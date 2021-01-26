@@ -25,7 +25,7 @@ export class DrawingComponent implements AfterViewInit {
     // TODO : Avoir un service dédié pour gérer tous les outils ? Ceci peut devenir lourd avec le temps
     //private tools: Tool[];
     //currentTool: Tool;
-    constructor(private drawingService: DrawingService, private toolHandlerServcice: ToolHandlerService) {
+    constructor(private drawingService: DrawingService, readonly toolHandlerServcice: ToolHandlerService) {
         //this.currentTool = this.toolHandlerServcice.findTool(PencilService.name);
         toolHandlerServcice.setTool(PencilService);
     }
@@ -56,6 +56,16 @@ export class DrawingComponent implements AfterViewInit {
     @HostListener('document:keypress', ['$event'])
     onKeyPress(event: KeyboardEvent) {
         this.toolHandlerServcice.onKeyPress(event);
+    }
+
+    @HostListener('mouseleave', ['$event'])
+    onMouseLeave(event: MouseEvent) {
+        this.toolHandlerServcice.onMouseLeave(event);
+    }
+
+    @HostListener('mouseenter', ['$event'])
+    onMouseEnter(event: MouseEvent) {
+        this.toolHandlerServcice.onMouseEnter(event);
     }
 
     get width(): number {

@@ -49,6 +49,14 @@ export class ToolHandlerService {
         }
     }
 
+    public onMouseLeave(event: MouseEvent): void {
+        this.currentTool.onMouseLeave(event);
+    }
+
+    public onMouseEnter(event: MouseEvent): void {
+        this.currentTool.onMouseEnter(event);
+    }
+
     private findToolshortcutKey(key: String): Tool | undefined {
         if (this.currentTool.shortCutKey == key) return undefined;
 
