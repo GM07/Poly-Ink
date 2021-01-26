@@ -7,30 +7,47 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./main-menu.component.scss'],
     animations: [
         trigger('fade', [
-            state('in', style({ opacity: 1 })),
-            state('out', style({ opacity: 0 })),
-            transition('in=>out', animate('500ms')),
-            transition('out=>in', animate('500ms')),
+            state('visible', style({ opacity: 1 })),
+            state('invisible', style({ opacity: 0 })),
+            transition('visible=> invisible', animate('500ms ease-out')),
+            transition('invisible => visible', animate('500ms ease-out')),
         ]),
     ],
 })
 export class MainMenuComponent implements OnInit {
-    state: string = 'in';
+    state: OpacityState = 'visible';
+    showComponent: boolean = true;
 
     constructor() {}
 
     ngOnInit(): void {}
 
+    // Function called when the create new drawing button is pressed
     createNewDrawing(): void {
         console.log('Create new drawing');
         this.fadeOut();
     }
 
+    continuingDrawing(): boolean {
+        return false;
+    }
+
     fadeOut(): void {
-        this.state = 'out';
+        this.state = 'invisible';
     }
 
     fadeIn(): void {
-        this.state = 'in';
+        this.state = 'visible';
+    }
+
+    // When an animation is done, show component or not according to state
+    endOfFadeAnimation() {
+        if (this.state == 'visible') {
+            this.showComponent = true;
+        } else {
+            this.showComponent = false;
+        }
     }
 }
+
+type OpacityState = 'visible' | 'invisible';
