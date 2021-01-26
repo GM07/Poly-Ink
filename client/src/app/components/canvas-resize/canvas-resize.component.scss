@@ -13,12 +13,23 @@
   background-color: black;
 }
 
-#right{
+
+.resize-control{
+  background-color: black;
+  z-index: 1;
+  width: 10px;
+  height: 10px;
   position: absolute;
-  right: 0;
 }
 
-.resize-border{
+#right{
   cursor: e-resize;
 }
 
+#bottom{
+  cursor: s-resize;
+}
+
+#corner{
+  cursor: se-resize;
+}

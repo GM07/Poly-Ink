@@ -22,6 +22,11 @@ export class CanvasResizeComponent implements AfterViewInit {
   private canvasTop : number;
   private canvasLeft : number;
   @ViewChild('previewResize', { static: false }) previewResize: ElementRef<HTMLDivElement>;
+  @ViewChild('control_right', { static: false }) control_right: ElementRef<HTMLDivElement>;
+  @ViewChild('control_bottom', { static: false }) control_bottom: ElementRef<HTMLDivElement>;
+  @ViewChild('control_corner', { static: false }) control_corner: ElementRef<HTMLDivElement>;
+
+
 
 
   constructor(private drawingService : DrawingService) {
@@ -35,6 +40,7 @@ export class CanvasResizeComponent implements AfterViewInit {
     this.setCanvasMargin();
     this.previewResize.nativeElement.style.marginLeft = String(this.canvasLeft) + "px";
     this.previewResize.nativeElement.style.marginTop = String(this.canvasTop) + "px";
+    this.setCanvasControl();
   }
 
 
@@ -79,7 +85,7 @@ export class CanvasResizeComponent implements AfterViewInit {
             break;
         }
         this.side = 0;
-
+        this.setCanvasControl();
       }
     }
 
@@ -106,5 +112,16 @@ export class CanvasResizeComponent implements AfterViewInit {
 
       this.canvasTop = canvasOffset.top + window.pageYOffset - documentOffset.clientTop;
       this.canvasLeft = canvasOffset.left + window.pageXOffset - documentOffset.clientLeft;
+    }
+
+    setCanvasControl() : void {
+      this.control_corner.nativeElement.style.marginTop = String(this.drawingService.canvas.height - 2.5) + "px";
+      this.control_corner.nativeElement.style.marginLeft = String(this.drawingService.canvas.width - 2.5) + "px";
+
+      this.control_bottom.nativeElement.style.marginTop = String(this.drawingService.canvas.height - 2.5) + "px";
+      this.control_bottom.nativeElement.style.marginLeft = String(this.drawingService.canvas.width/2 - 2.5) + "px";
+
+      this.control_right.nativeElement.style.marginTop = String(this.drawingService.canvas.height/2 - 2.5) + "px";
+      this.control_right.nativeElement.style.marginLeft = String(this.drawingService.canvas.width - 2.5) + "px";
     }
 }
