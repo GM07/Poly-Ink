@@ -1,9 +1,24 @@
 .resize-border{
   border: 1px dotted black;
-
   //Absolute position to allow the preview to be bigger than the canvas
   //TODO look for a way to fix this
   position: absolute;
   left: 0px;
   right: 0px;
 }
+
+.resize-box{
+  width: 100px;
+  height: 100px;
+  background-color: black;
+}
+
+#right{
+  position: absolute;
+  right: 0;
+}
+
+.resize-border{
+  cursor: e-resize;
+}
+

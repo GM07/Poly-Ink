@@ -25,7 +25,7 @@ export class CanvasResizeComponent implements AfterViewInit {
 
 
   constructor(private drawingService : DrawingService) {
-    this.treshold = 10;
+    this.treshold = 15;
 
    }
 

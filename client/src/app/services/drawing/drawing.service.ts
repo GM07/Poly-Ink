@@ -25,6 +25,11 @@ export class DrawingService {
           this.previewCanvas.width = width;
           this.previewCanvas.height = height;
           this.baseCtx.drawImage(memCanvas, 0, 0);
+          if(memCanvas.width < this.canvas.width || memCanvas.height < this.canvas.height){
+            this.baseCtx.fillStyle = "white";
+            this.baseCtx.fillRect(memCanvas.width, 0, this.canvas.width - memCanvas.width, this.canvas.height);
+            this.baseCtx.fillRect(0, memCanvas.height, this.canvas.width, this.canvas.height - memCanvas.height);
+          }
         }
     }
 }
