@@ -21,13 +21,48 @@ export enum MouseButton {
 })
 export class PencilService extends Tool {
     private pathData: Vec2[];
+    private strokeStyle_: string = '#000000';
+    private lineWidth_: number = 5;
 
     constructor(drawingService: DrawingService) {
         super(drawingService);
         this.clearPath();
+        this.shortCutKey = 'c';
+    }
+
+    get strokeStyle(): string {
+        return this.strokeStyle_;
+    }
+
+    /**
+     * Types d'entrées acceptées:
+     * "couleur";
+     * "#FFFFFF";
+     * "rgb(255, 255, 255)";
+     * "rgba(255, 255, 255, 1)";
+     */
+    set strokeStyle(strokeStyleIn: string) {
+        this.strokeStyle_ = strokeStyleIn;
+    }
+
+    get lineWidth(): number {
+        return this.lineWidth_;
+    }
+
+    /**
+     * La taille se choisit par pixel, donc un arrondissement
+     * est fait pour avoir une valeur entière
+     */
+    set lineWidth(lineWidthIn: number) {
+        this.lineWidth_ = Math.max(Math.round(lineWidthIn), 1);
     }
 
     onMouseDown(event: MouseEvent): void {
+        if (this.mouseDown && event.button === MouseButton.Left) {
+            this.drawLine(this.drawingService.baseCtx, this.pathData); //Évite de perdre le trait si la souris sort
+            this.clearPath();
+        }
+
         this.mouseDown = event.button === MouseButton.Left;
         if (this.mouseDown) {
             this.clearPath();
@@ -59,11 +94,22 @@ export class PencilService extends Tool {
     }
 
     private drawLine(ctx: CanvasRenderingContext2D, path: Vec2[]): void {
+        ctx.strokeStyle = this.strokeStyle;
+        ctx.fillStyle = this.strokeStyle;
+        ctx.lineWidth = this.lineWidth;
+        ctx.lineCap = 'round' as CanvasLineCap;
         ctx.beginPath();
-        for (const point of path) {
-            ctx.lineTo(point.x, point.y);
+
+        if (this.lineWidth <= 1 && path.length == 2 && path[0].x == path[1].x && path[0].y == path[1].y) {
+            //Cas spécial pour permettre de dessiner un seul pixel
+            ctx.fillRect(path[0].x, path[0].y, 1, 1);
+        } else {
+            for (const point of path) {
+                ctx.lineTo(point.x, point.y);
+            }
         }
         ctx.stroke();
+        ctx.closePath();
     }
 
     private clearPath(): void {

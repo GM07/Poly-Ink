@@ -6,6 +6,15 @@ import { Vec2 } from './vec2';
 export abstract class Tool {
     mouseDownCoord: Vec2;
     mouseDown: boolean = false;
+    private shortCutKey_: string;
+
+    get shortCutKey(): string {
+        return this.shortCutKey_;
+    }
+
+    set shortCutKey(key: string) {
+        this.shortCutKey_ = key;
+    }
 
     constructor(protected drawingService: DrawingService) {}
 
