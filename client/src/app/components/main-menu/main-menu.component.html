@@ -1,4 +1,4 @@
-<div *ngIf="showComponent" [@fade]="state" (@fade.done)="endOfFadeAnimation()" id="background">
+<div *ngIf="showComponent; else back" [@fade]="state" (@fade.done)="endOfFadeAnimation()" id="background">
     <div id="main">
         <div id="content">
             <h1 class="white" id="title">PAINT 2021</h1>
@@ -24,3 +24,10 @@
         </div>
     </div>
 </div>
+<<ng-template #back
+    ><div id="back" [@fade]="state === 'visible' ? 'invisible' : 'visible'" (@fade.done)="endOfFadeAnimation()">
+        <button mat-raised-button color="primary" (click)="backToMenu()">
+            <mat-icon>home</mat-icon>
+        </button>
+    </div></ng-template
+>

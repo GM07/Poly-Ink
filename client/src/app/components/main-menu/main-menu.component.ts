@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
             state('visible', style({ opacity: 1 })),
             state('invisible', style({ opacity: 0 })),
             transition('visible=> invisible', animate('500ms ease-out')),
-            transition('invisible => visible', animate('500ms ease-out')),
+            transition('invisible => visible', animate('500ms ease-in')),
         ]),
     ],
 })
@@ -26,6 +26,11 @@ export class MainMenuComponent implements OnInit {
     createNewDrawing(): void {
         console.log('Create new drawing');
         this.fadeOut();
+    }
+
+    backToMenu(): void {
+        console.log('Back to menu');
+        this.fadeIn();
     }
 
     continuingDrawing(): boolean {
