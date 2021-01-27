@@ -54,4 +54,11 @@ describe('MainMenuComponent', () => {
         component.createNewDrawing();
         expect(component.state).toBe('invisible');
     });
+
+    it('should go back to menu', () => {
+        component.createNewDrawing();
+        expect(component.state).toBe('invisible');
+        component.backToMenu();
+        expect(component.state).toBe('visible');
+    });
 });
