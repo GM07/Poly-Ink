@@ -18,7 +18,10 @@ export enum MouseButton {
 export class CanvasResizeComponent implements AfterViewInit {
   private treshold : number;
   private isDown : boolean;
-  private side : number;
+
+  private moveBottom : boolean;
+  private moveRight : boolean;
+
   private canvasTop : number;
   private canvasLeft : number;
   @ViewChild('previewResize', { static: false }) previewResize: ElementRef<HTMLDivElement>;
@@ -27,12 +30,10 @@ export class CanvasResizeComponent implements AfterViewInit {
   @ViewChild('control_corner', { static: false }) control_corner: ElementRef<HTMLDivElement>;
 
 
-
-
   constructor(private drawingService : DrawingService) {
     this.treshold = 15;
-
    }
+
 
   ngAfterViewInit(): void {
     this.previewResize.nativeElement.style.width = String(this.drawingService.canvas.width) + "px";
@@ -46,64 +47,47 @@ export class CanvasResizeComponent implements AfterViewInit {
 
   @HostListener('document:mousemove', ['$event'])
    onMouseMove(event: MouseEvent): void {
-      if(this.side != 0 && this.isDown){
-        switch(this.side){
-          case 1:
-            this.previewResize.nativeElement.style.width = String((event.clientX-this.canvasLeft) > 250 ? event.clientX-this.canvasLeft : 250) + "px";
-            break;
-          case 2:
-            this.previewResize.nativeElement.style.height = String((event.clientY-this.canvasTop) > 250 ? event.clientY - this.canvasTop : 250) + "px";
-            break;
-          case 3:
-            this.previewResize.nativeElement.style.width = String((event.clientX-this.canvasLeft) > 250 ? event.clientX-this.canvasLeft : 250) + "px";
-            this.previewResize.nativeElement.style.height = String((event.clientY-this.canvasTop) > 250 ? event.clientY - this.canvasTop : 250) + "px";
-            break;
-        }
+      if((this.moveRight || this.moveBottom) && this.isDown){
+        this.previewResize.nativeElement.style.width = this.moveRight ?
+        String((event.clientX-this.canvasLeft) > 250 ? event.clientX-this.canvasLeft : 250) + "px" :
+        this.previewResize.nativeElement.style.width;
+
+        this.previewResize.nativeElement.style.height = this.moveBottom ?
+        String((event.clientY-this.canvasTop) > 250 ? event.clientY - this.canvasTop : 250) + "px" :
+        this.previewResize.nativeElement.style.height;
       }
     }
 
     @HostListener('document:mousedown', ['$event'])
     onMouseDown(event: MouseEvent): void {
       this.isDown = event.button == MouseButton.Left;
-      if((this.side = this.closeEnough(event.clientX, event.clientY)) && this.isDown){
+      if(this.isDown){
+        this.closeEnough(event.clientX, event.clientY);
+        if(this.moveBottom || this.moveRight)
+          this.previewResize.nativeElement.style.visibility = "visible";
       }
     }
 
     @HostListener('document:mouseup', ['$event'])
     onMouseUp(event: MouseEvent): void {
       this.isDown = !(this.isDown && event.button == MouseButton.Left);
-      if(this.side != 0){
-        switch(this.side){
-          case 1:
-            this.drawingService.resizeCanvas((event.clientX-this.canvasLeft) > 250 ? event.clientX-this.canvasLeft : 250, this.drawingService.canvas.height);
-            break;
-          case 2:
-            this.drawingService.resizeCanvas(this.drawingService.canvas.width, (event.clientY-this.canvasTop) > 250 ? event.clientY - this.canvasTop : 250);
-            break;
-          case 3:
-            this.drawingService.resizeCanvas((event.clientX-this.canvasLeft) > 250 ? event.clientX-this.canvasLeft : 250, (event.clientY-this.canvasTop) > 250 ? event.clientY - this.canvasTop : 250);
-            break;
-        }
-        this.side = 0;
+      if(this.moveRight || this.moveBottom){
+        let xModifier = this.moveRight ? event.clientX-this.canvasLeft : this.drawingService.canvas.width;
+        let yModifier = this.moveBottom ? event.clientY-this.canvasTop : this.drawingService.canvas.height;
+        this.resizeCanvas(xModifier, yModifier);
+
         this.setCanvasControl();
+        this.previewResize.nativeElement.style.visibility = "hidden";
       }
     }
 
 
     //TODO make it fancier pls
-    closeEnough(mouseX : number, mouseY : number) : number{
+    closeEnough(mouseX : number, mouseY : number) : void{
       this.setCanvasMargin();
 
-      let left = Math.abs(mouseY - (this.canvasTop + this.drawingService.canvas.height)) < this.treshold;
-      let bottom = Math.abs(mouseX - (this.canvasLeft + this.drawingService.canvas.width)) < this.treshold
-
-      if(left && bottom)
-        return 3;
-      if(left)
-        return 2;
-      if(bottom)
-        return 1;
-      return 0;
+      this.moveBottom = Math.abs(mouseY - (this.canvasTop + this.drawingService.canvas.height)) < this.treshold;
+      this.moveRight = Math.abs(mouseX - (this.canvasLeft + this.drawingService.canvas.width)) < this.treshold
     }
 
     setCanvasMargin() : void{
@@ -123,5 +107,27 @@ export class CanvasResizeComponent implements AfterViewInit {
 
       this.control_right.nativeElement.style.marginTop = String(this.drawingService.canvas.height/2 - 2.5) + "px";
       this.control_right.nativeElement.style.marginLeft = String(this.drawingService.canvas.width - 2.5) + "px";
+    }
+
+    resizeCanvas(width : number, height : number) : void{
+      width = width < 250 ? 250 : width;
+      height = height < 250 ? 250 : height;
+      this.drawingService.resizeCanvas(width, height);
+    }
+
+    public getCanvasLeft() : number{
+      return this.canvasLeft;
+    }
+
+    public getCanvasTop() : number{
+      return this.canvasTop;
+    }
+
+    public getMoveBottom() : boolean{
+      return this.moveBottom;
+    }
+
+    public getMoveRight() : boolean{
+      return this.moveRight;
     }
 }

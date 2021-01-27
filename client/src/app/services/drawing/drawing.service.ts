@@ -14,23 +14,27 @@ export class DrawingService {
     }
 
     resizeCanvas(width: number, height: number) : void {
-        let memCanvas = document.createElement('canvas');
-        let memCtx = memCanvas.getContext('2d');
-        if(memCtx != null){
-          memCanvas.width = this.canvas.width;
-          memCanvas.height = this.canvas.height;
-          memCtx.drawImage(this.canvas, 0,0)
-          this.canvas.width = width;
-          this.canvas.height = height;
-          this.previewCanvas.width = width;
-          this.previewCanvas.height = height;
-          this.baseCtx.drawImage(memCanvas, 0, 0);
-          if(memCanvas.width < this.canvas.width || memCanvas.height < this.canvas.height){
-            this.baseCtx.fillStyle = "white";
-            this.baseCtx.fillRect(memCanvas.width, 0, this.canvas.width - memCanvas.width, this.canvas.height);
-            this.baseCtx.fillRect(0, memCanvas.height, this.canvas.width, this.canvas.height - memCanvas.height);
-          }
+
+      let memCanvas = document.createElement('canvas');//canvas temporaire
+      let memCtx = memCanvas.getContext('2d');
+
+      if(memCtx != null){
+        memCanvas.width = this.canvas.width;
+        memCanvas.height = this.canvas.height; //Sauvegarde du canvas
+        memCtx.drawImage(this.canvas, 0,0)
+
+        this.canvas.width = width;
+        this.canvas.height = height;
+        this.previewCanvas.width = width;  //Redimensionnement du canvas
+        this.previewCanvas.height = height;
+        this.baseCtx.drawImage(memCanvas, 0, 0);
+
+        if(memCanvas.width < this.canvas.width || memCanvas.height < this.canvas.height){
+          this.baseCtx.fillStyle = "white";
+          this.baseCtx.fillRect(memCanvas.width, 0, this.canvas.width - memCanvas.width, this.canvas.height);
+          this.baseCtx.fillRect(0, memCanvas.height, this.canvas.width, this.canvas.height - memCanvas.height);
         }
+      }
     }
 
     initBackground() : void {
