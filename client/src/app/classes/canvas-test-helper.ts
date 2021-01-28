@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-const WIDTH = 100;
-const HEIGHT = 100;
+const WIDTH = 250;
+const HEIGHT = 250;
 
 @Injectable({
     providedIn: 'root',

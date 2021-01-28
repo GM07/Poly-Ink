@@ -1,6 +1,6 @@
 <app-drawing class="drawing-container">
 </app-drawing>
-<div class="resize-control" id="right" #control_right></div>
-<div class="resize-control" id="bottom" #control_bottom></div>
-<div class="resize-control" id="corner" #control_corner></div>
-<div class="resize-border" #previewResize></div>
+<div class="resize-control" id="right"  [ngStyle]="controlRightStyle"></div>
+<div class="resize-control" id="bottom" [ngStyle]="controlBottomStyle"></div>
+<div class="resize-control" id="corner" [ngStyle]="controlCornerStyle"></div>
+<div class="resize-border" [ngStyle]="previewResizeStyle"></div>

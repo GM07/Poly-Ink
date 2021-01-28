@@ -1,133 +1,145 @@
-import { Component, AfterViewInit, HostListener, ViewChild, ElementRef} from '@angular/core';
+import { AfterViewInit, Component, HostListener} from '@angular/core';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
-//TODO devrait être dans un fichier const séparé
+// TODO devrait être dans un fichier const séparé
 export enum MouseButton {
-  Left = 0,
-  Middle = 1,
-  Right = 2,
-  Back = 3,
-  Forward = 4,
+    Left = 0,
+    Middle = 1,
+    Right = 2,
+    Back = 3,
+    Forward = 4,
 }
 
+const MIN_SIZE = 250;
+const CONTROL_MARGIN = 2.5;
+
 @Component({
-  selector: 'app-canvas-resize',
-  templateUrl: './canvas-resize.component.html',
-  styleUrls: ['./canvas-resize.component.scss']
+    selector: 'app-canvas-resize',
+    templateUrl: './canvas-resize.component.html',
+    styleUrls: ['./canvas-resize.component.scss'],
 })
 export class CanvasResizeComponent implements AfterViewInit {
-  private treshold : number;
-  private isDown : boolean;
+    private isDown: boolean;
 
-  private moveBottom : boolean;
-  private moveRight : boolean;
+    private moveBottom: boolean;
+    private moveRight: boolean;
 
-  private canvasTop : number;
-  private canvasLeft : number;
-  @ViewChild('previewResize', { static: false }) previewResize: ElementRef<HTMLDivElement>;
-  @ViewChild('control_right', { static: false }) control_right: ElementRef<HTMLDivElement>;
-  @ViewChild('control_bottom', { static: false }) control_bottom: ElementRef<HTMLDivElement>;
-  @ViewChild('control_corner', { static: false }) control_corner: ElementRef<HTMLDivElement>;
+    private canvasTop: number;
+    private canvasLeft: number;
 
+    controlRightStyle : {'margin-top': String, 'margin-left': String};
+    controlBottomStyle : {'margin-top': String, 'margin-left': String};
+    controlCornerStyle : {'margin-top': String, 'margin-left': String};
 
-  constructor(private drawingService : DrawingService) {
-    this.treshold = 15;
-   }
+    previewResizeStyle = {'visibility': 'hidden', //Déclaration des éléments que doit contenir ce tableau
+                          'width': "0",
+                          'height': "0",
+                          'margin-left': "0",
+                          'margin-top': "0"};
 
+    constructor(private drawingService: DrawingService) {}
 
-  ngAfterViewInit(): void {
-    this.previewResize.nativeElement.style.width = String(this.drawingService.canvas.width) + "px";
-    this.previewResize.nativeElement.style.height = String(this.drawingService.canvas.height) + "px";
-    this.setCanvasMargin();
-    this.previewResize.nativeElement.style.marginLeft = String(this.canvasLeft) + "px";
-    this.previewResize.nativeElement.style.marginTop = String(this.canvasTop) + "px";
-    this.setCanvasControl();
-  }
+    ngAfterViewInit(): void {
+        this.setCanvasMargin();
+        this.setStylePreview();
+        this.setStyleControl();
+    }
 
+    @HostListener('document:mousemove', ['$event'])
+    onMouseMove(event: MouseEvent): void {
+        if ((this.moveRight || this.moveBottom) && this.isDown) {
+            this.previewResizeStyle['width'] = this.moveRight
+                ? String(event.clientX - this.canvasLeft > MIN_SIZE ? event.clientX - this.canvasLeft : MIN_SIZE) + 'px'
+                : this.previewResizeStyle['width'];
 
-  @HostListener('document:mousemove', ['$event'])
-   onMouseMove(event: MouseEvent): void {
-      if((this.moveRight || this.moveBottom) && this.isDown){
-        this.previewResize.nativeElement.style.width = this.moveRight ?
-        String((event.clientX-this.canvasLeft) > 250 ? event.clientX-this.canvasLeft : 250) + "px" :
-        this.previewResize.nativeElement.style.width;
-
-        this.previewResize.nativeElement.style.height = this.moveBottom ?
-        String((event.clientY-this.canvasTop) > 250 ? event.clientY - this.canvasTop : 250) + "px" :
-        this.previewResize.nativeElement.style.height;
-      }
+            this.previewResizeStyle['height'] = this.moveBottom
+                ? String(event.clientY - this.canvasTop > MIN_SIZE ? event.clientY - this.canvasTop : MIN_SIZE) + 'px'
+                : this.previewResizeStyle['height']
+        }
     }
 
     @HostListener('document:mousedown', ['$event'])
     onMouseDown(event: MouseEvent): void {
-      this.isDown = event.button == MouseButton.Left;
-      if(this.isDown){
-        this.closeEnough(event.clientX, event.clientY);
-        if(this.moveBottom || this.moveRight)
-          this.previewResize.nativeElement.style.visibility = "visible";
-      }
+        this.isDown = event.button === MouseButton.Left;
+        if (this.isDown) {
+            this.closeEnough(event.clientX, event.clientY);
+            if (this.moveBottom || this.moveRight) this.previewResizeStyle['visibility'] = 'visible';
+        }
     }
 
     @HostListener('document:mouseup', ['$event'])
     onMouseUp(event: MouseEvent): void {
-      this.isDown = !(this.isDown && event.button == MouseButton.Left);
-      if(this.moveRight || this.moveBottom){
-        let xModifier = this.moveRight ? event.clientX-this.canvasLeft : this.drawingService.canvas.width;
-        let yModifier = this.moveBottom ? event.clientY-this.canvasTop : this.drawingService.canvas.height;
-        this.resizeCanvas(xModifier, yModifier);
+        this.isDown = !(this.isDown && event.button === MouseButton.Left);
+        if (this.moveRight || this.moveBottom) {
+            const xModifier = this.moveRight ? event.clientX - this.canvasLeft : this.drawingService.canvas.width;
+            const yModifier = this.moveBottom ? event.clientY - this.canvasTop : this.drawingService.canvas.height;
+            this.resizeCanvas(xModifier, yModifier);
 
-        this.setCanvasControl();
-        this.previewResize.nativeElement.style.visibility = "hidden";
-      }
+            this.setStyleControl();
+            this.moveRight = this.moveBottom = false;
+            this.previewResizeStyle['visibility'] = 'hidden';
+        }
     }
 
+    closeEnough(mouseX: number, mouseY: number): void {
+        const TRESHOLD = 10;
 
-    //TODO make it fancier pls
-    closeEnough(mouseX : number, mouseY : number) : void{
-      this.setCanvasMargin();
-
-      this.moveBottom = Math.abs(mouseY - (this.canvasTop + this.drawingService.canvas.height)) < this.treshold;
-      this.moveRight = Math.abs(mouseX - (this.canvasLeft + this.drawingService.canvas.width)) < this.treshold
+        this.moveBottom =
+            Math.abs(mouseY - (this.canvasTop + this.drawingService.canvas.height)) < TRESHOLD &&
+            mouseX < this.canvasLeft + this.drawingService.canvas.width + TRESHOLD &&
+            mouseX > this.canvasLeft - TRESHOLD;
+        this.moveRight =
+            Math.abs(mouseX - (this.canvasLeft + this.drawingService.canvas.width)) < TRESHOLD &&
+            mouseY < this.canvasTop + this.drawingService.canvas.height + TRESHOLD &&
+            mouseY > this.canvasTop - TRESHOLD;
     }
 
-    setCanvasMargin() : void{
-      let canvasOffset = this.drawingService.canvas.getBoundingClientRect();
-      let documentOffset = document.documentElement;
+    setCanvasMargin(): void {
+        const canvasOffset = this.drawingService.canvas.getBoundingClientRect();
+        const documentOffset = document.documentElement;
 
-      this.canvasTop = canvasOffset.top + window.pageYOffset - documentOffset.clientTop;
-      this.canvasLeft = canvasOffset.left + window.pageXOffset - documentOffset.clientLeft;
+        this.canvasTop = canvasOffset.top + window.pageYOffset - documentOffset.clientTop;
+        this.canvasLeft = canvasOffset.left + window.pageXOffset - documentOffset.clientLeft;
     }
 
-    setCanvasControl() : void {
-      this.control_corner.nativeElement.style.marginTop = String(this.drawingService.canvas.height - 2.5) + "px";
-      this.control_corner.nativeElement.style.marginLeft = String(this.drawingService.canvas.width - 2.5) + "px";
-
-      this.control_bottom.nativeElement.style.marginTop = String(this.drawingService.canvas.height - 2.5) + "px";
-      this.control_bottom.nativeElement.style.marginLeft = String(this.drawingService.canvas.width/2 - 2.5) + "px";
-
-      this.control_right.nativeElement.style.marginTop = String(this.drawingService.canvas.height/2 - 2.5) + "px";
-      this.control_right.nativeElement.style.marginLeft = String(this.drawingService.canvas.width - 2.5) + "px";
+    resizeCanvas(width: number, height: number): void {
+        this.drawingService.resizeCanvas(width < MIN_SIZE ? MIN_SIZE : width, height < MIN_SIZE ? MIN_SIZE : height);
     }
 
-    resizeCanvas(width : number, height : number) : void{
-      width = width < 250 ? 250 : width;
-      height = height < 250 ? 250 : height;
-      this.drawingService.resizeCanvas(width, height);
+    setStyleControl() : void{
+      setTimeout(() => { //Attend la fin de la queue avant d'exécuter cette fonction. Laisse le temps au canvas de s'instancier
+        this.controlRightStyle = {
+         'margin-top': String(this.drawingService.canvas.height / 2 - CONTROL_MARGIN) + 'px',
+         'margin-left': String(this.drawingService.canvas.width - CONTROL_MARGIN) + 'px',
+        };
+        this.controlBottomStyle = {
+         'margin-top': String(this.drawingService.canvas.height - CONTROL_MARGIN) + 'px',
+          'margin-left': String(this.drawingService.canvas.width / 2 - CONTROL_MARGIN) + 'px',
+        };
+        this.controlCornerStyle = {
+         'margin-top': String(this.drawingService.canvas.height - CONTROL_MARGIN) + 'px',
+          'margin-left': String(this.drawingService.canvas.width - CONTROL_MARGIN) + 'px',
+        };
+      });
     }
 
-    public getCanvasLeft() : number{
+    setStylePreview() : void {
+      setTimeout(() => {
+        this.previewResizeStyle = {
+          'width': String(this.drawingService.canvas.width) + 'px',
+          'height': String(this.drawingService.canvas.height) + 'px',
+          'margin-left': String(this.canvasLeft) + 'px',
+          'margin-top': String(this.canvasTop) + 'px',
+          'visibility': 'hidden',
+        };
+      });
+    }
+
+    getCanvasLeft(): number {
       return this.canvasLeft;
-    }
+  }
 
-    public getCanvasTop() : number{
+  getCanvasTop(): number {
       return this.canvasTop;
-    }
-
-    public getMoveBottom() : boolean{
-      return this.moveBottom;
-    }
-
-    public getMoveRight() : boolean{
-      return this.moveRight;
-    }
+  }
 }

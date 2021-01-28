@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resize.component';
 import { DrawingComponent } from '@app/components/drawing/drawing.component';
 import { SidebarComponent } from '@app/components/sidebar/sidebar.component';
 import { EditorComponent } from './editor.component';
-import {CanvasResizeComponent} from '@app/components/canvas-resize/canvas-resize.component'
 
 describe('EditorComponent', () => {
     let component: EditorComponent;
