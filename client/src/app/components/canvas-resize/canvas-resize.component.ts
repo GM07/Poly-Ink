@@ -1,17 +1,7 @@
 import { AfterViewInit, Component, HostListener} from '@angular/core';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-
-// TODO devrait être dans un fichier const séparé
-export enum MouseButton {
-    Left = 0,
-    Middle = 1,
-    Right = 2,
-    Back = 3,
-    Forward = 4,
-}
-
-const MIN_SIZE = 250;
-const CONTROL_MARGIN = 2.5;
+import { canvasConst } from '@app/constants/canvas.ts';
+import { controlConst } from '@app/constants/control.ts'
 
 @Component({
     selector: 'app-canvas-resize',
@@ -49,18 +39,18 @@ export class CanvasResizeComponent implements AfterViewInit {
     onMouseMove(event: MouseEvent): void {
         if ((this.moveRight || this.moveBottom) && this.isDown) {
             this.previewResizeStyle['width'] = this.moveRight
-                ? String(event.clientX - this.canvasLeft > MIN_SIZE ? event.clientX - this.canvasLeft : MIN_SIZE) + 'px'
+                ? String(event.clientX - this.canvasLeft > canvasConst.MIN_WIDTH ? event.clientX - this.canvasLeft : canvasConst.MIN_WIDTH) + 'px'
                 : this.previewResizeStyle['width'];
 
             this.previewResizeStyle['height'] = this.moveBottom
-                ? String(event.clientY - this.canvasTop > MIN_SIZE ? event.clientY - this.canvasTop : MIN_SIZE) + 'px'
+                ? String(event.clientY - this.canvasTop > canvasConst.MIN_HEIGHT ? event.clientY - this.canvasTop : canvasConst.MIN_HEIGHT) + 'px'
                 : this.previewResizeStyle['height']
         }
     }
 
     @HostListener('document:mousedown', ['$event'])
     onMouseDown(event: MouseEvent): void {
-        this.isDown = event.button === MouseButton.Left;
+        this.isDown = event.button === controlConst.MouseButton.Left;
         if (this.isDown) {
             this.closeEnough(event.clientX, event.clientY);
             if (this.moveBottom || this.moveRight) this.previewResizeStyle['visibility'] = 'visible';
@@ -69,7 +59,7 @@ export class CanvasResizeComponent implements AfterViewInit {
 
     @HostListener('document:mouseup', ['$event'])
     onMouseUp(event: MouseEvent): void {
-        this.isDown = !(this.isDown && event.button === MouseButton.Left);
+        this.isDown = !(this.isDown && event.button === controlConst.MouseButton.Left);
         if (this.moveRight || this.moveBottom) {
             const xModifier = this.moveRight ? event.clientX - this.canvasLeft : this.drawingService.canvas.width;
             const yModifier = this.moveBottom ? event.clientY - this.canvasTop : this.drawingService.canvas.height;
@@ -103,22 +93,22 @@ export class CanvasResizeComponent implements AfterViewInit {
     }
 
     resizeCanvas(width: number, height: number): void {
-        this.drawingService.resizeCanvas(width < MIN_SIZE ? MIN_SIZE : width, height < MIN_SIZE ? MIN_SIZE : height);
+        this.drawingService.resizeCanvas(width < canvasConst.MIN_WIDTH ? canvasConst.MIN_WIDTH : width, height < canvasConst.MIN_HEIGHT ? canvasConst.MIN_HEIGHT : height);
     }
 
     setStyleControl() : void{
       setTimeout(() => { //Attend la fin de la queue avant d'exécuter cette fonction. Laisse le temps au canvas de s'instancier
         this.controlRightStyle = {
-         'margin-top': String(this.drawingService.canvas.height / 2 - CONTROL_MARGIN) + 'px',
-         'margin-left': String(this.drawingService.canvas.width - CONTROL_MARGIN) + 'px',
+         'margin-top': String(this.drawingService.canvas.height / 2 - canvasConst.CONTROL_MARGIN) + 'px',
+         'margin-left': String(this.drawingService.canvas.width - canvasConst.CONTROL_MARGIN) + 'px',
         };
         this.controlBottomStyle = {
-         'margin-top': String(this.drawingService.canvas.height - CONTROL_MARGIN) + 'px',
-          'margin-left': String(this.drawingService.canvas.width / 2 - CONTROL_MARGIN) + 'px',
+         'margin-top': String(this.drawingService.canvas.height - canvasConst.CONTROL_MARGIN) + 'px',
+          'margin-left': String(this.drawingService.canvas.width / 2 - canvasConst.CONTROL_MARGIN) + 'px',
         };
         this.controlCornerStyle = {
-         'margin-top': String(this.drawingService.canvas.height - CONTROL_MARGIN) + 'px',
-          'margin-left': String(this.drawingService.canvas.width - CONTROL_MARGIN) + 'px',
+         'margin-top': String(this.drawingService.canvas.height - canvasConst.CONTROL_MARGIN) + 'px',
+          'margin-left': String(this.drawingService.canvas.width - canvasConst.CONTROL_MARGIN) + 'px',
         };
       });
     }
