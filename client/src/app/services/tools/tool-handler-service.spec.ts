@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { PencilService } from './pencil-service';
-import { ToolHandlerService } from './toolHandler-service';
+import { ToolHandlerService } from './tool-handler-service';
 
 // tslint:disable:no-any
 describe('ToolHandlerService', () => {
@@ -9,19 +9,12 @@ describe('ToolHandlerService', () => {
     let keyboardEvent: KeyboardEvent;
 
     let pencilService: PencilService;
-    //let pencilServiceSpy: jasmine.SpyObj<PencilService>;
 
     beforeEach(() => {
-        //pencilServiceSpy = spyOnAllFunctions<any>(PencilService);
-
-        TestBed.configureTestingModule({
-            //providers: [{ provide: PencilService, useValue: pencilServiceSpy }],
-        });
-        //TestBed.inject(DrawingService);
+        TestBed.configureTestingModule({});
         pencilService = TestBed.inject(PencilService);
         modifyObjectToSpyOnAllFunctions(pencilService);
         service = TestBed.inject(ToolHandlerService);
-        //pencilServiceSpy = spyOnAllFunctions(PencilService.prototype);
 
         mouseEvent = {
             offsetX: 25,
@@ -39,11 +32,6 @@ describe('ToolHandlerService', () => {
     });
 
     it('should transfer mouse events', () => {
-        //console.info(pencilServiceSpy);
-        //modifyObjectToSpyOnAllFunctions(pencilService);
-        //spyOn<any>(pencilService, 'onMouseMove');
-
-        //let drawServiceSpy = jasmine.createSpyObj('PencilService', ['onMouseMove']);
         service.onMouseMove(mouseEvent);
         expect(pencilService.onMouseMove).toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
@@ -65,13 +53,14 @@ describe('ToolHandlerService', () => {
         expect(service.getTool()).toBeInstanceOf(PencilService);
     });
 
-    function modifyObjectToSpyOnAllFunctions(object: any) {
+    const modifyObjectToSpyOnAllFunctions = (object: any): void => {
         do {
             Object.getOwnPropertyNames(object).filter((p: string) => {
-                if (typeof object[p] == 'function') {
+                if (typeof object[p] === 'function') {
                     spyOn<any>(object, p);
                 }
             });
-        } while ((object = Object.getPrototypeOf(object)) && object != Object.prototype);
-    }
+            object = Object.getPrototypeOf(object);
+        } while (object != null && object !== Object.prototype);
+    };
 });

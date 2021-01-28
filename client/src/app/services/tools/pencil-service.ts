@@ -23,8 +23,8 @@ export enum MouseButton {
 })
 export class PencilService extends Tool {
     private pathData: Vec2[][];
-    private strokeStyle_: string = 'black';
-    private lineWidth_: number = 1;
+    private strokeStyleIn: string = 'black';
+    private lineWidthIn: number = 1;
 
     constructor(drawingService: DrawingService) {
         super(drawingService);
@@ -33,7 +33,7 @@ export class PencilService extends Tool {
     }
 
     get strokeStyle(): string {
-        return this.strokeStyle_;
+        return this.strokeStyleIn;
     }
 
     /**
@@ -43,30 +43,30 @@ export class PencilService extends Tool {
      * "rgb(int, int, int)";
      * "rgba(int, int, int, 1.0)";
      */
-    set strokeStyle(strokeStyleIn: string) {
-        let colorIsValid: boolean = false;
-        let style = new Option().style;
-        style.color = strokeStyleIn;
-        colorIsValid = colorIsValid || style.color == strokeStyleIn;
-        colorIsValid = colorIsValid || /^#([0-9A-F]{3}){1,2}$/.test(strokeStyleIn);
-        colorIsValid = colorIsValid || /^rgb\((\d+),\s?(\d+),\s?(\d+)\)$/.test(strokeStyleIn);
-        colorIsValid = colorIsValid || /^rgba\((\d+,\s?){3}(1(\.0+)?|0*(\.\d+))\)$/.test(strokeStyleIn);
+    set strokeStyle(color: string) {
+        let colorIsValid = false;
+        const style = new Option().style;
+        style.color = color;
+        colorIsValid = colorIsValid || style.color === color;
+        colorIsValid = colorIsValid || /^#([0-9A-F]{3}){1,2}$/.test(color);
+        colorIsValid = colorIsValid || /^rgb\((\d+),\s?(\d+),\s?(\d+)\)$/.test(color);
+        colorIsValid = colorIsValid || /^rgba\((\d+,\s?){3}(1(\.0+)?|0*(\.\d+))\)$/.test(color);
 
         if (colorIsValid) {
-            this.strokeStyle_ = strokeStyleIn;
+            this.strokeStyleIn = color;
         }
     }
 
     get lineWidth(): number {
-        return this.lineWidth_;
+        return this.lineWidthIn;
     }
 
     /**
      * La taille se choisit par pixel, donc un arrondissement
      * est fait pour avoir une valeur entière
      */
-    set lineWidth(lineWidthIn: number) {
-        this.lineWidth_ = Math.max(Math.round(lineWidthIn), 1);
+    set lineWidth(width: number) {
+        this.lineWidthIn = Math.max(Math.round(width), 1);
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -113,12 +113,12 @@ export class PencilService extends Tool {
     }
 
     onMouseEnter(event: MouseEvent): void {
-        if (event.button != MouseButton.Left) return;
+        if (event.button !== MouseButton.Left) return;
 
-        if (event.buttons == LeftMouse.Pressed) {
+        if (event.buttons === LeftMouse.Pressed) {
             this.pathData.push([]);
             this.onMouseDown(event);
-        } else if (event.buttons == LeftMouse.Released) {
+        } else if (event.buttons === LeftMouse.Released) {
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawLine(this.drawingService.baseCtx, this.pathData);
             this.mouseDown = false;
@@ -126,7 +126,7 @@ export class PencilService extends Tool {
         }
     }
 
-    private drawBackgroundPoint(point: Vec2) {
+    private drawBackgroundPoint(point: Vec2): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
         this.drawLine(ctx, [[point]]);
@@ -138,15 +138,15 @@ export class PencilService extends Tool {
         ctx.fillStyle = this.strokeStyle;
         ctx.lineWidth = this.lineWidth;
         ctx.lineCap = 'round' as CanvasLineCap;
-        ctx.lineJoin = 'round' as CanvasLineJoin; //Essentiel pour avoir une allure "smooth"
+        ctx.lineJoin = 'round' as CanvasLineJoin; // Essentiel pour avoir une allure "smooth"
 
-        //Cas spécial pour permettre de dessiner exactement un seul pixel (sinon il n'est pas visible)
+        // Cas spécial pour permettre de dessiner exactement un seul pixel (sinon il n'est pas visible)
         if (
             this.lineWidth <= 1 &&
-            pathData.length == 1 &&
-            pathData[0].length == 2 &&
-            pathData[0][0].x == pathData[0][1].x &&
-            pathData[0][0].y == pathData[0][1].y
+            pathData.length === 1 &&
+            pathData[0].length === 2 &&
+            pathData[0][0].x === pathData[0][1].x &&
+            pathData[0][0].y === pathData[0][1].y
         ) {
             ctx.fillRect(pathData[0][0].x, pathData[0][0].y, 1, 1);
             ctx.stroke();
@@ -161,7 +161,6 @@ export class PencilService extends Tool {
             ctx.beginPath();
         }
         ctx.stroke();
-        //ctx.closePath();
     }
 
     private clearPath(): void {

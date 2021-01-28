@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { PencilService } from '@app/services/tools/pencil-service';
-import { ToolHandlerService } from '@app/services/tools/toolHandler-service';
+import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
 
 // TODO : Avoir un fichier séparé pour les constantes ?
 export const DEFAULT_WIDTH = 1000;
@@ -23,7 +23,6 @@ export class DrawingComponent implements AfterViewInit {
     private canvasSize: Vec2 = { x: DEFAULT_WIDTH, y: DEFAULT_HEIGHT };
 
     constructor(private drawingService: DrawingService, readonly toolHandlerServcice: ToolHandlerService) {
-        //this.currentTool = this.toolHandlerServcice.findTool(PencilService.name);
         toolHandlerServcice.setTool(PencilService);
     }
 
@@ -51,17 +50,17 @@ export class DrawingComponent implements AfterViewInit {
     }
 
     @HostListener('document:keypress', ['$event'])
-    onKeyPress(event: KeyboardEvent) {
+    onKeyPress(event: KeyboardEvent): void {
         this.toolHandlerServcice.onKeyPress(event);
     }
 
     @HostListener('mouseleave', ['$event'])
-    onMouseLeave(event: MouseEvent) {
+    onMouseLeave(event: MouseEvent): void {
         this.toolHandlerServcice.onMouseLeave(event);
     }
 
     @HostListener('mouseenter', ['$event'])
-    onMouseEnter(event: MouseEvent) {
+    onMouseEnter(event: MouseEvent): void {
         this.toolHandlerServcice.onMouseEnter(event);
     }
 

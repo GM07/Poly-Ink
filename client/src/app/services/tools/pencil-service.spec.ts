@@ -118,16 +118,20 @@ describe('PencilService', () => {
 
         // tslint:disable-next-line:no-magic-numbers
         let imageData: ImageData = baseCtxStub.getImageData(1, 1, 49, 49);
+        // tslint:disable-next-line:no-magic-numbers
         expect(imageData.data[3]).toEqual(0); // A, rien ne doit être dessiné
         imageData = baseCtxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
+        // tslint:disable-next-line:no-magic-numbers
         expect(imageData.data[3]).not.toEqual(0); // A
+        // tslint:disable-next-line:no-magic-numbers
         imageData = baseCtxStub.getImageData(0, 50, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
+        // tslint:disable-next-line:no-magic-numbers
         expect(imageData.data[3]).not.toEqual(0); // A
     });
 
@@ -139,7 +143,8 @@ describe('PencilService', () => {
         service.onMouseEnter(mouseEventLClick);
         expect(drawLineSpy).toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
-        let imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
+        const imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
+        // tslint:disable-next-line:no-magic-numbers
         expect(imageData.data[3]).toEqual(0); // A, rien ne doit être dessiné où on est entré
     });
 
@@ -160,11 +165,13 @@ describe('PencilService', () => {
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
+    // tslint:disable-next-line:no-magic-numbers
     it('Should only draw nothing on base canvas when moving the mouse, left click released', () => {
         service.mouseDown = false;
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
+        // tslint:disable-next-line:no-magic-numbers
         expect(imageData.data[3]).toEqual(0);
     });
 
