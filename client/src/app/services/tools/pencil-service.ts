@@ -43,7 +43,7 @@ export class PencilService extends Tool {
     /**
      * Types d'entrées acceptées:
      * "couleur";
-     * "#FFFFFF";
+     * "#FFFFFF" ou #FFF;
      * "rgb(int, int, int)";
      * "rgba(int, int, int, 1.0)";
      */
@@ -146,12 +146,11 @@ export class PencilService extends Tool {
         // Cas spécial pour permettre de dessiner exactement un seul pixel (sinon il n'est pas visible)
         if (
             this.lineWidth <= 1 &&
-            pathData.length === 1 &&
-            pathData[0].length === 2 &&
-            pathData[0][0].x === pathData[0][1].x &&
-            pathData[0][0].y === pathData[0][1].y
+            pathData[pathData.length - 1].length === 2 &&
+            pathData[pathData.length - 1][0].x === pathData[pathData.length - 1][1].x &&
+            pathData[pathData.length - 1][0].y === pathData[pathData.length - 1][1].y
         ) {
-            ctx.fillRect(pathData[0][0].x, pathData[0][0].y, 1, 1);
+            ctx.arc(pathData[pathData.length - 1][0].x, pathData[pathData.length - 1][0].y, 1 / 2, 0, Math.PI * 2);
             ctx.stroke();
             return;
         }
