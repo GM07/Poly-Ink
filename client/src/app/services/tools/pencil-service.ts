@@ -17,17 +17,14 @@ export enum MouseButton {
     Forward = 4,
 }
 
-// Ceci est une implémentation de base de l'outil Crayon pour aider à débuter le projet
-// L'implémentation ici ne couvre pas tous les critères d'accepetation du projet
-// Vous êtes encouragés de modifier et compléter le code.
-// N'oubliez pas de regarder les tests dans le fichier spec.ts aussi!
+// Ceci est une implémentation de l'outil Crayon
 @Injectable({
     providedIn: 'root',
 })
 export class PencilService extends Tool {
     private pathData: Vec2[][];
-    private strokeStyle_: string = '#000000';
-    private lineWidth_: number = 10;
+    private strokeStyle_: string = 'black';
+    private lineWidth_: number = 1;
 
     constructor(drawingService: DrawingService) {
         super(drawingService);
@@ -43,11 +40,21 @@ export class PencilService extends Tool {
      * Types d'entrées acceptées:
      * "couleur";
      * "#FFFFFF";
-     * "rgb(255, 255, 255)";
-     * "rgba(255, 255, 255, 1)";
+     * "rgb(int, int, int)";
+     * "rgba(int, int, int, 1.0)";
      */
     set strokeStyle(strokeStyleIn: string) {
-        this.strokeStyle_ = strokeStyleIn;
+        let colorIsValid: boolean = false;
+        let style = new Option().style;
+        style.color = strokeStyleIn;
+        colorIsValid = colorIsValid || style.color == strokeStyleIn;
+        colorIsValid = colorIsValid || /^#([0-9A-F]{3}){1,2}$/.test(strokeStyleIn);
+        colorIsValid = colorIsValid || /^rgb\((\d+),\s?(\d+),\s?(\d+)\)$/.test(strokeStyleIn);
+        colorIsValid = colorIsValid || /^rgba\((\d+,\s?){3}(1(\.0+)?|0*(\.\d+))\)$/.test(strokeStyleIn);
+
+        if (colorIsValid) {
+            this.strokeStyle_ = strokeStyleIn;
+        }
     }
 
     get lineWidth(): number {
@@ -64,8 +71,8 @@ export class PencilService extends Tool {
 
     onMouseDown(event: MouseEvent): void {
         if (this.mouseDown && event.button === MouseButton.Left) {
-            const mousePosition = this.getPositionFromMouse(event);
-            this.pathData[this.pathData.length - 1].push(mousePosition);
+            this.mouseDownCoord = this.getPositionFromMouse(event);
+            this.pathData[this.pathData.length - 1].push(this.mouseDownCoord);
             return;
         }
 
@@ -79,7 +86,6 @@ export class PencilService extends Tool {
     }
 
     onMouseUp(event: MouseEvent): void {
-        console.log(this.pathData);
         if (this.mouseDown) {
             const mousePosition = this.getPositionFromMouse(event);
             this.pathData[this.pathData.length - 1].push(mousePosition);
@@ -90,7 +96,7 @@ export class PencilService extends Tool {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.drawPoint(this.getPositionFromMouse(event));
+        this.drawBackgroundPoint(this.getPositionFromMouse(event));
 
         if (this.mouseDown) {
             const mousePosition = this.getPositionFromMouse(event);
@@ -113,13 +119,14 @@ export class PencilService extends Tool {
             this.pathData.push([]);
             this.onMouseDown(event);
         } else if (event.buttons == LeftMouse.Released) {
+            this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawLine(this.drawingService.baseCtx, this.pathData);
             this.mouseDown = false;
             this.clearPath();
         }
     }
 
-    private drawPoint(point: Vec2) {
+    private drawBackgroundPoint(point: Vec2) {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
         this.drawLine(ctx, [[point]]);
@@ -127,7 +134,6 @@ export class PencilService extends Tool {
 
     private drawLine(ctx: CanvasRenderingContext2D, pathData: Vec2[][]): void {
         ctx.beginPath();
-
         ctx.strokeStyle = this.strokeStyle;
         ctx.fillStyle = this.strokeStyle;
         ctx.lineWidth = this.lineWidth;

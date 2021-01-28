@@ -22,9 +22,6 @@ export class DrawingComponent implements AfterViewInit {
     private previewCtx: CanvasRenderingContext2D;
     private canvasSize: Vec2 = { x: DEFAULT_WIDTH, y: DEFAULT_HEIGHT };
 
-    // TODO : Avoir un service dédié pour gérer tous les outils ? Ceci peut devenir lourd avec le temps
-    //private tools: Tool[];
-    //currentTool: Tool;
     constructor(private drawingService: DrawingService, readonly toolHandlerServcice: ToolHandlerService) {
         //this.currentTool = this.toolHandlerServcice.findTool(PencilService.name);
         toolHandlerServcice.setTool(PencilService);

@@ -90,17 +90,104 @@ describe('PencilService', () => {
         expect(drawLineSpy).toHaveBeenCalled();
     });
 
-    it(' onMouseMove should not call drawLine if mouse was not already down', () => {
-        service.mouseDownCoord = { x: 0, y: 0 };
-        service.mouseDown = false;
+    it('Should allow for color change', () => {
+        service.strokeStyle = 'purple';
+        expect(service.strokeStyle).toEqual('purple');
+        service.strokeStyle = '#FF0000';
+        expect(service.strokeStyle).toEqual('#FF0000');
+        service.strokeStyle = 'rgb(1, 2, 3)';
+        expect(service.strokeStyle).toEqual('rgb(1, 2, 3)');
+        service.strokeStyle = 'rgba(1, 2, 4, 0.5)';
+        expect(service.strokeStyle).toEqual('rgba(1, 2, 4, 0.5)');
+        service.strokeStyle = '#000000';
+        service.strokeStyle = 'NimporteQuoi';
+        expect(service.strokeStyle).not.toEqual('NimporteQuoi');
+        expect(service.strokeStyle).toEqual('#000000');
+    });
 
-        service.onMouseMove(mouseEvent);
+    it('should not draw a line between the points where it left and entered the canvas', () => {
+        service.strokeStyle = '#000000';
+        let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
+        service.onMouseDown(mouseEventLClick);
+        service.onMouseLeave(mouseEventLClick);
+        mouseEventLClick = { offsetX: 0, offsetY: 50, button: 0, buttons: 1 } as MouseEvent;
+        service.onMouseEnter(mouseEventLClick);
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
+        mouseEventLClick = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+        service.onMouseUp(mouseEvent);
+
+        // tslint:disable-next-line:no-magic-numbers
+        let imageData: ImageData = baseCtxStub.getImageData(1, 1, 49, 49);
+        expect(imageData.data[3]).toEqual(0); // A, rien ne doit être dessiné
+        imageData = baseCtxStub.getImageData(0, 0, 1, 1);
+        expect(imageData.data[0]).toEqual(0); // R
+        expect(imageData.data[1]).toEqual(0); // G
+        expect(imageData.data[2]).toEqual(0); // B
+        expect(imageData.data[3]).not.toEqual(0); // A
+        imageData = baseCtxStub.getImageData(0, 50, 1, 1);
+        expect(imageData.data[0]).toEqual(0); // R
+        expect(imageData.data[1]).toEqual(0); // G
+        expect(imageData.data[2]).toEqual(0); // B
+        expect(imageData.data[3]).not.toEqual(0); // A
+    });
+
+    it('should stop drawing when the mouse enters the canvas, with mouse up', () => {
+        let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
+        service.onMouseDown(mouseEventLClick);
+        service.onMouseLeave(mouseEventLClick);
+        mouseEventLClick = { offsetX: 0, offsetY: 1, button: 0, buttons: 0 } as MouseEvent;
+        service.onMouseEnter(mouseEventLClick);
+        expect(drawLineSpy).toHaveBeenCalled();
+        expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
+        let imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
+        expect(imageData.data[3]).toEqual(0); // A, rien ne doit être dessiné où on est entré
+    });
+
+    it('should do nothing when entering the canvas, with an unsupported mouse state', () => {
+        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 3 } as MouseEvent;
+        service.onMouseEnter(mouseEvent);
         expect(drawLineSpy).not.toHaveBeenCalled();
+        expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
+        mouseEvent = { offsetX: 0, offsetY: 0, button: 10, buttons: 3 } as MouseEvent;
+        service.onMouseEnter(mouseEvent);
+        expect(drawLineSpy).not.toHaveBeenCalled();
+        expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
+    });
+
+    it('should clear the canvas preview when the mouse leaves the canvas, left click released', () => {
+        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
+        service.onMouseLeave(mouseEvent);
+        expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
+    });
+
+    it('Should only draw nothing on base canvas when moving the mouse, left click released', () => {
+        service.mouseDown = false;
+        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
+        service.onMouseMove(mouseEvent);
+        const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
+        expect(imageData.data[3]).toEqual(0);
+    });
+
+    it('Should draw a single pixel if the user clicked once with the smallest size, without moving', () => {
+        service.strokeStyle = 'black';
+        service.lineWidth = 1;
+        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+        service.onMouseDown(mouseEvent);
+        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+        service.onMouseUp(mouseEvent);
+
+        // Premier pixel seulement
+        const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
+        expect(imageData.data[0]).toEqual(0); // R
+        expect(imageData.data[1]).toEqual(0); // G
+        expect(imageData.data[2]).toEqual(0); // B
+        // tslint:disable-next-line:no-magic-numbers
+        expect(imageData.data[3]).not.toEqual(0); // A
     });
 
     // Exemple de test d'intégration qui est quand même utile
     it(' should change the pixel of the canvas ', () => {
+        service.strokeStyle = '#000000';
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 0, button: 0 } as MouseEvent;

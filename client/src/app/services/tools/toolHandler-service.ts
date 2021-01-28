@@ -58,7 +58,7 @@ export class ToolHandlerService {
     }
 
     private findToolshortcutKey(key: String): Tool | undefined {
-        if (this.currentTool.shortCutKey == key) return undefined;
+        if (this.currentTool.shortCutKey == key) return this.currentTool;
 
         for (let i = 0; i < this.TOOLS.length; ++i) {
             if (this.TOOLS[i].shortCutKey == key) {
