@@ -112,7 +112,7 @@ describe('PencilService', () => {
         service.onMouseLeave(mouseEventLClick);
         mouseEventLClick = { offsetX: 0, offsetY: 50, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
-        expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
+        expect(drawLineSpy).toHaveBeenCalled();
         mouseEventLClick = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 

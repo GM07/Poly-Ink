@@ -17,6 +17,10 @@ export enum MouseButton {
     Forward = 4,
 }
 
+/**
+ * Note: Pas besoin d'implémtenter le code pour commencer à dessiner un ligne quand le bouton de la souris
+ * est enfoncé hors du canvas (Ref: Document de vision Polydessin 2 v1.0, p.10)
+ */
 // Ceci est une implémentation de l'outil Crayon
 @Injectable({
     providedIn: 'root',
@@ -70,12 +74,6 @@ export class PencilService extends Tool {
     }
 
     onMouseDown(event: MouseEvent): void {
-        if (this.mouseDown && event.button === MouseButton.Left) {
-            this.mouseDownCoord = this.getPositionFromMouse(event);
-            this.pathData[this.pathData.length - 1].push(this.mouseDownCoord);
-            return;
-        }
-
         this.mouseDown = event.button === MouseButton.Left;
         if (this.mouseDown) {
             this.clearPath();
@@ -117,7 +115,7 @@ export class PencilService extends Tool {
 
         if (event.buttons === LeftMouse.Pressed) {
             this.pathData.push([]);
-            this.onMouseDown(event);
+            this.onMouseMove(event);
         } else if (event.buttons === LeftMouse.Released) {
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawLine(this.drawingService.baseCtx, this.pathData);
