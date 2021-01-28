@@ -1,10 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Tool } from '@app/classes/tool';
+import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { PencilService } from '@app/services/tools/pencil-service';
 import { DrawingComponent } from './drawing.component';
-import { canvasConst } from '@app/constants/canvas.ts';
 
 class ToolStub extends Tool {}
 
@@ -40,8 +40,8 @@ describe('DrawingComponent', () => {
     it('should have a default WIDTH and HEIGHT', () => {
         const height = component.height;
         const width = component.width;
-        expect(height).toEqual(canvasConst.DEFAULT_HEIGHT);
-        expect(width).toEqual(canvasConst.DEFAULT_WIDTH);
+        expect(height).toEqual(CanvasConst.DEFAULT_HEIGHT);
+        expect(width).toEqual(CanvasConst.DEFAULT_WIDTH);
     });
 
     it('should get stubTool', () => {

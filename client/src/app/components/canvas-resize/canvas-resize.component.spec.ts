@@ -2,24 +2,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { DrawingComponent } from '@app/components/drawing/drawing.component';
+import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { CanvasResizeComponent } from './canvas-resize.component';
-import { canvasConst } from '@app/constants/canvas.ts';
 
 describe('CanvasResizeComponent', () => {
     let component: CanvasResizeComponent;
     let fixture: ComponentFixture<CanvasResizeComponent>;
     let service: DrawingService;
     let canvasTestHelper: CanvasTestHelper;
-
-    function dragAndDrop(beginX : number, beginY : number, endX : number, endY : number) : void{
-      const downEvent = new MouseEvent('document:mouseDown', { clientX: beginX, clientY: beginY });
-      const moveEvent = new MouseEvent('document:mouseMove', { clientX: endX, clientY: endY});
-      const upEvent = new MouseEvent('document:mouseUp', { clientX: endX, clientY: endY});
-      component.onMouseDown(downEvent);
-      component.onMouseMove(moveEvent);
-      component.onMouseUp(upEvent);
-    }
 
     beforeEach(async(() => {
         service = new DrawingService();
@@ -42,25 +33,34 @@ describe('CanvasResizeComponent', () => {
         fixture.detectChanges();
     });
 
+    const dragAndDrop = (beginX: number, beginY: number, endX: number, endY: number): void => {
+        const downEvent = new MouseEvent('document:mouseDown', { clientX: beginX, clientY: beginY });
+        const moveEvent = new MouseEvent('document:mouseMove', { clientX: endX, clientY: endY });
+        const upEvent = new MouseEvent('document:mouseUp', { clientX: endX, clientY: endY });
+        component.onMouseDown(downEvent);
+        component.onMouseMove(moveEvent);
+        component.onMouseUp(upEvent);
+    };
+
     it('should create', () => {
         expect(component).toBeTruthy();
     });
 
     it('should not be smaller than 250px', () => {
-        component.resizeCanvas(canvasConst.MIN_WIDTH - 1, canvasConst.MIN_HEIGHT - 1);
-        expect(service.canvas.width).toEqual(canvasConst.MIN_WIDTH);
-        expect(service.canvas.height).toEqual(canvasConst.MIN_HEIGHT);
+        component.resizeCanvas(CanvasConst.MIN_WIDTH - 1, CanvasConst.MIN_HEIGHT - 1);
+        expect(service.canvas.width).toEqual(CanvasConst.MIN_WIDTH);
+        expect(service.canvas.height).toEqual(CanvasConst.MIN_HEIGHT);
     });
 
     it('preview canvas should be equal to canvas', () => {
-        component.resizeCanvas(canvasConst.MIN_WIDTH+1, canvasConst.MIN_HEIGHT+1);
+        component.resizeCanvas(CanvasConst.MIN_WIDTH + 1, CanvasConst.MIN_HEIGHT + 1);
         expect(service.canvas.width).toEqual(service.previewCanvas.width);
         expect(service.canvas.height).toEqual(service.previewCanvas.height);
     });
 
     it('should draw white pixels', () => {
-        component.resizeCanvas(canvasConst.MIN_WIDTH+1, canvasConst.MIN_HEIGHT+1);
-        const pixelBuffer = service.baseCtx.getImageData(canvasConst.MIN_WIDTH, canvasConst.MIN_HEIGHT, 1, 1).data;
+        component.resizeCanvas(CanvasConst.MIN_WIDTH + 1, CanvasConst.MIN_HEIGHT + 1);
+        const pixelBuffer = service.baseCtx.getImageData(CanvasConst.MIN_WIDTH, CanvasConst.MIN_HEIGHT, 1, 1).data;
         const stringPixelBuffer = String(pixelBuffer[0]) + String(pixelBuffer[1]) + String(pixelBuffer[2]);
         expect(stringPixelBuffer).toBe('255255255'); // Représente un pixel avec le rvb à 255
     });
@@ -68,29 +68,29 @@ describe('CanvasResizeComponent', () => {
     it('should resize when dragging the bottom side', () => {
         const xPos = component.getCanvasLeft();
         const yPos = service.canvas.height + component.getCanvasTop() + 2; // Petite valeurs pour simuler un clic
-        dragAndDrop(xPos,yPos,xPos+canvasConst.SHIFTING,yPos+canvasConst.SHIFTING);
-        expect(service.canvas.height).toBe(yPos - component.getCanvasTop() + canvasConst.SHIFTING);
+        dragAndDrop(xPos, yPos, xPos + CanvasConst.SHIFTING, yPos + CanvasConst.SHIFTING);
+        expect(service.canvas.height).toBe(yPos - component.getCanvasTop() + CanvasConst.SHIFTING);
     });
 
     it('should resize when dragging the right side', () => {
         const xPos = service.canvas.width + component.getCanvasLeft() + 2;
         const yPos = component.getCanvasTop();
-        dragAndDrop(xPos, yPos, xPos+canvasConst.SHIFTING, yPos+canvasConst.SHIFTING)
-        expect(service.canvas.width).toBe(xPos - component.getCanvasLeft() + canvasConst.SHIFTING);
+        dragAndDrop(xPos, yPos, xPos + CanvasConst.SHIFTING, yPos + CanvasConst.SHIFTING);
+        expect(service.canvas.width).toBe(xPos - component.getCanvasLeft() + CanvasConst.SHIFTING);
     });
 
     it('should resize when dragging the corner', () => {
         const xPos = service.canvas.width + component.getCanvasLeft() - 1;
         const yPos = service.canvas.height + component.getCanvasTop() + 1; // Petite valeurs pour simuler un clic
-        dragAndDrop(xPos,yPos,0,0);
-        expect(service.canvas.width).toBe(canvasConst.MIN_WIDTH);
-        expect(service.canvas.height).toBe(canvasConst.MIN_HEIGHT);
+        dragAndDrop(xPos, yPos, 0, 0);
+        expect(service.canvas.width).toBe(CanvasConst.MIN_WIDTH);
+        expect(service.canvas.height).toBe(CanvasConst.MIN_HEIGHT);
     });
 
     it('should not resize when clicking elsewhere', () => {
         const canvasWidth = service.canvas.width;
         const canvasHeight = service.canvas.height;
-        dragAndDrop(0,0,0,0);
+        dragAndDrop(0, 0, 0, 0);
         expect(canvasWidth).toBe(service.canvas.width);
         expect(canvasHeight).toBe(service.canvas.height);
     });

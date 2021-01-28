@@ -1,8 +1,8 @@
-export abstract class canvasConst {
-  public static readonly MIN_WIDTH = 250;
-  public static readonly MIN_HEIGHT = 250;
-  public static readonly SHIFTING = 25;
-  public static readonly CONTROL_MARGIN = 2.5;
-  public static readonly DEFAULT_WIDTH = 1000;
-  public static readonly DEFAULT_HEIGHT = 800;
+export abstract class CanvasConst {
+    static readonly MIN_WIDTH: number = 250;
+    static readonly MIN_HEIGHT: number = 250;
+    static readonly SHIFTING: number = 25;
+    static readonly CONTROL_MARGIN: number = 2.5;
+    static readonly DEFAULT_WIDTH: number = 1000;
+    static readonly DEFAULT_HEIGHT: number = 800;
 }
