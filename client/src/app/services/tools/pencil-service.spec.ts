@@ -107,6 +107,7 @@ describe('PencilService', () => {
 
     it('should not draw a line between the points where it left and entered the canvas', () => {
         service.strokeStyle = '#000000';
+        service.lineWidth = 2;
         let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);
         service.onMouseLeave(mouseEventLClick);
@@ -117,7 +118,7 @@ describe('PencilService', () => {
         service.onMouseUp(mouseEvent);
 
         // tslint:disable-next-line:no-magic-numbers
-        let imageData: ImageData = baseCtxStub.getImageData(1, 1, 49, 49);
+        let imageData: ImageData = baseCtxStub.getImageData(1, 1, 25, 25);
         // tslint:disable-next-line:no-magic-numbers
         expect(imageData.data[3]).toEqual(0); // A, rien ne doit être dessiné
         imageData = baseCtxStub.getImageData(0, 0, 1, 1);
@@ -137,9 +138,10 @@ describe('PencilService', () => {
 
     it('should stop drawing when the mouse enters the canvas, with mouse up', () => {
         let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
+        service.lineWidth = 2;
         service.onMouseDown(mouseEventLClick);
         service.onMouseLeave(mouseEventLClick);
-        mouseEventLClick = { offsetX: 0, offsetY: 1, button: 0, buttons: 0 } as MouseEvent;
+        mouseEventLClick = { offsetX: 0, offsetY: 2, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
         expect(drawLineSpy).toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
@@ -190,6 +192,11 @@ describe('PencilService', () => {
         expect(imageData.data[2]).toEqual(0); // B
         // tslint:disable-next-line:no-magic-numbers
         expect(imageData.data[3]).not.toEqual(0); // A
+    });
+
+    it('should stop drawing when asked to', () => {
+        service.stopDrawing();
+        expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
     // Exemple de test d'intégration qui est quand même utile

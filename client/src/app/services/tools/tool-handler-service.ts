@@ -23,12 +23,12 @@ export class ToolHandlerService {
 
     setTool(toolClass: typeof Tool): boolean {
         for (const tool of this.TOOLS) {
-            if (tool instanceof toolClass) {
+            if (tool !== this.currentTool && tool instanceof toolClass) {
+                this.currentTool.stopDrawing();
                 this.currentTool = tool;
                 return true;
             }
         }
-
         return false;
     }
 
@@ -47,6 +47,7 @@ export class ToolHandlerService {
     onKeyPress(event: KeyboardEvent): void {
         const tool = this.findToolshortcutKey(event.key);
         if (tool != undefined) {
+            this.currentTool.stopDrawing();
             this.currentTool = tool;
         }
     }
@@ -60,7 +61,7 @@ export class ToolHandlerService {
     }
 
     private findToolshortcutKey(key: string): Tool | undefined {
-        if (this.currentTool.shortCutKey === key) return this.currentTool;
+        if (this.currentTool.shortCutKey === key) return undefined;
 
         for (const tool of this.TOOLS) {
             if (tool.shortCutKey === key) {

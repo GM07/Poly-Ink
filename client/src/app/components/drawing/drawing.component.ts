@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { PencilService } from '@app/services/tools/pencil-service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
 
 // TODO : Avoir un fichier séparé pour les constantes ?
@@ -22,9 +21,7 @@ export class DrawingComponent implements AfterViewInit {
     private previewCtx: CanvasRenderingContext2D;
     private canvasSize: Vec2 = { x: DEFAULT_WIDTH, y: DEFAULT_HEIGHT };
 
-    constructor(private drawingService: DrawingService, readonly toolHandlerServcice: ToolHandlerService) {
-        toolHandlerServcice.setTool(PencilService);
-    }
+    constructor(private drawingService: DrawingService, readonly toolHandlerServcice: ToolHandlerService) {}
 
     ngAfterViewInit(): void {
         this.baseCtx = this.baseCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;

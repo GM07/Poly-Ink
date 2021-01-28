@@ -20,6 +20,8 @@ export abstract class Tool {
 
     onMouseEnter(event: MouseEvent): void {}
 
+    abstract stopDrawing(): void;
+
     getPositionFromMouse(event: MouseEvent): Vec2 {
         return { x: event.offsetX, y: event.offsetY };
     }

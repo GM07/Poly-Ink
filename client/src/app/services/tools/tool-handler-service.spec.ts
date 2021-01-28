@@ -10,12 +10,12 @@ describe('ToolHandlerService', () => {
     let keyboardEvent: KeyboardEvent;
 
     let pencilService: PencilService;
+    let lineService: LineService;
 
     beforeEach(() => {
-        TestBed.configureTestingModule({
-            providers: [LineService],
-        });
+        TestBed.configureTestingModule({});
         pencilService = TestBed.inject(PencilService);
+        lineService = TestBed.inject(LineService);
         modifyObjectToSpyOnAllFunctions(pencilService);
         service = TestBed.inject(ToolHandlerService);
 
@@ -57,6 +57,30 @@ describe('ToolHandlerService', () => {
         keyboardEvent = { key: 'l' } as KeyboardEvent;
         service.onKeyPress(keyboardEvent);
         expect(service.getTool()).toBeInstanceOf(LineService);
+    });
+
+    it('should allow for a tool to be set', () => {
+        service.setTool(PencilService);
+        expect(pencilService.stopDrawing).not.toHaveBeenCalled();
+        service.setTool(LineService);
+        expect(pencilService.stopDrawing).toHaveBeenCalled();
+        expect(service.getTool()).toBeInstanceOf(LineService);
+    });
+
+    it('should finalise the previous drawing on a tool change', () => {
+        pencilService.onMouseDown(mouseEvent);
+        service.onKeyPress(keyboardEvent);
+        expect(pencilService.stopDrawing).not.toHaveBeenCalled();
+        keyboardEvent = { key: 'FakeKey' } as KeyboardEvent;
+        service.onKeyPress(keyboardEvent);
+        expect(pencilService.stopDrawing).not.toHaveBeenCalled();
+        keyboardEvent = { key: 'l' } as KeyboardEvent;
+        service.onKeyPress(keyboardEvent);
+        expect(pencilService.stopDrawing).toHaveBeenCalled();
+        spyOn<any>(lineService, 'stopDrawing');
+        keyboardEvent = { key: 'c' } as KeyboardEvent;
+        service.onKeyPress(keyboardEvent);
+        expect(lineService.stopDrawing).toHaveBeenCalled();
     });
 
     const modifyObjectToSpyOnAllFunctions = (object: any): void => {

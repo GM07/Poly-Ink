@@ -5,7 +5,11 @@ import { PencilService } from '@app/services/tools/pencil-service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
 import { DrawingComponent } from './drawing.component';
 
-class ToolStub extends Tool {}
+class ToolStub extends Tool {
+    stopDrawing(): void {
+        // Clear
+    }
+}
 
 // TODO : Déplacer dans un fichier accessible à tous
 const DEFAULT_WIDTH = 1000;

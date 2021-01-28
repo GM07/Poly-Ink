@@ -8,7 +8,10 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 export class LineService extends Tool {
     constructor(drawingService: DrawingService) {
         super(drawingService);
-        // this.clearPath();
         this.shortCutKey = 'l';
+    }
+
+    stopDrawing(): void {
+        // Clear
     }
 }

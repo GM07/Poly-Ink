@@ -28,7 +28,7 @@ export enum MouseButton {
 export class PencilService extends Tool {
     private pathData: Vec2[][];
     private strokeStyleIn: string = 'black';
-    private lineWidthIn: number = 1;
+    private lineWidthIn: number = 5;
 
     constructor(drawingService: DrawingService) {
         super(drawingService);
@@ -122,6 +122,11 @@ export class PencilService extends Tool {
             this.mouseDown = false;
             this.clearPath();
         }
+    }
+
+    stopDrawing(): void {
+        this.onMouseUp({} as MouseEvent);
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
     private drawBackgroundPoint(point: Vec2): void {
