@@ -54,13 +54,13 @@ export class CanvasResizeComponent implements AfterViewInit {
     onMouseDown(event: MouseEvent): void {
         this.isDown = event.button === ControlConst.mouseButton.Left;
         if (this.isDown) {
-            this.closeEnough(event.clientX, event.clientY);
+            if (this.closeEnough(event.clientX, event.clientY)) this.previewResize.nativeElement.style.visibility = 'visible';
         }
     }
 
     @HostListener('document:mouseup', ['$event'])
     onMouseUp(event: MouseEvent): void {
-        this.isDown = !(this.isDown && event.button === ControlConst.mouseButton.Left);
+        this.isDown = false;
         if (this.moveRight || this.moveBottom) {
             const xModifier = this.moveRight ? event.clientX - this.canvasLeft : this.drawingService.canvas.width;
             const yModifier = this.moveBottom ? event.clientY - this.canvasTop : this.drawingService.canvas.height;
@@ -68,10 +68,12 @@ export class CanvasResizeComponent implements AfterViewInit {
 
             this.setStyleControl();
             this.moveRight = this.moveBottom = false;
+
+            this.previewResize.nativeElement.style.visibility = 'hidden';
         }
     }
 
-    closeEnough(mouseX: number, mouseY: number): void {
+    closeEnough(mouseX: number, mouseY: number): boolean {
         const TRESHOLD = 10;
 
         this.moveBottom =
@@ -82,6 +84,8 @@ export class CanvasResizeComponent implements AfterViewInit {
             Math.abs(mouseX - (this.canvasLeft + this.drawingService.canvas.width)) < TRESHOLD &&
             mouseY < this.canvasTop + this.drawingService.canvas.height + TRESHOLD &&
             mouseY > this.canvasTop - TRESHOLD;
+
+        return this.moveRight || this.moveBottom;
     }
 
     setCanvasMargin(): void {
@@ -89,7 +93,7 @@ export class CanvasResizeComponent implements AfterViewInit {
         const documentOffset = document.documentElement;
 
         this.canvasTop = canvasOffset.top + window.pageYOffset - documentOffset.clientTop;
-        this.canvasLeft = canvasOffset.left + window.pageXOffset - documentOffset.clientLeft;
+        this.canvasLeft = canvasOffset.left + window.pageXOffset - documentOffset.clientLeft - 1;
     }
 
     resizeCanvas(width: number, height: number): void {
