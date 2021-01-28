@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { LineService } from './line-service';
 import { PencilService } from './pencil-service';
 import { ToolHandlerService } from './tool-handler-service';
 
@@ -11,7 +12,9 @@ describe('ToolHandlerService', () => {
     let pencilService: PencilService;
 
     beforeEach(() => {
-        TestBed.configureTestingModule({});
+        TestBed.configureTestingModule({
+            providers: [LineService],
+        });
         pencilService = TestBed.inject(PencilService);
         modifyObjectToSpyOnAllFunctions(pencilService);
         service = TestBed.inject(ToolHandlerService);
@@ -51,6 +54,9 @@ describe('ToolHandlerService', () => {
         keyboardEvent = { key: 'FakeKey' } as KeyboardEvent;
         service.onKeyPress(keyboardEvent);
         expect(service.getTool()).toBeInstanceOf(PencilService);
+        keyboardEvent = { key: 'l' } as KeyboardEvent;
+        service.onKeyPress(keyboardEvent);
+        expect(service.getTool()).toBeInstanceOf(LineService);
     });
 
     const modifyObjectToSpyOnAllFunctions = (object: any): void => {

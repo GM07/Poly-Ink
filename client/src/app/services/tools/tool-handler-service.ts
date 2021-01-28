@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
+import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
 
 @Injectable({
@@ -10,8 +11,9 @@ export class ToolHandlerService {
     private TOOLS: Tool[] = [];
     private currentTool: Tool;
 
-    constructor(pencilService: PencilService) {
+    constructor(pencilService: PencilService, lineService: LineService) {
         this.TOOLS.push(pencilService);
+        this.TOOLS.push(lineService);
         this.currentTool = this.TOOLS.values().next().value;
     }
 
