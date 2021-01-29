@@ -18,9 +18,13 @@ export class MainMenuComponent implements OnInit {
     state: OpacityState = 'visible';
     showComponent: boolean = true;
 
-    constructor() {}
+    constructor() {
+        //
+    }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        //
+    }
 
     // Function called when the create new drawing button is pressed
     createNewDrawing(): void {
@@ -46,8 +50,8 @@ export class MainMenuComponent implements OnInit {
     }
 
     // When an animation is done, show component or not according to state
-    endOfFadeAnimation() {
-        if (this.state == 'visible') {
+    endOfFadeAnimation(): void {
+        if (this.state === 'visible') {
             this.showComponent = true;
         } else {
             this.showComponent = false;
