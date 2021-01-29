@@ -14,7 +14,18 @@ describe('PencilService', () => {
     let baseCtxStub: CanvasRenderingContext2D;
     let previewCtxStub: CanvasRenderingContext2D;
     let drawLineSpy: jasmine.Spy<any>;
+const red = 0;
+    const green = 1;
+    const blue = 2;
+    const alpha = 3;
 
+    const enum MouseButton {
+        Left = 0,
+        Middle = 1,
+        Right = 2,
+        Back = 3,
+        Forward = 4,
+    }
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
 
@@ -106,12 +117,13 @@ describe('PencilService', () => {
     });
 
     it('should not draw a line between the points where it left and entered the canvas', () => {
-        service.strokeStyle = '#000000';
+const offsetY = 50;
+        const size = 25;
         service.lineWidth = 2;
         let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);
         service.onMouseLeave(mouseEventLClick);
-        mouseEventLClick = { offsetX: 0, offsetY: 50, button: 0, buttons: 1 } as MouseEvent;
+mouseEventLClick = { offsetX: 0, offsetY, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
         expect(drawLineSpy).toHaveBeenCalled();
         mouseEventLClick = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
@@ -120,7 +132,8 @@ describe('PencilService', () => {
         // tslint:disable-next-line:no-magic-numbers
         let imageData: ImageData = baseCtxStub.getImageData(1, 1, 25, 25);
         // tslint:disable-next-line:no-magic-numbers
-        expect(imageData.data[3]).toEqual(0); // A, rien ne doit être dessiné
+let imageData: ImageData = baseCtxStub.getImageData(1, 1, size, size); // Besoin de récupérer une aussi grosse partie de l'image?
+        expect(imageData.data[alpha]).toEqual(0); // A, rien ne doit être dessiné
         imageData = baseCtxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
@@ -133,7 +146,15 @@ describe('PencilService', () => {
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
         // tslint:disable-next-line:no-magic-numbers
-        expect(imageData.data[3]).not.toEqual(0); // A
+expect(imageData.data[red]).toEqual(0); // R
+        expect(imageData.data[green]).toEqual(0); // G
+        expect(imageData.data[blue]).toEqual(0); // B
+        expect(imageData.data[alpha]).not.toEqual(0); // A
+        imageData = baseCtxStub.getImageData(0, offsetY, 1, 1);
+        expect(imageData.data[red]).toEqual(0); // R
+        expect(imageData.data[green]).toEqual(0); // G
+        expect(imageData.data[blue]).toEqual(0); // B
+        expect(imageData.data[alpha]).not.toEqual(0); // A
     });
 
     it('should stop drawing when the mouse enters the canvas, with mouse up', () => {
@@ -147,11 +168,12 @@ describe('PencilService', () => {
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
         const imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
         // tslint:disable-next-line:no-magic-numbers
-        expect(imageData.data[3]).toEqual(0); // A, rien ne doit être dessiné où on est entré
+expect(imageData.data[alpha]).toEqual(0); // A, rien ne doit être dessiné où on est entré
     });
 
     it('should do nothing when entering the canvas, with an unsupported mouse state', () => {
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 3 } as MouseEvent;
+mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: MouseButton.Back } as MouseEvent;
+        service.onMouseEnter(mouseEvent);
         service.onMouseEnter(mouseEvent);
         expect(drawLineSpy).not.toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
@@ -174,7 +196,7 @@ describe('PencilService', () => {
         service.onMouseMove(mouseEvent);
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
         // tslint:disable-next-line:no-magic-numbers
-        expect(imageData.data[3]).toEqual(0);
+expect(imageData.data[alpha]).toEqual(0);
     });
 
     it('Should draw a single pixel if the user clicked once with the smallest size, without moving', () => {
@@ -191,7 +213,10 @@ describe('PencilService', () => {
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
         // tslint:disable-next-line:no-magic-numbers
-        expect(imageData.data[3]).not.toEqual(0); // A
+expect(imageData.data[red]).toEqual(0); // R
+        expect(imageData.data[green]).toEqual(0); // G
+        expect(imageData.data[blue]).toEqual(0); // B
+        expect(imageData.data[alpha]).not.toEqual(0); // A
     });
 
     it('should stop drawing when asked to', () => {
@@ -213,6 +238,9 @@ describe('PencilService', () => {
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
         // tslint:disable-next-line:no-magic-numbers
-        expect(imageData.data[3]).not.toEqual(0); // A
+expect(imageData.data[red]).toEqual(0); // R
+        expect(imageData.data[green]).toEqual(0); // G
+        expect(imageData.data[blue]).toEqual(0); // B
+        expect(imageData.data[alpha]).not.toEqual(0); // A
     });
 });
