@@ -81,7 +81,7 @@ describe('DrawingComponent', () => {
     });
 
     it(" should call the toolHandler's keyPress event when receiving a keyPress event", () => {
-        const event = {} as KeyboardEvent;
+        const event = { key: 'c' } as KeyboardEvent;
         const mouseEventSpy = spyOn<ToolHandlerService>(component.toolHandlerServcice, 'onKeyPress').and.callThrough();
         component.onKeyPress(event);
         expect(mouseEventSpy).toHaveBeenCalled();

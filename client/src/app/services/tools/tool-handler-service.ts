@@ -7,7 +7,6 @@ import { PencilService } from '@app/services/tools/pencil-service';
     providedIn: 'root',
 })
 export class ToolHandlerService {
-    // private TOOLS: Map<String, Tool> = new Map();
     private TOOLS: Tool[] = [];
     private currentTool: Tool;
 
@@ -45,7 +44,7 @@ export class ToolHandlerService {
     }
 
     onKeyPress(event: KeyboardEvent): void {
-        const tool = this.findToolshortcutKey(event.key);
+        const tool = this.findToolshortcutKey(event.key.toLocaleLowerCase());
         if (tool != undefined) {
             this.currentTool.stopDrawing();
             this.currentTool = tool;

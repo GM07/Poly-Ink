@@ -15,6 +15,8 @@ describe('PencilService', () => {
     let previewCtxStub: CanvasRenderingContext2D;
     let drawLineSpy: jasmine.Spy<any>;
 
+    const ALPHA = 3;
+
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
 
@@ -59,7 +61,7 @@ describe('PencilService', () => {
         const mouseEventRClick = {
             offsetX: 25,
             offsetY: 25,
-            button: 1, // TODO: Avoir ceci dans un enum accessible
+            button: 1,
         } as MouseEvent;
         service.onMouseDown(mouseEventRClick);
         expect(service.mouseDown).toEqual(false);
@@ -119,21 +121,18 @@ describe('PencilService', () => {
 
         // tslint:disable-next-line:no-magic-numbers
         let imageData: ImageData = baseCtxStub.getImageData(1, 1, 25, 25);
-        // tslint:disable-next-line:no-magic-numbers
-        expect(imageData.data[3]).toEqual(0); // A, rien ne doit être dessiné
+        expect(imageData.data[ALPHA]).toEqual(0); // A, rien ne doit être dessiné
         imageData = baseCtxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
-        // tslint:disable-next-line:no-magic-numbers
-        expect(imageData.data[3]).not.toEqual(0); // A
+        expect(imageData.data[ALPHA]).not.toEqual(0); // A
         // tslint:disable-next-line:no-magic-numbers
         imageData = baseCtxStub.getImageData(0, 50, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
-        // tslint:disable-next-line:no-magic-numbers
-        expect(imageData.data[3]).not.toEqual(0); // A
+        expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
     it('should stop drawing when the mouse enters the canvas, with mouse up', () => {
@@ -146,8 +145,7 @@ describe('PencilService', () => {
         expect(drawLineSpy).toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
         const imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
-        // tslint:disable-next-line:no-magic-numbers
-        expect(imageData.data[3]).toEqual(0); // A, rien ne doit être dessiné où on est entré
+        expect(imageData.data[ALPHA]).toEqual(0); // A, rien ne doit être dessiné où on est entré
     });
 
     it('should do nothing when entering the canvas, with an unsupported mouse state', () => {
@@ -167,14 +165,12 @@ describe('PencilService', () => {
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
-    // tslint:disable-next-line:no-magic-numbers
     it('Should only draw nothing on base canvas when moving the mouse, left click released', () => {
         service.mouseDown = false;
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
-        // tslint:disable-next-line:no-magic-numbers
-        expect(imageData.data[3]).toEqual(0);
+        expect(imageData.data[ALPHA]).toEqual(0);
     });
 
     it('Should draw a single pixel if the user clicked once with the smallest size, without moving', () => {
@@ -190,8 +186,7 @@ describe('PencilService', () => {
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
-        // tslint:disable-next-line:no-magic-numbers
-        expect(imageData.data[3]).not.toEqual(0); // A
+        expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
     it('should stop drawing when asked to', () => {
@@ -212,7 +207,6 @@ describe('PencilService', () => {
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
-        // tslint:disable-next-line:no-magic-numbers
-        expect(imageData.data[3]).not.toEqual(0); // A
+        expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 });
