@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
 import { Vec2 } from '@app/classes/vec2';
-import { ControlConst } from '@app/constants/control.ts';
+import { MouseButton } from '@app/constants/control.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
 // Ceci est une implémentation de base de l'outil Crayon pour aider à débuter le projet
@@ -20,7 +20,7 @@ export class PencilService extends Tool {
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.mouseDown = event.button === ControlConst.mouseButton.Left;
+        this.mouseDown = event.button === MouseButton.Left;
         if (this.mouseDown) {
             this.clearPath();
 

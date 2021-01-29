@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { CanvasConst } from '@app/constants/canvas.ts';
-import { ControlConst } from '@app/constants/control.ts';
+import { MouseButton } from '@app/constants/control.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
 @Component({
@@ -40,19 +40,18 @@ export class CanvasResizeComponent implements AfterViewInit {
     @HostListener('document:mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
         if ((this.moveRight || this.moveBottom) && this.isDown) {
-            this.previewResizeStyle.width = this.moveRight
-                ? String(event.clientX - this.canvasLeft > CanvasConst.MIN_WIDTH ? event.clientX - this.canvasLeft : CanvasConst.MIN_WIDTH) + 'px'
-                : this.previewResizeStyle.width;
-
-            this.previewResizeStyle.height = this.moveBottom
-                ? String(event.clientY - this.canvasTop > CanvasConst.MIN_HEIGHT ? event.clientY - this.canvasTop : CanvasConst.MIN_HEIGHT) + 'px'
-                : this.previewResizeStyle.height;
+            if (this.moveRight)
+                this.previewResizeStyle.width =
+                    String(event.clientX - this.canvasLeft > CanvasConst.MIN_WIDTH ? event.clientX - this.canvasLeft : CanvasConst.MIN_WIDTH) + 'px';
+            if (this.moveBottom)
+                this.previewResizeStyle.height =
+                    String(event.clientY - this.canvasTop > CanvasConst.MIN_HEIGHT ? event.clientY - this.canvasTop : CanvasConst.MIN_HEIGHT) + 'px';
         }
     }
 
     @HostListener('document:mousedown', ['$event'])
     onMouseDown(event: MouseEvent): void {
-        this.isDown = event.button === ControlConst.mouseButton.Left;
+        this.isDown = event.button === MouseButton.Left;
         if (this.isDown) {
             if (this.closeEnough(event.clientX, event.clientY)) this.previewResize.nativeElement.style.visibility = 'visible';
         }
