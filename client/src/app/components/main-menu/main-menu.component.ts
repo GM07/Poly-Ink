@@ -38,7 +38,7 @@ export class MainMenuComponent implements OnInit {
     }
 
     continuingDrawing(): boolean {
-        return false;
+        return true;
     }
 
     fadeOut(): void {
