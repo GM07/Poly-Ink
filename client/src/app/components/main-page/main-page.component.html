@@ -1,6 +1,6 @@
+<app-launch-tool-config></app-launch-tool-config>
 <div class="container">
     <h1 class="header-item">Bienvenue au cours {{ title }}</h1>
-
     <div id="server-message">
         <p>Petit message du serveur : {{ message | async }}</p>
         <button class="button" (click)="getMessagesFromServer()">Récuper un message du serveur</button>
