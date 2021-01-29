@@ -143,24 +143,19 @@ export class PencilService extends Tool {
         ctx.lineCap = 'round' as CanvasLineCap;
         ctx.lineJoin = 'round' as CanvasLineJoin; // Essentiel pour avoir une allure "smooth"
 
-        // Cas spécial pour permettre de dessiner exactement un seul pixel (sinon il n'est pas visible)
-        if (
-            this.lineWidth <= 1 &&
-            pathData[pathData.length - 1].length === 2 &&
-            pathData[pathData.length - 1][0].x === pathData[pathData.length - 1][1].x &&
-            pathData[pathData.length - 1][0].y === pathData[pathData.length - 1][1].y
-        ) {
-            ctx.arc(pathData[pathData.length - 1][0].x, pathData[pathData.length - 1][0].y, 1 / 2, 0, Math.PI * 2);
-            ctx.stroke();
-            return;
-        }
-
         for (const paths of pathData) {
-            for (const point of paths) {
-                ctx.lineTo(point.x, point.y);
+            // Cas spécial pour permettre de dessiner exactement un seul pixel (sinon il n'est pas visible)
+            if (this.lineWidth <= 1 && paths.length === 2 && paths[0].x === paths[1].x && paths[0].y === paths[1].y) {
+                ctx.arc(paths[0].x, paths[0].y, 1 / 2, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath();
+            } else {
+                for (const point of paths) {
+                    ctx.lineTo(point.x, point.y);
+                }
+                ctx.stroke();
+                ctx.beginPath();
             }
-            ctx.stroke();
-            ctx.beginPath();
         }
         ctx.stroke();
     }
