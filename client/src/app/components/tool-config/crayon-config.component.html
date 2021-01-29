@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{ data }} Configurations</h2>
 <!--SIZE-->
-<mat-dialog-content *ngIf="data === 'Crayon'"><!--Add an *ngIf it's a crayon, a brush etc...-->
+<mat-dialog-content>
     <section>
         <div mat-dialog-header>
             Size
@@ -42,21 +42,6 @@
             <button mat-raised-button (click)="changeColor('blue')">Blue</button>
             <button mat-raised-button (click)="changeColor('yellow')">Yellow</button>
             <button mat-raised-button (click)="toggleColorPicker()">Color Picker</button>
-        </div>
-    </section>
-</mat-dialog-content>
-
-<!--TYPE DE TRACE-->
-<mat-dialog-content *ngIf="data === 'Rectangle'">
-    <mat-divider></mat-divider>
-    <br/>
-    <section>
-        <div>Type de tracé</div>
-        <br/>
-        <div class="button-row">
-            <button mat-raised-button (click)="changeColor('black')">Contour</button>
-            <button mat-raised-button (click)="changeColor('white')">Plein</button>
-            <button mat-raised-button (click)="changeColor('grey')">Plein avec contour</button>
         </div>
     </section>
 </mat-dialog-content>
