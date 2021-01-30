@@ -45,29 +45,25 @@ export class CanvasResizeComponent implements AfterViewInit {
 
     @HostListener('document:mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
-        if ((this.moveRight || this.moveBottom) && this.isDown) {
+        if (this.isDown) {
             if (this.moveRight)
-                this.previewResizeStyle.width =
-                    String(event.clientX - this.canvasLeft > CanvasConst.MIN_WIDTH ? event.clientX - this.canvasLeft : CanvasConst.MIN_WIDTH) + 'px';
+                this.previewResizeStyle.width = String(this.getWidth(event.clientX)) + 'px';
             if (this.moveBottom)
-                this.previewResizeStyle.height =
-                    String(event.clientY - this.canvasTop > CanvasConst.MIN_HEIGHT ? event.clientY - this.canvasTop : CanvasConst.MIN_HEIGHT) + 'px';
+                this.previewResizeStyle.height = String(this.getHeight(event.clientY)) + 'px';
         }
     }
 
     @HostListener('document:mouseup', ['$event'])
     onMouseUp(event: MouseEvent): void {
         this.isDown = false;
-        if (this.moveRight || this.moveBottom) {
-            const xModifier = this.moveRight ? event.clientX - this.canvasLeft : this.drawingService.canvas.width;
-            const yModifier = this.moveBottom ? event.clientY - this.canvasTop : this.drawingService.canvas.height;
-            this.resizeCanvas(xModifier, yModifier);
+        const xModifier = this.moveRight ? this.getWidth(event.clientX) : this.drawingService.canvas.width;
+        const yModifier = this.moveBottom ? this.getHeight(event.clientY) : this.drawingService.canvas.height;
+        this.drawingService.resizeCanvas(xModifier, yModifier);
 
-            this.setStyleControl();
-            this.moveRight = this.moveBottom = false;
+        this.setStyleControl();
+        this.moveRight = this.moveBottom = false;
 
-            this.previewResize.nativeElement.style.visibility = 'hidden';
-        }
+        this.previewResize.nativeElement.style.visibility = 'hidden';
     }
 
     setCanvasMargin(): void {
@@ -78,11 +74,8 @@ export class CanvasResizeComponent implements AfterViewInit {
         this.canvasLeft = canvasOffset.left + window.pageXOffset - documentOffset.clientLeft - 1;
     }
 
-    resizeCanvas(width: number, height: number): void {
-        this.drawingService.resizeCanvas(
-            width < CanvasConst.MIN_WIDTH ? CanvasConst.MIN_WIDTH : width,
-            height < CanvasConst.MIN_HEIGHT ? CanvasConst.MIN_HEIGHT : height,
-        );
+    resizeCanvas(xModifier: number, yModifier : number) : void {
+      this.drawingService.resizeCanvas(xModifier < 250 ? 250 : xModifier, yModifier < 250 ? 250 : yModifier);
     }
 
     setStyleControl(): void {
@@ -120,5 +113,13 @@ export class CanvasResizeComponent implements AfterViewInit {
 
     getCanvasTop(): number {
         return this.canvasTop;
+    }
+
+    getWidth(xPos : number) : number{
+      return xPos - this.canvasLeft > CanvasConst.MIN_WIDTH ? xPos - this.canvasLeft : CanvasConst.MIN_WIDTH
+    }
+
+    getHeight(yPos : number) : number{
+      return yPos - this.canvasTop > CanvasConst.MIN_HEIGHT ? yPos - this.canvasTop : CanvasConst.MIN_HEIGHT
     }
 }
