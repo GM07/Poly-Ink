@@ -1,0 +1,59 @@
+$background: rgb(51, 51, 51);
+
+#background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+#main {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.white {
+    color: white;
+}
+
+#content {
+    background-color: $background;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 24px;
+    margin-bottom: 32px;
+    border-radius: 12px;
+}
+
+#title {
+    text-align: center;
+}
+
+.button {
+    margin: 16px;
+    font-size: 24px;
+    padding: 12px 20px;
+    display: inline-flex;
+    border-radius: 12px;
+}
+
+#team {
+    text-align: center;
+    background-color: $background;
+    border-radius: 12px;
+}
+
+#back {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 16px;
+}

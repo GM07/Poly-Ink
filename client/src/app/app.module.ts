@@ -1,18 +1,23 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.component';
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
-import { MainPageComponent } from './components/main-page/main-page.component';
+import { HomePageComponent } from './components/home-page/home-page.component';
+import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
-    declarations: [AppComponent, EditorComponent, SidebarComponent, DrawingComponent, MainPageComponent, CanvasResizeComponent],
-    imports: [BrowserModule, HttpClientModule, AppRoutingModule, MatButtonModule],
+    declarations: [AppComponent, EditorComponent, SidebarComponent, DrawingComponent, MainMenuComponent, HomePageComponent, CanvasResizeComponent],
+    imports: [BrowserModule, HttpClientModule, AppRoutingModule, MatButtonModule, MatExpansionModule, MatIconModule, BrowserAnimationsModule],
+
     providers: [],
     bootstrap: [AppComponent],
 })
