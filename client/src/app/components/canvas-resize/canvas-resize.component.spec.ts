@@ -92,12 +92,11 @@ describe('CanvasResizeComponent', () => {
         expect(canvasHeight).toBe(service.canvas.height);
     });
 
-    it('should not do anything when moving but not clicking', () =>{
-      const moveEvent= new MouseEvent('mouseMove', {});
-      const mouseEventSpy = spyOn(component, 'onMouseMove').and.callThrough();
-      component.onMouseMove(moveEvent);
-      expect(mouseEventSpy).toHaveBeenCalled();
-      expect(mouseEventSpy).toHaveBeenCalledWith(moveEvent);
-
+    it('should not do anything when moving but not clicking', () => {
+        const moveEvent = new MouseEvent('mouseMove', {});
+        const mouseEventSpy = spyOn(component, 'onMouseMove').and.callThrough();
+        component.onMouseMove(moveEvent);
+        expect(mouseEventSpy).toHaveBeenCalled();
+        expect(mouseEventSpy).toHaveBeenCalledWith(moveEvent);
     });
 });

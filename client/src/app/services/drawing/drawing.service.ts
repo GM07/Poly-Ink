@@ -24,21 +24,21 @@ export class DrawingService {
         this.baseCtx.drawImage(memoryCanvas, 0, 0);
 
         if (memoryCanvas.width < this.canvas.width || memoryCanvas.height < this.canvas.height) {
-          this.drawWhite(memoryCanvas);
+            this.drawWhite(memoryCanvas);
         }
     }
 
-    saveCanvas(memoryCanvas : HTMLCanvasElement) : void {
-      const memoryCtx = memoryCanvas.getContext('2d');
-      memoryCanvas.width = this.canvas.width;
-      memoryCanvas.height = this.canvas.height; // Sauvegarde du canvas
-      memoryCtx?.drawImage(this.canvas, 0, 0); // Ne devrait jamais être égal à nul.
+    saveCanvas(memoryCanvas: HTMLCanvasElement): void {
+        const memoryCtx = memoryCanvas.getContext('2d');
+        memoryCanvas.width = this.canvas.width;
+        memoryCanvas.height = this.canvas.height; // Sauvegarde du canvas
+        memoryCtx?.drawImage(this.canvas, 0, 0); // Ne devrait jamais être égal à nul.
     }
 
-    drawWhite(memoryCanvas : HTMLCanvasElement) : void{
-      this.baseCtx.fillStyle = 'white';
-      this.baseCtx.fillRect(memoryCanvas.width, 0, this.canvas.width - memoryCanvas.width, this.canvas.height);
-      this.baseCtx.fillRect(0, memoryCanvas.height, this.canvas.width, this.canvas.height - memoryCanvas.height);
+    drawWhite(memoryCanvas: HTMLCanvasElement): void {
+        this.baseCtx.fillStyle = 'white';
+        this.baseCtx.fillRect(memoryCanvas.width, 0, this.canvas.width - memoryCanvas.width, this.canvas.height);
+        this.baseCtx.fillRect(0, memoryCanvas.height, this.canvas.width, this.canvas.height - memoryCanvas.height);
     }
 
     initBackground(): void {

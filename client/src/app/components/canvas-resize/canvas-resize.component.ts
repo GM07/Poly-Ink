@@ -36,20 +36,18 @@ export class CanvasResizeComponent implements AfterViewInit {
         this.setStyleControl();
     }
 
-    mouseDown(right : boolean, bottom: boolean) : void {
-      this.isDown = true;
-      this.moveRight = right;
-      this.moveBottom = bottom;
-      this.previewResize.nativeElement.style.visibility = 'visible'
+    mouseDown(right: boolean, bottom: boolean): void {
+        this.isDown = true;
+        this.moveRight = right;
+        this.moveBottom = bottom;
+        this.previewResize.nativeElement.style.visibility = 'visible';
     }
 
     @HostListener('document:mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
         if (this.isDown) {
-            if (this.moveRight)
-                this.previewResizeStyle.width = String(this.getWidth(event.clientX)) + 'px';
-            if (this.moveBottom)
-                this.previewResizeStyle.height = String(this.getHeight(event.clientY)) + 'px';
+            if (this.moveRight) this.previewResizeStyle.width = String(this.getWidth(event.clientX)) + 'px';
+            if (this.moveBottom) this.previewResizeStyle.height = String(this.getHeight(event.clientY)) + 'px';
         }
     }
 
@@ -74,8 +72,11 @@ export class CanvasResizeComponent implements AfterViewInit {
         this.canvasLeft = canvasOffset.left + window.pageXOffset - documentOffset.clientLeft - 1;
     }
 
-    resizeCanvas(xModifier: number, yModifier : number) : void {
-      this.drawingService.resizeCanvas(xModifier < 250 ? 250 : xModifier, yModifier < 250 ? 250 : yModifier);
+    resizeCanvas(xModifier: number, yModifier: number): void {
+        this.drawingService.resizeCanvas(
+            xModifier < CanvasConst.MIN_WIDTH ? CanvasConst.MIN_WIDTH : xModifier,
+            yModifier < CanvasConst.MIN_HEIGHT ? CanvasConst.MIN_HEIGHT : yModifier,
+        );
     }
 
     setStyleControl(): void {
@@ -115,11 +116,11 @@ export class CanvasResizeComponent implements AfterViewInit {
         return this.canvasTop;
     }
 
-    getWidth(xPos : number) : number{
-      return xPos - this.canvasLeft > CanvasConst.MIN_WIDTH ? xPos - this.canvasLeft : CanvasConst.MIN_WIDTH
+    getWidth(xPos: number): number {
+        return xPos - this.canvasLeft > CanvasConst.MIN_WIDTH ? xPos - this.canvasLeft : CanvasConst.MIN_WIDTH;
     }
 
-    getHeight(yPos : number) : number{
-      return yPos - this.canvasTop > CanvasConst.MIN_HEIGHT ? yPos - this.canvasTop : CanvasConst.MIN_HEIGHT
+    getHeight(yPos: number): number {
+        return yPos - this.canvasTop > CanvasConst.MIN_HEIGHT ? yPos - this.canvasTop : CanvasConst.MIN_HEIGHT;
     }
 }
