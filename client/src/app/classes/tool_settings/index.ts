@@ -1,3 +1,4 @@
+// Order matters here
 // Tool icons at the top of the side bar
 export { ColorSettings } from './color-settings';
 export { Pencilsettings } from './pencil-settings';

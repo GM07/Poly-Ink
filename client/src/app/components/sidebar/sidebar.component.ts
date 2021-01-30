@@ -8,7 +8,6 @@ export class SidebarComponent implements OnInit {
     bottomToolsSettings: ToolSettings[] = [];
 
     ngOnInit(): void {
-        
         Object.values(CommonToolSettings).forEach((setting) => {
             this.topToolsSettings.push(new setting());
         });
