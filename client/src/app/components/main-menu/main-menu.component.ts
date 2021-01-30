@@ -28,12 +28,10 @@ export class MainMenuComponent implements OnInit {
 
     // Function called when the create new drawing button is pressed
     createNewDrawing(): void {
-        console.log('Create new drawing');
         this.fadeOut();
     }
 
     backToMenu(): void {
-        console.log('Back to menu');
         this.fadeIn();
     }
 

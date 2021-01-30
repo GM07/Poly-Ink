@@ -1,4 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MainMenuComponent } from './main-menu.component';
 
@@ -8,8 +11,8 @@ describe('MainMenuComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [NoopAnimationsModule],
             declarations: [MainMenuComponent],
+            imports: [NoopAnimationsModule, MatButtonModule, MatExpansionModule, MatIconModule],
         }).compileComponents();
     }));
 
