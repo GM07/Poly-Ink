@@ -15,5 +15,3 @@ export { EyeDropperSettings } from './eyedropper-settings';
 export { EllipseSelectionSettings } from './ellipse-selection-settings';
 export { RectangleSelectionSettings } from './rectangle-selection-settings';
 export { LassoSettings } from './lasso-settings';
-
-
