@@ -15,8 +15,5 @@ export { EyeDropperSettings } from './eyedropper-settings';
 export { EllipseSelectionSettings } from './ellipse-selection-settings';
 export { RectangleSelectionSettings } from './rectangle-selection-settings';
 export { LassoSettings } from './lasso-settings';
-// Tool icons at the bottom of the side bar
-export { SaveSettings } from './save-settings';
-export { ExportSettings } from './export-settings';
 
 
