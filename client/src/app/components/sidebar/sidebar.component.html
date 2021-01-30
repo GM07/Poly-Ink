@@ -1,37 +1,15 @@
 <div class="container">
     <mat-action-list class="top-sidebar">
-        <button class="sidebar-item" mat-icon-button matTooltip="Home" matTooltipPosition="right">
-            <mat-icon>home</mat-icon>
-        </button>
-        <button class="sidebar-item" mat-icon-button matTooltip="Home" matTooltipPosition="right">
-            <mat-icon>home</mat-icon>
-        </button>
-        <button class="sidebar-item" mat-icon-button matTooltip="Home" matTooltipPosition="right">
-            <mat-icon>home</mat-icon>
-        </button>
-        <button class="sidebar-item" mat-icon-button matTooltip="Home" matTooltipPosition="right">
-            <mat-icon>home</mat-icon>
-        </button>
-        <button class="sidebar-item" mat-icon-button matTooltip="Home" matTooltipPosition="right">
-            <mat-icon>home</mat-icon>
+        <button *ngFor="let tool of topToolsSettings" class="sidebar-item" matTooltip={{tool.infoBubble}}
+            mat-icon-button matTooltipPosition="right">
+            <mat-icon>{{tool.iconName}}</mat-icon>
         </button>
     </mat-action-list>
 
-    <mat-action-list class="down-sidebar">
-        <button class="sidebar-item" mat-icon-button matTooltip="Home" matTooltipPosition="right">
-            <mat-icon>home</mat-icon>
-        </button>
-        <button class="sidebar-item" mat-icon-button matTooltip="Home" matTooltipPosition="right">
-            <mat-icon>home</mat-icon>
-        </button>
-        <button class="sidebar-item" mat-icon-button matTooltip="Home" matTooltipPosition="right">
-            <mat-icon>home</mat-icon>
-        </button>
-        <button class="sidebar-item" mat-icon-button matTooltip="Home" matTooltipPosition="right">
-            <mat-icon>home</mat-icon>
-        </button>
-        <button class="sidebar-item" mat-icon-button matTooltip="Home" matTooltipPosition="right">
-            <mat-icon>home</mat-icon>
+    <mat-action-list class="bottom-sidebar">
+        <button *ngFor="let tool of bottomToolsSettings" class="sidebar-item" matTooltip={{tool.infoBubble}}
+            mat-icon-button matTooltipPosition="right">
+            <mat-icon>{{tool.iconName}}</mat-icon>
         </button>
     </mat-action-list>
 </div>
