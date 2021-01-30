@@ -1,17 +1,21 @@
-export { AerosolSettings } from './aerosol-settings';
+// Tool icons at the top of the side bar
 export { ColorSettings } from './color-settings';
-export { EllipseSelectionSettings } from './ellipse-selection-settings';
-export { EllipseSettings } from './ellipse-settings';
-export { EraserSettings } from './eraser-settings';
-export { ExportSettings } from './export-settings';
-export { EyeDropperSettings } from './eyedropper-settings';
-export { FillSettings } from './fill-settings';
-export { LassoSettings } from './lasso-settings';
-export { LineSettings } from './line-settings';
 export { Pencilsettings } from './pencil-settings';
-export { PolygoneSettings } from './polygone-settings';
-export { RectangleSelectionSettings } from './rectangle-selection-settings';
+export { AerosolSettings } from './aerosol-settings';
 export { RectangleSettings } from './rectangle-settings';
-export { SaveSettings } from './save-settings';
-export { StampSettings } from './stamp-settings';
+export { EllipseSettings } from './ellipse-settings';
+export { PolygoneSettings } from './polygone-settings';
+export { LineSettings } from './line-settings';
 export { TextSettings } from './text-settings';
+export { FillSettings } from './fill-settings';
+export { EraserSettings } from './eraser-settings';
+export { StampSettings } from './stamp-settings';
+export { EyeDropperSettings } from './eyedropper-settings';
+export { EllipseSelectionSettings } from './ellipse-selection-settings';
+export { RectangleSelectionSettings } from './rectangle-selection-settings';
+export { LassoSettings } from './lasso-settings';
+// Tool icons at the bottom of the side bar
+export { SaveSettings } from './save-settings';
+export { ExportSettings } from './export-settings';
+
+

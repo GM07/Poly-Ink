@@ -8,24 +8,9 @@ export class SidebarComponent implements OnInit {
     bottomToolsSettings: ToolSettings[] = [];
 
     ngOnInit(): void {
-        // Tool icons at the top of the side bar
-        this.topToolsSettings.push(new CommonToolSettings.ColorSettings());
-        this.topToolsSettings.push(new CommonToolSettings.Pencilsettings());
-        this.topToolsSettings.push(new CommonToolSettings.AerosolSettings());
-        this.topToolsSettings.push(new CommonToolSettings.RectangleSettings());
-        this.topToolsSettings.push(new CommonToolSettings.EllipseSettings());
-        this.topToolsSettings.push(new CommonToolSettings.PolygoneSettings());
-        this.topToolsSettings.push(new CommonToolSettings.LineSettings());
-        this.topToolsSettings.push(new CommonToolSettings.TextSettings());
-        this.topToolsSettings.push(new CommonToolSettings.FillSettings());
-        this.topToolsSettings.push(new CommonToolSettings.EraserSettings());
-        this.topToolsSettings.push(new CommonToolSettings.StampSettings());
-        this.topToolsSettings.push(new CommonToolSettings.EyeDropperSettings());
-        this.topToolsSettings.push(new CommonToolSettings.EllipseSelectionSettings());
-        this.topToolsSettings.push(new CommonToolSettings.RectangleSelectionSettings());
-
-        // Tool icons at the bottom of the side bar
-        this.bottomToolsSettings.push(new CommonToolSettings.SaveSettings());
-        this.bottomToolsSettings.push(new CommonToolSettings.ExportSettings());
+        
+        Object.values(CommonToolSettings).forEach((setting) => {
+            this.topToolsSettings.push(new setting());
+        });
     }
 }
