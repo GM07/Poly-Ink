@@ -33,11 +33,10 @@ describe('CanvasResizeComponent', () => {
         fixture.detectChanges();
     });
 
-    const dragAndDrop = (beginX: number, beginY: number, endX: number, endY: number): void => {
-        const downEvent = new MouseEvent('document:mouseDown', { clientX: beginX, clientY: beginY });
+    const dragAndDrop = (right: boolean, bottom: boolean, endX: number, endY: number): void => {
         const moveEvent = new MouseEvent('document:mouseMove', { clientX: endX, clientY: endY });
         const upEvent = new MouseEvent('document:mouseUp', { clientX: endX, clientY: endY });
-        component.onMouseDown(downEvent);
+        component.mouseDown(right, bottom);
         component.onMouseMove(moveEvent);
         component.onMouseUp(upEvent);
     };
@@ -68,21 +67,19 @@ describe('CanvasResizeComponent', () => {
     it('should resize when dragging the bottom side', () => {
         const xPos = component.getCanvasLeft();
         const yPos = service.canvas.height + component.getCanvasTop() + 2; // Petite valeurs pour simuler un clic
-        dragAndDrop(xPos, yPos, xPos + CanvasConst.SHIFTING, yPos + CanvasConst.SHIFTING);
+        dragAndDrop(false, true, xPos + CanvasConst.SHIFTING, yPos + CanvasConst.SHIFTING);
         expect(service.canvas.height).toBe(yPos - component.getCanvasTop() + CanvasConst.SHIFTING);
     });
 
     it('should resize when dragging the right side', () => {
         const xPos = service.canvas.width + component.getCanvasLeft() + 2;
         const yPos = component.getCanvasTop();
-        dragAndDrop(xPos, yPos, xPos + CanvasConst.SHIFTING, yPos + CanvasConst.SHIFTING);
+        dragAndDrop(true, false, xPos + CanvasConst.SHIFTING, yPos + CanvasConst.SHIFTING);
         expect(service.canvas.width).toBe(xPos - component.getCanvasLeft() + CanvasConst.SHIFTING);
     });
 
     it('should resize when dragging the corner', () => {
-        const xPos = service.canvas.width + component.getCanvasLeft() - 1;
-        const yPos = service.canvas.height + component.getCanvasTop() + 1; // Petite valeurs pour simuler un clic
-        dragAndDrop(xPos, yPos, 0, 0);
+        dragAndDrop(true, true, 0, 0);
         expect(service.canvas.width).toBe(CanvasConst.MIN_WIDTH);
         expect(service.canvas.height).toBe(CanvasConst.MIN_HEIGHT);
     });
@@ -90,16 +87,8 @@ describe('CanvasResizeComponent', () => {
     it('should not resize when clicking elsewhere', () => {
         const canvasWidth = service.canvas.width;
         const canvasHeight = service.canvas.height;
-        dragAndDrop(0, 0, 0, 0);
+        dragAndDrop(false, false, 0, 0);
         expect(canvasWidth).toBe(service.canvas.width);
         expect(canvasHeight).toBe(service.canvas.height);
-    });
-
-    it('should not drag with other click', () => {
-        const downEvent = new MouseEvent('document:mouseDown', { button: 1 });
-        const mouseEventSpy = spyOn(component, 'onMouseDown').and.callThrough();
-        component.onMouseDown(downEvent);
-        expect(mouseEventSpy).toHaveBeenCalled();
-        expect(mouseEventSpy).toHaveBeenCalledWith(downEvent);
     });
 });

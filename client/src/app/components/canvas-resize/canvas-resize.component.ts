@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { CanvasConst } from '@app/constants/canvas.ts';
-import { MouseButton } from '@app/constants/control.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
 @Component({
@@ -37,6 +36,13 @@ export class CanvasResizeComponent implements AfterViewInit {
         this.setStyleControl();
     }
 
+    mouseDown(right : boolean, bottom: boolean) : void {
+      this.isDown = true;
+      this.moveRight = right;
+      this.moveBottom = bottom;
+      this.previewResize.nativeElement.style.visibility = 'visible'
+    }
+
     @HostListener('document:mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
         if ((this.moveRight || this.moveBottom) && this.isDown) {
@@ -46,14 +52,6 @@ export class CanvasResizeComponent implements AfterViewInit {
             if (this.moveBottom)
                 this.previewResizeStyle.height =
                     String(event.clientY - this.canvasTop > CanvasConst.MIN_HEIGHT ? event.clientY - this.canvasTop : CanvasConst.MIN_HEIGHT) + 'px';
-        }
-    }
-
-    @HostListener('document:mousedown', ['$event'])
-    onMouseDown(event: MouseEvent): void {
-        this.isDown = event.button === MouseButton.Left;
-        if (this.isDown) {
-            if (this.closeEnough(event.clientX, event.clientY)) this.previewResize.nativeElement.style.visibility = 'visible';
         }
     }
 
@@ -70,21 +68,6 @@ export class CanvasResizeComponent implements AfterViewInit {
 
             this.previewResize.nativeElement.style.visibility = 'hidden';
         }
-    }
-
-    closeEnough(mouseX: number, mouseY: number): boolean {
-        const TRESHOLD = 10;
-
-        this.moveBottom =
-            Math.abs(mouseY - (this.canvasTop + this.drawingService.canvas.height)) < TRESHOLD &&
-            mouseX < this.canvasLeft + this.drawingService.canvas.width + TRESHOLD &&
-            mouseX > this.canvasLeft - TRESHOLD;
-        this.moveRight =
-            Math.abs(mouseX - (this.canvasLeft + this.drawingService.canvas.width)) < TRESHOLD &&
-            mouseY < this.canvasTop + this.drawingService.canvas.height + TRESHOLD &&
-            mouseY > this.canvasTop - TRESHOLD;
-
-        return this.moveRight || this.moveBottom;
     }
 
     setCanvasMargin(): void {
