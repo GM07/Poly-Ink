@@ -1,7 +1,10 @@
+import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DrawingComponent } from '@app/components/drawing/drawing.component';
-import { SidebarComponent } from '@app/components/sidebar/sidebar.component';
 import { EditorComponent } from './editor.component';
+
+@Component({ selector: 'app-sidebar', template: '' })
+class StubSidebarComponent {}
 
 describe('EditorComponent', () => {
     let component: EditorComponent;
@@ -9,7 +12,7 @@ describe('EditorComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [EditorComponent, DrawingComponent, SidebarComponent],
+            declarations: [EditorComponent, DrawingComponent, StubSidebarComponent],
         }).compileComponents();
     }));
 
