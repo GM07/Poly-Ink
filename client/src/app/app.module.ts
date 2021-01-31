@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
@@ -15,9 +18,20 @@ import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
-    declarations: [AppComponent, EditorComponent, SidebarComponent, DrawingComponent, MainMenuComponent, HomePageComponent, CanvasResizeComponent],
-    imports: [BrowserModule, HttpClientModule, AppRoutingModule, MatButtonModule, MatExpansionModule, MatIconModule, BrowserAnimationsModule],
-
+    declarations: [AppComponent, EditorComponent, SidebarComponent, DrawingComponent, HomePageComponent, MainMenuComponent, CanvasResizeComponent],
+    imports: [
+        AppRoutingModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        AppRoutingModule,
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule,
+        MatSidenavModule,
+        MatListModule,
+        MatExpansionModule,
+    ],
     providers: [],
     bootstrap: [AppComponent],
 })
