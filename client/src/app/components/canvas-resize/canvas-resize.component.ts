@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
@@ -23,7 +23,7 @@ export class CanvasResizeComponent implements AfterViewInit {
     previewResizeStyle: { [key: string]: string };
     @ViewChild('previewResize', { static: false }) previewResize: ElementRef<HTMLDivElement>;
 
-    constructor(private drawingService: DrawingService) {
+    constructor(private drawingService: DrawingService, private cd: ChangeDetectorRef) {
         this.previewResizeStyle = {
             'margin-left': '0',
             'margin-top': '0',
@@ -34,6 +34,7 @@ export class CanvasResizeComponent implements AfterViewInit {
         this.setCanvasMargin();
         this.setStylePreview();
         this.setStyleControl();
+        this.cd.detectChanges();
     }
 
     mouseDown(right: boolean, bottom: boolean): void {
@@ -80,7 +81,7 @@ export class CanvasResizeComponent implements AfterViewInit {
     }
 
     setStyleControl(): void {
-        setTimeout(() => {
+
             // Attend la fin de la queue avant d'exécuter cette fonction. Laisse le temps au canvas de s'instancier
             this.controlRightStyle = {
                 'margin-top': String(this.drawingService.canvas.height / 2 - CanvasConst.CONTROL_MARGIN) + 'px',
@@ -94,18 +95,15 @@ export class CanvasResizeComponent implements AfterViewInit {
                 'margin-top': String(this.drawingService.canvas.height - CanvasConst.CONTROL_MARGIN) + 'px',
                 'margin-left': String(this.drawingService.canvas.width - CanvasConst.CONTROL_MARGIN) + 'px',
             };
-        });
     }
 
     setStylePreview(): void {
-        setTimeout(() => {
             this.previewResizeStyle = {
                 'margin-left': String(this.canvasLeft) + 'px',
                 'margin-top': String(this.canvasTop) + 'px',
             };
             this.previewResize.nativeElement.style.width = String(this.drawingService.canvas.width) + 'px'; // lint lance une erreur si width et heig
             this.previewResize.nativeElement.style.height = String(this.drawingService.canvas.height) + 'px'; // sont dans previewresizestyle
-        });
     }
 
     getCanvasLeft(): number {
