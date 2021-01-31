@@ -21,7 +21,7 @@ export class DrawingComponent implements AfterViewInit {
     private previewCtx: CanvasRenderingContext2D;
     private canvasSize: Vec2 = { x: DEFAULT_WIDTH, y: DEFAULT_HEIGHT };
 
-    constructor(private drawingService: DrawingService, readonly toolHandlerServcice: ToolHandlerService) {}
+    constructor(private drawingService: DrawingService, readonly toolHandlerService: ToolHandlerService) {}
 
     ngAfterViewInit(): void {
         this.baseCtx = this.baseCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
@@ -33,32 +33,32 @@ export class DrawingComponent implements AfterViewInit {
 
     @HostListener('mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
-        this.toolHandlerServcice.onMouseMove(event);
+        this.toolHandlerService.onMouseMove(event);
     }
 
     @HostListener('mousedown', ['$event'])
     onMouseDown(event: MouseEvent): void {
-        this.toolHandlerServcice.onMouseDown(event);
+        this.toolHandlerService.onMouseDown(event);
     }
 
     @HostListener('mouseup', ['$event'])
     onMouseUp(event: MouseEvent): void {
-        this.toolHandlerServcice.onMouseUp(event);
+        this.toolHandlerService.onMouseUp(event);
     }
 
     @HostListener('document:keypress', ['$event'])
     onKeyPress(event: KeyboardEvent): void {
-        this.toolHandlerServcice.onKeyPress(event);
+        this.toolHandlerService.onKeyPress(event);
     }
 
     @HostListener('mouseleave', ['$event'])
     onMouseLeave(event: MouseEvent): void {
-        this.toolHandlerServcice.onMouseLeave(event);
+        this.toolHandlerService.onMouseLeave(event);
     }
 
     @HostListener('mouseenter', ['$event'])
     onMouseEnter(event: MouseEvent): void {
-        this.toolHandlerServcice.onMouseEnter(event);
+        this.toolHandlerService.onMouseEnter(event);
     }
 
     get width(): number {
