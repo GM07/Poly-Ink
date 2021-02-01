@@ -41,14 +41,25 @@ export class DrawingComponent implements AfterViewInit {
         this.toolHandlerService.onMouseDown(event);
     }
 
+    @HostListener('dblclick', ['$event'])
+    onDoubleClick(event: MouseEvent): void {
+        this.toolHandlerService.onDoubleClick(event);
+    }
+
     @HostListener('mouseup', ['$event'])
     onMouseUp(event: MouseEvent): void {
         this.toolHandlerService.onMouseUp(event);
     }
 
-    @HostListener('document:keypress', ['$event'])
-    onKeyPress(event: KeyboardEvent): void {
-        this.toolHandlerService.onKeyPress(event);
+    // On utilisait keypress, mais les touches BACKSPACE, SHIFT ne marchent pas avec keypress
+    @HostListener('document:keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent): void {
+        this.toolHandlerService.onKeyDown(event);
+    }
+
+    @HostListener('document:keyup', ['$event'])
+    onKeyUp(event: KeyboardEvent): void {
+        this.toolHandlerService.onKeyUp(event);
     }
 
     @HostListener('mouseleave', ['$event'])

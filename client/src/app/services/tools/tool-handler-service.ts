@@ -39,16 +39,25 @@ export class ToolHandlerService {
         this.currentTool.onMouseDown(event);
     }
 
+    onDoubleClick(event: MouseEvent): void {
+        this.currentTool.onDoubleClick(event);
+    }
+
     onMouseUp(event: MouseEvent): void {
         this.currentTool.onMouseUp(event);
     }
 
-    onKeyPress(event: KeyboardEvent): void {
+    onKeyDown(event: KeyboardEvent): void {
+        this.currentTool.onKeyDown(event);
         const tool = this.findToolshortcutKey(event.key.toLocaleLowerCase());
         if (tool != undefined) {
             this.currentTool.stopDrawing();
             this.currentTool = tool;
         }
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
+        this.currentTool.onKeyUp(event);
     }
 
     onMouseLeave(event: MouseEvent): void {

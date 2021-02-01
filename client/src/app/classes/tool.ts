@@ -29,6 +29,8 @@ export abstract class Tool {
 
     onMouseDown(event: MouseEvent): void {}
 
+    onDoubleClick(event: MouseEvent): void {}
+
     onMouseUp(event: MouseEvent): void {}
 
     onMouseMove(event: MouseEvent): void {}
@@ -36,6 +38,10 @@ export abstract class Tool {
     onMouseLeave(event: MouseEvent): void {}
 
     onMouseEnter(event: MouseEvent): void {}
+
+    onKeyDown(event: KeyboardEvent): void {}
+
+    onKeyUp(event: KeyboardEvent): void {}
 
     abstract stopDrawing(): void;
 
