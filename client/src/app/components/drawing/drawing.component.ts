@@ -41,7 +41,7 @@ export class DrawingComponent implements AfterViewInit {
         this.toolHandlerService.onMouseDown(event);
     }
 
-    @HostListener('mouseup', ['$event'])
+    @HostListener('document:mouseup', ['$event'])
     onMouseUp(event: MouseEvent): void {
         this.toolHandlerService.onMouseUp(event);
     }
