@@ -52,7 +52,7 @@ describe('DrawingComponent', () => {
     });
 
     it('should get stubTool', () => {
-        const currentTool = component.toolHandlerServcice.getTool();
+        const currentTool = component.toolHandlerService.getTool();
         expect(currentTool).toEqual(toolStub);
     });
 
@@ -82,7 +82,7 @@ describe('DrawingComponent', () => {
 
     it(" should call the toolHandler's keyPress event when receiving a keyPress event", () => {
         const event = { key: 'c' } as KeyboardEvent;
-        const mouseEventSpy = spyOn<ToolHandlerService>(component.toolHandlerServcice, 'onKeyPress').and.callThrough();
+        const mouseEventSpy = spyOn<ToolHandlerService>(component.toolHandlerService, 'onKeyPress').and.callThrough();
         component.onKeyPress(event);
         expect(mouseEventSpy).toHaveBeenCalled();
         expect(mouseEventSpy).toHaveBeenCalledWith(event);

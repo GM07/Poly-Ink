@@ -40,23 +40,8 @@ export class PencilService extends Tool {
         return this.strokeStyleIn;
     }
 
-    /**
-     * Types d'entrées acceptées:
-     * "couleur";
-     * "#FFFFFF" ou #FFF;
-     * "rgb(int, int, int)";
-     * "rgba(int, int, int, 1.0)";
-     */
     set strokeStyle(color: string) {
-        let colorIsValid = false;
-        const style = new Option().style;
-        style.color = color;
-        colorIsValid = colorIsValid || style.color === color;
-        colorIsValid = colorIsValid || /^#([0-9A-F]{3}){1,2}$/.test(color);
-        colorIsValid = colorIsValid || /^rgb\((\d+),\s?(\d+),\s?(\d+)\)$/.test(color);
-        colorIsValid = colorIsValid || /^rgba\((\d+,\s?){3}(1(\.0+)?|0*(\.\d+))\)$/.test(color);
-
-        if (colorIsValid) {
+        if (Tool.isColorValid(color)) {
             this.strokeStyleIn = color;
         }
     }
