@@ -28,10 +28,11 @@ export abstract class Tool {
     }
 
     isInCanvas(event: MouseEvent): boolean {
-        const left = this.drawingService.canvas.getBoundingClientRect().x;
-        const right = this.drawingService.canvas.getBoundingClientRect().x + this.drawingService.canvas.getBoundingClientRect().width;
-        const top = this.drawingService.canvas.getBoundingClientRect().y;
-        const bottom = this.drawingService.canvas.getBoundingClientRect().y + this.drawingService.canvas.getBoundingClientRect().height;
+        const clientRect = this.drawingService.canvas.getBoundingClientRect();
+        const left = clientRect.x;
+        const right = clientRect.x + clientRect.width;
+        const top = clientRect.y;
+        const bottom = clientRect.y + clientRect.height;
         if (event.x < left || event.x > right || event.y < top || event.y > bottom) return false;
         return true;
     }
