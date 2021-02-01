@@ -20,7 +20,7 @@ export class CanvasResizeComponent implements AfterViewInit {
     controlCornerStyle: { [key: string]: string };
     controlRightStyle: { [key: string]: string };
 
-    workStyle: { [key: string]: string };
+    workZoneStyle: { [key: string]: string };
 
     previewResizeView: boolean;
     previewResizeStyle: { [key: string]: string };
@@ -53,11 +53,11 @@ export class CanvasResizeComponent implements AfterViewInit {
         if (this.isDown) {
             if (this.moveRight) {
                 this.previewResizeStyle.width = String(this.getWidth(event.pageX)) + 'px';
-                this.workStyle.width = String(this.getWidth(event.pageX + CanvasConst.WORKING_SIZE)) + 'px';
+                this.workZoneStyle.width = String(this.getWidth(event.pageX + CanvasConst.WORKING_SIZE)) + 'px';
             }
             if (this.moveBottom) {
                 this.previewResizeStyle.height = String(this.getHeight(event.pageY)) + 'px';
-                this.workStyle.height = String(this.getHeight(event.pageY + CanvasConst.WORKING_SIZE)) + 'px';
+                this.workZoneStyle.height = String(this.getHeight(event.pageY + CanvasConst.WORKING_SIZE)) + 'px';
             }
         }
     }
@@ -115,7 +115,7 @@ export class CanvasResizeComponent implements AfterViewInit {
                 'height': String(this.drawingService.canvas.height) + 'px',
                 // tslint:enable:prettier
         };
-        this.workStyle = {
+        this.workZoneStyle = {
             // tslint:disable:prettier
            width: String(this.drawingService.canvas.width + CanvasConst.WORKING_SIZE) + 'px',
            height: String(this.drawingService.canvas.height + CanvasConst.WORKING_SIZE) + 'px',
