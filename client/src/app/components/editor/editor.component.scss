@@ -1,6 +1,7 @@
 .container {
   overflow: visible;
   display: flex;
+  background-color: lightgray;
 }
 
 .drawing-container {
@@ -13,3 +14,5 @@
     width: min-content;
     outline: none;
 }
+
+

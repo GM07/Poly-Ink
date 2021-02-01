@@ -32,6 +32,7 @@ export class CanvasResizeComponent implements AfterViewInit {
             'margin-left': '0',
             'margin-top': '0',
         };
+        document.documentElement.style.backgroundColor = 'lightgray';
     }
 
     ngAfterViewInit(): void {
