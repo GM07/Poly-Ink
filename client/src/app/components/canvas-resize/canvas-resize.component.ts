@@ -117,8 +117,8 @@ export class CanvasResizeComponent implements AfterViewInit {
         };
         this.workZoneStyle = {
             // tslint:disable:prettier
-           width: String(this.drawingService.canvas.width + CanvasConst.WORKING_SIZE) + 'px',
-           height: String(this.drawingService.canvas.height + CanvasConst.WORKING_SIZE) + 'px',
+           'width': String(this.drawingService.canvas.width + CanvasConst.WORKING_SIZE) + 'px',
+           'height': String(this.drawingService.canvas.height + CanvasConst.WORKING_SIZE) + 'px',
            // tslint:enable:prettier
         };
     }
