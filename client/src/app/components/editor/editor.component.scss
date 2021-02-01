@@ -1,10 +1,10 @@
 .container {
-    height: 100%;
-    display: flex;
+  overflow: visible;
+  display: flex;
 }
 
 .drawing-container {
-    overflow: auto;
+    overflow: visible;
     flex: 1 1 auto;
 }
 
