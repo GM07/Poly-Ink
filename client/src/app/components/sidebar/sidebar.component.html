@@ -8,13 +8,13 @@
         </mat-action-list>
 
         <mat-action-list class="bottom-sidebar">
-            <button *ngFor="let tool of bottomToolsSettings" class="sidebar-item" matTooltip={{tool.infoBubble}}
-                mat-icon-button matTooltipPosition="right">
+            <button (click)="toolIconClicked(tool)" *ngFor="let tool of bottomToolsSettings" class="sidebar-item"
+                matTooltip={{tool.infoBubble}} mat-icon-button matTooltipPosition="right">
                 <mat-icon svgIcon={{tool.iconName}}></mat-icon>
             </button>
         </mat-action-list>
     </mat-drawer>
     <mat-drawer-content class="attributes-tab">
-        Attributs
+        {{toolHandlerService.currentTool}}
     </mat-drawer-content>
 </mat-drawer-container>

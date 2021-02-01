@@ -3,7 +3,6 @@ import { Tool } from '@app/classes/tool';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-
 export enum LeftMouse {
     Released = 0,
     Pressed = 1,
@@ -21,6 +20,7 @@ export class PencilService extends Tool {
     private pathData: Vec2[][];
     private strokeStyleIn: string = 'black';
     private lineWidthIn: number = 12;
+    readonly name: string = 'Pencil';
 
     constructor(drawingService: DrawingService) {
         super(drawingService);

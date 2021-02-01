@@ -6,6 +6,7 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
     providedIn: 'root',
 })
 export class LineService extends Tool {
+    readonly name: string = 'line';
     constructor(drawingService: DrawingService) {
         super(drawingService);
         this.shortCutKey = 'l';

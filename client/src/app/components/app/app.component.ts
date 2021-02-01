@@ -9,6 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class AppComponent {
     constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer) {
+        // https://www.flaticon.com/
         this.matIconRegistry.addSvgIcon('bucket', this.domSanitizer.bypassSecurityTrustResourceUrl('../../../assets/icons/bucket.svg'));
         this.matIconRegistry.addSvgIcon(
             'ellipse-selection',
