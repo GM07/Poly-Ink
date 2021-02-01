@@ -59,7 +59,7 @@ export class CanvasResizeComponent implements AfterViewInit {
         this.isDown = false;
         const xModifier = this.moveRight ? this.getWidth(event.clientX) : this.drawingService.canvas.width;
         const yModifier = this.moveBottom ? this.getHeight(event.clientY) : this.drawingService.canvas.height;
-        this.drawingService.resizeCanvas(xModifier, yModifier);
+        if (this.moveBottom || this.moveRight) this.drawingService.resizeCanvas(xModifier, yModifier);
 
         this.setStyleControl();
         this.moveRight = this.moveBottom = false;
