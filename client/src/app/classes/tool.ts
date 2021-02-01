@@ -27,6 +27,15 @@ export abstract class Tool {
         return colorIsValid;
     }
 
+    isInCanvas(event: MouseEvent): boolean {
+        const left = this.drawingService.canvas.getBoundingClientRect().x;
+        const right = this.drawingService.canvas.getBoundingClientRect().x + this.drawingService.canvas.getBoundingClientRect().width;
+        const top = this.drawingService.canvas.getBoundingClientRect().y;
+        const bottom = this.drawingService.canvas.getBoundingClientRect().y + this.drawingService.canvas.getBoundingClientRect().height;
+        if (event.x < left || event.x > right || event.y < top || event.y > bottom) return false;
+        return true;
+    }
+
     onMouseDown(event: MouseEvent): void {}
 
     onMouseUp(event: MouseEvent): void {}
