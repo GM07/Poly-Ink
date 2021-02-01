@@ -1,8 +1,8 @@
 <mat-drawer-container class="container">
     <mat-drawer mode="side" opened>
         <mat-action-list class="top-sidebar">
-            <button *ngFor="let tool of topToolsSettings" class="sidebar-item" matTooltip={{tool.infoBubble}}
-                mat-icon-button matTooltipPosition="right">
+            <button (click)="toolIconClicked(tool)" *ngFor="let tool of topToolsSettings" class="sidebar-item"
+                matTooltip={{tool.infoBubble}} mat-icon-button matTooltipPosition="right">
                 <mat-icon svgIcon={{tool.iconName}}></mat-icon>
             </button>
         </mat-action-list>

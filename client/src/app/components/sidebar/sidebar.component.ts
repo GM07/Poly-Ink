@@ -8,6 +8,8 @@ export class SidebarComponent implements OnInit {
     topToolsSettings: ToolSettings[] = [];
     bottomToolsSettings: ToolSettings[] = [];
 
+    constructor(private toolHandlerService: HeroService) {}
+
     ngOnInit(): void {
         Object.values(CommonToolSettingsTop).forEach((setting) => {
             this.topToolsSettings.push(new setting());
@@ -16,4 +18,6 @@ export class SidebarComponent implements OnInit {
             this.bottomToolsSettings.push(new setting());
         });
     }
+
+    toolIconClicked(toolSettings: ToolSettings): void {}
 }
