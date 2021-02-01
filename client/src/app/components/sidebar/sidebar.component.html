@@ -1,15 +1,20 @@
-<div class="container">
-    <mat-action-list class="top-sidebar">
-        <button *ngFor="let tool of topToolsSettings" class="sidebar-item" matTooltip={{tool.infoBubble}}
-            mat-icon-button matTooltipPosition="right">
-            <mat-icon>{{tool.iconName}}</mat-icon>
-        </button>
-    </mat-action-list>
+<mat-drawer-container class="container">
+    <mat-drawer mode="side" opened>
+        <mat-action-list class="top-sidebar">
+            <button *ngFor="let tool of topToolsSettings" class="sidebar-item" matTooltip={{tool.infoBubble}}
+                mat-icon-button matTooltipPosition="right">
+                <mat-icon svgIcon={{tool.iconName}}></mat-icon>
+            </button>
+        </mat-action-list>
 
-    <mat-action-list class="bottom-sidebar">
-        <button *ngFor="let tool of bottomToolsSettings" class="sidebar-item" matTooltip={{tool.infoBubble}}
-            mat-icon-button matTooltipPosition="right">
-            <mat-icon>{{tool.iconName}}</mat-icon>
-        </button>
-    </mat-action-list>
-</div>
+        <mat-action-list class="bottom-sidebar">
+            <button *ngFor="let tool of bottomToolsSettings" class="sidebar-item" matTooltip={{tool.infoBubble}}
+                mat-icon-button matTooltipPosition="right">
+                <mat-icon svgIcon={{tool.iconName}}></mat-icon>
+            </button>
+        </mat-action-list>
+    </mat-drawer>
+    <mat-drawer-content class="attributes-tab">
+        Attributs
+    </mat-drawer-content>
+</mat-drawer-container>
