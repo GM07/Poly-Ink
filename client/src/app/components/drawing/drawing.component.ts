@@ -1,12 +1,8 @@
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { Tool } from '@app/classes/tool';
 import { Vec2 } from '@app/classes/vec2';
+import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { PencilService } from '@app/services/tools/pencil-service';
-
-// TODO : Avoir un fichier séparé pour les constantes ?
-export const DEFAULT_WIDTH = 1000;
-export const DEFAULT_HEIGHT = 800;
+import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
 
 @Component({
     selector: 'app-drawing',
@@ -20,15 +16,9 @@ export class DrawingComponent implements AfterViewInit {
 
     private baseCtx: CanvasRenderingContext2D;
     private previewCtx: CanvasRenderingContext2D;
-    private canvasSize: Vec2 = { x: DEFAULT_WIDTH, y: DEFAULT_HEIGHT };
+    private canvasSize: Vec2 = { x: CanvasConst.DEFAULT_WIDTH, y: CanvasConst.DEFAULT_HEIGHT };
 
-    // TODO : Avoir un service dédié pour gérer tous les outils ? Ceci peut devenir lourd avec le temps
-    private tools: Tool[];
-    currentTool: Tool;
-    constructor(private drawingService: DrawingService, pencilService: PencilService) {
-        this.tools = [pencilService];
-        this.currentTool = this.tools[0];
-    }
+    constructor(private drawingService: DrawingService, readonly toolHandlerService: ToolHandlerService) {}
 
     ngAfterViewInit(): void {
         this.baseCtx = this.baseCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
@@ -36,21 +26,39 @@ export class DrawingComponent implements AfterViewInit {
         this.drawingService.baseCtx = this.baseCtx;
         this.drawingService.previewCtx = this.previewCtx;
         this.drawingService.canvas = this.baseCanvas.nativeElement;
+        this.drawingService.previewCanvas = this.previewCanvas.nativeElement;
+        this.drawingService.initBackground();
+        document.body.style.overflow = 'hidden';
     }
 
     @HostListener('mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
-        this.currentTool.onMouseMove(event);
+        this.toolHandlerService.onMouseMove(event);
     }
 
     @HostListener('mousedown', ['$event'])
     onMouseDown(event: MouseEvent): void {
-        this.currentTool.onMouseDown(event);
+        this.toolHandlerService.onMouseDown(event);
     }
 
     @HostListener('mouseup', ['$event'])
     onMouseUp(event: MouseEvent): void {
-        this.currentTool.onMouseUp(event);
+        this.toolHandlerService.onMouseUp(event);
+    }
+
+    @HostListener('document:keypress', ['$event'])
+    onKeyPress(event: KeyboardEvent): void {
+        this.toolHandlerService.onKeyPress(event);
+    }
+
+    @HostListener('mouseleave', ['$event'])
+    onMouseLeave(event: MouseEvent): void {
+        this.toolHandlerService.onMouseLeave(event);
+    }
+
+    @HostListener('mouseenter', ['$event'])
+    onMouseEnter(event: MouseEvent): void {
+        this.toolHandlerService.onMouseEnter(event);
     }
 
     get width(): number {
