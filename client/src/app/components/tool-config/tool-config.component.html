@@ -1,62 +1,16 @@
-<h2 mat-dialog-title>{{ data }} Configurations</h2>
-<!--SIZE-->
-<mat-dialog-content *ngIf="data === 'Crayon'"><!--Add an *ngIf it's a crayon, a brush etc...-->
-    <section>
-        <div mat-dialog-header>
-            Size
-        </div> 
-        <div>
-            <br/>
-        </div>
-        <div>
-            <mat-slider 
-                [(ngModel)]="sizeValue"
-                thumbLabel
-                [displayWith]="colorSliderLabel"
-                min="this.lineSizeMin"
-                max="this.lineSizeMax">
-            </mat-slider>
-        </div>
-        <div>
-            <mat-form-field>
-                <mat-label>Manual size input</mat-label>
-                <input matInput type="number" [(ngModel)]="sizeValue">
-            </mat-form-field>
-        </div> 
-    </section>
-</mat-dialog-content>
-
-<!--COLOR-->
-<mat-dialog-content *ngIf="data === 'Crayon'">
-    <mat-divider></mat-divider>
-    <br/>
-    <section>
-        <div>Color</div>
-        <br/>
-        <div class="button-row">
-            <button mat-raised-button (click)="changeColor('black')">Black</button>
-            <button mat-raised-button (click)="changeColor('white')">White</button>
-            <button mat-raised-button (click)="changeColor('grey')">Grey</button>
-            <button mat-raised-button (click)="changeColor('red')">Red</button>
-            <button mat-raised-button (click)="changeColor('green')">Green</button>
-            <button mat-raised-button (click)="changeColor('blue')">Blue</button>
-            <button mat-raised-button (click)="changeColor('yellow')">Yellow</button>
-            <button mat-raised-button (click)="toggleColorPicker()">Color Picker</button>
-        </div>
-    </section>
-</mat-dialog-content>
-
-<!--TYPE DE TRACE-->
-<mat-dialog-content *ngIf="data === 'Rectangle'">
-    <mat-divider></mat-divider>
-    <br/>
-    <section>
-        <div>Type de tracé</div>
-        <br/>
-        <div class="button-row">
-            <button mat-raised-button (click)="changeColor('black')">Contour</button>
-            <button mat-raised-button (click)="changeColor('white')">Plein</button>
-            <button mat-raised-button (click)="changeColor('grey')">Plein avec contour</button>
-        </div>
-    </section>
-</mat-dialog-content>
+<!--<mat-dialog-content *ngFor=-->
+<div *ngIf="data === 'Crayon'">
+    <app-crayon-config></app-crayon-config>
+</div>
+<div *ngIf="data === 'Ellipse'">
+    <app-ellipse-config></app-ellipse-config>
+</div>
+<div *ngIf="data === 'Eraser'">
+    <app-eraser-config></app-eraser-config>
+</div>
+<div *ngIf="data === 'Ligne'">
+    <app-line-config></app-line-config>
+</div>
+<div *ngIf="data === 'Rectangle'">
+    <app-rectangle-config></app-rectangle-config>
+</div>

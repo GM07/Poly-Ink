@@ -8,11 +8,15 @@ import { ToolConfigComponent } from '@app/components/tool-config/tool-config.com
     styleUrls: ['./launch-tool-config.component.scss'],
 })
 export class LaunchToolConfigComponent {
-    toolName: string = 'Crayon';
+    toolName: string = 'Ligne';
 
     constructor(public dialog: MatDialog) {}
 
     openDialog(): void {
         this.dialog.open(ToolConfigComponent, { data: this.toolName });
+    }
+
+    getComponentname(): string {
+        return this.toolName + 'ConfigComponent';
     }
 }

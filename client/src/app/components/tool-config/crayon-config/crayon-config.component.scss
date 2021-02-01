@@ -1,0 +1,23 @@
+mat-slider {
+    width: 300px;
+}
+
+.button-row {
+    display: table-cell;
+    width: 300px;
+}
+
+.button-row .mat-button-base {
+    margin: 8px 8px 8px 0;
+}
+
+::ng-deep .mat-slider-wrapper {
+    .mat-slider-thumb-container {
+      .mat-slider-thumb-label {
+        width: 34px;
+        height: 34px;
+        top: -41px;
+        right: -15px;
+      }
+    }
+  }

@@ -18,11 +18,44 @@ import { HomePageComponent } from './components/home-page/home-page.component';
 import { LaunchToolConfigComponent } from './components/launch-tool-config/launch-tool-config.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { CrayonConfigComponent } from './components/tool-config/crayon-config/crayon-config.component';
+import { EllipseConfigComponent } from './components/tool-config/ellipse-config/ellipse-config.component';
+import { EraserConfigComponent } from './components/tool-config/eraser-config/eraser-config.component';
+import { LineConfigComponent } from './components/tool-config/line-config/line-config.component';
+import { RectangleConfigComponent } from './components/tool-config/rectangle-config/rectangle-config.component';
 import { ToolConfigComponent } from './components/tool-config/tool-config.component';
 
 @NgModule({
-    declarations: [AppComponent, EditorComponent, SidebarComponent, DrawingComponent, MainMenuComponent, HomePageComponent, ToolConfigComponent, LaunchToolConfigComponent],
-    imports: [BrowserModule, HttpClientModule, AppRoutingModule, BrowserAnimationsModule, MatButtonModule, MatExpansionModule, MatIconModule, MatDividerModule, MatSliderModule, MatDialogModule, BrowserAnimationsModule, MatInputModule, FormsModule],
+    declarations: [
+        AppComponent,
+        EditorComponent,
+        SidebarComponent,
+        DrawingComponent,
+        MainMenuComponent,
+        HomePageComponent,
+        ToolConfigComponent,
+        LaunchToolConfigComponent,
+        RectangleConfigComponent,
+        CrayonConfigComponent,
+        EllipseConfigComponent,
+        EraserConfigComponent,
+        LineConfigComponent,
+    ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatButtonModule,
+        MatExpansionModule,
+        MatIconModule,
+        MatDividerModule,
+        MatSliderModule,
+        MatDialogModule,
+        BrowserAnimationsModule,
+        MatInputModule,
+        FormsModule,
+    ],
     providers: [],
     bootstrap: [AppComponent],
 })
