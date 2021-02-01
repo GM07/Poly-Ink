@@ -87,7 +87,7 @@ export enum RectangleSelectionToolConstants {
 }
 
 export enum EllipseSelectionToolConstants {
-    TOOL_ID = 'RECTANGLE_SELECTION',
+    TOOL_ID = 'ELLIPSE_SELECTION',
     TOOL_TITLE = 'Ellipse de séléction',
     INFO_BUBBLE = 'Ellipse de séléction (S)',
     ICON_NAME = 'ellipse-selection',

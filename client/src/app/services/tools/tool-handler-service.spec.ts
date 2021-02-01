@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
+import * as ToolsConstants from '@app/classes/tool_settings/tools.constants';
 import { LineService } from './line-service';
 import { PencilService } from './pencil-service';
 import { ToolHandlerService } from './tool-handler-service';
-
 // tslint:disable:no-any
 describe('ToolHandlerService', () => {
     let service: ToolHandlerService;
@@ -60,9 +60,9 @@ describe('ToolHandlerService', () => {
     });
 
     it('should allow for a tool to be set', () => {
-        service.setTool(PencilService);
+        service.setTool(ToolsConstants.PencilToolConstants.TOOL_ID);
         expect(pencilService.stopDrawing).not.toHaveBeenCalled();
-        service.setTool(LineService);
+        service.setTool(ToolsConstants.LineToolConstants.TOOL_ID);
         expect(pencilService.stopDrawing).toHaveBeenCalled();
         expect(service.getTool()).toBeInstanceOf(LineService);
     });

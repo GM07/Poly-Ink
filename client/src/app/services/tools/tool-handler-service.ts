@@ -9,7 +9,7 @@ import { PencilService } from '@app/services/tools/pencil-service';
 })
 export class ToolHandlerService {
     private TOOLS: Map<string, Tool> = new Map();
-    public currentTool: Tool;
+    currentTool: Tool;
 
     constructor(pencilService: PencilService, lineService: LineService) {
         this.TOOLS.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
@@ -38,8 +38,10 @@ export class ToolHandlerService {
     }
 
     setTool(toolId: string): boolean {
-        if (this.TOOLS.get(toolId)) {
-            this.currentTool = this.TOOLS.get(toolId)!;
+        const newCurrentTool: Tool | undefined = this.TOOLS.get(toolId);
+
+        if (newCurrentTool !== undefined) {
+            this.currentTool = newCurrentTool;
             return true;
         } else {
             return false;

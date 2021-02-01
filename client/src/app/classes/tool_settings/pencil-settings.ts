@@ -1,7 +1,7 @@
 import { ToolSettings } from './tool-settings';
 import { PencilToolConstants } from './tools.constants';
 
-export class Pencilsettings implements ToolSettings {
+export class PencilSettings implements ToolSettings {
     toolId: string = PencilToolConstants.TOOL_ID;
     toolTitle: string = PencilToolConstants.TOOL_TITLE;
     infoBubble: string = PencilToolConstants.INFO_BUBBLE;
