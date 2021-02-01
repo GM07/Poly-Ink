@@ -6,8 +6,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
+<<<<<<< HEAD
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
+=======
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTooltipModule } from '@angular/material/tooltip';
+>>>>>>> a69e6817a990a88b4336a4ffa3d85e0dffa38255
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
@@ -26,6 +32,7 @@ import { RectangleConfigComponent } from './components/tool-config/rectangle-con
 import { ToolConfigComponent } from './components/tool-config/tool-config.component';
 
 @NgModule({
+<<<<<<< HEAD
     declarations: [
         AppComponent,
         EditorComponent,
@@ -55,6 +62,20 @@ import { ToolConfigComponent } from './components/tool-config/tool-config.compon
         BrowserAnimationsModule,
         MatInputModule,
         FormsModule,
+=======
+    declarations: [AppComponent, EditorComponent, SidebarComponent, DrawingComponent, HomePageComponent, MainMenuComponent],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        AppRoutingModule,
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule,
+        MatSidenavModule,
+        MatListModule,
+        MatExpansionModule,
+>>>>>>> a69e6817a990a88b4336a4ffa3d85e0dffa38255
     ],
     providers: [],
     bootstrap: [AppComponent],

@@ -4,6 +4,11 @@ import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
 // TODO : Déplacer ça dans un fichier séparé accessible par tous
+export enum LeftMouse {
+    Released = 0,
+    Pressed = 1,
+}
+
 export enum MouseButton {
     Left = 0,
     Middle = 1,
@@ -12,19 +17,45 @@ export enum MouseButton {
     Forward = 4,
 }
 
-// Ceci est une implémentation de base de l'outil Crayon pour aider à débuter le projet
-// L'implémentation ici ne couvre pas tous les critères d'accepetation du projet
-// Vous êtes encouragés de modifier et compléter le code.
-// N'oubliez pas de regarder les tests dans le fichier spec.ts aussi!
+/**
+ * Note: Pas besoin d'implémtenter le code pour commencer à dessiner un ligne quand le bouton de la souris
+ * est enfoncé hors du canvas (Ref: Document de vision Polydessin 2 v1.0, p.10)
+ */
+// Ceci est une implémentation de l'outil Crayon
 @Injectable({
     providedIn: 'root',
 })
 export class PencilService extends Tool {
-    private pathData: Vec2[];
+    private pathData: Vec2[][];
+    private strokeStyleIn: string = 'black';
+    private lineWidthIn: number = 5;
 
     constructor(drawingService: DrawingService) {
         super(drawingService);
         this.clearPath();
+        this.shortCutKey = 'c';
+    }
+
+    get strokeStyle(): string {
+        return this.strokeStyleIn;
+    }
+
+    set strokeStyle(color: string) {
+        if (Tool.isColorValid(color)) {
+            this.strokeStyleIn = color;
+        }
+    }
+
+    get lineWidth(): number {
+        return this.lineWidthIn;
+    }
+
+    /**
+     * La taille se choisit par pixel, donc un arrondissement
+     * est fait pour avoir une valeur entière
+     */
+    set lineWidth(width: number) {
+        this.lineWidthIn = Math.max(Math.round(width), 1);
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -33,14 +64,14 @@ export class PencilService extends Tool {
             this.clearPath();
 
             this.mouseDownCoord = this.getPositionFromMouse(event);
-            this.pathData.push(this.mouseDownCoord);
+            this.pathData[this.pathData.length - 1].push(this.mouseDownCoord);
         }
     }
 
     onMouseUp(event: MouseEvent): void {
         if (this.mouseDown) {
             const mousePosition = this.getPositionFromMouse(event);
-            this.pathData.push(mousePosition);
+            this.pathData[this.pathData.length - 1].push(mousePosition);
             this.drawLine(this.drawingService.baseCtx, this.pathData);
         }
         this.mouseDown = false;
@@ -48,9 +79,11 @@ export class PencilService extends Tool {
     }
 
     onMouseMove(event: MouseEvent): void {
+        this.drawBackgroundPoint(this.getPositionFromMouse(event));
+
         if (this.mouseDown) {
             const mousePosition = this.getPositionFromMouse(event);
-            this.pathData.push(mousePosition);
+            this.pathData[this.pathData.length - 1].push(mousePosition);
 
             // On dessine sur le canvas de prévisualisation et on l'efface à chaque déplacement de la souris
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
@@ -58,15 +91,62 @@ export class PencilService extends Tool {
         }
     }
 
-    private drawLine(ctx: CanvasRenderingContext2D, path: Vec2[]): void {
+    onMouseLeave(event: MouseEvent): void {
+        if (!this.mouseDown) this.drawingService.clearCanvas(this.drawingService.previewCtx);
+    }
+
+    onMouseEnter(event: MouseEvent): void {
+        if (event.button !== MouseButton.Left) return;
+
+        if (event.buttons === LeftMouse.Pressed) {
+            this.pathData.push([]);
+            this.onMouseMove(event);
+        } else if (event.buttons === LeftMouse.Released) {
+            this.drawingService.clearCanvas(this.drawingService.previewCtx);
+            this.drawLine(this.drawingService.baseCtx, this.pathData);
+            this.mouseDown = false;
+            this.clearPath();
+        }
+    }
+
+    stopDrawing(): void {
+        this.onMouseUp({} as MouseEvent);
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
+    }
+
+    private drawBackgroundPoint(point: Vec2): void {
+        const ctx = this.drawingService.previewCtx;
+        this.drawingService.clearCanvas(ctx);
+        this.drawLine(ctx, [[point]]);
+    }
+
+    private drawLine(ctx: CanvasRenderingContext2D, pathData: Vec2[][]): void {
         ctx.beginPath();
-        for (const point of path) {
-            ctx.lineTo(point.x, point.y);
+        ctx.strokeStyle = this.strokeStyle;
+        ctx.fillStyle = this.strokeStyle;
+        ctx.lineWidth = this.lineWidth;
+        ctx.lineCap = 'round' as CanvasLineCap;
+        ctx.lineJoin = 'round' as CanvasLineJoin; // Essentiel pour avoir une allure "smooth"
+
+        for (const paths of pathData) {
+            // Cas spécial pour permettre de dessiner exactement un seul pixel (sinon il n'est pas visible)
+            if (this.lineWidth <= 1 && paths.length === 2 && paths[0].x === paths[1].x && paths[0].y === paths[1].y) {
+                ctx.arc(paths[0].x, paths[0].y, 1 / 2, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath();
+            } else {
+                for (const point of paths) {
+                    ctx.lineTo(point.x, point.y);
+                }
+                ctx.stroke();
+                ctx.beginPath();
+            }
         }
         ctx.stroke();
     }
 
     private clearPath(): void {
         this.pathData = [];
+        this.pathData.push([]);
     }
 }

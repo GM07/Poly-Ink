@@ -1,0 +1,8 @@
+import { ToolSettings } from './tool-settings';
+import { StampToolConstants } from './tools.constants';
+
+export class StampSettings implements ToolSettings {
+    toolTitle: string = StampToolConstants.TOOL_TITLE;
+    infoBubble: string = StampToolConstants.INFO_BUBBLE;
+    iconName: string = StampToolConstants.ICON_NAME;
+}
