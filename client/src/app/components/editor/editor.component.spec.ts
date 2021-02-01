@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resize.component';
 import { DrawingComponent } from '@app/components/drawing/drawing.component';
 import { EditorComponent } from './editor.component';
 
@@ -12,7 +13,7 @@ describe('EditorComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [EditorComponent, DrawingComponent, StubSidebarComponent],
+            declarations: [EditorComponent, DrawingComponent, CanvasResizeComponent, StubSidebarComponent],
         }).compileComponents();
     }));
 

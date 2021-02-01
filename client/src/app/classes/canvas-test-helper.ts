@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-
-const WIDTH = 100;
-const HEIGHT = 100;
+import { CanvasConst } from '@app/constants/canvas.ts';
 
 @Injectable({
     providedIn: 'root',
@@ -12,9 +10,9 @@ export class CanvasTestHelper {
     selectionCanvas: HTMLCanvasElement;
 
     constructor() {
-        this.canvas = this.createCanvas(WIDTH, HEIGHT);
-        this.drawCanvas = this.createCanvas(WIDTH, HEIGHT);
-        this.selectionCanvas = this.createCanvas(WIDTH, HEIGHT);
+        this.canvas = this.createCanvas(CanvasConst.MIN_WIDTH, CanvasConst.MIN_HEIGHT);
+        this.drawCanvas = this.createCanvas(CanvasConst.MIN_WIDTH, CanvasConst.MIN_HEIGHT);
+        this.selectionCanvas = this.createCanvas(CanvasConst.MIN_WIDTH, CanvasConst.MIN_HEIGHT);
     }
 
     private createCanvas(width: number, height: number): HTMLCanvasElement {
