@@ -1,12 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { Tool } from '@app/classes/tool';
 import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { PencilService } from '@app/services/tools/pencil-service';
+import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
 import { DrawingComponent } from './drawing.component';
 
-class ToolStub extends Tool {}
+class ToolStub extends Tool {
+    stopDrawing(): void {
+        // Clear
+    }
+}
 
 describe('DrawingComponent', () => {
     let component: DrawingComponent;
@@ -45,11 +49,11 @@ describe('DrawingComponent', () => {
     });
 
     it('should get stubTool', () => {
-        const currentTool = component.currentTool;
+        const currentTool = component.toolHandlerService.getTool();
         expect(currentTool).toEqual(toolStub);
     });
 
-    it(" should call the tool's mouse move when receiving a mouse move event", () => {
+    it(" should call the tool's mouse move when receiving a mouse event", () => {
         const event = {} as MouseEvent;
         const mouseEventSpy = spyOn(toolStub, 'onMouseMove').and.callThrough();
         component.onMouseMove(event);
@@ -69,6 +73,30 @@ describe('DrawingComponent', () => {
         const event = {} as MouseEvent;
         const mouseEventSpy = spyOn(toolStub, 'onMouseUp').and.callThrough();
         component.onMouseUp(event);
+        expect(mouseEventSpy).toHaveBeenCalled();
+        expect(mouseEventSpy).toHaveBeenCalledWith(event);
+    });
+
+    it(" should call the toolHandler's keyPress event when receiving a keyPress event", () => {
+        const event = { key: 'c' } as KeyboardEvent;
+        const mouseEventSpy = spyOn<ToolHandlerService>(component.toolHandlerService, 'onKeyPress').and.callThrough();
+        component.onKeyPress(event);
+        expect(mouseEventSpy).toHaveBeenCalled();
+        expect(mouseEventSpy).toHaveBeenCalledWith(event);
+    });
+
+    it(" should call the tool's mouse leave when receiving a mouse leave event", () => {
+        const event = {} as MouseEvent;
+        const mouseEventSpy = spyOn(toolStub, 'onMouseLeave').and.callThrough();
+        component.onMouseLeave(event);
+        expect(mouseEventSpy).toHaveBeenCalled();
+        expect(mouseEventSpy).toHaveBeenCalledWith(event);
+    });
+
+    it(" should call the tool's mouse enter when receiving a mouse enter event", () => {
+        const event = {} as MouseEvent;
+        const mouseEventSpy = spyOn(toolStub, 'onMouseEnter').and.callThrough();
+        component.onMouseEnter(event);
         expect(mouseEventSpy).toHaveBeenCalled();
         expect(mouseEventSpy).toHaveBeenCalledWith(event);
     });

@@ -99,4 +99,15 @@ describe('CanvasResizeComponent', () => {
         expect(mouseEventSpy).toHaveBeenCalled();
         expect(mouseEventSpy).toHaveBeenCalledWith(moveEvent);
     });
+
+    it('should handle null error', () => {
+        spyOn(window, 'alert');
+        const elem = {
+            getContext(contextId: '2d', options?: CanvasRenderingContext2DSettings | undefined): CanvasRenderingContext2D | null {
+                return null;
+            },
+        } as HTMLCanvasElement;
+        service.saveCanvas(elem);
+        expect(window.alert).toHaveBeenCalledWith('Erreur when resizing');
+    });
 });
