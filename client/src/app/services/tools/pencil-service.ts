@@ -1,20 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
 import { Vec2 } from '@app/classes/vec2';
+import { MouseButton } from '@app/constants/control.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
-// TODO : Déplacer ça dans un fichier séparé accessible par tous
 export enum LeftMouse {
     Released = 0,
     Pressed = 1,
-}
-
-export enum MouseButton {
-    Left = 0,
-    Middle = 1,
-    Right = 2,
-    Back = 3,
-    Forward = 4,
 }
 
 /**
@@ -28,7 +20,7 @@ export enum MouseButton {
 export class PencilService extends Tool {
     private pathData: Vec2[][];
     private strokeStyleIn: string = 'black';
-    private lineWidthIn: number = 5;
+    private lineWidthIn: number = 12;
 
     constructor(drawingService: DrawingService) {
         super(drawingService);
