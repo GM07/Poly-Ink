@@ -1,0 +1,13 @@
+<mat-dialog-content>
+    <section>
+        <div>Type de jonction</div>
+        <br/>
+        <div class="button-row">
+            <button mat-raised-button (click)="toggleTypeLigne('normal')">Normal</button>
+            <button mat-raised-button (click)="toggleTypeLigne('avecPoint')">Avec point</button>
+        </div>
+    </section>
+    <br/>
+    <mat-divider></mat-divider>
+</mat-dialog-content>
+<app-diameter-junction-point *ngIf="avecPoint"></app-diameter-junction-point>

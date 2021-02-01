@@ -6,14 +6,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-<<<<<<< HEAD
 import { MatInputModule } from '@angular/material/input';
-import { MatSliderModule } from '@angular/material/slider';
-=======
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
->>>>>>> a69e6817a990a88b4336a4ffa3d85e0dffa38255
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
@@ -25,45 +22,25 @@ import { LaunchToolConfigComponent } from './components/launch-tool-config/launc
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { CrayonConfigComponent } from './components/tool-config/crayon-config/crayon-config.component';
+import { DiameterJunctionPointComponent } from './components/tool-config/diameter-junction-point/diameter-junction-point.component';
 import { EllipseConfigComponent } from './components/tool-config/ellipse-config/ellipse-config.component';
 import { EraserConfigComponent } from './components/tool-config/eraser-config/eraser-config.component';
+import { JunctionTypeComponent } from './components/tool-config/junction-type/junction-type.component';
 import { LineConfigComponent } from './components/tool-config/line-config/line-config.component';
 import { RectangleConfigComponent } from './components/tool-config/rectangle-config/rectangle-config.component';
+import { ThicknessComponent } from './components/tool-config/thickness/thickness.component';
 import { ToolConfigComponent } from './components/tool-config/tool-config.component';
+import { TraceTypeComponent } from './components/tool-config/trace-type/trace-type.component';
 
 @NgModule({
-<<<<<<< HEAD
-    declarations: [
-        AppComponent,
-        EditorComponent,
-        SidebarComponent,
-        DrawingComponent,
-        MainMenuComponent,
-        HomePageComponent,
-        ToolConfigComponent,
+    declarations: [AppComponent, EditorComponent, SidebarComponent, DrawingComponent, HomePageComponent, MainMenuComponent, ToolConfigComponent,
         LaunchToolConfigComponent,
         RectangleConfigComponent,
         CrayonConfigComponent,
         EllipseConfigComponent,
         EraserConfigComponent,
         LineConfigComponent,
-    ],
-    imports: [
-        BrowserModule,
-        HttpClientModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatExpansionModule,
-        MatIconModule,
-        MatDividerModule,
-        MatSliderModule,
-        MatDialogModule,
-        BrowserAnimationsModule,
-        MatInputModule,
-        FormsModule,
-=======
-    declarations: [AppComponent, EditorComponent, SidebarComponent, DrawingComponent, HomePageComponent, MainMenuComponent],
+        ThicknessComponent, TraceTypeComponent, JunctionTypeComponent, DiameterJunctionPointComponent],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
@@ -75,7 +52,11 @@ import { ToolConfigComponent } from './components/tool-config/tool-config.compon
         MatSidenavModule,
         MatListModule,
         MatExpansionModule,
->>>>>>> a69e6817a990a88b4336a4ffa3d85e0dffa38255
+        MatDividerModule,
+        MatSliderModule,
+        MatDialogModule,
+        MatInputModule,
+        FormsModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

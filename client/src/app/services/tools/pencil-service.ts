@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
+import { Pencilsettings } from '@app/classes/tool_settings/pencil-settings';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
@@ -29,6 +30,7 @@ export class PencilService extends Tool {
     private pathData: Vec2[][];
     private strokeStyleIn: string = 'black';
     private lineWidthIn: number = 5;
+    public settings: Pencilsettings;
 
     constructor(drawingService: DrawingService) {
         super(drawingService);

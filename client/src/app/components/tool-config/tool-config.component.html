@@ -1,6 +1,7 @@
 <!--<mat-dialog-content *ngFor=-->
-<div *ngIf="data === 'Crayon'">
-    <app-crayon-config></app-crayon-config>
+<div *ngIf="currentTool instanceOf IThicknessComponent">
+    <app-thickness></app-thickness>
+    <!--<app-crayon-config></app-crayon-config>
 </div>
 <div *ngIf="data === 'Ellipse'">
     <app-ellipse-config></app-ellipse-config>
@@ -13,4 +14,4 @@
 </div>
 <div *ngIf="data === 'Rectangle'">
     <app-rectangle-config></app-rectangle-config>
-</div>
+</div>-->
