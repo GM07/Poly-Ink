@@ -28,7 +28,7 @@ export class DrawingComponent implements AfterViewInit {
         this.drawingService.canvas = this.baseCanvas.nativeElement;
         this.drawingService.previewCanvas = this.previewCanvas.nativeElement;
         this.drawingService.initBackground();
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow = 'auto';
     }
 
     @HostListener('mousemove', ['$event'])

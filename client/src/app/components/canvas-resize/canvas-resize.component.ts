@@ -20,6 +20,8 @@ export class CanvasResizeComponent implements AfterViewInit {
     controlCornerStyle: { [key: string]: string };
     controlRightStyle: { [key: string]: string };
 
+    workZoneStyle: { [key: string]: string };
+
     previewResizeView: boolean;
     previewResizeStyle: { [key: string]: string };
     @ViewChild('previewResize', { static: false }) previewResize: ElementRef<HTMLDivElement>;
@@ -30,6 +32,7 @@ export class CanvasResizeComponent implements AfterViewInit {
             'margin-left': '0',
             'margin-top': '0',
         };
+        document.documentElement.style.backgroundColor = 'lightgray';
     }
 
     ngAfterViewInit(): void {
@@ -49,16 +52,22 @@ export class CanvasResizeComponent implements AfterViewInit {
     @HostListener('document:mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
         if (this.isDown) {
-            if (this.moveRight) this.previewResizeStyle.width = String(this.getWidth(event.clientX)) + 'px';
-            if (this.moveBottom) this.previewResizeStyle.height = String(this.getHeight(event.clientY)) + 'px';
+            if (this.moveRight) {
+                this.previewResizeStyle.width = String(this.getWidth(event.pageX)) + 'px';
+                this.workZoneStyle.width = String(this.getWidth(event.pageX + CanvasConst.WORKING_SIZE)) + 'px';
+            }
+            if (this.moveBottom) {
+                this.previewResizeStyle.height = String(this.getHeight(event.pageY)) + 'px';
+                this.workZoneStyle.height = String(this.getHeight(event.pageY + CanvasConst.WORKING_SIZE)) + 'px';
+            }
         }
     }
 
     @HostListener('document:mouseup', ['$event'])
     onMouseUp(event: MouseEvent): void {
         this.isDown = false;
-        const xModifier = this.moveRight ? this.getWidth(event.clientX) : this.drawingService.canvas.width;
-        const yModifier = this.moveBottom ? this.getHeight(event.clientY) : this.drawingService.canvas.height;
+        const xModifier = this.moveRight ? this.getWidth(event.pageX) : this.drawingService.canvas.width;
+        const yModifier = this.moveBottom ? this.getHeight(event.pageY) : this.drawingService.canvas.height;
         if (this.moveBottom || this.moveRight) this.drawingService.resizeCanvas(xModifier, yModifier);
 
         this.setStyleControl();
@@ -102,10 +111,16 @@ export class CanvasResizeComponent implements AfterViewInit {
         this.previewResizeStyle = {
             'margin-left': String(this.canvasLeft) + 'px',
             'margin-top': String(this.canvasTop) + 'px',
-                // tslint:disable:prettier
-                'width': String(this.drawingService.canvas.width) + 'px',
-                'height': String(this.drawingService.canvas.height) + 'px',
-                // tslint:enable:prettier
+            // tslint:disable:prettier
+            'width': String(this.drawingService.canvas.width) + 'px',
+            'height': String(this.drawingService.canvas.height) + 'px',
+            // tslint:enable:prettier
+        };
+        this.workZoneStyle = {
+          // tslint:disable:prettier
+           width: String(this.drawingService.canvas.width + CanvasConst.WORKING_SIZE) + 'px',
+           height: String(this.drawingService.canvas.height + CanvasConst.WORKING_SIZE) + 'px',
+           // tslint:enable:prettier
         };
     }
 
