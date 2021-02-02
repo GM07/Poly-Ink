@@ -24,7 +24,7 @@
         </div>
     </div>
 </div>
-<<ng-template #back
+<ng-template #back
     ><div id="back" [@fade]="state === 'visible' ? 'invisible' : 'visible'" (@fade.done)="endOfFadeAnimation()">
         <button mat-raised-button color="primary" (click)="backToMenu()">
             <mat-icon>home</mat-icon>

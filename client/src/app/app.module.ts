@@ -15,6 +15,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
+import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.component';
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { EraserConfigComponent } from './components/eraser-config/eraser-config.component';
@@ -31,14 +32,7 @@ import { ThicknessComponent } from './components/tool-config/thickness/thickness
 import { ToolConfigComponent } from './components/tool-config/tool-config.component';
 import { TraceTypeComponent } from './components/tool-config/trace-type/trace-type.component';
 @NgModule({
-    declarations: [
-        AppComponent,
-        EditorComponent,
-        SidebarComponent,
-        DrawingComponent,
-        HomePageComponent,
-        MainMenuComponent,
-        ToolConfigComponent,
+    declarations: [AppComponent, EditorComponent, SidebarComponent, DrawingComponent, HomePageComponent, MainMenuComponent, CanvasResizeComponent, ToolConfigComponent,
         LaunchToolConfigComponent,
         RectangleConfigComponent,
         EllipseConfigComponent,
@@ -47,9 +41,9 @@ import { TraceTypeComponent } from './components/tool-config/trace-type/trace-ty
         TraceTypeComponent,
         JunctionTypeComponent,
         DiameterJunctionPointComponent,
-        ThicknessComponent,
-    ],
+        ThicknessComponent],
     imports: [
+        AppRoutingModule,
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule,

@@ -1,20 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
 import { Vec2 } from '@app/classes/vec2';
+import { MouseButton } from '@app/constants/control.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
-// TODO : Déplacer ça dans un fichier séparé accessible par tous
 export enum LeftMouse {
     Released = 0,
     Pressed = 1,
-}
-
-export enum MouseButton {
-    Left = 0,
-    Middle = 1,
-    Right = 2,
-    Back = 3,
-    Forward = 4,
 }
 
 /**
@@ -28,8 +20,12 @@ export enum MouseButton {
 export class PencilService extends Tool { //implements IThicknessComponent AbstractThicknessComponent 
     private pathData: Vec2[][];
     private strokeStyleIn: string = 'black';
+<<<<<<< HEAD
     private lineWidthIn: number = 5;
     //@Input('lineWidthIn') lineWidthIn: number = 1;
+=======
+    private lineWidthIn: number = 12;
+>>>>>>> 23e4848d626fcc16a0671d8485f1300c38133fe9
 
     constructor(drawingService: DrawingService) {
         super(drawingService);
@@ -71,8 +67,10 @@ export class PencilService extends Tool { //implements IThicknessComponent Abstr
 
     onMouseUp(event: MouseEvent): void {
         if (this.mouseDown) {
-            const mousePosition = this.getPositionFromMouse(event);
-            this.pathData[this.pathData.length - 1].push(mousePosition);
+            if (this.isInCanvas(event)) {
+                const mousePosition = this.getPositionFromMouse(event);
+                this.pathData[this.pathData.length - 1].push(mousePosition);
+            }
             this.drawLine(this.drawingService.baseCtx, this.pathData);
         }
         this.mouseDown = false;
@@ -131,7 +129,7 @@ export class PencilService extends Tool { //implements IThicknessComponent Abstr
 
         for (const paths of pathData) {
             // Cas spécial pour permettre de dessiner exactement un seul pixel (sinon il n'est pas visible)
-            if (this.lineWidth <= 1 && paths.length === 2 && paths[0].x === paths[1].x && paths[0].y === paths[1].y) {
+            if (paths.length === 1 || (paths.length === 2 && paths[0].x === paths[1].x && paths[0].y === paths[1].y)) {
                 ctx.arc(paths[0].x, paths[0].y, 1 / 2, 0, Math.PI * 2);
                 ctx.stroke();
                 ctx.beginPath();
