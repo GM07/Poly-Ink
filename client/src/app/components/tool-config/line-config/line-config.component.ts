@@ -1,13 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-line-config',
     templateUrl: './line-config.component.html',
     styleUrls: ['./line-config.component.scss'],
 })
-export class LineConfigComponent implements OnInit {
-    constructor() {}
-
+export class LineConfigComponent {
     epaisseurLigne: number;
     epaisseurTrait: number;
     avecPoint: boolean = false;
@@ -19,6 +17,4 @@ export class LineConfigComponent implements OnInit {
     toggleTypeLigne(typeLigne: string): void {
         typeLigne === 'normal' ? (this.avecPoint = false) : (this.avecPoint = true);
     }
-
-    ngOnInit(): void {}
 }

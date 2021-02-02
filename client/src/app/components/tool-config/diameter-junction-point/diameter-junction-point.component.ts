@@ -1,21 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-diameter-junction-point',
-  templateUrl: './diameter-junction-point.component.html',
-  styleUrls: ['./diameter-junction-point.component.scss']
+    selector: 'app-diameter-junction-point',
+    templateUrl: './diameter-junction-point.component.html',
+    styleUrls: ['./diameter-junction-point.component.scss'],
 })
-export class DiameterJunctionPointComponent implements OnInit {
+export class DiameterJunctionPointComponent {
+    diameterJunctionPoints: number;
 
-  diameterJunctionPoints: number;
-
-  constructor() { }
-
-  colorSliderLabel(value: number): string {
-    return value + 'px';
-  }
-
-  ngOnInit(): void {
-  }
-
+    colorSliderLabel(value: number): string {
+        return value + 'px';
+    }
 }

@@ -10,20 +10,18 @@ import { ToolConfigComponent } from './tool-config.component';
 class MockCrayonConfigComponent {}*/
 
 describe('ToolConfigComponent', () => {
-
     let component: ToolConfigComponent;
     let fixture: ComponentFixture<ToolConfigComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [ ToolConfigComponent], //, MockCrayonConfigComponent 
-            imports: [ MatDialogModule ],
-            providers: [ 
+            declarations: [ToolConfigComponent], // , MockCrayonConfigComponent
+            imports: [MatDialogModule],
+            providers: [
                 { provide: MAT_DIALOG_DATA, useValue: {} },
-                { provide: MatDialogRef, useValue: {} }
+                { provide: MatDialogRef, useValue: {} },
             ],
-        })
-        .compileComponents();
+        }).compileComponents();
     }));
 
     beforeEach(() => {

@@ -13,7 +13,7 @@ export class LaunchToolConfigComponent {
     constructor(public dialog: MatDialog) {}
 
     openDialog(): void {
-        this.dialog.open(ToolConfigComponent, { data: this.toolName }); 
+        this.dialog.open(ToolConfigComponent, { data: this.toolName });
     }
 
     getComponentname(): string {

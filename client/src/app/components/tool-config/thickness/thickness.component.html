@@ -6,17 +6,16 @@
         <br/>
         <div>
             <mat-slider 
-                [(ngModel)]="sizeValue"
+                [(ngModel)]="lineWidthIn"
                 thumbLabel
                 [displayWith]="colorSliderLabel"
                 min="this.lineSizeMin"
                 max="this.lineSizeMax">
             </mat-slider>
-        </div>
-        <div>
+        <br/>
             <mat-form-field>
                 <mat-label>Manual size input</mat-label>
-                <input matInput type="number" [(ngModel)]="sizeValue">
+                <input matInput type="number" [(ngModel)]="lineWidthIn">
             </mat-form-field>
         </div> 
     </section>

@@ -17,30 +17,38 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
+import { EraserConfigComponent } from './components/eraser-config/eraser-config.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { LaunchToolConfigComponent } from './components/launch-tool-config/launch-tool-config.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { CrayonConfigComponent } from './components/tool-config/crayon-config/crayon-config.component';
 import { DiameterJunctionPointComponent } from './components/tool-config/diameter-junction-point/diameter-junction-point.component';
 import { EllipseConfigComponent } from './components/tool-config/ellipse-config/ellipse-config.component';
-import { EraserConfigComponent } from './components/tool-config/eraser-config/eraser-config.component';
 import { JunctionTypeComponent } from './components/tool-config/junction-type/junction-type.component';
 import { LineConfigComponent } from './components/tool-config/line-config/line-config.component';
 import { RectangleConfigComponent } from './components/tool-config/rectangle-config/rectangle-config.component';
 import { ThicknessComponent } from './components/tool-config/thickness/thickness.component';
 import { ToolConfigComponent } from './components/tool-config/tool-config.component';
 import { TraceTypeComponent } from './components/tool-config/trace-type/trace-type.component';
-
 @NgModule({
-    declarations: [AppComponent, EditorComponent, SidebarComponent, DrawingComponent, HomePageComponent, MainMenuComponent, ToolConfigComponent,
+    declarations: [
+        AppComponent,
+        EditorComponent,
+        SidebarComponent,
+        DrawingComponent,
+        HomePageComponent,
+        MainMenuComponent,
+        ToolConfigComponent,
         LaunchToolConfigComponent,
         RectangleConfigComponent,
-        CrayonConfigComponent,
         EllipseConfigComponent,
         EraserConfigComponent,
         LineConfigComponent,
-        ThicknessComponent, TraceTypeComponent, JunctionTypeComponent, DiameterJunctionPointComponent],
+        TraceTypeComponent,
+        JunctionTypeComponent,
+        DiameterJunctionPointComponent,
+        ThicknessComponent,
+    ],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,

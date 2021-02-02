@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
-import { Pencilsettings } from '@app/classes/tool_settings/pencil-settings';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
@@ -26,11 +25,11 @@ export enum MouseButton {
 @Injectable({
     providedIn: 'root',
 })
-export class PencilService extends Tool {
+export class PencilService extends Tool { //implements IThicknessComponent AbstractThicknessComponent 
     private pathData: Vec2[][];
     private strokeStyleIn: string = 'black';
     private lineWidthIn: number = 5;
-    public settings: Pencilsettings;
+    //@Input('lineWidthIn') lineWidthIn: number = 1;
 
     constructor(drawingService: DrawingService) {
         super(drawingService);

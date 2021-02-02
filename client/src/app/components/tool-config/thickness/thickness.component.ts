@@ -1,26 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+import { PencilService } from '@app/services/tools/pencil-service';
+import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
 
 export interface IThicknessComponent {
-  //sizeValue: number;
-  //colorSliderLabel(value: number): string;
+  thicknessValue: number;
+}
+
+export abstract class AbstractThicknessComponent {
+  lineWidthIn: number = 5;
 }
 
 @Component({
-  selector: 'app-thickness',
-  templateUrl: './thickness.component.html',
-  styleUrls: ['./thickness.component.scss']
+    selector: 'app-thickness',
+    templateUrl: './thickness.component.html',
+    styleUrls: ['./thickness.component.scss'],
 })
-export class ThicknessComponent implements OnInit, IThicknessComponent {
+export class ThicknessComponent {
+    public lineWidthIn: number = 1;
 
-  sizeValue: number;
+    private wasInside = false;
 
-  constructor() { }
+    @HostListener('document:click')
+    clickout() {
+        if(!this.wasInside) {
+            this.changeThickness();
+        }
+    }
 
-  colorSliderLabel(value: number): string {
-    return value + 'px';
-  }
+    constructor(public service: ToolHandlerService) {
+    }
 
-  ngOnInit(): void {
-  }
+    changeThickness() {
+      if (this.service.getTool() instanceof PencilService) 
+        (<PencilService>this.service.getTool()).lineWidth = this.lineWidthIn;
+    }
 
+    colorSliderLabel(value: number): string {
+        return value + 'px';
+    }
 }

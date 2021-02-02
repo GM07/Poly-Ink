@@ -1,17 +1,4 @@
-<!--<mat-dialog-content *ngFor=-->
-<div *ngIf="currentTool instanceOf IThicknessComponent">
-    <app-thickness></app-thickness>
-    <!--<app-crayon-config></app-crayon-config>
-</div>
-<div *ngIf="data === 'Ellipse'">
-    <app-ellipse-config></app-ellipse-config>
-</div>
-<div *ngIf="data === 'Eraser'">
-    <app-eraser-config></app-eraser-config>
-</div>
-<div *ngIf="data === 'Ligne'">
-    <app-line-config></app-line-config>
-</div>
-<div *ngIf="data === 'Rectangle'">
-    <app-rectangle-config></app-rectangle-config>
-</div>-->
+
+<app-thickness *ngIf="hasThickness"></app-thickness>
+<app-trace-type *ngIf="hasTraceType"></app-trace-type>
+<app-junction-type *ngIf="hasJunctionType"></app-junction-type>

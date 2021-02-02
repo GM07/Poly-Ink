@@ -1,21 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+
+// TODO quand ligne sera faite!
+export interface IJunctionTypeComponent {
+    avecPoint: boolean;
+}
 
 @Component({
-  selector: 'app-junction-type',
-  templateUrl: './junction-type.component.html',
-  styleUrls: ['./junction-type.component.scss']
+    selector: 'app-junction-type',
+    templateUrl: './junction-type.component.html',
+    styleUrls: ['./junction-type.component.scss'],
 })
-export class JunctionTypeComponent implements OnInit {
+export class JunctionTypeComponent implements IJunctionTypeComponent {
+    avecPoint: boolean;
 
-  avecPoint: boolean = false;
-
-  constructor() { }
-
-  toggleTypeLigne(typeLigne: string): void {
-    typeLigne === 'normal' ? (this.avecPoint = false) : (this.avecPoint = true);
-  }
-
-  ngOnInit(): void {
-  }
-
+    toggleTypeLigne(typeLigne: string): void {
+        typeLigne === 'normal' ? (this.avecPoint = false) : (this.avecPoint = true);
+    }
 }
