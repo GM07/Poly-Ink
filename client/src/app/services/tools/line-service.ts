@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
-import { getAngle, getDistanceBetween, Vec2 } from '@app/classes/vec2';
+import { Vec2, VectorHandler } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { MouseButton } from './pencil-service';
 
@@ -8,7 +8,8 @@ import { MouseButton } from './pencil-service';
     providedIn: 'root',
 })
 export class LineService extends Tool {
-    readonly ANGLE_STEPS = 45;
+    static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
+    static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;
     private points: Vec2[] = [];
     private pointToAdd: Vec2;
 
@@ -32,7 +33,7 @@ export class LineService extends Tool {
         this.shortCutKey = 'l';
     }
 
-    setupDrawingStyle() {
+    setupDrawingStyle(): void {
         this.drawingService.previewCtx.strokeStyle = this.strokeStyle;
         this.drawingService.previewCtx.fillStyle = this.fillStyle;
         this.drawingService.baseCtx.strokeStyle = this.strokeStyle;
@@ -40,7 +41,8 @@ export class LineService extends Tool {
     }
 
     onMouseDown(event: MouseEvent): void {
-        if (!(this.mouseDown = event.button === MouseButton.Left)) {
+        this.mouseDown = event.button === MouseButton.Left;
+        if (!this.mouseDown) {
             return;
         }
 
@@ -52,20 +54,21 @@ export class LineService extends Tool {
     }
 
     onDoubleClick(event: MouseEvent): void {
-        if (this.points.length == 0) {
+        if (this.points.length === 0) {
             return;
         }
 
-        let point: Vec2 = this.getPositionFromMouse(event);
-        let firstPoint: Vec2 = this.getFirstPoint();
-        let closedLoop: boolean = getDistanceBetween(point, firstPoint) <= 20;
+        const point: Vec2 = this.getPositionFromMouse(event);
+        this.pointToAdd = point;
+        const firstPoint: Vec2 = this.getFirstPoint();
+        const closedLoop: boolean = VectorHandler.getDistanceBetween(point, firstPoint) <= LineService.MINIMUM_DISTANCE_TO_CLOSE_PATH;
         this.drawPath(this.drawingService.baseCtx, this.points, closedLoop);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.points = [];
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.points.length == 0 || !this.mouseDown) {
+        if (this.points.length === 0 || !this.mouseDown) {
             return;
         }
         let point: Vec2 = (this.mousePosition = this.getPositionFromMouse(event));
@@ -94,6 +97,11 @@ export class LineService extends Tool {
     }
 
     handleKeys(currentKey: string): void {
+        // Si on a pas de points, aucune des touches ne fait rien
+        if (this.points.length === 0) {
+            return;
+        }
+
         if (currentKey === 'Backspace' && this.keyEvents.get('Backspace')) {
             if (this.points.length >= 1) {
                 this.points.pop();
@@ -122,22 +130,22 @@ export class LineService extends Tool {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
-    handleLinePreview() {
+    handleLinePreview(): void {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
 
         // On redessine le path sur le preview en ajoutant une ligne jusqu'au curseur
         this.drawPath(this.drawingService.previewCtx);
-        let lastPoint: Vec2 = this.getLastPoint();
+        const lastPoint: Vec2 = this.getLastPoint();
         this.drawLine(this.drawingService.previewCtx, lastPoint, this.pointToAdd);
     }
 
-    alignPoint(cursor: Vec2 = this.mousePosition): Vec2 {
-        let angle: number = getAngle(this.getLastPoint(), cursor) + Math.PI / 8;
-        let finalAngle = (Math.floor(angle / (Math.PI / 4)) * Math.PI) / 4;
+    alignPoint(cursor: Vec2 = this.pointToAdd): Vec2 {
+        const angle: number = VectorHandler.getAngle(this.getLastPoint(), cursor) + LineService.ANGLE_STEPS / 2;
+        const finalAngle = Math.floor(angle / LineService.ANGLE_STEPS) * LineService.ANGLE_STEPS;
 
-        let distance = getDistanceBetween(this.getLastPoint(), cursor);
-        let dx = distance * Math.cos(finalAngle) + this.getLastPoint().x;
-        let dy = -(distance * Math.sin(finalAngle)) + this.getLastPoint().y;
+        const distance = VectorHandler.getDistanceBetween(this.getLastPoint(), cursor);
+        const dx = distance * Math.cos(finalAngle) + this.getLastPoint().x;
+        const dy = -(distance * Math.sin(finalAngle)) + this.getLastPoint().y;
 
         return { x: Math.round(dx), y: Math.round(dy) };
     }
@@ -160,7 +168,7 @@ export class LineService extends Tool {
             }
         }
         if (closed) {
-            let beginPoint: Vec2 = this.getFirstPoint();
+            const beginPoint: Vec2 = this.getFirstPoint();
             ctx.lineTo(beginPoint.x, beginPoint.y);
             ctx.stroke();
         }

@@ -49,13 +49,13 @@ describe('ToolHandlerService', () => {
 
     it('should change tool on keyPress', () => {
         pencilService.onMouseDown(mouseEvent);
-        service.onKeyPress(keyboardEvent);
+        service.onKeyDown(keyboardEvent);
         expect(service.getTool()).toBeInstanceOf(PencilService);
         keyboardEvent = { key: 'FakeKey' } as KeyboardEvent;
-        service.onKeyPress(keyboardEvent);
+        service.onKeyDown(keyboardEvent);
         expect(service.getTool()).toBeInstanceOf(PencilService);
         keyboardEvent = { key: 'l' } as KeyboardEvent;
-        service.onKeyPress(keyboardEvent);
+        service.onKeyDown(keyboardEvent);
         expect(service.getTool()).toBeInstanceOf(LineService);
     });
 
@@ -69,17 +69,17 @@ describe('ToolHandlerService', () => {
 
     it('should finalise the previous drawing on a tool change', () => {
         pencilService.onMouseDown(mouseEvent);
-        service.onKeyPress(keyboardEvent);
+        service.onKeyDown(keyboardEvent);
         expect(pencilService.stopDrawing).not.toHaveBeenCalled();
         keyboardEvent = { key: 'FakeKey' } as KeyboardEvent;
-        service.onKeyPress(keyboardEvent);
+        service.onKeyDown(keyboardEvent);
         expect(pencilService.stopDrawing).not.toHaveBeenCalled();
         keyboardEvent = { key: 'l' } as KeyboardEvent;
-        service.onKeyPress(keyboardEvent);
+        service.onKeyDown(keyboardEvent);
         expect(pencilService.stopDrawing).toHaveBeenCalled();
         spyOn<any>(lineService, 'stopDrawing');
         keyboardEvent = { key: 'c' } as KeyboardEvent;
-        service.onKeyPress(keyboardEvent);
+        service.onKeyDown(keyboardEvent);
         expect(lineService.stopDrawing).toHaveBeenCalled();
     });
 

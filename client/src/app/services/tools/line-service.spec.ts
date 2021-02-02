@@ -14,9 +14,9 @@ describe('LigneService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('should stop drawing when asked to', () => {
-        spyOn<any>(service, 'stopDrawing').and.callThrough();
-        service.stopDrawing();
-        expect(service.stopDrawing).toHaveBeenCalled();
-    });
+    // it('should stop drawing when asked to', () => {
+    //     spyOn<any>(service, 'stopDrawing').and.callThrough();
+    //     service.stopDrawing();
+    //     expect(service.stopDrawing).toHaveBeenCalled();
+    // });
 });
