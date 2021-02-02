@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CanvasConst } from '@app/constants/canvas.ts';
 
 @Injectable({
     providedIn: 'root',
@@ -47,5 +48,13 @@ export class DrawingService {
     initBackground(): void {
         this.baseCtx.fillStyle = 'white';
         this.baseCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    newCanvas(){
+      this.canvas.width = CanvasConst.DEFAULT_WIDTH;
+      this.canvas.height = CanvasConst.DEFAULT_HEIGHT;
+      this.previewCanvas.width = CanvasConst.DEFAULT_WIDTH;
+      this.previewCanvas.height = CanvasConst.DEFAULT_HEIGHT;
+      this.initBackground();
     }
 }
