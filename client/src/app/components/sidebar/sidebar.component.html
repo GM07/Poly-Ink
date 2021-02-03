@@ -7,7 +7,7 @@
     </mat-action-list>
 
     <mat-action-list class="bottom-sidebar">
-        <button *ngFor="let tool of bottomToolsSettings" class="sidebar-item" matTooltip={{tool.infoBubble}}
+        <button *ngFor="let tool of bottomToolsSettings" class="sidebar-item" (click)="emitEvent(tool.toolTitle);"matTooltip={{tool.infoBubble}}
             mat-icon-button matTooltipPosition="right">
             <mat-icon>{{tool.iconName}}</mat-icon>
         </button>

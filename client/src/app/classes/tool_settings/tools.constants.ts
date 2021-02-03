@@ -114,6 +114,13 @@ export enum ExportFileToolConstants {
     ICON_NAME = 'import_export',
 }
 
+export enum NewDrawingConstants {
+  TOOL_ID = 'NEW_DRAWING',
+  TOOL_TITLE = 'Nouveau Dessin',
+  INFO_BUBBLE = 'Nouveau Dessin (Ctr-O)',
+  ICON_NAME = 'import_export', //TODO modifier l'icone
+}
+
 export const TOP_TOOLS_CONSTANTS = [
     ColorToolConstants,
     PencilToolConstants,
@@ -131,4 +138,4 @@ export const TOP_TOOLS_CONSTANTS = [
     LassoToolConstants,
 ];
 
-export const BOTTOM_TOOLS_CONSTANTS = [SaveFileToolConsants, ExportFileToolConstants];
+export const BOTTOM_TOOLS_CONSTANTS = [SaveFileToolConsants, ExportFileToolConstants, NewDrawingConstants];

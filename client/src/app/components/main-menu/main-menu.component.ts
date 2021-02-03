@@ -1,6 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { DrawingService } from '@app/services/drawing/drawing.service';
 
 @Component({
     selector: 'app-main-menu',
@@ -19,7 +18,7 @@ export class MainMenuComponent implements OnInit {
     state: OpacityState = 'visible';
     showComponent: boolean = true;
 
-    constructor(private drawingService : DrawingService) {
+    constructor() {
         //
     }
 
@@ -29,7 +28,6 @@ export class MainMenuComponent implements OnInit {
 
     // Function called when the create new drawing button is pressed
     createNewDrawing(): void {
-      this.drawingService.newCanvas();
       this.fadeOut();
     }
 

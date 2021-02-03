@@ -16,9 +16,10 @@ import { EditorComponent } from './components/editor/editor.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { NewDrawingComponent } from './components/new-drawing/new-drawing.component';
 
 @NgModule({
-    declarations: [AppComponent, EditorComponent, SidebarComponent, DrawingComponent, HomePageComponent, MainMenuComponent, CanvasResizeComponent],
+    declarations: [AppComponent, EditorComponent, SidebarComponent, DrawingComponent, HomePageComponent, MainMenuComponent, CanvasResizeComponent, NewDrawingComponent],
     imports: [
         AppRoutingModule,
         BrowserModule,

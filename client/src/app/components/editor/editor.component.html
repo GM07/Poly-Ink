@@ -1,7 +1,8 @@
 <div class="container">
-    <app-sidebar></app-sidebar>
+    <app-sidebar (settingClicked)="executeAction($event)"></app-sidebar>
     <div class="drawing-container">
-        <app-canvas-resize class="drawing" tabindex="0" ondragstart="return false;">
+      <app-canvas-resize class="drawing" tabindex="0" ondragstart="return false;">
         </app-canvas-resize>
     </div>
+    <app-new-drawing #newCanvasMenu></app-new-drawing>
 </div>

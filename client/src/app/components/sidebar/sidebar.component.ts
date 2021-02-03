@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import * as CommonToolSettingsBottom from '@app/classes/tool_settings/index-bottom';
 import * as CommonToolSettingsTop from '@app/classes/tool_settings/index-top';
 import { ToolSettings } from '@app/classes/tool_settings/tool-settings';
@@ -7,6 +7,9 @@ import { ToolSettings } from '@app/classes/tool_settings/tool-settings';
 export class SidebarComponent implements OnInit {
     topToolsSettings: ToolSettings[] = [];
     bottomToolsSettings: ToolSettings[] = [];
+    @Output() settingClicked = new EventEmitter<string>();
+
+    public constructor(){}
 
     ngOnInit(): void {
         Object.values(CommonToolSettingsTop).forEach((setting) => {
@@ -15,5 +18,9 @@ export class SidebarComponent implements OnInit {
         Object.values(CommonToolSettingsBottom).forEach((setting) => {
             this.bottomToolsSettings.push(new setting());
         });
+    }
+
+    emitEvent(name : string){
+      this.settingClicked.emit(name);
     }
 }
