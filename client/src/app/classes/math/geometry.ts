@@ -1,6 +1,6 @@
 import { Vec2 } from '@app/classes/vec2';
 
-export class GeometryService {
+export class Geometry {
     static readonly DEGREE_CONVERSION_FACTOR: number = 180;
 
     static getDistanceBetween(initial: Vec2, final: Vec2): number {
@@ -17,10 +17,10 @@ export class GeometryService {
     }
 
     static toDegrees(radians: number): number {
-        return (radians * GeometryService.DEGREE_CONVERSION_FACTOR) / Math.PI;
+        return (radians * Geometry.DEGREE_CONVERSION_FACTOR) / Math.PI;
     }
 
     static toRadians(degrees: number): number {
-        return (degrees * Math.PI) / GeometryService.DEGREE_CONVERSION_FACTOR;
+        return (degrees * Math.PI) / Geometry.DEGREE_CONVERSION_FACTOR;
     }
 }

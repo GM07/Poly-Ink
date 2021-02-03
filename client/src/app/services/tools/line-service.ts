@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { GeometryService } from '../math/geometry.service';
+import { Geometry } from '../../classes/math/geometry';
 import { MouseButton } from './pencil-service';
 
 @Injectable({
@@ -43,24 +43,28 @@ export class LineService extends Tool {
         }
     }
 
+    onMouseUp(event: MouseEvent): void {
+        this.mouseDown = !(event.button === MouseButton.Left);
+    }
+
     onDoubleClick(event: MouseEvent): void {
         if (this.points.length === 0) {
             return;
         }
 
         this.pointToAdd = this.getPositionFromMouse(event);
-        const closedLoop: boolean = GeometryService.getDistanceBetween(this.pointToAdd, this.points[0]) <= LineService.MINIMUM_DISTANCE_TO_CLOSE_PATH;
+        const closedLoop: boolean = Geometry.getDistanceBetween(this.pointToAdd, this.points[0]) <= LineService.MINIMUM_DISTANCE_TO_CLOSE_PATH;
         this.drawLinePath(this.drawingService.baseCtx, this.points, closedLoop);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.points = [];
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.points.length === 0 || !this.mouseDown) {
+        if (this.points.length === 0) {
             return;
         }
-        let point: Vec2 = (this.mousePosition = this.getPositionFromMouse(event));
 
+        let point: Vec2 = (this.mousePosition = this.getPositionFromMouse(event));
         if (this.keyEvents.get('Shift')) {
             point = this.alignPoint(point);
         }
@@ -98,6 +102,7 @@ export class LineService extends Tool {
                 break;
             case 'Shift':
                 this.handleShiftKey();
+                break;
             default:
                 break;
         }
@@ -107,8 +112,11 @@ export class LineService extends Tool {
         if (this.keyEvents.get('Backspace')) {
             if (this.points.length >= 1) {
                 this.points.pop();
+                this.handleLinePreview();
+                this.onMouseMove({} as MouseEvent);
+            } else {
+                this.drawingService.clearCanvas(this.drawingService.previewCtx);
             }
-            this.drawingService.clearCanvas(this.drawingService.previewCtx);
         }
     }
 
@@ -137,15 +145,15 @@ export class LineService extends Tool {
     handleLinePreview(): void {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.drawLinePath(this.drawingService.previewCtx);
-        const lastPoint: Vec2 = this.getLastPoint();
+        let lastPoint: Vec2 = this.getLastPoint();
         this.drawLine(this.drawingService.previewCtx, lastPoint, this.pointToAdd);
     }
 
     alignPoint(cursor: Vec2 = this.pointToAdd): Vec2 {
-        const angle: number = GeometryService.getAngle(this.getLastPoint(), cursor) + LineService.ANGLE_STEPS / 2;
+        const angle: number = Geometry.getAngle(this.getLastPoint(), cursor) + LineService.ANGLE_STEPS / 2;
         const finalAngle = Math.floor(angle / LineService.ANGLE_STEPS) * LineService.ANGLE_STEPS;
 
-        const distance = GeometryService.getDistanceBetween(this.getLastPoint(), cursor);
+        const distance = Geometry.getDistanceBetween(this.getLastPoint(), cursor);
         const dx = distance * Math.cos(finalAngle) + this.getLastPoint().x;
         const dy = -(distance * Math.sin(finalAngle)) + this.getLastPoint().y;
 
@@ -160,14 +168,14 @@ export class LineService extends Tool {
     }
 
     private drawLinePath(ctx: CanvasRenderingContext2D, points: Vec2[] = this.points, closed: boolean = false): void {
-        for (let index = 0; index < points.length; index++) {
-            const point = points[index];
-            if (index === 0) {
-                ctx.moveTo(point.x, point.y);
-            } else {
-                ctx.lineTo(point.x, point.y);
-                ctx.stroke();
-            }
+        if (points.length < 2) {
+            return;
+        }
+
+        ctx.moveTo(points[0].x, points[0].y);
+        for (const point of points) {
+            ctx.lineTo(point.x, point.y);
+            ctx.stroke();
         }
         if (closed) {
             ctx.lineTo(this.points[0].x, this.points[0].y);
