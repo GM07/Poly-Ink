@@ -32,7 +32,11 @@ export class RectangleService extends Tool {
         this.shortCutKey = '1';
     }
 
-    stopDrawing(): void {}
+    stopDrawing(): void {
+        this.mouseDown = false;
+        this.shiftPressed = false;
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
+    }
 
     onMouseDown(event: MouseEvent): void {
         this.mouseDown = event.button === MouseButton.Left;
@@ -44,7 +48,9 @@ export class RectangleService extends Tool {
 
     onMouseUp(event: MouseEvent): void {
         if (this.mouseDown) {
-            this.mouseUpCoord = this.getPositionFromMouse(event);
+            if (this.isInCanvas(event)) {
+                this.mouseUpCoord = this.getPositionFromMouse(event);
+            }
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawRectangle(this.drawingService.baseCtx);
         }
@@ -61,17 +67,22 @@ export class RectangleService extends Tool {
     }
 
     onMouseLeave(event: MouseEvent): void {
-        if (this.mouseDown) this.mouseUpCoord = this.getPositionFromMouse(event);
+        if (this.mouseDown) {
+            this.mouseUpCoord = this.getPositionFromMouse(event);
+            this.updateRectangle();
+        }
     }
 
     onMouseEnter(event: MouseEvent): void {
-        if (this.mouseDown) this.mouseUpCoord = this.getPositionFromMouse(event);
+        if (this.mouseDown) {
+            this.mouseUpCoord = this.getPositionFromMouse(event);
+            this.updateRectangle();
+        }
     }
 
     onKeyPress(event: KeyboardEvent): void {
         if (event.shiftKey && !this.shiftPressed) {
             this.shiftPressed = true;
-            console.log('shiftDown');
             if (this.mouseDown) {
                 this.updateRectangle();
             }
@@ -81,7 +92,6 @@ export class RectangleService extends Tool {
     onKeyUp(event: KeyboardEvent): void {
         if (!event.shiftKey && this.shiftPressed) {
             this.shiftPressed = false;
-            console.log('shiftUp');
             if (this.mouseDown) {
                 this.updateRectangle();
             }
