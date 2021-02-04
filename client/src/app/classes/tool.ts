@@ -46,6 +46,10 @@ export abstract class Tool {
     onMouseLeave(event: MouseEvent): void {}
 
     onMouseEnter(event: MouseEvent): void {}
+    
+    onKeyPress(event: KeyboardEvent): void {}
+
+    onKeyUp(event: KeyboardEvent): void {}
 
     abstract stopDrawing(): void;
 
