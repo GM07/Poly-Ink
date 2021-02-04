@@ -1,0 +1,27 @@
+<!--{{ pencilService.lineWidth }}
+<p>Épaisseur crayon: 
+    <input mat-input 
+        type="number" 
+        [(ngModel)]="pencilService.lineWidth"/>
+</p>-->
+<div mat-dialog-header>
+    Size
+</div> 
+<div>
+    <br/>
+</div>
+<div>
+    <mat-slider 
+        [(ngModel)]="pencilService.lineWidth"
+        thumbLabel
+        [displayWith]="colorSliderLabel"
+        min="this.lineSizeMin"
+        max="this.lineSizeMax">
+    </mat-slider>
+</div>
+<div>
+    <mat-form-field>
+        <mat-label>Manual size input</mat-label>
+        <input matInput type="number" [(ngModel)]="pencilService.lineWidth">
+    </mat-form-field>
+</div> 

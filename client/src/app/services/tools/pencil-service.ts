@@ -17,15 +17,11 @@ export enum LeftMouse {
 @Injectable({
     providedIn: 'root',
 })
-export class PencilService extends Tool { //implements IThicknessComponent AbstractThicknessComponent 
+export class PencilService extends Tool {
     private pathData: Vec2[][];
     private strokeStyleIn: string = 'black';
-<<<<<<< HEAD
-    private lineWidthIn: number = 5;
-    //@Input('lineWidthIn') lineWidthIn: number = 1;
-=======
     private lineWidthIn: number = 12;
->>>>>>> 23e4848d626fcc16a0671d8485f1300c38133fe9
+    private mouseInCanvas: boolean = false;
 
     constructor(drawingService: DrawingService) {
         super(drawingService);
@@ -43,6 +39,7 @@ export class PencilService extends Tool { //implements IThicknessComponent Abstr
         }
     }
 
+
     get lineWidth(): number {
         return this.lineWidthIn;
     }
@@ -53,6 +50,7 @@ export class PencilService extends Tool { //implements IThicknessComponent Abstr
      */
     set lineWidth(width: number) {
         this.lineWidthIn = Math.max(Math.round(width), 1);
+        if (this.mouseInCanvas) this.drawBackgroundPoint(this.mouseDownCoord);
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -78,8 +76,6 @@ export class PencilService extends Tool { //implements IThicknessComponent Abstr
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.drawBackgroundPoint(this.getPositionFromMouse(event));
-
         if (this.mouseDown) {
             const mousePosition = this.getPositionFromMouse(event);
             this.pathData[this.pathData.length - 1].push(mousePosition);
@@ -87,14 +83,21 @@ export class PencilService extends Tool { //implements IThicknessComponent Abstr
             // On dessine sur le canvas de prévisualisation et on l'efface à chaque déplacement de la souris
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawLine(this.drawingService.previewCtx, this.pathData);
+        } else {
+            this.mouseDownCoord = this.getPositionFromMouse(event);
+            this.drawBackgroundPoint(this.getPositionFromMouse(event));
         }
     }
 
+
     onMouseLeave(event: MouseEvent): void {
         if (!this.mouseDown) this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.mouseInCanvas = false;
     }
 
+
     onMouseEnter(event: MouseEvent): void {
+        this.mouseInCanvas = true;
         if (event.button !== MouseButton.Left) return;
 
         if (event.buttons === LeftMouse.Pressed) {
@@ -107,6 +110,7 @@ export class PencilService extends Tool { //implements IThicknessComponent Abstr
             this.clearPath();
         }
     }
+
 
     stopDrawing(): void {
         this.onMouseUp({} as MouseEvent);

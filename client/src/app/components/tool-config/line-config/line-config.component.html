@@ -1,4 +1,46 @@
 <h2 mat-dialog-title>Line Configurations</h2>
 
-<app-junction-type></app-junction-type>
-<app-thickness></app-thickness>
+<p>Épaisseur ligne: 
+    <input mat-input 
+        type="number" 
+        [(ngModel)]="lineService.lineWidth"/>
+</p>
+
+
+<section>
+    <div>Type de jonction</div>
+    <br/>
+    <div class="button-row">
+        <button mat-raised-button (click)="toggleTypeLigne('normal')">Normal</button>
+        <button mat-raised-button (click)="toggleTypeLigne('avecPoint')">Avec point</button>
+    </div>
+</section>
+<br/>
+<mat-divider></mat-divider>
+
+<mat-divider></mat-divider>
+<br/>
+<section>
+    <div mat-dialog-header>
+        Diamètre points de jonction
+    </div> 
+    <div>
+        <br/>
+    </div>
+    <div>
+        <!--[(ngModel)]="diameterJunctionPoints"-->
+        <mat-slider 
+            thumbLabel
+            [displayWith]="colorSliderLabel"
+            min="this.lineSizeMin"
+            max="this.lineSizeMax">
+        </mat-slider>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-label>Manual input</mat-label>
+            <input matInput type="number"> <!--[(ngModel)]="diameterJunctionPoints"-->
+        </mat-form-field>
+    </div> 
+</section>
+
