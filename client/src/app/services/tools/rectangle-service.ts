@@ -71,20 +71,20 @@ export class RectangleService extends Tool {
     onKeyPress(event: KeyboardEvent): void {
         if (event.shiftKey && !this.shiftPressed) {
             this.shiftPressed = true;
-            const ctx = this.drawingService.previewCtx;
-            this.drawingService.clearCanvas(ctx);
-            this.drawRectangle(ctx);
             console.log('shiftDown');
+            if (this.mouseDown) {
+                this.updateRectangle();
+            }
         }
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if (!event.shiftKey) {
-            console.log('shiftUp');
+        if (!event.shiftKey && this.shiftPressed) {
             this.shiftPressed = false;
-            const ctx = this.drawingService.previewCtx;
-            this.drawingService.clearCanvas(ctx);
-            this.drawRectangle(ctx);
+            console.log('shiftUp');
+            if (this.mouseDown) {
+                this.updateRectangle();
+            }
         }
     }
 
@@ -92,8 +92,8 @@ export class RectangleService extends Tool {
         let width: number = this.mouseUpCoord.x - this.mouseDownCoord.x;
         let height: number = this.mouseUpCoord.y - this.mouseDownCoord.y;
         if (this.shiftPressed) {
-            width = Math.max(width, height);
-            height = width;
+            height = Math.sign(height) * Math.max(Math.abs(width), Math.abs(height));
+            width = Math.sign(width) * Math.abs(height);
         }
         ctx.lineWidth = this.lineWidthIn;
         ctx.strokeStyle = this.strokeStyle;
@@ -116,6 +116,12 @@ export class RectangleService extends Tool {
         }
 
         ctx.stroke();
+    }
+
+    private updateRectangle() {
+        const ctx = this.drawingService.previewCtx;
+        this.drawingService.clearCanvas(ctx);
+        this.drawRectangle(ctx);
     }
 
     private clearPath(): void {}
