@@ -3,6 +3,7 @@ import { Tool } from '@app/classes/tool';
 import { EllipseService } from '@app/services/tools/ellipse-service';
 import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
+import { RectangleService } from '@app/services/tools/rectangle-service';
 
 @Injectable({
     providedIn: 'root',
@@ -11,9 +12,10 @@ export class ToolHandlerService {
     private TOOLS: Tool[] = [];
     private currentTool: Tool;
 
-    constructor(pencilService: PencilService, lineService: LineService, ellipseService: EllipseService) {
+    constructor(pencilService: PencilService, lineService: LineService, rectangleService: RectangleService, ellipseService: EllipseService) {
         this.TOOLS.push(pencilService);
         this.TOOLS.push(lineService);
+        this.TOOLS.push(rectangleService);
         this.TOOLS.push(ellipseService);
         this.currentTool = this.TOOLS.values().next().value;
     }
@@ -45,8 +47,8 @@ export class ToolHandlerService {
         this.currentTool.onMouseUp(event);
     }
 
-    onKeyPress(event: KeyboardEvent): void {
-        this.currentTool.onKeyPress(event);
+    onKeyDown(event: KeyboardEvent): void {
+        this.currentTool.onKeyDown(event);
         const tool = this.findToolshortcutKey(event.key.toLocaleLowerCase());
         if (tool != undefined) {
             this.currentTool.stopDrawing();
