@@ -13,8 +13,9 @@ export class LineService extends Tool {
     static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;
     private points: Vec2[] = [];
     private pointToAdd: Vec2;
-    // private strokeStyle: string = 'black';
     private mousePosition: Vec2;
+    showJunctionPoints: boolean = true;
+    diameterJunctions: number = 5;
 
     private keyEvents: Map<string, boolean> = new Map([
         ['Shift', false],
@@ -26,11 +27,6 @@ export class LineService extends Tool {
         super(drawingService);
         this.shortCutKey = 'l';
     }
-
-    // setupDrawingStyle(): void {
-    //     this.drawingService.previewCtx.strokeStyle = this.strokeStyle;
-    //     this.drawingService.baseCtx.strokeStyle = this.strokeStyle;
-    // }
 
     onMouseDown(event: MouseEvent): void {
         this.mouseDown = event.button === MouseButton.Left;
@@ -156,11 +152,23 @@ export class LineService extends Tool {
     }
 
     private drawLine(ctx: CanvasRenderingContext2D, initial: Vec2, final: Vec2): void {
+        this.drawJunction(ctx, initial);
         ctx.beginPath();
         ctx.moveTo(initial.x, initial.y);
         ctx.lineTo(final.x, final.y);
         ctx.stroke();
         ctx.closePath();
+        this.drawJunction(ctx, final);
+    }
+
+    private drawJunction(ctx: CanvasRenderingContext2D, point: Vec2): void {
+        if (this.showJunctionPoints) {
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, this.diameterJunctions / 2, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+            ctx.closePath();
+        }
     }
 
     private drawLinePath(ctx: CanvasRenderingContext2D, points: Vec2[] = this.points, closed: boolean = false): void {
@@ -168,12 +176,16 @@ export class LineService extends Tool {
             return;
         }
 
+        this.drawJunction(ctx, points[0]);
+
         ctx.beginPath();
         ctx.moveTo(points[0].x, points[0].y);
         for (let index = 1; index < points.length; index++) {
             const point = points[index];
             ctx.lineTo(point.x, point.y);
             ctx.stroke();
+            this.drawJunction(ctx, point);
+            ctx.moveTo(point.x, point.y);
         }
 
         if (closed) {

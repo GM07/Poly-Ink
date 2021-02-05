@@ -9,15 +9,17 @@ import { MouseButton } from './pencil-service';
 /* tslint:disable:no-any */
 describe('LigneService', () => {
     let service: LineService;
-    const mockContext = {
+    const mockContext = ({
         /* tslint:disable:no-empty */
         beginPath: () => {},
         moveTo: (x: number, y: number) => {},
         lineTo: (x: number, y: number) => {},
         stroke: () => {},
+        arc: () => {},
+        fill: () => {},
         closePath: () => {},
         /* tslint:enable:no-empty */
-    } as CanvasRenderingContext2D;
+    } as unknown) as CanvasRenderingContext2D;
 
     let pointsTest2: Vec2[];
 
@@ -33,6 +35,7 @@ describe('LigneService', () => {
         service = TestBed.inject(LineService);
         service['pointToAdd'] = { x: 0, y: 0 };
         service['mousePosition'] = { x: 0, y: 0 };
+        service.showJunctionPoints = false;
         pointsTest2 = [
             { x: 100, y: 100 },
             { x: 200, y: 300 },
@@ -80,25 +83,20 @@ describe('LigneService', () => {
     });
 
     it('should end drawing on double click without closing path', () => {
-        const clearCanvas = spyOn(service['drawingService'], 'clearCanvas').and.callThrough();
         service['points'] = [{ x: 100, y: 800 } as Vec2];
         const lastEvent = { offsetX: 100, offsetY: 100 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath').and.callThrough();
 
         service.onDoubleClick(lastEvent);
         expect(drawLinePath).toHaveBeenCalledWith(mockContext, [{ x: 100, y: 800 }], false);
-        expect(clearCanvas).toHaveBeenCalled();
     });
 
     it('should end drawing on double click with a closed path', () => {
-        const clearCanvas = spyOn(service['drawingService'], 'clearCanvas').and.callThrough();
         service['points'] = [{ x: 100, y: 819 } as Vec2];
         const lastEvent = { offsetX: 100, offsetY: 800 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath').and.callThrough();
-
         service.onDoubleClick(lastEvent);
         expect(drawLinePath).toHaveBeenCalledWith(mockContext, [{ x: 100, y: 819 }], true);
-        expect(clearCanvas).toHaveBeenCalled();
     });
 
     it('should not move line on mouse move when point array is empty', () => {
@@ -110,7 +108,6 @@ describe('LigneService', () => {
     it('should move line on mouse move when point array is not empty', () => {
         service['points'] = [{ x: 100, y: 200 } as Vec2];
         const alignPointFunc = spyOn(service, 'alignPoint').and.callThrough();
-
         service.onMouseMove({ offsetX: 120, offsetY: 540 } as MouseEvent);
         expect(alignPointFunc).not.toHaveBeenCalled();
         expect(service['pointToAdd']).toEqual({ x: 120, y: 540 } as Vec2);
@@ -130,7 +127,6 @@ describe('LigneService', () => {
         const handleBackspace = spyOn(service, 'handleBackspaceKey').and.callThrough();
         const handleEscape = spyOn(service, 'handleEscapeKey').and.callThrough();
         const handleShift = spyOn(service, 'handleShiftKey').and.callThrough();
-
         service.handleKeys('Backspace');
         expect(handleBackspace).not.toHaveBeenCalled();
         expect(handleEscape).not.toHaveBeenCalled();
@@ -172,7 +168,6 @@ describe('LigneService', () => {
 
     it('should call correct function when Backspace key is pressed', () => {
         service['points'].push({ x: 100, y: 100 } as Vec2);
-
         const handleBackspace = spyOn(service, 'handleBackspaceKey').and.callThrough();
         service.handleKeys('Backspace');
         expect(handleBackspace).toHaveBeenCalled();
@@ -180,7 +175,6 @@ describe('LigneService', () => {
 
     it('should call correct function when Escape key is pressed', () => {
         service['points'].push({ x: 100, y: 100 } as Vec2);
-
         const handleEscape = spyOn(service, 'handleEscapeKey').and.callThrough();
         service.handleKeys('Escape');
         expect(handleEscape).toHaveBeenCalled();
@@ -188,7 +182,6 @@ describe('LigneService', () => {
 
     it('should call correct function when Shift key is pressed', () => {
         service['points'].push({ x: 100, y: 100 } as Vec2);
-
         const handleShift = spyOn(service, 'handleShiftKey').and.callThrough();
         service.handleKeys('Shift');
         expect(handleShift).toHaveBeenCalled();
@@ -299,11 +292,8 @@ describe('LigneService', () => {
         const points = pointsTest2;
         service['points'] = points;
 
-        const moveToSpy = spyOn(mockContext, 'moveTo').and.callThrough();
         const lineToSpy = spyOn(mockContext, 'lineTo').and.callThrough();
-
         service['drawLinePath'](mockContext, points, false);
-        expect(moveToSpy).toHaveBeenCalledTimes(1);
         expect(lineToSpy).toHaveBeenCalledTimes(1);
     });
 
@@ -312,24 +302,29 @@ describe('LigneService', () => {
         const points = pointsTest2;
         service['points'] = points;
 
-        const moveToSpy = spyOn(mockContext, 'moveTo').and.callThrough();
         const lineToSpy = spyOn(mockContext, 'lineTo').and.callThrough();
-
         service['drawLinePath'](mockContext, points, true);
-        expect(moveToSpy).toHaveBeenCalledTimes(1);
         expect(lineToSpy).toHaveBeenCalledTimes(3);
     });
 
     it('should not draw line path', () => {
-        const points = [{ x: 100, y: 100 }];
-        service['points'] = points;
-
+        service['points'] = [{ x: 100, y: 100 }];
         const moveToSpy = spyOn(mockContext, 'moveTo').and.callThrough();
-        const lineToSpy = spyOn(mockContext, 'lineTo').and.callThrough();
-
-        service['drawLinePath'](mockContext, points, true);
+        service['drawLinePath'](mockContext, [{ x: 100, y: 100 }], true);
         expect(moveToSpy).not.toHaveBeenCalled();
-        expect(lineToSpy).not.toHaveBeenCalled();
+    });
+
+    it('should draw junctions', () => {
+        service['showJunctionPoints'] = true;
+        const fillFunc = spyOn(mockContext, 'fill').and.callThrough();
+        service['drawJunction'](mockContext, { x: 0, y: 0 });
+        expect(fillFunc).toHaveBeenCalled();
+    });
+
+    it('should not draw junctions', () => {
+        const fillFunc = spyOn(mockContext, 'fill').and.callThrough();
+        service['drawJunction'](mockContext, { x: 0, y: 0 });
+        expect(fillFunc).not.toHaveBeenCalled();
     });
 
     it('should align points', () => {
