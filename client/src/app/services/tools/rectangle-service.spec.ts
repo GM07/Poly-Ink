@@ -137,20 +137,20 @@ describe('RectangleService', () => {
     });
 
     it('should update the rectangle to a square with shift pressed', () => {
-        service.onKeyPress({} as KeyboardEvent);
+        service.onKeyDown({} as KeyboardEvent);
         expect(updateRectangleSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
-        service.onKeyPress(keyboardEvent);
+        service.onKeyDown(keyboardEvent);
         expect(updateRectangleSpy).toHaveBeenCalled();
     });
 
     it('should update the square to a rectangle with shift released', () => {
         service.onKeyUp({} as KeyboardEvent);
         expect(updateRectangleSpy).not.toHaveBeenCalled();
-        service.onKeyPress(keyboardEvent);
+        service.onKeyDown(keyboardEvent);
         service.onKeyUp({ shiftKey: false } as KeyboardEvent);
         expect(updateRectangleSpy).not.toHaveBeenCalled();
-        service.onKeyPress(keyboardEvent);
+        service.onKeyDown(keyboardEvent);
         service.onMouseDown(mouseEvent);
         keyboardEvent = { shiftKey: false } as KeyboardEvent;
         service.onKeyUp(keyboardEvent);
@@ -235,7 +235,7 @@ describe('RectangleService', () => {
     });
 
     it('should draw a square when shift is pressed', () => {
-        service.onKeyPress(keyboardEvent);
+        service.onKeyDown(keyboardEvent);
         service.rectangleMode = RectangleMode.Filled;
         service.fillStyle = '#000000';
         service.onMouseDown(mouseEvent);
