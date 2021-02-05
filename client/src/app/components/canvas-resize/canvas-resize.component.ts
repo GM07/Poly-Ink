@@ -112,8 +112,8 @@ export class CanvasResizeComponent implements AfterViewInit {
             'margin-left': String(this.canvasLeft) + 'px',
             'margin-top': String(this.canvasTop) + 'px',
             // tslint:disable:prettier
-            width: String(this.drawingService.canvas.width) + 'px',
-            height: String(this.drawingService.canvas.height) + 'px',
+            'width': String(this.drawingService.canvas.width) + 'px',
+            'height': String(this.drawingService.canvas.height) + 'px',
             // tslint:enable:prettier
         };
         this.workZoneStyle = {

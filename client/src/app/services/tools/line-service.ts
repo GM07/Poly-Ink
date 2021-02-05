@@ -32,7 +32,7 @@ export class LineService extends Tool {
         this.shortCutKey = 'l';
     }
 
-    applyAttributes(ctx: CanvasRenderingContext2D) {
+    applyAttributes(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = this.color;
         ctx.strokeStyle = this.color;
         ctx.lineWidth = this.thickness;
