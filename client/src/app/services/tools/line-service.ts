@@ -35,7 +35,7 @@ export class LineService extends Tool {
     onMouseDown(event: MouseEvent): void {
         this.mouseDown = event.button === MouseButton.Left;
         if (this.mouseDown) {
-            if (this.pointToAdd === undefined || this.points.length === 0) {
+            if (this.points.length === 0) {
                 this.pointToAdd = this.getPositionFromMouse(event);
             }
 
@@ -57,10 +57,11 @@ export class LineService extends Tool {
         this.drawLinePath(this.drawingService.baseCtx, this.points, closedLoop);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.points = [];
+        console.log(this.points);
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.points.length === 0) {
+        if (this.points.length === 0 || event.offsetX === undefined || event.offsetY === undefined) {
             return;
         }
 
@@ -112,8 +113,9 @@ export class LineService extends Tool {
         if (this.keyEvents.get('Backspace')) {
             if (this.points.length >= 1) {
                 this.points.pop();
+                this.drawingService.clearCanvas(this.drawingService.previewCtx);
                 this.handleLinePreview();
-                this.onMouseMove({} as MouseEvent);
+                // this.onMouseMove({} as MouseEvent);
             } else {
                 this.drawingService.clearCanvas(this.drawingService.previewCtx);
             }
@@ -122,8 +124,9 @@ export class LineService extends Tool {
 
     handleShiftKey(): void {
         if (this.keyEvents.get('Shift')) {
-            this.pointToAdd = this.alignPoint();
+            this.pointToAdd = this.alignPoint(this.mousePosition);
             this.handleLinePreview();
+            // this.onMouseMove({} as MouseEvent);
         } else {
             this.pointToAdd = this.mousePosition;
             this.handleLinePreview();
@@ -138,7 +141,6 @@ export class LineService extends Tool {
     }
 
     stopDrawing(): void {
-        this.onMouseUp({} as MouseEvent);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
@@ -149,7 +151,7 @@ export class LineService extends Tool {
         this.drawLine(this.drawingService.previewCtx, lastPoint, this.pointToAdd);
     }
 
-    alignPoint(cursor: Vec2 = this.pointToAdd): Vec2 {
+    alignPoint(cursor: Vec2): Vec2 {
         const angle: number = Geometry.getAngle(this.getLastPoint(), cursor) + LineService.ANGLE_STEPS / 2;
         const finalAngle = Math.floor(angle / LineService.ANGLE_STEPS) * LineService.ANGLE_STEPS;
 
@@ -165,6 +167,7 @@ export class LineService extends Tool {
         ctx.moveTo(initial.x, initial.y);
         ctx.lineTo(final.x, final.y);
         ctx.stroke();
+        ctx.closePath();
     }
 
     private drawLinePath(ctx: CanvasRenderingContext2D, points: Vec2[] = this.points, closed: boolean = false): void {
@@ -173,14 +176,18 @@ export class LineService extends Tool {
         }
 
         ctx.moveTo(points[0].x, points[0].y);
-        for (const point of points) {
+        for (let index = 1; index < points.length; index++) {
+            const point = points[index];
             ctx.lineTo(point.x, point.y);
             ctx.stroke();
         }
+
         if (closed) {
             ctx.lineTo(this.points[0].x, this.points[0].y);
             ctx.stroke();
         }
+
+        ctx.closePath();
     }
 
     private getLastPoint(): Vec2 {

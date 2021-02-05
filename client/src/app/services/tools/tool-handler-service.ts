@@ -48,11 +48,12 @@ export class ToolHandlerService {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        this.currentTool.onKeyDown(event);
         const tool = this.findToolshortcutKey(event.key.toLocaleLowerCase());
         if (tool != undefined) {
             this.currentTool.stopDrawing();
             this.currentTool = tool;
+        } else {
+            this.currentTool.onKeyDown(event);
         }
     }
 

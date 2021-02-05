@@ -31,7 +31,7 @@ export class DrawingComponent implements AfterViewInit {
         this.drawingService.canvas = this.baseCanvas.nativeElement;
     }
 
-    @HostListener('document:mousemove', ['$event'])
+    @HostListener('mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
         this.toolHandlerService.onMouseMove(event);
     }
@@ -46,13 +46,13 @@ export class DrawingComponent implements AfterViewInit {
         this.toolHandlerService.onDoubleClick(event);
     }
 
-    @HostListener('mouseup', ['$event'])
+    @HostListener('document:mouseup', ['$event'])
     onMouseUp(event: MouseEvent): void {
         this.toolHandlerService.onMouseUp(event);
     }
 
     // On utilisait keypress, mais les touches BACKSPACE, SHIFT ne marchent pas avec keypress
-    @HostListener('keydown', ['$event'])
+    @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
         this.toolHandlerService.onKeyDown(event);
     }
