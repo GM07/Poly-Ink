@@ -315,6 +315,19 @@ describe('LigneService', () => {
         expect(moveToSpy).not.toHaveBeenCalled();
     });
 
+    it('should draw junctions', () => {
+        service['showJunctionPoints'] = true;
+        const fillFunc = spyOn(mockContext, 'fill').and.callThrough();
+        service['drawJunction'](mockContext, { x: 0, y: 0 });
+        expect(fillFunc).toHaveBeenCalled();
+    });
+
+    it('should not draw junctions', () => {
+        const fillFunc = spyOn(mockContext, 'fill').and.callThrough();
+        service['drawJunction'](mockContext, { x: 0, y: 0 });
+        expect(fillFunc).not.toHaveBeenCalled();
+    });
+
     it('should align points', () => {
         service['points'] = [
             { x: 500, y: 500 },
