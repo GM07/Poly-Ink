@@ -132,3 +132,23 @@ export const TOP_TOOLS_CONSTANTS = [
 ];
 
 export const BOTTOM_TOOLS_CONSTANTS = [SaveFileToolConsants, ExportFileToolConstants];
+
+export const ICONS_PATHS = [
+    ['bucket', '../../../assets/icons/bucket.svg'],
+    ['ellipse-selection', '../../../assets/icons/ellipse-selection.svg'],
+    ['ellipse', '../../../assets/icons/ellipse.svg'],
+    ['eraser', '../../../assets/icons/eraser.svg'],
+    ['export', '../../../assets/icons/export.svg'],
+    ['eye-dropper', '../../../assets/icons/eye-dropper.svg'],
+    ['lasso', '../../../assets/icons/lasso.svg'],
+    ['line', '../../../assets/icons/line.svg'],
+    ['polygone', '../../../assets/icons/polygone.svg'],
+    ['rectangle-selection', '../../../assets/icons/rectangle-selection.svg'],
+    ['rectangle', '../../../assets/icons/rectangle'],
+    ['spray', '../../../assets/icons/spray.svg'],
+    ['stamp', '../../../assets/icons/stamp.svg'],
+    ['palette', '../../../assets/icons/palette.svg'],
+    ['save', '../../../assets/icons/save.svg'],
+    ['text', '../../../assets/icons/text.svg'],
+    ['pencil', '../../../assets/icons/pencil.svg'],
+];
