@@ -9,7 +9,7 @@ import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
 export class NewDrawingComponent {
     constructor(private newDrawing: NewDrawingService) {}
 
-    fadeOut(): void {
+    removeWarning(): void {
         this.newDrawing.showWarning = false;
     }
 
@@ -18,7 +18,7 @@ export class NewDrawingComponent {
     }
 
     createNewDrawing(confirm: boolean): void {
-        this.fadeOut();
+        this.removeWarning();
         this.newDrawing.newCanvas(confirm);
     }
 

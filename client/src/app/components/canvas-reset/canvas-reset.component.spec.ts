@@ -27,7 +27,7 @@ describe('NewDrawingComponent', () => {
     });
 
     it('should set showWarning to false', () => {
-        component.fadeOut();
+        component.removeWarning();
         expect(newDrawingService.showWarning).toBe(false);
     });
 
