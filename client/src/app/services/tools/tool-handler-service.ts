@@ -40,7 +40,8 @@ export class ToolHandlerService {
     setTool(toolId: string): boolean {
         const newCurrentTool: Tool | undefined = this.TOOLS.get(toolId);
 
-        if (newCurrentTool !== undefined) {
+        if (newCurrentTool !== undefined && newCurrentTool != this.currentTool) {
+            this.currentTool.stopDrawing();
             this.currentTool = newCurrentTool;
             return true;
         } else {

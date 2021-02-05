@@ -1,33 +1,32 @@
-.resize-border{
-  border: 1px dotted black;
-  position: absolute;
-  left: 0px;
-  right: 0px;
+.resize-border {
+    border: 1px dotted black;
+    position: absolute;
+    left: 0px;
+    right: 0px;
 }
 
-.resize-box{
-  width: 100px;
-  height: 100px;
-  background-color: black;
+.resize-box {
+    width: 100px;
+    height: 100px;
+    background-color: black;
 }
 
-
-.resize-control{
-  background-color: black;
-  z-index: 1;
-  width: 10px;
-  height: 10px;
-  position: absolute;
+.resize-control {
+    background-color: black;
+    z-index: 1;
+    width: 10px;
+    height: 10px;
+    position: absolute;
 }
 
-#right{
-  cursor: e-resize;
+#right {
+    cursor: e-resize;
 }
 
-#bottom{
-  cursor: s-resize;
+#bottom {
+    cursor: s-resize;
 }
 
-#corner{
-  cursor: se-resize;
+#corner {
+    cursor: se-resize;
 }

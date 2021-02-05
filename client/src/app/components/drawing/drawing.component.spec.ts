@@ -3,7 +3,6 @@ import { Tool } from '@app/classes/tool';
 import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { PencilService } from '@app/services/tools/pencil-service';
-import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
 import { DrawingComponent } from './drawing.component';
 
 class ToolStub extends Tool {
@@ -77,13 +76,13 @@ describe('DrawingComponent', () => {
         expect(mouseEventSpy).toHaveBeenCalledWith(event);
     });
 
-    it(" should call the toolHandler's keyPress event when receiving a keyPress event", () => {
-        const event = { key: 'c' } as KeyboardEvent;
-        const mouseEventSpy = spyOn<ToolHandlerService>(component.toolHandlerService, 'onKeyPress').and.callThrough();
-        component.onKeyPress(event);
-        expect(mouseEventSpy).toHaveBeenCalled();
-        expect(mouseEventSpy).toHaveBeenCalledWith(event);
-    });
+    // it(" should call the toolHandler's keyPress event when receiving a keyPress event", () => {
+    //     const event = { key: 'c' } as KeyboardEvent;
+    //     const mouseEventSpy = spyOn<ToolHandlerService>(component.toolHandlerService, 'onKeyPress').and.callThrough();
+    //     component.onKeyPress(event);
+    //     expect(mouseEventSpy).toHaveBeenCalled();
+    //     expect(mouseEventSpy).toHaveBeenCalledWith(event);
+    // });
 
     it(" should call the tool's mouse leave when receiving a mouse leave event", () => {
         const event = {} as MouseEvent;
