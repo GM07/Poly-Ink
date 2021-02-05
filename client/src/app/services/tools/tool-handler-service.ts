@@ -3,6 +3,7 @@ import { Tool } from '@app/classes/tool';
 import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
 import { RectangleService } from '@app/services/tools/rectangle-service';
+import { EffaceService } from './efface.service';
 
 @Injectable({
     providedIn: 'root',
@@ -11,10 +12,11 @@ export class ToolHandlerService {
     private TOOLS: Tool[] = [];
     private currentTool: Tool;
 
-    constructor(pencilService: PencilService, lineService: LineService, rectangleService: RectangleService) {
+    constructor(pencilService: PencilService, lineService: LineService, rectangleService: RectangleService, effaceService : EffaceService) {
         this.TOOLS.push(pencilService);
         this.TOOLS.push(lineService);
         this.TOOLS.push(rectangleService);
+        this.TOOLS.push(effaceService);
         this.currentTool = this.TOOLS.values().next().value;
     }
 
