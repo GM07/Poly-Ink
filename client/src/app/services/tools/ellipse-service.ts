@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
-import { DrawingService } from '../drawing/drawing.service';
+import { DrawingService } from '@app/services/drawing/drawing.service';
 
 export enum Key {
     Released = 0,
@@ -24,7 +24,7 @@ export class EllipseService extends Tool {
     private mouseUpCoord: Vec2;
     private shiftPressed: boolean = false;
     private lineWidthIn: number = 5;
-    ellipseMode: EllipseMode = EllipseMode.Filled;
+    ellipseMode: EllipseMode = EllipseMode.FilledWithContour;
 
     constructor(drawingService: DrawingService) {
         super(drawingService);
@@ -32,7 +32,7 @@ export class EllipseService extends Tool {
         this.strokeStyleIn = 'black';
         this.fillStyleIn = 'black';
         this.shiftPressed = false;
-        this.lineWidthIn = 5;
+        this.lineWidthIn = 1;
         this.ellipseMode = EllipseMode.Filled;
     }
 
@@ -73,7 +73,6 @@ export class EllipseService extends Tool {
             this.mouseDownCoord = this.getPositionFromMouse(event);
             this.mouseUpCoord = this.mouseDownCoord;
             const ctx = this.drawingService.previewCtx;
-            //this.drawRectanglePerimeter(ctx);
             this.drawEllipse(ctx);
         }
     }
@@ -186,10 +185,10 @@ export class EllipseService extends Tool {
         ctx.closePath();
     }
 
-    private drawRectanglePerimeter(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, radiusX: number, radiusY: number) {
+    private drawRectanglePerimeter(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, radiusX: number, radiusY: number): void {
         const dashWidth = 1;
         let lineWidth: number = this.lineWidthIn;
-        if (this.ellipseMode == EllipseMode.Filled) {
+        if (this.ellipseMode === EllipseMode.Filled) {
             lineWidth = 0;
         }
         const x = centerX - radiusX - lineWidth / 2;

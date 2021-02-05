@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
-import { DrawingService } from '../drawing/drawing.service';
-import { EllipseMode, EllipseService } from './ellipse-service';
+import { DrawingService } from '@app/services/drawing/drawing.service';
+import { EllipseMode, EllipseService } from '@app/services/tools/ellipse-service';
 
 // tslint:disable:no-any
 describe('EllipseService', () => {
@@ -33,6 +33,7 @@ describe('EllipseService', () => {
         drawEllipseSpy = spyOn<any>(service, 'drawEllipse').and.callThrough();
         updateEllipseSpy = spyOn<any>(service, 'updateEllipse').and.callThrough();
 
+        // tslint:disable:no-string-literal
         service['drawingService'].baseCtx = baseCtxStub; // Jasmine doesnt copy properties with underlying data
         service['drawingService'].previewCtx = previewCtxStub;
         service['drawingService'].canvas = canvasTestHelper.canvas;
@@ -166,6 +167,7 @@ describe('EllipseService', () => {
         expect(drawEllipseSpy).toHaveBeenCalled();
 
         // Border is present
+        // tslint:disable-next-line:no-magic-numbers
         const middlePoint = 25 / 2;
         let imageData: ImageData = baseCtxStub.getImageData(0, middlePoint, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
@@ -174,7 +176,9 @@ describe('EllipseService', () => {
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
 
         // Inside is untouched
-        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); //Pythagore
+        // tslint:disable-next-line:no-magic-numbers
+        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagore
+        // tslint:disable-next-line:no-magic-numbers
         const x = 25 - 2 * maxSquareRadius;
         const y = x;
         imageData = baseCtxStub.getImageData(x, y, maxSquareRadius * 2, maxSquareRadius * 2);
@@ -189,7 +193,9 @@ describe('EllipseService', () => {
         service.onMouseUp(mouseEvent);
         expect(drawEllipseSpy).toHaveBeenCalled();
 
-        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); //Pythagore
+        // tslint:disable-next-line:no-magic-numbers
+        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagore
+        // tslint:disable-next-line:no-magic-numbers
         const x = 25 - 2 * maxSquareRadius;
         const y = x;
         const imageData: ImageData = baseCtxStub.getImageData(x, y, maxSquareRadius * 2, maxSquareRadius * 2);
@@ -210,6 +216,7 @@ describe('EllipseService', () => {
         expect(drawEllipseSpy).toHaveBeenCalled();
 
         // Border is present
+        // tslint:disable-next-line:no-magic-numbers
         const middlePoint = 25 / 2;
         let imageData: ImageData = baseCtxStub.getImageData(0, middlePoint, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
@@ -218,7 +225,9 @@ describe('EllipseService', () => {
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
 
         // Inside is present
-        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); //Pythagore
+        // tslint:disable-next-line:no-magic-numbers
+        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagore
+        // tslint:disable-next-line:no-magic-numbers
         const x = 25 - 2 * maxSquareRadius;
         const y = x;
         imageData = baseCtxStub.getImageData(x, y, maxSquareRadius * 2, maxSquareRadius * 2);
@@ -250,6 +259,7 @@ describe('EllipseService', () => {
         mouseEvent = { offsetX: 0, offsetY: 5, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
+        // tslint:disable-next-line:no-magic-numbers
         const middlePoint = 25 / 2;
         const imageData: ImageData = baseCtxStub.getImageData(middlePoint, 0, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
