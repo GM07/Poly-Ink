@@ -76,16 +76,15 @@ export class LineService extends Tool {
     onKeyDown(event: KeyboardEvent): void {
         if (this.keyEvents.has(event.key)) {
             this.keyEvents.set(event.key, true);
+            this.handleKeys(event.key);
         }
-        this.handleKeys(event.key);
     }
 
     onKeyUp(event: KeyboardEvent): void {
         if (this.keyEvents.has(event.key)) {
             this.keyEvents.set(event.key, false);
+            this.handleKeys(event.key);
         }
-
-        this.handleKeys(event.key);
     }
 
     handleKeys(currentKey: string): void {
