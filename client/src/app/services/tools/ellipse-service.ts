@@ -23,7 +23,7 @@ export class EllipseService extends Tool {
     private fillStyleIn: string = 'red';
     private mouseUpCoord: Vec2;
     private shiftPressed: boolean = false;
-    private lineWidthIn: number = 20;
+    private lineWidthIn: number = 5;
     ellipseMode: EllipseMode = EllipseMode.Contour;
 
     constructor(drawingService: DrawingService) {
@@ -89,7 +89,6 @@ export class EllipseService extends Tool {
             this.mouseUpCoord = this.getPositionFromMouse(event);
             const ctx = this.drawingService.previewCtx;
             this.drawingService.clearCanvas(ctx);
-            //this.drawRectanglePerimeter(ctx);
             this.drawEllipse(ctx);
         }
     }
@@ -130,7 +129,6 @@ export class EllipseService extends Tool {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
         this.drawEllipse(ctx);
-        //this.drawRectanglePerimeter(ctx);
     }
 
     private drawEllipse(ctx: CanvasRenderingContext2D): void {
@@ -138,11 +136,26 @@ export class EllipseService extends Tool {
         let radiusY: number = (this.mouseUpCoord.y - this.mouseDownCoord.y) / 2;
         let centerX: number = this.mouseDownCoord.x + radiusX;
         let centerY: number = this.mouseDownCoord.y + radiusY;
-        radiusX = Math.abs(radiusX);
-        radiusY = Math.abs(radiusY);
 
-        if (ctx !== this.drawingService.baseCtx) {
-            this.drawRectanglePerimeter(ctx, centerX, centerY, radiusX, radiusY);
+        if (this.shiftPressed) {
+            const furthestPoint = Math.max(Math.abs(this.mouseUpCoord.x), Math.abs(this.mouseUpCoord.y));
+            furthestPoint;
+            centerX = Math.sign(1);
+            centerX = Math.sign(centerX) * Math.max(Math.abs(centerX), Math.abs(centerY));
+            centerY = Math.sign(centerY) * centerX;
+            //const mouseupX = Math.sign(this.mouseUpCoord.x) * Math.max(Math.abs(this.mouseUpCoord.x), Math.abs(this.mouseUpCoord.y));
+            //const mouseupY = Math.sign(this.mouseUpCoord.y) * Math.abs(mouseupX);
+            //radiusX = (mouseupX - this.mouseDownCoord.x) / 2;
+            //radiusY = radiusX;
+            //centerX = mouseupX + radiusX;
+            //centerY = mouseupY + radiusY;
+        }
+
+        const radiusXAbs = Math.abs(radiusX);
+        const radiusYAbs = Math.abs(radiusY);
+
+        if (ctx === this.drawingService.previewCtx) {
+            this.drawRectanglePerimeter(ctx, centerX, centerY, radiusXAbs, radiusYAbs);
         }
 
         ctx.strokeStyle = this.strokeStyleIn;
@@ -151,18 +164,18 @@ export class EllipseService extends Tool {
         switch (this.ellipseMode) {
             case EllipseMode.Contour:
                 ctx.lineWidth = this.lineWidthIn;
-                ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+                ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
                 ctx.stroke();
                 break;
             case EllipseMode.Filled:
                 ctx.fillStyle = this.fillStyleIn;
-                ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+                ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
                 ctx.fill();
                 break;
             case EllipseMode.FilledWithContour:
                 ctx.lineWidth = this.lineWidthIn;
                 ctx.fillStyle = this.fillStyleIn;
-                ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+                ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
                 ctx.fill();
                 ctx.stroke();
                 break;
@@ -193,27 +206,5 @@ export class EllipseService extends Tool {
         ctx.stroke();
         ctx.closePath();
         ctx.setLineDash([]);
-
-        // let radiusX: number = Math.abs(this.mouseUpCoord.x - this.mouseDownCoord.x);
-        // let radiusY: number = Math.abs(this.mouseUpCoord.y - this.mouseDownCoord.y);
-        // if (this.shiftPressed) {
-        //     radiusY = Math.max(radiusX, radiusY);
-        //     radiusX = radiusY;
-        // }
-        // let width: number = 2 * radiusX;
-        // let height: number = 2 * radiusY;
-        // if (this.ellipseMode == EllipseMode.Contour || this.ellipseMode == EllipseMode.FilledWithContour) {
-        //     width;
-        // }
-        // const x = this.mouseDownCoord.x - radiusX - this.lineWidthIn;
-        // const y = this.mouseDownCoord.y - radiusY - this.lineWidthIn;
-        // const lineDash = 6;
-        // ctx.lineWidth = 1;
-        // ctx.strokeStyle = 'dark gray';
-        // ctx.setLineDash([lineDash]);
-        // ctx.beginPath();
-        // ctx.strokeRect(x, y, 2 * radiusX, 2 * radiusY);
-        // ctx.closePath();
-        // ctx.setLineDash([]);
     }
 }
