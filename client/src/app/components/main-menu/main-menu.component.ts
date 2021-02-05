@@ -28,7 +28,7 @@ export class MainMenuComponent implements OnInit {
 
     // Function called when the create new drawing button is pressed
     createNewDrawing(): void {
-      this.fadeOut();
+        this.fadeOut();
     }
 
     backToMenu(): void {

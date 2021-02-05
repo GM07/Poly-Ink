@@ -48,5 +48,4 @@ export class DrawingService {
         this.baseCtx.fillStyle = 'white';
         this.baseCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
-
 }

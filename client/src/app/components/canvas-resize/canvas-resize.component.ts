@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { CanvasConst } from '@app/constants/canvas.ts';
+import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { NewDrawingService } from '@app/services/drawing/new-drawing.service';
 
 @Component({
     selector: 'app-canvas-resize',
@@ -93,9 +93,9 @@ export class CanvasResizeComponent implements AfterViewInit {
         );
     }
 
-    resetCanvas() : void{
-      this.setStyleControl();
-      this.setStylePreview();
+    resetCanvas(): void {
+        this.setStyleControl();
+        this.setStylePreview();
     }
 
     setStyleControl(): void {

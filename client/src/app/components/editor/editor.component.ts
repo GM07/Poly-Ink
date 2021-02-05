@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NewDrawingComponent } from '../new-drawing/new-drawing.component';
+import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 
 @Component({
     selector: 'app-editor',
@@ -7,14 +7,15 @@ import { NewDrawingComponent } from '../new-drawing/new-drawing.component';
     styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent {
+    @ViewChild('newCanvasMenu') newDrawingMenu: NewDrawingComponent;
 
-  @ViewChild('newCanvasMenu') newDrawingMenu: NewDrawingComponent;
+    constructor() {
+        //
+    }
 
-  public constructor(){}
-
-    executeAction(action : string){
-      if(action === "Nouveau Dessin"){
-        this.newDrawingMenu.createNewDrawing(false);
-      }
+    executeAction(action: string): void {
+        if (action === 'Nouveau Dessin') {
+            this.newDrawingMenu.createNewDrawing(false);
+        }
     }
 }

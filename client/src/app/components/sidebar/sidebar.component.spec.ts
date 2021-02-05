@@ -24,4 +24,10 @@ describe('SidebarComponent', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
+
+    it('should emit event', () => {
+        spyOn(component.settingClicked, 'emit');
+        component.emitEvent('test');
+        expect(component.settingClicked.emit).toHaveBeenCalledWith('test');
+    });
 });

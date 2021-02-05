@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Vec2 } from '@app/classes/vec2';
 import { CanvasConst } from '@app/constants/canvas.ts';
+import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
-import { NewDrawingService } from '../../services/drawing/new-drawing.service';
 
 @Component({
     selector: 'app-drawing',
@@ -63,10 +63,10 @@ export class DrawingComponent implements AfterViewInit {
     }
 
     get width(): number {
-      return this.canvasSize.x;
-  }
+        return this.canvasSize.x;
+    }
 
-  get height(): number {
-      return this.canvasSize.y;
-  }
+    get height(): number {
+        return this.canvasSize.y;
+    }
 }

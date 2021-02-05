@@ -115,10 +115,10 @@ export enum ExportFileToolConstants {
 }
 
 export enum NewDrawingConstants {
-  TOOL_ID = 'NEW_DRAWING',
-  TOOL_TITLE = 'Nouveau Dessin',
-  INFO_BUBBLE = 'Nouveau Dessin (Ctr-O)',
-  ICON_NAME = 'import_export', //TODO modifier l'icone
+    TOOL_ID = 'NEW_DRAWING',
+    TOOL_TITLE = 'Nouveau Dessin',
+    INFO_BUBBLE = 'Nouveau Dessin (Ctr-O)',
+    ICON_NAME = 'import_export', // TODO modifier l'icone
 }
 
 export const TOP_TOOLS_CONSTANTS = [
