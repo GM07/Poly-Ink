@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { Geometry } from '@app/classes/math/geometry';
 import { Tool } from '@app/classes/tool';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { Geometry } from '../../classes/math/geometry';
 import { MouseButton } from './pencil-service';
 
 @Injectable({
@@ -57,7 +57,6 @@ export class LineService extends Tool {
         this.drawLinePath(this.drawingService.baseCtx, this.points, closedLoop);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.points = [];
-        console.log(this.points);
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -111,12 +110,11 @@ export class LineService extends Tool {
 
     handleBackspaceKey(): void {
         if (this.keyEvents.get('Backspace')) {
-            if (this.points.length >= 1) {
+            if (this.points.length >= 2) {
                 this.points.pop();
-                this.drawingService.clearCanvas(this.drawingService.previewCtx);
                 this.handleLinePreview();
-                this.onMouseMove({} as MouseEvent);
-            } else {
+            } else if (this.points.length === 1) {
+                this.points.pop();
                 this.drawingService.clearCanvas(this.drawingService.previewCtx);
             }
         }
@@ -125,11 +123,10 @@ export class LineService extends Tool {
     handleShiftKey(): void {
         if (this.keyEvents.get('Shift')) {
             this.pointToAdd = this.alignPoint(this.mousePosition);
-            this.handleLinePreview();
         } else {
             this.pointToAdd = this.mousePosition;
-            this.handleLinePreview();
         }
+        this.handleLinePreview();
     }
 
     handleEscapeKey(): void {
@@ -146,7 +143,7 @@ export class LineService extends Tool {
     handleLinePreview(): void {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.drawLinePath(this.drawingService.previewCtx);
-        let lastPoint: Vec2 = this.getLastPoint();
+        const lastPoint: Vec2 = this.getLastPoint();
         this.drawLine(this.drawingService.previewCtx, lastPoint, this.pointToAdd);
     }
 

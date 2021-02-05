@@ -1,6 +1,7 @@
 import { Vec2 } from '@app/classes/vec2';
 import { Geometry } from './geometry';
 
+/* tslint:disable */
 describe('Geometry', () => {
     it('should get distance between (4, 5) and (1, 1)', () => {
         const initial: Vec2 = { x: 4, y: 5 };
