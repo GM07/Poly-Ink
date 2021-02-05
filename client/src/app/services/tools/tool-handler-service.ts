@@ -45,8 +45,8 @@ export class ToolHandlerService {
         this.currentTool.onMouseUp(event);
     }
 
-    onKeyPress(event: KeyboardEvent): void {
-        this.currentTool.onKeyPress(event);
+    onKeyDown(event: KeyboardEvent): void {
+        this.currentTool.onKeyDown(event);
         const tool = this.findToolshortcutKey(event.key.toLocaleLowerCase());
         if (tool != undefined) {
             this.currentTool.stopDrawing();

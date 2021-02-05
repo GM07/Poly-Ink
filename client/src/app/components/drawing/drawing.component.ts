@@ -47,8 +47,8 @@ export class DrawingComponent implements AfterViewInit {
     }
 
     @HostListener('document:keydown', ['$event'])
-    onKeyPress(event: KeyboardEvent): void {
-        this.toolHandlerService.onKeyPress(event);
+    onKeyDown(event: KeyboardEvent): void {
+        this.toolHandlerService.onKeyDown(event);
     }
 
     @HostListener('document:keyup', ['$event'])

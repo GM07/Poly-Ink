@@ -105,7 +105,7 @@ export class RectangleService extends Tool {
         }
     }
 
-    onKeyPress(event: KeyboardEvent): void {
+    onKeyDown(event: KeyboardEvent): void {
         if (event.shiftKey && !this.shiftPressed) {
             this.shiftPressed = true;
             if (this.mouseDown) {
