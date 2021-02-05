@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
+import { EllipseService } from '@app/services/tools/ellipse-service';
 import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
 
@@ -10,9 +11,10 @@ export class ToolHandlerService {
     private TOOLS: Tool[] = [];
     private currentTool: Tool;
 
-    constructor(pencilService: PencilService, lineService: LineService) {
+    constructor(pencilService: PencilService, lineService: LineService, ellipseService: EllipseService) {
         this.TOOLS.push(pencilService);
         this.TOOLS.push(lineService);
+        this.TOOLS.push(ellipseService);
         this.currentTool = this.TOOLS.values().next().value;
     }
 
@@ -44,11 +46,16 @@ export class ToolHandlerService {
     }
 
     onKeyPress(event: KeyboardEvent): void {
+        this.currentTool.onKeyPress(event);
         const tool = this.findToolshortcutKey(event.key.toLocaleLowerCase());
         if (tool != undefined) {
             this.currentTool.stopDrawing();
             this.currentTool = tool;
         }
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
+        this.currentTool.onKeyUp(event);
     }
 
     onMouseLeave(event: MouseEvent): void {
