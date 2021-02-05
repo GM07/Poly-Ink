@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as CommonFileSettings from '@app/classes/tool_settings/index-bottom';
 import * as CommonToolSettings from '@app/classes/tool_settings/index-top';
-import { PencilSettings } from '@app/classes/tool_settings/pencil-settings';
 import { ToolSettings } from '@app/classes/tool_settings/tool-settings';
 import { PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
@@ -26,10 +25,8 @@ export class SidebarComponent implements OnInit {
         });
     }
 
-    toolIconClicked(toolSettings: PencilSettings): void {
-        console.log(toolSettings.toolId);
+    toolIconClicked(toolSettings: ToolSettings): void {
         this.toolHandlerService.setTool(toolSettings.toolId);
         this.selectedToolId = toolSettings.toolId;
-        console.log(this.toolHandlerService.currentTool);
     }
 }
