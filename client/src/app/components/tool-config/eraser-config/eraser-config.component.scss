@@ -2,13 +2,17 @@ mat-slider {
     width: 300px;
 }
 
-.button-row {
-    display: table-cell;
-    width: 300px;
+.textFormat {
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
-.button-row .mat-button-base {
-    margin: 8px 8px 8px 0;
+.textFormatForSlider {
+  padding-left: 8px;
+}
+
+::ng-deep .mat-form-field {
+  width: 100px;  
 }
 
 ::ng-deep .mat-slider-wrapper {

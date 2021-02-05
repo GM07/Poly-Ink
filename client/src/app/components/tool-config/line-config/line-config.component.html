@@ -1,46 +1,53 @@
-<h2 mat-dialog-title>Line Configurations</h2>
-
-<p>Épaisseur ligne: 
-    <input mat-input 
-        type="number" 
-        [(ngModel)]="lineService.lineWidth"/>
-</p>
-
-
-<section>
-    <div>Type de jonction</div>
-    <br/>
-    <div class="button-row">
-        <button mat-raised-button (click)="toggleTypeLigne('normal')">Normal</button>
-        <button mat-raised-button (click)="toggleTypeLigne('avecPoint')">Avec point</button>
-    </div>
-</section>
-<br/>
-<mat-divider></mat-divider>
-
-<mat-divider></mat-divider>
-<br/>
-<section>
-    <div mat-dialog-header>
-        Diamètre points de jonction
-    </div> 
-    <div>
-        <br/>
-    </div>
-    <div>
-        <!--[(ngModel)]="diameterJunctionPoints"-->
-        <mat-slider 
+<div>
+    <h5 class="textFormat">Configurations ligne</h5>
+    <mat-divider></mat-divider>
+    <!--Epaisseur-->
+    <h5 class="textFormat">Épaisseur</h5>
+    <div class="textFormatForSlider">
+        <mat-slider
+            id="widthSlider"
+            min="1"
+            max="100"
+            [(ngModel)]="lineService.lineWidth"
             thumbLabel
-            [displayWith]="colorSliderLabel"
-            min="this.lineSizeMin"
-            max="this.lineSizeMax">
+            [displayWith]="colorSliderLabel">
         </mat-slider>
     </div>
-    <div>
-        <mat-form-field>
-            <mat-label>Manual input</mat-label>
-            <input matInput type="number"> <!--[(ngModel)]="diameterJunctionPoints"-->
+    <mat-form-field class="textFormat">
+        <input matInput 
+            type="number"
+            min="1" max="100" 
+            [(ngModel)]="lineService.lineWidth">
+        <span matSuffix>px</span>
+    </mat-form-field>
+    <mat-divider></mat-divider>
+    <!--Type de jonction-->
+    <h5 class="textFormatButton">Type de jonction</h5>
+    <div class="textFormatButton">
+        <button mat-raised-button (click)="toggleLineType('normal')">Normal</button>
+    </div>
+    <div class="textFormatButton">
+        <button mat-raised-button (click)="toggleLineType('point')">Avec point</button>
+    </div>
+    <br/>
+    <mat-divider></mat-divider>
+    <!--Diametre des points de jonction-->
+    <div *ngIf="withJunctionPoint" class="textFormatForJunctionPoint">
+        <h5 class="textFormat">Diamètre points de jonction</h5>
+        <div class="textFormatForSlider">
+            <!--[(ngModel)]="lineService.diameterJunctionPoints"-->
+            <mat-slider 
+                thumbLabel
+                [displayWith]="colorSliderLabel"
+                min="this.lineSizeMin"
+                max="this.lineSizeMax">
+            </mat-slider>
+        </div>
+        <mat-form-field class="textFormat">
+            <input matInput 
+            type="number"
+            min="1" max="100"> <!--[(ngModel)]="lineService.diameterJunctionPoints"-->
+            <span matSuffix>px</span>
         </mat-form-field>
-    </div> 
-</section>
-
+    </div>
+</div>

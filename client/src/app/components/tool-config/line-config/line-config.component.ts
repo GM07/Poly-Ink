@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
+//import { ToolConfig } from '@app/components/tool-config/tool-config';
+import { ToolConfig } from '@app/classes/tool-config';
 import { LineService } from '@app/services/tools/line-service';
-import { ToolConfig } from '../tool-config';
 
 @Component({
     selector: 'app-line-config',
@@ -8,18 +9,17 @@ import { ToolConfig } from '../tool-config';
     styleUrls: ['./line-config.component.scss'],
 })
 export class LineConfigComponent extends ToolConfig {
-
-    withJunctionPoint: boolean;
+    withJunctionPoint: boolean = false;
 
     constructor(public lineService: LineService) {
         super();
     }
-    
+
     colorSliderLabel(value: number): string {
         return value + 'px';
     }
 
-    toggleTypeLigne(typeLigne: string): void {
-        typeLigne === 'normal' ? (this.withJunctionPoint = false) : (this.withJunctionPoint = true);
+    toggleLineType(lineType: string): void {
+        lineType === 'point' ? (this.withJunctionPoint = true) : (this.withJunctionPoint = false);
     }
 }

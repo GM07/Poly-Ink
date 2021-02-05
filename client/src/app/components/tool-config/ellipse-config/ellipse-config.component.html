@@ -1,38 +1,36 @@
-<h2 mat-dialog-title>Ellipse Configurations</h2>
-<!--TYPE DE TRACE-->
-<section>
-    <div>Type de tracé</div>
-    <br/>
-    <div class="button-row">
-        <button mat-raised-button>Contour</button>
-        <button mat-raised-button>Plein</button>
-        <button mat-raised-button>Plein avec contour</button>
+<div>
+    <h5 class="textFormat">Configuration ellipse</h5>
+    <mat-divider></mat-divider>
+    <!--Type de tracé-->
+    <h5 class="textFormat">Type de tracé</h5>
+    <div class="textFormatButton">
+        <button mat-raised-button class="mat-raised">Contour</button>
     </div>
-</section>
-<br/>
-<mat-divider></mat-divider>
-<br/>
-<!--SIZE-->
-<section>
-    <div mat-dialog-header>
-        Size
-    </div> 
-    <div>
-        <br/>
+    <div class="textFormatButton">
+        <button mat-raised-button class="mat-raised">Plein</button>
     </div>
-    <div>
-        <mat-slider 
-            [(ngModel)]="sizeValue"
+    <div class="textFormatButton">
+        <button mat-raised-button class="mat-raised">Plein&Contour</button>
+    </div>
+    <mat-divider></mat-divider>
+
+    <!--Epaisseur-->
+    <h5 class="textFormat">Épaisseur</h5>
+    <div class="textFormatForSlider">
+        <!--[(ngModel)]="ellipseService.lineWidth"-->
+        <mat-slider
+            min="1"
+            max="100"
             thumbLabel
-            [displayWith]="colorSliderLabel"
-            min="this.lineSizeMin"
-            max="this.lineSizeMax">
+            [displayWith]="colorSliderLabel">
         </mat-slider>
     </div>
-    <div>
-        <mat-form-field>
-            <mat-label>Manual size input</mat-label>
-            <input matInput type="number" [(ngModel)]="sizeValue">
-        </mat-form-field>
-    </div> 
-</section>
+    <mat-form-field class="textFormat">
+        <input matInput 
+            type="number"
+            min="1" max="100">
+            <!--[(ngModel)]="ellipseService.lineWidth">-->
+        <span matSuffix>px</span>
+    </mat-form-field>
+    <mat-divider></mat-divider>
+</div>

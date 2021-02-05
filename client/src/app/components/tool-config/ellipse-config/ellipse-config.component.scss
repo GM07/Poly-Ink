@@ -1,23 +1,48 @@
-mat-slider {
-    width: 300px;
-}
-
 .button-row {
-    display: table-cell;
-    width: 325px;
+  display: table-cell;
+  width: 300px;
 }
 
 .button-row .mat-button-base {
-    margin: 8px 8px 8px 0;
+  margin: 8px 8px 8px 0;
+}
+
+.textFormat {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.textFormatForSlider {
+  padding-left: 8px;
+}
+
+.textFormatButton {
+padding-left: 15px;
+padding-right: 15px;
+padding-bottom: 4px;
+}
+
+::ng-deep .mat-form-field {
+  width: 100px;  
+  
 }
 
 ::ng-deep .mat-slider-wrapper {
-    .mat-slider-thumb-container {
-      .mat-slider-thumb-label {
-        width: 34px;
-        height: 34px;
-        top: -41px;
-        right: -15px;
+  padding-left: 0px;
+  width: 100px;
+  .mat-slider-thumb-container {
+    .mat-slider-thumb-label {
+      width: 30px;
+      height: 30px;
+      top: -41px;
+      right: -15px;
+      .mat-slider-thumb-label-text{
+        font-size: x-small;
       }
     }
   }
+}
+
+::ng-deep .mat-raised{
+width:100px !important;
+}

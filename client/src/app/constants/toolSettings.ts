@@ -1,0 +1,4 @@
+export abstract class ToolSettingsConst {
+    static readonly MIN_WIDTH: number = 1;
+    static readonly MAX_WIDTH: number = 100;
+}

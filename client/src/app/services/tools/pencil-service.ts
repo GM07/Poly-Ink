@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
+import { PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-
 export enum LeftMouse {
     Released = 0,
     Pressed = 1,
@@ -39,7 +39,6 @@ export class PencilService extends Tool {
         }
     }
 
-
     get lineWidth(): number {
         return this.lineWidthIn;
     }
@@ -49,8 +48,12 @@ export class PencilService extends Tool {
      * est fait pour avoir une valeur entière
      */
     set lineWidth(width: number) {
-        this.lineWidthIn = Math.max(Math.round(width), 1);
-        if (this.mouseInCanvas) this.drawBackgroundPoint(this.mouseDownCoord);
+        if (width >= PencilToolConstants.MIN_WIDTH && width <= PencilToolConstants.MAX_WIDTH) {
+            this.lineWidthIn = Math.max(Math.round(width), 1);
+            if (this.mouseInCanvas) this.drawBackgroundPoint(this.mouseDownCoord);
+        } else {
+            alert('Veuillez choisir une épaisseur de crayon entre 1px et 100px');
+        }
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -89,12 +92,10 @@ export class PencilService extends Tool {
         }
     }
 
-
     onMouseLeave(event: MouseEvent): void {
         if (!this.mouseDown) this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.mouseInCanvas = false;
     }
-
 
     onMouseEnter(event: MouseEvent): void {
         this.mouseInCanvas = true;
@@ -110,7 +111,6 @@ export class PencilService extends Tool {
             this.clearPath();
         }
     }
-
 
     stopDrawing(): void {
         this.onMouseUp({} as MouseEvent);

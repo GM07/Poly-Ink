@@ -10,6 +10,8 @@ export enum PencilToolConstants {
     TOOL_TITLE = 'Crayon',
     INFO_BUBBLE = 'Crayon (C)',
     ICON_NAME = 'create',
+    MAX_WIDTH = 100,
+    MIN_WIDTH = 1,
 }
 export enum AerosolToolConstants {
     TOOL_ID = 'AEROSOL',
@@ -22,6 +24,8 @@ export enum RectangleToolConstants {
     TOOL_TITLE = 'Rectangle',
     INFO_BUBBLE = 'Rectangle (1)',
     ICON_NAME = 'crop_5_4',
+    MAX_WIDTH = 100,
+    MIN_WIDTH = 1,
 }
 
 export enum EllipseToolConstants {
@@ -29,6 +33,8 @@ export enum EllipseToolConstants {
     TOOL_TITLE = 'Ellipse',
     INFO_BUBBLE = 'Ellipse (2)',
     ICON_NAME = 'panorama_fish_eye',
+    MAX_WIDTH = 100,
+    MIN_WIDTH = 1,
 }
 export enum PolygoneToolConstants {
     TOOL_ID = 'POLYGONE',
@@ -42,6 +48,8 @@ export enum LineToolConstants {
     TOOL_TITLE = 'Ligne',
     INFO_BUBBLE = 'Ligne (L)',
     ICON_NAME = 'timeline',
+    MAX_WIDTH = 100,
+    MIN_WIDTH = 1,
 }
 
 export enum TextToolConstants {
@@ -63,6 +71,8 @@ export enum EraserToolConstants {
     TOOL_TITLE = 'Efface',
     INFO_BUBBLE = 'Efface (E)',
     ICON_NAME = 'clear',
+    MAX_WIDTH = 100,
+    MIN_WIDTH = 1,
 }
 
 export enum StampToolConstants {

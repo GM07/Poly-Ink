@@ -6,22 +6,17 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 @Injectable({
     providedIn: 'root',
 })
-export class LineService extends Tool { //implements AbstractThicknessComponent, AbstractTraceTypeComponent
-    public lineWidth: number;
-    private traceType: string;
-    private avecPoint: boolean;
+export class LineService extends Tool {
+    // implements AbstractThicknessComponent, AbstractTraceTypeComponent
+    lineWidth: number;
     getSettings(): ToolSettings {
         throw new Error('Method not implemented.');
     }
 
-
     constructor(drawingService: DrawingService) {
         super(drawingService);
         this.shortCutKey = 'l';
-        this.lineWidth;
         // Doit changer ça...
-        this.traceType;
-        this.avecPoint;
     }
 
     stopDrawing(): void {
