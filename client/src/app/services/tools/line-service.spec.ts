@@ -4,7 +4,8 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 import { LineService } from './line-service';
 import { MouseButton } from './pencil-service';
 
-/* tslint:disable */
+/* tslint:disable:no-magic-numbers */
+/* tslint:disable:no-string-literals */
 describe('LigneService', () => {
     let service: LineService;
     const mockContext = {
@@ -36,10 +37,12 @@ describe('LigneService', () => {
     });
 
     it('should add point on mouse left button down', () => {
+        service['points'] = [{ x: 100, y: 100 }];
+        service['pointToAdd'] = { x: 120, y: 120 } as Vec2;
         const mouseEvent = { button: MouseButton.Left, offsetX: 500, offsetY: 283 } as MouseEvent;
         service.onMouseDown(mouseEvent);
-        expect(service['points'].length).toBe(1);
-        expect(service['points'][0]).toEqual({ x: 500, y: 283 } as Vec2);
+        expect(service['points'].length).toBe(2);
+        expect(service['points'][1]).toEqual({ x: 120, y: 120 } as Vec2);
     });
 
     it('should add not add point on mouse right button down', () => {
@@ -55,10 +58,18 @@ describe('LigneService', () => {
         expect(service['mouseDown']).toBe(false);
     });
 
+    it('should not reset if point array is empty on double click', () => {
+        const clearCanvas = spyOn(service['drawingService'], 'clearCanvas').and.callThrough();
+        const drawLinePath: any = spyOn<any>(service, 'drawLinePath').and.callFake(() => {});
+
+        service.onDoubleClick({ offsetX: 100, offsetY: 100 } as MouseEvent);
+        expect(drawLinePath).not.toHaveBeenCalled();
+        expect(clearCanvas).not.toHaveBeenCalled();
+    });
+
     it('should end drawing on double click without closing path', () => {
         const clearCanvas = spyOn(service['drawingService'], 'clearCanvas').and.callThrough();
-        const mouseEvent = { button: MouseButton.Left, offsetX: 100, offsetY: 800 } as MouseEvent;
-        service.onMouseDown(mouseEvent);
+        service['points'] = [{ x: 100, y: 800 } as Vec2];
         const lastEvent = { offsetX: 100, offsetY: 100 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath').and.callFake(() => {});
 
@@ -69,13 +80,12 @@ describe('LigneService', () => {
 
     it('should end drawing on double click with a closed path', () => {
         const clearCanvas = spyOn(service['drawingService'], 'clearCanvas').and.callThrough();
-        const mouseEvent = { button: MouseButton.Left, offsetX: 100, offsetY: 800 } as MouseEvent;
-        service.onMouseDown(mouseEvent);
-        const lastEvent = { offsetX: 100, offsetY: 819 } as MouseEvent;
+        service['points'] = [{ x: 100, y: 819 } as Vec2];
+        const lastEvent = { offsetX: 100, offsetY: 800 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath').and.callFake(() => {});
 
         service.onDoubleClick(lastEvent);
-        expect(drawLinePath).toHaveBeenCalledWith(undefined, [{ x: 100, y: 800 }], true);
+        expect(drawLinePath).toHaveBeenCalledWith(undefined, [{ x: 100, y: 819 }], true);
         expect(clearCanvas).toHaveBeenCalled();
     });
 
@@ -112,60 +122,58 @@ describe('LigneService', () => {
         expect(service['pointToAdd']).toEqual({ x: 40, y: 60 } as Vec2);
     });
 
-    it('should set key to pressed when pressing Backspace', () => {
-        const keyEvent: KeyboardEvent = { key: 'Backspace' } as KeyboardEvent;
-        const handleKeysFunc = spyOn(service, 'handleKeys').and.callThrough();
+    it('should not handle any key when point array is empty', () => {
+        const handleBackspace = spyOn(service, 'handleBackspaceKey').and.callFake(() => {});
+        const handleEscape = spyOn(service, 'handleEscapeKey').and.callFake(() => {});
+        const handleShift = spyOn(service, 'handleShiftKey').and.callFake(() => {});
 
+        service.handleKeys('Backspace');
+        expect(handleBackspace).not.toHaveBeenCalled();
+        expect(handleEscape).not.toHaveBeenCalled();
+        expect(handleShift).not.toHaveBeenCalled();
+    });
+
+    it('should set key to pressed when pressing Backspace', () => {
+        service['points'] = [{ x: 100, y: 300 }];
+        const keyEvent: KeyboardEvent = { key: 'Backspace' } as KeyboardEvent;
         service.onKeyDown(keyEvent);
         expect(service['keyEvents'].get('Backspace')).toBe(true);
-        expect(handleKeysFunc).toHaveBeenCalledWith('Backspace');
     });
 
     it('should set key to pressed when pressing Shift', () => {
+        service['points'] = [{ x: 100, y: 300 }];
         const keyEvent: KeyboardEvent = { key: 'Shift' } as KeyboardEvent;
-        const handleKeysFunc = spyOn(service, 'handleKeys').and.callThrough();
-
+        service['handleShiftKey'] = () => {};
         service.onKeyDown(keyEvent);
         expect(service['keyEvents'].get('Shift')).toBe(true);
-        expect(handleKeysFunc).toHaveBeenCalledWith('Shift');
     });
 
     it('should set key to pressed when pressing Escape', () => {
+        service['points'] = [{ x: 100, y: 300 }];
         const keyEvent: KeyboardEvent = { key: 'Escape' } as KeyboardEvent;
-        const handleKeysFunc = spyOn(service, 'handleKeys').and.callThrough();
         service.onKeyDown(keyEvent);
         expect(service['keyEvents'].get('Escape')).toBe(true);
-        expect(handleKeysFunc).toHaveBeenCalledWith('Escape');
     });
 
-    it('should set key to pressed when pressing Backspace', () => {
+    it('should set key to released when releasing Backspace', () => {
         const keyEvent: KeyboardEvent = { key: 'Backspace' } as KeyboardEvent;
-        const handleKeysFunc = spyOn(service, 'handleKeys').and.callThrough();
-
         service['keyEvents'].set('Backspace', true);
         service.onKeyUp(keyEvent);
         expect(service['keyEvents'].get('Backspace')).toBe(false);
-        expect(handleKeysFunc).toHaveBeenCalledWith('Backspace');
     });
 
-    it('should set key to pressed when pressing Shift', () => {
+    it('should set key to released when releasing Shift', () => {
         const keyEvent: KeyboardEvent = { key: 'Shift' } as KeyboardEvent;
-        const handleKeysFunc = spyOn(service, 'handleKeys').and.callThrough();
-
         service['keyEvents'].set('Shift', true);
         service.onKeyUp(keyEvent);
         expect(service['keyEvents'].get('Shift')).toBe(false);
-        expect(handleKeysFunc).toHaveBeenCalledWith('Shift');
     });
 
-    it('should set key to pressed when pressing Escape', () => {
+    it('should set key to released when releasing Escape', () => {
         const keyEvent: KeyboardEvent = { key: 'Escape' } as KeyboardEvent;
-        const handleKeysFunc = spyOn(service, 'handleKeys').and.callThrough();
-
         service['keyEvents'].set('Escape', true);
         service.onKeyUp(keyEvent);
         expect(service['keyEvents'].get('Escape')).toBe(false);
-        expect(handleKeysFunc).toHaveBeenCalledWith('Escape');
     });
 
     it('should call correct function when Backspace key is pressed', () => {
@@ -218,7 +226,13 @@ describe('LigneService', () => {
         expect(handleShift).not.toHaveBeenCalled();
     });
 
-    it('should handle correctly Backspace key event when there are more than 2 points', () => {
+    it('should not do anything when Backspace key is released', () => {
+        const handlePreviewFunc = spyOn(service, 'handleLinePreview').and.callFake(() => {});
+        service.handleBackspaceKey();
+        expect(handlePreviewFunc).not.toHaveBeenCalled();
+    });
+
+    it('should show preview with Backspace key event when there are more than 2 points', () => {
         service['points'] = [
             { x: 100, y: 100 },
             { x: 200, y: 300 },
@@ -232,20 +246,25 @@ describe('LigneService', () => {
         expect(service['points'].length).toBe(1);
     });
 
-    it('should handle correctly Backspace key event when there is 1 point', () => {
+    it('should not update preview on a Backspace key event when there is 1 point', () => {
         service['points'] = [{ x: 100, y: 100 }];
         service['keyEvents'].set('Backspace', true);
 
         const handlePreviewFunc = spyOn(service, 'handleLinePreview').and.callFake(() => {});
-        const clearCanvasFunc = spyOn(service['drawingService'], 'clearCanvas').and.callThrough();
 
         service.handleBackspaceKey();
-        expect(clearCanvasFunc).toHaveBeenCalled();
         expect(handlePreviewFunc).not.toHaveBeenCalled();
         expect(service['points'].length).toBe(0);
     });
 
-    it('should handle correctly shift key event when shift key is pressed', () => {
+    it('should not do anything on a Backspace key event when points array is empty', () => {
+        service['keyEvents'].set('Backspace', true);
+        const handlePreviewFunc = spyOn(service, 'handleLinePreview').and.callFake(() => {});
+        service.handleBackspaceKey();
+        expect(handlePreviewFunc).not.toHaveBeenCalled();
+    });
+
+    it('should align points when shift key is pressed', () => {
         service['pointToAdd'] = { x: 40, y: 10 };
         service['keyEvents'].set('Shift', true);
         service['handleLinePreview'] = () => {};
@@ -256,7 +275,7 @@ describe('LigneService', () => {
         expect(service['pointToAdd']).toEqual({ x: 100, y: 100 } as Vec2);
     });
 
-    it('should handle correctly shift key event when shift key is released', () => {
+    it('should point to mouse position when shift key is released', () => {
         service['mousePosition'] = { x: 40, y: 10 };
         service['keyEvents'].set('Shift', false);
         service['handleLinePreview'] = () => {};
@@ -264,16 +283,38 @@ describe('LigneService', () => {
         expect(service['pointToAdd']).toEqual({ x: 40, y: 10 } as Vec2);
     });
 
-    it('should handle escape key event when escape key is pressed', () => {
+    it('should clear points when escape key is pressed', () => {
+        service['points'] = [
+            { x: 100, y: 100 },
+            { x: 400, y: 300 },
+        ];
         service['keyEvents'].set('Escape', true);
         service.handleEscapeKey();
         expect(service['points'].length).toBe(0);
+    });
+
+    it('should not do anything when escape key is released', () => {
+        service['points'] = [
+            { x: 100, y: 100 },
+            { x: 400, y: 300 },
+        ];
+        service.handleEscapeKey();
+        expect(service['points'].length).toBe(2);
     });
 
     it('should stop drawing', () => {
         const spyFunc = spyOn(service['drawingService'], 'clearCanvas');
         service.stopDrawing();
         expect(spyFunc).toHaveBeenCalled();
+    });
+
+    it('should handle line preview', () => {
+        service['points'] = [{ x: 100, y: 100 }];
+        service['pointToAdd'] = { x: 200, y: 200 };
+        service['drawingService'].previewCtx = mockContext;
+        const clearCanvasSpy = spyOn(service['drawingService'], 'clearCanvas').and.callThrough();
+        service.handleLinePreview();
+        expect(clearCanvasSpy).toHaveBeenCalled();
     });
 
     it('should draw line', () => {
@@ -333,9 +374,7 @@ describe('LigneService', () => {
             { x: 500, y: 500 },
             { x: 200, y: 300 },
         ];
-
-        const cursor: Vec2 = { x: 210, y: 200 };
-        const result: Vec2 = service.alignPoint(cursor);
+        const result: Vec2 = service.alignPoint({ x: 210, y: 200 });
         expect(result).toEqual({ x: 200, y: 200 });
     });
 

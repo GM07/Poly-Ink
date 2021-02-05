@@ -13,7 +13,7 @@ export class LineService extends Tool {
     static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;
     private points: Vec2[] = [];
     private pointToAdd: Vec2;
-    private strokeStyle: string = 'black';
+    // private strokeStyle: string = 'black';
     private mousePosition: Vec2;
 
     private keyEvents: Map<string, boolean> = new Map([
@@ -27,15 +27,15 @@ export class LineService extends Tool {
         this.shortCutKey = 'l';
     }
 
-    setupDrawingStyle(): void {
-        this.drawingService.previewCtx.strokeStyle = this.strokeStyle;
-        this.drawingService.baseCtx.strokeStyle = this.strokeStyle;
-    }
+    // setupDrawingStyle(): void {
+    //     this.drawingService.previewCtx.strokeStyle = this.strokeStyle;
+    //     this.drawingService.baseCtx.strokeStyle = this.strokeStyle;
+    // }
 
     onMouseDown(event: MouseEvent): void {
         this.mouseDown = event.button === MouseButton.Left;
         if (this.mouseDown) {
-            if (this.points.length === 0) {
+            if (this.points.length === 0 || this.pointToAdd === undefined) {
                 this.pointToAdd = this.getPositionFromMouse(event);
             }
 
@@ -102,8 +102,6 @@ export class LineService extends Tool {
                 break;
             case 'Shift':
                 this.handleShiftKey();
-                break;
-            default:
                 break;
         }
     }
