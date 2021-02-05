@@ -19,16 +19,21 @@ export enum EllipseMode {
     providedIn: 'root',
 })
 export class EllipseService extends Tool {
-    private strokeStyleIn: string = 'black';
-    private fillStyleIn: string = 'red';
+    private strokeStyleIn: string;
+    private fillStyleIn: string;
     private mouseUpCoord: Vec2;
     private shiftPressed: boolean = false;
     private lineWidthIn: number = 5;
-    ellipseMode: EllipseMode = EllipseMode.Contour;
+    ellipseMode: EllipseMode = EllipseMode.Filled;
 
     constructor(drawingService: DrawingService) {
         super(drawingService);
         this.shortCutKey = '2';
+        this.strokeStyleIn = 'black';
+        this.fillStyleIn = 'black';
+        this.shiftPressed = false;
+        this.lineWidthIn = 5;
+        this.ellipseMode = EllipseMode.Filled;
     }
 
     set strokeStyle(color: string) {
@@ -138,17 +143,11 @@ export class EllipseService extends Tool {
         let centerY: number = this.mouseDownCoord.y + radiusY;
 
         if (this.shiftPressed) {
-            const furthestPoint = Math.max(Math.abs(this.mouseUpCoord.x), Math.abs(this.mouseUpCoord.y));
-            furthestPoint;
-            centerX = Math.sign(1);
-            centerX = Math.sign(centerX) * Math.max(Math.abs(centerX), Math.abs(centerY));
-            centerY = Math.sign(centerY) * centerX;
-            //const mouseupX = Math.sign(this.mouseUpCoord.x) * Math.max(Math.abs(this.mouseUpCoord.x), Math.abs(this.mouseUpCoord.y));
-            //const mouseupY = Math.sign(this.mouseUpCoord.y) * Math.abs(mouseupX);
-            //radiusX = (mouseupX - this.mouseDownCoord.x) / 2;
-            //radiusY = radiusX;
-            //centerX = mouseupX + radiusX;
-            //centerY = mouseupY + radiusY;
+            const maxRadius = Math.max(Math.abs(radiusX), Math.abs(radiusY));
+            centerX = this.mouseDownCoord.x + Math.sign(radiusX) * maxRadius;
+            centerY = this.mouseDownCoord.y + Math.sign(radiusY) * maxRadius;
+            radiusX = maxRadius;
+            radiusY = maxRadius;
         }
 
         const radiusXAbs = Math.abs(radiusX);
@@ -168,6 +167,7 @@ export class EllipseService extends Tool {
                 ctx.stroke();
                 break;
             case EllipseMode.Filled:
+                ctx.lineWidth = 0;
                 ctx.fillStyle = this.fillStyleIn;
                 ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
                 ctx.fill();
