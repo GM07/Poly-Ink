@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
 import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
+import { RectangleService } from '@app/services/tools/rectangle-service';
 
 @Injectable({
     providedIn: 'root',
@@ -10,9 +11,10 @@ export class ToolHandlerService {
     private TOOLS: Tool[] = [];
     private currentTool: Tool;
 
-    constructor(pencilService: PencilService, lineService: LineService) {
+    constructor(pencilService: PencilService, lineService: LineService, rectangleService: RectangleService) {
         this.TOOLS.push(pencilService);
         this.TOOLS.push(lineService);
+        this.TOOLS.push(rectangleService);
         this.currentTool = this.TOOLS.values().next().value;
     }
 
@@ -48,6 +50,7 @@ export class ToolHandlerService {
     }
 
     onKeyDown(event: KeyboardEvent): void {
+        this.currentTool.onKeyDown(event);
         const tool = this.findToolshortcutKey(event.key.toLocaleLowerCase());
         if (tool != undefined) {
             this.currentTool.stopDrawing();

@@ -27,6 +27,16 @@ export abstract class Tool {
         return colorIsValid;
     }
 
+    isInCanvas(event: MouseEvent): boolean {
+        const clientRect = this.drawingService.canvas.getBoundingClientRect();
+        const left = clientRect.x;
+        const right = clientRect.x + clientRect.width;
+        const top = clientRect.y;
+        const bottom = clientRect.y + clientRect.height;
+        if (event.x < left || event.x > right || event.y < top || event.y > bottom) return false;
+        return true;
+    }
+
     onMouseDown(event: MouseEvent): void {}
 
     onDoubleClick(event: MouseEvent): void {}

@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { Vec2 } from '@app/classes/vec2';
+import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { LineService } from './line-service';
-import { MouseButton } from './pencil-service';
 
 /* tslint:disable:no-magic-numbers */
 /* tslint:disable:no-string-literal */
@@ -56,6 +56,7 @@ describe('LigneService', () => {
     it('should add point on mouse left button down', () => {
         service['points'] = [{ x: 100, y: 100 }];
         service['pointToAdd'] = { x: 120, y: 120 } as Vec2;
+        service['showJunctionPoints'] = true;
         const mouseEvent = { button: MouseButton.Left, offsetX: 500, offsetY: 283 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(service['points'].length).toBe(2);
@@ -314,19 +315,6 @@ describe('LigneService', () => {
         expect(moveToSpy).not.toHaveBeenCalled();
     });
 
-    it('should draw junctions', () => {
-        service['showJunctionPoints'] = true;
-        const fillFunc = spyOn(mockContext, 'fill').and.callThrough();
-        service['drawJunction'](mockContext, { x: 0, y: 0 });
-        expect(fillFunc).toHaveBeenCalled();
-    });
-
-    it('should not draw junctions', () => {
-        const fillFunc = spyOn(mockContext, 'fill').and.callThrough();
-        service['drawJunction'](mockContext, { x: 0, y: 0 });
-        expect(fillFunc).not.toHaveBeenCalled();
-    });
-
     it('should align points', () => {
         service['points'] = [
             { x: 500, y: 500 },
@@ -334,10 +322,5 @@ describe('LigneService', () => {
         ];
         const result: Vec2 = service.alignPoint({ x: 210, y: 200 });
         expect(result).toEqual({ x: 200, y: 200 });
-    });
-
-    it('should return last point', () => {
-        service['points'] = pointsTest2;
-        expect(service['getLastPoint']()).toEqual(pointsTest2[pointsTest2.length - 1]);
     });
 });

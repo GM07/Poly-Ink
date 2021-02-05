@@ -34,6 +34,7 @@ describe('PencilService', () => {
         // tslint:disable:no-string-literal
         service['drawingService'].baseCtx = baseCtxStub; // Jasmine doesnt copy properties with underlying data
         service['drawingService'].previewCtx = previewCtxStub;
+        service['drawingService'].canvas = canvasTestHelper.canvas;
 
         mouseEvent = {
             offsetX: 25,
@@ -120,7 +121,7 @@ describe('PencilService', () => {
         service.onMouseUp(mouseEvent);
 
         // tslint:disable-next-line:no-magic-numbers
-        let imageData: ImageData = baseCtxStub.getImageData(1, 1, 25, 25);
+        let imageData: ImageData = baseCtxStub.getImageData(2, 2, 25, 25);
         expect(imageData.data[ALPHA]).toEqual(0); // A, rien ne doit être dessiné
         imageData = baseCtxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
@@ -135,9 +136,9 @@ describe('PencilService', () => {
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
-    it('should stop drawing when the mouse enters the canvas, with mouse up', () => {
+    it('should stop drawing when the mouse is up', () => {
         let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
-        service.lineWidth = 2;
+        service.lineWidth = 1;
         service.onMouseDown(mouseEventLClick);
         service.onMouseLeave(mouseEventLClick);
         mouseEventLClick = { offsetX: 0, offsetY: 2, button: 0, buttons: 0 } as MouseEvent;
@@ -146,6 +147,12 @@ describe('PencilService', () => {
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
         const imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
         expect(imageData.data[ALPHA]).toEqual(0); // A, rien ne doit être dessiné où on est entré
+
+        service.mouseDown = true;
+        mouseEventLClick = { x: 1000, y: 1000, button: 0, buttons: 0 } as MouseEvent;
+        service.onMouseUp(mouseEventLClick);
+        expect(drawLineSpy).toHaveBeenCalled();
+        expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
     it('should do nothing when entering the canvas, with an unsupported mouse state', () => {
@@ -178,7 +185,7 @@ describe('PencilService', () => {
         service.lineWidth = 1;
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+        mouseEvent = { x: 0, y: 0, offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
         // Premier pixel seulement

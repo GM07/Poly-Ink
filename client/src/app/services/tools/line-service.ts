@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Geometry } from '@app/classes/math/geometry';
 import { Tool } from '@app/classes/tool';
 import { Vec2 } from '@app/classes/vec2';
+import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { MouseButton } from './pencil-service';
 
 @Injectable({
     providedIn: 'root',
@@ -14,8 +14,12 @@ export class LineService extends Tool {
     private points: Vec2[] = [];
     private pointToAdd: Vec2;
     private mousePosition: Vec2;
+
+    // Attributs
     showJunctionPoints: boolean = true;
-    diameterJunctions: number = 5;
+    diameterJunctions: number = 50;
+    thickness: number = 10;
+    color: string = 'red';
 
     private keyEvents: Map<string, boolean> = new Map([
         ['Shift', false],
@@ -26,6 +30,12 @@ export class LineService extends Tool {
     constructor(drawingService: DrawingService) {
         super(drawingService);
         this.shortCutKey = 'l';
+    }
+
+    applyAttributes(ctx: CanvasRenderingContext2D) {
+        ctx.fillStyle = this.color;
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = this.thickness;
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -50,6 +60,7 @@ export class LineService extends Tool {
 
         this.pointToAdd = this.getPositionFromMouse(event);
         const closedLoop: boolean = Geometry.getDistanceBetween(this.pointToAdd, this.points[0]) <= LineService.MINIMUM_DISTANCE_TO_CLOSE_PATH;
+        this.applyAttributes(this.drawingService.baseCtx);
         this.drawLinePath(this.drawingService.baseCtx, this.points, closedLoop);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.points = [];
@@ -135,6 +146,7 @@ export class LineService extends Tool {
 
     handleLinePreview(): void {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.applyAttributes(this.drawingService.previewCtx);
         this.drawLinePath(this.drawingService.previewCtx);
         const lastPoint: Vec2 = this.getLastPoint();
         this.drawLine(this.drawingService.previewCtx, lastPoint, this.pointToAdd);

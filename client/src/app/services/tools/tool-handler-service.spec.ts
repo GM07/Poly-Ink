@@ -59,6 +59,11 @@ describe('ToolHandlerService', () => {
         expect(service.getTool()).toBeInstanceOf(LineService);
     });
 
+    it('should transfer keyUp event', () => {
+        service.onKeyUp(keyboardEvent);
+        expect(pencilService.onKeyUp).toHaveBeenCalled();
+    });
+
     it('should allow for a tool to be set', () => {
         service.setTool(PencilService);
         expect(pencilService.stopDrawing).not.toHaveBeenCalled();
