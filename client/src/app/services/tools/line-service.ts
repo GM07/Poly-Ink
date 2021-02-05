@@ -115,7 +115,7 @@ export class LineService extends Tool {
                 this.points.pop();
                 this.drawingService.clearCanvas(this.drawingService.previewCtx);
                 this.handleLinePreview();
-                // this.onMouseMove({} as MouseEvent);
+                this.onMouseMove({} as MouseEvent);
             } else {
                 this.drawingService.clearCanvas(this.drawingService.previewCtx);
             }
@@ -126,7 +126,6 @@ export class LineService extends Tool {
         if (this.keyEvents.get('Shift')) {
             this.pointToAdd = this.alignPoint(this.mousePosition);
             this.handleLinePreview();
-            // this.onMouseMove({} as MouseEvent);
         } else {
             this.pointToAdd = this.mousePosition;
             this.handleLinePreview();
@@ -175,6 +174,7 @@ export class LineService extends Tool {
             return;
         }
 
+        ctx.beginPath();
         ctx.moveTo(points[0].x, points[0].y);
         for (let index = 1; index < points.length; index++) {
             const point = points[index];
