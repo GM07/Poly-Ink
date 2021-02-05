@@ -19,16 +19,21 @@ export enum RectangleMode {
     providedIn: 'root',
 })
 export class RectangleService extends Tool {
-    private strokeStyleIn: string = 'black';
-    private fillStyleIn: string = 'red';
+    private strokeStyleIn: string;
+    private fillStyleIn: string;
     private mouseUpCoord: Vec2;
-    private shiftPressed: boolean = false;
-    private lineWidthIn: number = 5;
-    rectangleMode: RectangleMode = RectangleMode.FilledWithContour;
+    private shiftPressed: boolean;
+    private lineWidthIn: number;
+    rectangleMode: RectangleMode;
 
     constructor(drawingService: DrawingService) {
         super(drawingService);
         this.shortCutKey = '1';
+        this.strokeStyleIn = 'black';
+        this.fillStyleIn = 'black';
+        this.shiftPressed = false;
+        this.lineWidthIn = 1;
+        this.rectangleMode = RectangleMode.FilledWithContour;
     }
 
     set strokeStyle(color: string) {
