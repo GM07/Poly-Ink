@@ -1,9 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LineSettings } from '@app/classes/tool_settings/index-top';
+import { LineSettings } from '@app/classes/tool_settings/line-settings';
+import { LineToolConstants, PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
 import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
@@ -17,12 +20,12 @@ describe('SidebarComponent', () => {
     let toolHandlerService: ToolHandlerService;
 
     beforeEach(async(() => {
-        const pencilSpy = jasmine.createSpyObj('PencilService', ['stopDrawing']);
-        const lineSpy = jasmine.createSpyObj('LineService', ['stopDrawing']);
+        const pencilSpy = jasmine.createSpyObj('PencilService', ['stopDrawing'], { toolID: PencilToolConstants.TOOL_ID });
+        const lineSpy = jasmine.createSpyObj('LineService', ['stopDrawing'], { toolID: LineToolConstants.TOOL_ID });
 
         TestBed.configureTestingModule({
-            declarations: [SidebarComponent],
-            imports: [MatTooltipModule, MatListModule, MatIconModule, BrowserAnimationsModule],
+            declarations: [SidebarComponent, MatIcon],
+            imports: [MatTooltipModule, MatListModule, MatIconModule, BrowserAnimationsModule, MatIconTestingModule, MatSidenavModule],
             providers: [{ provide: PencilService, useValue: pencilSpy }, { provide: LineService, useValue: lineSpy }, ToolHandlerService],
         }).compileComponents();
     }));
@@ -47,10 +50,9 @@ describe('SidebarComponent', () => {
         pencilServiceSpy.stopDrawing.and.returnValue();
         lineServiceSpy.stopDrawing.and.returnValue();
 
-        // component.toolIconClicked(new PencilSettings());
-        console.log(toolHandlerService.currentTool);
-        expect(toolHandlerService.getTool()).toBeInstanceOf(PencilService);
-        // component.toolIconClicked(new LineSettings());
-        expect(toolHandlerService.getTool()).toBeInstanceOf(LineSettings);
+        // Default Tool should be Pencil
+        expect(toolHandlerService.currentTool.toolID).toEqual(PencilToolConstants.TOOL_ID);
+        component.toolIconClicked(new LineSettings());
+        expect(toolHandlerService.currentTool.toolID).toEqual(LineToolConstants.TOOL_ID);
     });
 });
