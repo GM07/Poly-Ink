@@ -28,7 +28,7 @@ export class DrawingComponent implements AfterViewInit {
         this.drawingService.canvas = this.baseCanvas.nativeElement;
         this.drawingService.previewCanvas = this.previewCanvas.nativeElement;
         this.drawingService.initBackground();
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow = 'auto';
     }
 
     @HostListener('mousemove', ['$event'])
@@ -41,14 +41,19 @@ export class DrawingComponent implements AfterViewInit {
         this.toolHandlerService.onMouseDown(event);
     }
 
-    @HostListener('mouseup', ['$event'])
+    @HostListener('document:mouseup', ['$event'])
     onMouseUp(event: MouseEvent): void {
         this.toolHandlerService.onMouseUp(event);
     }
 
-    @HostListener('document:keypress', ['$event'])
-    onKeyPress(event: KeyboardEvent): void {
-        this.toolHandlerService.onKeyPress(event);
+    @HostListener('document:keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent): void {
+        this.toolHandlerService.onKeyDown(event);
+    }
+
+    @HostListener('document:keyup', ['$event'])
+    onKeyUp(event: KeyboardEvent): void {
+        this.toolHandlerService.onKeyUp(event);
     }
 
     @HostListener('mouseleave', ['$event'])

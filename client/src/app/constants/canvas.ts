@@ -5,4 +5,5 @@ export abstract class CanvasConst {
     static readonly CONTROL_MARGIN: number = 2.5;
     static readonly DEFAULT_WIDTH: number = 1000;
     static readonly DEFAULT_HEIGHT: number = 800;
+    static readonly WORKING_SIZE: number = 200;
 }

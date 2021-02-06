@@ -76,21 +76,21 @@ describe('DrawingComponent', () => {
         expect(mouseEventSpy).toHaveBeenCalledWith(event);
     });
 
-    // it(" should call the toolHandler's onKeyDown event when receiving a KeyDown event", () => {
-    //     const event = { key: 'c' } as KeyboardEvent;
-    //     const mouseEventSpy = spyOn<ToolHandlerService>(component.toolHandlerService, 'onKeyDown').and.callThrough();
-    //     component.onKeyDown(event);
-    //     expect(mouseEventSpy).toHaveBeenCalled();
-    //     expect(mouseEventSpy).toHaveBeenCalledWith(event);
-    // });
+    it(" should call the toolHandler's onKeyDown event when receiving a KeyDown event", () => {
+        const event = { key: 'c' } as KeyboardEvent;
+        const mouseEventSpy = spyOn(component.toolHandlerService, 'onKeyDown').and.callThrough();
+        component.onKeyDown(event);
+        expect(mouseEventSpy).toHaveBeenCalled();
+        expect(mouseEventSpy).toHaveBeenCalledWith(event);
+    });
 
-    // it(" should call the toolHandler's onKeyUp event when receiving a KeyUp event", () => {
-    //     const event = { key: 'c' } as KeyboardEvent;
-    //     const mouseEventSpy = spyOn<ToolHandlerService>(component.toolHandlerService, 'onKeyUp').and.callThrough();
-    //     component.onKeyUp(event);
-    //     expect(mouseEventSpy).toHaveBeenCalled();
-    //     expect(mouseEventSpy).toHaveBeenCalledWith(event);
-    // });
+    it(" should call the toolHandler's onKeyUp event when receiving a KeyUp event", () => {
+        const event = { key: 'c' } as KeyboardEvent;
+        const mouseEventSpy = spyOn(component.toolHandlerService, 'onKeyUp').and.callThrough();
+        component.onKeyUp(event);
+        expect(mouseEventSpy).toHaveBeenCalled();
+        expect(mouseEventSpy).toHaveBeenCalledWith(event);
+    });
 
     it(" should call the tool's mouse leave when receiving a mouse leave event", () => {
         const event = {} as MouseEvent;
