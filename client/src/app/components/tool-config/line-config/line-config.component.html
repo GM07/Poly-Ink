@@ -3,31 +3,30 @@
     <mat-divider></mat-divider>
     <!--Epaisseur-->
     <h5 class="textFormat">Épaisseur</h5>
-    <div class="textFormatForSlider">
+    <div class="textFormatForSlider"> 
         <mat-slider
             id="widthSlider"
             min="1"
             max="100"
-            [(ngModel)]="lineService.lineWidth"
             thumbLabel
-            [displayWith]="colorSliderLabel">
+            [displayWith]="colorSliderLabel"> <!--[(ngModel)]="lineService.lineWidth"-->
         </mat-slider>
     </div>
     <mat-form-field class="textFormat">
         <input matInput 
             type="number"
             min="1" max="100" 
-            [(ngModel)]="lineService.lineWidth">
+            ><!--[(ngModel)]="lineService.lineWidth"-->
         <span matSuffix>px</span>
     </mat-form-field>
     <mat-divider></mat-divider>
     <!--Type de jonction-->
     <h5 class="textFormatButton">Type de jonction</h5>
     <div class="textFormatButton">
-        <button mat-raised-button (click)="toggleLineType('normal')">Normal</button>
+        <button mat-raised-button type=normal (click)="toggleLineType('normal')">Normal</button>
     </div>
-    <div class="textFormatButton">
-        <button mat-raised-button (click)="toggleLineType('point')">Avec point</button>
+    <div class="textFormatForJunctionPoint">
+        <button mat-raised-button type=junctionPoint (click)="toggleLineType('point')">Avec point</button>
     </div>
     <br/>
     <mat-divider></mat-divider>

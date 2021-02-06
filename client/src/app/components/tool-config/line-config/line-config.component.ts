@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-//import { ToolConfig } from '@app/components/tool-config/tool-config';
 import { ToolConfig } from '@app/classes/tool-config';
 import { LineService } from '@app/services/tools/line-service';
 

@@ -6,11 +6,13 @@ import { PencilService } from '@app/services/tools/pencil-service';
 // import { FormControl, Validators } from '@angular/forms';
 //import { PencilService } from '@app/services/tools/pencil-service';
 
+
 @Component({
   selector: 'app-pencil-config',
   templateUrl: './pencil-config.component.html',
   styleUrls: ['./pencil-config.component.scss'],
 })
+
 export class PencilConfigComponent extends ToolConfig {
   //width = new FormControl('', [Validators.min(1), Validators.max(100)]);
   public lineWidth: number; 

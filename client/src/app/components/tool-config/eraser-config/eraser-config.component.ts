@@ -8,6 +8,7 @@ import { ToolConfig } from '@app/classes/tool-config';
     styleUrls: ['./eraser-config.component.scss'],
 })
 export class EraserConfigComponent extends ToolConfig {
+    
     sizeValue: number;
 
     colorSliderLabel(value: number): string {

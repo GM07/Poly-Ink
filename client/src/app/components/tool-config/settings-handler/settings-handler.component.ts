@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { Tool } from '@app/classes/tool';
-import { LineConfigComponent } from '@app/components/tool-config/line-config/line-config.component';
+//import { LineConfigComponent } from '@app/components/tool-config/line-config/line-config.component';
 import { PencilConfigComponent } from '@app/components/tool-config/pencil-config/pencil-config.component';
 import { ToolConfig } from '@app/components/tool-config/tool-config';
 import { LineService } from '@app/services/tools/line-service';
+//import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
+import { LineConfigComponent } from '../line-config/line-config.component';
 
 @Component({
     selector: 'app-settings-handler',

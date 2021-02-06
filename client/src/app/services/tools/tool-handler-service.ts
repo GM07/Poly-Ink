@@ -7,8 +7,8 @@ import { PencilService } from '@app/services/tools/pencil-service';
     providedIn: 'root',
 })
 export class ToolHandlerService {
-    private TOOLS: Tool[] = [];
-    private currentTool: Tool;
+    protected TOOLS: Tool[] = [];
+    protected currentTool: Tool;
 
     constructor(pencilService: PencilService, lineService: LineService) {
         this.TOOLS.push(pencilService);
