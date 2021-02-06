@@ -39,16 +39,19 @@ describe('EllipseConfigComponent', () => {
     });
 
     it('should get max value of slider', async () => {
+        const max = 100;
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getMaxValue()).toBe(100);
+        expect(await slider.getMaxValue()).toBe(max);
     });
 
     it('should be able to set value of slider', async () => {
+        const defaultValue = 1;
+        const setValue = 78;
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getValue()).toBe(1);
+        expect(await slider.getValue()).toBe(defaultValue);
 
-        await slider.setValue(78);
-        expect(await slider.getValue()).toBe(78);
+        await slider.setValue(setValue);
+        expect(await slider.getValue()).toBe(setValue);
     });
 
     it('traceType should be Contour by default', () => {
@@ -56,8 +59,9 @@ describe('EllipseConfigComponent', () => {
     });
 
     it('should load all button harnesses', async () => {
+        const nButtons = 3;
         const buttons = await loader.getAllHarnesses(MatButtonHarness);
-        expect(buttons.length).toBe(3);
+        expect(buttons.length).toBe(nButtons);
     });
 
     it('should load button with exact text', async () => {

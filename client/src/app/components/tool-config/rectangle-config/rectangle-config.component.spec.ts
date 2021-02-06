@@ -38,17 +38,19 @@ describe('RectangleConfigComponent', () => {
     });
 
     it('should get max value of slider', async () => {
+        const max = 100;
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getMaxValue()).toBe(100);
+        expect(await slider.getMaxValue()).toBe(max);
     });
 
     it('should be able to set value of slider', async () => {
+        const setValue = 99;
         const slider = await loader.getHarness(MatSliderHarness);
         expect(await slider.getValue()).toBe(1);
 
-        await slider.setValue(99);
+        await slider.setValue(setValue);
 
-        expect(await slider.getValue()).toBe(99);
+        expect(await slider.getValue()).toBe(setValue);
     });
 
     it('traceType should be Contour by default', () => {
@@ -56,8 +58,9 @@ describe('RectangleConfigComponent', () => {
     });
 
     it('should load all button harnesses', async () => {
+        const nButtons = 3;
         const buttons = await loader.getAllHarnesses(MatButtonHarness);
-        expect(buttons.length).toBe(3);
+        expect(buttons.length).toBe(nButtons);
     });
 
     it('should load button with Contour text', async () => {

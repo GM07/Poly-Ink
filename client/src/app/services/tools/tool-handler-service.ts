@@ -41,6 +41,10 @@ export class ToolHandlerService {
         this.currentTool.onMouseDown(event);
     }
 
+    onDoubleClick(event: MouseEvent): void {
+        this.currentTool.onDoubleClick(event);
+    }
+
     onMouseUp(event: MouseEvent): void {
         this.currentTool.onMouseUp(event);
     }
@@ -51,6 +55,8 @@ export class ToolHandlerService {
         if (tool != undefined) {
             this.currentTool.stopDrawing();
             this.currentTool = tool;
+        } else {
+            this.currentTool.onKeyDown(event);
         }
     }
 

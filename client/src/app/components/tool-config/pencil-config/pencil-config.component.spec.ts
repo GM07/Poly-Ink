@@ -35,21 +35,25 @@ describe('PencilConfigComponent', () => {
     });
 
     it('should get default value of slider', async () => {
+        const defaultValue = 12;
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getValue()).toBe(12);
+        expect(await slider.getValue()).toBe(defaultValue);
     });
 
     it('should get max value of slider', async () => {
+        const max = 100;
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getMaxValue()).toBe(100);
+        expect(await slider.getMaxValue()).toBe(max);
     });
 
     it('should be able to set value of slider', async () => {
+        const defaultValue = 12;
+        const setValue = 33;
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getValue()).toBe(12);
+        expect(await slider.getValue()).toBe(defaultValue);
 
-        await slider.setValue(33);
+        await slider.setValue(setValue);
 
-        expect(await slider.getValue()).toBe(33);
+        expect(await slider.getValue()).toBe(setValue);
     });
 });
