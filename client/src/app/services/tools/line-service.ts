@@ -17,8 +17,8 @@ export class LineService extends Tool {
 
     // Attributs
     showJunctionPoints: boolean = true;
-    diameterJunctions: number = 10;
-    thickness: number = 10;
+    diameterJunctions: number = 7;
+    thickness: number = 100;
     color: string = 'black';
 
     private keyEvents: Map<string, boolean> = new Map([
