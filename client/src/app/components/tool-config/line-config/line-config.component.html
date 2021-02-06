@@ -8,15 +8,16 @@
             id="widthSlider"
             min="1"
             max="100"
+            [(ngModel)]="lineService.thickness"
             thumbLabel
-            [displayWith]="colorSliderLabel"> <!--[(ngModel)]="lineService.lineWidth"-->
+            [displayWith]="colorSliderLabel">
         </mat-slider>
     </div>
     <mat-form-field class="textFormat">
         <input matInput 
             type="number"
             min="1" max="100" 
-            ><!--[(ngModel)]="lineService.lineWidth"-->
+            [(ngModel)]="lineService.thickness">
         <span matSuffix>px</span>
     </mat-form-field>
     <mat-divider></mat-divider>
@@ -31,12 +32,12 @@
     <br/>
     <mat-divider></mat-divider>
     <!--Diametre des points de jonction-->
-    <div *ngIf="withJunctionPoint" class="textFormatForJunctionPoint">
+    <div *ngIf="withJunctionPoint">
         <h5 class="textFormat">Diamètre points de jonction</h5>
         <div class="textFormatForSlider">
-            <!--[(ngModel)]="lineService.diameterJunctionPoints"-->
             <mat-slider 
                 thumbLabel
+                [(ngModel)]="lineService.diameterJunctions"
                 [displayWith]="colorSliderLabel"
                 min="this.lineSizeMin"
                 max="this.lineSizeMax">
@@ -45,7 +46,8 @@
         <mat-form-field class="textFormat">
             <input matInput 
             type="number"
-            min="1" max="100"> <!--[(ngModel)]="lineService.diameterJunctionPoints"-->
+            min="1" max="100"
+            [(ngModel)]="lineService.diameterJunctions">
             <span matSuffix>px</span>
         </mat-form-field>
     </div>

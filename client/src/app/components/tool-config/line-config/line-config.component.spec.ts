@@ -34,7 +34,7 @@ describe('LineConfigComponent', () => {
 
     it('should load all slider harnesses', async () => {
         const sliders = await loader.getAllHarnesses(MatSliderHarness);
-        expect(sliders.length).toBe(1);
+        expect(sliders.length).toBe(2);
     });
 
     it('should get max value of slider', async () => {
@@ -44,9 +44,10 @@ describe('LineConfigComponent', () => {
     });
 
     it('should be able to set value of slider', async () => {
+        const defaultValue = 10;
         const setValue = 99;
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getValue()).toBe(1);
+        expect(await slider.getValue()).toBe(defaultValue);
 
         await slider.setValue(setValue);
 
@@ -54,7 +55,7 @@ describe('LineConfigComponent', () => {
     });
 
     it('withJunctionPoint should be false by default', () => {
-        expect(component.withJunctionPoint).toBeFalse();
+        expect(component.withJunctionPoint).toBeTrue();
     });
 
     it('should load all button harnesses', async () => {

@@ -8,17 +8,21 @@ import { LineService } from '@app/services/tools/line-service';
     styleUrls: ['./line-config.component.scss'],
 })
 export class LineConfigComponent extends ToolConfig {
-    withJunctionPoint: boolean = false;
+
+    public withJunctionPoint: boolean;
 
     constructor(public lineService: LineService) {
         super();
+        this.withJunctionPoint = true;
     }
-
+    
     colorSliderLabel(value: number): string {
         return value + 'px';
     }
-
+    
     toggleLineType(lineType: string): void {
         lineType === 'point' ? (this.withJunctionPoint = true) : (this.withJunctionPoint = false);
+        this.lineService.showJunctionPoints = this.withJunctionPoint;
     }
+    
 }
