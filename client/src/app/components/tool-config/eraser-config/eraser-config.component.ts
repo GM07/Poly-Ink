@@ -9,7 +9,7 @@ import { PencilService } from '@app/services/tools/pencil-service';
     styleUrls: ['./eraser-config.component.scss'],
 })
 export class EraserConfigComponent extends ToolConfig {
-    public sizeValue: number;
+    sizeValue: number;
 
     // TODO Changer pencilService pour eraserService
     constructor(public service: PencilService) {

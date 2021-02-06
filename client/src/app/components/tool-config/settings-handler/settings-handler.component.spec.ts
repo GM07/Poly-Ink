@@ -10,7 +10,6 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
 import { SettingsHandlerComponent } from './settings-handler.component';
 
 class MockToolHandler extends ToolHandlerService {
-    
     constructor(pencilService: PencilService, lineService: LineService, rectangleService: RectangleService) {
         super(pencilService, lineService, rectangleService);
     }

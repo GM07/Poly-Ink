@@ -8,7 +8,7 @@ import { LineService } from '@app/services/tools/line-service';
     styleUrls: ['./line-config.component.scss'],
 })
 export class LineConfigComponent extends ToolConfig {
-    public withJunctionPoint: boolean = false;
+    withJunctionPoint: boolean = false;
 
     constructor(public lineService: LineService) {
         super();
