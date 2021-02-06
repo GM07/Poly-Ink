@@ -62,7 +62,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         MatCardModule,
         MatInputModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

@@ -44,7 +44,7 @@ describe('LineConfigComponent', () => {
     });
 
     it('should be able to set value of slider', async () => {
-        const defaultValue = 10;
+        const defaultValue = 75;
         const setValue = 99;
         const slider = await loader.getHarness(MatSliderHarness);
         expect(await slider.getValue()).toBe(defaultValue);
