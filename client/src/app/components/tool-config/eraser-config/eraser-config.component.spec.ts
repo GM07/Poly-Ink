@@ -1,13 +1,13 @@
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {HarnessLoader} from '@angular/cdk/testing';
-import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
-import { EraserConfigComponent } from './eraser-config.component';
 import { MatSliderHarness } from '@angular/material/slider/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { EraserConfigComponent } from './eraser-config.component';
 
 describe('EraserConfigComponent', () => {
     let component: EraserConfigComponent;
@@ -17,7 +17,7 @@ describe('EraserConfigComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [EraserConfigComponent],
-            imports: [MatDividerModule, MatSliderModule, NoopAnimationsModule, FormsModule, MatInputModule]
+            imports: [MatDividerModule, MatSliderModule, NoopAnimationsModule, FormsModule, MatInputModule],
         }).compileComponents();
         fixture = TestBed.createComponent(EraserConfigComponent);
         component = fixture.componentInstance;
@@ -29,7 +29,7 @@ describe('EraserConfigComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should load all slider harnesses', async() => {
+    it('should load all slider harnesses', async () => {
         const sliders = await loader.getAllHarnesses(MatSliderHarness);
         expect(sliders.length).toBe(1);
     });
@@ -38,7 +38,7 @@ describe('EraserConfigComponent', () => {
         const slider = await loader.getHarness(MatSliderHarness);
         expect(await slider.getValue()).toBe(1);
     });
-  
+
     it('should get max value of slider', async () => {
         const slider = await loader.getHarness(MatSliderHarness);
         expect(await slider.getMaxValue()).toBe(100);
@@ -47,9 +47,9 @@ describe('EraserConfigComponent', () => {
     it('should be able to set value of slider', async () => {
         const slider = await loader.getHarness(MatSliderHarness);
         expect(await slider.getValue()).toBe(1);
-    
+
         await slider.setValue(54);
-    
+
         expect(await slider.getValue()).toBe(54);
     });
 });

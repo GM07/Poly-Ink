@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { Tool } from '@app/classes/tool';
-//import { LineConfigComponent } from '@app/components/tool-config/line-config/line-config.component';
+import { LineConfigComponent } from '@app/components/tool-config/line-config/line-config.component';
 import { PencilConfigComponent } from '@app/components/tool-config/pencil-config/pencil-config.component';
+import { RectangleConfigComponent } from '@app/components/tool-config/rectangle-config/rectangle-config.component';
 import { ToolConfig } from '@app/components/tool-config/tool-config';
 import { LineService } from '@app/services/tools/line-service';
-//import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
+import { RectangleService } from '@app/services/tools/rectangle-service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
-import { LineConfigComponent } from '../line-config/line-config.component';
 
 @Component({
     selector: 'app-settings-handler',
@@ -16,12 +16,13 @@ import { LineConfigComponent } from '../line-config/line-config.component';
 })
 export class SettingsHandlerComponent {
     settingsList: Map<typeof Tool, ToolConfig> = new Map();
-    public lastTool: Tool;
-    public lastTab: ToolConfig = PencilConfigComponent;
+    lastTool: Tool;
+    lastTab: ToolConfig = PencilConfigComponent;
 
     constructor(private toolHandler: ToolHandlerService) {
         this.settingsList.set(PencilService, PencilConfigComponent);
         this.settingsList.set(LineService, LineConfigComponent);
+        this.settingsList.set(RectangleService, RectangleConfigComponent);
         this.lastTool = toolHandler.getTool();
         this.lastTab = PencilConfigComponent;
     }

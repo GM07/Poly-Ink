@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-//import { ToolConfig } from '@app/components/tool-config/tool-config';
 import { ToolConfig } from '@app/classes/tool-config';
-import { PencilService } from '@app/services/tools/pencil-service';
+import { RectangleService } from '@app/services/tools/rectangle-service';
 
 @Component({
     selector: 'app-rectangle-config',
@@ -9,17 +8,16 @@ import { PencilService } from '@app/services/tools/pencil-service';
     styleUrls: ['./rectangle-config.component.scss'],
 })
 export class RectangleConfigComponent extends ToolConfig {
+    traceTypeTestIn: number;
 
-    public traceType: string;
-
-    //TODO changer pencilService pour rectangleService
-    constructor(public service: PencilService) {
+    constructor(public rectangleService: RectangleService) {
         super();
-        this.traceType = 'Contour';
+        this.traceTypeTestIn = 0;
     }
 
-    public toggleTraceType(traceType: string): void {
-        this.traceType = traceType; 
+    traceTypeTest(rectangleMode: number): void {
+        this.traceTypeTestIn = rectangleMode;
+        this.rectangleService.rectangleMode = this.traceTypeTestIn;
     }
 
     colorSliderLabel(value: number): string {
