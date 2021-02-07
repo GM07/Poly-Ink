@@ -17,8 +17,8 @@ export class LineService extends Tool {
 
     // Attributs
     showJunctionPoints: boolean = true;
-    diameterJunctions: number = 7;
-    thickness: number = 100;
+    diameterJunctions: number = 100;
+    thickness: number = 75;
     color: string = 'black';
 
     private keyEvents: Map<string, boolean> = new Map([
@@ -36,6 +36,8 @@ export class LineService extends Tool {
         ctx.fillStyle = this.color;
         ctx.strokeStyle = this.color;
         ctx.lineWidth = this.thickness;
+        ctx.lineCap = 'round' as CanvasLineCap;
+        ctx.lineJoin = 'round' as CanvasLineJoin; // Essentiel pour avoir une allure "smooth"
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -169,7 +171,6 @@ export class LineService extends Tool {
         ctx.moveTo(initial.x, initial.y);
         ctx.lineTo(final.x, final.y);
         ctx.stroke();
-        ctx.closePath();
         this.drawJunction(ctx, final);
     }
 
@@ -178,8 +179,6 @@ export class LineService extends Tool {
             ctx.beginPath();
             ctx.arc(point.x, point.y, this.diameterJunctions / 2, 0, 2 * Math.PI);
             ctx.fill();
-            ctx.stroke();
-            ctx.closePath();
         }
     }
 
@@ -195,17 +194,19 @@ export class LineService extends Tool {
         for (let index = 1; index < points.length; index++) {
             const point = points[index];
             ctx.lineTo(point.x, point.y);
-            ctx.stroke();
+        }
+        ctx.stroke();
+        ctx.closePath();
+
+        for (let index = 0; index < points.length; index++) {
+            const point = points[index];
             this.drawJunction(ctx, point);
-            ctx.moveTo(point.x, point.y);
         }
 
         if (closed) {
             ctx.lineTo(this.points[0].x, this.points[0].y);
             ctx.stroke();
         }
-
-        ctx.closePath();
     }
 
     private getLastPoint(): Vec2 {
