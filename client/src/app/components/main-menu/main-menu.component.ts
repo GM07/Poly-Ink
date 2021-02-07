@@ -1,5 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-main-menu',
@@ -18,7 +19,7 @@ export class MainMenuComponent implements OnInit {
     state: OpacityState = 'visible';
     showComponent: boolean = true;
 
-    constructor() {
+    constructor(private router: Router) {
         //
     }
 
@@ -29,6 +30,7 @@ export class MainMenuComponent implements OnInit {
     // Function called when the create new drawing button is pressed
     createNewDrawing(): void {
         this.fadeOut();
+        this.router.navigateByUrl('editor');
     }
 
     backToMenu(): void {
