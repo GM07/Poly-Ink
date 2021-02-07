@@ -198,8 +198,7 @@ export class LineService extends Tool {
         ctx.stroke();
         ctx.closePath();
 
-        for (let index = 0; index < points.length; index++) {
-            const point = points[index];
+        for (const point of points) {
             this.drawJunction(ctx, point);
         }
 
