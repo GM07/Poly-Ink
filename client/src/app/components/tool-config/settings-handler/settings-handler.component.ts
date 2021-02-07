@@ -23,13 +23,16 @@ export class SettingsHandlerComponent {
         this.settingsList.set(PencilService, PencilConfigComponent);
         this.settingsList.set(LineService, LineConfigComponent);
         this.settingsList.set(RectangleService, RectangleConfigComponent);
-        this.lastTool = toolHandler.getTool();
-        this.lastTab = PencilConfigComponent;
+        this.applyNewTab();
     }
 
     get activeTab(): ToolConfig {
         if (this.toolHandler.getTool() === this.lastTool) return this.lastTab;
+        this.applyNewTab();
+        return this.lastTab;
+    }
 
+    applyNewTab(): void {
         for (const [tool, toolConfig] of this.settingsList) {
             if (this.toolHandler.getTool() instanceof tool) {
                 this.lastTool = this.toolHandler.getTool();
@@ -37,6 +40,5 @@ export class SettingsHandlerComponent {
                 break;
             }
         }
-        return this.lastTab;
     }
 }
