@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { DrawingComponent } from '@app/components/drawing/drawing.component';
 import { CanvasConst } from '@app/constants/canvas.ts';
@@ -66,9 +65,9 @@ describe('CanvasResizeComponent', () => {
 
     it('should resize when dragging the bottom side', () => {
         const xPos = component.getCanvasLeft();
-        const yPos = service.canvas.height + component.getCanvasTop() + 2; // Petite valeurs pour simuler un clic
+        const yPos = service.canvas.height + Math.ceil(component.getCanvasTop()); // Petite valeurs pour simuler un clic
         dragAndDrop(false, true, xPos + CanvasConst.SHIFTING, yPos + CanvasConst.SHIFTING);
-        expect(service.canvas.height).toBe(yPos - component.getCanvasTop() + CanvasConst.SHIFTING);
+        expect(service.canvas.height).toBe(yPos - Math.ceil(component.getCanvasTop()) + CanvasConst.SHIFTING);
     });
 
     it('should resize when dragging the right side', () => {

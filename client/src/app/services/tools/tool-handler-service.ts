@@ -41,6 +41,10 @@ export class ToolHandlerService {
         this.currentTool.onMouseDown(event);
     }
 
+    onDoubleClick(event: MouseEvent): void {
+        this.currentTool.onDoubleClick(event);
+    }
+
     onMouseUp(event: MouseEvent): void {
         this.currentTool.onMouseUp(event);
     }
