@@ -55,8 +55,6 @@ export class ToolHandlerService {
         if (tool != undefined) {
             this.currentTool.stopDrawing();
             this.currentTool = tool;
-        } else {
-            this.currentTool.onKeyDown(event);
         }
     }
 
