@@ -10,7 +10,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LineSettings } from '@app/classes/tool_settings/line-settings';
-import { LineToolConstants, PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
+import { NewDrawing } from '@app/classes/tool_settings/new-drawing-settings';
+import { LineToolConstants, NewDrawingConstants, PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
 import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resize.component';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
@@ -53,7 +54,7 @@ describe('SidebarComponent', () => {
     }));
 
     beforeEach(() => {
-        // Inject service to test
+        // Inject  service to test //
         toolHandlerService = TestBed.inject(ToolHandlerService);
 
         // Inject its spy dependecies
@@ -87,5 +88,12 @@ describe('SidebarComponent', () => {
         const funct = spyOn(router, 'navigateByUrl');
         component.backToMenu();
         expect(funct).toHaveBeenCalledWith('home');
+    });
+
+    it('should emit event when newDrawing is clicked', () => {
+        spyOn(component.settingClicked, 'emit');
+        component.emitClickEvent(new NewDrawing());
+        expect(component.settingClicked.emit).toHaveBeenCalled();
+        expect(component.settingClicked.emit).toHaveBeenCalledWith(NewDrawingConstants.TOOL_ID);
     });
 });

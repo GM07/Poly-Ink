@@ -1,13 +1,10 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-// import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSliderModule } from '@angular/material/slider';
@@ -16,6 +13,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
+import { NewDrawingComponent } from './components/canvas-reset/canvas-reset.component';
 import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.component';
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
@@ -36,6 +34,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         DrawingComponent,
         HomePageComponent,
         CanvasResizeComponent,
+        NewDrawingComponent,
         RectangleConfigComponent,
         EllipseConfigComponent,
         EraserConfigComponent,
@@ -50,6 +49,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule,
+        AppRoutingModule,
         MatButtonModule,
         MatIconModule,
         MatTooltipModule,
@@ -58,10 +58,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         MatExpansionModule,
         MatDividerModule,
         MatSliderModule,
-        MatCardModule,
-        MatInputModule,
         FormsModule,
-        ReactiveFormsModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

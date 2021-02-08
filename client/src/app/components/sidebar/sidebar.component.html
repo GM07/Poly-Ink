@@ -20,7 +20,7 @@
 
         <mat-action-list class="bottom-sidebar">
             <button
-                (click)="toolIconClicked(tool)"
+                (click)="emitClickEvent(tool)"
                 *ngFor="let tool of bottomToolsSettings"
                 class="sidebar-item icon-button"
                 matTooltip="{{ tool.infoBubble }}"

@@ -70,9 +70,9 @@ describe('RectangleService', () => {
     it('should change the contour size', () => {
         service.contourWidth = 2;
         expect(service.contourWidth).toEqual(2);
-        const max = 100;
+        const max = 50;
         const min = 1;
-        const overMax = 101;
+        const overMax = 51;
         service.contourWidth = overMax;
         expect(service.contourWidth).toEqual(max);
         const underMin = 0;
@@ -244,7 +244,7 @@ describe('RectangleService', () => {
         service.onMouseUp(mouseEvent);
 
         // tslint:disable-next-line:no-magic-numbers
-        const imageData: ImageData = baseCtxStub.getImageData(5, 5, 20, 20);
+        const imageData: ImageData = baseCtxStub.getImageData(20, 20, 5, 5);
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
