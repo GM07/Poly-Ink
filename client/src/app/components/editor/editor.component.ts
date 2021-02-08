@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 import { NewDrawingConstants } from '@app/classes/tool_settings/tools.constants';
+import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 
 @Component({
     selector: 'app-editor',

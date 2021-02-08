@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NewDrawingConstants } from '@app/classes/tool_settings/tools.constants';
+import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resize.component';
 import { DrawingComponent } from '@app/components/drawing/drawing.component';
 import { SettingsHandlerComponent } from '@app/components/tool-config/settings-handler/settings-handler.component';
@@ -17,7 +18,14 @@ describe('EditorComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [EditorComponent, DrawingComponent, CanvasResizeComponent, StubSidebarComponent, SettingsHandlerComponent],
+            declarations: [
+                EditorComponent,
+                DrawingComponent,
+                CanvasResizeComponent,
+                StubSidebarComponent,
+                SettingsHandlerComponent,
+                NewDrawingComponent,
+            ],
             imports: [NoopAnimationsModule],
         }).compileComponents();
     }));
@@ -35,13 +43,13 @@ describe('EditorComponent', () => {
 
     it("should create a new drawing when clicking on 'nouveau dessin'", () => {
         component.newDrawingMenu = newDrawingComponent;
-        component.executeAction('Nouveau Dessin');
+        component.resetDrawing(NewDrawingConstants.TOOL_ID);
         expect(newDrawingComponent.createNewDrawing).toHaveBeenCalled();
     });
 
     it('should not create a new drawing when calling with invalid argument', () => {
         component.newDrawingMenu = newDrawingComponent;
-        component.executeAction('InvalidArgument');
+        component.resetDrawing('InvalidArgument');
         expect(newDrawingComponent.createNewDrawing).not.toHaveBeenCalled();
     });
 });

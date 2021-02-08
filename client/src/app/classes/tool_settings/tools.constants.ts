@@ -118,7 +118,7 @@ export enum NewDrawingConstants {
     TOOL_ID = 'NEW_DRAWING',
     TOOL_TITLE = 'Nouveau Dessin',
     INFO_BUBBLE = 'Nouveau Dessin (Ctr-O)',
-    ICON_NAME = 'new', // TODO modifier l'icone
+    ICON_NAME = 'new',
 }
 
 export const TOP_TOOLS_CONSTANTS = [
@@ -158,5 +158,5 @@ export const ICONS_PATHS = [
     ['save', '../../../assets/icons/save.svg'],
     ['text', '../../../assets/icons/text.svg'],
     ['pencil', '../../../assets/icons/pencil.svg'],
-    ['new', '../../../assets/icons/new.svg']
+    ['new', '../../../assets/icons/new.svg'],
 ];
