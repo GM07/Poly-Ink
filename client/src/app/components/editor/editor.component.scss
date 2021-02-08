@@ -1,7 +1,8 @@
 .container {
-    overflow: visible;
-    display: flex;
-    background-color: lightgray;
+  overflow: visible;
+  display: flex;
+  background-color: lightgray;
+  width: 5%;
 }
 
 .drawing-container {
@@ -13,11 +14,4 @@
     display: grid;
     width: min-content;
     outline: none;
-}
-
-#back {
-    position: fixed;
-    top: 0;
-    right: 0;
-    margin: 16px;
 }

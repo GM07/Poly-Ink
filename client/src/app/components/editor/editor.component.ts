@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, ViewChild } from '@angular/core';
+import { NewDrawingConstants } from '@app/classes/tool_settings/tools.constants';
+import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 
 @Component({
     selector: 'app-editor',
@@ -7,11 +8,9 @@ import { Router } from '@angular/router';
     styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent {
-    constructor(private router: Router) {
-        //
-    }
+    @ViewChild('newCanvasMenu') newDrawingMenu: NewDrawingComponent;
 
-    backToMenu(): void {
-        this.router.navigateByUrl('home');
+    resetDrawing(toolID: string): void {
+        if (toolID === NewDrawingConstants.TOOL_ID) this.newDrawingMenu.createNewDrawing(false);
     }
 }

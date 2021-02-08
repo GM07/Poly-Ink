@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, NgZone, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { BOTTOM_TOOLS } from '@app/classes/tool_settings/index-bottom';
 import { TOP_TOOLS } from '@app/classes/tool_settings/index-top';
 import { ToolSettings } from '@app/classes/tool_settings/tool-settings';
@@ -12,9 +13,14 @@ export class SidebarComponent implements OnInit {
     toolHandlerService: ToolHandlerService;
     selectedToolId: string = PencilToolConstants.TOOL_ID;
     readonly HIGHLIGHTED_COLOR: string = HIGHLIGHTED_COLOR;
+    @Output() settingClicked: EventEmitter<string> = new EventEmitter<string>();
 
-    constructor(toolHandlerService: ToolHandlerService) {
+    constructor(toolHandlerService: ToolHandlerService, private router: Router, private zone: NgZone) {
         this.toolHandlerService = toolHandlerService;
+    }
+
+    backToMenu(): void {
+        this.zone.run(() => this.router.navigateByUrl('home'));
     }
 
     ngOnInit(): void {
@@ -29,5 +35,9 @@ export class SidebarComponent implements OnInit {
     toolIconClicked(toolSettings: ToolSettings): void {
         this.toolHandlerService.setTool(toolSettings.toolId);
         this.selectedToolId = toolSettings.toolId;
+    }
+
+    emitClickEvent(toolSettings: ToolSettings): void {
+        this.settingClicked.emit(toolSettings.toolId);
     }
 }
