@@ -72,7 +72,7 @@ describe('EllipseService', () => {
         expect(service.contourWidth).toEqual(2);
         const max = 50;
         const min = 1;
-        const overMax = 101;
+        const overMax = 51;
         service.contourWidth = overMax;
         expect(service.contourWidth).toEqual(max);
         const underMin = 0;
