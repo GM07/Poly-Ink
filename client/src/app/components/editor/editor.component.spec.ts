@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resize.component';
 import { DrawingComponent } from '@app/components/drawing/drawing.component';
-import { HomePageComponent } from '../home-page/home-page.component';
-import { EditorComponent } from './editor.component';
+import { EditorComponent } from '@app/components/editor/editor.component';
+import { HomePageComponent } from '@app/components/home-page/home-page.component';
 
 @Component({ selector: 'app-sidebar', template: '' })
 class StubSidebarComponent {}

@@ -4,8 +4,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { EditorComponent } from '../editor/editor.component';
-import { HomePageComponent } from './home-page.component';
+import { EditorComponent } from '@app/components/editor/editor.component';
+import { HomePageComponent } from '@app/components/home-page.component';
 
 describe('HomePageComponent', () => {
     let component: HomePageComponent;
