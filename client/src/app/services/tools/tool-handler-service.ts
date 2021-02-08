@@ -20,14 +20,12 @@ export class ToolHandlerService {
         this.TOOLS.set(ToolsConstants.EllipseSelectionToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.EllipseToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.EraserToolConstants.TOOL_ID, pencilService);
-        this.TOOLS.set(ToolsConstants.ExportFileToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.EyeDropperToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.FillToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.LassoToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.PolygoneToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.RectangleSelectionToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.RectangleToolConstants.TOOL_ID, rectangleService);
-        this.TOOLS.set(ToolsConstants.SaveFileToolConsants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.StampToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.TextToolConstants.TOOL_ID, pencilService);
         this.currentTool = this.TOOLS.values().next().value;
