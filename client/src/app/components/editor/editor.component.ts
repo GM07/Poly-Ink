@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { NewDrawingConstants } from '@app/classes/tool_settings/tools.constants';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 
@@ -10,13 +11,15 @@ import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.c
 export class EditorComponent {
     @ViewChild('newCanvasMenu') newDrawingMenu: NewDrawingComponent;
 
-    constructor() {
+    constructor(private router: Router) {
         //
     }
 
     resetDrawing(toolID: string): void {
-        if (toolID === NewDrawingConstants.TOOL_ID) {
-            this.newDrawingMenu.createNewDrawing(false);
-        }
+        if (toolID === NewDrawingConstants.TOOL_ID) this.newDrawingMenu.createNewDrawing(false);
+    }
+
+    backToMenu(): void {
+        this.router.navigateByUrl('home');
     }
 }

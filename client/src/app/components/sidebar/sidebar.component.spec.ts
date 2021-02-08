@@ -4,7 +4,7 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { LineSettings } from '@app/classes/tool_settings/line-settings';
 import { NewDrawing } from '@app/classes/tool_settings/new-drawing-settings';
 import { LineToolConstants, NewDrawingConstants, PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
@@ -27,7 +27,7 @@ describe('SidebarComponent', () => {
 
         TestBed.configureTestingModule({
             declarations: [SidebarComponent, MatIcon, SettingsHandlerComponent],
-            imports: [MatTooltipModule, MatListModule, MatIconModule, BrowserAnimationsModule, MatIconTestingModule, MatSidenavModule],
+            imports: [MatTooltipModule, MatListModule, MatIconModule, NoopAnimationsModule, MatIconTestingModule, MatSidenavModule],
             providers: [{ provide: PencilService, useValue: pencilSpy }, { provide: LineService, useValue: lineSpy }, ToolHandlerService],
         }).compileComponents();
     }));

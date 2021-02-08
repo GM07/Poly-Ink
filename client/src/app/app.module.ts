@@ -21,7 +21,6 @@ import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
-import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { EllipseConfigComponent } from './components/tool-config/ellipse-config/ellipse-config.component';
 import { EraserConfigComponent } from './components/tool-config/eraser-config/eraser-config.component';
@@ -37,7 +36,6 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         SidebarComponent,
         DrawingComponent,
         HomePageComponent,
-        MainMenuComponent,
         CanvasResizeComponent,
         NewDrawingComponent,
         RectangleConfigComponent,
@@ -52,7 +50,6 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule,
-        AppRoutingModule,
         MatButtonModule,
         MatIconModule,
         MatTooltipModule,

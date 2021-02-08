@@ -49,6 +49,5 @@ export class DrawingService {
     initBackground(): void {
         this.baseCtx.fillStyle = 'white';
         this.baseCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        // this.clearCanvas(this.baseCtx);
     }
 }
