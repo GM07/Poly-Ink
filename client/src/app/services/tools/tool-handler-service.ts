@@ -3,6 +3,7 @@ import { Tool } from '@app/classes/tool';
 import * as ToolsConstants from '@app/classes/tool_settings/tools.constants';
 import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
+import { RectangleService } from '@app/services/tools/rectangle-service';
 
 @Injectable({
     providedIn: 'root',
@@ -11,7 +12,7 @@ export class ToolHandlerService {
     private TOOLS: Map<string, Tool> = new Map();
     currentTool: Tool;
 
-    constructor(pencilService: PencilService, lineService: LineService) {
+    constructor(pencilService: PencilService, lineService: LineService, rectangleService: RectangleService) {
         this.TOOLS.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
         this.TOOLS.set(ToolsConstants.AerosolToolConstants.TOOL_ID, pencilService);
@@ -25,8 +26,7 @@ export class ToolHandlerService {
         this.TOOLS.set(ToolsConstants.LassoToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.PolygoneToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.RectangleSelectionToolConstants.TOOL_ID, pencilService);
-        this.TOOLS.set(ToolsConstants.RectangleToolConstants.TOOL_ID, pencilService);
-        this.TOOLS.set(ToolsConstants.RectangleToolConstants.TOOL_ID, pencilService);
+        this.TOOLS.set(ToolsConstants.RectangleToolConstants.TOOL_ID, rectangleService);
         this.TOOLS.set(ToolsConstants.SaveFileToolConsants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.StampToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.TextToolConstants.TOOL_ID, pencilService);
