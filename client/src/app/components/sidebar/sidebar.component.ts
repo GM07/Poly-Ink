@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import * as CommonFileSettings from '@app/classes/tool_settings/index-bottom';
 import * as CommonToolSettings from '@app/classes/tool_settings/index-top';
 import { ToolSettings } from '@app/classes/tool_settings/tool-settings';
@@ -11,6 +11,7 @@ export class SidebarComponent implements OnInit {
     bottomToolsSettings: ToolSettings[] = [];
     toolHandlerService: ToolHandlerService;
     selectedToolId: string = PencilToolConstants.TOOL_ID;
+    @Output() settingClicked: EventEmitter<string> = new EventEmitter<string>();
 
     constructor(toolHandlerService: ToolHandlerService) {
         this.toolHandlerService = toolHandlerService;
@@ -28,5 +29,9 @@ export class SidebarComponent implements OnInit {
     toolIconClicked(toolSettings: ToolSettings): void {
         this.toolHandlerService.setTool(toolSettings.toolId);
         this.selectedToolId = toolSettings.toolId;
+    }
+
+    emitClickEvent(toolSettings: ToolSettings): void {
+        this.settingClicked.emit(toolSettings.toolId);
     }
 }
