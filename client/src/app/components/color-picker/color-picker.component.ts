@@ -52,23 +52,10 @@ export class ColorPickerComponent implements OnDestroy, ToolConfig {
 
     valueChange(value: [string, number]): void {
         switch (value[0]) {
-            case 'R':
-                this.selectedColor = new Color(value[1], this.selectedColor.g, this.selectedColor.b);
-                break;
-            case 'G':
-                this.selectedColor = new Color(this.selectedColor.r, value[1], this.selectedColor.b);
-                break;
-            case 'B':
-                this.selectedColor = new Color(this.selectedColor.r, this.selectedColor.g, value[1]);
-                break;
             case 'Alpha':
                 this.selectedAlpha = value[1];
-                this.colorService.primaryColorAlpha = this.selectedAlpha;
-                return;
+                break;
         }
-        this.hexColor = this.selectedColor.hexString;
-        this.colorService.selectedHueSliders = Color.hueToRgb(this.selectedColor.hue);
-        this.colorService.selectedColorSliders = this.selectedColor;
     }
 
     chosePrimary(): void {

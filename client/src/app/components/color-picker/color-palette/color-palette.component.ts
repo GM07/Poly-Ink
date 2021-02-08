@@ -28,7 +28,7 @@ export class ColorPaletteComponent implements OnDestroy, AfterViewInit {
     }
 
     initValues(): void {
-        this.hueColor = this.colorService.primaryColor;
+        this.hueColor = Color.hueToRgb(this.colorService.primaryColor.hue);
     }
 
     initSubscriptions(): void {
@@ -48,6 +48,7 @@ export class ColorPaletteComponent implements OnDestroy, AfterViewInit {
 
     ngAfterViewInit(): void {
         this.getContext();
+        this.setPositionToColor(this.colorService.selectedColor);
         this.draw();
     }
 

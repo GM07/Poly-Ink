@@ -18,19 +18,13 @@
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
         <!--[(ngModel)]="ellipseService.lineWidth"-->
-        <mat-slider
-            min="1"
-            max="100"
-            thumbLabel
-            [displayWith]="colorSliderLabel">
-        </mat-slider>
+        <mat-slider min="1" max="100" thumbLabel [displayWith]="colorSliderLabel"> </mat-slider>
     </div>
     <mat-form-field class="textFormat">
-        <input matInput 
-            type="number"
-            min="1" max="100">
-            <!--[(ngModel)]="ellipseService.lineWidth">-->
+        <input matInput type="number" min="1" max="100" />
+        <!--[(ngModel)]="ellipseService.lineWidth">-->
         <span matSuffix>px</span>
     </mat-form-field>
     <mat-divider></mat-divider>
+    <app-color-picker></app-color-picker>
 </div>

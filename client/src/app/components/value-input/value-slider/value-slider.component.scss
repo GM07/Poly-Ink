@@ -1,15 +1,16 @@
 div {
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+}
+
+:host ::ng-deep mat-slider,
+:host ::ng-deep .mat-slider-wrapper {
+    width: 90%;
+    padding: 0px;
 }
 
 :host {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0px 10px;
-}
-
-label {
-    margin-right: 5px;
+    flex-direction: column;
+    margin: 5px 10px;
 }

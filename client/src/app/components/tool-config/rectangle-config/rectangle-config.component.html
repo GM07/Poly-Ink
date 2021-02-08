@@ -1,6 +1,6 @@
 <div>
     <h5 class="textFormat">Configuration rectangle</h5>
-    
+
     <!--Type de tracé-->
     <mat-divider></mat-divider>
     <h5 class="textFormat">Type de tracé</h5>
@@ -18,19 +18,10 @@
     <!--Epaisseur-->
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
-        <mat-slider
-            min="1"
-            max="100"
-            [(ngModel)]="rectangleService.contourWidth"
-            thumbLabel
-            [displayWith]="colorSliderLabel">
-        </mat-slider>
+        <mat-slider min="1" max="100" [(ngModel)]="rectangleService.contourWidth" thumbLabel [displayWith]="colorSliderLabel"> </mat-slider>
     </div>
     <mat-form-field class="textFormat">
-        <input matInput 
-            type="number"
-            min="1" max="100"
-            [(ngModel)]="rectangleService.contourWidth">
+        <input matInput type="number" min="1" max="100" [(ngModel)]="rectangleService.contourWidth" />
         <span matSuffix>px</span>
     </mat-form-field>
     <mat-divider></mat-divider>

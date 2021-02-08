@@ -9,13 +9,11 @@ div {
     flex-direction: column;
 }
 
-.action-buttons {
-    justify-content: space-between;
-    align-items: center;
-    margin: 5px;
+.buttons {
+    flex-direction: column;
+    justify-content: center;
 }
 
 button {
-    margin: 5px;
-    text-align: center;
+    margin: 2.5px 5px;
 }
