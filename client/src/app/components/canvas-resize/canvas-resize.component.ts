@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { CanvasConst } from '@app/constants/canvas.ts';
+import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
 @Component({
@@ -26,7 +27,7 @@ export class CanvasResizeComponent implements AfterViewInit {
     previewResizeStyle: { [key: string]: string };
     @ViewChild('previewResize', { static: false }) previewResize: ElementRef<HTMLDivElement>;
 
-    constructor(private drawingService: DrawingService, private cd: ChangeDetectorRef) {
+    constructor(private drawingService: DrawingService, private cd: ChangeDetectorRef, private newDrawing: NewDrawingService) {
         this.previewResizeView = false;
         this.previewResizeStyle = {
             'margin-left': '0',
@@ -37,9 +38,10 @@ export class CanvasResizeComponent implements AfterViewInit {
 
     ngAfterViewInit(): void {
         this.setCanvasMargin();
-        this.setStylePreview();
-        this.setStyleControl();
+        this.resetCanvas();
         this.cd.detectChanges();
+
+        this.newDrawing.changes.subscribe((value: number) => this.resetCanvas());
     }
 
     mouseDown(right: boolean, bottom: boolean): void {
@@ -91,8 +93,12 @@ export class CanvasResizeComponent implements AfterViewInit {
         );
     }
 
+    resetCanvas(): void {
+        this.setStyleControl();
+        this.setStylePreview();
+    }
+
     setStyleControl(): void {
-        // Attend la fin de la queue avant d'exécuter cette fonction. Laisse le temps au canvas de s'instancier
         this.controlRightStyle = {
             'margin-top': String(this.drawingService.canvas.height / 2 - CanvasConst.CONTROL_MARGIN) + 'px',
             'margin-left': String(this.drawingService.canvas.width - CanvasConst.CONTROL_MARGIN) + 'px',
