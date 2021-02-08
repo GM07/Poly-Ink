@@ -4,7 +4,7 @@ import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
-export enum RectangleMode {
+export enum EllipseMode {
     Contour = 0,
     Filled = 1,
     FilledWithContour = 2,
@@ -13,22 +13,22 @@ export enum RectangleMode {
 @Injectable({
     providedIn: 'root',
 })
-export class RectangleService extends Tool {
+export class EllipseService extends Tool {
     private strokeStyleIn: string;
     private fillStyleIn: string;
     private mouseUpCoord: Vec2;
     private shiftPressed: boolean;
     private lineWidthIn: number;
-    rectangleMode: RectangleMode;
+    ellipseMode: EllipseMode;
 
     constructor(drawingService: DrawingService) {
         super(drawingService);
-        this.shortCutKey = '1';
+        this.shortCutKey = '2';
         this.strokeStyleIn = 'black';
         this.fillStyleIn = 'black';
         this.shiftPressed = false;
         this.lineWidthIn = 1;
-        this.rectangleMode = RectangleMode.FilledWithContour;
+        this.ellipseMode = EllipseMode.Contour;
     }
 
     set strokeStyle(color: string) {
@@ -67,7 +67,8 @@ export class RectangleService extends Tool {
         if (this.mouseDown) {
             this.mouseDownCoord = this.getPositionFromMouse(event);
             this.mouseUpCoord = this.mouseDownCoord;
-            this.drawRectangle(this.drawingService.previewCtx);
+            const ctx = this.drawingService.previewCtx;
+            this.drawEllipse(ctx);
         }
     }
 
@@ -77,7 +78,7 @@ export class RectangleService extends Tool {
                 this.mouseUpCoord = this.getPositionFromMouse(event);
             }
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
-            this.drawRectangle(this.drawingService.baseCtx);
+            this.drawEllipse(this.drawingService.baseCtx);
         }
         this.mouseDown = false;
     }
@@ -87,21 +88,21 @@ export class RectangleService extends Tool {
             this.mouseUpCoord = this.getPositionFromMouse(event);
             const ctx = this.drawingService.previewCtx;
             this.drawingService.clearCanvas(ctx);
-            this.drawRectangle(ctx);
+            this.drawEllipse(ctx);
         }
     }
 
     onMouseLeave(event: MouseEvent): void {
         if (this.mouseDown) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
-            this.updateRectangle();
+            this.updateEllipse();
         }
     }
 
     onMouseEnter(event: MouseEvent): void {
         if (this.mouseDown) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
-            this.updateRectangle();
+            this.updateEllipse();
         }
     }
 
@@ -109,7 +110,7 @@ export class RectangleService extends Tool {
         if (event.shiftKey && !this.shiftPressed) {
             this.shiftPressed = true;
             if (this.mouseDown) {
-                this.updateRectangle();
+                this.updateEllipse();
             }
         }
     }
@@ -118,46 +119,88 @@ export class RectangleService extends Tool {
         if (!event.shiftKey && this.shiftPressed) {
             this.shiftPressed = false;
             if (this.mouseDown) {
-                this.updateRectangle();
+                this.updateEllipse();
             }
         }
     }
 
-    private updateRectangle(): void {
+    private updateEllipse(): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
-        this.drawRectangle(ctx);
+        this.drawEllipse(ctx);
     }
 
-    private drawRectangle(ctx: CanvasRenderingContext2D): void {
-        let width: number = this.mouseUpCoord.x - this.mouseDownCoord.x;
-        let height: number = this.mouseUpCoord.y - this.mouseDownCoord.y;
-        if (this.shiftPressed) {
-            height = Math.sign(height) * Math.min(Math.abs(width), Math.abs(height));
-            width = Math.sign(width) * Math.abs(height);
-        }
-        ctx.lineWidth = this.lineWidthIn;
-        ctx.strokeStyle = this.strokeStyleIn;
-        ctx.fillStyle = this.fillStyleIn;
-        ctx.lineJoin = 'miter' as CanvasLineJoin;
-        ctx.beginPath();
+    private drawEllipse(ctx: CanvasRenderingContext2D): void {
+        let radiusX: number = (this.mouseUpCoord.x - this.mouseDownCoord.x) / 2;
+        let radiusY: number = (this.mouseUpCoord.y - this.mouseDownCoord.y) / 2;
+        let centerX: number = this.mouseDownCoord.x + radiusX;
+        let centerY: number = this.mouseDownCoord.y + radiusY;
 
-        switch (this.rectangleMode) {
-            case RectangleMode.Contour:
-                ctx.strokeRect(this.mouseDownCoord.x, this.mouseDownCoord.y, width, height);
+        if (this.shiftPressed) {
+            const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
+            centerX = this.mouseDownCoord.x + Math.sign(radiusX) * minRadius;
+            centerY = this.mouseDownCoord.y + Math.sign(radiusY) * minRadius;
+            radiusX = minRadius;
+            radiusY = minRadius;
+        }
+
+        const radiusXAbs = Math.abs(radiusX);
+        const radiusYAbs = Math.abs(radiusY);
+
+        if (ctx === this.drawingService.previewCtx) {
+            this.drawRectanglePerimeter(ctx, centerX, centerY, radiusXAbs, radiusYAbs);
+        }
+
+        ctx.strokeStyle = this.strokeStyleIn;
+        ctx.lineCap = 'round' as CanvasLineCap;
+        ctx.lineJoin = 'round' as CanvasLineJoin;
+
+        ctx.beginPath();
+        switch (this.ellipseMode) {
+            case EllipseMode.Contour:
+                ctx.lineWidth = this.lineWidthIn;
+                ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
+                ctx.stroke();
                 break;
-            case RectangleMode.Filled:
-                ctx.fillRect(this.mouseDownCoord.x, this.mouseDownCoord.y, width, height);
-                break;
-            case RectangleMode.FilledWithContour:
-                ctx.rect(this.mouseDownCoord.x, this.mouseDownCoord.y, width, height);
+            case EllipseMode.Filled:
+                ctx.lineWidth = 0;
+                ctx.fillStyle = this.fillStyleIn;
+                ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
                 ctx.fill();
+                break;
+            case EllipseMode.FilledWithContour:
+                ctx.lineWidth = this.lineWidthIn;
+                ctx.fillStyle = this.fillStyleIn;
+                ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
                 break;
             default:
                 break;
         }
 
+        ctx.closePath();
+    }
+
+    private drawRectanglePerimeter(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, radiusX: number, radiusY: number): void {
+        const dashWidth = 1;
+        let lineWidth: number = this.lineWidthIn;
+        if (this.ellipseMode === EllipseMode.Filled) {
+            lineWidth = 0;
+        }
+        const x = centerX - radiusX - lineWidth / 2;
+        const y = centerY - radiusY - lineWidth / 2;
+        const width = radiusX * 2 + lineWidth;
+        const height = radiusY * 2 + lineWidth;
+
+        const lineDash = 6;
+        ctx.lineWidth = dashWidth;
+        ctx.strokeStyle = 'dark gray';
+        ctx.setLineDash([lineDash]);
+        ctx.beginPath();
+        ctx.strokeRect(x, y, width, height);
         ctx.stroke();
         ctx.closePath();
+        ctx.setLineDash([]);
     }
 }

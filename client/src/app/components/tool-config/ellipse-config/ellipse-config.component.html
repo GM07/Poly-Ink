@@ -4,26 +4,21 @@
     <mat-divider></mat-divider>
     <h5 class="textFormat">Type de tracé</h5>
     <div class="textFormatButton">
-        <button mat-raised-button class="buttons" (click)="toggleTraceType('Contour')">Contour</button>
+        <button mat-raised-button class="buttons" (click)="toggleTraceType(ellipseModeIn.Contour)">Contour</button>
     </div>
     <div class="textFormatButton">
-        <button mat-raised-button class="buttons" (click)="toggleTraceType('Plein')">Plein</button>
+        <button mat-raised-button class="buttons" (click)="toggleTraceType(ellipseModeIn.Filled)">Plein</button>
     </div>
     <div class="textFormatButton">
-        <button mat-raised-button class="buttons" (click)="toggleTraceType('Plein&Contour')">Plein&Contour</button>
+        <button mat-raised-button class="buttons" (click)="toggleTraceType(ellipseModeIn.FilledWithContour)">Plein&Contour</button>
     </div>
     <mat-divider></mat-divider>
 
     <!--Epaisseur-->
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
-        <!--[(ngModel)]="ellipseService.lineWidth"-->
-        <mat-slider
-            min="1"
-            max="100"
-            thumbLabel
-            [displayWith]="colorSliderLabel">
-        </mat-slider>
+        <mat-slider min="1" max="50" [(ngModel)]="ellipseService.contourWidth" thumbLabel [displayWith]="colorSliderLabel"> </mat-slider>
+        {{ ellipseService.contourWidth }}px
     </div>
     <mat-divider></mat-divider>
 </div>
