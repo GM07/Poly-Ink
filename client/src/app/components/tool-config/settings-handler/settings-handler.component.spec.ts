@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Tool } from '@app/classes/tool';
+import * as ToolsConstants from '@app/classes/tool_settings/tools.constants';
 import { LineConfigComponent } from '@app/components/tool-config/line-config/line-config.component';
 import { PencilConfigComponent } from '@app/components/tool-config/pencil-config/pencil-config.component';
 import { RectangleConfigComponent } from '@app/components/tool-config/rectangle-config/rectangle-config.component';
@@ -8,7 +9,6 @@ import { PencilService } from '@app/services/tools/pencil-service';
 import { RectangleService } from '@app/services/tools/rectangle-service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
 import { SettingsHandlerComponent } from './settings-handler.component';
-import * as ToolsConstants from '@app/classes/tool_settings/tools.constants';
 
 class MockToolHandler extends ToolHandlerService {
     TOOLS_MOCK: Map<string, Tool> = new Map();
