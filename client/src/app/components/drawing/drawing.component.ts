@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Vec2 } from '@app/classes/vec2';
 import { CanvasConst } from '@app/constants/canvas.ts';
+import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
 
@@ -18,7 +19,7 @@ export class DrawingComponent implements AfterViewInit {
     private previewCtx: CanvasRenderingContext2D;
     private canvasSize: Vec2 = { x: CanvasConst.DEFAULT_WIDTH, y: CanvasConst.DEFAULT_HEIGHT };
 
-    constructor(private drawingService: DrawingService, readonly toolHandlerService: ToolHandlerService) {}
+    constructor(private drawingService: DrawingService, readonly toolHandlerService: ToolHandlerService, private newDrawing: NewDrawingService) {}
 
     ngAfterViewInit(): void {
         this.baseCtx = this.baseCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
@@ -27,7 +28,7 @@ export class DrawingComponent implements AfterViewInit {
         this.drawingService.previewCtx = this.previewCtx;
         this.drawingService.canvas = this.baseCanvas.nativeElement;
         this.drawingService.previewCanvas = this.previewCanvas.nativeElement;
-        this.drawingService.initBackground();
+        this.newDrawing.newCanvas();
         document.body.style.overflow = 'auto';
     }
 

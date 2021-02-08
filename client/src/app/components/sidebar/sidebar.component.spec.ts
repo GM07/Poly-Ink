@@ -6,7 +6,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { LineSettings } from '@app/classes/tool_settings/line-settings';
-import { LineToolConstants, PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
+import { NewDrawing } from '@app/classes/tool_settings/new-drawing-settings';
+import { LineToolConstants, NewDrawingConstants, PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
+import { SettingsHandlerComponent } from '@app/components/tool-config/settings-handler/settings-handler.component';
 import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
@@ -24,7 +26,7 @@ describe('SidebarComponent', () => {
         const lineSpy = jasmine.createSpyObj('LineService', ['stopDrawing'], { toolID: LineToolConstants.TOOL_ID });
 
         TestBed.configureTestingModule({
-            declarations: [SidebarComponent, MatIcon],
+            declarations: [SidebarComponent, MatIcon, SettingsHandlerComponent],
             imports: [MatTooltipModule, MatListModule, MatIconModule, NoopAnimationsModule, MatIconTestingModule, MatSidenavModule],
             providers: [{ provide: PencilService, useValue: pencilSpy }, { provide: LineService, useValue: lineSpy }, ToolHandlerService],
         }).compileComponents();
@@ -54,5 +56,12 @@ describe('SidebarComponent', () => {
         expect(toolHandlerService.currentTool.toolID).toEqual(PencilToolConstants.TOOL_ID);
         component.toolIconClicked(new LineSettings());
         expect(toolHandlerService.currentTool.toolID).toEqual(LineToolConstants.TOOL_ID);
+    });
+
+    it('should emit event when newDrawing is clicked', () => {
+        spyOn(component.settingClicked, 'emit');
+        component.emitClickEvent(new NewDrawing());
+        expect(component.settingClicked.emit).toHaveBeenCalled();
+        expect(component.settingClicked.emit).toHaveBeenCalledWith(NewDrawingConstants.TOOL_ID);
     });
 });

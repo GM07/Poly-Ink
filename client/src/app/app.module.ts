@@ -13,6 +13,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
+import { NewDrawingComponent } from './components/canvas-reset/canvas-reset.component';
 import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.component';
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
@@ -33,6 +34,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         DrawingComponent,
         HomePageComponent,
         CanvasResizeComponent,
+        NewDrawingComponent,
         RectangleConfigComponent,
         EllipseConfigComponent,
         EraserConfigComponent,
