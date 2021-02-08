@@ -3,12 +3,14 @@ import { CanvasConst } from '@app/constants/canvas';
 import { BehaviorSubject } from 'rxjs';
 import { DrawingService } from './drawing.service';
 
+const barPercentage: number = 5;
+const fullPercentage: number = 100;
+
 @Injectable({
     providedIn: 'root',
 })
+
 export class NewDrawingService {
-    private barPercentage: number = 5;
-    private fullPercentage: number = 100;
     showWarning: boolean;
 
     changes: BehaviorSubject<number> = new BehaviorSubject(0);
@@ -17,7 +19,7 @@ export class NewDrawingService {
 
     newCanvas(
         confirm: boolean = false,
-        width: number = (document.documentElement.clientWidth - document.documentElement.clientWidth / (this.fullPercentage / this.barPercentage)) /
+        width: number = (document.documentElement.clientWidth - document.documentElement.clientWidth / (fullPercentage / barPercentage)) /
             2,
         height: number = document.documentElement.clientHeight / 2,
     ): void {
