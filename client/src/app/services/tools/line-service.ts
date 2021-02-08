@@ -11,8 +11,8 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
     providedIn: 'root',
 })
 export class LineService extends Tool {
-    constructor(drawingService: DrawingService, private colorService: ColorService) {
-        super(drawingService);
+    constructor(drawingService: DrawingService, colorService: ColorService) {
+        super(drawingService, colorService);
         this.shortCutKey = 'l';
     }
     static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...

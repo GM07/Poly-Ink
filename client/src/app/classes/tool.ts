@@ -1,10 +1,11 @@
+import { ColorService } from '@app/components/color-picker/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Vec2 } from './vec2';
 
 // Ceci est justifié vu qu'on a des fonctions qui seront gérés par les classes enfant
 // tslint:disable:no-empty
 export abstract class Tool {
-    constructor(protected drawingService: DrawingService) {}
+    constructor(protected drawingService: DrawingService, protected colorService: ColorService) {}
     mouseDownCoord: Vec2;
     mouseDown: boolean = false;
     shortCutKey: string;

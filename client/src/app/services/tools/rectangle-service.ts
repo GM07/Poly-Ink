@@ -25,8 +25,8 @@ export class RectangleService extends Tool {
     private lineWidthIn: number;
     rectangleMode: RectangleMode;
 
-    constructor(drawingService: DrawingService, private colorService: ColorService) {
-        super(drawingService);
+    constructor(drawingService: DrawingService, colorService: ColorService) {
+        super(drawingService, colorService);
         this.shortCutKey = '1';
         this.shiftPressed = false;
         this.lineWidthIn = 1;

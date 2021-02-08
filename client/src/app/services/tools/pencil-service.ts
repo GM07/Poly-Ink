@@ -23,8 +23,8 @@ export class PencilService extends Tool {
     private lineWidthIn: number = 12;
     readonly toolID: string = PencilToolConstants.TOOL_ID;
 
-    constructor(drawingService: DrawingService, private colorService: ColorService) {
-        super(drawingService);
+    constructor(drawingService: DrawingService, colorService: ColorService) {
+        super(drawingService, colorService);
         this.clearPath();
         this.shortCutKey = 'c';
     }

@@ -1,15 +1,11 @@
-:host ::ng-deep mat-slider {
-  width: 100%;
-}
-
 div {
+  margin: 5px;
   width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
-label {
-  float: left;
-}
-
-input {
-  float: right;
+:host ::ng-deep mat-slider,
+:host ::ng-deep .mat-slider-wrapper {
+  width: 100%;
 }
