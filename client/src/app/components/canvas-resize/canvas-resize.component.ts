@@ -83,7 +83,7 @@ export class CanvasResizeComponent implements AfterViewInit {
         const documentOffset = document.documentElement;
 
         this.canvasTop = canvasOffset.top + window.pageYOffset - documentOffset.clientTop;
-        this.canvasLeft = canvasOffset.left + window.pageXOffset - documentOffset.clientLeft - 1;
+        this.canvasLeft = canvasOffset.left + window.pageXOffset - documentOffset.clientLeft;
     }
 
     resizeCanvas(xModifier: number, yModifier: number): void {
@@ -117,16 +117,16 @@ export class CanvasResizeComponent implements AfterViewInit {
         this.previewResizeStyle = {
             'margin-left': String(this.canvasLeft) + 'px',
             'margin-top': String(this.canvasTop) + 'px',
-            // tslint:disable:prettier
+            // prettier-ignore
             'width': String(this.drawingService.canvas.width) + 'px',
             'height': String(this.drawingService.canvas.height) + 'px',
-            // tslint:enable:prettier
+            // prettier-ignore
         };
         this.workZoneStyle = {
-            // tslint:disable:prettier
+            // prettier-ignore
             width: String(this.drawingService.canvas.width + CanvasConst.WORKING_SIZE) + 'px',
             height: String(this.drawingService.canvas.height + CanvasConst.WORKING_SIZE) + 'px',
-            // tslint:enable:prettier
+            // prettier-ignore
         };
     }
 

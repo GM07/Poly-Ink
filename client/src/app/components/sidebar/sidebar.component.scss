@@ -22,4 +22,20 @@
     margin-bottom: auto;
     position: absolute;
     bottom: 0;
+    padding-bottom: 30px;
+}
+
+.attributes-tab {
+    width: 200px;
+    display: flex;
+    justify-content: center;
+}
+
+.icon-button:hover {
+    background: rgba(148, 152, 153, 0.342);
+}
+
+.icon-button {
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
