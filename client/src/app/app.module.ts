@@ -42,6 +42,8 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         LineConfigComponent,
         PencilConfigComponent,
         SettingsHandlerComponent,
+        CanvasResizeComponent,
+        SidebarComponent,
     ],
     imports: [
         AppRoutingModule,

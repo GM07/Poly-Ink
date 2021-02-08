@@ -14,6 +14,7 @@ import { HomePageComponent } from '@app/components/home-page/home-page.component
 import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
+import { SettingsHandlerComponent } from '../tool-config/settings-handler/settings-handler.component';
 import { SidebarComponent } from './sidebar.component';
 
 describe('SidebarComponent', () => {
@@ -29,7 +30,7 @@ describe('SidebarComponent', () => {
         const lineSpy = jasmine.createSpyObj('LineService', ['stopDrawing'], { toolID: LineToolConstants.TOOL_ID });
 
         TestBed.configureTestingModule({
-            declarations: [SidebarComponent, MatIcon],
+            declarations: [SidebarComponent, MatIcon, SettingsHandlerComponent],
             imports: [
                 RouterTestingModule.withRoutes([
                     { path: 'home', component: HomePageComponent },
@@ -39,7 +40,6 @@ describe('SidebarComponent', () => {
                 MatTooltipModule,
                 MatListModule,
                 MatIconModule,
-                NoopAnimationsModule,
                 MatIconTestingModule,
                 MatSidenavModule,
             ],
