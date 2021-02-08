@@ -63,6 +63,7 @@ describe('SidebarComponent', () => {
         fixture = TestBed.createComponent(SidebarComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
+
         router = TestBed.inject(Router);
         zone = TestBed.inject(NgZone);
         zone.run(() => {
