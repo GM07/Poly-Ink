@@ -1,22 +1,21 @@
 <div>
     <h5 class="textFormat">Configurations efface</h5>
     <mat-divider></mat-divider>
-    <!--Epaisseur-->
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
-        <!--[(ngModel)]="eraserService.width"-->
     <mat-slider
-        min="1"
+        min="5"
         max="100"
+        [(ngModel)]="eraserService.lineWidth"
         thumbLabel
         [displayWith]="colorSliderLabel">
     </mat-slider>
     </div>
-    <!--[(ngModel)]="eraserService.width">-->
     <mat-form-field class="textFormat">
-        <input matInput 
+        <input matInput
             type="number"
-            min="1" max="100">
+            min="5" max="100"
+            [(ngModel)]="eraserService.lineWidth">
         <span matSuffix>px</span>
     </mat-form-field>
-</div> 
+</div>

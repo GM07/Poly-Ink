@@ -13,6 +13,7 @@ describe('EraserConfigComponent', () => {
     let component: EraserConfigComponent;
     let fixture: ComponentFixture<EraserConfigComponent>;
     let loader: HarnessLoader;
+    const DEFAULT_VALUE = 25;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -36,7 +37,7 @@ describe('EraserConfigComponent', () => {
 
     it('should get default value of slider', async () => {
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getValue()).toBe(1);
+        expect(await slider.getValue()).toBe(DEFAULT_VALUE);
     });
 
     it('should get max value of slider', async () => {
@@ -48,7 +49,7 @@ describe('EraserConfigComponent', () => {
     it('should be able to set value of slider', async () => {
         const setValue = 54;
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getValue()).toBe(1);
+        expect(await slider.getValue()).toBe(DEFAULT_VALUE);
 
         await slider.setValue(setValue);
 

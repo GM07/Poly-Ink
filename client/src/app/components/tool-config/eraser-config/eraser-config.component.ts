@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-// import { ToolConfig } from '@app/components/tool-config/tool-config';
 import { ToolConfig } from '@app/classes/tool-config';
-import { PencilService } from '@app/services/tools/pencil-service';
+import { EraserService } from '@app/services/tools/eraser-service';
 
 @Component({
     selector: 'app-eraser-config',
@@ -9,12 +8,10 @@ import { PencilService } from '@app/services/tools/pencil-service';
     styleUrls: ['./eraser-config.component.scss'],
 })
 export class EraserConfigComponent extends ToolConfig {
-    sizeValue: number;
+    lineWidth: number;
 
-    // TODO Changer pencilService pour eraserService
-    constructor(public service: PencilService) {
+    constructor(public eraserService: EraserService) {
         super();
-        // this.traceTypeTestIn = 0;
     }
 
     colorSliderLabel(value: number): string {
