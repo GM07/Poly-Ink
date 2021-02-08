@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.component';
+import { ColorPickerModule } from './components/color-picker/color-picker.module';
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
@@ -31,6 +32,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
         MatSidenavModule,
         MatListModule,
         MatExpansionModule,
+        ColorPickerModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

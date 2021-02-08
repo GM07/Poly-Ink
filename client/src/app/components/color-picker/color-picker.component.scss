@@ -1,0 +1,22 @@
+div {
+  display: flex;
+}
+:host ::ng-deep app-color-palette,
+:host ::ng-deep app-color-slider,
+:host ::ng-deep app-color-icon,
+:host ::ng-deep app-color-preview {
+  margin: 10px;
+}
+.color-icon {
+  justify-content: space-between;
+}
+.vertical {
+  flex-direction: column;
+  margin: 10px;
+}
+
+.action-buttons {
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+}
