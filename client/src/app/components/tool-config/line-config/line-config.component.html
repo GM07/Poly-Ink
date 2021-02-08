@@ -24,10 +24,10 @@
     <!--Type de jonction-->
     <h5 class="textFormat">Type de jonction</h5>
     <div class="textFormatButton">
-        <button mat-raised-button class="buttons" (click)="toggleLineType('normal')" >Normal</button>
+        <button mat-raised-button text="Normal" class="buttons" (click)="toggleLineType(false)">Normal</button>
     </div>
     <div class="textFormatButton">
-        <button mat-raised-button class="buttons" (click)="toggleLineType('point')">Avec point</button>
+        <button mat-raised-button text="Avec point" class="buttons" (click)="toggleLineType(true)">Avec point</button>
     </div>
     <br/>
     <mat-divider></mat-divider>

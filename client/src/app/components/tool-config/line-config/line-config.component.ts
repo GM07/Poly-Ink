@@ -19,8 +19,8 @@ export class LineConfigComponent extends ToolConfig {
         return value + 'px';
     }
 
-    toggleLineType(lineType: string): void {
-        lineType === 'point' ? (this.withJunctionPoint = true) : (this.withJunctionPoint = false);
+    toggleLineType(lineType: boolean): void {
+        this.withJunctionPoint = lineType;
         this.lineService.showJunctionPoints = this.withJunctionPoint;
     }
 }
