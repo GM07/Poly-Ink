@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import * as CommonFileSettings from '@app/classes/tool_settings/index-bottom';
 import * as CommonToolSettings from '@app/classes/tool_settings/index-top';
 import { ToolSettings } from '@app/classes/tool_settings/tool-settings';
@@ -12,8 +13,12 @@ export class SidebarComponent implements OnInit {
     toolHandlerService: ToolHandlerService;
     selectedToolId: string = PencilToolConstants.TOOL_ID;
 
-    constructor(toolHandlerService: ToolHandlerService) {
+    constructor(toolHandlerService: ToolHandlerService, private router: Router) {
         this.toolHandlerService = toolHandlerService;
+    }
+
+    backToMenu(): void {
+        this.router.navigateByUrl('home');
     }
 
     ngOnInit(): void {
