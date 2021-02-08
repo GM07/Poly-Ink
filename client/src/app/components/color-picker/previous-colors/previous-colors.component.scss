@@ -1,0 +1,12 @@
+.parent {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 100%;
+}
+.previousColor {
+    border: 1px solid black;
+    height: 50px;
+    width: 17%;
+    margin: 1%;
+}

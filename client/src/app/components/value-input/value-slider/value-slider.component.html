@@ -1,0 +1,13 @@
+<mat-slider (input)="onSliderChange($event)" min="{{ min }}" max="{{ max }}" value="{{ value }}" step="{{ step }}"></mat-slider>
+<div>
+    <label for="name"> {{ label }}: </label>
+    <input
+        (change)="onInputChange($event.target.value)"
+        id="name"
+        type="number"
+        min="{{ min }}"
+        max="{{ max }}"
+        value="{{ value }}"
+        step="{{ step }}"
+    />
+</div>

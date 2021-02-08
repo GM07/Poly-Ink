@@ -8,6 +8,7 @@ import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
 import { RectangleService } from '@app/services/tools/rectangle-service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
+import { ColorPickerComponent } from './../../color-picker/color-picker.component';
 
 @Component({
     selector: 'app-settings-handler',
@@ -27,6 +28,7 @@ export class SettingsHandlerComponent {
     }
 
     get activeTab(): ToolConfig {
+        if (this.toolHandler.openColorPicker) return ColorPickerComponent;
         if (this.toolHandler.getTool() === this.lastTool) return this.lastTab;
         this.applyNewTab();
         return this.lastTab;
@@ -41,4 +43,4 @@ export class SettingsHandlerComponent {
             }
         }
     }
-}
+  }

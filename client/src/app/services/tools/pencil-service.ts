@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
 import { PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
+import { ColorService } from '@app/components/color-picker/color.service';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 export enum LeftMouse {
@@ -19,24 +20,13 @@ export enum LeftMouse {
 })
 export class PencilService extends Tool {
     private pathData: Vec2[][];
-    private strokeStyleIn: string = 'black';
     private lineWidthIn: number = 12;
     readonly toolID: string = PencilToolConstants.TOOL_ID;
 
-    constructor(drawingService: DrawingService) {
-        super(drawingService);
+    constructor(drawingService: DrawingService, colorService: ColorService) {
+        super(drawingService, colorService);
         this.clearPath();
         this.shortCutKey = 'c';
-    }
-
-    get strokeStyle(): string {
-        return this.strokeStyleIn;
-    }
-
-    set strokeStyle(color: string) {
-        if (Tool.isColorValid(color)) {
-            this.strokeStyleIn = color;
-        }
     }
 
     get lineWidth(): number {
@@ -119,8 +109,8 @@ export class PencilService extends Tool {
 
     private drawLine(ctx: CanvasRenderingContext2D, pathData: Vec2[][]): void {
         ctx.beginPath();
-        ctx.strokeStyle = this.strokeStyle;
-        ctx.fillStyle = this.strokeStyle;
+        ctx.strokeStyle = this.colorService.primaryRgba;
+        ctx.fillStyle = this.colorService.primaryRgba;
         ctx.lineWidth = this.lineWidth;
         ctx.lineCap = 'round' as CanvasLineCap;
         ctx.lineJoin = 'round' as CanvasLineJoin; // Essentiel pour avoir une allure "smooth"

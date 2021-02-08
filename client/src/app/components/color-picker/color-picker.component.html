@@ -1,0 +1,29 @@
+<div>
+    <app-color-palette></app-color-palette>
+    <app-color-slider></app-color-slider>
+</div>
+<div class="color-icon">
+    <app-color-preview></app-color-preview>
+    <app-color-icon class="color-icon" [width]="40" [height]="40"></app-color-icon>
+</div>
+
+<div class="vertical">
+    <app-value-slider (valueChangeEvent)="valueChange($event)" [label]="'R'" [min]="0" [max]="255" [value]="selectedColor.r"></app-value-slider>
+    <app-value-slider (valueChangeEvent)="valueChange($event)" [label]="'G'" [min]="0" [max]="255" [value]="selectedColor.g"></app-value-slider>
+    <app-value-slider (valueChangeEvent)="valueChange($event)" [label]="'B'" [min]="0" [max]="255" [value]="selectedColor.b"></app-value-slider>
+    <app-value-slider
+        (valueChangeEvent)="valueChange($event)"
+        [label]="'Alpha'"
+        [min]="0"
+        [max]="1"
+        [value]="selectedAlpha"
+        [step]="0.01"
+    ></app-value-slider>
+</div>
+
+<app-color-textbox [hex]="hexColor" (hexChangeEvent)="hexValueChange($event)"></app-color-textbox>
+
+<button (click)="chosePrimary()" mat-raised-button>Couleur primaire</button>
+<button (click)="choseSecondary()" mat-raised-button>Couleur secondaire</button>
+
+<app-previous-colors></app-previous-colors>

@@ -29,6 +29,12 @@ export class SidebarComponent implements OnInit {
     toolIconClicked(toolSettings: ToolSettings): void {
         this.toolHandlerService.setTool(toolSettings.toolId);
         this.selectedToolId = toolSettings.toolId;
+        this.toolHandlerService.openColorPicker = false;
+    }
+
+    openColorPicker() {
+      this.selectedToolId = "None";
+      this.toolHandlerService.openColorPicker = true;
     }
 
     emitClickEvent(toolSettings: ToolSettings): void {

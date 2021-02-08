@@ -1,0 +1,32 @@
+.parent {
+    position: relative;
+    background-color: transparent;
+    margin: 0px;
+}
+
+.primaryColor {
+    position: absolute;
+    border: 1px solid black;
+    z-index: 2;
+}
+
+.secondaryColor {
+    position: absolute;
+    border: 1px solid black;
+    z-index: 1;
+    cursor: pointer;
+}
+
+mat-icon {
+    position: absolute;
+    z-index: 2;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+:host {
+    margin: 5px;
+}

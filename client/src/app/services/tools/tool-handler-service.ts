@@ -9,6 +9,7 @@ import { RectangleService } from '@app/services/tools/rectangle-service';
     providedIn: 'root',
 })
 export class ToolHandlerService {
+    openColorPicker: boolean = false;
     private TOOLS: Map<string, Tool> = new Map();
     currentTool: Tool;
 

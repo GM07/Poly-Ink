@@ -16,6 +16,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { NewDrawingComponent } from './components/canvas-reset/canvas-reset.component';
 import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.component';
+import { ColorPickerModule } from './components/color-picker/color-picker.module';
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
@@ -54,6 +55,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         MatSidenavModule,
         MatListModule,
         MatExpansionModule,
+        ColorPickerModule,
         MatDividerModule,
         MatSliderModule,
         MatInputModule,

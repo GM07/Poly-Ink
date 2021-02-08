@@ -1,0 +1,28 @@
+<div class="parent" [style.width]="width + 'px'" [style.height]="height + 'px'">
+  <div class="colorIcon">
+    <div
+      class="primaryColor"
+      [style.background]="primaryColor"
+      [style.width]="colorPreviewWidth + 'px'"
+      [style.height]="colorPreviewHeight + 'px'"
+    ></div>
+    <div
+      class="secondaryColor"
+      [style.background]="secondaryColor"
+      [style.width]="colorPreviewWidth + 'px'"
+      [style.height]="colorPreviewHeight + 'px'"
+      [style.top]="colorPreviewOffsetHeight + 'px'"
+      [style.left]="colorPreviewOffsetWidth + 'px'"
+    ></div>
+  </div>
+  <mat-icon
+    [style.font-size]="swapIconSize + 'px'"
+    [style.height]="swapIconSize + 'px'"
+    [style.width]="swapIconSize + 'px'"
+    [style.top]="swapIconOffsetTop + 'px'"
+    [style.left]="swapIconOffsetLeft + 'px'"
+    (click)="swap()"
+  >
+    autorenew
+  </mat-icon>
+</div>

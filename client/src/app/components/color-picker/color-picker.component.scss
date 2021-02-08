@@ -1,0 +1,21 @@
+div {
+    display: flex;
+}
+
+.color-icon {
+    justify-content: space-between;
+}
+.vertical {
+    flex-direction: column;
+}
+
+.action-buttons {
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px;
+}
+
+button {
+    margin: 5px;
+    text-align: center;
+}
