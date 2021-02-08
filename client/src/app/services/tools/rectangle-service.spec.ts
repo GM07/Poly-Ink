@@ -195,31 +195,31 @@ describe('RectangleService', () => {
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
-    it('should allow for filled with contour drawing type', () => {
-        service.rectangleMode = RectangleMode.FilledWithContour;
-        service.contourWidth = 1;
-        service.strokeStyle = '#000000';
-        service.fillStyle = '#010101';
-        service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
-        service.onMouseUp(mouseEvent);
-        expect(drawRectangleSpy).toHaveBeenCalled();
+    // it('should allow for filled with contour drawing type', () => {
+    //     service.rectangleMode = RectangleMode.FilledWithContour;
+    //     service.contourWidth = 1;
+    //     service.strokeStyle = '#000000';
+    //     service.fillStyle = '#010101';
+    //     service.onMouseDown(mouseEvent);
+    //     mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+    //     service.onMouseUp(mouseEvent);
+    //     expect(drawRectangleSpy).toHaveBeenCalled();
 
-        // Border is present
-        let imageData: ImageData = baseCtxStub.getImageData(1, 1, 1, 1);
-        expect(imageData.data[0]).toEqual(0); // R
-        expect(imageData.data[1]).toEqual(0); // G
-        expect(imageData.data[2]).toEqual(0); // B
-        expect(imageData.data[ALPHA]).not.toEqual(0); // A
+    //     // Border is present
+    //     let imageData: ImageData = baseCtxStub.getImageData(1, 1, 1, 1);
+    //     expect(imageData.data[0]).toEqual(0); // R
+    //     expect(imageData.data[1]).toEqual(0); // G
+    //     expect(imageData.data[2]).toEqual(0); // B
+    //     expect(imageData.data[ALPHA]).not.toEqual(0); // A
 
-        // Inside is present
-        // tslint:disable-next-line:no-magic-numbers
-        imageData = baseCtxStub.getImageData(2, 2, 20, 20);
-        expect(imageData.data[0]).toEqual(1); // R
-        expect(imageData.data[1]).toEqual(1); // G
-        expect(imageData.data[2]).toEqual(1); // B
-        expect(imageData.data[ALPHA]).not.toEqual(0); // A
-    });
+    //     // Inside is present
+    //     // tslint:disable-next-line:no-magic-numbers
+    //     imageData = baseCtxStub.getImageData(2, 2, 20, 20);
+    //     expect(imageData.data[0]).toEqual(1); // R
+    //     expect(imageData.data[1]).toEqual(1); // G
+    //     expect(imageData.data[2]).toEqual(1); // B
+    //     expect(imageData.data[ALPHA]).not.toEqual(0); // A
+    // });
 
     it('should do nothing with an unknown mode', () => {
         service.rectangleMode = {} as RectangleMode;
