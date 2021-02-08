@@ -157,6 +157,8 @@ export class EllipseService extends Tool {
         }
 
         ctx.strokeStyle = this.strokeStyleIn;
+        ctx.lineCap = 'round' as CanvasLineCap;
+        ctx.lineJoin = 'round' as CanvasLineJoin;
 
         ctx.beginPath();
         switch (this.ellipseMode) {

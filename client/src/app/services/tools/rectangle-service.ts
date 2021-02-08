@@ -144,6 +144,7 @@ export class RectangleService extends Tool {
         ctx.lineWidth = this.lineWidthIn;
         ctx.strokeStyle = this.strokeStyleIn;
         ctx.fillStyle = this.fillStyleIn;
+        ctx.lineJoin = 'miter' as CanvasLineJoin;
         ctx.beginPath();
 
         switch (this.rectangleMode) {
