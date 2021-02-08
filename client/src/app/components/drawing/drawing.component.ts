@@ -42,6 +42,11 @@ export class DrawingComponent implements AfterViewInit {
         this.toolHandlerService.onMouseDown(event);
     }
 
+    @HostListener('dblclick', ['$event'])
+    onDoubleClick(event: MouseEvent): void {
+        this.toolHandlerService.onDoubleClick(event);
+    }
+
     @HostListener('document:mouseup', ['$event'])
     onMouseUp(event: MouseEvent): void {
         this.toolHandlerService.onMouseUp(event);
