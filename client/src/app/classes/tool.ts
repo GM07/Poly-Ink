@@ -10,24 +10,6 @@ export abstract class Tool {
     shortCutKey: string;
     toolID: string;
 
-    /**
-     * Types d'entrées acceptées:
-     * "couleur";
-     * "#FFFFFF" ou #FFF;
-     * "rgb(int, int, int)";
-     * "rgba(int, int, int, 1.0)";
-     */
-    static isColorValid(color: string): boolean {
-        let colorIsValid = false;
-        const style = new Option().style;
-        style.color = color;
-        colorIsValid = colorIsValid || style.color === color;
-        colorIsValid = colorIsValid || /^#([0-9A-F]{3}){1,2}$/.test(color);
-        colorIsValid = colorIsValid || /^rgb\((\d+),\s?(\d+),\s?(\d+)\)$/.test(color);
-        colorIsValid = colorIsValid || /^rgba\((\d+,\s?){3}(1(\.0+)?|0*(\.\d+))\)$/.test(color);
-        return colorIsValid;
-    }
-
     isInCanvas(event: MouseEvent): boolean {
         const clientRect = this.drawingService.canvas.getBoundingClientRect();
         const left = clientRect.x;

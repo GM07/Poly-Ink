@@ -93,23 +93,7 @@ describe('PencilService', () => {
         expect(drawLineSpy).toHaveBeenCalled();
     });
 
-    it('Should allow for color change', () => {
-        service.strokeStyle = 'purple';
-        expect(service.strokeStyle).toEqual('purple');
-        service.strokeStyle = '#FF0000';
-        expect(service.strokeStyle).toEqual('#FF0000');
-        service.strokeStyle = 'rgb(1, 2, 3)';
-        expect(service.strokeStyle).toEqual('rgb(1, 2, 3)');
-        service.strokeStyle = 'rgba(1, 2, 4, 0.5)';
-        expect(service.strokeStyle).toEqual('rgba(1, 2, 4, 0.5)');
-        service.strokeStyle = '#000000';
-        service.strokeStyle = 'NimporteQuoi';
-        expect(service.strokeStyle).not.toEqual('NimporteQuoi');
-        expect(service.strokeStyle).toEqual('#000000');
-    });
-
     it('should not draw a line between the points where it left and entered the canvas', () => {
-        service.strokeStyle = '#000000';
         service.lineWidth = 2;
         let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);
@@ -181,7 +165,6 @@ describe('PencilService', () => {
     });
 
     it('Should draw a single pixel if the user clicked once with the smallest size, without moving', () => {
-        service.strokeStyle = 'black';
         service.lineWidth = 1;
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
@@ -203,7 +186,6 @@ describe('PencilService', () => {
 
     // Exemple de test d'intégration qui est quand même utile
     it(' should change the pixel of the canvas ', () => {
-        service.strokeStyle = '#000000';
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 0, button: 0 } as MouseEvent;

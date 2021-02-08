@@ -37,6 +37,13 @@ export class ColorService {
         this.previous.unshift(this.primary);
     }
 
+    get primaryRgba(): string {
+        return this.primary.toRgbaString(this.primaryColorAlpha);
+    }
+    get secondaryRgba(): string {
+        return this.secondary.toRgbaString(this.secondaryColorAlpha);
+    }
+
     set primaryColor(color: Color) {
         this.primary = color.clone();
         this.addToPreviousColors(this.primary);

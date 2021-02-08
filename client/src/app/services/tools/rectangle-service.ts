@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
 import { Vec2 } from '@app/classes/vec2';
+import { ColorService } from '@app/components/color-picker/color.service';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
@@ -19,37 +20,17 @@ export enum RectangleMode {
     providedIn: 'root',
 })
 export class RectangleService extends Tool {
-    private strokeStyleIn: string;
-    private fillStyleIn: string;
     private mouseUpCoord: Vec2;
     private shiftPressed: boolean;
     private lineWidthIn: number;
     rectangleMode: RectangleMode;
 
-    constructor(drawingService: DrawingService) {
+    constructor(drawingService: DrawingService, private colorService: ColorService) {
         super(drawingService);
         this.shortCutKey = '1';
-        this.strokeStyleIn = 'black';
-        this.fillStyleIn = 'black';
         this.shiftPressed = false;
         this.lineWidthIn = 1;
         this.rectangleMode = RectangleMode.FilledWithContour;
-    }
-
-    set strokeStyle(color: string) {
-        if (Tool.isColorValid(color)) this.strokeStyleIn = color;
-    }
-
-    get strokeStyle(): string {
-        return this.strokeStyleIn;
-    }
-
-    set fillStyle(color: string) {
-        if (Tool.isColorValid(color)) this.fillStyleIn = color;
-    }
-
-    get fillStyle(): string {
-        return this.fillStyleIn;
     }
 
     set contourWidth(width: number) {
@@ -142,8 +123,8 @@ export class RectangleService extends Tool {
             width = Math.sign(width) * Math.abs(height);
         }
         ctx.lineWidth = this.lineWidthIn;
-        ctx.strokeStyle = this.strokeStyleIn;
-        ctx.fillStyle = this.fillStyleIn;
+        ctx.strokeStyle = this.colorService.secondaryRgba;
+        ctx.fillStyle = this.colorService.primaryRgba;
         ctx.beginPath();
 
         switch (this.rectangleMode) {
