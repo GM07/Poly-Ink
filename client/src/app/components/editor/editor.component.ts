@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
+import { NewDrawingConstants } from '@app/classes/tool_settings/tools.constants';
 
 @Component({
     selector: 'app-editor',
@@ -13,8 +14,8 @@ export class EditorComponent {
         //
     }
 
-    executeAction(action: string): void {
-        if (action === 'Nouveau Dessin') {
+    resetDrawing(toolID: string): void {
+        if (toolID === NewDrawingConstants.TOOL_ID) {
             this.newDrawingMenu.createNewDrawing(false);
         }
     }
