@@ -4,11 +4,6 @@ import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
-export enum Key {
-    Released = 0,
-    Pressed = 1,
-}
-
 export enum RectangleMode {
     Contour = 0,
     Filled = 1,
