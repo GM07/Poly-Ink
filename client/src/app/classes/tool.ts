@@ -8,6 +8,7 @@ export abstract class Tool {
     mouseDownCoord: Vec2;
     mouseDown: boolean = false;
     shortCutKey: string;
+    toolID: string;
 
     /**
      * Types d'entrées acceptées:

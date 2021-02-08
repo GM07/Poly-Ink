@@ -8,24 +8,44 @@ import { PencilService } from '@app/services/tools/pencil-service';
 import { RectangleService } from '@app/services/tools/rectangle-service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
 import { SettingsHandlerComponent } from './settings-handler.component';
+import * as ToolsConstants from '@app/classes/tool_settings/tools.constants';
 
 class MockToolHandler extends ToolHandlerService {
+    TOOLS_MOCK: Map<string, Tool> = new Map();
+
     constructor(pencilService: PencilService, lineService: LineService, rectangleService: RectangleService) {
         super(pencilService, lineService, rectangleService);
+        this.TOOLS_MOCK.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
+        this.TOOLS_MOCK.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
+        this.TOOLS_MOCK.set(ToolsConstants.AerosolToolConstants.TOOL_ID, pencilService);
+        this.TOOLS_MOCK.set(ToolsConstants.ColorToolConstants.TOOL_ID, pencilService);
+        this.TOOLS_MOCK.set(ToolsConstants.EllipseSelectionToolConstants.TOOL_ID, pencilService);
+        this.TOOLS_MOCK.set(ToolsConstants.EllipseToolConstants.TOOL_ID, pencilService);
+        this.TOOLS_MOCK.set(ToolsConstants.EraserToolConstants.TOOL_ID, pencilService);
+        this.TOOLS_MOCK.set(ToolsConstants.EyeDropperToolConstants.TOOL_ID, pencilService);
+        this.TOOLS_MOCK.set(ToolsConstants.FillToolConstants.TOOL_ID, pencilService);
+        this.TOOLS_MOCK.set(ToolsConstants.LassoToolConstants.TOOL_ID, pencilService);
+        this.TOOLS_MOCK.set(ToolsConstants.PolygoneToolConstants.TOOL_ID, pencilService);
+        this.TOOLS_MOCK.set(ToolsConstants.RectangleSelectionToolConstants.TOOL_ID, pencilService);
+        this.TOOLS_MOCK.set(ToolsConstants.RectangleToolConstants.TOOL_ID, rectangleService);
+        this.TOOLS_MOCK.set(ToolsConstants.StampToolConstants.TOOL_ID, pencilService);
+        this.TOOLS_MOCK.set(ToolsConstants.TextToolConstants.TOOL_ID, pencilService);
+        this.currentTool = this.TOOLS_MOCK.values().next().value;
     }
 
     getTool(): Tool {
         return this.currentTool;
     }
 
-    setTool(toolClass: typeof Tool): boolean {
-        for (const tool of this.TOOLS) {
-            if (tool !== this.currentTool && tool instanceof toolClass) {
-                this.currentTool = tool;
-                return true;
-            }
+    setTool(toolId: string): boolean {
+        const newCurrentTool: Tool | undefined = this.TOOLS_MOCK.get(toolId);
+
+        if (newCurrentTool !== undefined && newCurrentTool !== this.currentTool) {
+            this.currentTool = newCurrentTool;
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 }
 
@@ -62,12 +82,12 @@ describe('SettingsHandlerComponent', () => {
     });
 
     it('should change the return value of activeTab for LineConfigComponent when setTool(LineService) is called', () => {
-        toolHandlerService.setTool(LineService);
+        toolHandlerService.setTool(ToolsConstants.LineToolConstants.TOOL_ID);
         expect(component.activeTab === LineConfigComponent).toBeTruthy();
     });
 
     it('should change the return value of activeTab for RectangleConfigComponent when setTool(RectangleService) is called', () => {
-        toolHandlerService.setTool(RectangleService);
+        toolHandlerService.setTool(ToolsConstants.RectangleToolConstants.TOOL_ID);
         expect(component.activeTab === RectangleConfigComponent).toBeTruthy();
     });
 });

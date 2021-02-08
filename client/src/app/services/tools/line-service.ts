@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Geometry } from '@app/classes/math/geometry';
 import { Tool } from '@app/classes/tool';
+import { LineToolConstants } from '@app/classes/tool_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -9,8 +10,13 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
     providedIn: 'root',
 })
 export class LineService extends Tool {
+    constructor(drawingService: DrawingService) {
+        super(drawingService);
+        this.shortCutKey = 'l';
+    }
     static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
     static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;
+    readonly toolID: string = LineToolConstants.TOOL_ID;
     private points: Vec2[] = [];
     private pointToAdd: Vec2;
     private mousePosition: Vec2;
@@ -26,12 +32,6 @@ export class LineService extends Tool {
         ['Escape', false],
         ['Backspace', false],
     ]);
-
-    constructor(drawingService: DrawingService) {
-        super(drawingService);
-        this.shortCutKey = 'l';
-        // Doit changer ça...
-    }
 
     applyAttributes(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = this.color;
