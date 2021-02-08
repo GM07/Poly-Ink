@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,7 +19,7 @@ export class HomePageComponent implements OnInit {
     state: OpacityState = 'visible';
     showComponent: boolean = true;
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private zone: NgZone) {
         //
     }
 
@@ -30,7 +30,7 @@ export class HomePageComponent implements OnInit {
     // Function called when the create new drawing button is pressed
     createNewDrawing(): void {
         this.fadeOut();
-        this.router.navigateByUrl('editor');
+        this.zone.run(() => this.router.navigateByUrl('editor'));
     }
 
     backToMenu(): void {

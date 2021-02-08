@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
-import { PencilService } from '@app/services/tools/pencil-service';
+import { EllipseMode, EllipseService } from '@app/services/tools/ellipse-service';
 
 @Component({
     selector: 'app-ellipse-config',
@@ -8,24 +8,17 @@ import { PencilService } from '@app/services/tools/pencil-service';
     styleUrls: ['./ellipse-config.component.scss'],
 })
 export class EllipseConfigComponent extends ToolConfig {
-    traceType: string;
-    traceTypeTestIn: number;
+    ellipseModeIn: typeof EllipseMode = EllipseMode;
+    traceTypeIn: EllipseMode;
 
-    // TODO Changer pencilService pour ellipseService
-    constructor(public service: PencilService) {
+    constructor(public ellipseService: EllipseService) {
         super();
-        this.traceType = 'Contour';
-        // this.traceTypeTestIn = 0;
+        this.traceTypeIn = EllipseMode.Contour;
     }
 
-    /*TODO implementer cette fonction quand ellipse sera integre
-    traceTypeTest(ellipseMode: number) {
-        this.traceTypeTestIn = ellipseMode;
-        this.ellipseService.ellipseMode = this.traceTypeTestIn;
-    }*/
-
-    toggleTraceType(traceType: string): void {
-        this.traceType = traceType;
+    toggleTraceType(traceType: EllipseMode): void {
+        this.traceTypeIn = traceType;
+        this.ellipseService.ellipseMode = traceType;
     }
 
     colorSliderLabel(value: number): string {

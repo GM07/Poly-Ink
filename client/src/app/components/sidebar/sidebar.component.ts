@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, NgZone, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import * as CommonFileSettings from '@app/classes/tool_settings/index-bottom';
 import * as CommonToolSettings from '@app/classes/tool_settings/index-top';
 import { ToolSettings } from '@app/classes/tool_settings/tool-settings';
@@ -13,8 +14,12 @@ export class SidebarComponent implements OnInit {
     selectedToolId: string = PencilToolConstants.TOOL_ID;
     @Output() settingClicked: EventEmitter<string> = new EventEmitter<string>();
 
-    constructor(toolHandlerService: ToolHandlerService) {
+    constructor(toolHandlerService: ToolHandlerService, private router: Router, private zone: NgZone) {
         this.toolHandlerService = toolHandlerService;
+    }
+
+    backToMenu(): void {
+        this.zone.run(() => this.router.navigateByUrl('home'));
     }
 
     ngOnInit(): void {

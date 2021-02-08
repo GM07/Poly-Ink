@@ -120,9 +120,6 @@ export class LineService extends Tool {
             if (this.points.length >= 2) {
                 this.points.pop();
                 this.handleLinePreview();
-            } else if (this.points.length === 1) {
-                this.points.pop();
-                this.drawingService.clearCanvas(this.drawingService.previewCtx);
             }
         }
     }
@@ -204,6 +201,8 @@ export class LineService extends Tool {
         }
 
         if (closed) {
+            ctx.beginPath();
+            ctx.moveTo(this.getLastPoint().x, this.getLastPoint().y);
             ctx.lineTo(this.points[0].x, this.points[0].y);
             ctx.stroke();
         }
