@@ -138,7 +138,7 @@ export class RectangleService extends Tool {
         let width: number = this.mouseUpCoord.x - this.mouseDownCoord.x;
         let height: number = this.mouseUpCoord.y - this.mouseDownCoord.y;
         if (this.shiftPressed) {
-            height = Math.sign(height) * Math.max(Math.abs(width), Math.abs(height));
+            height = Math.sign(height) * Math.min(Math.abs(width), Math.abs(height));
             width = Math.sign(width) * Math.abs(height);
         }
         ctx.lineWidth = this.lineWidthIn;
