@@ -38,14 +38,14 @@ describe('LineConfigComponent', () => {
     });
 
     it('should get max value of slider', async () => {
-        const max = 100;
+        const max = 50;
         const slider = await loader.getHarness(MatSliderHarness);
         expect(await slider.getMaxValue()).toBe(max);
     });
 
     it('should be able to set value of slider', async () => {
-        const defaultValue = 75;
-        const setValue = 99;
+        const defaultValue = 12;
+        const setValue = 15;
         const slider = await loader.getHarness(MatSliderHarness);
         expect(await slider.getValue()).toBe(defaultValue);
 
@@ -64,13 +64,13 @@ describe('LineConfigComponent', () => {
     });
 
     it('should load button with exact text', async () => {
-        const buttons = await loader.getAllHarnesses(buttonHarness.with({ text: 'Normal' }));
+        const buttons = await loader.getAllHarnesses(buttonHarness.with({ text: 'Sans jonction' }));
         expect(buttons.length).toBe(1);
-        expect(await buttons[0].getText()).toBe('Normal');
+        expect(await buttons[0].getText()).toBe('Sans jonction');
     });
 
     it('withJunctionPoint should be false when normal button is clicked ', async () => {
-        const button = await loader.getHarness(buttonHarness.with({ text: 'Normal' }));
+        const button = await loader.getHarness(buttonHarness.with({ text: 'Sans jonction' }));
         await button.click();
         expect(fixture.componentInstance.withJunctionPoint).toBe(false);
     });

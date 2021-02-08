@@ -20,18 +20,12 @@
     <div class="textFormatForSlider">
         <mat-slider
             min="1"
-            max="100"
+            max="50"
             [(ngModel)]="rectangleService.contourWidth"
             thumbLabel
             [displayWith]="colorSliderLabel">
         </mat-slider>
+        {{rectangleService.contourWidth}}px
     </div>
-    <mat-form-field class="textFormat">
-        <input matInput 
-            type="number"
-            min="1" max="100"
-            [(ngModel)]="rectangleService.contourWidth">
-        <span matSuffix>px</span>
-    </mat-form-field>
     <mat-divider></mat-divider>
 </div>

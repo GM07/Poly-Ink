@@ -70,9 +70,9 @@ describe('RectangleService', () => {
     it('should change the contour size', () => {
         service.contourWidth = 2;
         expect(service.contourWidth).toEqual(2);
-        const max = 100;
+        const max = 50;
         const min = 1;
-        const overMax = 101;
+        const overMax = 51;
         service.contourWidth = overMax;
         expect(service.contourWidth).toEqual(max);
         const underMin = 0;
