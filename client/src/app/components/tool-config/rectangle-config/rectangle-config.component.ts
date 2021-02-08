@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
-import { RectangleService } from '@app/services/tools/rectangle-service';
+import { RectangleMode, RectangleService } from '@app/services/tools/rectangle-service';
 
 @Component({
     selector: 'app-rectangle-config',
@@ -8,16 +8,17 @@ import { RectangleService } from '@app/services/tools/rectangle-service';
     styleUrls: ['./rectangle-config.component.scss'],
 })
 export class RectangleConfigComponent extends ToolConfig {
-    traceTypeTestIn: number;
+    rectangleModeIn: typeof RectangleMode = RectangleMode;
+    traceTypeIn: RectangleMode;
 
     constructor(public rectangleService: RectangleService) {
         super();
-        this.traceTypeTestIn = 0;
+        this.traceTypeIn = RectangleMode.Contour;
     }
 
-    traceTypeTest(rectangleMode: number): void {
-        this.traceTypeTestIn = rectangleMode;
-        this.rectangleService.rectangleMode = this.traceTypeTestIn;
+    toggleTraceType(rectangleMode: RectangleMode): void {
+        this.traceTypeIn = rectangleMode;
+        this.rectangleService.rectangleMode = rectangleMode;
     }
 
     colorSliderLabel(value: number): string {

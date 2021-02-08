@@ -22,9 +22,9 @@ export class EllipseService extends Tool {
     private strokeStyleIn: string;
     private fillStyleIn: string;
     private mouseUpCoord: Vec2;
-    private shiftPressed: boolean = false;
-    private lineWidthIn: number = 5;
-    ellipseMode: EllipseMode = EllipseMode.FilledWithContour;
+    private shiftPressed: boolean;
+    private lineWidthIn: number;
+    ellipseMode: EllipseMode;
 
     constructor(drawingService: DrawingService) {
         super(drawingService);
@@ -33,7 +33,7 @@ export class EllipseService extends Tool {
         this.fillStyleIn = 'black';
         this.shiftPressed = false;
         this.lineWidthIn = 1;
-        this.ellipseMode = EllipseMode.Filled;
+        this.ellipseMode = EllipseMode.Contour;
     }
 
     set strokeStyle(color: string) {
