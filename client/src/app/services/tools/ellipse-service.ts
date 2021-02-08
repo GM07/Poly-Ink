@@ -142,11 +142,11 @@ export class EllipseService extends Tool {
         let centerY: number = this.mouseDownCoord.y + radiusY;
 
         if (this.shiftPressed) {
-            const maxRadius = Math.max(Math.abs(radiusX), Math.abs(radiusY));
-            centerX = this.mouseDownCoord.x + Math.sign(radiusX) * maxRadius;
-            centerY = this.mouseDownCoord.y + Math.sign(radiusY) * maxRadius;
-            radiusX = maxRadius;
-            radiusY = maxRadius;
+            const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
+            centerX = this.mouseDownCoord.x + Math.sign(radiusX) * minRadius;
+            centerY = this.mouseDownCoord.y + Math.sign(radiusY) * minRadius;
+            radiusX = minRadius;
+            radiusY = minRadius;
         }
 
         const radiusXAbs = Math.abs(radiusX);
