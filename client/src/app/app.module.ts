@@ -41,6 +41,8 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         LineConfigComponent,
         PencilConfigComponent,
         SettingsHandlerComponent,
+        CanvasResizeComponent,
+        SidebarComponent,
     ],
     imports: [
         AppRoutingModule,
@@ -56,6 +58,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         MatExpansionModule,
         MatDividerModule,
         MatSliderModule,
+        MatIconModule,
         FormsModule,
     ],
     providers: [],
