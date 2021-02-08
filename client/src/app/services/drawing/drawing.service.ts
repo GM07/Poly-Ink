@@ -15,12 +15,15 @@ export class DrawingService {
 
     resizeCanvas(width: number, height: number): void {
         const memoryCanvas = document.createElement('canvas'); // canvas temporaire
+        const previewCanvas = document.createElement('canvas'); // canvas temporaire
         this.saveCanvas(memoryCanvas);
+        this.saveCanvas(previewCanvas);
         this.canvas.width = width;
         this.canvas.height = height;
         this.previewCanvas.width = width; // Redimensionnement du canvas
         this.previewCanvas.height = height;
         this.baseCtx.drawImage(memoryCanvas, 0, 0);
+        this.previewCtx.drawImage(previewCanvas, 0, 0);
 
         if (memoryCanvas.width < this.canvas.width || memoryCanvas.height < this.canvas.height) {
             this.drawWhite(memoryCanvas);
@@ -39,9 +42,11 @@ export class DrawingService {
     }
 
     drawWhite(memoryCanvas: HTMLCanvasElement): void {
+        const color = this.baseCtx.fillStyle;
         this.baseCtx.fillStyle = 'white';
         this.baseCtx.fillRect(memoryCanvas.width, 0, this.canvas.width - memoryCanvas.width, this.canvas.height);
         this.baseCtx.fillRect(0, memoryCanvas.height, this.canvas.width, this.canvas.height - memoryCanvas.height);
+        this.baseCtx.fillStyle = color;
     }
 
     initBackground(): void {

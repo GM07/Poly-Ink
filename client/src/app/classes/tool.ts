@@ -8,6 +8,7 @@ export abstract class Tool {
     mouseDownCoord: Vec2;
     mouseDown: boolean = false;
     shortCutKey: string;
+    toolID: string;
 
     /**
      * Types d'entrées acceptées:
@@ -38,6 +39,8 @@ export abstract class Tool {
     }
 
     onMouseDown(event: MouseEvent): void {}
+
+    onDoubleClick(event: MouseEvent): void {}
 
     onMouseUp(event: MouseEvent): void {}
 
