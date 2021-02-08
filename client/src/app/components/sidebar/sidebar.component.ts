@@ -1,9 +1,9 @@
 import { Component, EventEmitter, NgZone, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import * as CommonFileSettings from '@app/classes/tool_settings/index-bottom';
-import * as CommonToolSettings from '@app/classes/tool_settings/index-top';
+import { BOTTOM_TOOLS } from '@app/classes/tool_settings/index-bottom';
+import { TOP_TOOLS } from '@app/classes/tool_settings/index-top';
 import { ToolSettings } from '@app/classes/tool_settings/tool-settings';
-import { PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
+import { HIGHLIGHTED_COLOR, PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
 
 @Component({ selector: 'app-sidebar', templateUrl: './sidebar.component.html', styleUrls: ['./sidebar.component.scss'] })
@@ -12,6 +12,7 @@ export class SidebarComponent implements OnInit {
     bottomToolsSettings: ToolSettings[] = [];
     toolHandlerService: ToolHandlerService;
     selectedToolId: string = PencilToolConstants.TOOL_ID;
+    readonly HIGHLIGHTED_COLOR: string = HIGHLIGHTED_COLOR;
     @Output() settingClicked: EventEmitter<string> = new EventEmitter<string>();
 
     constructor(toolHandlerService: ToolHandlerService, private router: Router, private zone: NgZone) {
@@ -23,11 +24,11 @@ export class SidebarComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        Object.values(CommonToolSettings).forEach((setting) => {
-            this.topToolsSettings.push(new setting());
+        Object.values(TOP_TOOLS).forEach((setting) => {
+            this.topToolsSettings.push(setting);
         });
-        Object.values(CommonFileSettings).forEach((setting) => {
-            this.bottomToolsSettings.push(new setting());
+        Object.values(BOTTOM_TOOLS).forEach((setting) => {
+            this.bottomToolsSettings.push(setting);
         });
     }
 

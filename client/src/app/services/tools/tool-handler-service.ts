@@ -17,7 +17,6 @@ export class ToolHandlerService {
         this.TOOLS.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
         this.TOOLS.set(ToolsConstants.AerosolToolConstants.TOOL_ID, pencilService);
-        this.TOOLS.set(ToolsConstants.ColorToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.EllipseSelectionToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.EllipseToolConstants.TOOL_ID, ellipseService);
         this.TOOLS.set(ToolsConstants.EraserToolConstants.TOOL_ID, pencilService);
