@@ -9,11 +9,6 @@ export enum LeftMouse {
     Pressed = 1,
 }
 
-/**
- * Note: Pas besoin d'implémtenter le code pour commencer à dessiner un ligne quand le bouton de la souris
- * est enfoncé hors du canvas (Ref: Document de vision Polydessin 2 v1.0, p.10)
- */
-// Ceci est une implémentation de l'outil Crayon
 @Injectable({
     providedIn: 'root',
 })
@@ -68,7 +63,6 @@ export class EraserService extends Tool {
             const mousePosition = this.getPositionFromMouse(event);
             this.pathData[this.pathData.length - 1].push(mousePosition);
 
-            // On dessine sur le canvas de prévisualisation et on l'efface à chaque déplacement de la souris
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawLine(this.drawingService.previewCtx, this.pathData);
             this.drawBackgroundPoint(this.getPositionFromMouse(event), false);

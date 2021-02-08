@@ -33,7 +33,7 @@ describe('EraserService', () => {
 
         // Configuration du spy du service
         // tslint:disable:no-string-literal
-        service['drawingService'].baseCtx = baseCtxStub; // Jasmine doesnt copy properties with underlying data
+        service['drawingService'].baseCtx = baseCtxStub;
         service['drawingService'].previewCtx = previewCtxStub;
         service['drawingService'].canvas = canvasTestHelper.canvas;
 
@@ -96,7 +96,7 @@ describe('EraserService', () => {
         expect(drawLineSpy).toHaveBeenCalled();
     });
 
-    it('should not draw a line between the points where it left and entered the canvas', () => {
+    it('should not erase a line between the points where it left and entered the canvas', () => {
         service.lineWidth = 2;
         let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);
@@ -123,7 +123,7 @@ describe('EraserService', () => {
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
-    it('should stop drawing when the mouse is up', () => {
+    it('should stop erasing when the mouse is up', () => {
         let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.lineWidth = 1;
         service.onMouseDown(mouseEventLClick);
