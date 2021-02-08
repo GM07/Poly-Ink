@@ -22,7 +22,6 @@ describe('RectangleService', () => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
 
         TestBed.configureTestingModule({
-            
             providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
         });
 
