@@ -1,10 +1,10 @@
 <div class="container">
-    <app-sidebar></app-sidebar>
+    <app-sidebar (settingClicked)="resetDrawing($event)"></app-sidebar>
     <div class="drawing-container">
         <app-canvas-resize class="drawing" tabindex="0" ondragstart="return false;"> </app-canvas-resize>
     </div>
+    <app-canvas-reset #newCanvasMenu></app-canvas-reset>
 </div>
 <button id="back" mat-raised-button color="primary" (click)="backToMenu()">
     <mat-icon>home</mat-icon>
 </button>
->

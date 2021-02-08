@@ -53,7 +53,7 @@ export class EllipseService extends Tool {
     }
 
     set contourWidth(width: number) {
-        const max = 100;
+        const max = 50;
         this.lineWidthIn = Math.min(Math.max(width, 1), max);
     }
 

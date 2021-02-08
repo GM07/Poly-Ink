@@ -41,7 +41,7 @@ describe('PencilConfigComponent', () => {
     });
 
     it('should get max value of slider', async () => {
-        const max = 100;
+        const max = 50;
         const slider = await loader.getHarness(MatSliderHarness);
         expect(await slider.getMaxValue()).toBe(max);
     });
