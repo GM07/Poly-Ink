@@ -8,23 +8,22 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.component';
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
-import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
-    declarations: [AppComponent, EditorComponent, SidebarComponent, DrawingComponent, HomePageComponent, MainMenuComponent, CanvasResizeComponent],
+    declarations: [AppComponent, EditorComponent, SidebarComponent, DrawingComponent, HomePageComponent, CanvasResizeComponent],
     imports: [
         AppRoutingModule,
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule,
-        AppRoutingModule,
         MatButtonModule,
         MatIconModule,
         MatTooltipModule,
@@ -32,7 +31,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
         MatListModule,
         MatExpansionModule,
     ],
-    providers: [],
+    providers: [Router],
     bootstrap: [AppComponent],
 })
 export class AppModule {}
