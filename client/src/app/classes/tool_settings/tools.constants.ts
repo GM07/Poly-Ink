@@ -151,7 +151,7 @@ export const ICONS_PATHS = [
     ['line', '../../../assets/icons/line.svg'],
     ['polygone', '../../../assets/icons/polygone.svg'],
     ['rectangle-selection', '../../../assets/icons/rectangle-selection.svg'],
-    ['rectangle', '../../../assets/icons/rectangle'],
+    ['rectangle', '../../../assets/icons/rectangle.svg'],
     ['spray', '../../../assets/icons/spray.svg'],
     ['stamp', '../../../assets/icons/stamp.svg'],
     ['palette', '../../../assets/icons/palette.svg'],

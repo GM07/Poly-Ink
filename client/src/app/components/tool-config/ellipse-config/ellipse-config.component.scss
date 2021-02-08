@@ -1,0 +1,33 @@
+mat-slider {
+  width: 300px;
+}
+
+.textFormat {
+padding-left: 15px;
+padding-right: 15px;
+}
+
+.textFormatForSlider {
+padding-left: 8px;
+}
+
+.buttons {
+width:120px !important;
+}
+
+.textFormatButton {
+padding-left: 15px;
+padding-right: 15px;
+padding-bottom: 8px;
+}
+
+::ng-deep .mat-slider-wrapper {
+  .mat-slider-thumb-container {
+    .mat-slider-thumb-label {
+      width: 34px;
+      height: 34px;
+      top: -41px;
+      right: -15px;
+    }
+  }
+}
