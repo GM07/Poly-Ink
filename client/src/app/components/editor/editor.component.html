@@ -1,7 +1,10 @@
 <div class="container">
     <app-sidebar></app-sidebar>
     <div class="drawing-container">
-        <app-canvas-resize class="drawing" tabindex="0" ondragstart="return false;">
-        </app-canvas-resize>
+        <app-canvas-resize class="drawing" tabindex="0" ondragstart="return false;"> </app-canvas-resize>
     </div>
 </div>
+<button id="back" mat-raised-button color="primary" (click)="backToMenu()">
+    <mat-icon>home</mat-icon>
+</button>
+>
