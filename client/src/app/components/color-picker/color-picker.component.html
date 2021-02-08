@@ -23,7 +23,8 @@
 
 <div class="action-buttons">
   <app-color-textbox [hex]="hexColor" (hexChangeEvent)="hexValueChange($event)"></app-color-textbox>
-  <button (click)="choseColor()" mat-raised-button>Apply</button>
 </div>
+<button (click)="chosePrimary()" mat-raised-button>Définir la couleur primaire</button>
+<button (click)="choseSecondary()" mat-raised-button>Définir la couleur secondaire</button>
 
 <app-previous-colors></app-previous-colors>

@@ -38,3 +38,7 @@
     margin-top: 2px;
     margin-bottom: 2px;
 }
+
+:host ::ng-deep app-color-icon .parent {
+  margin: 5px;
+}

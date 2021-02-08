@@ -25,6 +25,8 @@ export class ValueSliderComponent {
     @Output()
     valueChangeEvent: EventEmitter<[string, number]> = new EventEmitter<[string, number]>();
 
+    constructor() {}
+
     emitValue(): void {
         this.valueChangeEvent.emit([this.label, this.value]);
     }

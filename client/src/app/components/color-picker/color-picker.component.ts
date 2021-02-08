@@ -1,4 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
+import { ToolConfig } from '@app/classes/tool-config';
 import { Subscription } from 'rxjs';
 import { Color } from './color';
 import { ColorService } from './color.service';
@@ -8,7 +9,7 @@ import { ColorService } from './color.service';
     templateUrl: './color-picker.component.html',
     styleUrls: ['./color-picker.component.scss'],
 })
-export class ColorPickerComponent implements OnDestroy {
+export class ColorPickerComponent implements OnDestroy, ToolConfig {
     selectedColor: Color;
     hexColor: string;
     private selectedColorSubscription: Subscription;
@@ -71,8 +72,13 @@ export class ColorPickerComponent implements OnDestroy {
         this.colorService.selectedColorSliders = this.selectedColor;
     }
 
-    choseColor(): void {
+    chosePrimary(): void {
         this.colorService.primaryColor = this.selectedColor;
         this.colorService.primaryColorAlpha = this.selectedAlpha;
+    }
+
+    choseSecondary(): void {
+      this.colorService.secondaryColor = this.selectedColor;
+      this.colorService.secondaryColorAlpha = this.selectedAlpha;
     }
 }

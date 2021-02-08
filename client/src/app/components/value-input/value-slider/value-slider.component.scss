@@ -1,11 +1,13 @@
 div {
-  margin: 5px;
-  width: 100%;
+  margin: 1%;
+  width: 98%;
   display: flex;
   justify-content: space-between;
 }
 
 :host ::ng-deep mat-slider,
 :host ::ng-deep .mat-slider-wrapper {
-  width: 100%;
+  width: 95%;
+  margin: 2.5%;
+  padding: 0;
 }

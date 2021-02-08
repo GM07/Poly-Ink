@@ -21,6 +21,6 @@ import { PreviousColorsComponent } from './previous-colors/previous-colors.compo
         ColorTextboxComponent,
         PreviousColorsComponent,
     ],
-    exports: [ColorPickerComponent],
+    exports: [ColorPickerComponent, ColorIconComponent],
 })
 export class ColorPickerModule {}
