@@ -1,3 +1,4 @@
+import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -8,7 +9,9 @@ import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resi
 import { DrawingComponent } from '@app/components/drawing/drawing.component';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
-import { SidebarComponent } from '@app/components/sidebar/sidebar.component';
+
+@Component({ selector: 'app-sidebar', template: '' })
+class StubSidebarComponent {}
 
 describe('EditorComponent', () => {
     let component: EditorComponent;
@@ -17,7 +20,7 @@ describe('EditorComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [HomePageComponent, EditorComponent, DrawingComponent, CanvasResizeComponent, SidebarComponent, NewDrawingComponent],
+            declarations: [HomePageComponent, EditorComponent, DrawingComponent, CanvasResizeComponent, StubSidebarComponent, NewDrawingComponent],
             imports: [
                 RouterTestingModule.withRoutes([
                     { path: 'home', component: HomePageComponent },

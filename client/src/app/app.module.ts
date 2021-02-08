@@ -58,6 +58,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         MatExpansionModule,
         MatDividerModule,
         MatSliderModule,
+        MatIconModule,
         FormsModule,
     ],
     providers: [],
