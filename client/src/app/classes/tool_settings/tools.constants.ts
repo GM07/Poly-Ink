@@ -130,7 +130,7 @@ export const TOP_TOOLS_CONSTANTS = [
     EllipseSelectionToolConstants,
     LassoToolConstants,
 ];
-
+export const HIGHLIGHTED_COLOR = 'rgba(148, 152, 153, 0.342)';
 export const BOTTOM_TOOLS_CONSTANTS = [SaveFileToolConsants, ExportFileToolConstants];
 
 export const ICONS_PATHS = [

@@ -9,7 +9,7 @@
                 mat-icon-button
                 matTooltipPosition="right"
                 [@.disabled]="true"
-                [style.background]="tool.toolId == selectedToolId ? 'rgba(148, 152, 153, 0.342)' : 'white'"
+                [style.background]="tool.toolId == selectedToolId ? HIGHLIGHTED_COLOR : 'white'"
             >
                 <mat-icon svgIcon="{{ tool.iconName }}"></mat-icon>
             </button>
@@ -24,7 +24,7 @@
                 mat-icon-button
                 matTooltipPosition="right"
                 [@.disabled]="true"
-                [style.background]="tool.toolId == selectedToolId ? 'rgba(148, 152, 153, 0.342)' : 'white'"
+                [style.background]="tool.toolId == selectedToolId ? HIGHLIGHTED_COLOR : 'white'"
             >
                 <mat-icon svgIcon="{{ tool.iconName }}"></mat-icon>
             </button>

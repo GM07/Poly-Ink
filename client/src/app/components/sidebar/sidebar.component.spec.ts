@@ -7,6 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LineSettings } from '@app/classes/tool_settings/line-settings';
 import { LineToolConstants, PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
+import { SettingsHandlerComponent } from '@app/components/tool-config/settings-handler/settings-handler.component';
 import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
@@ -24,9 +25,19 @@ describe('SidebarComponent', () => {
         const lineSpy = jasmine.createSpyObj('LineService', ['stopDrawing'], { toolID: LineToolConstants.TOOL_ID });
 
         TestBed.configureTestingModule({
-            declarations: [SidebarComponent, MatIcon],
+            declarations: [SidebarComponent, MatIcon, SettingsHandlerComponent],
             imports: [MatTooltipModule, MatListModule, MatIconModule, BrowserAnimationsModule, MatIconTestingModule, MatSidenavModule],
-            providers: [{ provide: PencilService, useValue: pencilSpy }, { provide: LineService, useValue: lineSpy }, ToolHandlerService],
+            providers: [
+                {
+                    provide: PencilService,
+                    useValue: pencilSpy,
+                },
+                {
+                    provide: LineService,
+                    useValue: lineSpy,
+                },
+                ToolHandlerService,
+            ],
         }).compileComponents();
     }));
 
