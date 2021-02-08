@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -9,7 +10,6 @@ import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resi
 import { DrawingComponent } from '@app/components/drawing/drawing.component';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
-import { MatIconModule } from '@angular/material/icon';
 
 @Component({ selector: 'app-sidebar', template: '' })
 class StubSidebarComponent {}
@@ -46,10 +46,10 @@ describe('EditorComponent', () => {
         expect(component).toBeTruthy();
     });
     it('should create a new drawing when calling reset drawing', () => {
-      component.newDrawingMenu = newDrawingComponent;
-      component.resetDrawing(NewDrawingConstants.TOOL_ID);
-      expect(newDrawingComponent.createNewDrawing).toHaveBeenCalled();
-  });
+        component.newDrawingMenu = newDrawingComponent;
+        component.resetDrawing(NewDrawingConstants.TOOL_ID);
+        expect(newDrawingComponent.createNewDrawing).toHaveBeenCalled();
+    });
     it('should not create a new drawing when calling with invalid argument', () => {
         component.newDrawingMenu = newDrawingComponent;
         component.resetDrawing('InvalidArgument');
