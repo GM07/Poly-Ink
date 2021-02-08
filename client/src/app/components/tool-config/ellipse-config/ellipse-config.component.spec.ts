@@ -39,14 +39,14 @@ describe('EllipseConfigComponent', () => {
     });
 
     it('should get max value of slider', async () => {
-        const max = 100;
+        const max = 50;
         const slider = await loader.getHarness(MatSliderHarness);
         expect(await slider.getMaxValue()).toBe(max);
     });
 
     it('should be able to set value of slider', async () => {
         const defaultValue = 1;
-        const setValue = 78;
+        const setValue = 49;
         const slider = await loader.getHarness(MatSliderHarness);
         expect(await slider.getValue()).toBe(defaultValue);
 
