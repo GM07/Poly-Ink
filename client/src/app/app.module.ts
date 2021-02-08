@@ -1,9 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-// import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -56,10 +54,8 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         MatExpansionModule,
         MatDividerModule,
         MatSliderModule,
-        MatCardModule,
         MatInputModule,
         FormsModule,
-        ReactiveFormsModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
