@@ -1,15 +1,22 @@
-<div class="container">
-    <mat-action-list class="top-sidebar">
-        <button *ngFor="let tool of topToolsSettings" class="sidebar-item" matTooltip={{tool.infoBubble}}
-            mat-icon-button matTooltipPosition="right">
-            <mat-icon>{{tool.iconName}}</mat-icon>
-        </button>
-    </mat-action-list>
+<mat-drawer-container class="container">
+    <mat-drawer mode="side" opened>
+        <mat-action-list class="top-sidebar">
+            <button (click)="toolIconClicked(tool)" *ngFor="let tool of topToolsSettings"
+                class="sidebar-item icon-button" matTooltip={{tool.infoBubble}} mat-icon-button
+                matTooltipPosition="right" [@.disabled]="true"
+                [style.background]="tool.toolId == selectedToolId ?  'rgba(148, 152, 153, 0.342)' : 'white'">
+                <mat-icon svgIcon={{tool.iconName}}></mat-icon>
+            </button>
+        </mat-action-list>
 
-    <mat-action-list class="bottom-sidebar">
-        <button *ngFor="let tool of bottomToolsSettings" class="sidebar-item" matTooltip={{tool.infoBubble}}
-            mat-icon-button matTooltipPosition="right">
-            <mat-icon>{{tool.iconName}}</mat-icon>
-        </button>
-    </mat-action-list>
-</div>
+        <mat-action-list class="bottom-sidebar">
+            <button (click)="toolIconClicked(tool)" *ngFor="let tool of bottomToolsSettings"
+                class="sidebar-item icon-button" matTooltip={{tool.infoBubble}} mat-icon-button
+                matTooltipPosition="right" [@.disabled]="true"
+                [style.background]="tool.toolId == selectedToolId ?  'rgba(148, 152, 153, 0.342)' : 'white'">
+                <mat-icon svgIcon={{tool.iconName}}></mat-icon>
+            </button>
+        </mat-action-list>
+    </mat-drawer>
+    <app-settings-handler></app-settings-handler>
+</mat-drawer-container>

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
+import { PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-
 export enum LeftMouse {
     Released = 0,
     Pressed = 1,
@@ -21,6 +21,7 @@ export class PencilService extends Tool {
     private pathData: Vec2[][];
     private strokeStyleIn: string = 'black';
     private lineWidthIn: number = 12;
+    readonly toolID: string = PencilToolConstants.TOOL_ID;
 
     constructor(drawingService: DrawingService) {
         super(drawingService);
@@ -47,7 +48,8 @@ export class PencilService extends Tool {
      * est fait pour avoir une valeur entière
      */
     set lineWidth(width: number) {
-        this.lineWidthIn = Math.max(Math.round(width), 1);
+        const max = 100;
+        this.lineWidthIn = Math.min(Math.max(width, 1), max);
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -73,8 +75,6 @@ export class PencilService extends Tool {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.drawBackgroundPoint(this.getPositionFromMouse(event));
-
         if (this.mouseDown) {
             const mousePosition = this.getPositionFromMouse(event);
             this.pathData[this.pathData.length - 1].push(mousePosition);
@@ -82,6 +82,9 @@ export class PencilService extends Tool {
             // On dessine sur le canvas de prévisualisation et on l'efface à chaque déplacement de la souris
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawLine(this.drawingService.previewCtx, this.pathData);
+        } else {
+            this.mouseDownCoord = this.getPositionFromMouse(event);
+            this.drawBackgroundPoint(this.getPositionFromMouse(event));
         }
     }
 
