@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EditorComponent } from '@app/components/editor/editor.component';
-import { HomePageComponent } from '@app/components/home-page.component';
+import { HomePageComponent } from '@app/components/home-page/home-page.component';
 
 describe('HomePageComponent', () => {
     let component: HomePageComponent;
