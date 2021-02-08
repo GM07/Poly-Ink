@@ -22,6 +22,7 @@ describe('RectangleService', () => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
 
         TestBed.configureTestingModule({
+            
             providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
         });
 
@@ -244,7 +245,7 @@ describe('RectangleService', () => {
         service.onMouseUp(mouseEvent);
 
         // tslint:disable-next-line:no-magic-numbers
-        const imageData: ImageData = baseCtxStub.getImageData(5, 5, 20, 20);
+        const imageData: ImageData = baseCtxStub.getImageData(20, 20, 5, 5);
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
