@@ -1,10 +1,3 @@
-export enum ColorToolConstants {
-    TOOL_ID = 'COULEUR',
-    TOOL_TITLE = 'Couleur',
-    INFO_BUBBLE = 'Couleur (???)',
-    ICON_NAME = 'palette',
-}
-
 export enum PencilToolConstants {
     TOOL_ID = 'PENCIL',
     TOOL_TITLE = 'Crayon',
@@ -115,7 +108,6 @@ export enum ExportFileToolConstants {
 }
 
 export const TOP_TOOLS_CONSTANTS = [
-    ColorToolConstants,
     PencilToolConstants,
     RectangleToolConstants,
     PolygoneToolConstants,
@@ -147,7 +139,6 @@ export const ICONS_PATHS = [
     ['rectangle', '../../../assets/icons/rectangle.svg'],
     ['spray', '../../../assets/icons/spray.svg'],
     ['stamp', '../../../assets/icons/stamp.svg'],
-    ['palette', '../../../assets/icons/palette.svg'],
     ['save', '../../../assets/icons/save.svg'],
     ['text', '../../../assets/icons/text.svg'],
     ['pencil', '../../../assets/icons/pencil.svg'],

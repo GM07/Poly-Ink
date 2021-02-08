@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import * as CommonFileSettings from '@app/classes/tool_settings/index-bottom';
-import * as CommonToolSettings from '@app/classes/tool_settings/index-top';
+import { BOTTOM_TOOLS } from '@app/classes/tool_settings/index-bottom';
+import { TOP_TOOLS } from '@app/classes/tool_settings/index-top';
 import { ToolSettings } from '@app/classes/tool_settings/tool-settings';
 import { HIGHLIGHTED_COLOR, PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
 import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
@@ -18,11 +18,11 @@ export class SidebarComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        Object.values(CommonToolSettings).forEach((setting) => {
-            this.topToolsSettings.push(new setting());
+        Object.values(TOP_TOOLS).forEach((setting) => {
+            this.topToolsSettings.push(setting);
         });
-        Object.values(CommonFileSettings).forEach((setting) => {
-            this.bottomToolsSettings.push(new setting());
+        Object.values(BOTTOM_TOOLS).forEach((setting) => {
+            this.bottomToolsSettings.push(setting);
         });
     }
 
