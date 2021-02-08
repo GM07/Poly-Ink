@@ -10,9 +10,13 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
     providedIn: 'root',
 })
 export class LineService extends Tool {
-    readonly toolID: string = LineToolConstants.TOOL_ID;
+    constructor(drawingService: DrawingService) {
+        super(drawingService);
+        this.shortCutKey = 'l';
+    }
     static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
     static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;
+    readonly toolID: string = LineToolConstants.TOOL_ID;
     private points: Vec2[] = [];
     private pointToAdd: Vec2;
     private mousePosition: Vec2;
@@ -28,11 +32,6 @@ export class LineService extends Tool {
         ['Escape', false],
         ['Backspace', false],
     ]);
-
-    constructor(drawingService: DrawingService) {
-        super(drawingService);
-        this.shortCutKey = 'l';
-    }
 
     applyAttributes(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = this.color;
