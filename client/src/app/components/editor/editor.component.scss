@@ -1,7 +1,7 @@
 .container {
-  overflow: visible;
-  display: flex;
-  background-color: lightgray;
+    overflow: visible;
+    display: flex;
+    background-color: lightgray;
 }
 
 .drawing-container {
@@ -15,4 +15,9 @@
     outline: none;
 }
 
-
+#back {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 16px;
+}
