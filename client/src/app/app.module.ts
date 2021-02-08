@@ -48,6 +48,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule,
+        AppRoutingModule,
         MatButtonModule,
         MatIconModule,
         MatTooltipModule,
