@@ -116,7 +116,7 @@ export class EraserService extends Tool {
         ctx.strokeStyle = 'rgba(255,255,255,1)';
         ctx.lineWidth = this.lineWidth;
         ctx.lineCap = 'square' as CanvasLineCap;
-        ctx.lineJoin = 'miter' as CanvasLineJoin;
+        ctx.lineJoin = 'bevel' as CanvasLineJoin;
 
         for (const paths of pathData) {
             // Cas spécial pour permettre de dessiner exactement un seul pixel (sinon il n'est pas visible)
@@ -126,7 +126,7 @@ export class EraserService extends Tool {
                 ctx.beginPath();
             } else {
                 for (const point of paths) {
-                    ctx.fillRect(point.x - this.lineWidthIn / 2, point.y - this.lineWidthIn / 2, this.lineWidthIn, this.lineWidthIn);
+                    ctx.lineTo(point.x, point.y);
                 }
                 ctx.stroke();
                 ctx.beginPath();

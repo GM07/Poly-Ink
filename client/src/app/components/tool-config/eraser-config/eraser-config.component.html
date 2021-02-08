@@ -10,12 +10,6 @@
         thumbLabel
         [displayWith]="colorSliderLabel">
     </mat-slider>
-    </div>
-    <mat-form-field class="textFormat">
-        <input matInput
-            type="number"
-            min="5" max="100"
-            [(ngModel)]="eraserService.lineWidth">
-        <span matSuffix>px</span>
-    </mat-form-field>
+    {{eraserService.lineWidth}}px
+  </div>
 </div>
