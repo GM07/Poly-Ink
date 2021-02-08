@@ -107,4 +107,20 @@ describe('DrawingComponent', () => {
         expect(mouseEventSpy).toHaveBeenCalled();
         expect(mouseEventSpy).toHaveBeenCalledWith(event);
     });
+
+    it(" should call the tool's double click event", () => {
+        const event = {} as MouseEvent;
+        const mouseEventSpy = spyOn(toolStub, 'onDoubleClick').and.callThrough();
+        component.onDoubleClick(event);
+        expect(mouseEventSpy).toHaveBeenCalled();
+        expect(mouseEventSpy).toHaveBeenCalledWith(event);
+    });
+
+    it(" should call the tool's key up event", () => {
+        const event = {} as KeyboardEvent;
+        const keyboardSpy = spyOn(toolStub, 'onKeyUp').and.callThrough();
+        component.onKeyUp(event);
+        expect(keyboardSpy).toHaveBeenCalled();
+        expect(keyboardSpy).toHaveBeenCalledWith(event);
+    });
 });
