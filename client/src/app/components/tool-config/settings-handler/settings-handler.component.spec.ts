@@ -5,6 +5,7 @@ import { LineConfigComponent } from '@app/components/tool-config/line-config/lin
 import { PencilConfigComponent } from '@app/components/tool-config/pencil-config/pencil-config.component';
 import { RectangleConfigComponent } from '@app/components/tool-config/rectangle-config/rectangle-config.component';
 import { SettingsHandlerComponent } from '@app/components/tool-config/settings-handler/settings-handler.component';
+import { EllipseService } from '@app/services/tools/ellipse-service';
 import { EraserService } from '@app/services/tools/eraser-service';
 import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
@@ -14,14 +15,19 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
 class MockToolHandler extends ToolHandlerService {
     TOOLS_MOCK: Map<string, Tool> = new Map();
 
-    constructor(pencilService: PencilService, lineService: LineService, rectangleService: RectangleService, eraserService: EraserService) {
-        super(pencilService, lineService, rectangleService, eraserService);
+    constructor(
+        pencilService: PencilService,
+        lineService: LineService,
+        rectangleService: RectangleService,
+        eraserService: EraserService,
+        ellipseService: EllipseService,
+    ) {
+        super(pencilService, lineService, rectangleService, ellipseService, eraserService);
         this.TOOLS_MOCK.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
         this.TOOLS_MOCK.set(ToolsConstants.AerosolToolConstants.TOOL_ID, pencilService);
-        this.TOOLS_MOCK.set(ToolsConstants.ColorToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.EllipseSelectionToolConstants.TOOL_ID, pencilService);
-        this.TOOLS_MOCK.set(ToolsConstants.EllipseToolConstants.TOOL_ID, pencilService);
+        this.TOOLS_MOCK.set(ToolsConstants.EllipseToolConstants.TOOL_ID, ellipseService);
         this.TOOLS_MOCK.set(ToolsConstants.EraserToolConstants.TOOL_ID, eraserService);
         this.TOOLS_MOCK.set(ToolsConstants.EyeDropperToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.FillToolConstants.TOOL_ID, pencilService);
@@ -56,6 +62,7 @@ describe('SettingsHandlerComponent', () => {
     let lineService: LineService;
     let rectangleService: RectangleService;
     let eraserService: EraserService;
+    let ellipseService: EllipseService;
     let toolHandlerService: MockToolHandler;
 
     beforeEach(() => {
@@ -63,7 +70,8 @@ describe('SettingsHandlerComponent', () => {
         lineService = TestBed.inject(LineService);
         rectangleService = TestBed.inject(RectangleService);
         eraserService = TestBed.inject(EraserService);
-        toolHandlerService = new MockToolHandler(pencilService, lineService, rectangleService, eraserService);
+        ellipseService = TestBed.inject(EllipseService);
+        toolHandlerService = new MockToolHandler(pencilService, lineService, rectangleService, eraserService, ellipseService);
         component = new SettingsHandlerComponent(toolHandlerService);
     });
 
