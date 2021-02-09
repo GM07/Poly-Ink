@@ -1,13 +1,12 @@
 <div (keydown)="$event.stopPropagation()">
-    <label for="hex">Hex : </label>
+    <label for="hex">{{ label }} : </label>
     <input
         (keypress)="preventInvalid($event)"
         (change)="onChange($event.target.value)"
         [(ngModel)]="hex"
-        id="hex"
         type="text"
-        maxlength="6"
+        maxlength="{{ length }}"
         value="{{ hex | uppercase }}"
-        size="6"
+        size="{{ length }}"
     />
 </div>

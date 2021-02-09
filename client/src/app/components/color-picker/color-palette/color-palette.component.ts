@@ -48,7 +48,8 @@ export class ColorPaletteComponent implements OnDestroy, AfterViewInit {
 
     ngAfterViewInit(): void {
         this.getContext();
-        this.setPositionToColor(this.colorService.selectedColor);
+        this.setPositionToColor(this.colorService.primaryColor);
+        this.hueColor = Color.hueToRgb(this.colorService.primaryColor.hue);
         this.draw();
     }
 

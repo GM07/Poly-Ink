@@ -4,8 +4,16 @@
 </div>
 <div class="color-icon">
     <app-color-preview></app-color-preview>
-    <app-color-textbox [hex]="hexColor" (hexChangeEvent)="hexValueChange($event)"></app-color-textbox>
+    <app-color-textbox [hex]="hexColor" (hexColorChangeEvent)="hexValueChange($event)"></app-color-textbox>
 </div>
+
+<mat-divider></mat-divider>
+<div class="rgb-selectors">
+    <app-hex-textbox (hexChangeEvent)="hexRGBChange($event)" [label]="'R'" [hex]="hexColor.substr(0, 2)" [length]="'2'"></app-hex-textbox>
+    <app-hex-textbox (hexChangeEvent)="hexRGBChange($event)" [label]="'G'" [hex]="hexColor.substr(2, 2)" [length]="'2'"></app-hex-textbox>
+    <app-hex-textbox (hexChangeEvent)="hexRGBChange($event)" [label]="'B'" [hex]="hexColor.substr(4, 2)" [length]="'2'"></app-hex-textbox>
+</div>
+<mat-divider></mat-divider>
 
 <app-value-slider
     (valueChangeEvent)="valueChange($event)"
@@ -16,9 +24,12 @@
     [step]="0.01"
 ></app-value-slider>
 
+<mat-divider></mat-divider>
+
 <div class="buttons">
-    <button (click)="chosePrimary()" mat-raised-button>Couleur primaire</button>
-    <button (click)="choseSecondary()" mat-raised-button>Couleur secondaire</button>
+    <button (click)="chosePrimary()" mat-raised-button>Définir couleur primaire</button>
+    <button (click)="choseSecondary()" mat-raised-button>Définir couleur secondaire</button>
+    <button mat-raised-button>Annuler</button>
 </div>
 
 <app-previous-colors></app-previous-colors>

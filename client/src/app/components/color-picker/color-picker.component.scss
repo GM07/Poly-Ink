@@ -14,6 +14,15 @@ div {
     justify-content: center;
 }
 
+.rgb-selector {
+    display: flex;
+    justify-content: space-around;
+}
+
 button {
     margin: 2.5px 5px;
+}
+
+:host ::ng-deep mat-divider {
+    margin: 5px;
 }

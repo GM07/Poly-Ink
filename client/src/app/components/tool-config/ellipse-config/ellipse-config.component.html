@@ -1,7 +1,13 @@
 <div>
     <h5 class="textFormat">Configuration ellipse</h5>
-    <!--Type de tracé-->
     <mat-divider></mat-divider>
+
+    <!--Couleur-->
+    <h5 class="textFormat">Couleur</h5>
+    <app-color-icon [width]="50" [height]="50"></app-color-icon>
+    <mat-divider></mat-divider>
+
+    <!--Type de tracé-->
     <h5 class="textFormat">Type de tracé</h5>
     <div class="textFormatButton">
         <button mat-raised-button class="buttons" (click)="toggleTraceType('Contour')">Contour</button>
@@ -26,5 +32,4 @@
         <span matSuffix>px</span>
     </mat-form-field>
     <mat-divider></mat-divider>
-    <app-color-picker></app-color-picker>
 </div>

@@ -1,5 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
+import { Colors } from '@app/constants/colors';
 import { Subscription } from 'rxjs';
 import { Color } from './color';
 import { ColorService } from './color.service';
@@ -43,6 +44,33 @@ export class ColorPickerComponent implements OnDestroy, ToolConfig {
         this.colorService.selectedColorSliders = hex;
         this.colorService.selectedColorPalette = hex;
         this.colorService.selectedHueSliders = Color.hueToRgb(hex.hue);
+    }
+
+    hexRGBChange(values: [string, string]): void {
+        const component: number = parseInt(values[1], 16);
+        const r: number = this.colorService.selectedColor.r;
+        const g: number = this.colorService.selectedColor.g;
+        const b: number = this.colorService.selectedColor.b;
+        let color: Color;
+        switch (values[0]) {
+            case 'R':
+                color = new Color(component, g, b);
+                break;
+
+            case 'G':
+                color = new Color(r, component, b);
+                break;
+
+            case 'B':
+                color = new Color(r, g, component);
+                break;
+
+            default:
+                color = Colors.WHITE.clone();
+        }
+
+        this.colorService.selectedColorSliders = color;
+        this.colorService.selectedHueSliders = Color.hueToRgb(color.hue);
     }
 
     ngOnDestroy(): void {

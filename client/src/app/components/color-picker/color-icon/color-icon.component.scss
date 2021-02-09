@@ -1,7 +1,7 @@
 .parent {
     position: relative;
     background-color: transparent;
-    margin: 0px;
+    margin: 10px 5px 10px 10px;
 }
 
 .primaryColor {
@@ -27,6 +27,19 @@ mat-icon {
     user-select: none;
 }
 
+button {
+    margin: 10px 10px 10px 5px;
+}
+
+.menuTrigger {
+    position: absolute;
+    left: 100%;
+    top: 0px;
+}
+
 :host {
-    margin: 5px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
 }

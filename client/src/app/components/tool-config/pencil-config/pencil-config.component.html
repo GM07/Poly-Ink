@@ -1,6 +1,12 @@
 <div>
     <h5 class="textFormat">Configurations crayon</h5>
     <mat-divider></mat-divider>
+
+    <!--Couleur-->
+    <h5 class="textFormat">Couleur</h5>
+    <app-color-icon [width]="50" [height]="50"></app-color-icon>
+    <mat-divider></mat-divider>
+
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
         <mat-slider min="1" max="100" [(ngModel)]="pencilService.lineWidth" thumbLabel [displayWith]="colorSliderLabel"> </mat-slider>
@@ -9,5 +15,4 @@
         <input matInput type="number" min="1" max="100" [(ngModel)]="pencilService.lineWidth" />
         <span matSuffix>px</span>
     </mat-form-field>
-    <app-color-picker width="50" height="50"></app-color-picker>
 </div>

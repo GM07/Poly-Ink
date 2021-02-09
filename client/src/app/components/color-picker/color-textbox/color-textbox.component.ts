@@ -12,26 +12,24 @@ export class ColorTextboxComponent {
     hex: string;
 
     @Output()
-    hexChangeEvent: EventEmitter<Color> = new EventEmitter<Color>();
+    hexColorChangeEvent: EventEmitter<Color> = new EventEmitter<Color>();
 
-    cleanHex(hex: string): string {
-        // Remove pound sign if there is one
-        if (hex[0] === '#') {
-            hex = hex.substring(1);
-        }
+    validateSizeHex(hex: string): string {
+        if (hex.length < HexColors.LENGTH) return HexColors.INVALID;
 
-        if (hex.length > HexColors.LENGTH) return HexColors.INVALID;
-
-        const regularExpression = /[0-9A-Fa-f]{6}/g;
-
-        if (regularExpression.test(hex)) return hex;
-
-        return HexColors.INVALID;
+        return hex;
     }
 
     onChange(hex: string): void {
-        this.hex = this.cleanHex(hex);
+        this.hex = this.validateSizeHex(hex);
+        console.log(`Input ${hex}`);
+        console.log(`Value it should be ${this.hex}`);
         const color = Color.hexToRgb(this.hex);
-        this.hexChangeEvent.emit(color);
+        this.hexColorChangeEvent.emit(color);
+    }
+
+    preventInvalid(key: KeyboardEvent) {
+        const regularExpression = /[0-9A-Fa-f]{1}/g;
+        if (!regularExpression.test(key.key)) key.preventDefault();
     }
 }

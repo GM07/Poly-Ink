@@ -1,7 +1,8 @@
-<div>
+<div (keydown)="$event.stopPropagation()">
     <label for="name"> {{ label }}: </label>
     <input
         (change)="onInputChange($event.target.value)"
+        [(ngModel)]="value"
         id="name"
         type="number"
         min="{{ min }}"

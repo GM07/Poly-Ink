@@ -1,9 +1,10 @@
+<p>Couleurs précédentes</p>
 <div class="parent">
-  <div
-    (click)="selectPrimaryColor(color)"
-    (contextmenu)="selectSecondaryColor(color)"
-    class="previousColor"
-    *ngFor="let color of previousColors"
-    [style.background]="color.rgbString"
-  ></div>
+    <div
+        (click)="selectPrimaryColor(color)"
+        (contextmenu)="selectSecondaryColor(color)"
+        class="previousColor"
+        *ngFor="let color of previousColors"
+        [style.background]="color.rgbString"
+    ></div>
 </div>

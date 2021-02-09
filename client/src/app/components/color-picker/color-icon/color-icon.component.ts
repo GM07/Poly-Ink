@@ -1,6 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { ColorService } from '@app/components/color-picker/color.service';
 import { Subscription } from 'rxjs';
+import { Color } from '../color';
 
 @Component({
     selector: 'app-color-icon',
@@ -13,6 +15,8 @@ export class ColorIconComponent implements OnInit, OnDestroy {
 
     @Input()
     height: number;
+
+    @ViewChild(MatMenuTrigger) colorMenuTrigger: MatMenuTrigger;
 
     colorPreviewOffsetWidth: number;
     colorPreviewOffsetHeight: number;
@@ -76,5 +80,20 @@ export class ColorIconComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.primaryColorSubscription.unsubscribe();
         this.secondaryColorSubscription.unsubscribe();
+    }
+
+    openColorPicker(): void {
+        this.colorService.selectedHueSliders = Color.hueToRgb(this.colorService.primaryColor.hue);
+        this.colorService.selectedColorSliders = this.colorService.primaryColor;
+        this.colorService.selectedColorPalette = this.colorService.primaryColor;
+        this.colorMenuTrigger.openMenu();
+    }
+
+    checkIfMenuClose(event: MouseEvent): void {
+        //Check if button click to close menu
+        //TODO - Find a better way kinda hacky
+        const className: string = (event.target as Element).className;
+        if (className.includes('button')) return;
+        event.stopPropagation();
     }
 }
