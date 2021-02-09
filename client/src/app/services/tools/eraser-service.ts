@@ -113,12 +113,11 @@ export class EraserService extends Tool {
         ctx.lineJoin = 'bevel' as CanvasLineJoin;
 
         for (const paths of pathData) {
-          for (const point of paths) {
-            ctx.lineTo(point.x, point.y);
-          }
-          ctx.stroke();
-          ctx.beginPath();
-
+            for (const point of paths) {
+                ctx.lineTo(point.x, point.y);
+            }
+            ctx.stroke();
+            ctx.beginPath();
         }
         ctx.stroke();
     }
