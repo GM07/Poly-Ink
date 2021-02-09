@@ -15,7 +15,7 @@ describe('EraserService', () => {
     let previewCtxStub: CanvasRenderingContext2D;
     let drawLineSpy: jasmine.Spy<any>;
     const WHITE = 255;
-
+    const MIN_WIDTH = 5;
     const ALPHA = 3;
 
     beforeEach(() => {
@@ -97,7 +97,7 @@ describe('EraserService', () => {
     });
 
     it('should not erase a line between the points where it left and entered the canvas', () => {
-        service.lineWidth = 2;
+        service.lineWidth = MIN_WIDTH;
         let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);
         service.onMouseLeave(mouseEventLClick);
@@ -108,7 +108,7 @@ describe('EraserService', () => {
         service.onMouseUp(mouseEvent);
 
         // tslint:disable-next-line:no-magic-numbers
-        let imageData: ImageData = baseCtxStub.getImageData(2, 2, 25, 25);
+        let imageData: ImageData = baseCtxStub.getImageData(0, 6, 1, 1);
         expect(imageData.data[0]).toEqual(0); // A, rien ne doit être dessiné
         imageData = baseCtxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[0]).toEqual(WHITE); // R
@@ -168,7 +168,6 @@ describe('EraserService', () => {
     });
 
     it('Should erase if the user clicked once with the smallest size, without moving', () => {
-        const MIN_WIDTH = 5;
         service.lineWidth = MIN_WIDTH;
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
