@@ -106,8 +106,8 @@ export class EraserService extends Tool {
 
     private drawLine(ctx: CanvasRenderingContext2D, pathData: Vec2[][]): void {
         ctx.beginPath();
-        ctx.fillStyle = 'rgba(255,255,255,1)';
-        ctx.strokeStyle = 'rgba(255,255,255,1)';
+        ctx.fillStyle = 'white';
+        ctx.strokeStyle = 'white';
         ctx.lineWidth = this.lineWidth;
         ctx.lineCap = 'square' as CanvasLineCap;
         ctx.lineJoin = 'bevel' as CanvasLineJoin;
