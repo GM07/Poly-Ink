@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
 import { EraserService } from '@app/services/tools/eraser-service';
+import { ToolSettingsConst } from '@app/constants/toolSettings';
 
 @Component({
     selector: 'app-eraser-config',
@@ -9,6 +10,8 @@ import { EraserService } from '@app/services/tools/eraser-service';
 })
 export class EraserConfigComponent extends ToolConfig {
     lineWidth: number;
+    readonly MIN = ToolSettingsConst.MIN_ERASER_WIDTH;
+    readonly MAX = ToolSettingsConst.MAX_WIDTH;
 
     constructor(public eraserService: EraserService) {
         super();

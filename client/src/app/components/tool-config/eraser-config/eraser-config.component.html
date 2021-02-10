@@ -4,8 +4,8 @@
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
     <mat-slider
-        min="5"
-        max="50"
+        min="{{ MIN }}"
+        max="{{ MAX }}"
         [(ngModel)]="eraserService.lineWidth"
         thumbLabel
         [displayWith]="colorSliderLabel">

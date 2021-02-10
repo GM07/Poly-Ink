@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ToolSettingsConst } from '../../../constants/toolSettings';
 import { EraserConfigComponent } from './eraser-config.component';
 
 describe('EraserConfigComponent', () => {
@@ -41,9 +42,8 @@ describe('EraserConfigComponent', () => {
     });
 
     it('should get max value of slider', async () => {
-        const max = 50;
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getMaxValue()).toBe(max);
+        expect(await slider.getMaxValue()).toBe(ToolSettingsConst.MAX_WIDTH);
     });
 
     it('should be able to set value of slider', async () => {
