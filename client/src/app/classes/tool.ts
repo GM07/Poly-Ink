@@ -1,5 +1,5 @@
-import { ColorService } from '@app/components/color-picker/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { ColorService } from 'src/color-picker/services/color.service';
 import { Vec2 } from './vec2';
 
 // Ceci est justifié vu qu'on a des fonctions qui seront gérés par les classes enfant

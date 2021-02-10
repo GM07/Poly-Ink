@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
-import { ColorService } from '@app/components/color-picker/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { ColorService } from 'src/color-picker/services/color.service';
 import { RectangleMode, RectangleService } from './rectangle-service';
 
 // tslint:disable:no-any
@@ -148,8 +148,8 @@ describe('RectangleService', () => {
     });
 
     it('should allow for contour drawing type', () => {
-        spyOnProperty(colorService, 'primaryRgba').and.returnValue("rgba(1, 1, 1, 1)");
-        spyOnProperty(colorService, 'secondaryRgba').and.returnValue("rgba(0, 0, 0, 1");
+        spyOnProperty(colorService, 'primaryRgba').and.returnValue('rgba(1, 1, 1, 1)');
+        spyOnProperty(colorService, 'secondaryRgba').and.returnValue('rgba(0, 0, 0, 1');
 
         service.rectangleMode = RectangleMode.Contour;
         service.contourWidth = 1;
@@ -188,8 +188,8 @@ describe('RectangleService', () => {
 
     it('should allow for filled with contour drawing type', () => {
         //Set primary color to black
-        spyOnProperty(colorService, 'primaryRgba').and.returnValue("rgba(1, 1, 1, 1)");
-        spyOnProperty(colorService, 'secondaryRgba').and.returnValue("rgba(0, 0, 0, 1");
+        spyOnProperty(colorService, 'primaryRgba').and.returnValue('rgba(1, 1, 1, 1)');
+        spyOnProperty(colorService, 'secondaryRgba').and.returnValue('rgba(0, 0, 0, 1');
 
         service.rectangleMode = RectangleMode.FilledWithContour;
         service.contourWidth = 1;

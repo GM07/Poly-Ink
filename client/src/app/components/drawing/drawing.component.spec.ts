@@ -3,6 +3,7 @@ import { Tool } from '@app/classes/tool';
 import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { PencilService } from '@app/services/tools/pencil-service';
+import { ColorService } from 'src/color-picker/services/color.service';
 import { DrawingComponent } from './drawing.component';
 
 class ToolStub extends Tool {
@@ -18,7 +19,7 @@ describe('DrawingComponent', () => {
     let drawingStub: DrawingService;
 
     beforeEach(async(() => {
-        toolStub = new ToolStub({} as DrawingService);
+        toolStub = new ToolStub({} as DrawingService, {} as ColorService);
         drawingStub = new DrawingService();
 
         TestBed.configureTestingModule({

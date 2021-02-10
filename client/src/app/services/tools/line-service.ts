@@ -3,9 +3,9 @@ import { Geometry } from '@app/classes/math/geometry';
 import { Tool } from '@app/classes/tool';
 import { LineToolConstants } from '@app/classes/tool_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
-import { ColorService } from '@app/components/color-picker/color.service';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',
