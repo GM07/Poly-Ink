@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { EraserConfigComponent } from '@app/components/tool-config/eraser-config.component';
+import { EraserConfigComponent } from '@app/components/tool-config/eraser-config/eraser-config.component';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 
 describe('EraserConfigComponent', () => {
