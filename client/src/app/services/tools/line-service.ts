@@ -33,6 +33,15 @@ export class LineService extends Tool {
         ['Backspace', false],
     ]);
 
+    initService(): void {
+        for (const event of this.keyEvents) {
+            event[1] = false;
+        }
+        this.points = [];
+        this.pointToAdd = {} as Vec2;
+        this.mousePosition = {} as Vec2;
+    }
+
     applyAttributes(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = this.color;
         ctx.strokeStyle = this.color;
@@ -66,8 +75,7 @@ export class LineService extends Tool {
         this.applyAttributes(this.drawingService.baseCtx);
         this.drawLinePath(this.drawingService.baseCtx, this.points, closedLoop);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
-        this.points = [];
-        this.mousePosition = (undefined as unknown) as Vec2;
+        this.initService();
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -143,9 +151,7 @@ export class LineService extends Tool {
 
     stopDrawing(): void {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
-        this.points = [];
-        this.pointToAdd = (undefined as unknown) as Vec2;
-        this.mousePosition = (undefined as unknown) as Vec2;
+        this.initService();
     }
 
     handleLinePreview(): void {
