@@ -67,6 +67,7 @@ export class LineService extends Tool {
         this.drawLinePath(this.drawingService.baseCtx, this.points, closedLoop);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.points = [];
+        this.mousePosition = (undefined as unknown) as Vec2;
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -142,6 +143,9 @@ export class LineService extends Tool {
 
     stopDrawing(): void {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.points = [];
+        this.pointToAdd = (undefined as unknown) as Vec2;
+        this.mousePosition = (undefined as unknown) as Vec2;
     }
 
     handleLinePreview(): void {
