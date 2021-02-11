@@ -15,15 +15,12 @@ export class ColorTextboxComponent {
     hexColorChangeEvent: EventEmitter<Color> = new EventEmitter<Color>();
 
     validateSizeHex(hex: string): string {
-        if (hex.length < HexColors.LENGTH) return HexColors.INVALID;
-
+        if (hex.length != HexColors.LENGTH) return HexColors.INVALID;
         return hex;
     }
 
     onChange(hex: string): void {
         this.hex = this.validateSizeHex(hex);
-        console.log(`Input ${hex}`);
-        console.log(`Value it should be ${this.hex}`);
         const color = Color.hexToRgb(this.hex);
         this.hexColorChangeEvent.emit(color);
     }
