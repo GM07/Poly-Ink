@@ -19,7 +19,7 @@ export enum LeftMouse {
 })
 export class PencilService extends Tool {
     private pathData: Vec2[][];
-    private strokeStyleIn: string = 'rgba(0,0,0,0.7)';
+    private strokeStyleIn: string = 'black';
     private lineWidthIn: number = 12;
     readonly toolID: string = PencilToolConstants.TOOL_ID;
 
