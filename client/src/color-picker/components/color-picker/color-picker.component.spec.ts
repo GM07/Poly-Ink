@@ -106,6 +106,7 @@ describe('ColorPickerComponent', () => {
     it('should set primary color and alpha when chosen', () => {
         const color: Color = Colors.CYAN;
         const alpha: number = 0.5;
+        spyOn(component, 'closeColorPicker').and.stub();
 
         component.colorService.selectedColor = color;
         component.colorService.selectedAlpha = alpha;
@@ -119,6 +120,7 @@ describe('ColorPickerComponent', () => {
     it('should set secondary color and alpha when chosen', () => {
         const color: Color = Colors.CYAN;
         const alpha: number = 0.5;
+        spyOn(component, 'closeColorPicker').and.stub();
 
         component.colorService.selectedColor = color;
         component.colorService.selectedAlpha = alpha;
@@ -127,5 +129,13 @@ describe('ColorPickerComponent', () => {
 
         expect(component.colorService.secondaryColor).toEqual(color);
         expect(component.colorService.secondaryColorAlpha).toEqual(alpha);
+    });
+
+    it('should emit close event on color selection or cancelation', () => {
+        spyOn(component.closeMenuEvent, 'emit');
+        component.chosePrimary();
+        component.choseSecondary();
+        component.closeColorPicker();
+        expect(component.closeMenuEvent.emit).toHaveBeenCalledTimes(3);
     });
 });

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Color } from '../../classes/color';
 import { ColorService } from '../../services/color.service';
 
@@ -8,6 +8,9 @@ import { ColorService } from '../../services/color.service';
     styleUrls: ['./color-picker.component.scss'],
 })
 export class ColorPickerComponent {
+    @Output()
+    closeMenuEvent: EventEmitter<void> = new EventEmitter<void>();
+
     constructor(public colorService: ColorService) {}
 
     hexValueChange(hex: Color): void {
@@ -51,10 +54,16 @@ export class ColorPickerComponent {
     chosePrimary(): void {
         this.colorService.primaryColor = this.colorService.selectedColor;
         this.colorService.primaryColorAlpha = this.colorService.selectedAlpha;
+        this.closeColorPicker();
     }
 
     choseSecondary(): void {
         this.colorService.secondaryColor = this.colorService.selectedColor;
         this.colorService.secondaryColorAlpha = this.colorService.selectedAlpha;
+        this.closeColorPicker();
+    }
+
+    closeColorPicker(): void {
+        this.closeMenuEvent.emit();
     }
 }

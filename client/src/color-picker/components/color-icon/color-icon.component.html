@@ -1,33 +1,12 @@
-<div class="parent" [style.width]="width + 'px'" [style.height]="height + 'px'">
+<div class="parent">
     <div class="colorIcon">
-        <div
-            class="primaryColor"
-            [style.background]="colorService.primaryColor.rgbString"
-            [style.width]="colorPreviewWidth + 'px'"
-            [style.height]="colorPreviewHeight + 'px'"
-        ></div>
-        <div
-            class="secondaryColor"
-            [style.background]="colorService.secondaryColor.rgbString"
-            [style.width]="colorPreviewWidth + 'px'"
-            [style.height]="colorPreviewHeight + 'px'"
-            [style.top]="colorPreviewOffsetHeight + 'px'"
-            [style.left]="colorPreviewOffsetWidth + 'px'"
-        ></div>
+        <div class="primaryColor" [style.background]="colorService.primaryColor.rgbString"></div>
+        <div class="secondaryColor" [style.background]="colorService.secondaryColor.rgbString"></div>
     </div>
-    <mat-icon
-        [style.font-size]="swapIconSize + 'px'"
-        [style.height]="swapIconSize + 'px'"
-        [style.width]="swapIconSize + 'px'"
-        [style.top]="swapIconOffsetTop + 'px'"
-        [style.left]="swapIconOffsetLeft + 'px'"
-        (click)="swap()"
-    >
-        autorenew
-    </mat-icon>
+    <mat-icon (click)="swap()"> autorenew </mat-icon>
 </div>
 <button mat-raised-button (click)="openColorPicker()">Modifier</button>
 <div class="menuTrigger" [matMenuTriggerFor]="ColorMenu"></div>
 <mat-menu #ColorMenu>
-    <app-color-picker (click)="checkIfMenuClose($event)"></app-color-picker>
+    <app-color-picker (click)="$event.stopPropagation()" (closeMenuEvent)="closeMenu()"></app-color-picker>
 </mat-menu>
