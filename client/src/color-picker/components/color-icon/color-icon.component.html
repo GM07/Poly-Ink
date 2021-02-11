@@ -2,13 +2,13 @@
     <div class="colorIcon">
         <div
             class="primaryColor"
-            [style.background]="primaryColor"
+            [style.background]="colorService.primaryRgba"
             [style.width]="colorPreviewWidth + 'px'"
             [style.height]="colorPreviewHeight + 'px'"
         ></div>
         <div
             class="secondaryColor"
-            [style.background]="secondaryColor"
+            [style.background]="colorService.secondaryRgba"
             [style.width]="colorPreviewWidth + 'px'"
             [style.height]="colorPreviewHeight + 'px'"
             [style.top]="colorPreviewOffsetHeight + 'px'"

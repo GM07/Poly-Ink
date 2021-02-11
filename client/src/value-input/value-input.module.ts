@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatSliderModule } from '@angular/material/slider';
-import { HexTextboxComponent } from './hex-textbox/hex-textbox.component';
-import { ValueSliderComponent } from './value-slider/value-slider.component';
+import { ValueSliderComponent } from 'src/value-input/components/value-slider/value-slider.component';
+import { HexTextboxComponent } from './components/hex-textbox/hex-textbox.component';
 
 @NgModule({
     imports: [CommonModule, MatSliderModule, FormsModule],

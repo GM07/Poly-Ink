@@ -1,6 +1,5 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { Subscription } from 'rxjs';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { Color } from '../../classes/color';
 
@@ -9,7 +8,7 @@ import { Color } from '../../classes/color';
     templateUrl: './color-icon.component.html',
     styleUrls: ['./color-icon.component.scss'],
 })
-export class ColorIconComponent implements OnInit, OnDestroy {
+export class ColorIconComponent {
     @Input()
     width: number;
 
@@ -23,31 +22,7 @@ export class ColorIconComponent implements OnInit, OnDestroy {
 
     swapIconSize: number;
 
-    primaryColor: string;
-    primaryColorSubscription: Subscription;
-
-    secondaryColor: string;
-    secondaryColorSubscription: Subscription;
-
-    constructor(private colorService: ColorService) {
-        this.initValues();
-        this.initSubscriptions();
-    }
-
-    initValues(): void {
-        this.primaryColor = this.colorService.rgba(this.colorService.primaryColor, 1);
-        this.secondaryColor = this.colorService.rgba(this.colorService.secondaryColor, 1);
-    }
-
-    initSubscriptions(): void {
-        this.primaryColorSubscription = this.colorService.primaryColorChange.subscribe((value) => {
-            this.primaryColor = this.colorService.rgba(value, 1);
-        });
-
-        this.secondaryColorSubscription = this.colorService.secondaryColorChange.subscribe((value) => {
-            this.secondaryColor = this.colorService.rgba(value, 1);
-        });
-    }
+    constructor(public colorService: ColorService) {}
 
     get swapIconOffsetTop(): number {
         return this.height - this.swapIconSize;
@@ -75,11 +50,6 @@ export class ColorIconComponent implements OnInit, OnDestroy {
         this.swapIconSize = this.width / widthToIconRatio;
         this.colorPreviewOffsetWidth = (this.width - this.swapIconSize) / widthToColorPreviewRatio;
         this.colorPreviewOffsetHeight = (this.height - this.swapIconSize) / widthToColorPreviewRatio;
-    }
-
-    ngOnDestroy(): void {
-        this.primaryColorSubscription.unsubscribe();
-        this.secondaryColorSubscription.unsubscribe();
     }
 
     openColorPicker(): void {
