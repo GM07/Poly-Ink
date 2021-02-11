@@ -1,5 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
 import { Color } from 'src/color-picker/classes/color';
 import { ColorService } from 'src/color-picker/services/color.service';
 
@@ -8,34 +7,17 @@ import { ColorService } from 'src/color-picker/services/color.service';
     templateUrl: './previous-colors.component.html',
     styleUrls: ['./previous-colors.component.scss'],
 })
-export class PreviousColorsComponent implements OnDestroy {
-    previousColors: Color[];
-    previousColorSubscription: Subscription;
-
-    constructor(private colorService: ColorService) {
-        this.initValues();
-        this.initSubscription();
-    }
-
-    initValues(): void {
-        this.previousColors = this.colorService.previousColors;
-    }
-
-    initSubscription(): void {
-        this.previousColorSubscription = this.colorService.previousColorsChange.subscribe((value) => {
-            this.previousColors = value;
-        });
-    }
-
-    ngOnDestroy(): void {
-        this.previousColorSubscription.unsubscribe();
-    }
+export class PreviousColorsComponent {
+    constructor(public colorService: ColorService) {}
 
     selectPrimaryColor(color: Color): void {
         this.colorService.primaryColor = color;
     }
 
-    selectSecondaryColor(color: Color): void {
+    selectSecondaryColor(color: Color): boolean {
         this.colorService.secondaryColor = color;
+
+        //Prevents context menu from apearing
+        return false;
     }
 }

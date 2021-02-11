@@ -8,48 +8,32 @@ import { ColorService } from 'src/color-picker/services/color.service';
     templateUrl: './color-palette.component.html',
     styleUrls: ['./color-palette.component.scss'],
 })
-export class ColorPaletteComponent implements OnDestroy, AfterViewInit {
+export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
     @ViewChild('canvas')
     canvas: ElementRef<HTMLCanvasElement>;
-
-    private hueColor: Color;
-    hueSubscriptionSliders: Subscription;
-    hueSubscriptionWheel: Subscription;
-
-    selectedColorSubscription: Subscription;
 
     context: CanvasRenderingContext2D;
     mouseDown: boolean = false;
     selectedPosition: { x: number; y: number } = { x: 0, y: 0 };
 
-    constructor(private colorService: ColorService) {
-        this.initValues();
-        this.initSubscriptions();
-    }
+    selectedColorChangeHexSubscription: Subscription;
+    selectedHueChangeSliderSubscription: Subscription;
 
-    initValues(): void {
-        this.hueColor = Color.hueToRgb(this.colorService.primaryColor.hue);
-    }
-
-    initSubscriptions(): void {
-        this.hueSubscriptionSliders = this.colorService.selectedHueChangeSliders.subscribe((value) => {
-            this.hue = value;
-        });
-        this.hueSubscriptionWheel = this.colorService.selectedHueChangeWheel.subscribe((value) => {
-            this.hue = value;
-            this.colorService.selectedColorPalette = this.getColorAtPosition(this.selectedPosition.x, this.selectedPosition.y);
-        });
-
-        this.selectedColorSubscription = this.colorService.selectedColorChangeSliders.subscribe((value) => {
+    constructor(public colorService: ColorService) {
+        this.selectedColorChangeHexSubscription = this.colorService.selectedColorChangeFromHex.subscribe((value) => {
             this.setPositionToColor(value);
             this.draw();
+        });
+
+        this.selectedHueChangeSliderSubscription = this.colorService.hueChangeFromSlider.subscribe(() => {
+            this.draw();
+            this.colorService.selectedColor = this.getColorAtPosition(this.selectedPosition.x, this.selectedPosition.y);
         });
     }
 
     ngAfterViewInit(): void {
         this.getContext();
         this.setPositionToColor(this.colorService.primaryColor);
-        this.hueColor = Color.hueToRgb(this.colorService.primaryColor.hue);
         this.draw();
     }
 
@@ -57,7 +41,7 @@ export class ColorPaletteComponent implements OnDestroy, AfterViewInit {
         const width = this.canvas.nativeElement.width;
         const height = this.canvas.nativeElement.height;
 
-        this.context.fillStyle = this.colorService.rgba(this.hueColor, 1);
+        this.context.fillStyle = this.colorService.selectedHue.rgbString;
         this.context.fillRect(0, 0, width, height);
 
         const whiteGradient = this.context.createLinearGradient(0, 0, width, 0);
@@ -77,6 +61,10 @@ export class ColorPaletteComponent implements OnDestroy, AfterViewInit {
         if (this.selectedPosition) {
             this.drawSelectionArea();
         }
+    }
+
+    ngOnDestroy() {
+        this.selectedColorChangeHexSubscription.unsubscribe();
     }
 
     getContext(): void {
@@ -124,21 +112,6 @@ export class ColorPaletteComponent implements OnDestroy, AfterViewInit {
         this.selectedPosition.y = (height / Color.MAX) * stepY;
     }
 
-    set hue(color: Color) {
-        this.hueColor = color;
-        this.draw();
-    }
-
-    get hue(): Color {
-        return this.hueColor;
-    }
-
-    ngOnDestroy(): void {
-        this.hueSubscriptionSliders.unsubscribe();
-        this.hueSubscriptionWheel.unsubscribe();
-        this.selectedColorSubscription.unsubscribe();
-    }
-
     @HostListener('window:mouseup', ['$event'])
     onMouseUp(event: MouseEvent): void {
         this.mouseDown = false;
@@ -159,7 +132,7 @@ export class ColorPaletteComponent implements OnDestroy, AfterViewInit {
     changeSelectedPosition(offsetX: number, offsetY: number): void {
         this.selectedPosition = this.keepSelectionWithinBounds(offsetX, offsetY);
         this.draw();
-        this.colorService.selectedColorPalette = this.getColorAtPosition(this.selectedPosition.x, this.selectedPosition.y);
+        this.colorService.selectedColor = this.getColorAtPosition(this.selectedPosition.x, this.selectedPosition.y);
     }
 
     keepSelectionWithinBounds(x: number, y: number): { x: number; y: number } {

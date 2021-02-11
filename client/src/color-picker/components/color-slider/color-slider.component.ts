@@ -26,11 +26,11 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
     mouseDown: boolean = false;
     selectedHeight: number = 0;
 
-    selectedHueSlidersSubscription: Subscription;
+    hueChangeFromHexSubscription: Subscription;
 
     constructor(private colorService: ColorService) {
-        this.selectedHueSlidersSubscription = this.colorService.selectedHueChangeSliders.subscribe((value) => {
-            this.setPositionToHue(value);
+        this.hueChangeFromHexSubscription = this.colorService.hueChangeFromHex.subscribe((color) => {
+            this.setPositionToHue(color);
             this.draw();
         });
     }
@@ -72,6 +72,10 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
         }
     }
 
+    ngOnDestroy() {
+        this.hueChangeFromHexSubscription.unsubscribe();
+    }
+
     drawSelectionBox(): void {
         const lineWidth = 5;
         const rectangleHeight = 10;
@@ -89,10 +93,6 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
         this.draw();
     }
 
-    ngOnDestroy(): void {
-        this.selectedHueSlidersSubscription.unsubscribe();
-    }
-
     onMouseDown(event: MouseEvent): void {
         this.mouseDown = true;
         this.changeSelectedHeight(event.offsetY);
@@ -107,7 +107,7 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
     changeSelectedHeight(offsetY: number): void {
         this.selectedHeight = offsetY;
         this.draw();
-        this.colorService.selectedHueWheel = this.getColor(offsetY);
+        this.colorService.selectedHueFromSliders = this.getColor(offsetY);
     }
 
     setPositionToHue(color: Color): void {

@@ -1,7 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { Color } from '../../classes/color';
 
 @Component({
     selector: 'app-color-icon',
@@ -53,14 +52,12 @@ export class ColorIconComponent {
     }
 
     openColorPicker(): void {
-        this.colorService.selectedHueSliders = Color.hueToRgb(this.colorService.primaryColor.hue);
-        this.colorService.selectedColorSliders = this.colorService.primaryColor;
-        this.colorService.selectedColorPalette = this.colorService.primaryColor;
+        this.colorService.selectedColorFromHex = this.colorService.primaryColor;
         this.colorMenuTrigger.openMenu();
     }
 
     checkIfMenuClose(event: MouseEvent): void {
-        //Check if button click to close menu
+        //Check if any button is clicked on menu to close it
         //TODO - Find a better way kinda hacky
         const className: string = (event.target as Element).className;
         if (className.includes('button')) return;
