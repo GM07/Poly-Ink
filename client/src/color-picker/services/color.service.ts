@@ -32,10 +32,10 @@ export class ColorService {
     }
 
     get primaryRgba(): string {
-        return this.primary.toRgbaString(this.primaryColorAlpha);
+        return this.rgba(this.primary, this.primaryColorAlpha);
     }
     get secondaryRgba(): string {
-        return this.secondary.toRgbaString(this.secondaryColorAlpha);
+        return this.rgba(this.secondary, this.secondaryColorAlpha);
     }
 
     set primaryColor(color: Color) {

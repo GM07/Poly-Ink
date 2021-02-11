@@ -110,6 +110,8 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
 
         this.selectedPosition.x = width - (width / Color.MAX) * stepX;
         this.selectedPosition.y = (height / Color.MAX) * stepY;
+
+        console.log(this.selectedPosition);
     }
 
     @HostListener('window:mouseup', ['$event'])
