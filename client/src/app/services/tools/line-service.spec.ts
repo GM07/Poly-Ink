@@ -216,18 +216,7 @@ describe('LigneService', () => {
         expect(service['points'].length).toBe(1);
     });
 
-    it('should not update preview on a Backspace key event when there is 1 point', () => {
-        service['points'] = [{ x: 100, y: 100 }];
-        service['keyEvents'].set('Backspace', true);
-
-        const handlePreviewFunc = spyOn(service, 'handleLinePreview').and.callThrough();
-
-        service.handleBackspaceKey();
-        expect(handlePreviewFunc).not.toHaveBeenCalled();
-        expect(service['points'].length).toBe(0);
-    });
-
-    it('should not do anything on a Backspace key event when points array is empty', () => {
+    it('should not do anything on a Backspace key event when points array is empty ', () => {
         service['keyEvents'].set('Backspace', true);
         const handlePreviewFunc = spyOn(service, 'handleLinePreview').and.callThrough();
         service.handleBackspaceKey();

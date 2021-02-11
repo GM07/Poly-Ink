@@ -1,2 +1,28 @@
-<app-editor></app-editor>
-<app-main-menu></app-main-menu>
+<div id="background_page"></div>
+
+<div *ngIf="showComponent" [@fade]="state" (@fade.done)="endOfFadeAnimation()" id="background">
+    <div id="main">
+        <div id="content">
+            <h1 class="white" id="title">PAINT 2021</h1>
+            <button class="button" mat-raised-button color="primary" (click)="createNewDrawing()">Nouveau dessin</button>
+            <button class="button" mat-raised-button color="primary">Carrousel</button>
+            <button *ngIf="continuingDrawing()" class="button" mat-raised-button color="primary">Continuer</button>
+        </div>
+
+        <div>
+            <mat-expansion-panel id="team" class="white" hideToggle>
+                <mat-expansion-panel-header>
+                    <mat-panel-title class="white"> Équipe </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Alexis Foulon <br />
+                    Félix-Antoine Constantin <br />
+                    Florence Cloutier <br />
+                    Gaya Mehenni <br />
+                    Mamadou Barri <br />
+                    Paul-André Bisson <br />
+                </p>
+            </mat-expansion-panel>
+        </div>
+    </div>
+</div>

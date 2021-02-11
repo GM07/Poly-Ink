@@ -48,7 +48,7 @@ export class PencilService extends Tool {
      * est fait pour avoir une valeur entière
      */
     set lineWidth(width: number) {
-        const max = 100;
+        const max = 50;
         this.lineWidthIn = Math.min(Math.max(width, 1), max);
     }
 

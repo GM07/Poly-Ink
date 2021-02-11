@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { RectangleMode, RectangleService } from './rectangle-service';
+import { EllipseMode, EllipseService } from '@app/services/tools/ellipse-service';
 
 // tslint:disable:no-any
-describe('RectangleService', () => {
-    let service: RectangleService;
+describe('EllipseService', () => {
+    let service: EllipseService;
     let mouseEvent: MouseEvent;
     let keyboardEvent: KeyboardEvent;
     let canvasTestHelper: CanvasTestHelper;
@@ -13,8 +13,8 @@ describe('RectangleService', () => {
 
     let baseCtxStub: CanvasRenderingContext2D;
     let previewCtxStub: CanvasRenderingContext2D;
-    let drawRectangleSpy: jasmine.Spy<any>;
-    let updateRectangleSpy: jasmine.Spy<any>;
+    let drawEllipseSpy: jasmine.Spy<any>;
+    let updateEllipseSpy: jasmine.Spy<any>;
 
     const ALPHA = 3;
 
@@ -29,9 +29,9 @@ describe('RectangleService', () => {
         baseCtxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
         previewCtxStub = canvasTestHelper.drawCanvas.getContext('2d') as CanvasRenderingContext2D;
 
-        service = TestBed.inject(RectangleService);
-        drawRectangleSpy = spyOn<any>(service, 'drawRectangle').and.callThrough();
-        updateRectangleSpy = spyOn<any>(service, 'updateRectangle').and.callThrough();
+        service = TestBed.inject(EllipseService);
+        drawEllipseSpy = spyOn<any>(service, 'drawEllipse').and.callThrough();
+        updateEllipseSpy = spyOn<any>(service, 'updateEllipse').and.callThrough();
 
         // tslint:disable:no-string-literal
         service['drawingService'].baseCtx = baseCtxStub; // Jasmine doesnt copy properties with underlying data
@@ -83,16 +83,16 @@ describe('RectangleService', () => {
     it('should not draw when the mouse is up', () => {
         service.mouseDown = false;
         service.onMouseMove(mouseEvent);
-        expect(drawRectangleSpy).not.toHaveBeenCalled();
+        expect(drawEllipseSpy).not.toHaveBeenCalled();
     });
 
     it('should start drawing when the mouse is down', () => {
         mouseEvent = { offsetX: 1, offsetY: 1, button: 3 } as MouseEvent;
         service.onMouseDown(mouseEvent);
-        expect(drawRectangleSpy).not.toHaveBeenCalled();
+        expect(drawEllipseSpy).not.toHaveBeenCalled();
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
-        expect(drawRectangleSpy).toHaveBeenCalled();
+        expect(drawEllipseSpy).toHaveBeenCalled();
     });
 
     it('should stop drawing when the mouse is up', () => {
@@ -101,7 +101,7 @@ describe('RectangleService', () => {
         service.onMouseDown(mouseEvent);
         mouseEvent = { x: -1, y: -1, offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
-        expect(drawRectangleSpy).toHaveBeenCalled();
+        expect(drawEllipseSpy).toHaveBeenCalled();
     });
 
     it('should stop drawing when asked to', () => {
@@ -115,59 +115,61 @@ describe('RectangleService', () => {
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
-        expect(drawRectangleSpy).toHaveBeenCalled();
+        expect(drawEllipseSpy).toHaveBeenCalled();
     });
 
     it('should update the rectangle when the mouse leaves', () => {
         service.onMouseLeave(mouseEvent);
-        expect(updateRectangleSpy).not.toHaveBeenCalled();
+        expect(updateEllipseSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseLeave(mouseEvent);
-        expect(updateRectangleSpy).toHaveBeenCalled();
+        expect(updateEllipseSpy).toHaveBeenCalled();
     });
 
     it('should update the rectangle when the mouse enters', () => {
         service.onMouseEnter(mouseEvent);
-        expect(updateRectangleSpy).not.toHaveBeenCalled();
+        expect(updateEllipseSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
-        expect(updateRectangleSpy).toHaveBeenCalled();
+        expect(updateEllipseSpy).toHaveBeenCalled();
     });
 
     it('should update the rectangle to a square with shift pressed', () => {
         service.onKeyDown({} as KeyboardEvent);
-        expect(updateRectangleSpy).not.toHaveBeenCalled();
+        expect(updateEllipseSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         service.onKeyDown(keyboardEvent);
-        expect(updateRectangleSpy).toHaveBeenCalled();
+        expect(updateEllipseSpy).toHaveBeenCalled();
     });
 
     it('should update the square to a rectangle with shift released', () => {
         service.onKeyUp({} as KeyboardEvent);
-        expect(updateRectangleSpy).not.toHaveBeenCalled();
+        expect(updateEllipseSpy).not.toHaveBeenCalled();
         service.onKeyDown(keyboardEvent);
         service.onKeyUp({ shiftKey: false } as KeyboardEvent);
-        expect(updateRectangleSpy).not.toHaveBeenCalled();
+        expect(updateEllipseSpy).not.toHaveBeenCalled();
         service.onKeyDown(keyboardEvent);
         service.onMouseDown(mouseEvent);
         keyboardEvent = { shiftKey: false } as KeyboardEvent;
         service.onKeyUp(keyboardEvent);
-        expect(updateRectangleSpy).toHaveBeenCalled();
+        expect(updateEllipseSpy).toHaveBeenCalled();
     });
 
     it('should allow for contour drawing type', () => {
-        service.rectangleMode = RectangleMode.Contour;
+        service.ellipseMode = EllipseMode.Contour;
         service.contourWidth = 1;
         service.strokeStyle = '#000000';
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
-        expect(drawRectangleSpy).toHaveBeenCalled();
+        expect(drawEllipseSpy).toHaveBeenCalled();
 
         // Border is present
-        let imageData: ImageData = baseCtxStub.getImageData(1, 1, 1, 1);
+        // tslint:disable-next-line:no-magic-numbers
+        const middlePoint = 25 / 2;
+        let imageData: ImageData = baseCtxStub.getImageData(0, middlePoint, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
@@ -175,20 +177,28 @@ describe('RectangleService', () => {
 
         // Inside is untouched
         // tslint:disable-next-line:no-magic-numbers
-        imageData = baseCtxStub.getImageData(2, 2, 20, 20);
+        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagore
+        // tslint:disable-next-line:no-magic-numbers
+        const x = 25 - 2 * maxSquareRadius;
+        const y = x;
+        imageData = baseCtxStub.getImageData(x, y, maxSquareRadius * 2, maxSquareRadius * 2);
         expect(imageData.data[ALPHA]).toEqual(0); // A
     });
 
     it('should allow for filled drawing type', () => {
-        service.rectangleMode = RectangleMode.Filled;
+        service.ellipseMode = EllipseMode.Filled;
         service.fillStyle = '#000000';
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
-        expect(drawRectangleSpy).toHaveBeenCalled();
+        expect(drawEllipseSpy).toHaveBeenCalled();
 
         // tslint:disable-next-line:no-magic-numbers
-        const imageData: ImageData = baseCtxStub.getImageData(1, 1, 25, 25);
+        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagore
+        // tslint:disable-next-line:no-magic-numbers
+        const x = 25 - 2 * maxSquareRadius;
+        const y = x;
+        const imageData: ImageData = baseCtxStub.getImageData(x, y, maxSquareRadius * 2, maxSquareRadius * 2);
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
@@ -196,17 +206,19 @@ describe('RectangleService', () => {
     });
 
     it('should allow for filled with contour drawing type', () => {
-        service.rectangleMode = RectangleMode.FilledWithContour;
+        service.ellipseMode = EllipseMode.FilledWithContour;
         service.contourWidth = 1;
         service.strokeStyle = '#000000';
         service.fillStyle = '#010101';
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
-        expect(drawRectangleSpy).toHaveBeenCalled();
+        expect(drawEllipseSpy).toHaveBeenCalled();
 
         // Border is present
-        let imageData: ImageData = baseCtxStub.getImageData(1, 1, 1, 1);
+        // tslint:disable-next-line:no-magic-numbers
+        const middlePoint = 25 / 2;
+        let imageData: ImageData = baseCtxStub.getImageData(0, middlePoint, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
@@ -214,7 +226,11 @@ describe('RectangleService', () => {
 
         // Inside is present
         // tslint:disable-next-line:no-magic-numbers
-        imageData = baseCtxStub.getImageData(2, 2, 20, 20);
+        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagore
+        // tslint:disable-next-line:no-magic-numbers
+        const x = 25 - 2 * maxSquareRadius;
+        const y = x;
+        imageData = baseCtxStub.getImageData(x, y, maxSquareRadius * 2, maxSquareRadius * 2);
         expect(imageData.data[0]).toEqual(1); // R
         expect(imageData.data[1]).toEqual(1); // G
         expect(imageData.data[2]).toEqual(1); // B
@@ -222,7 +238,7 @@ describe('RectangleService', () => {
     });
 
     it('should do nothing with an unknown mode', () => {
-        service.rectangleMode = {} as RectangleMode;
+        service.ellipseMode = {} as EllipseMode;
         service.strokeStyle = '#000000';
         service.fillStyle = '#010101';
         service.onMouseDown(mouseEvent);
@@ -234,17 +250,20 @@ describe('RectangleService', () => {
         expect(imageData.data[ALPHA]).toEqual(0); // A
     });
 
-    it('should draw a square when shift is pressed', () => {
+    it('should draw a circle when shift is pressed', () => {
         service.onKeyDown(keyboardEvent);
-        service.rectangleMode = RectangleMode.Filled;
+        service.ellipseMode = EllipseMode.Filled;
+        service.contourWidth = 1;
         service.fillStyle = '#000000';
         service.onMouseDown(mouseEvent);
         // tslint:disable-next-line:no-magic-numbers
-        mouseEvent = { offsetX: 20, offsetY: 5, button: 0 } as MouseEvent;
+        mouseEvent = { offsetX: 0, offsetY: 5, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
         // tslint:disable-next-line:no-magic-numbers
-        const imageData: ImageData = baseCtxStub.getImageData(20, 20, 5, 5);
+        const middlePoint = 5 + (25 - 5) / 2;
+        // tslint:disable-next-line:no-magic-numbers
+        const imageData: ImageData = baseCtxStub.getImageData(middlePoint, 5, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B

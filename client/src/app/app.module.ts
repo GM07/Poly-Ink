@@ -1,13 +1,10 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-// import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSliderModule } from '@angular/material/slider';
@@ -16,11 +13,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
+import { NewDrawingComponent } from './components/canvas-reset/canvas-reset.component';
 import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.component';
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
-import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { EllipseConfigComponent } from './components/tool-config/ellipse-config/ellipse-config.component';
 import { EraserConfigComponent } from './components/tool-config/eraser-config/eraser-config.component';
@@ -36,14 +33,16 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         SidebarComponent,
         DrawingComponent,
         HomePageComponent,
-        MainMenuComponent,
         CanvasResizeComponent,
+        NewDrawingComponent,
         RectangleConfigComponent,
         EllipseConfigComponent,
         EraserConfigComponent,
         LineConfigComponent,
         PencilConfigComponent,
         SettingsHandlerComponent,
+        CanvasResizeComponent,
+        SidebarComponent,
     ],
     imports: [
         AppRoutingModule,
@@ -59,10 +58,8 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         MatExpansionModule,
         MatDividerModule,
         MatSliderModule,
-        MatCardModule,
-        MatInputModule,
+        MatIconModule,
         FormsModule,
-        ReactiveFormsModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

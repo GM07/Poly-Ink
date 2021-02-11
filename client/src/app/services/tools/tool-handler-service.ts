@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
 import * as ToolsConstants from '@app/classes/tool_settings/tools.constants';
+import { EllipseService } from '@app/services/tools/ellipse-service';
 import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
 import { RectangleService } from '@app/services/tools/rectangle-service';
@@ -12,13 +13,12 @@ export class ToolHandlerService {
     private TOOLS: Map<string, Tool> = new Map();
     currentTool: Tool;
 
-    constructor(pencilService: PencilService, lineService: LineService, rectangleService: RectangleService) {
+    constructor(pencilService: PencilService, lineService: LineService, rectangleService: RectangleService, ellipseService: EllipseService) {
         this.TOOLS.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
         this.TOOLS.set(ToolsConstants.AerosolToolConstants.TOOL_ID, pencilService);
-        this.TOOLS.set(ToolsConstants.ColorToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.EllipseSelectionToolConstants.TOOL_ID, pencilService);
-        this.TOOLS.set(ToolsConstants.EllipseToolConstants.TOOL_ID, pencilService);
+        this.TOOLS.set(ToolsConstants.EllipseToolConstants.TOOL_ID, ellipseService);
         this.TOOLS.set(ToolsConstants.EraserToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.EyeDropperToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.FillToolConstants.TOOL_ID, pencilService);
