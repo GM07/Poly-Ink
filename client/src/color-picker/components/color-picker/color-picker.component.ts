@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Colors } from 'src/color-picker/constants/colors';
 import { Color } from '../../classes/color';
 import { ColorService } from '../../services/color.service';
 
@@ -35,7 +34,7 @@ export class ColorPickerComponent {
                 break;
 
             default:
-                color = Colors.WHITE.clone();
+                color = this.colorService.selectedColor;
         }
 
         this.hexValueChange(color);
