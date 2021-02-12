@@ -82,8 +82,8 @@ describe('EllipseConfigComponent', () => {
         expect(fixture.componentInstance.traceTypeIn).toEqual(EllipseMode.Filled);
     });
 
-    it('traceType should be Plein&Contour when Plein&Contour button is clicked ', async () => {
-        const button3 = await loader.getHarness(buttonHarness.with({ text: 'Plein&Contour' }));
+    it('traceType should be Plein & Contour when Plein & Contour button is clicked ', async () => {
+        const button3 = await loader.getHarness(buttonHarness.with({ text: 'Plein & Contour' }));
         await button3.click();
         expect(fixture.componentInstance.traceTypeIn).toEqual(EllipseMode.FilledWithContour);
     });
