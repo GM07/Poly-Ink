@@ -242,7 +242,7 @@ describe('EllipseService', () => {
 
     it('should draw a circle when shift is pressed', () => {
         service.onKeyDown(keyboardEvent);
-        service.ellipseMode = EllipseMode.Filled;
+        service.ellipseMode = EllipseMode.FilledWithContour;
         service.contourWidth = 1;
         service.onMouseDown(mouseEvent);
         // tslint:disable-next-line:no-magic-numbers
@@ -253,9 +253,9 @@ describe('EllipseService', () => {
         const middlePoint = 5 + (25 - 5) / 2;
         // tslint:disable-next-line:no-magic-numbers
         const imageData: ImageData = baseCtxStub.getImageData(middlePoint, 5, 1, 1);
-        expect(imageData.data[0]).toEqual(1); // R
-        expect(imageData.data[1]).toEqual(1); // G
-        expect(imageData.data[2]).toEqual(1); // B
+        expect(imageData.data[0]).toEqual(0); // R
+        expect(imageData.data[1]).toEqual(0); // G
+        expect(imageData.data[2]).toEqual(0); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 });

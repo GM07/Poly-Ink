@@ -194,7 +194,7 @@ describe('RectangleService', () => {
         expect(drawRectangleSpy).toHaveBeenCalled();
 
         // Border is present
-        let imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
+        let imageData: ImageData = baseCtxStub.getImageData(1, 1, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
