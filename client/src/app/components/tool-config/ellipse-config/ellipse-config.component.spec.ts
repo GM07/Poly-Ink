@@ -1,16 +1,19 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-
-import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatSliderHarness } from '@angular/material/slider/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { EllipseConfigComponent } from './ellipse-config.component';
+
+@Component({ selector: 'app-color-icon', template: '' })
+class StubColorIcon {}
 
 describe('EllipseConfigComponent', () => {
     let component: EllipseConfigComponent;
@@ -20,7 +23,7 @@ describe('EllipseConfigComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [EllipseConfigComponent],
+            declarations: [EllipseConfigComponent, StubColorIcon],
             imports: [MatDividerModule, MatButtonModule, MatSliderModule, NoopAnimationsModule, MatInputModule, FormsModule],
         }).compileComponents();
         fixture = TestBed.createComponent(EllipseConfigComponent);
