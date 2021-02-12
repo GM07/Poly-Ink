@@ -4,7 +4,7 @@ import { Color } from 'src/color-picker/classes/color';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { ColorPickerComponent } from './color-picker.component';
-
+// tslint:disable:max-classes-per-file
 @Component({ selector: 'app-color-palette', template: '' })
 class StubColorPaletteComponent {}
 @Component({ selector: 'app-color-slider', template: '' })
@@ -27,6 +27,8 @@ class StubValueSliderComponent {}
 
 @Component({ selector: 'mat-divider', template: '' })
 class StubMatDividerComponent {}
+
+// tslint:enable:max-classes-per-file
 
 describe('ColorPickerComponent', () => {
     let component: ColorPickerComponent;

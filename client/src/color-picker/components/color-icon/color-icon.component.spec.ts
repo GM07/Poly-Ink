@@ -6,6 +6,7 @@ import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { ColorIconComponent } from './color-icon.component';
 
+// tslint:disable:max-classes-per-file
 @Component({ selector: 'app-color-picker', template: '' })
 class StubColorPickerComponent {}
 
@@ -14,6 +15,7 @@ class StubMatMenuComponent {}
 
 @Component({ selector: 'mat-icon', template: '' })
 class StubMatIconComponent {}
+// tslint:enable:max-classes-per-file
 
 describe('ColorIconComponent', () => {
     let component: ColorIconComponent;
