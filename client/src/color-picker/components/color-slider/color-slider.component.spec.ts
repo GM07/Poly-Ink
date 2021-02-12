@@ -26,39 +26,11 @@ describe('ColorSliderComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it(`RED_START has default value`, () => {
-        expect(component.RED_START).toEqual(0);
-    });
-
-    it(`YELLOW_START has default value`, () => {
-        expect(component.YELLOW_START).toEqual(0.17);
-    });
-
-    it(`GREEN_START has default value`, () => {
-        expect(component.GREEN_START).toEqual(0.34);
-    });
-
-    it(`CYAN_START has default value`, () => {
-        expect(component.CYAN_START).toEqual(0.51);
-    });
-
-    it(`BLUE_START has default value`, () => {
-        expect(component.BLUE_START).toEqual(0.61);
-    });
-
-    it(`PURPLE_START has default value`, () => {
-        expect(component.PURPLE_START).toEqual(0.85);
-    });
-
-    it(`RED_END has default value`, () => {
-        expect(component.RED_END).toEqual(1);
-    });
-
-    it(`mouseDown has default value`, () => {
+    it('mouseDown has default value', () => {
         expect(component.mouseDown).toEqual(false);
     });
 
-    it(`selectedHeight has default value`, () => {
+    it('selectedHeight has default value', () => {
         expect(component.selectedHeight).toEqual(0);
     });
 
@@ -171,18 +143,19 @@ describe('ColorSliderComponent', () => {
     });
 
     it('should get proper color', () => {
+        const place = -1;
         const red: Color = component.getColor(component.RED_START);
-        expect(red.r).toBeCloseTo(Colors.RED.r, -1);
-        expect(red.g).toBeCloseTo(Colors.RED.g, -1);
-        expect(red.b).toBeCloseTo(Colors.RED.b, -1);
+        expect(red.r).toBeCloseTo(Colors.RED.r, place);
+        expect(red.g).toBeCloseTo(Colors.RED.g, place);
+        expect(red.b).toBeCloseTo(Colors.RED.b, place);
     });
 
     it('should not getContext if there', () => {
-        //Get context to make sure we have one
+        // Get context to make sure we have one
         component.getContext();
         spyOn(component.canvas.nativeElement, 'getContext').and.stub();
 
-        //Get context should not do anything since we already have it
+        // Get context should not do anything since we already have it
         component.getContext();
         expect(component.canvas.nativeElement.getContext).not.toHaveBeenCalled();
     });

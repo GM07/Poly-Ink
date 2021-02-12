@@ -23,16 +23,16 @@ describe('HexTextboxComponent', () => {
 
     it('should cut hex if to long', () => {
         component.length = 2;
-        const longHex: string = 'AFA';
-        const goodHex: string = 'AF';
+        const longHex = 'AFA';
+        const goodHex = 'AF';
 
         expect(component.validateSizeHex(longHex)).toEqual(goodHex);
     });
 
     it('should append 0 if hex to small', () => {
         component.length = 2;
-        const shortHex: string = 'A';
-        const goodHex: string = 'A0';
+        const shortHex = 'A';
+        const goodHex = 'A0';
 
         expect(component.validateSizeHex(shortHex)).toEqual(goodHex);
     });
@@ -48,9 +48,9 @@ describe('HexTextboxComponent', () => {
     });
 
     it('should prevent entering characters that are not hex', () => {
-        const notHex: string = 'HhGgVv/][`~*';
+        const notHex = 'HhGgVv/][`~*';
 
-        for (let c of notHex) {
+        for (const c of notHex) {
             const keyEvent = new KeyboardEvent('document:keydown', { key: c });
             spyOn(keyEvent, 'preventDefault').and.stub();
             component.preventInvalid(keyEvent);
@@ -59,9 +59,9 @@ describe('HexTextboxComponent', () => {
     });
 
     it('should allow entering characters that are hex', () => {
-        const notHex: string = 'abcdefABCDEF123456789';
+        const notHex = 'abcdefABCDEF123456789';
 
-        for (let c of notHex) {
+        for (const c of notHex) {
             const keyEvent = new KeyboardEvent('document:keydown', { key: c });
             spyOn(keyEvent, 'preventDefault').and.stub();
             component.preventInvalid(keyEvent);

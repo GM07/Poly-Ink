@@ -25,7 +25,7 @@ describe('ColorTextboxComponent', () => {
     });
 
     it('should return Invalid color if hex is to short', () => {
-        let invalidHex: string = 'AFAF';
+        let invalidHex = 'AFAF';
         let hex = component.validateSizeHex(invalidHex);
         expect(hex).toEqual(HexColors.INVALID);
 
@@ -35,7 +35,7 @@ describe('ColorTextboxComponent', () => {
     });
 
     it('should return Invalid color if hex is to long', () => {
-        let invalidHex: string = 'AFAFAFA';
+        let invalidHex = 'AFAFAFA';
         let hex = component.validateSizeHex(invalidHex);
         expect(hex).toEqual(HexColors.INVALID);
 
@@ -66,9 +66,9 @@ describe('ColorTextboxComponent', () => {
     });
 
     it('should prevent entering characters that are not hex', () => {
-        const notHex: string = 'HhGgVv/][`~*';
+        const notHex = 'HhGgVv/][`~*';
 
-        for (let c of notHex) {
+        for (const c of notHex) {
             const keyEvent = new KeyboardEvent('document:keydown', { key: c });
             spyOn(keyEvent, 'preventDefault').and.stub();
             component.preventInvalid(keyEvent);
@@ -77,9 +77,9 @@ describe('ColorTextboxComponent', () => {
     });
 
     it('should allow entering characters that are hex', () => {
-        const notHex: string = 'abcdefABCDEF123456789';
+        const notHex = 'abcdefABCDEF123456789';
 
-        for (let c of notHex) {
+        for (const c of notHex) {
             const keyEvent = new KeyboardEvent('document:keydown', { key: c });
             spyOn(keyEvent, 'preventDefault').and.stub();
             component.preventInvalid(keyEvent);

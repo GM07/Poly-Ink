@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { Colors } from '../constants/colors';
-import { Color } from './../classes/color';
+import { Color } from 'src/color-picker/classes/color';
+import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from './color.service';
 
 describe('ColorService', () => {
@@ -15,38 +15,14 @@ describe('ColorService', () => {
         expect(service).toBeTruthy();
     });
 
-    it(`MAX_NUMBER_PREVIOUS_COLORS has default value`, () => {
-        expect(ColorService.MAX_NUMBER_PREVIOUS_COLORS).toEqual(10);
-    });
-
-    it(`selectedColor has default value`, () => {
-        expect(service.selectedColor).toEqual(Colors.BLACK);
-    });
-
-    it(`selectedAlpha has default value`, () => {
-        expect(service.selectedAlpha).toEqual(1);
-    });
-
-    it(`selectedHue has default value`, () => {
-        expect(service.selectedHue).toEqual(Colors.BLACK);
-    });
-
-    it(`primaryColorAlpha has default value`, () => {
-        expect(service.primaryColorAlpha).toEqual(1);
-    });
-
-    it(`secondaryColorAlpha has default value`, () => {
-        expect(service.secondaryColorAlpha).toEqual(1);
-    });
-
     it('should return proper primary rgba string', () => {
-        const redRgba: string = 'rgba(255, 0, 0, 1)';
+        const redRgba = 'rgba(255, 0, 0, 1)';
         service.primaryColor = Colors.RED;
         expect(service.primaryRgba).toEqual(redRgba);
     });
 
     it('should return proper secondary rgba string', () => {
-        const redRgba: string = 'rgba(255, 0, 0, 1)';
+        const redRgba = 'rgba(255, 0, 0, 1)';
         service.secondaryColor = Colors.RED;
         expect(service.secondaryRgba).toEqual(redRgba);
     });

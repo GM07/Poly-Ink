@@ -60,7 +60,7 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
         this.drawSelectionArea();
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.selectedColorChangeHexSubscription.unsubscribe();
     }
 

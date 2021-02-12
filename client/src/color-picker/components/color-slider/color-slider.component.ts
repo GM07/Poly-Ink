@@ -70,7 +70,7 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
         }
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.hueChangeFromHexSubscription.unsubscribe();
     }
 

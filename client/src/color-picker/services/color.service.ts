@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { Color } from 'src/color-picker/classes/color';
 import { Colors } from 'src/color-picker/constants/colors';
-import { Color } from '../classes/color';
 
 @Injectable({
     providedIn: 'root',
@@ -14,12 +14,12 @@ export class ColorService {
 
     private previous: Color[] = [];
 
-    public selectedColor: Color = Colors.BLACK;
+    selectedColor: Color = Colors.BLACK;
     selectedColorChangeFromHex: Subject<Color> = new Subject<Color>();
 
-    public selectedAlpha: number = 1;
+    selectedAlpha: number = 1;
 
-    public selectedHue: Color = Colors.BLACK;
+    selectedHue: Color = Colors.BLACK;
     hueChangeFromHex: Subject<Color> = new Subject<Color>();
     hueChangeFromSlider: Subject<Color> = new Subject<Color>();
 

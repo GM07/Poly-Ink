@@ -26,7 +26,7 @@ describe('ColorPaletteComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it(`mouseDown has default value`, () => {
+    it('mouseDown has default value', () => {
         expect(component.mouseDown).toEqual(false);
     });
 
@@ -97,8 +97,8 @@ describe('ColorPaletteComponent', () => {
     });
 
     it('should change selected position on mouseDown', () => {
-        const x: number = 50;
-        const y: number = 50;
+        const x = 50;
+        const y = 50;
 
         spyOn(component, 'changeSelectedPosition').and.stub();
 
@@ -109,8 +109,8 @@ describe('ColorPaletteComponent', () => {
     });
 
     it('should move selected position on mouse move if mouse is down', () => {
-        const x: number = 50;
-        const y: number = 50;
+        const x = 50;
+        const y = 50;
         component.mouseDown = true;
 
         spyOn(component, 'changeSelectedPosition').and.stub();
@@ -121,8 +121,8 @@ describe('ColorPaletteComponent', () => {
     });
 
     it('should not move selected position on mouse move if mouse up', () => {
-        const x: number = 50;
-        const y: number = 50;
+        const x = 50;
+        const y = 50;
         component.mouseDown = false;
 
         spyOn(component, 'changeSelectedPosition').and.stub();
@@ -133,11 +133,11 @@ describe('ColorPaletteComponent', () => {
     });
 
     it('should make appropriate calls when changing positions', () => {
-        const x: number = 50;
-        const y: number = 50;
+        const x = 50;
+        const y = 50;
 
         spyOn(component, 'draw').and.stub();
-        spyOn(component, 'keepSelectionWithinBounds').and.returnValue({ x: x, y: y });
+        spyOn(component, 'keepSelectionWithinBounds').and.returnValue({ x, y });
         spyOn(component, 'getColorAtPosition').and.stub();
 
         component.changeSelectedPosition(x, y);
@@ -148,19 +148,21 @@ describe('ColorPaletteComponent', () => {
     });
 
     it('should keep selection within bounds', () => {
+        const startX = 0;
+        const startY = 0;
         const width: number = component.canvas.nativeElement.width;
         const height: number = component.canvas.nativeElement.height;
-        const x: number = 50;
-        const y: number = 50;
+        const x = 50;
+        const y = 50;
 
         let position: { x: number; y: number } = component.keepSelectionWithinBounds(width + 1, height + 1);
         expect(position).toEqual({ x: width, y: height });
 
-        position = component.keepSelectionWithinBounds(-1, -1);
-        expect(position).toEqual({ x: 0, y: 0 });
+        position = component.keepSelectionWithinBounds(startX - 1, startY - 1);
+        expect(position).toEqual({ x: startX, y: startY });
 
         position = component.keepSelectionWithinBounds(x, y);
-        expect(position).toEqual({ x: x, y: y });
+        expect(position).toEqual({ x, y });
     });
 
     it('should get proper color from canvas', () => {
@@ -170,17 +172,17 @@ describe('ColorPaletteComponent', () => {
         let color: Color = component.getColorAtPosition(width, height);
 
         color = component.getColorAtPosition(width, height);
-        expect(color.r).toBeCloseTo(Colors.BLACK.r, 3);
-        expect(color.g).toBeCloseTo(Colors.BLACK.g, 3);
-        expect(color.b).toBeCloseTo(Colors.BLACK.b, 3);
+        expect(color.r).toEqual(Colors.BLACK.r);
+        expect(color.g).toEqual(Colors.BLACK.g);
+        expect(color.b).toEqual(Colors.BLACK.b);
     });
 
     it('should not getContext if there', () => {
-        //Get context to make sure we have one
+        // Get context to make sure we have one
         component.getContext();
         spyOn(component.canvas.nativeElement, 'getContext').and.stub();
 
-        //Get context should not do anything since we already have it
+        // Get context should not do anything since we already have it
         component.getContext();
         expect(component.canvas.nativeElement.getContext).not.toHaveBeenCalled();
     });

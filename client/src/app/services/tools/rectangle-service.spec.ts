@@ -187,7 +187,7 @@ describe('RectangleService', () => {
     });
 
     it('should allow for filled with contour drawing type', () => {
-        //Set primary color to black
+        // Set primary color to black
         spyOnProperty(colorService, 'primaryRgba').and.returnValue('rgba(1, 1, 1, 1)');
         spyOnProperty(colorService, 'secondaryRgba').and.returnValue('rgba(0, 0, 0, 1');
 

@@ -15,7 +15,7 @@ export class ColorTextboxComponent {
     hexColorChangeEvent: EventEmitter<Color> = new EventEmitter<Color>();
 
     validateSizeHex(hex: string): string {
-        if (hex.length != HexColors.LENGTH) return HexColors.INVALID;
+        if (hex.length !== HexColors.LENGTH) return HexColors.INVALID;
         return hex;
     }
 
@@ -25,7 +25,7 @@ export class ColorTextboxComponent {
         this.hexColorChangeEvent.emit(color);
     }
 
-    preventInvalid(key: KeyboardEvent) {
+    preventInvalid(key: KeyboardEvent): void {
         const regularExpression = /[0-9A-Fa-f]{1}/g;
         if (!regularExpression.test(key.key)) key.preventDefault();
     }

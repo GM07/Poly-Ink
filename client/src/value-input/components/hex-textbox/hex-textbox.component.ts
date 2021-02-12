@@ -35,7 +35,7 @@ export class HexTextboxComponent {
         this.hexChangeEvent.emit([this.label, this.hex]);
     }
 
-    preventInvalid(event: KeyboardEvent) {
+    preventInvalid(event: KeyboardEvent): void {
         const regularExpression = /[0-9A-Fa-f]{1}/g;
         if (!regularExpression.test(event.key)) event.preventDefault();
     }
