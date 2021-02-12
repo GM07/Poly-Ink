@@ -11,7 +11,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PencilConfigComponent } from './pencil-config.component';
 
 @Component({ selector: 'app-color-icon', template: '' })
-class StubColorIcon {}
+class StubColorIconComponent {}
 
 describe('PencilConfigComponent', () => {
     let component: PencilConfigComponent;
@@ -20,7 +20,7 @@ describe('PencilConfigComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [PencilConfigComponent, StubColorIcon],
+            declarations: [PencilConfigComponent, StubColorIconComponent],
             imports: [MatDividerModule, MatSliderModule, FormsModule, NoopAnimationsModule, MatInputModule],
         }).compileComponents();
         fixture = TestBed.createComponent(PencilConfigComponent);
@@ -45,7 +45,7 @@ describe('PencilConfigComponent', () => {
     });
 
     it('should get max value of slider', async () => {
-        const max = 100;
+        const max = 50;
         const slider = await loader.getHarness(MatSliderHarness);
         expect(await slider.getMaxValue()).toBe(max);
     });

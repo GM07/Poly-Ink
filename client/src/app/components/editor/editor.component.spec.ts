@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NewDrawingConstants } from '@app/classes/tool_settings/tools.constants';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
@@ -17,7 +16,6 @@ class StubSidebarComponent {}
 describe('EditorComponent', () => {
     let component: EditorComponent;
     let fixture: ComponentFixture<EditorComponent>;
-    let router: Router;
     let newDrawingComponent: jasmine.SpyObj<NewDrawingComponent>;
 
     beforeEach(async(() => {
@@ -32,7 +30,6 @@ describe('EditorComponent', () => {
                 MatIconModule,
             ],
         }).compileComponents();
-        router = TestBed.inject(Router);
     }));
 
     beforeEach(() => {
@@ -54,10 +51,5 @@ describe('EditorComponent', () => {
         component.newDrawingMenu = newDrawingComponent;
         component.resetDrawing('InvalidArgument');
         expect(newDrawingComponent.createNewDrawing).not.toHaveBeenCalled();
-    });
-    it('should go back to menu', () => {
-        const funct = spyOn(router, 'navigateByUrl');
-        component.backToMenu();
-        expect(funct).toHaveBeenCalledWith('home');
     });
 });

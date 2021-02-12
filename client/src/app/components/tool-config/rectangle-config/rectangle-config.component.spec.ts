@@ -10,10 +10,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RectangleMode } from '@app/services/tools/rectangle-service';
 import { RectangleConfigComponent } from './rectangle-config.component';
 
 @Component({ selector: 'app-color-icon', template: '' })
-class StubColorIcon {}
+class StubColorIconComponent {}
 
 describe('RectangleConfigComponent', () => {
     let component: RectangleConfigComponent;
@@ -23,7 +24,7 @@ describe('RectangleConfigComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [RectangleConfigComponent, StubColorIcon],
+            declarations: [RectangleConfigComponent, StubColorIconComponent],
             imports: [MatDividerModule, MatButtonModule, MatSliderModule, FormsModule, MatInputModule, NoopAnimationsModule],
         }).compileComponents();
         fixture = TestBed.createComponent(RectangleConfigComponent);
@@ -42,13 +43,13 @@ describe('RectangleConfigComponent', () => {
     });
 
     it('should get max value of slider', async () => {
-        const max = 100;
+        const max = 50;
         const slider = await loader.getHarness(MatSliderHarness);
         expect(await slider.getMaxValue()).toBe(max);
     });
 
     it('should be able to set value of slider', async () => {
-        const setValue = 99;
+        const setValue = 15;
         const slider = await loader.getHarness(MatSliderHarness);
         expect(await slider.getValue()).toBe(1);
 
@@ -58,7 +59,7 @@ describe('RectangleConfigComponent', () => {
     });
 
     it('traceType should be Contour by default', () => {
-        expect(component.traceTypeTestIn).toEqual(0);
+        expect(component.traceTypeIn).toEqual(RectangleMode.Contour);
     });
 
     it('should load all button harnesses', async () => {
@@ -88,18 +89,18 @@ describe('RectangleConfigComponent', () => {
     it('traceType should be Contour when Contour button is clicked ', async () => {
         const button1 = await loader.getHarness(buttonHarness.with({ text: 'Contour' }));
         await button1.click();
-        expect(fixture.componentInstance.traceTypeTestIn).toEqual(0);
+        expect(fixture.componentInstance.traceTypeIn).toEqual(RectangleMode.Contour);
     });
 
     it('traceType should be Plein when Plein button is clicked ', async () => {
         const button2 = await loader.getHarness(buttonHarness.with({ text: 'Plein' }));
         await button2.click();
-        expect(fixture.componentInstance.traceTypeTestIn).toEqual(1);
+        expect(fixture.componentInstance.traceTypeIn).toEqual(RectangleMode.Filled);
     });
 
     it('traceType should be Plein&Contour when Plein&Contour button is clicked ', async () => {
         const button3 = await loader.getHarness(buttonHarness.with({ text: 'Plein&Contour' }));
         await button3.click();
-        expect(fixture.componentInstance.traceTypeTestIn).toEqual(2);
+        expect(fixture.componentInstance.traceTypeIn).toEqual(RectangleMode.FilledWithContour);
     });
 });

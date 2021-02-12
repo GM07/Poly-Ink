@@ -5,11 +5,6 @@ import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 
-export enum Key {
-    Released = 0,
-    Pressed = 1,
-}
-
 export enum RectangleMode {
     Contour = 0,
     Filled = 1,
@@ -34,7 +29,7 @@ export class RectangleService extends Tool {
     }
 
     set contourWidth(width: number) {
-        const max = 100;
+        const max = 50;
         this.lineWidthIn = Math.min(Math.max(width, 1), max);
     }
 
@@ -125,6 +120,7 @@ export class RectangleService extends Tool {
         ctx.lineWidth = this.lineWidthIn;
         ctx.strokeStyle = this.colorService.secondaryRgba;
         ctx.fillStyle = this.colorService.primaryRgba;
+        ctx.lineJoin = 'miter' as CanvasLineJoin;
         ctx.beginPath();
 
         switch (this.rectangleMode) {

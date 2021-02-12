@@ -5,7 +5,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSliderModule } from '@angular/material/slider';
@@ -43,12 +42,15 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         LineConfigComponent,
         PencilConfigComponent,
         SettingsHandlerComponent,
+        CanvasResizeComponent,
+        SidebarComponent,
     ],
     imports: [
         AppRoutingModule,
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule,
+        AppRoutingModule,
         MatButtonModule,
         MatIconModule,
         MatTooltipModule,
@@ -58,7 +60,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         ColorPickerModule,
         MatDividerModule,
         MatSliderModule,
-        MatInputModule,
+        MatIconModule,
         FormsModule,
     ],
     providers: [],

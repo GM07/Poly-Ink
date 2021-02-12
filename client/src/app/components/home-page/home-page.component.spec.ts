@@ -1,8 +1,11 @@
+import { HttpClientModule } from '@angular/common/http';
+import { NgZone } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
@@ -10,6 +13,8 @@ import { HomePageComponent } from '@app/components/home-page/home-page.component
 describe('HomePageComponent', () => {
     let component: HomePageComponent;
     let fixture: ComponentFixture<HomePageComponent>;
+    let zone: NgZone;
+    let router: Router;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -19,6 +24,7 @@ describe('HomePageComponent', () => {
                     { path: 'home', component: HomePageComponent },
                     { path: 'editor', component: EditorComponent },
                 ]),
+                HttpClientModule,
                 NoopAnimationsModule,
                 MatButtonModule,
                 MatExpansionModule,
@@ -31,6 +37,11 @@ describe('HomePageComponent', () => {
         fixture = TestBed.createComponent(HomePageComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
+        router = TestBed.inject(Router);
+        zone = TestBed.inject(NgZone);
+        zone.run(() => {
+            router.initialNavigation();
+        });
     });
 
     it('should create', () => {
