@@ -33,8 +33,8 @@
                 thumbLabel
                 [(ngModel)]="lineService.diameterJunctions"
                 [displayWith]="colorSliderLabel"
-                min="1"
-                max="50">
+                min="{{ MIN }}"
+                max="{{ MAX }}">
             </mat-slider>
             {{lineService.diameterJunctions}}px
         </div>
