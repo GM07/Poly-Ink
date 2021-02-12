@@ -1,4 +1,3 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HexTextboxComponent } from './hex-textbox.component';
@@ -10,7 +9,6 @@ describe('HexTextboxComponent', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [FormsModule],
-            schemas: [NO_ERRORS_SCHEMA],
             declarations: [HexTextboxComponent],
         });
         fixture = TestBed.createComponent(HexTextboxComponent);

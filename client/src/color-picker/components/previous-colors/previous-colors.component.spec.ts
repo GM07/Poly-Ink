@@ -1,4 +1,3 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Color } from 'src/color-picker/classes/color';
 import { Colors } from 'src/color-picker/constants/colors';
@@ -12,7 +11,6 @@ describe('PreviousColorsComponent', () => {
     beforeEach(() => {
         const colorServiceStub = () => ({ primaryColor: {}, secondaryColor: {} });
         TestBed.configureTestingModule({
-            schemas: [NO_ERRORS_SCHEMA],
             declarations: [PreviousColorsComponent],
             providers: [{ provide: ColorService, useFactory: colorServiceStub }],
         });

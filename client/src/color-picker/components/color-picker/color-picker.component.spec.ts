@@ -1,9 +1,32 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Color } from 'src/color-picker/classes/color';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { ColorPickerComponent } from './color-picker.component';
+
+@Component({ selector: 'app-color-palette', template: '' })
+class StubColorPaletteComponent {}
+@Component({ selector: 'app-color-slider', template: '' })
+class StubColorSliderComponent {}
+
+@Component({ selector: 'app-previous-colors', template: '' })
+class StubPreviousColorComponent {}
+
+@Component({ selector: 'app-hex-textbox', template: '' })
+class StubHexTextboxComponent {}
+
+@Component({ selector: 'app-color-preview', template: '' })
+class StubColorPreviewComponent {}
+
+@Component({ selector: 'app-color-textbox', template: '' })
+class StubColorTextBoxComponent {}
+
+@Component({ selector: 'app-value-slider', template: '' })
+class StubValueSliderComponent {}
+
+@Component({ selector: 'mat-divider', template: '' })
+class StubMatDividerComponent {}
 
 describe('ColorPickerComponent', () => {
     let component: ColorPickerComponent;
@@ -20,8 +43,17 @@ describe('ColorPickerComponent', () => {
             secondaryColorAlpha: {},
         });
         TestBed.configureTestingModule({
-            schemas: [NO_ERRORS_SCHEMA],
-            declarations: [ColorPickerComponent],
+            declarations: [
+                ColorPickerComponent,
+                StubColorPaletteComponent,
+                StubColorSliderComponent,
+                StubPreviousColorComponent,
+                StubColorPreviewComponent,
+                StubColorTextBoxComponent,
+                StubValueSliderComponent,
+                StubHexTextboxComponent,
+                StubMatDividerComponent,
+            ],
             providers: [{ provide: ColorService, useFactory: colorServiceStub }],
         });
         fixture = TestBed.createComponent(ColorPickerComponent);

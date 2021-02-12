@@ -1,7 +1,10 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSliderChange } from '@angular/material/slider';
 import { ValueSliderComponent } from './value-slider.component';
+
+@Component({ selector: 'mat-slider', template: '' })
+class StubMatSliderComponent {}
 
 describe('ValueSliderComponent', () => {
     let component: ValueSliderComponent;
@@ -9,8 +12,7 @@ describe('ValueSliderComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            schemas: [NO_ERRORS_SCHEMA],
-            declarations: [ValueSliderComponent],
+            declarations: [ValueSliderComponent, StubMatSliderComponent],
         });
         fixture = TestBed.createComponent(ValueSliderComponent);
         component = fixture.componentInstance;

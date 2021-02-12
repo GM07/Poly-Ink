@@ -1,4 +1,3 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Color } from 'src/color-picker/classes/color';
@@ -13,7 +12,6 @@ describe('ColorTextboxComponent', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [FormsModule],
-            schemas: [NO_ERRORS_SCHEMA],
             declarations: [ColorTextboxComponent],
         });
         fixture = TestBed.createComponent(ColorTextboxComponent);

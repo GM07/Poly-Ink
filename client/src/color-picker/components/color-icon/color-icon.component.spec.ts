@@ -1,10 +1,19 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Color } from 'src/color-picker/classes/color';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { ColorIconComponent } from './color-icon.component';
+
+@Component({ selector: 'app-color-picker', template: '' })
+class StubColorPickerComponent {}
+
+@Component({ selector: 'mat-menu', template: '' })
+class StubMatMenuComponent {}
+
+@Component({ selector: 'mat-icon', template: '' })
+class StubMatIconComponent {}
 
 describe('ColorIconComponent', () => {
     let component: ColorIconComponent;
@@ -19,8 +28,7 @@ describe('ColorIconComponent', () => {
             primaryColor: {},
         });
         TestBed.configureTestingModule({
-            schemas: [NO_ERRORS_SCHEMA],
-            declarations: [ColorIconComponent],
+            declarations: [ColorIconComponent, StubColorPickerComponent, StubMatMenuComponent, StubMatIconComponent],
             providers: [{ provide: ColorService, useFactory: colorServiceStub }],
         });
         fixture = TestBed.createComponent(ColorIconComponent);
