@@ -12,6 +12,7 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class ToolHandlerService {
+    openColorPicker: boolean = false;
     private TOOLS: Map<string, Tool> = new Map();
     private currentTool: Tool;
     currentToolSubject: Subject<Tool> = new Subject<Tool>();

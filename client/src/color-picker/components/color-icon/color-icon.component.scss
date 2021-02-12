@@ -1,0 +1,55 @@
+.parent {
+    position: relative;
+    background-color: transparent;
+    margin: 10px 5px 10px 10px;
+    width: 60px;
+    height: 60px;
+}
+
+.primaryColor {
+    position: absolute;
+    border: 1px solid black;
+    z-index: 2;
+    width: 35px;
+    height: 35px;
+}
+
+.secondaryColor {
+    position: absolute;
+    border: 1px solid black;
+    z-index: 1;
+    width: 35px;
+    height: 35px;
+    top: 7px;
+    left: 7px;
+}
+
+mat-icon {
+    position: absolute;
+    z-index: 2;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-size: 18px;
+    top: 42px;
+    left: 42px;
+}
+
+button {
+    margin: 10px 10px 10px 5px;
+}
+
+.menuTrigger {
+    position: absolute;
+    left: 100%;
+    top: 0px;
+}
+
+:host {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+}

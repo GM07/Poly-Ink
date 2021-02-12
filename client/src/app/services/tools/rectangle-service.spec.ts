@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { ColorService } from 'src/color-picker/services/color.service';
 import { RectangleMode, RectangleService } from './rectangle-service';
 
 // tslint:disable:no-any
@@ -10,6 +11,7 @@ describe('RectangleService', () => {
     let keyboardEvent: KeyboardEvent;
     let canvasTestHelper: CanvasTestHelper;
     let drawServiceSpy: jasmine.SpyObj<DrawingService>;
+    let colorServiceSpy: jasmine.SpyObj<ColorService>;
 
     let baseCtxStub: CanvasRenderingContext2D;
     let previewCtxStub: CanvasRenderingContext2D;
@@ -20,9 +22,13 @@ describe('RectangleService', () => {
 
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
+        colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(1, 1, 1, 1)', secondaryRgba: 'rgba(0, 0, 0, 1)' });
 
         TestBed.configureTestingModule({
-            providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
+            providers: [
+                { provide: DrawingService, useValue: drawServiceSpy },
+                { provide: ColorService, useValue: colorServiceSpy },
+            ],
         });
 
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
@@ -51,20 +57,6 @@ describe('RectangleService', () => {
 
     it('should be created', () => {
         expect(service).toBeTruthy();
-    });
-
-    it('should change the fill color', () => {
-        service.fillStyle = 'purple';
-        expect(service.fillStyle).toEqual('purple');
-        service.fillStyle = 'nothing';
-        expect(service.fillStyle).toEqual('purple');
-    });
-
-    it('should change the contour color', () => {
-        service.strokeStyle = 'purple';
-        expect(service.strokeStyle).toEqual('purple');
-        service.strokeStyle = 'nothing';
-        expect(service.strokeStyle).toEqual('purple');
     });
 
     it('should change the contour size', () => {
@@ -160,7 +152,6 @@ describe('RectangleService', () => {
     it('should allow for contour drawing type', () => {
         service.rectangleMode = RectangleMode.Contour;
         service.contourWidth = 1;
-        service.strokeStyle = '#000000';
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
@@ -181,7 +172,6 @@ describe('RectangleService', () => {
 
     it('should allow for filled drawing type', () => {
         service.rectangleMode = RectangleMode.Filled;
-        service.fillStyle = '#000000';
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
@@ -189,17 +179,15 @@ describe('RectangleService', () => {
 
         // tslint:disable-next-line:no-magic-numbers
         const imageData: ImageData = baseCtxStub.getImageData(1, 1, 25, 25);
-        expect(imageData.data[0]).toEqual(0); // R
-        expect(imageData.data[1]).toEqual(0); // G
-        expect(imageData.data[2]).toEqual(0); // B
+        expect(imageData.data[0]).toEqual(1); // R
+        expect(imageData.data[1]).toEqual(1); // G
+        expect(imageData.data[2]).toEqual(1); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
     it('should allow for filled with contour drawing type', () => {
         service.rectangleMode = RectangleMode.FilledWithContour;
         service.contourWidth = 1;
-        service.strokeStyle = '#000000';
-        service.fillStyle = '#010101';
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
@@ -223,8 +211,6 @@ describe('RectangleService', () => {
 
     it('should do nothing with an unknown mode', () => {
         service.rectangleMode = {} as RectangleMode;
-        service.strokeStyle = '#000000';
-        service.fillStyle = '#010101';
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
@@ -237,7 +223,6 @@ describe('RectangleService', () => {
     it('should draw a square when shift is pressed', () => {
         service.onKeyDown(keyboardEvent);
         service.rectangleMode = RectangleMode.Filled;
-        service.fillStyle = '#000000';
         service.onMouseDown(mouseEvent);
         // tslint:disable-next-line:no-magic-numbers
         mouseEvent = { offsetX: 20, offsetY: 5, button: 0 } as MouseEvent;
@@ -245,9 +230,9 @@ describe('RectangleService', () => {
 
         // tslint:disable-next-line:no-magic-numbers
         const imageData: ImageData = baseCtxStub.getImageData(20, 20, 5, 5);
-        expect(imageData.data[0]).toEqual(0); // R
-        expect(imageData.data[1]).toEqual(0); // G
-        expect(imageData.data[2]).toEqual(0); // B
+        expect(imageData.data[0]).toEqual(1); // R
+        expect(imageData.data[1]).toEqual(1); // G
+        expect(imageData.data[2]).toEqual(1); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 });

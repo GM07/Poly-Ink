@@ -5,13 +5,14 @@ import { LineToolConstants } from '@app/classes/tool_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class LineService extends Tool {
-    constructor(drawingService: DrawingService) {
-        super(drawingService);
+    constructor(drawingService: DrawingService, colorService: ColorService) {
+        super(drawingService, colorService);
         this.shortCutKey = 'l';
     }
     static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
@@ -45,8 +46,8 @@ export class LineService extends Tool {
     }
 
     applyAttributes(ctx: CanvasRenderingContext2D): void {
-        ctx.fillStyle = this.color;
-        ctx.strokeStyle = this.color;
+        ctx.fillStyle = this.colorService.primaryRgba;
+        ctx.strokeStyle = this.colorService.primaryRgba;
         ctx.lineWidth = this.thickness;
         ctx.lineCap = 'round' as CanvasLineCap;
         ctx.lineJoin = 'round' as CanvasLineJoin; // Essentiel pour avoir une allure "smooth"

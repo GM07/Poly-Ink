@@ -1,5 +1,6 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +14,9 @@ import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { RectangleMode } from '@app/services/tools/rectangle-service';
 import { RectangleConfigComponent } from './rectangle-config.component';
 
+@Component({ selector: 'app-color-icon', template: '' })
+class StubColorIconComponent {}
+
 describe('RectangleConfigComponent', () => {
     let component: RectangleConfigComponent;
     let fixture: ComponentFixture<RectangleConfigComponent>;
@@ -21,7 +25,7 @@ describe('RectangleConfigComponent', () => {
     const DEFAULT_VALUE = 1;
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [RectangleConfigComponent],
+            declarations: [RectangleConfigComponent, StubColorIconComponent],
             imports: [MatDividerModule, MatButtonModule, MatSliderModule, FormsModule, MatInputModule, NoopAnimationsModule],
         }).compileComponents();
         fixture = TestBed.createComponent(RectangleConfigComponent);

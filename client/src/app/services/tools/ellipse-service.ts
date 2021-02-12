@@ -4,6 +4,7 @@ import { EllipseToolConstants } from '@app/classes/tool_settings/tools.constants
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { ColorService } from 'src/color-picker/services/color.service';
 
 export enum EllipseMode {
     Contour = 0,
@@ -16,37 +17,17 @@ export enum EllipseMode {
 })
 export class EllipseService extends Tool {
     toolID: string = EllipseToolConstants.TOOL_ID;
-    private strokeStyleIn: string;
-    private fillStyleIn: string;
     private mouseUpCoord: Vec2;
     private shiftPressed: boolean;
     private lineWidthIn: number;
     ellipseMode: EllipseMode;
 
-    constructor(drawingService: DrawingService) {
-        super(drawingService);
+    constructor(drawingService: DrawingService, colorService: ColorService) {
+        super(drawingService, colorService);
         this.shortCutKey = '2';
-        this.strokeStyleIn = 'black';
-        this.fillStyleIn = 'black';
         this.shiftPressed = false;
         this.lineWidthIn = 1;
         this.ellipseMode = EllipseMode.Contour;
-    }
-
-    set strokeStyle(color: string) {
-        if (Tool.isColorValid(color)) this.strokeStyleIn = color;
-    }
-
-    get strokeStyle(): string {
-        return this.strokeStyleIn;
-    }
-
-    set fillStyle(color: string) {
-        if (Tool.isColorValid(color)) this.fillStyleIn = color;
-    }
-
-    get fillStyle(): string {
-        return this.fillStyleIn;
     }
 
     set contourWidth(width: number) {
@@ -153,7 +134,7 @@ export class EllipseService extends Tool {
             this.drawRectanglePerimeter(ctx, centerX, centerY, radiusXAbs, radiusYAbs);
         }
 
-        ctx.strokeStyle = this.strokeStyleIn;
+        ctx.strokeStyle = this.colorService.secondaryRgba;
         ctx.lineCap = 'round' as CanvasLineCap;
         ctx.lineJoin = 'round' as CanvasLineJoin;
 
@@ -166,13 +147,13 @@ export class EllipseService extends Tool {
                 break;
             case EllipseMode.Filled:
                 ctx.lineWidth = 0;
-                ctx.fillStyle = this.fillStyleIn;
+                ctx.fillStyle = this.colorService.primaryRgba;
                 ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
                 ctx.fill();
                 break;
             case EllipseMode.FilledWithContour:
                 ctx.lineWidth = this.lineWidthIn;
-                ctx.fillStyle = this.fillStyleIn;
+                ctx.fillStyle = this.colorService.primaryRgba;
                 ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
                 ctx.fill();
                 ctx.stroke();

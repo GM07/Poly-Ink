@@ -1,6 +1,12 @@
 <div class="tab">
     <h5 class="textFormat">Configurations crayon</h5>
     <mat-divider></mat-divider>
+
+    <!--Couleur-->
+    <h5 class="textFormat">Couleur</h5>
+    <app-color-icon></app-color-icon>
+    <mat-divider></mat-divider>
+
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
         <mat-slider min="{{ MIN }}" max="{{ MAX }}" [(ngModel)]="pencilService.lineWidth" thumbLabel [displayWith]="colorSliderLabel"> </mat-slider>

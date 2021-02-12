@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { ColorService } from 'src/color-picker/services/color.service';
 import { PencilService } from './pencil-service';
 
 // tslint:disable:no-any
@@ -10,6 +11,7 @@ describe('PencilService', () => {
     let mouseEvent: MouseEvent;
     let canvasTestHelper: CanvasTestHelper;
     let drawServiceSpy: jasmine.SpyObj<DrawingService>;
+    let colorServiceSpy: jasmine.SpyObj<ColorService>;
 
     let baseCtxStub: CanvasRenderingContext2D;
     let previewCtxStub: CanvasRenderingContext2D;
@@ -19,9 +21,13 @@ describe('PencilService', () => {
 
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
+        colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(1, 1, 1, 1)', secondaryRgba: 'rgba(0, 0, 0, 1)' });
 
         TestBed.configureTestingModule({
-            providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
+            providers: [
+                { provide: DrawingService, useValue: drawServiceSpy },
+                { provide: ColorService, useValue: colorServiceSpy },
+            ],
         });
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         baseCtxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -93,23 +99,7 @@ describe('PencilService', () => {
         expect(drawLineSpy).toHaveBeenCalled();
     });
 
-    it('Should allow for color change', () => {
-        service.strokeStyle = 'purple';
-        expect(service.strokeStyle).toEqual('purple');
-        service.strokeStyle = '#FF0000';
-        expect(service.strokeStyle).toEqual('#FF0000');
-        service.strokeStyle = 'rgb(1, 2, 3)';
-        expect(service.strokeStyle).toEqual('rgb(1, 2, 3)');
-        service.strokeStyle = 'rgba(1, 2, 4, 0.5)';
-        expect(service.strokeStyle).toEqual('rgba(1, 2, 4, 0.5)');
-        service.strokeStyle = '#000000';
-        service.strokeStyle = 'NimporteQuoi';
-        expect(service.strokeStyle).not.toEqual('NimporteQuoi');
-        expect(service.strokeStyle).toEqual('#000000');
-    });
-
     it('should not draw a line between the points where it left and entered the canvas', () => {
-        service.strokeStyle = '#000000';
         service.lineWidth = 2;
         let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);
@@ -117,22 +107,22 @@ describe('PencilService', () => {
         mouseEventLClick = { offsetX: 0, offsetY: 50, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
         expect(drawLineSpy).toHaveBeenCalled();
-        mouseEventLClick = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
-        service.onMouseUp(mouseEvent);
+        mouseEventLClick = { offsetX: 0, offsetY: 50, button: 0 } as MouseEvent;
+        service.onMouseUp(mouseEventLClick);
 
         // tslint:disable-next-line:no-magic-numbers
         let imageData: ImageData = baseCtxStub.getImageData(2, 2, 25, 25);
         expect(imageData.data[ALPHA]).toEqual(0); // A, rien ne doit être dessiné
         imageData = baseCtxStub.getImageData(0, 0, 1, 1);
-        expect(imageData.data[0]).toEqual(0); // R
-        expect(imageData.data[1]).toEqual(0); // G
-        expect(imageData.data[2]).toEqual(0); // B
+        expect(imageData.data[0]).toEqual(1); // R
+        expect(imageData.data[1]).toEqual(1); // G
+        expect(imageData.data[2]).toEqual(1); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
         // tslint:disable-next-line:no-magic-numbers
         imageData = baseCtxStub.getImageData(0, 50, 1, 1);
-        expect(imageData.data[0]).toEqual(0); // R
-        expect(imageData.data[1]).toEqual(0); // G
-        expect(imageData.data[2]).toEqual(0); // B
+        expect(imageData.data[0]).toEqual(1); // R
+        expect(imageData.data[1]).toEqual(1); // G
+        expect(imageData.data[2]).toEqual(1); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
@@ -181,7 +171,6 @@ describe('PencilService', () => {
     });
 
     it('Should draw a single pixel if the user clicked once with the smallest size, without moving', () => {
-        service.strokeStyle = 'black';
         service.lineWidth = 1;
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
@@ -203,7 +192,6 @@ describe('PencilService', () => {
 
     // Exemple de test d'intégration qui est quand même utile
     it(' should change the pixel of the canvas ', () => {
-        service.strokeStyle = '#000000';
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 0, button: 0 } as MouseEvent;
@@ -211,9 +199,9 @@ describe('PencilService', () => {
 
         // Premier pixel seulement
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
-        expect(imageData.data[0]).toEqual(0); // R
-        expect(imageData.data[1]).toEqual(0); // G
-        expect(imageData.data[2]).toEqual(0); // B
+        expect(imageData.data[0]).toEqual(1); // R
+        expect(imageData.data[1]).toEqual(1); // G
+        expect(imageData.data[2]).toEqual(1); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 });

@@ -11,6 +11,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ColorPickerModule } from 'src/color-picker/color-picker.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { NewDrawingComponent } from './components/canvas-reset/canvas-reset.component';
@@ -56,6 +57,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         MatSidenavModule,
         MatListModule,
         MatExpansionModule,
+        ColorPickerModule,
         MatDividerModule,
         MatSliderModule,
         MatIconModule,
