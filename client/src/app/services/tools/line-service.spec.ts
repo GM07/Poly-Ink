@@ -8,6 +8,7 @@ import { LineService } from './line-service';
 /* tslint:disable:no-magic-numbers */
 /* tslint:disable:no-string-literal */
 /* tslint:disable:no-any */
+
 describe('LineService', () => {
     let service: LineService;
     let colorServiceSpy: jasmine.SpyObj<ColorService>;
@@ -27,7 +28,6 @@ describe('LineService', () => {
     let pointsTest2: Vec2[];
 
     const delay = async (ms: number) => new Promise((result) => setTimeout(result, ms));
-
     beforeEach(() => {
         const spyDrawing = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
         colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(1, 1, 1, 1)', secondaryRgba: 'rgba(0, 0, 0, 1)' });
@@ -117,7 +117,6 @@ describe('LineService', () => {
         service['keyEvents'].set('Shift', true);
         const lastEvent = { offsetX: 100, offsetY: 100, detail: 2 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath').and.callThrough();
-
         service.onMouseDown(lastEvent);
         expect(drawLinePath).toHaveBeenCalledWith(
             mockContext,
@@ -162,7 +161,6 @@ describe('LineService', () => {
         service['points'] = [{ x: 100, y: 200 } as Vec2];
         service['keyEvents'].set('Shift', true);
         const alignPointFunc = spyOn(service, 'alignPoint').and.returnValue({ x: 40, y: 60 });
-
         service.onMouseMove({ offsetX: 120, offsetY: 540 } as MouseEvent);
         expect(alignPointFunc).toHaveBeenCalled();
         expect(service['pointToAdd']).toEqual({ x: 40, y: 60 } as Vec2);
@@ -236,7 +234,6 @@ describe('LineService', () => {
         const handleBackspace = spyOn(service, 'handleBackspaceKey').and.callThrough();
         const handleEscape = spyOn(service, 'handleEscapeKey').and.callThrough();
         const handleShift = spyOn(service, 'handleShiftKey').and.callThrough();
-
         service.handleKeys('Shift');
         expect(handleBackspace).not.toHaveBeenCalled();
         expect(handleEscape).not.toHaveBeenCalled();
@@ -269,7 +266,6 @@ describe('LineService', () => {
         service['keyEvents'].set('Shift', true);
         service['points'].push({ x: 10, y: 10 });
         const alignFunc = spyOn(service, 'alignPoint').and.returnValue({ x: 100, y: 100 } as Vec2);
-
         service.handleShiftKey();
         expect(alignFunc).toHaveBeenCalled();
         expect(service['pointToAdd']).toEqual({ x: 100, y: 100 } as Vec2);
@@ -313,7 +309,6 @@ describe('LineService', () => {
     it('should draw line', () => {
         const moveToSpy = spyOn(mockContext, 'moveTo').and.callThrough();
         const lineToSpy = spyOn(mockContext, 'lineTo').and.callThrough();
-
         service['drawLine'](mockContext, { x: 100, y: 200 }, { x: 300, y: 400 });
         expect(moveToSpy).toHaveBeenCalledWith(100, 200);
         expect(lineToSpy).toHaveBeenCalledWith(300, 400);
@@ -322,7 +317,6 @@ describe('LineService', () => {
     it('should draw non closed line path', () => {
         const points = pointsTest2;
         service['points'] = points;
-
         const lineToSpy = spyOn(mockContext, 'lineTo').and.callThrough();
         service['drawLinePath'](mockContext, points, false);
         expect(lineToSpy).toHaveBeenCalledTimes(1);
