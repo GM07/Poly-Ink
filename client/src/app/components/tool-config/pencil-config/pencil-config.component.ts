@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
+import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { PencilService } from '@app/services/tools/pencil-service';
-
 @Component({
     selector: 'app-pencil-config',
     templateUrl: './pencil-config.component.html',
@@ -9,6 +9,8 @@ import { PencilService } from '@app/services/tools/pencil-service';
 })
 export class PencilConfigComponent extends ToolConfig {
     lineWidth: number;
+    readonly MIN: number = ToolSettingsConst.MIN_WIDTH;
+    readonly MAX: number = ToolSettingsConst.MAX_WIDTH;
 
     constructor(public pencilService: PencilService) {
         super();
