@@ -13,6 +13,7 @@ import { SettingsHandlerComponent } from './settings-handler.component';
 
 class MockToolHandler extends ToolHandlerService {
     TOOLS_MOCK: Map<string, Tool> = new Map();
+    currentToolStub: Tool;
 
     constructor(pencilService: PencilService, lineService: LineService, rectangleService: RectangleService, ellipseService: EllipseService) {
         super(pencilService, lineService, rectangleService, ellipseService);
@@ -30,18 +31,18 @@ class MockToolHandler extends ToolHandlerService {
         this.TOOLS_MOCK.set(ToolsConstants.RectangleToolConstants.TOOL_ID, rectangleService);
         this.TOOLS_MOCK.set(ToolsConstants.StampToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.TextToolConstants.TOOL_ID, pencilService);
-        this.currentTool = this.TOOLS_MOCK.values().next().value;
+        this.currentToolStub = this.TOOLS_MOCK.values().next().value;
     }
 
     getTool(): Tool {
-        return this.currentTool;
+        return this.currentToolStub;
     }
 
     setTool(toolId: string): boolean {
         const newCurrentTool: Tool | undefined = this.TOOLS_MOCK.get(toolId);
 
-        if (newCurrentTool !== undefined && newCurrentTool !== this.currentTool) {
-            this.currentTool = newCurrentTool;
+        if (newCurrentTool !== undefined && newCurrentTool !== this.currentToolStub) {
+            this.currentToolStub = newCurrentTool;
             return true;
         } else {
             return false;

@@ -11,7 +11,7 @@ import { RectangleService } from '@app/services/tools/rectangle-service';
 })
 export class ToolHandlerService {
     private TOOLS: Map<string, Tool> = new Map();
-    currentTool: Tool;
+    private currentTool: Tool;
 
     constructor(pencilService: PencilService, lineService: LineService, rectangleService: RectangleService, ellipseService: EllipseService) {
         this.TOOLS.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
