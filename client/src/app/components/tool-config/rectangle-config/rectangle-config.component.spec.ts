@@ -77,9 +77,9 @@ describe('RectangleConfigComponent', () => {
     });
 
     it('should load button with Plein&Contour text', async () => {
-        const buttons = await loader.getAllHarnesses(buttonHarness.with({ text: 'Plein&Contour' }));
+        const buttons = await loader.getAllHarnesses(buttonHarness.with({ text: 'Plein & Contour' }));
         expect(buttons.length).toBe(1);
-        expect(await buttons[0].getText()).toBe('Plein&Contour');
+        expect(await buttons[0].getText()).toBe('Plein & Contour');
     });
 
     it('traceType should be Contour when Contour button is clicked ', async () => {
@@ -95,7 +95,7 @@ describe('RectangleConfigComponent', () => {
     });
 
     it('traceType should be Plein&Contour when Plein&Contour button is clicked ', async () => {
-        const button3 = await loader.getHarness(buttonHarness.with({ text: 'Plein&Contour' }));
+        const button3 = await loader.getHarness(buttonHarness.with({ text: 'Plein & Contour' }));
         await button3.click();
         expect(fixture.componentInstance.traceTypeIn).toEqual(RectangleMode.FilledWithContour);
     });

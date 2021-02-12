@@ -1,15 +1,9 @@
-<div>
+<div class="tab">
     <h5 class="textFormat">Configurations efface</h5>
     <mat-divider></mat-divider>
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
-    <mat-slider
-        min="{{ MIN }}"
-        max="{{ MAX }}"
-        [(ngModel)]="eraserService.lineWidth"
-        thumbLabel
-        [displayWith]="colorSliderLabel">
-    </mat-slider>
-    {{eraserService.lineWidth}}px
-  </div>
+        <mat-slider min="{{ MIN }}" max="{{ MAX }}" [(ngModel)]="eraserService.lineWidth" thumbLabel [displayWith]="colorSliderLabel"> </mat-slider>
+        {{ eraserService.lineWidth }}px
+    </div>
 </div>

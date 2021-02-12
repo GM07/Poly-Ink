@@ -1,5 +1,8 @@
+.tab {
+    width: 190px;
+}
 .buttons {
-  width:150px !important;
+    width: 150px !important;
 }
 
 .textFormat {
@@ -13,23 +16,23 @@
 }
 
 .textFormatButton {
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-bottom: 8px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 8px;
 }
 
 ::ng-deep .mat-slider-wrapper {
     padding-left: 0px;
     width: 100px;
     .mat-slider-thumb-container {
-      .mat-slider-thumb-label {
-        width: 30px;
-        height: 30px;
-        top: -41px;
-        right: -15px;
-        .mat-slider-thumb-label-text{
-          font-size: x-small;
+        .mat-slider-thumb-label {
+            width: 30px;
+            height: 30px;
+            top: -41px;
+            right: -15px;
+            .mat-slider-thumb-label-text {
+                font-size: x-small;
+            }
         }
-      }
     }
-  }
+}
