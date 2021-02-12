@@ -14,12 +14,12 @@ export class ColorService {
 
     private previous: Color[] = [];
 
-    private selected: Color = Colors.BLACK;
+    public selectedColor: Color = Colors.BLACK;
     selectedColorChangeFromHex: Subject<Color> = new Subject<Color>();
 
     public selectedAlpha: number = 1;
 
-    private hue: Color = Colors.BLACK;
+    public selectedHue: Color = Colors.BLACK;
     hueChangeFromHex: Subject<Color> = new Subject<Color>();
     hueChangeFromSlider: Subject<Color> = new Subject<Color>();
 
@@ -56,24 +56,8 @@ export class ColorService {
         return this.secondary;
     }
 
-    set selectedColor(color: Color) {
-        this.selected = color;
-    }
-
-    get selectedColor(): Color {
-        return this.selected;
-    }
-
-    set selectedHue(color: Color) {
-        this.hue = color;
-    }
-
-    get selectedHue(): Color {
-        return this.hue;
-    }
-
     set selectedHueFromSliders(hue: Color) {
-        this.hue = hue;
+        this.selectedHue = hue;
         this.hueChangeFromSlider.next(hue);
     }
 
@@ -82,10 +66,10 @@ export class ColorService {
     }
 
     set selectedColorFromHex(color: Color) {
-        this.selected = color;
-        this.hue = Color.hueToRgb(color.hue);
-        this.selectedColorChangeFromHex.next(this.selected);
-        this.hueChangeFromHex.next(this.hue);
+        this.selectedColor = color;
+        this.selectedHue = Color.hueToRgb(color.hue);
+        this.selectedColorChangeFromHex.next(this.selectedColor);
+        this.hueChangeFromHex.next(this.selectedHue);
     }
 
     rgba(color: Color, alpha: number): string {
