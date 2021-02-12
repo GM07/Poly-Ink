@@ -61,9 +61,7 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
         this.context.fill();
         this.context.closePath();
 
-        if (this.selectedHeight) {
-            this.drawSelectionBox();
-        }
+        this.drawSelectionBox();
     }
 
     getContext(): void {
