@@ -13,7 +13,7 @@ import { Subject } from 'rxjs';
 })
 export class ToolHandlerService {
     private TOOLS: Map<string, Tool> = new Map();
-    currentTool: Tool;
+    private currentTool: Tool;
     currentToolSubject: Subject<Tool> = new Subject<Tool>();
 
     constructor(

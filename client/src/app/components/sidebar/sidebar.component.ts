@@ -18,7 +18,7 @@ export class SidebarComponent implements OnInit {
 
     constructor(toolHandlerService: ToolHandlerService, private router: Router, private zone: NgZone) {
         this.toolHandlerService = toolHandlerService;
-        this.selectedTool = this.toolHandlerService.currentTool;
+        this.selectedTool = this.toolHandlerService.getTool();
         this.toolHandlerService.currentToolSubject.subscribe((newTool) => {
             this.selectedTool = newTool;
         });
