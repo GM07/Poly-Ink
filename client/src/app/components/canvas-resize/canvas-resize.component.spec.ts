@@ -109,4 +109,35 @@ describe('CanvasResizeComponent', () => {
         service.saveCanvas(elem);
         expect(window.alert).toHaveBeenCalledWith('Erreur when resizing');
     });
+    it('mouseDownShould should set previewResizeView to true', () => {
+      component.mouseDown(true,false);
+      expect(component.previewResizeView).toBe(true);
+    });
+
+    it('set canvasMargin should set value of canvasTop and canvasLeft', () => {
+      component.setCanvasMargin();
+      const canvasTop = component.getCanvasTop();
+      const canvasLeft = component.getCanvasLeft();
+      expect(canvasTop).toBeDefined();
+      expect(canvasLeft).toBeDefined();
+    });
+
+    it('resize canvas should propagate to drawingService', () =>{
+      const spyFunc = spyOn(service, 'resizeCanvas');
+      component.resizeCanvas(100,100);
+      expect(spyFunc).toHaveBeenCalled();
+    });
+
+    it('setStyleControl should change value of control css', () =>{
+      component.setStyleControl();
+      expect(component.controlRightStyle['margin-left']).toBeDefined();
+      expect(component.controlBottomStyle['margin-left']).toBeDefined();
+      expect(component.controlCornerStyle['margin-left']).toBeDefined();
+    });
+
+    it('setStylePreview should change value of preview css', () =>{
+      component.setStylePreview();
+      expect(component.previewResizeStyle.width).toBeDefined();
+      expect(component.workZoneStyle.width).toBeDefined();
+    });
 });
