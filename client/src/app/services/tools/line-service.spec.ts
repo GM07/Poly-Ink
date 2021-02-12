@@ -2,13 +2,16 @@ import { TestBed } from '@angular/core/testing';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { ColorService } from 'src/color-picker/services/color.service';
 import { LineService } from './line-service';
 
 /* tslint:disable:no-magic-numbers */
 /* tslint:disable:no-string-literal */
 /* tslint:disable:no-any */
-describe('LigneService', () => {
+describe('LineService', () => {
     let service: LineService;
+    let colorServiceSpy: jasmine.SpyObj<ColorService>;
+
     const mockContext = ({
         /* tslint:disable:no-empty */
         beginPath: () => {},
@@ -25,12 +28,16 @@ describe('LigneService', () => {
 
     beforeEach(() => {
         const spyDrawing = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
+        colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(1, 1, 1, 1)', secondaryRgba: 'rgba(0, 0, 0, 1)' });
         /* tslint:disable-next-line:no-empty */
         spyDrawing.clearCanvas = () => {};
         spyDrawing['previewCtx'] = mockContext;
         spyDrawing['baseCtx'] = mockContext;
         TestBed.configureTestingModule({
-            providers: [{ provide: DrawingService, useValue: spyDrawing }],
+            providers: [
+                { provide: DrawingService, useValue: spyDrawing },
+                { provide: ColorService, useValue: colorServiceSpy },
+            ],
         });
         service = TestBed.inject(LineService);
         service['pointToAdd'] = { x: 0, y: 0 };

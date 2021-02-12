@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { ColorService } from 'src/color-picker/services/color.service';
 import { PencilService } from './pencil-service';
 
 // tslint:disable:no-any
@@ -10,6 +11,7 @@ describe('PencilService', () => {
     let mouseEvent: MouseEvent;
     let canvasTestHelper: CanvasTestHelper;
     let drawServiceSpy: jasmine.SpyObj<DrawingService>;
+    let colorServiceSpy: jasmine.SpyObj<ColorService>;
 
     let baseCtxStub: CanvasRenderingContext2D;
     let previewCtxStub: CanvasRenderingContext2D;
@@ -19,9 +21,13 @@ describe('PencilService', () => {
 
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
+        colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(1, 1, 1, 1)', secondaryRgba: 'rgba(0, 0, 0, 1)' });
 
         TestBed.configureTestingModule({
-            providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
+            providers: [
+                { provide: DrawingService, useValue: drawServiceSpy },
+                { provide: ColorService, useValue: colorServiceSpy },
+            ],
         });
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         baseCtxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -108,15 +114,15 @@ describe('PencilService', () => {
         let imageData: ImageData = baseCtxStub.getImageData(2, 2, 25, 25);
         expect(imageData.data[ALPHA]).toEqual(0); // A, rien ne doit être dessiné
         imageData = baseCtxStub.getImageData(0, 0, 1, 1);
-        expect(imageData.data[0]).toEqual(0); // R
-        expect(imageData.data[1]).toEqual(0); // G
-        expect(imageData.data[2]).toEqual(0); // B
+        expect(imageData.data[0]).toEqual(1); // R
+        expect(imageData.data[1]).toEqual(1); // G
+        expect(imageData.data[2]).toEqual(1); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
         // tslint:disable-next-line:no-magic-numbers
         imageData = baseCtxStub.getImageData(0, 50, 1, 1);
-        expect(imageData.data[0]).toEqual(0); // R
-        expect(imageData.data[1]).toEqual(0); // G
-        expect(imageData.data[2]).toEqual(0); // B
+        expect(imageData.data[0]).toEqual(1); // R
+        expect(imageData.data[1]).toEqual(1); // G
+        expect(imageData.data[2]).toEqual(1); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
@@ -193,9 +199,9 @@ describe('PencilService', () => {
 
         // Premier pixel seulement
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
-        expect(imageData.data[0]).toEqual(0); // R
-        expect(imageData.data[1]).toEqual(0); // G
-        expect(imageData.data[2]).toEqual(0); // B
+        expect(imageData.data[0]).toEqual(1); // R
+        expect(imageData.data[1]).toEqual(1); // G
+        expect(imageData.data[2]).toEqual(1); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 });

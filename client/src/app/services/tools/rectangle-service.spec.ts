@@ -11,7 +11,7 @@ describe('RectangleService', () => {
     let keyboardEvent: KeyboardEvent;
     let canvasTestHelper: CanvasTestHelper;
     let drawServiceSpy: jasmine.SpyObj<DrawingService>;
-    let colorService: ColorService;
+    let colorServiceSpy: jasmine.SpyObj<ColorService>;
 
     let baseCtxStub: CanvasRenderingContext2D;
     let previewCtxStub: CanvasRenderingContext2D;
@@ -22,12 +22,14 @@ describe('RectangleService', () => {
 
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
+        colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(1, 1, 1, 1)', secondaryRgba: 'rgba(0, 0, 0, 1)' });
 
         TestBed.configureTestingModule({
-            providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
+            providers: [
+                { provide: DrawingService, useValue: drawServiceSpy },
+                { provide: ColorService, useValue: colorServiceSpy },
+            ],
         });
-
-        colorService = TestBed.inject(ColorService);
 
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         baseCtxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -148,9 +150,6 @@ describe('RectangleService', () => {
     });
 
     it('should allow for contour drawing type', () => {
-        spyOnProperty(colorService, 'primaryRgba').and.returnValue('rgba(1, 1, 1, 1)');
-        spyOnProperty(colorService, 'secondaryRgba').and.returnValue('rgba(0, 0, 0, 1');
-
         service.rectangleMode = RectangleMode.Contour;
         service.contourWidth = 1;
         service.onMouseDown(mouseEvent);
@@ -180,17 +179,13 @@ describe('RectangleService', () => {
 
         // tslint:disable-next-line:no-magic-numbers
         const imageData: ImageData = baseCtxStub.getImageData(1, 1, 25, 25);
-        expect(imageData.data[0]).toEqual(0); // R
-        expect(imageData.data[1]).toEqual(0); // G
-        expect(imageData.data[2]).toEqual(0); // B
+        expect(imageData.data[0]).toEqual(1); // R
+        expect(imageData.data[1]).toEqual(1); // G
+        expect(imageData.data[2]).toEqual(1); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
     it('should allow for filled with contour drawing type', () => {
-        // Set primary color to black
-        spyOnProperty(colorService, 'primaryRgba').and.returnValue('rgba(1, 1, 1, 1)');
-        spyOnProperty(colorService, 'secondaryRgba').and.returnValue('rgba(0, 0, 0, 1');
-
         service.rectangleMode = RectangleMode.FilledWithContour;
         service.contourWidth = 1;
         service.onMouseDown(mouseEvent);
@@ -235,9 +230,9 @@ describe('RectangleService', () => {
 
         // tslint:disable-next-line:no-magic-numbers
         const imageData: ImageData = baseCtxStub.getImageData(20, 20, 5, 5);
-        expect(imageData.data[0]).toEqual(0); // R
-        expect(imageData.data[1]).toEqual(0); // G
-        expect(imageData.data[2]).toEqual(0); // B
+        expect(imageData.data[0]).toEqual(1); // R
+        expect(imageData.data[1]).toEqual(1); // G
+        expect(imageData.data[2]).toEqual(1); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 });

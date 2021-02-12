@@ -22,7 +22,7 @@ describe('EllipseService', () => {
 
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
-        colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(1, 1, 1)', secondaryRgba: 'rgba(255, 255, 255)' });
+        colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(1, 1, 1, 1)', secondaryRgba: 'rgba(0, 0, 0, 1)' });
 
         TestBed.configureTestingModule({
             providers: [
@@ -162,9 +162,9 @@ describe('EllipseService', () => {
         const middlePoint = 25 / 2;
         let imageData: ImageData = baseCtxStub.getImageData(0, middlePoint, 1, 1);
         // tslint:disable:no-magic-numbers
-        expect(imageData.data[0]).toEqual(255); // R
-        expect(imageData.data[1]).toEqual(255); // G
-        expect(imageData.data[2]).toEqual(255); // B
+        expect(imageData.data[0]).toEqual(0); // R
+        expect(imageData.data[1]).toEqual(0); // G
+        expect(imageData.data[2]).toEqual(0); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
         // tslint:enable:no-magic-numbers
 
@@ -210,9 +210,9 @@ describe('EllipseService', () => {
         const middlePoint = 25 / 2;
         let imageData: ImageData = baseCtxStub.getImageData(0, middlePoint, 1, 1);
         // tslint:disable:no-magic-numbers
-        expect(imageData.data[0]).toEqual(255); // R
-        expect(imageData.data[1]).toEqual(255); // G
-        expect(imageData.data[2]).toEqual(255); // B
+        expect(imageData.data[0]).toEqual(0); // R
+        expect(imageData.data[1]).toEqual(0); // G
+        expect(imageData.data[2]).toEqual(0); // B
         // tslint:enable:no-magic-numbers
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
 
