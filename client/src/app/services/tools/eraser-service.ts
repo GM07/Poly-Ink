@@ -3,6 +3,7 @@ import { Tool } from '@app/classes/tool';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { ColorService } from './../../../color-picker/services/color.service';
 
 export enum LeftMouse {
     Released = 0,
@@ -16,8 +17,8 @@ export class EraserService extends Tool {
     private pathData: Vec2[][];
     private lineWidthIn: number = 25;
 
-    constructor(drawingService: DrawingService) {
-        super(drawingService);
+    constructor(drawingService: DrawingService, colorService: ColorService) {
+        super(drawingService, colorService);
         this.clearPath();
         this.shortCutKey = 'e';
     }

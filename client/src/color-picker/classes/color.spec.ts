@@ -13,7 +13,7 @@ describe('Color', () => {
         expect(color.b).toEqual(b);
     });
 
-    it('should construct proper rgba sting', () => {
+    it('should construct proper rgba string', () => {
         const color: Color = Colors.RED;
         const expectedRgba = 'rgba(255, 0, 0, 1)';
         const answerRgba: string = color.toRgbaString(1);
