@@ -7,12 +7,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { EraserConfigComponent } from './eraser-config.component';
+import { EraserConfigComponent } from '@app/components/tool-config/eraser-config/eraser-config.component';
+import { ToolSettingsConst } from '@app/constants/tool-settings';
 
 describe('EraserConfigComponent', () => {
     let component: EraserConfigComponent;
     let fixture: ComponentFixture<EraserConfigComponent>;
     let loader: HarnessLoader;
+    const DEFAULT_VALUE = 25;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -36,19 +38,18 @@ describe('EraserConfigComponent', () => {
 
     it('should get default value of slider', async () => {
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getValue()).toBe(1);
+        expect(await slider.getValue()).toBe(DEFAULT_VALUE);
     });
 
     it('should get max value of slider', async () => {
-        const max = 100;
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getMaxValue()).toBe(max);
+        expect(await slider.getMaxValue()).toBe(ToolSettingsConst.MAX_WIDTH);
     });
 
     it('should be able to set value of slider', async () => {
-        const setValue = 54;
+        const setValue = 24;
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getValue()).toBe(1);
+        expect(await slider.getValue()).toBe(DEFAULT_VALUE);
 
         await slider.setValue(setValue);
 

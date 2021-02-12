@@ -65,7 +65,7 @@ describe('CanvasResizeComponent', () => {
 
     it('should resize when dragging the bottom side', () => {
         const xPos = component.getCanvasLeft();
-        const yPos = service.canvas.height + Math.ceil(component.getCanvasTop()); // Petite valeurs pour simuler un clic
+        const yPos = service.canvas.height + Math.ceil(component.getCanvasTop());
         dragAndDrop(false, true, xPos + CanvasConst.SHIFTING, yPos + CanvasConst.SHIFTING);
         expect(service.canvas.height).toBe(yPos - Math.ceil(component.getCanvasTop()) + CanvasConst.SHIFTING);
     });
