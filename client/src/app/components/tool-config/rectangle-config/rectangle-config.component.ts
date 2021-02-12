@@ -10,6 +10,9 @@ import { RectangleMode, RectangleService } from '@app/services/tools/rectangle-s
 export class RectangleConfigComponent extends ToolConfig {
     rectangleModeIn: typeof RectangleMode = RectangleMode;
     traceTypeIn: RectangleMode;
+    readonly MIN: number = ToolSettingsConst.MIN_RECTANGLE_WIDTH;
+    readonly MAX: number = ToolSettingsConst.MAX_WIDTH;
+    
 
     constructor(public rectangleService: RectangleService) {
         super();
