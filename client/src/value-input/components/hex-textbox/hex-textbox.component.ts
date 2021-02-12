@@ -23,6 +23,10 @@ export class HexTextboxComponent {
             for (let i = hex.length; i < this.length; i++) hex += '0';
         }
 
+        if (hex.length > this.length) {
+            hex = hex.substr(0, 2);
+        }
+
         return hex;
     }
 
@@ -31,8 +35,8 @@ export class HexTextboxComponent {
         this.hexChangeEvent.emit([this.label, this.hex]);
     }
 
-    preventInvalid(key: KeyboardEvent) {
+    preventInvalid(event: KeyboardEvent) {
         const regularExpression = /[0-9A-Fa-f]{1}/g;
-        if (!regularExpression.test(key.key)) key.preventDefault();
+        if (!regularExpression.test(event.key)) event.preventDefault();
     }
 }

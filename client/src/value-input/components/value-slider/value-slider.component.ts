@@ -35,12 +35,4 @@ export class ValueSliderComponent {
         this.value = event.value as number;
         this.emitValue();
     }
-
-    onInputChange(value: number): void {
-        if (value.toString.length === 0 || value < this.min) this.value = this.min;
-        else if (value > this.max) this.value = this.max;
-        else this.value = value;
-
-        this.emitValue();
-    }
 }
