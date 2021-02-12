@@ -15,6 +15,7 @@ describe('NewDrawingService', () => {
         drawingService = TestBed.inject(DrawingService);
         canvas = document.createElement('canvas');
         context = canvas.getContext('2d') as CanvasRenderingContext2D;
+        drawingService.canvas = canvas;
         canvas.width = 1;
         canvas.height = 1;
     });
@@ -46,7 +47,6 @@ describe('NewDrawingService', () => {
     });
 
     it('should not reset if confirm is false and not empty', () => {
-        drawingService.canvas = canvas;
         const spyFunc = spyOn(service, 'isNotEmpty').and.returnValue(true);
         const spyFunc2 = spyOn(drawingService, 'resizeCanvas');
         service.newCanvas(false);
@@ -55,7 +55,6 @@ describe('NewDrawingService', () => {
     });
 
     it('should reset if confirm is false and empty', () => {
-        drawingService.canvas = canvas;
         drawingService.baseCtx = context;
         const spyFunc = spyOn(drawingService, 'resizeCanvas');
         const spyFunc2 = spyOn(service, 'isNotEmpty').and.returnValue(false);

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
+import { RectangleToolConstants } from '@app/classes/tool_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -14,6 +15,7 @@ export enum RectangleMode {
     providedIn: 'root',
 })
 export class RectangleService extends Tool {
+    toolID: string = RectangleToolConstants.TOOL_ID;
     private strokeStyleIn: string;
     private fillStyleIn: string;
     private mouseUpCoord: Vec2;

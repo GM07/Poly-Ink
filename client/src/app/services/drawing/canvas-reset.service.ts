@@ -3,9 +3,6 @@ import { CanvasConst } from '@app/constants/canvas';
 import { BehaviorSubject } from 'rxjs';
 import { DrawingService } from './drawing.service';
 
-const barPercentage = 5;
-const fullPercentage = 100;
-
 @Injectable({
     providedIn: 'root',
 })
@@ -16,15 +13,20 @@ export class NewDrawingService {
 
     constructor(private drawingService: DrawingService) {}
 
-    newCanvas(
-        confirm: boolean = false,
-        width: number = (document.documentElement.clientWidth - document.documentElement.clientWidth / (fullPercentage / barPercentage)) / 2,
-        height: number = document.documentElement.clientHeight / 2,
-    ): void {
+    newCanvas(confirm: boolean = false): void {
         if (!confirm && this.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)) {
             this.showWarning = true;
             return;
         }
+
+        const canvasOffset = this.drawingService.canvas.getBoundingClientRect();
+        const documentOffset = document.documentElement;
+
+        const canvasTop = canvasOffset.top + window.pageYOffset - documentOffset.clientTop;
+        const canvasLeft = canvasOffset.left + window.pageXOffset - documentOffset.clientLeft;
+
+        let width: number = (document.documentElement.clientWidth - canvasLeft) / 2;
+        let height: number = (document.documentElement.clientHeight - canvasTop) / 2;
 
         width = Math.max(width, CanvasConst.MIN_WIDTH);
         height = Math.max(height, CanvasConst.MIN_HEIGHT);
