@@ -6,6 +6,7 @@ import { EraserService } from '@app/services/tools/eraser-service';
 import { LineService } from '@app/services/tools/line-service';
 import { PencilService } from '@app/services/tools/pencil-service';
 import { RectangleService } from '@app/services/tools/rectangle-service';
+import { Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -13,6 +14,7 @@ import { RectangleService } from '@app/services/tools/rectangle-service';
 export class ToolHandlerService {
     private TOOLS: Map<string, Tool> = new Map();
     currentTool: Tool;
+    currentToolSubject: Subject<Tool> = new Subject<Tool>();
 
     constructor(
         pencilService: PencilService,
@@ -36,6 +38,7 @@ export class ToolHandlerService {
         this.TOOLS.set(ToolsConstants.StampToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.TextToolConstants.TOOL_ID, pencilService);
         this.currentTool = this.TOOLS.values().next().value;
+        this.currentToolSubject.next(this.currentTool);
     }
 
     getTool(): Tool {
@@ -48,6 +51,7 @@ export class ToolHandlerService {
         if (newCurrentTool !== undefined && newCurrentTool !== this.currentTool) {
             this.currentTool.stopDrawing();
             this.currentTool = newCurrentTool;
+            this.currentToolSubject.next(this.currentTool);
             return true;
         } else {
             return false;
@@ -76,6 +80,7 @@ export class ToolHandlerService {
         if (tool != undefined) {
             this.currentTool.stopDrawing();
             this.currentTool = tool;
+            this.currentToolSubject.next(tool);
         }
     }
 

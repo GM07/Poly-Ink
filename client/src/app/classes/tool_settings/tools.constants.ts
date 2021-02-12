@@ -52,7 +52,7 @@ export enum FillToolConstants {
 }
 
 export enum EraserToolConstants {
-    TOOL_ID = 'RASER',
+    TOOL_ID = 'ERASER',
     TOOL_TITLE = 'Efface',
     INFO_BUBBLE = 'Efface (E)',
     ICON_NAME = 'eraser',
