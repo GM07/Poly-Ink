@@ -1,4 +1,4 @@
-<div>
+<div class="tab">
     <h5 class="textFormat">Configuration rectangle</h5>
     <!--Type de tracé-->
     <mat-divider></mat-divider>
@@ -17,14 +17,14 @@
         <button mat-raised-button class="buttons" (click)="toggleTraceType(rectangleModeIn.Filled)">Plein</button>
     </div>
     <div class="textFormatButton">
-        <button mat-raised-button class="buttons" (click)="toggleTraceType(rectangleModeIn.FilledWithContour)">Plein&Contour</button>
+        <button mat-raised-button class="buttons" (click)="toggleTraceType(rectangleModeIn.FilledWithContour)">Plein & Contour</button>
     </div>
     <mat-divider></mat-divider>
 
     <!--Epaisseur-->
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
-        <mat-slider min="1" max="50" [(ngModel)]="rectangleService.contourWidth" thumbLabel [displayWith]="colorSliderLabel"> </mat-slider>
+        <mat-slider min="{{ MIN }}" max="{{ MAX }}" [(ngModel)]="rectangleService.contourWidth" thumbLabel [displayWith]="colorSliderLabel"> </mat-slider>
         {{ rectangleService.contourWidth }}px
     </div>
     <mat-divider></mat-divider>

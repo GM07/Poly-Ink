@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { LineConfigComponent } from './line-config.component';
 
 @Component({ selector: 'app-color-icon', template: '' })
@@ -20,6 +21,7 @@ describe('LineConfigComponent', () => {
     let fixture: ComponentFixture<LineConfigComponent>;
     let loader: HarnessLoader;
     const buttonHarness = MatButtonHarness;
+    const DEFAULT_VALUE = 12;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -41,24 +43,27 @@ describe('LineConfigComponent', () => {
         expect(sliders.length).toBe(2);
     });
 
-    it('should get max value of slider', async () => {
-        const max = 50;
+    it('should get default value of slider', async () => {
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getMaxValue()).toBe(max);
+        expect(await slider.getValue()).toBe(DEFAULT_VALUE);
+    });
+
+    it('should get max value of slider', async () => {
+        const slider = await loader.getHarness(MatSliderHarness);
+        expect(await slider.getMaxValue()).toBe(ToolSettingsConst.MAX_WIDTH);
     });
 
     it('should be able to set value of slider', async () => {
-        const defaultValue = 12;
         const setValue = 15;
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getValue()).toBe(defaultValue);
+        expect(await slider.getValue()).toBe(DEFAULT_VALUE);
 
         await slider.setValue(setValue);
 
         expect(await slider.getValue()).toBe(setValue);
     });
 
-    it('withJunctionPoint should be false by default', () => {
+    it('withJunctionPoint should be true by default', () => {
         expect(component.withJunctionPoint).toBeTrue();
     });
 

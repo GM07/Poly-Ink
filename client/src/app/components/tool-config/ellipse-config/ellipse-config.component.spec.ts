@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { EllipseMode } from '@app/services/tools/ellipse-service';
 import { EllipseConfigComponent } from './ellipse-config.component';
 
@@ -21,6 +22,7 @@ describe('EllipseConfigComponent', () => {
     let fixture: ComponentFixture<EllipseConfigComponent>;
     let loader: HarnessLoader;
     const buttonHarness = MatButtonHarness;
+    const DEFAULT_VALUE = 1;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -42,17 +44,20 @@ describe('EllipseConfigComponent', () => {
         expect(sliders.length).toBe(1);
     });
 
-    it('should get max value of slider', async () => {
-        const max = 50;
+    it('should get default value of slider', async () => {
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getMaxValue()).toBe(max);
+        expect(await slider.getValue()).toBe(DEFAULT_VALUE);
+    });
+
+    it('should get max value of slider', async () => {
+        const slider = await loader.getHarness(MatSliderHarness);
+        expect(await slider.getMaxValue()).toBe(ToolSettingsConst.MAX_WIDTH);
     });
 
     it('should be able to set value of slider', async () => {
-        const defaultValue = 1;
         const setValue = 49;
         const slider = await loader.getHarness(MatSliderHarness);
-        expect(await slider.getValue()).toBe(defaultValue);
+        expect(await slider.getValue()).toBe(DEFAULT_VALUE);
 
         await slider.setValue(setValue);
         expect(await slider.getValue()).toBe(setValue);
@@ -86,8 +91,8 @@ describe('EllipseConfigComponent', () => {
         expect(fixture.componentInstance.traceTypeIn).toEqual(EllipseMode.Filled);
     });
 
-    it('traceType should be Plein&Contour when Plein&Contour button is clicked ', async () => {
-        const button3 = await loader.getHarness(buttonHarness.with({ text: 'Plein&Contour' }));
+    it('traceType should be Plein & Contour when Plein & Contour button is clicked ', async () => {
+        const button3 = await loader.getHarness(buttonHarness.with({ text: 'Plein & Contour' }));
         await button3.click();
         expect(fixture.componentInstance.traceTypeIn).toEqual(EllipseMode.FilledWithContour);
     });

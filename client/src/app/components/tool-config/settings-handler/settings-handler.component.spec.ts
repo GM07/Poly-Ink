@@ -14,6 +14,7 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
 
 class MockToolHandler extends ToolHandlerService {
     TOOLS_MOCK: Map<string, Tool> = new Map();
+    currentToolStub: Tool;
 
     constructor(
         pencilService: PencilService,
@@ -29,26 +30,20 @@ class MockToolHandler extends ToolHandlerService {
         this.TOOLS_MOCK.set(ToolsConstants.EllipseSelectionToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.EllipseToolConstants.TOOL_ID, ellipseService);
         this.TOOLS_MOCK.set(ToolsConstants.EraserToolConstants.TOOL_ID, eraserService);
-        this.TOOLS_MOCK.set(ToolsConstants.EyeDropperToolConstants.TOOL_ID, pencilService);
-        this.TOOLS_MOCK.set(ToolsConstants.FillToolConstants.TOOL_ID, pencilService);
-        this.TOOLS_MOCK.set(ToolsConstants.LassoToolConstants.TOOL_ID, pencilService);
-        this.TOOLS_MOCK.set(ToolsConstants.PolygoneToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.RectangleSelectionToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.RectangleToolConstants.TOOL_ID, rectangleService);
-        this.TOOLS_MOCK.set(ToolsConstants.StampToolConstants.TOOL_ID, pencilService);
-        this.TOOLS_MOCK.set(ToolsConstants.TextToolConstants.TOOL_ID, pencilService);
-        this.currentTool = this.TOOLS_MOCK.values().next().value;
+        this.currentToolStub = this.TOOLS_MOCK.values().next().value;
     }
 
     getTool(): Tool {
-        return this.currentTool;
+        return this.currentToolStub;
     }
 
     setTool(toolId: string): boolean {
         const newCurrentTool: Tool | undefined = this.TOOLS_MOCK.get(toolId);
 
-        if (newCurrentTool !== undefined && newCurrentTool !== this.currentTool) {
-            this.currentTool = newCurrentTool;
+        if (newCurrentTool !== undefined && newCurrentTool !== this.currentToolStub) {
+            this.currentToolStub = newCurrentTool;
             return true;
         } else {
             return false;

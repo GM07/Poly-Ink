@@ -114,12 +114,14 @@ export class CanvasResizeComponent implements AfterViewInit {
     }
 
     setStylePreview(): void {
+        const borderWidth: string = window.getComputedStyle(this.drawingService.canvas).getPropertyValue('border-left-width');
+        const borderSize: number = parseInt(borderWidth.replace('px', ''), 10);
         this.previewResizeStyle = {
             'margin-left': String(this.canvasLeft) + 'px',
             'margin-top': String(this.canvasTop) + 'px',
             // prettier-ignore
-            'width': String(this.drawingService.canvas.width) + 'px',
-            'height': String(this.drawingService.canvas.height) + 'px',
+            'width': String(this.drawingService.canvas.width+borderSize) + 'px',
+            'height': String(this.drawingService.canvas.height+borderSize) + 'px',
             // prettier-ignore
         };
         this.workZoneStyle = {

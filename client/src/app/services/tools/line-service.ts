@@ -17,10 +17,12 @@ export class LineService extends Tool {
     }
     static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
     static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;
+    static readonly TIMEOUT_SIMPLE_CLICK: number = 120;
     readonly toolID: string = LineToolConstants.TOOL_ID;
     private points: Vec2[] = [];
     private pointToAdd: Vec2;
     private mousePosition: Vec2;
+    private timeoutID: number = 0;
 
     // Attributs
     showJunctionPoints: boolean = true;
@@ -34,6 +36,15 @@ export class LineService extends Tool {
         ['Backspace', false],
     ]);
 
+    initService(): void {
+        for (const event of this.keyEvents) {
+            event[1] = false;
+        }
+        this.points = [];
+        this.pointToAdd = {} as Vec2;
+        this.mousePosition = {} as Vec2;
+    }
+
     applyAttributes(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = this.colorService.primaryRgba;
         ctx.strokeStyle = this.colorService.primaryRgba;
@@ -43,6 +54,21 @@ export class LineService extends Tool {
     }
 
     onMouseDown(event: MouseEvent): void {
+        if (this.timeoutID > 0) {
+            clearTimeout(this.timeoutID);
+            this.timeoutID = 0;
+        }
+
+        if (event.detail === 1) {
+            this.timeoutID = window.setTimeout(() => {
+                this.handleSimpleClick(event);
+            }, LineService.TIMEOUT_SIMPLE_CLICK);
+        } else if (event.detail === 2) {
+            this.handleDoubleClick(event);
+        }
+    }
+
+    handleSimpleClick(event: MouseEvent): void {
         this.mouseDown = event.button === MouseButton.Left;
         if (this.mouseDown) {
             if (this.points.length === 0 || this.pointToAdd === undefined) {
@@ -50,24 +76,28 @@ export class LineService extends Tool {
             }
 
             this.points.push(this.pointToAdd);
+            this.handleLinePreview();
         }
     }
 
-    onMouseUp(event: MouseEvent): void {
-        this.mouseDown = !(event.button === MouseButton.Left);
-    }
-
-    onDoubleClick(event: MouseEvent): void {
-        if (this.points.length === 0) {
-            return;
+    handleDoubleClick(event: MouseEvent): void {
+        if (!this.keyEvents.get('Shift')) {
+            this.pointToAdd = this.getPositionFromMouse(event);
         }
 
-        this.pointToAdd = this.getPositionFromMouse(event);
+        this.points.push(this.pointToAdd);
+
         const closedLoop: boolean = Geometry.getDistanceBetween(this.pointToAdd, this.points[0]) <= LineService.MINIMUM_DISTANCE_TO_CLOSE_PATH;
         this.applyAttributes(this.drawingService.baseCtx);
         this.drawLinePath(this.drawingService.baseCtx, this.points, closedLoop);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
-        this.points = [];
+        this.initService();
+    }
+
+    onMouseUp(event: MouseEvent): void {
+        if (event.button === MouseButton.Left) {
+            this.mouseDown = false;
+        }
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -143,6 +173,7 @@ export class LineService extends Tool {
 
     stopDrawing(): void {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.initService();
     }
 
     handleLinePreview(): void {

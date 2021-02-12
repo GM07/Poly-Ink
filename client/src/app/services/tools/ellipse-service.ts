@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
+import { EllipseToolConstants } from '@app/classes/tool_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -15,6 +16,7 @@ export enum EllipseMode {
     providedIn: 'root',
 })
 export class EllipseService extends Tool {
+    toolID: string = EllipseToolConstants.TOOL_ID;
     private mouseUpCoord: Vec2;
     private shiftPressed: boolean;
     private lineWidthIn: number;
