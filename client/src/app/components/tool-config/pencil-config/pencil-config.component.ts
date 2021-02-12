@@ -9,7 +9,7 @@ import { PencilService } from '@app/services/tools/pencil-service';
 })
 export class PencilConfigComponent extends ToolConfig {
     lineWidth: number;
-    readonly MIN: number = ToolSettingsConst.MIN_PENCIL_WIDTH;
+    readonly MIN: number = ToolSettingsConst.MIN_WIDTH;
     readonly MAX: number = ToolSettingsConst.MAX_WIDTH;
 
     constructor(public pencilService: PencilService) {

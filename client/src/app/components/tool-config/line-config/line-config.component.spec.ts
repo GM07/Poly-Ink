@@ -42,7 +42,7 @@ describe('LineConfigComponent', () => {
     it('should get default value of slider', async () => {
         const slider = await loader.getHarness(MatSliderHarness);
         expect(await slider.getValue()).toBe(DEFAULT_VALUE);
-    })
+    });
 
     it('should get max value of slider', async () => {
         const slider = await loader.getHarness(MatSliderHarness);

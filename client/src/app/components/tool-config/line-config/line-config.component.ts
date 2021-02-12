@@ -9,7 +9,7 @@ import { LineService } from '@app/services/tools/line-service';
 })
 export class LineConfigComponent extends ToolConfig {
     withJunctionPoint: boolean;
-    readonly MIN: number = ToolSettingsConst.MIN_LINE_WIDTH;
+    readonly MIN: number = ToolSettingsConst.MIN_WIDTH;
     readonly MAX: number = ToolSettingsConst.MAX_WIDTH;
 
     constructor(public lineService: LineService) {

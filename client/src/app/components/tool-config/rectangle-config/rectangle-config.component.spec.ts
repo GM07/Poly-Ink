@@ -40,7 +40,7 @@ describe('RectangleConfigComponent', () => {
     });
 
     it('should get max value of slider', async () => {
-        //const max = 50;
+        // const max = 50;
         const slider = await loader.getHarness(MatSliderHarness);
         expect(await slider.getMaxValue()).toBe(ToolSettingsConst.MAX_WIDTH);
     });
