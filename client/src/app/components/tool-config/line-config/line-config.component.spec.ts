@@ -21,7 +21,7 @@ describe('LineConfigComponent', () => {
     let fixture: ComponentFixture<LineConfigComponent>;
     let loader: HarnessLoader;
     const buttonHarness = MatButtonHarness;
-    const DEFAULT_VALUE = 12;
+    const DEFAULT_VALUE = 6;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({

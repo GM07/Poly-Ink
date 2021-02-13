@@ -28,7 +28,7 @@ export class LineService extends Tool {
     // Attributs
     showJunctionPoints: boolean = true;
     diameterJunctions: number = 10;
-    thickness: number = 12;
+    thickness: number = 6;
     color: string = 'black';
 
     private keyEvents: Map<string, boolean> = new Map([
@@ -45,6 +45,10 @@ export class LineService extends Tool {
         this.pointToAdd = {} as Vec2;
         this.mousePosition = {} as Vec2;
         this.awaitsDoubleClick = false;
+        if (this.timeoutID > 0) {
+            clearTimeout(this.timeoutID);
+            this.timeoutID = 0;
+        }
     }
 
     applyAttributes(ctx: CanvasRenderingContext2D): void {
@@ -75,7 +79,7 @@ export class LineService extends Tool {
     handleSimpleClick(event: MouseEvent): void {
         this.mouseDown = event.button === MouseButton.Left;
         if (this.mouseDown) {
-            if (!this.keyEvents.get('Shift') || this.points.length === 0 || this.pointToAdd === undefined) {
+            if (this.points.length === 0 || this.pointToAdd === undefined) {
                 this.pointToAdd = this.getPositionFromMouse(event);
             }
 
