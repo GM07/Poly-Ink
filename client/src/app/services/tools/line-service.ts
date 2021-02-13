@@ -23,10 +23,11 @@ export class LineService extends Tool {
     private pointToAdd: Vec2;
     private mousePosition: Vec2;
     private awaitsDoubleClick: boolean = false;
+    private timeoutID: number = 0;
 
     // Attributs
     showJunctionPoints: boolean = true;
-    diameterJunctions: number = 50;
+    diameterJunctions: number = 10;
     thickness: number = 12;
     color: string = 'black';
 
@@ -55,10 +56,15 @@ export class LineService extends Tool {
     }
 
     onMouseDown(event: MouseEvent): void {
+        if (this.timeoutID > 0) {
+            clearTimeout(this.timeoutID);
+            this.timeoutID = 0;
+        }
+
         this.awaitsDoubleClick = true;
 
         if (event.detail === 1) {
-            window.setTimeout(() => {
+            this.timeoutID = window.setTimeout(() => {
                 this.handleSimpleClick(event);
             }, LineService.TIMEOUT_SIMPLE_CLICK);
         } else if (event.detail === 2) {
@@ -74,6 +80,7 @@ export class LineService extends Tool {
             }
 
             this.points.push(this.pointToAdd);
+            this.handleLinePreview();
         }
         this.awaitsDoubleClick = false;
     }
@@ -121,6 +128,8 @@ export class LineService extends Tool {
     }
 
     onKeyUp(event: KeyboardEvent): void {
+        this.keyEvents.set('Shift', event.shiftKey);
+
         if (this.keyEvents.has(event.key)) {
             this.keyEvents.set(event.key, false);
             this.handleKeys(event.key);
