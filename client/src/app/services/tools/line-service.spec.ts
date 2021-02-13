@@ -75,7 +75,6 @@ describe('LineService', () => {
     });
 
     it('should not add point on mouse right button down', () => {
-        service['timeoutID'] = 1;
         const mouseEvent = { button: MouseButton.Right, offsetX: 500, offsetY: 283, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(service['points'].length).toBe(0);

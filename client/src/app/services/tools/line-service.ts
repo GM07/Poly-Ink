@@ -22,7 +22,7 @@ export class LineService extends Tool {
     private points: Vec2[] = [];
     private pointToAdd: Vec2;
     private mousePosition: Vec2;
-    private timeoutID: number = 0;
+    private awaitsDoubleClick: boolean = false;
 
     // Attributs
     showJunctionPoints: boolean = true;
@@ -54,13 +54,10 @@ export class LineService extends Tool {
     }
 
     onMouseDown(event: MouseEvent): void {
-        if (this.timeoutID > 0) {
-            clearTimeout(this.timeoutID);
-            this.timeoutID = 0;
-        }
+        this.awaitsDoubleClick = true;
 
         if (event.detail === 1) {
-            this.timeoutID = window.setTimeout(() => {
+            window.setTimeout(() => {
                 this.handleSimpleClick(event);
             }, LineService.TIMEOUT_SIMPLE_CLICK);
         } else if (event.detail === 2) {
@@ -71,13 +68,13 @@ export class LineService extends Tool {
     handleSimpleClick(event: MouseEvent): void {
         this.mouseDown = event.button === MouseButton.Left;
         if (this.mouseDown) {
-            if (this.points.length === 0 || this.pointToAdd === undefined) {
+            if (!this.keyEvents.get('Shift') || this.points.length === 0 || this.pointToAdd === undefined) {
                 this.pointToAdd = this.getPositionFromMouse(event);
             }
 
             this.points.push(this.pointToAdd);
-            this.handleLinePreview();
         }
+        this.awaitsDoubleClick = false;
     }
 
     handleDoubleClick(event: MouseEvent): void {
@@ -92,6 +89,7 @@ export class LineService extends Tool {
         this.drawLinePath(this.drawingService.baseCtx, this.points, closedLoop);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.initService();
+        this.awaitsDoubleClick = false;
     }
 
     onMouseUp(event: MouseEvent): void {
@@ -101,6 +99,7 @@ export class LineService extends Tool {
     }
 
     onMouseMove(event: MouseEvent): void {
+        if (this.awaitsDoubleClick) return;
         if (this.points.length === 0 || event.offsetX === undefined || event.offsetY === undefined) {
             return;
         }
@@ -173,6 +172,7 @@ export class LineService extends Tool {
 
     stopDrawing(): void {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.awaitsDoubleClick = false;
         this.initService();
     }
 
