@@ -13,7 +13,7 @@
 
 .resize-control {
     background-color: black;
-    z-index: 1;
+    z-index: 0;
     width: 10px;
     height: 10px;
     position: absolute;
@@ -31,6 +31,6 @@
     cursor: se-resize;
 }
 
-.working-zone{
-  background-color: lightgray;
+.working-zone {
+    background-color: lightgray;
 }
