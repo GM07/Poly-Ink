@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
+import { EraserToolConstants } from '@app/classes/tool_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -21,6 +22,7 @@ export class EraserService extends Tool {
         super(drawingService, colorService);
         this.clearPath();
         this.shortCutKey = 'e';
+        this.toolID = EraserToolConstants.TOOL_ID;
     }
 
     get lineWidth(): number {
