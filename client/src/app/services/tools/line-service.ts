@@ -43,6 +43,7 @@ export class LineService extends Tool {
         this.points = [];
         this.pointToAdd = {} as Vec2;
         this.mousePosition = {} as Vec2;
+        this.awaitsDoubleClick = false;
     }
 
     applyAttributes(ctx: CanvasRenderingContext2D): void {
@@ -89,7 +90,6 @@ export class LineService extends Tool {
         this.drawLinePath(this.drawingService.baseCtx, this.points, closedLoop);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.initService();
-        this.awaitsDoubleClick = false;
     }
 
     onMouseUp(event: MouseEvent): void {
@@ -172,7 +172,6 @@ export class LineService extends Tool {
 
     stopDrawing(): void {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
-        this.awaitsDoubleClick = false;
         this.initService();
     }
 
