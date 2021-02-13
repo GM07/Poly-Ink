@@ -8,7 +8,7 @@ export abstract class Tool {
     constructor(protected drawingService: DrawingService, protected colorService: ColorService) {}
     mouseDownCoord: Vec2;
     mouseDown: boolean = false;
-    shortCutKey: string;
+    shortcutKey: string;
     toolID: string;
 
     isInCanvas(event: MouseEvent): boolean {

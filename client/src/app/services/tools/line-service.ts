@@ -13,7 +13,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
 export class LineService extends Tool {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
-        this.shortCutKey = 'l';
+        this.shortcutKey = LineToolConstants.SHORTCUTKEY;
     }
     static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
     static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;

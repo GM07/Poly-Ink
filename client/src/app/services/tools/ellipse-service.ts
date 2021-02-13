@@ -24,7 +24,7 @@ export class EllipseService extends Tool {
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
-        this.shortCutKey = '2';
+        this.shortcutKey = EllipseToolConstants.SHORTCUTKEY;
         this.shiftPressed = false;
         this.lineWidthIn = 1;
         this.ellipseMode = EllipseMode.FilledWithContour;

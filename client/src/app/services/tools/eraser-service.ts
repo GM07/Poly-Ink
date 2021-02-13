@@ -21,7 +21,7 @@ export class EraserService extends Tool {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.clearPath();
-        this.shortCutKey = 'e';
+        this.shortcutKey = EraserToolConstants.SHORTCUTKEY;
         this.toolID = EraserToolConstants.TOOL_ID;
     }
 
