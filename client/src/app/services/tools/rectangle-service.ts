@@ -24,7 +24,7 @@ export class RectangleService extends Tool {
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
-        this.shortcutKey = RectangleToolConstants.SHORTCUTKEY;
+        this.shortcutKey = RectangleToolConstants.SHORTCUT_KEY;
         this.shiftPressed = false;
         this.lineWidthIn = 1;
         this.rectangleMode = RectangleMode.FilledWithContour;

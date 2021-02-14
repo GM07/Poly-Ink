@@ -26,7 +26,7 @@ export class PencilService extends Tool {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.clearPath();
-        this.shortcutKey = PencilToolConstants.SHORTCUTKEY;
+        this.shortcutKey = PencilToolConstants.SHORTCUT_KEY;
     }
 
     get lineWidth(): number {

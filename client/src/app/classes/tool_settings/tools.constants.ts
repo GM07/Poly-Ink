@@ -3,21 +3,21 @@ export enum PencilToolConstants {
     TOOL_TITLE = 'Crayon',
     INFO_BUBBLE = 'Crayon (C)',
     ICON_NAME = 'pencil',
-    SHORTCUTKEY = 'c',
+    SHORTCUT_KEY = 'c',
 }
 export enum AerosolToolConstants {
     TOOL_ID = 'AEROSOL',
     TOOL_TITLE = 'Aerosol',
     INFO_BUBLE = 'Aerosol (A)',
     ICON_NAME = 'spray',
-    SHORTCUTKEY = 'a',
+    SHORTCUT_KEY = 'a',
 }
 export enum RectangleToolConstants {
     TOOL_ID = 'RECTANGLE',
     TOOL_TITLE = 'Rectangle',
     INFO_BUBBLE = 'Rectangle (1)',
     ICON_NAME = 'rectangle',
-    SHORTCUTKEY = '1',
+    SHORTCUT_KEY = '1',
 }
 
 export enum EllipseToolConstants {
@@ -25,14 +25,14 @@ export enum EllipseToolConstants {
     TOOL_TITLE = 'Ellipse',
     INFO_BUBBLE = 'Ellipse (2)',
     ICON_NAME = 'ellipse',
-    SHORTCUTKEY = '2',
+    SHORTCUT_KEY = '2',
 }
 export enum PolygoneToolConstants {
     TOOL_ID = 'POLYGONE',
     TOOL_TITLE = 'Polygone',
     INFO_BUBBLE = 'Polygone (3)',
     ICON_NAME = 'polygone',
-    SHORTCUTKEY = '3',
+    SHORTCUT_KEY = '3',
 }
 
 export enum LineToolConstants {
@@ -40,7 +40,7 @@ export enum LineToolConstants {
     TOOL_TITLE = 'Ligne',
     INFO_BUBBLE = 'Ligne (L)',
     ICON_NAME = 'line',
-    SHORTCUTKEY = 'l',
+    SHORTCUT_KEY = 'l',
 }
 
 export enum TextToolConstants {
@@ -48,7 +48,7 @@ export enum TextToolConstants {
     TOOL_TITLE = 'Texte',
     INFO_BUBBLE = 'Texte (T)',
     ICON_NAME = 'text',
-    SHORTCUTKEY = 't',
+    SHORTCUT_KEY = 't',
 }
 
 export enum FillToolConstants {
@@ -56,7 +56,7 @@ export enum FillToolConstants {
     TOOL_TITLE = 'Sceau de peinture',
     INFO_BUBBLE = 'Sceau de peinture (B)',
     ICON_NAME = 'bucket',
-    SHORTCUTKEY = 'b',
+    SHORTCUT_KEY = 'b',
 }
 
 export enum EraserToolConstants {
@@ -64,7 +64,7 @@ export enum EraserToolConstants {
     TOOL_TITLE = 'Efface',
     INFO_BUBBLE = 'Efface (E)',
     ICON_NAME = 'eraser',
-    SHORTCUTKEY = 'e',
+    SHORTCUT_KEY = 'e',
 }
 
 export enum StampToolConstants {
@@ -72,7 +72,7 @@ export enum StampToolConstants {
     TOOL_TITLE = 'Étampe',
     INFO_BUBBLE = 'Étampe (D)',
     ICON_NAME = 'stamp',
-    SHORTCUTKEY = 'd',
+    SHORTCUT_KEY = 'd',
 }
 
 export enum EyeDropperToolConstants {
@@ -80,7 +80,7 @@ export enum EyeDropperToolConstants {
     TOOL_TITLE = 'Pipette',
     INFO_BUBBLE = 'Pipette (I)',
     ICON_NAME = 'eye-dropper',
-    SHORTCUTKEY = 'i',
+    SHORTCUT_KEY = 'i',
 }
 
 export enum RectangleSelectionToolConstants {
@@ -88,7 +88,7 @@ export enum RectangleSelectionToolConstants {
     TOOL_TITLE = 'Séléction rectangulaire',
     INFO_BUBBLE = 'Séléction rectangulaire (R)',
     ICON_NAME = 'rectangle-selection',
-    SHORTCUTKEY = 'r',
+    SHORTCUT_KEY = 'r',
 }
 
 export enum EllipseSelectionToolConstants {
@@ -96,7 +96,7 @@ export enum EllipseSelectionToolConstants {
     TOOL_TITLE = 'Ellipse de séléction',
     INFO_BUBBLE = 'Ellipse de séléction (S)',
     ICON_NAME = 'ellipse-selection',
-    SHORTCUTKEY = 's',
+    SHORTCUT_KEY = 's',
 }
 
 export enum LassoToolConstants {
@@ -104,7 +104,7 @@ export enum LassoToolConstants {
     TOOL_TITLE = 'Lasso polygonal',
     INFO_BUBBLE = 'Lasso polygonal (V)',
     ICON_NAME = 'lasso',
-    SHORTCUTKEY = 'v',
+    SHORTCUT_KEY = 'v',
 }
 
 export enum SaveFileToolConsants {
