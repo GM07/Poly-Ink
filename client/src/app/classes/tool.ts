@@ -17,7 +17,7 @@ export abstract class Tool {
         const right = clientRect.x + clientRect.width;
         const top = clientRect.y;
         const bottom = clientRect.y + clientRect.height;
-        if (event.x < left || event.x > right || event.y < top || event.y > bottom) return false;
+        if (event.x <= left || event.x >= right || event.y <= top || event.y >= bottom) return false;
         return true;
     }
 
