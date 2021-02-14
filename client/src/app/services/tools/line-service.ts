@@ -22,12 +22,13 @@ export class LineService extends Tool {
     private points: Vec2[] = [];
     private pointToAdd: Vec2;
     private mousePosition: Vec2;
+    private awaitsDoubleClick: boolean = false;
     private timeoutID: number = 0;
 
     // Attributs
     showJunctionPoints: boolean = true;
-    diameterJunctions: number = 50;
-    thickness: number = 12;
+    diameterJunctions: number = 10;
+    thickness: number = 6;
     color: string = 'black';
 
     private keyEvents: Map<string, boolean> = new Map([
@@ -43,6 +44,11 @@ export class LineService extends Tool {
         this.points = [];
         this.pointToAdd = {} as Vec2;
         this.mousePosition = {} as Vec2;
+        this.awaitsDoubleClick = false;
+        if (this.timeoutID > 0) {
+            clearTimeout(this.timeoutID);
+            this.timeoutID = 0;
+        }
     }
 
     applyAttributes(ctx: CanvasRenderingContext2D): void {
@@ -58,6 +64,8 @@ export class LineService extends Tool {
             clearTimeout(this.timeoutID);
             this.timeoutID = 0;
         }
+
+        this.awaitsDoubleClick = true;
 
         if (event.detail === 1) {
             this.timeoutID = window.setTimeout(() => {
@@ -78,6 +86,7 @@ export class LineService extends Tool {
             this.points.push(this.pointToAdd);
             this.handleLinePreview();
         }
+        this.awaitsDoubleClick = false;
     }
 
     handleDoubleClick(event: MouseEvent): void {
@@ -101,6 +110,7 @@ export class LineService extends Tool {
     }
 
     onMouseMove(event: MouseEvent): void {
+        if (this.awaitsDoubleClick) return;
         if (this.points.length === 0 || event.offsetX === undefined || event.offsetY === undefined) {
             return;
         }
@@ -122,6 +132,8 @@ export class LineService extends Tool {
     }
 
     onKeyUp(event: KeyboardEvent): void {
+        this.keyEvents.set('Shift', event.shiftKey);
+
         if (this.keyEvents.has(event.key)) {
             this.keyEvents.set(event.key, false);
             this.handleKeys(event.key);
