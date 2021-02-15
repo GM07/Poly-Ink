@@ -142,7 +142,6 @@ describe('LineService', () => {
             { x: 100, y: 819 },
             { x: 500, y: 400 },
         ]);
-        //
     });
 
     it('should move line on mouse move when point array is not empty', () => {

@@ -84,6 +84,7 @@ export class LineService extends Tool {
             }
 
             this.points.push(this.pointToAdd);
+            console.log('before: ', this.points);
         }
         this.awaitsDoubleClick = false;
     }
@@ -100,6 +101,7 @@ export class LineService extends Tool {
         if (closedLoop) {
             this.points[this.points.length - 1] = this.points[0];
         }
+        console.log('after : ', this.points);
 
         this.applyAttributes(this.drawingService.baseCtx);
         this.drawLinePath(this.drawingService.baseCtx, this.points);
