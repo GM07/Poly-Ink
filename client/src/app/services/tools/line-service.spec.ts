@@ -320,10 +320,10 @@ describe('LineService', () => {
         ];
         //
         const result: Vec2 = service.alignPoint({ x: 310, y: 405 });
-        expect(result).toEqual({ x: 300, y: 400 });
+        expect(result).toEqual({ x: 310, y: 410 });
     });
 
-    it('should align points', () => {
+    it('should align points when vertical', () => {
         service['points'] = [
             { x: 500, y: 500 },
             { x: 200, y: 300 },
