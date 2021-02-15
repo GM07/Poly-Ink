@@ -17,7 +17,6 @@ export class LineService extends Tool {
     }
     static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
     static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;
-    static readonly TIMEOUT_SIMPLE_CLICK: number = 0;
     readonly toolID: string = LineToolConstants.TOOL_ID;
     private points: Vec2[] = [];
     private pointToAdd: Vec2;
@@ -60,17 +59,10 @@ export class LineService extends Tool {
     }
 
     onMouseDown(event: MouseEvent): void {
-        if (this.timeoutID > 0) {
-            window.clearTimeout(this.timeoutID);
-            this.timeoutID = 0;
-        }
-
         this.awaitsDoubleClick = true;
 
         if (event.detail === 1) {
-            this.timeoutID = window.setTimeout(() => {
-                this.handleSimpleClick(event);
-            }, LineService.TIMEOUT_SIMPLE_CLICK);
+            this.handleSimpleClick(event);
         } else if (event.detail === 2) {
             this.handleDoubleClick(event);
         }

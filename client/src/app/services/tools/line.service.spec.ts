@@ -27,7 +27,6 @@ describe('LineService', () => {
 
     let pointsTest2: Vec2[];
 
-    const delay = async (ms: number) => new Promise((result) => setTimeout(result, ms));
     beforeEach(() => {
         const spyDrawing = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
         colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(1, 1, 1, 1)', secondaryRgba: 'rgba(0, 0, 0, 1)' });
@@ -58,7 +57,6 @@ describe('LineService', () => {
     it('should add point on mouse position on first mouse left button down', async () => {
         const mouseEvent = { button: MouseButton.Left, offsetX: 300, offsetY: 400, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
-        await delay(LineService.TIMEOUT_SIMPLE_CLICK * 2);
         expect(service['points'].length).toBe(1);
         expect(service['points'][0]).toEqual({ x: 300, y: 400 } as Vec2);
     });
@@ -69,7 +67,6 @@ describe('LineService', () => {
         service['showJunctionPoints'] = true;
         const mouseEvent = { button: MouseButton.Left, offsetX: 500, offsetY: 283, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
-        await delay(LineService.TIMEOUT_SIMPLE_CLICK * 2);
         expect(service['points'].length).toBe(2);
         expect(service['points'][1]).toEqual({ x: 120, y: 120 } as Vec2);
     });
