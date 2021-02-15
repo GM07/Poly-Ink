@@ -123,8 +123,8 @@ export class EraserService extends Tool {
             ctx.stroke();
             ctx.beginPath();
 
-            ctx.stroke();
         }
+        ctx.stroke();
     }
 
     private clearPath(): void {
