@@ -128,29 +128,21 @@ describe('LineService', () => {
         const lastEvent = { offsetX: 100, offsetY: 100, detail: 2 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath').and.callThrough();
         service.onMouseDown(lastEvent);
-        expect(drawLinePath).toHaveBeenCalledWith(
-            mockContext,
-            [
-                { x: 100, y: 800 },
-                { x: 0, y: 0 },
-            ],
-            false,
-        );
+        expect(drawLinePath).toHaveBeenCalledWith(mockContext, [{ x: 100, y: 800 }]);
     });
 
-    it('should end drawing on double click with a closed path', () => {
-        service['points'] = [{ x: 100, y: 819 } as Vec2];
-        const lastEvent = { offsetX: 100, offsetY: 800, detail: 2 } as MouseEvent;
+    it('should end drawing on double click with a closed path', async () => {
+        service['points'] = [{ x: 500, y: 400 }, { x: 200, y: 300 }, { x: 100, y: 819 } as Vec2];
+        const lastEvent = { offsetX: 500, offsetY: 419, detail: 2 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath').and.callThrough();
         service.onMouseDown(lastEvent);
-        expect(drawLinePath).toHaveBeenCalledWith(
-            mockContext,
-            [
-                { x: 100, y: 819 },
-                { x: 100, y: 800 },
-            ],
-            true,
-        );
+        expect(drawLinePath).toHaveBeenCalledWith(mockContext, [
+            { x: 500, y: 400 },
+            { x: 200, y: 300 },
+            { x: 100, y: 819 },
+            { x: 500, y: 400 },
+        ]);
+        //
     });
 
     it('should move line on mouse move when point array is not empty', () => {
@@ -311,17 +303,8 @@ describe('LineService', () => {
         const points = pointsTest2;
         service['points'] = points;
         const lineToSpy = spyOn(mockContext, 'lineTo').and.callThrough();
-        service['drawLinePath'](mockContext, points, false);
+        service['drawLinePath'](mockContext, points);
         expect(lineToSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it('should draw closed line path', () => {
-        pointsTest2.push({ x: 453, y: 764 });
-        const points = pointsTest2;
-        service['points'] = points;
-        const lineToSpy = spyOn(mockContext, 'lineTo').and.callThrough();
-        service['drawLinePath'](mockContext, points, true);
-        expect(lineToSpy).toHaveBeenCalledTimes(3);
     });
 
     it('should draw junctions', () => {

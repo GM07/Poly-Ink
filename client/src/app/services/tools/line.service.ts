@@ -17,7 +17,7 @@ export class LineService extends Tool {
     }
     static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
     static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;
-    static readonly TIMEOUT_SIMPLE_CLICK: number = 120;
+    static readonly TIMEOUT_SIMPLE_CLICK: number = 0;
     readonly toolID: string = LineToolConstants.TOOL_ID;
     private points: Vec2[] = [];
     private pointToAdd: Vec2;
@@ -61,7 +61,7 @@ export class LineService extends Tool {
 
     onMouseDown(event: MouseEvent): void {
         if (this.timeoutID > 0) {
-            clearTimeout(this.timeoutID);
+            window.clearTimeout(this.timeoutID);
             this.timeoutID = 0;
         }
 
@@ -84,7 +84,6 @@ export class LineService extends Tool {
             }
 
             this.points.push(this.pointToAdd);
-            this.handleLinePreview();
         }
         this.awaitsDoubleClick = false;
     }
@@ -92,13 +91,18 @@ export class LineService extends Tool {
     handleDoubleClick(event: MouseEvent): void {
         if (!this.keyEvents.get('Shift')) {
             this.pointToAdd = this.getPositionFromMouse(event);
+        } else {
+            this.pointToAdd = this.alignPoint(this.getPositionFromMouse(event));
         }
 
-        this.points.push(this.pointToAdd);
-
         const closedLoop: boolean = Geometry.getDistanceBetween(this.pointToAdd, this.points[0]) <= LineService.MINIMUM_DISTANCE_TO_CLOSE_PATH;
+
+        if (closedLoop) {
+            this.points[this.points.length - 1] = this.points[0];
+        }
+
         this.applyAttributes(this.drawingService.baseCtx);
-        this.drawLinePath(this.drawingService.baseCtx, this.points, closedLoop);
+        this.drawLinePath(this.drawingService.baseCtx, this.points);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.initService();
     }
@@ -110,8 +114,7 @@ export class LineService extends Tool {
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.awaitsDoubleClick) return;
-        if (this.points.length === 0 || event.offsetX === undefined || event.offsetY === undefined) {
+        if (this.points.length === 0 || this.awaitsDoubleClick || event.offsetX === undefined || event.offsetY === undefined) {
             return;
         }
 
@@ -126,19 +129,25 @@ export class LineService extends Tool {
 
     onKeyDown(event: KeyboardEvent): void {
         if (this.awaitsDoubleClick) return;
+
         if (this.keyEvents.has(event.key)) {
-            this.keyEvents.set(event.key, true);
-            this.handleKeys(event.key);
+            if (this.keyEvents.get(event.key) != true) {
+                this.keyEvents.set(event.key, true);
+                this.handleKeys(event.key);
+            }
         }
     }
 
     onKeyUp(event: KeyboardEvent): void {
         if (this.awaitsDoubleClick) return;
+
         this.keyEvents.set('Shift', event.shiftKey);
 
         if (this.keyEvents.has(event.key)) {
-            this.keyEvents.set(event.key, false);
-            this.handleKeys(event.key);
+            if (this.keyEvents.get(event.key) != false) {
+                this.keyEvents.set(event.key, false);
+                this.handleKeys(event.key);
+            }
         }
     }
 
@@ -170,6 +179,8 @@ export class LineService extends Tool {
     }
 
     handleShiftKey(): void {
+        if (this.mouseDown) return;
+
         if (this.keyEvents.get('Shift')) {
             this.pointToAdd = this.alignPoint(this.mousePosition);
         } else {
@@ -226,7 +237,7 @@ export class LineService extends Tool {
         }
     }
 
-    private drawLinePath(ctx: CanvasRenderingContext2D, points: Vec2[] = this.points, closed: boolean = false): void {
+    private drawLinePath(ctx: CanvasRenderingContext2D, points: Vec2[] = this.points): void {
         if (points.length < 2) {
             return;
         }
@@ -244,13 +255,6 @@ export class LineService extends Tool {
 
         for (const point of points) {
             this.drawJunction(ctx, point);
-        }
-
-        if (closed) {
-            ctx.beginPath();
-            ctx.moveTo(this.getLastPoint().x, this.getLastPoint().y);
-            ctx.lineTo(this.points[0].x, this.points[0].y);
-            ctx.stroke();
         }
     }
 
