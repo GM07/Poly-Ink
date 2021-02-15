@@ -1,7 +1,15 @@
 <mat-drawer-container class="container">
     <mat-drawer mode="side" opened>
         <mat-action-list class="top-sidebar">
-            <button id="back" mat-icon-button (click)="backToMenu()">
+            <button
+                id="back"
+                class="sidebar-item"
+                mat-icon-button
+                [@.disabled]="true"
+                (click)="backToMenu()"
+                matTooltip="Menu"
+                matTooltipPosition="right"
+            >
                 <mat-icon>home</mat-icon>
             </button>
             <button

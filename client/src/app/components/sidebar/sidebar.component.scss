@@ -1,6 +1,6 @@
 .container {
     height: 100%;
-    min-height: 98vh;
+    min-height: 100vh;
     border: 1px solid black;
     background: white;
 }
@@ -15,12 +15,8 @@
 .bottom-sidebar {
     display: flex;
     flex-direction: column;
-    justify-content: right;
-    align-items: flex-end;
-    margin-bottom: auto;
-    position: absolute;
-    bottom: 0;
-    padding-bottom: 30px;
+    justify-content: space-evenly;
+    align-items: left;
 }
 
 .attributes-tab {
