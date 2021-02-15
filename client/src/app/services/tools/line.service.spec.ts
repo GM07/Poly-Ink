@@ -135,11 +135,10 @@ describe('LineService', () => {
         service['points'] = [{ x: 500, y: 400 }, { x: 200, y: 300 }, { x: 100, y: 819 } as Vec2];
         const lastEvent = { offsetX: 500, offsetY: 419, detail: 2 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath').and.callThrough();
-        service.onMouseDown(lastEvent);
+        service.handleDoubleClick(lastEvent);
         expect(drawLinePath).toHaveBeenCalledWith(mockContext, [
             { x: 500, y: 400 },
             { x: 200, y: 300 },
-            { x: 100, y: 819 },
             { x: 500, y: 400 },
         ]);
     });
@@ -172,6 +171,14 @@ describe('LineService', () => {
 
     it('should set backspace key to pressed when pressing Backspace', () => {
         service['points'] = [{ x: 100, y: 300 }];
+        const keyEvent: KeyboardEvent = { key: 'Backspace' } as KeyboardEvent;
+        service.onKeyDown(keyEvent);
+        expect(service['keyEvents'].get('Backspace')).toBe(true);
+    });
+
+    it('should not trigger event when key pressed is same as last', () => {
+        service['points'] = [{ x: 100, y: 300 }];
+        service['keyEvents'].set('Backspace', true);
         const keyEvent: KeyboardEvent = { key: 'Backspace' } as KeyboardEvent;
         service.onKeyDown(keyEvent);
         expect(service['keyEvents'].get('Backspace')).toBe(true);
@@ -244,6 +251,15 @@ describe('LineService', () => {
         const handlePreviewFunc = spyOn(service, 'handleLinePreview').and.callThrough();
         service.handleBackspaceKey();
         expect(handlePreviewFunc).not.toHaveBeenCalled();
+    });
+
+    it('should not align points when shift key is pressed when mouse is down', () => {
+        service['keyEvents'].set('Shift', true);
+        service['points'].push({ x: 10, y: 10 });
+        service['mouseDown'] = true;
+        const alignFunc = spyOn(service, 'alignPoint').and.returnValue({ x: 100, y: 100 } as Vec2);
+        service.handleShiftKey();
+        expect(alignFunc).not.toHaveBeenCalled();
     });
 
     it('should align points when shift key is pressed', () => {
