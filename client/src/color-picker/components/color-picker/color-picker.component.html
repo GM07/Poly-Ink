@@ -41,10 +41,9 @@
 
 <mat-divider></mat-divider>
 
-<div class="buttons">
-    <button (click)="chosePrimary()" mat-raised-button>Définir couleur primaire</button>
-    <button (click)="choseSecondary()" mat-raised-button>Définir couleur secondaire</button>
-    <button (click)="closeColorPicker()" mat-raised-button>Annuler</button>
-</div>
-
 <app-previous-colors></app-previous-colors>
+
+<div class="buttons">
+    <button (click)="closeColorPicker()" mat-raised-button>Ok</button>
+    <button (click)="cancelColorChange()" mat-raised-button>Annuler</button>
+</div>

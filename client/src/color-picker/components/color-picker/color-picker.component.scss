@@ -10,8 +10,9 @@ div {
 }
 
 .buttons {
-    flex-direction: column;
-    justify-content: center;
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
 }
 
 .rgb-selector {
@@ -20,7 +21,8 @@ div {
 }
 
 button {
-    margin: 2.5px 5px;
+    margin: 2.5px 0px;
+    width: 45%;
 }
 
 :host ::ng-deep mat-divider {

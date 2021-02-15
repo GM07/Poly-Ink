@@ -1,13 +1,13 @@
 <div class="colors">
     <div class="color">
-        <div (click)="openColorPicker()" class="primaryColor" [style.background]="colorService.primaryColor.rgbString"></div>
+        <div (click)="changePrimaryColor()" class="primaryColor" [style.background]="colorService.primaryColor.rgbString"></div>
         <h5>Primaire</h5>
     </div>
     <div class="color">
-        <div (click)="openColorPicker()" class="secondaryColor" [style.background]="colorService.secondaryColor.rgbString"></div>
+        <div (click)="changeSecondaryColor()" class="secondaryColor" [style.background]="colorService.secondaryColor.rgbString"></div>
         <h5>Secondaire</h5>
     </div>
-    <div class="menuTrigger" [matMenuTriggerFor]="ColorMenu"></div>
+    <div class="menuTrigger" [matMenuTriggerFor]="ColorMenu" (menuClosed)="menuClosed()"></div>
 </div>
 <mat-menu #ColorMenu>
     <app-color-picker (click)="$event.stopPropagation()" (closeMenuEvent)="closeMenu()"></app-color-picker>

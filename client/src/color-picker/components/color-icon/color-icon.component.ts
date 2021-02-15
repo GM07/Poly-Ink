@@ -8,6 +8,9 @@ import { ColorService } from 'src/color-picker/services/color.service';
     styleUrls: ['./color-icon.component.scss'],
 })
 export class ColorIconComponent {
+    readonly changePrimary: boolean = true;
+    readonly changeSecondary: boolean = false;
+
     @Input()
     width: number;
 
@@ -16,21 +19,36 @@ export class ColorIconComponent {
 
     @ViewChild(MatMenuTrigger) colorMenuTrigger: MatMenuTrigger;
 
-    swapIconSize: number;
-
     constructor(public colorService: ColorService) {}
 
     swap(): void {
         this.colorService.swap();
     }
 
-    openColorPicker(): void {
+    changePrimaryColor(): void {
         this.colorService.selectedColorFromHex = this.colorService.primaryColor;
         this.colorService.selectedAlpha = this.colorService.primaryColorAlpha;
+        this.colorService.changePrimary = true; //TODO make enum
+        this.openColorPicker();
+    }
+
+    changeSecondaryColor(): void {
+        this.colorService.selectedColorFromHex = this.colorService.secondaryColor;
+        this.colorService.selectedAlpha = this.colorService.secondaryColorAlpha;
+        this.colorService.changePrimary = false; //TODO make enum
+        this.openColorPicker();
+    }
+
+    openColorPicker(): void {
+        this.colorService.shouldChangeColor = true;
         this.colorMenuTrigger.openMenu();
     }
 
     closeMenu(): void {
         this.colorMenuTrigger.closeMenu();
+    }
+
+    menuClosed(): void {
+        this.colorService.choseColor();
     }
 }
