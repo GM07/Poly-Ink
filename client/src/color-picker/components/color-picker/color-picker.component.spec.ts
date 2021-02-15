@@ -43,6 +43,7 @@ describe('ColorPickerComponent', () => {
             primaryColorAlpha: {},
             secondaryColor: {},
             secondaryColorAlpha: {},
+            shouldChangeColor: {},
         });
         TestBed.configureTestingModule({
             declarations: [
@@ -135,5 +136,18 @@ describe('ColorPickerComponent', () => {
         component.valueChange([label, alpha]);
 
         expect(component.colorService.selectedAlpha).toEqual(alpha);
+    });
+
+    it('should not allow for color change when cancelling color change', () => {
+        spyOn(component, 'closeColorPicker');
+        component.cancelColorChange();
+        expect(component.colorService.shouldChangeColor).toBeFalse();
+        expect(component.closeColorPicker).toHaveBeenCalled();
+    });
+
+    it('should emit a closeColorPicker event', () => {
+        spyOn(component.closeMenuEvent, 'emit').and.stub();
+        component.closeColorPicker();
+        expect(component.closeMenuEvent.emit).toHaveBeenCalled();
     });
 });
