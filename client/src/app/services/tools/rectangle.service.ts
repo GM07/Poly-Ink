@@ -123,6 +123,7 @@ export class RectangleService extends Tool {
         ctx.strokeStyle = this.colorService.secondaryRgba;
         ctx.fillStyle = this.colorService.primaryRgba;
         ctx.lineJoin = 'miter' as CanvasLineJoin;
+        ctx.lineCap = 'square' as CanvasLineCap;
         ctx.beginPath();
 
         switch (this.rectangleMode) {
