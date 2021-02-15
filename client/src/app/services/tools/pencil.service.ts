@@ -30,6 +30,11 @@ export class PencilService extends Tool {
         this.shortcutKey = PencilToolConstants.SHORTCUT_KEY;
     }
 
+    static isAPoint(path: Vec2[]): boolean {
+        const isPoint = path.length === 1;
+        return isPoint || (path.length === 2 && path[0].x === path[1].x && path[0].y === path[1].y);
+    }
+
     get lineWidth(): number {
         return this.lineWidthIn;
     }
@@ -136,10 +141,5 @@ export class PencilService extends Tool {
     private clearPath(): void {
         this.pathData = [];
         this.pathData.push([]);
-    }
-
-    static isAPoint(path: Vec2[]): boolean {
-        let isPoint = path.length === 1;
-        return isPoint || (path.length === 2 && path[0].x === path[1].x && path[0].y === path[1].y);
     }
 }
