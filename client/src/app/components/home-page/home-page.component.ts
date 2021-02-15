@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,15 +15,11 @@ import { Router } from '@angular/router';
         ]),
     ],
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent {
     state: OpacityState = 'visible';
     showComponent: boolean = true;
 
     constructor(private router: Router, private zone: NgZone) {
-        //
-    }
-
-    ngOnInit(): void {
         //
     }
 

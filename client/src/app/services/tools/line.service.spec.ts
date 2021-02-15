@@ -27,7 +27,6 @@ describe('LineService', () => {
 
     let pointsTest2: Vec2[];
 
-    const delay = async (ms: number) => new Promise((result) => setTimeout(result, ms));
     beforeEach(() => {
         const spyDrawing = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
         colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(1, 1, 1, 1)', secondaryRgba: 'rgba(0, 0, 0, 1)' });
@@ -58,7 +57,6 @@ describe('LineService', () => {
     it('should add point on mouse position on first mouse left button down', async () => {
         const mouseEvent = { button: MouseButton.Left, offsetX: 300, offsetY: 400, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
-        await delay(LineService.TIMEOUT_SIMPLE_CLICK * 2);
         expect(service['points'].length).toBe(1);
         expect(service['points'][0]).toEqual({ x: 300, y: 400 } as Vec2);
     });
@@ -69,13 +67,11 @@ describe('LineService', () => {
         service['showJunctionPoints'] = true;
         const mouseEvent = { button: MouseButton.Left, offsetX: 500, offsetY: 283, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
-        await delay(LineService.TIMEOUT_SIMPLE_CLICK * 2);
         expect(service['points'].length).toBe(2);
         expect(service['points'][1]).toEqual({ x: 120, y: 120 } as Vec2);
     });
 
     it('should not add point on mouse right button down', () => {
-        service['timeoutID'] = 1;
         const mouseEvent = { button: MouseButton.Right, offsetX: 500, offsetY: 283, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(service['points'].length).toBe(0);
@@ -91,16 +87,7 @@ describe('LineService', () => {
         expect(service['mouseDown']).toBe(false);
     });
 
-    it('should reset properly', () => {
-        service['awaitsDoubleClick'] = true;
-        service['timeoutID'] = 1;
-        service.initService();
-        expect(service['timeoutID']).toEqual(0);
-        expect(service['awaitsDoubleClick']).toBeFalsy();
-    });
-
     it('should do nothing when awaiting a double click', () => {
-        service['awaitsDoubleClick'] = true;
         const handlePreviewFunc = spyOn(service, 'handleLinePreview').and.callThrough();
         const handleKeys = spyOn(service, 'handleKeys').and.callThrough();
         service.onMouseMove({} as MouseEvent);
@@ -128,26 +115,20 @@ describe('LineService', () => {
         const lastEvent = { offsetX: 100, offsetY: 100, detail: 2 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath').and.callThrough();
         service.onMouseDown(lastEvent);
-        expect(drawLinePath).toHaveBeenCalledWith(
-            mockContext,
-            [
-                { x: 100, y: 800 },
-                { x: 0, y: 0 },
-            ],
-            false,
-        );
+        expect(drawLinePath).toHaveBeenCalledWith(mockContext, [{ x: 100, y: 800 }], false);
     });
 
-    it('should end drawing on double click with a closed path', () => {
-        service['points'] = [{ x: 100, y: 819 } as Vec2];
-        const lastEvent = { offsetX: 100, offsetY: 800, detail: 2 } as MouseEvent;
+    it('should end drawing on double click with a closed path', async () => {
+        service['points'] = [{ x: 500, y: 400 }, { x: 200, y: 300 }, { x: 100, y: 819 } as Vec2];
+        const lastEvent = { offsetX: 500, offsetY: 419, detail: 2 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath').and.callThrough();
-        service.onMouseDown(lastEvent);
+        service.handleDoubleClick(lastEvent);
         expect(drawLinePath).toHaveBeenCalledWith(
             mockContext,
             [
-                { x: 100, y: 819 },
-                { x: 100, y: 800 },
+                { x: 500, y: 400 },
+                { x: 200, y: 300 },
+                { x: 500, y: 400 },
             ],
             true,
         );
@@ -181,6 +162,14 @@ describe('LineService', () => {
 
     it('should set backspace key to pressed when pressing Backspace', () => {
         service['points'] = [{ x: 100, y: 300 }];
+        const keyEvent: KeyboardEvent = { key: 'Backspace' } as KeyboardEvent;
+        service.onKeyDown(keyEvent);
+        expect(service['keyEvents'].get('Backspace')).toBe(true);
+    });
+
+    it('should not trigger event when key pressed is same as last', () => {
+        service['points'] = [{ x: 100, y: 300 }];
+        service['keyEvents'].set('Backspace', true);
         const keyEvent: KeyboardEvent = { key: 'Backspace' } as KeyboardEvent;
         service.onKeyDown(keyEvent);
         expect(service['keyEvents'].get('Backspace')).toBe(true);
@@ -255,6 +244,15 @@ describe('LineService', () => {
         expect(handlePreviewFunc).not.toHaveBeenCalled();
     });
 
+    it('should not align points when shift key is pressed when mouse is down', () => {
+        service['keyEvents'].set('Shift', true);
+        service['points'].push({ x: 10, y: 10 });
+        service['mouseDown'] = true;
+        const alignFunc = spyOn(service, 'alignPoint').and.returnValue({ x: 100, y: 100 } as Vec2);
+        service.handleShiftKey();
+        expect(alignFunc).not.toHaveBeenCalled();
+    });
+
     it('should align points when shift key is pressed', () => {
         service['keyEvents'].set('Shift', true);
         service['points'].push({ x: 10, y: 10 });
@@ -305,17 +303,15 @@ describe('LineService', () => {
         const points = pointsTest2;
         service['points'] = points;
         const lineToSpy = spyOn(mockContext, 'lineTo').and.callThrough();
-        service['drawLinePath'](mockContext, points, false);
+        service['drawLinePath'](mockContext, points);
         expect(lineToSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('should draw closed line path', () => {
-        pointsTest2.push({ x: 453, y: 764 });
-        const points = pointsTest2;
-        service['points'] = points;
-        const lineToSpy = spyOn(mockContext, 'lineTo').and.callThrough();
-        service['drawLinePath'](mockContext, points, true);
-        expect(lineToSpy).toHaveBeenCalledTimes(3);
+    it('should draw junctions', () => {
+        service['showJunctionPoints'] = true;
+        const fillFunc = spyOn(mockContext, 'fill').and.callThrough();
+        service['drawJunction'](mockContext, { x: 0, y: 0 });
+        expect(fillFunc).toHaveBeenCalled();
     });
 
     it('should align points', () => {
