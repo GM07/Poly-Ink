@@ -24,10 +24,10 @@ export class EllipseService extends Tool {
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
-        this.shortCutKey = '2';
+        this.shortcutKey = EllipseToolConstants.SHORTCUT_KEY;
         this.shiftPressed = false;
         this.lineWidthIn = 1;
-        this.ellipseMode = EllipseMode.Contour;
+        this.ellipseMode = EllipseMode.FilledWithContour;
     }
 
     set contourWidth(width: number) {
@@ -178,7 +178,7 @@ export class EllipseService extends Tool {
 
         const lineDash = 6;
         ctx.lineWidth = dashWidth;
-        ctx.strokeStyle = 'dark gray';
+        ctx.strokeStyle = 'gray';
         ctx.setLineDash([lineDash]);
         ctx.beginPath();
         ctx.strokeRect(x, y, width, height);
