@@ -187,7 +187,7 @@ describe('RectangleService', () => {
 
     it('should allow for filled with contour drawing type', () => {
         service.rectangleMode = RectangleMode.FilledWithContour;
-        service.contourWidth = 1;
+        service.contourWidth = 2;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
