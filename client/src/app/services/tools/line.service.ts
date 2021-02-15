@@ -123,7 +123,7 @@ export class LineService extends Tool {
         if (this.awaitsDoubleClick) return;
 
         if (this.keyEvents.has(event.key)) {
-            if (this.keyEvents.get(event.key) != true) {
+            if (this.keyEvents.get(event.key) !== true) {
                 this.keyEvents.set(event.key, true);
                 this.handleKeys(event.key);
             }
