@@ -21,7 +21,6 @@ export class LineService extends Tool {
     private points: Vec2[] = [];
     private pointToAdd: Vec2;
     private mousePosition: Vec2;
-    private awaitsDoubleClick: boolean = false;
 
     // Attributs
     showJunctionPoints: boolean = true;
@@ -69,7 +68,6 @@ export class LineService extends Tool {
 
             this.points.push(this.pointToAdd);
         }
-        this.awaitsDoubleClick = false;
     }
 
     handleDoubleClick(event: MouseEvent): void {
@@ -98,7 +96,7 @@ export class LineService extends Tool {
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.points.length === 0 || this.awaitsDoubleClick || event.offsetX === undefined || event.offsetY === undefined) {
+        if (this.points.length === 0 || event.offsetX === undefined || event.offsetY === undefined) {
             return;
         }
 

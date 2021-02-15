@@ -88,7 +88,6 @@ describe('LineService', () => {
     });
 
     it('should do nothing when awaiting a double click', () => {
-        service['awaitsDoubleClick'] = true;
         const handlePreviewFunc = spyOn(service, 'handleLinePreview').and.callThrough();
         const handleKeys = spyOn(service, 'handleKeys').and.callThrough();
         service.onMouseMove({} as MouseEvent);
