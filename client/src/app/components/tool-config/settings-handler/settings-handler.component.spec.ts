@@ -11,6 +11,7 @@ import { LineService } from '@app/services/tools/line.service';
 import { PencilService } from '@app/services/tools/pencil.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
 
 class MockToolHandler extends ToolHandlerService {
     TOOLS_MOCK: Map<string, Tool> = new Map();
@@ -22,8 +23,9 @@ class MockToolHandler extends ToolHandlerService {
         rectangleService: RectangleService,
         eraserService: EraserService,
         ellipseService: EllipseService,
+        newDrawingService: NewDrawingService
     ) {
-        super(pencilService, lineService, rectangleService, ellipseService, eraserService);
+        super(pencilService, lineService, rectangleService, ellipseService, eraserService, newDrawingService);
         this.TOOLS_MOCK.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
         this.TOOLS_MOCK.set(ToolsConstants.AerosolToolConstants.TOOL_ID, pencilService);
@@ -59,6 +61,7 @@ describe('SettingsHandlerComponent', () => {
     let eraserService: EraserService;
     let ellipseService: EllipseService;
     let toolHandlerService: MockToolHandler;
+    let newDrawingService: NewDrawingService;
 
     beforeEach(() => {
         pencilService = TestBed.inject(PencilService);
@@ -66,7 +69,8 @@ describe('SettingsHandlerComponent', () => {
         rectangleService = TestBed.inject(RectangleService);
         eraserService = TestBed.inject(EraserService);
         ellipseService = TestBed.inject(EllipseService);
-        toolHandlerService = new MockToolHandler(pencilService, lineService, rectangleService, eraserService, ellipseService);
+        newDrawingService = TestBed.inject(NewDrawingService);
+        toolHandlerService = new MockToolHandler(pencilService, lineService, rectangleService, eraserService, ellipseService, newDrawingService);
         component = new SettingsHandlerComponent(toolHandlerService);
     });
 

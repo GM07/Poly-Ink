@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
 import * as ToolsConstants from '@app/classes/tool_ui_settings/tools.constants';
+import { NewDrawingService } from '@app/services/drawing/canvas-reset.service.ts';
 import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
 import { LineService } from '@app/services/tools/line.service';
@@ -16,6 +17,7 @@ export class ToolHandlerService {
     private TOOLS: Map<string, Tool> = new Map();
     private currentTool: Tool;
     currentToolSubject: Subject<Tool> = new Subject<Tool>();
+    private newDrawingService: NewDrawingService;
 
     constructor(
         pencilService: PencilService,
@@ -23,6 +25,7 @@ export class ToolHandlerService {
         rectangleService: RectangleService,
         ellipseService: EllipseService,
         eraserService: EraserService,
+        newDrawingService: NewDrawingService,
     ) {
         this.TOOLS.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
@@ -40,6 +43,7 @@ export class ToolHandlerService {
         // this.TOOLS.set(ToolsConstants.TextToolConstants.TOOL_ID, pencilService);
         this.currentTool = this.TOOLS.values().next().value;
         this.currentToolSubject.next(this.currentTool);
+        this.newDrawingService = newDrawingService;
     }
 
     getTool(): Tool {
@@ -76,12 +80,14 @@ export class ToolHandlerService {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        this.currentTool.onKeyDown(event);
-        const tool = this.findToolshortcutKey(event.key.toLocaleLowerCase());
-        if (tool != undefined) {
-            this.currentTool.stopDrawing();
-            this.currentTool = tool;
-            this.currentToolSubject.next(tool);
+        if (!this.newDrawingService.showWarning) {
+            this.currentTool.onKeyDown(event);
+            const tool = this.findToolshortcutKey(event.key.toLocaleLowerCase());
+            if (tool != undefined) {
+                this.currentTool.stopDrawing();
+                this.currentTool = tool;
+                this.currentToolSubject.next(tool);
+            }
         }
     }
 
