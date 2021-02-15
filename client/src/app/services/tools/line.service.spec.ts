@@ -125,7 +125,7 @@ describe('LineService', () => {
         const lastEvent = { offsetX: 100, offsetY: 100, detail: 2 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath').and.callThrough();
         service.onMouseDown(lastEvent);
-        expect(drawLinePath).toHaveBeenCalledWith(mockContext, [{ x: 100, y: 800 }]);
+        expect(drawLinePath).toHaveBeenCalledWith(mockContext, [{ x: 100, y: 800 }], false);
     });
 
     it('should end drawing on double click with a closed path', async () => {
@@ -133,11 +133,15 @@ describe('LineService', () => {
         const lastEvent = { offsetX: 500, offsetY: 419, detail: 2 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath').and.callThrough();
         service.handleDoubleClick(lastEvent);
-        expect(drawLinePath).toHaveBeenCalledWith(mockContext, [
-            { x: 500, y: 400 },
-            { x: 200, y: 300 },
-            { x: 500, y: 400 },
-        ]);
+        expect(drawLinePath).toHaveBeenCalledWith(
+            mockContext,
+            [
+                { x: 500, y: 400 },
+                { x: 200, y: 300 },
+                { x: 500, y: 400 },
+            ],
+            true,
+        );
     });
 
     it('should move line on mouse move when point array is not empty', () => {
@@ -318,6 +322,15 @@ describe('LineService', () => {
         const fillFunc = spyOn(mockContext, 'fill').and.callThrough();
         service['drawJunction'](mockContext, { x: 0, y: 0 });
         expect(fillFunc).toHaveBeenCalled();
+    });
+
+    it('should align points', () => {
+        service['points'] = [
+            { x: 500, y: 500 },
+            { x: 200, y: 300 },
+        ];
+        const result: Vec2 = service.alignPoint({ x: 310, y: 405 });
+        expect(result).toEqual({ x: 310, y: 410 });
     });
 
     it('should align points when vertical', () => {

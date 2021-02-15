@@ -94,7 +94,7 @@ export class LineService extends Tool {
         }
 
         this.applyAttributes(this.drawingService.baseCtx);
-        this.drawLinePath(this.drawingService.baseCtx, this.points);
+        this.drawLinePath(this.drawingService.baseCtx, this.points, closedLoop);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.initService();
     }
@@ -236,7 +236,7 @@ export class LineService extends Tool {
         }
     }
 
-    private drawLinePath(ctx: CanvasRenderingContext2D, points: Vec2[] = this.points): void {
+    private drawLinePath(ctx: CanvasRenderingContext2D, points: Vec2[] = this.points, closed: boolean = false): void {
         if (points.length < 2) {
             return;
         }
@@ -252,7 +252,9 @@ export class LineService extends Tool {
         ctx.stroke();
         ctx.closePath();
 
-        for (const point of points) {
+        for (let index = 1; index < (closed ? points.length - 1 : points.length); index++) {
+            const point = points[index];
+
             this.drawJunction(ctx, point);
         }
     }
