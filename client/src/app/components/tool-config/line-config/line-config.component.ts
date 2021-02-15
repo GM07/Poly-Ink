@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { LineService } from '@app/services/tools/line-service';
+import { LineService } from '@app/services/tools/line.service';
 @Component({
     selector: 'app-line-config',
     templateUrl: './line-config.component.html',

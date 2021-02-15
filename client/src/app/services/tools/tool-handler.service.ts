@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
-import * as ToolsConstants from '@app/classes/tool_settings/tools.constants';
-import { EllipseService } from '@app/services/tools/ellipse-service';
-import { EraserService } from '@app/services/tools/eraser-service';
-import { LineService } from '@app/services/tools/line-service';
-import { PencilService } from '@app/services/tools/pencil-service';
-import { RectangleService } from '@app/services/tools/rectangle-service';
+import * as ToolsConstants from '@app/classes/tool_ui_settings/tools.constants';
+import { EllipseService } from '@app/services/tools/ellipse.service';
+import { EraserService } from '@app/services/tools/eraser.service';
+import { LineService } from '@app/services/tools/line.service';
+import { PencilService } from '@app/services/tools/pencil.service';
+import { RectangleService } from '@app/services/tools/rectangle.service';
 import { Subject } from 'rxjs';
 
 @Injectable({

@@ -3,7 +3,7 @@ import { Vec2 } from '@app/classes/vec2';
 import { CanvasConst } from '@app/constants/canvas.ts';
 import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
+import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
 @Component({
     selector: 'app-drawing',

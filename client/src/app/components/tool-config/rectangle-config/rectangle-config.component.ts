@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { RectangleMode, RectangleService } from '@app/services/tools/rectangle-service';
+import { RectangleMode, RectangleService } from '@app/services/tools/rectangle.service';
 @Component({
     selector: 'app-rectangle-config',
     templateUrl: './rectangle-config.component.html',

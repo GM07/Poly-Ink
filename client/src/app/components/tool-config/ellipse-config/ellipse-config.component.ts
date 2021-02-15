@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { EllipseMode, EllipseService } from '@app/services/tools/ellipse-service';
+import { EllipseMode, EllipseService } from '@app/services/tools/ellipse.service';
 @Component({
     selector: 'app-ellipse-config',
     templateUrl: './ellipse-config.component.html',

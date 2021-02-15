@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Geometry } from '@app/classes/math/geometry';
 import { Tool } from '@app/classes/tool';
-import { LineToolConstants } from '@app/classes/tool_settings/tools.constants';
+import { LineToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';

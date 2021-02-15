@@ -2,38 +2,43 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { EraserService } from './eraser-service';
+import { ColorService } from 'src/color-picker/services/color.service';
+import { PencilService } from './pencil.service';
 
 // tslint:disable:no-any
-describe('EraserService', () => {
-    let service: EraserService;
+describe('PencilService', () => {
+    let service: PencilService;
     let mouseEvent: MouseEvent;
     let canvasTestHelper: CanvasTestHelper;
     let drawServiceSpy: jasmine.SpyObj<DrawingService>;
+    let colorServiceSpy: jasmine.SpyObj<ColorService>;
 
     let baseCtxStub: CanvasRenderingContext2D;
     let previewCtxStub: CanvasRenderingContext2D;
     let drawLineSpy: jasmine.Spy<any>;
-    const WHITE = 255;
-    const MIN_WIDTH = 5;
+
     const ALPHA = 3;
 
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
+        colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(1, 1, 1, 1)', secondaryRgba: 'rgba(0, 0, 0, 1)' });
 
         TestBed.configureTestingModule({
-            providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
+            providers: [
+                { provide: DrawingService, useValue: drawServiceSpy },
+                { provide: ColorService, useValue: colorServiceSpy },
+            ],
         });
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         baseCtxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
         previewCtxStub = canvasTestHelper.drawCanvas.getContext('2d') as CanvasRenderingContext2D;
 
-        service = TestBed.inject(EraserService);
+        service = TestBed.inject(PencilService);
         drawLineSpy = spyOn<any>(service, 'drawLine').and.callThrough();
 
         // Configuration du spy du service
         // tslint:disable:no-string-literal
-        service['drawingService'].baseCtx = baseCtxStub;
+        service['drawingService'].baseCtx = baseCtxStub; // Jasmine doesnt copy properties with underlying data
         service['drawingService'].previewCtx = previewCtxStub;
         service['drawingService'].canvas = canvasTestHelper.canvas;
 
@@ -42,8 +47,6 @@ describe('EraserService', () => {
             offsetY: 25,
             button: 0,
         } as MouseEvent;
-        baseCtxStub.fillStyle = 'black';
-        baseCtxStub.fillRect(0, 0, canvasTestHelper.canvas.width, canvasTestHelper.canvas.height);
     });
 
     it('should be created', () => {
@@ -96,34 +99,34 @@ describe('EraserService', () => {
         expect(drawLineSpy).toHaveBeenCalled();
     });
 
-    it('should not erase a line between the points where it left and entered the canvas', () => {
-        service.lineWidth = MIN_WIDTH;
+    it('should not draw a line between the points where it left and entered the canvas', () => {
+        service.lineWidth = 2;
         let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);
         service.onMouseLeave(mouseEventLClick);
         mouseEventLClick = { offsetX: 0, offsetY: 50, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
         expect(drawLineSpy).toHaveBeenCalled();
-        mouseEventLClick = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
-        service.onMouseUp(mouseEvent);
+        mouseEventLClick = { offsetX: 0, offsetY: 50, button: 0 } as MouseEvent;
+        service.onMouseUp(mouseEventLClick);
 
         // tslint:disable-next-line:no-magic-numbers
-        let imageData: ImageData = baseCtxStub.getImageData(0, 6, 1, 1);
-        expect(imageData.data[0]).toEqual(0); // A, rien ne doit être dessiné
+        let imageData: ImageData = baseCtxStub.getImageData(2, 2, 25, 25);
+        expect(imageData.data[ALPHA]).toEqual(0); // A, rien ne doit être dessiné
         imageData = baseCtxStub.getImageData(0, 0, 1, 1);
-        expect(imageData.data[0]).toEqual(WHITE); // R
-        expect(imageData.data[1]).toEqual(WHITE); // G
-        expect(imageData.data[2]).toEqual(WHITE); // B
+        expect(imageData.data[0]).toEqual(1); // R
+        expect(imageData.data[1]).toEqual(1); // G
+        expect(imageData.data[2]).toEqual(1); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
         // tslint:disable-next-line:no-magic-numbers
         imageData = baseCtxStub.getImageData(0, 50, 1, 1);
-        expect(imageData.data[0]).toEqual(WHITE); // R
-        expect(imageData.data[1]).toEqual(WHITE); // G
-        expect(imageData.data[2]).toEqual(WHITE); // B
+        expect(imageData.data[0]).toEqual(1); // R
+        expect(imageData.data[1]).toEqual(1); // G
+        expect(imageData.data[2]).toEqual(1); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
-    it('should stop erasing when the mouse is up', () => {
+    it('should stop drawing when the mouse is up', () => {
         let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.lineWidth = 1;
         service.onMouseDown(mouseEventLClick);
@@ -133,7 +136,7 @@ describe('EraserService', () => {
         expect(drawLineSpy).toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
         const imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
-        expect(imageData.data[0]).toEqual(0); // A, rien ne doit être dessiné où on est entré
+        expect(imageData.data[ALPHA]).toEqual(0); // A, rien ne doit être dessiné où on est entré
 
         service.mouseDown = true;
         mouseEventLClick = { x: 1000, y: 1000, button: 0, buttons: 0 } as MouseEvent;
@@ -159,16 +162,16 @@ describe('EraserService', () => {
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
-    it('Should only erase nothing on base canvas when moving the mouse, left click released', () => {
+    it('Should only draw nothing on base canvas when moving the mouse, left click released', () => {
         service.mouseDown = false;
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
-        expect(imageData.data[0]).toEqual(0);
+        expect(imageData.data[ALPHA]).toEqual(0);
     });
 
-    it('Should erase if the user clicked once with the smallest size, without moving', () => {
-        service.lineWidth = MIN_WIDTH;
+    it('Should draw a single pixel if the user clicked once with the smallest size, without moving', () => {
+        service.lineWidth = 1;
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         mouseEvent = { x: 0, y: 0, offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
@@ -176,13 +179,13 @@ describe('EraserService', () => {
 
         // Premier pixel seulement
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
-        expect(imageData.data[0]).toEqual(WHITE); // R
-        expect(imageData.data[1]).toEqual(WHITE); // G
-        expect(imageData.data[2]).toEqual(WHITE); // B
+        expect(imageData.data[0]).toEqual(0); // R
+        expect(imageData.data[1]).toEqual(0); // G
+        expect(imageData.data[2]).toEqual(0); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
-    it('should stop erasing when asked to', () => {
+    it('should stop drawing when asked to', () => {
         service.stopDrawing();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
@@ -196,9 +199,9 @@ describe('EraserService', () => {
 
         // Premier pixel seulement
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
-        expect(imageData.data[0]).toEqual(WHITE); // R
-        expect(imageData.data[1]).toEqual(WHITE); // G
-        expect(imageData.data[2]).toEqual(WHITE); // B
+        expect(imageData.data[0]).toEqual(1); // R
+        expect(imageData.data[1]).toEqual(1); // G
+        expect(imageData.data[2]).toEqual(1); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 });

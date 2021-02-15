@@ -11,7 +11,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { EllipseMode } from '@app/services/tools/ellipse-service';
+import { EllipseMode } from '@app/services/tools/ellipse.service';
 import { EllipseConfigComponent } from './ellipse-config.component';
 
 @Component({ selector: 'app-color-icon', template: '' })
