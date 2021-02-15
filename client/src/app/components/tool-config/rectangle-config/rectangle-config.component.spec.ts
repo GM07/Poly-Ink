@@ -11,7 +11,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { RectangleMode } from '@app/services/tools/rectangle-service';
+import { RectangleMode } from '@app/services/tools/rectangle.service';
 import { RectangleConfigComponent } from './rectangle-config.component';
 
 @Component({ selector: 'app-color-icon', template: '' })

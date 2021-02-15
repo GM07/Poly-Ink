@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { RectangleMode, RectangleService } from './rectangle-service';
+import { RectangleMode, RectangleService } from './rectangle.service';
 
 // tslint:disable:no-any
 describe('RectangleService', () => {

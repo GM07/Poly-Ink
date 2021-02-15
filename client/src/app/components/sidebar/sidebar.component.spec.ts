@@ -9,17 +9,17 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { LineSettings } from '@app/classes/tool_settings/line-settings';
-import { NewDrawing } from '@app/classes/tool_settings/new-drawing-settings';
-import { LineToolConstants, NewDrawingConstants, PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
+import { LineSettings } from '@app/classes/tool_ui_settings/line-settings';
+import { NewDrawing } from '@app/classes/tool_ui_settings/new-drawing-settings';
+import { LineToolConstants, NewDrawingConstants, PencilToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resize.component';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
 import { SidebarComponent } from '@app/components/sidebar/sidebar.component';
 import { SettingsHandlerComponent } from '@app/components/tool-config/settings-handler/settings-handler.component';
-import { LineService } from '@app/services/tools/line-service';
-import { PencilService } from '@app/services/tools/pencil-service';
-import { ToolHandlerService } from '@app/services/tools/tool-handler-service';
+import { LineService } from '@app/services/tools/line.service';
+import { PencilService } from '@app/services/tools/pencil.service';
+import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
 describe('SidebarComponent', () => {
     let component: SidebarComponent;

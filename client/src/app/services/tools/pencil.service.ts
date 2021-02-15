@@ -1,28 +1,32 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
-import { EraserToolConstants } from '@app/classes/tool_settings/tools.constants';
+import { PencilToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
-import { MouseButton } from '@app/constants/control.ts';
+import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
-
 export enum LeftMouse {
     Released = 0,
     Pressed = 1,
 }
 
+/**
+ * Note: Pas besoin d'implémtenter le code pour commencer à dessiner un ligne quand le bouton de la souris
+ * est enfoncé hors du canvas (Ref: Document de vision Polydessin 2 v1.0, p.10)
+ */
+// Ceci est une implémentation de l'outil Crayon
 @Injectable({
     providedIn: 'root',
 })
-export class EraserService extends Tool {
+export class PencilService extends Tool {
     private pathData: Vec2[][];
-    private lineWidthIn: number = 25;
+    private lineWidthIn: number = 12;
+    readonly toolID: string = PencilToolConstants.TOOL_ID;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.clearPath();
-        this.shortcutKey = EraserToolConstants.SHORTCUT_KEY;
-        this.toolID = EraserToolConstants.TOOL_ID;
+        this.shortcutKey = PencilToolConstants.SHORTCUT_KEY;
     }
 
     get lineWidth(): number {
@@ -34,7 +38,8 @@ export class EraserService extends Tool {
      * est fait pour avoir une valeur entière
      */
     set lineWidth(width: number) {
-        this.lineWidthIn = Math.max(Math.round(width), 1);
+        const max = 50;
+        this.lineWidthIn = Math.min(Math.max(width, 1), max);
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -57,18 +62,20 @@ export class EraserService extends Tool {
         }
         this.mouseDown = false;
         this.clearPath();
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.drawBackgroundPoint(this.getPositionFromMouse(event), true);
-
         if (this.mouseDown) {
             const mousePosition = this.getPositionFromMouse(event);
             this.pathData[this.pathData.length - 1].push(mousePosition);
 
+            // On dessine sur le canvas de prévisualisation et on l'efface à chaque déplacement de la souris
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawLine(this.drawingService.previewCtx, this.pathData);
-            this.drawBackgroundPoint(this.getPositionFromMouse(event), false);
+        } else {
+            this.mouseDownCoord = this.getPositionFromMouse(event);
+            this.drawBackgroundPoint(this.getPositionFromMouse(event));
         }
     }
 
@@ -95,32 +102,33 @@ export class EraserService extends Tool {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
-    private drawBackgroundPoint(point: Vec2, clear: boolean): void {
+    private drawBackgroundPoint(point: Vec2): void {
         const ctx = this.drawingService.previewCtx;
-        if (clear) this.drawingService.clearCanvas(ctx);
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = 'black';
-        ctx.fillStyle = 'white';
-        ctx.beginPath();
-        ctx.fillRect(point.x - this.lineWidthIn / 2, point.y - this.lineWidthIn / 2, this.lineWidthIn, this.lineWidthIn);
-        ctx.rect(point.x - this.lineWidthIn / 2, point.y - this.lineWidthIn / 2, this.lineWidthIn, this.lineWidthIn);
-        ctx.stroke();
+        this.drawingService.clearCanvas(ctx);
+        this.drawLine(ctx, [[point]]);
     }
 
     private drawLine(ctx: CanvasRenderingContext2D, pathData: Vec2[][]): void {
         ctx.beginPath();
-        ctx.fillStyle = 'white';
-        ctx.strokeStyle = 'white';
+        ctx.strokeStyle = this.colorService.primaryRgba;
+        ctx.fillStyle = this.colorService.primaryRgba;
         ctx.lineWidth = this.lineWidth;
-        ctx.lineCap = 'square' as CanvasLineCap;
-        ctx.lineJoin = 'bevel' as CanvasLineJoin;
+        ctx.lineCap = 'round' as CanvasLineCap;
+        ctx.lineJoin = 'round' as CanvasLineJoin; // Essentiel pour avoir une allure "smooth"
 
         for (const paths of pathData) {
-            for (const point of paths) {
-                ctx.lineTo(point.x, point.y);
+            // Cas spécial pour permettre de dessiner exactement un seul point (sinon il n'est pas visible)
+            if (paths.length === 1 || (paths.length === 2 && paths[0].x === paths[1].x && paths[0].y === paths[1].y)) {
+                ctx.arc(paths[0].x, paths[0].y, this.lineWidthIn / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+            } else {
+                for (const point of paths) {
+                    ctx.lineTo(point.x, point.y);
+                }
+                ctx.stroke();
+                ctx.beginPath();
             }
-            ctx.stroke();
-            ctx.beginPath();
         }
         ctx.stroke();
     }
