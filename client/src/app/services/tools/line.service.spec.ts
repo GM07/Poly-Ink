@@ -278,12 +278,6 @@ describe('LineService', () => {
         expect(service['points'].length).toBe(0);
     });
 
-    it('should not do anything when escape key is released', () => {
-        service['points'] = pointsTest2;
-        service.handleEscapeKey();
-        expect(service['points'].length).toBe(2);
-    });
-
     it('should stop drawing', () => {
         const spyFunc = spyOn(service['drawingService'], 'clearCanvas');
         service.stopDrawing();
@@ -324,19 +318,21 @@ describe('LineService', () => {
         expect(lineToSpy).toHaveBeenCalledTimes(3);
     });
 
-    it('should draw junctions', () => {
-        service['showJunctionPoints'] = true;
-        const fillFunc = spyOn(mockContext, 'fill').and.callThrough();
-        service['drawJunction'](mockContext, { x: 0, y: 0 });
-        expect(fillFunc).toHaveBeenCalled();
-    });
-
     it('should align points', () => {
         service['points'] = [
             { x: 500, y: 500 },
             { x: 200, y: 300 },
         ];
-        const result: Vec2 = service.alignPoint({ x: 210, y: 200 });
-        expect(result).toEqual({ x: 200, y: 200 });
+        const result: Vec2 = service.alignPoint({ x: 310, y: 405 });
+        expect(result).toEqual({ x: 310, y: 410 });
+    });
+
+    it('should align points when vertical', () => {
+        service['points'] = [
+            { x: 500, y: 500 },
+            { x: 200, y: 300 },
+        ];
+        const result: Vec2 = service.alignPoint({ x: 205, y: 500 });
+        expect(result).toEqual({ x: 200, y: 500 });
     });
 });
