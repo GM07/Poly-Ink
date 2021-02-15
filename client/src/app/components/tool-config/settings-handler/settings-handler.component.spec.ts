@@ -5,6 +5,7 @@ import { LineConfigComponent } from '@app/components/tool-config/line-config/lin
 import { PencilConfigComponent } from '@app/components/tool-config/pencil-config/pencil-config.component';
 import { RectangleConfigComponent } from '@app/components/tool-config/rectangle-config/rectangle-config.component';
 import { SettingsHandlerComponent } from '@app/components/tool-config/settings-handler/settings-handler.component';
+import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
 import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
 import { LineService } from '@app/services/tools/line.service';
@@ -22,8 +23,9 @@ class MockToolHandler extends ToolHandlerService {
         rectangleService: RectangleService,
         eraserService: EraserService,
         ellipseService: EllipseService,
+        newDrawingService: NewDrawingService,
     ) {
-        super(pencilService, lineService, rectangleService, ellipseService, eraserService);
+        super(pencilService, lineService, rectangleService, ellipseService, eraserService, newDrawingService);
         this.TOOLS_MOCK.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
         this.TOOLS_MOCK.set(ToolsConstants.AerosolToolConstants.TOOL_ID, pencilService);
@@ -59,6 +61,7 @@ describe('SettingsHandlerComponent', () => {
     let eraserService: EraserService;
     let ellipseService: EllipseService;
     let toolHandlerService: MockToolHandler;
+    let newDrawingService: NewDrawingService;
 
     beforeEach(() => {
         pencilService = TestBed.inject(PencilService);
@@ -66,7 +69,8 @@ describe('SettingsHandlerComponent', () => {
         rectangleService = TestBed.inject(RectangleService);
         eraserService = TestBed.inject(EraserService);
         ellipseService = TestBed.inject(EllipseService);
-        toolHandlerService = new MockToolHandler(pencilService, lineService, rectangleService, eraserService, ellipseService);
+        newDrawingService = TestBed.inject(NewDrawingService);
+        toolHandlerService = new MockToolHandler(pencilService, lineService, rectangleService, eraserService, ellipseService, newDrawingService);
         component = new SettingsHandlerComponent(toolHandlerService);
     });
 
