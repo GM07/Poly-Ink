@@ -41,9 +41,9 @@ export class ToolHandlerService {
         this.TOOLS.set(ToolsConstants.RectangleToolConstants.TOOL_ID, rectangleService);
         // this.TOOLS.set(ToolsConstants.StampToolConstants.TOOL_ID, pencilService);
         // this.TOOLS.set(ToolsConstants.TextToolConstants.TOOL_ID, pencilService);
+        this.newDrawingService = newDrawingService;
         this.currentTool = this.TOOLS.values().next().value;
         this.currentToolSubject.next(this.currentTool);
-        this.newDrawingService = newDrawingService;
     }
 
     getTool(): Tool {
