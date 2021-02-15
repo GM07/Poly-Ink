@@ -6,6 +6,17 @@
     cursor: pointer;
 }
 
+mat-icon {
+    cursor: pointer;
+    margin: -5px 10px 10px 15px;
+
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
 :host {
     display: flex;
     flex-direction: column;
@@ -29,7 +40,7 @@ h5 {
 .colors {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
     width: 100%;
 }
 
@@ -37,8 +48,4 @@ h5 {
     position: absolute;
     top: 0;
     left: 100%;
-}
-
-button {
-    margin: 5px;
 }

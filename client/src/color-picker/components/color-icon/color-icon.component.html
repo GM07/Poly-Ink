@@ -3,6 +3,7 @@
         <div (click)="changePrimaryColor()" class="primaryColor" [style.background]="colorService.primaryColor.rgbString"></div>
         <h5>Primaire</h5>
     </div>
+    <mat-icon (click)="swap()">swap_horiz</mat-icon>
     <div class="color">
         <div (click)="changeSecondaryColor()" class="secondaryColor" [style.background]="colorService.secondaryColor.rgbString"></div>
         <h5>Secondaire</h5>
@@ -12,4 +13,3 @@
 <mat-menu #ColorMenu>
     <app-color-picker (click)="$event.stopPropagation()" (closeMenuEvent)="closeMenu()"></app-color-picker>
 </mat-menu>
-<button mat-raised-button (click)="swap()">Échanger</button>
