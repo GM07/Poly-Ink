@@ -112,17 +112,19 @@ export class EraserService extends Tool {
         ctx.fillStyle = 'white';
         ctx.strokeStyle = 'white';
         ctx.lineWidth = this.lineWidth;
-        ctx.lineCap = 'square' as CanvasLineCap;
+        ctx.lineCap = 'butt' as CanvasLineCap;
         ctx.lineJoin = 'bevel' as CanvasLineJoin;
-
         for (const paths of pathData) {
+            if (paths.length >= 1)
+                ctx.fillRect(paths[0].x - this.lineWidthIn / 2, paths[0].y - this.lineWidthIn / 2, this.lineWidthIn, this.lineWidthIn);
             for (const point of paths) {
                 ctx.lineTo(point.x, point.y);
             }
             ctx.stroke();
             ctx.beginPath();
+
+            ctx.stroke();
         }
-        ctx.stroke();
     }
 
     private clearPath(): void {
