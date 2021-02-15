@@ -99,11 +99,16 @@ describe('LineService', () => {
         expect(service['awaitsDoubleClick']).toBeFalsy();
     });
 
-    it('should not draw preview when awaiting a double click', () => {
+    it('should do nothing when awaiting a double click', () => {
         service['awaitsDoubleClick'] = true;
         const handlePreviewFunc = spyOn(service, 'handleLinePreview').and.callThrough();
+        const handleKeys = spyOn(service, 'handleKeys').and.callThrough();
         service.onMouseMove({} as MouseEvent);
         expect(handlePreviewFunc).not.toHaveBeenCalled();
+        service.onKeyDown({} as KeyboardEvent);
+        expect(handleKeys).not.toHaveBeenCalled();
+        service.onKeyUp({} as KeyboardEvent);
+        expect(handleKeys).not.toHaveBeenCalled();
     });
 
     it('should not do anything on triple click', () => {

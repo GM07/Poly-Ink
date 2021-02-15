@@ -125,6 +125,7 @@ export class LineService extends Tool {
     }
 
     onKeyDown(event: KeyboardEvent): void {
+        if (this.awaitsDoubleClick) return;
         if (this.keyEvents.has(event.key)) {
             this.keyEvents.set(event.key, true);
             this.handleKeys(event.key);
@@ -132,6 +133,7 @@ export class LineService extends Tool {
     }
 
     onKeyUp(event: KeyboardEvent): void {
+        if (this.awaitsDoubleClick) return;
         this.keyEvents.set('Shift', event.shiftKey);
 
         if (this.keyEvents.has(event.key)) {
