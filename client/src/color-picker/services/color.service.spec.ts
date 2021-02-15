@@ -125,4 +125,75 @@ describe('ColorService', () => {
         expect(service.secondaryColorAlpha).toEqual(primaryAlpha);
         expect(service.primaryColorAlpha).toEqual(secondaryAlpha);
     });
+
+    it('should not chose any color if shouldChoseColor is false', () => {
+        const color: Color = Colors.RED;
+        const alpha = 0.5;
+
+        const selectedColor: Color = Colors.BLUE;
+        const selectedAlpha = 1;
+
+        service.primaryColor = color;
+        service.secondaryColor = color;
+        service.primaryColorAlpha = alpha;
+        service.secondaryColorAlpha = alpha;
+        service.selectedColor = selectedColor;
+        service.selectedAlpha = selectedAlpha;
+        service.shouldChangeColor = false;
+
+        service.choseColor();
+
+        expect(service.primaryColor).not.toEqual(selectedColor);
+        expect(service.secondaryColor).not.toEqual(selectedColor);
+        expect(service.primaryColorAlpha).not.toEqual(selectedAlpha);
+        expect(service.secondaryColorAlpha).not.toEqual(selectedAlpha);
+    });
+
+    it('should only chose primary color', () => {
+        const color: Color = Colors.RED;
+        const alpha = 0.5;
+
+        const selectedColor: Color = Colors.BLUE;
+        const selectedAlpha = 1;
+
+        service.primaryColor = color;
+        service.secondaryColor = color;
+        service.primaryColorAlpha = alpha;
+        service.secondaryColorAlpha = alpha;
+        service.selectedColor = selectedColor;
+        service.selectedAlpha = selectedAlpha;
+        service.shouldChangeColor = true;
+        service.changePrimary = true;
+
+        service.choseColor();
+
+        expect(service.primaryColor).toEqual(selectedColor);
+        expect(service.secondaryColor).not.toEqual(selectedColor);
+        expect(service.primaryColorAlpha).toEqual(selectedAlpha);
+        expect(service.secondaryColorAlpha).not.toEqual(selectedAlpha);
+    });
+
+    it('should only chose secondary color', () => {
+        const color: Color = Colors.RED;
+        const alpha = 0.5;
+
+        const selectedColor: Color = Colors.BLUE;
+        const selectedAlpha = 1;
+
+        service.primaryColor = color;
+        service.secondaryColor = color;
+        service.primaryColorAlpha = alpha;
+        service.secondaryColorAlpha = alpha;
+        service.selectedColor = selectedColor;
+        service.selectedAlpha = selectedAlpha;
+        service.shouldChangeColor = true;
+        service.changePrimary = false;
+
+        service.choseColor();
+
+        expect(service.primaryColor).not.toEqual(selectedColor);
+        expect(service.secondaryColor).toEqual(selectedColor);
+        expect(service.primaryColorAlpha).not.toEqual(selectedAlpha);
+        expect(service.secondaryColorAlpha).toEqual(selectedAlpha);
+    });
 });

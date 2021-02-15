@@ -27,7 +27,15 @@ describe('ColorIconComponent', () => {
         const colorServiceStub = () => ({
             swap: () => ({}),
             selectedColorFromHex: {},
+            selectedAlpha: {},
+            shouldChangeColor: {},
             primaryColor: {},
+            secondaryColor: {},
+            primaryColorAlpha: {},
+            secondaryColorAlpha: {},
+            changePrimary: {},
+            // tslint:disable-next-line:no-empty
+            choseColor: () => {},
         });
         TestBed.configureTestingModule({
             declarations: [ColorIconComponent, StubColorPickerComponent, StubMatMenuComponent, StubMatIconComponent],
@@ -49,17 +57,65 @@ describe('ColorIconComponent', () => {
     });
 
     it('should open color picker menu', () => {
-        const color: Color = Colors.PURPLE;
-        component.colorService.primaryColor = color;
-        component.colorService.primaryColorAlpha = 1;
         component.openColorPicker();
-        expect(component.colorService.selectedColorFromHex).toEqual(color);
-        expect(component.colorService.selectedAlpha).toEqual(1);
         expect(component.colorMenuTrigger.openMenu).toHaveBeenCalled();
+        expect(component.colorService.shouldChangeColor).toBeTrue();
     });
 
     it('should close color picker menu on close event', () => {
         component.closeMenu();
         expect(component.colorMenuTrigger.closeMenu).toHaveBeenCalled();
+    });
+
+    it('should make appropriate calls when changing primary color', () => {
+        const alpha = 1;
+        const color: Color = Colors.BLUE;
+        component.colorService.primaryColor = color;
+        component.colorService.primaryColorAlpha = alpha;
+
+        spyOn(component, 'openColorPicker').and.stub();
+
+        component.changePrimaryColor();
+
+        expect(component.colorService.selectedColorFromHex).toEqual(color);
+        expect(component.colorService.selectedAlpha).toEqual(alpha);
+    });
+
+    it('should make appropriate calls when changing primary color', () => {
+        const alpha = 1;
+        const color: Color = Colors.BLUE;
+        component.colorService.primaryColor = color;
+        component.colorService.primaryColorAlpha = alpha;
+
+        spyOn(component, 'openColorPicker').and.stub();
+
+        component.changePrimaryColor();
+
+        expect(component.colorService.selectedColorFromHex).toEqual(color);
+        expect(component.colorService.selectedAlpha).toEqual(alpha);
+        expect(component.colorService.changePrimary).toBeTrue();
+        expect(component.openColorPicker).toHaveBeenCalled();
+    });
+
+    it('should make appropriate calls when changing secondary color', () => {
+        const alpha = 1;
+        const color: Color = Colors.BLUE;
+        component.colorService.secondaryColor = color;
+        component.colorService.secondaryColorAlpha = alpha;
+
+        spyOn(component, 'openColorPicker').and.stub();
+
+        component.changeSecondaryColor();
+
+        expect(component.colorService.selectedColorFromHex).toEqual(color);
+        expect(component.colorService.selectedAlpha).toEqual(alpha);
+        expect(component.colorService.changePrimary).toBeFalse();
+        expect(component.openColorPicker).toHaveBeenCalled();
+    });
+
+    it('should chose color after closing color picker menu', () => {
+        spyOn(component.colorService, 'choseColor').and.stub();
+        component.menuClosed();
+        expect(component.colorService.choseColor).toHaveBeenCalled();
     });
 });
