@@ -37,6 +37,15 @@ mat-icon {
     left: 42px;
 }
 
+.primaryColor,
+.secondaryColor {
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 button {
     margin: 10px 10px 10px 5px;
 }
