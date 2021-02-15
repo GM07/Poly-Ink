@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanvasConst } from '@app/constants/canvas';
+import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { BehaviorSubject } from 'rxjs';
 import { DrawingService } from './drawing.service';
-import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
 @Injectable({
     providedIn: 'root',
@@ -12,7 +12,7 @@ export class NewDrawingService {
 
     changes: BehaviorSubject<number> = new BehaviorSubject(0);
 
-    constructor(private drawingService: DrawingService, private toolHandler : ToolHandlerService) {}
+    constructor(private drawingService: DrawingService, private toolHandler: ToolHandlerService) {}
 
     newCanvas(confirm: boolean = false): void {
         if (!confirm && this.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)) {
