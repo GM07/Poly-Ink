@@ -318,7 +318,6 @@ describe('LineService', () => {
             { x: 500, y: 500 },
             { x: 200, y: 300 },
         ];
-        //
         const result: Vec2 = service.alignPoint({ x: 310, y: 405 });
         expect(result).toEqual({ x: 310, y: 410 });
     });
@@ -328,7 +327,6 @@ describe('LineService', () => {
             { x: 500, y: 500 },
             { x: 200, y: 300 },
         ];
-        //
         const result: Vec2 = service.alignPoint({ x: 205, y: 500 });
         expect(result).toEqual({ x: 200, y: 500 });
     });
