@@ -72,7 +72,6 @@ describe('LineService', () => {
     });
 
     it('should not add point on mouse right button down', () => {
-        service['timeoutID'] = 1;
         const mouseEvent = { button: MouseButton.Right, offsetX: 500, offsetY: 283, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(service['points'].length).toBe(0);
@@ -86,14 +85,6 @@ describe('LineService', () => {
         mouseEvent = { button: MouseButton.Left } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(service['mouseDown']).toBe(false);
-    });
-
-    it('should reset properly', () => {
-        service['awaitsDoubleClick'] = true;
-        service['timeoutID'] = 1;
-        service.initService();
-        expect(service['timeoutID']).toEqual(0);
-        expect(service['awaitsDoubleClick']).toBeFalsy();
     });
 
     it('should do nothing when awaiting a double click', () => {

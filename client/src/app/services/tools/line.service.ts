@@ -22,7 +22,6 @@ export class LineService extends Tool {
     private pointToAdd: Vec2;
     private mousePosition: Vec2;
     private awaitsDoubleClick: boolean = false;
-    private timeoutID: number = 0;
 
     // Attributs
     showJunctionPoints: boolean = true;
@@ -43,11 +42,6 @@ export class LineService extends Tool {
         this.points = [];
         this.pointToAdd = {} as Vec2;
         this.mousePosition = {} as Vec2;
-        this.awaitsDoubleClick = false;
-        if (this.timeoutID > 0) {
-            clearTimeout(this.timeoutID);
-            this.timeoutID = 0;
-        }
     }
 
     applyAttributes(ctx: CanvasRenderingContext2D): void {
@@ -59,8 +53,6 @@ export class LineService extends Tool {
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.awaitsDoubleClick = true;
-
         if (event.detail === 1) {
             this.handleSimpleClick(event);
         } else if (event.detail === 2) {
@@ -120,8 +112,6 @@ export class LineService extends Tool {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (this.awaitsDoubleClick) return;
-
         if (this.keyEvents.has(event.key)) {
             if (this.keyEvents.get(event.key) !== true) {
                 this.keyEvents.set(event.key, true);
@@ -131,8 +121,6 @@ export class LineService extends Tool {
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if (this.awaitsDoubleClick) return;
-
         this.keyEvents.set('Shift', event.shiftKey);
 
         if (this.keyEvents.has(event.key)) {
