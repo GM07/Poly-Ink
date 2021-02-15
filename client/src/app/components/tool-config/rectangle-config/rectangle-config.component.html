@@ -10,15 +10,17 @@
 
     <!--Type de tracé-->
     <h5 class="textFormat">Type de tracé</h5>
-    <div class="textFormatButton">
-        <button mat-raised-button class="buttons" (click)="toggleTraceType(rectangleModeIn.Contour)">Contour</button>
-    </div>
-    <div class="textFormatButton">
-        <button mat-raised-button class="buttons" (click)="toggleTraceType(rectangleModeIn.Filled)">Plein</button>
-    </div>
-    <div class="textFormatButton">
-        <button mat-raised-button class="buttons" (click)="toggleTraceType(rectangleModeIn.FilledWithContour)">Plein & Contour</button>
-    </div>
+    <mat-button-toggle-group vertical=true name="fontStyle" aria-label="Font Style">
+        <div class="textFormatButton">
+            <mat-button-toggle [checked]="traceTypeIn === rectangleModeIn.Contour" class="buttons" (click)="toggleTraceType(rectangleModeIn.Contour)" >Contour</mat-button-toggle>
+        </div>
+        <div class="textFormatButton">
+            <mat-button-toggle [checked]="traceTypeIn === rectangleModeIn.Filled" class="buttons" (click)="toggleTraceType(rectangleModeIn.Filled)">Plein</mat-button-toggle>
+        </div>
+        <div class="textFormatButton">
+            <mat-button-toggle [checked]="traceTypeIn === rectangleModeIn.FilledWithContour" class="buttons" (click)="toggleTraceType(rectangleModeIn.FilledWithContour)">Plein & Contour</mat-button-toggle>
+        </div>
+    </mat-button-toggle-group>
     <mat-divider></mat-divider>
 
     <!--Epaisseur-->

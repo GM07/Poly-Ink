@@ -14,7 +14,7 @@ export class LineConfigComponent extends ToolConfig {
 
     constructor(public lineService: LineService) {
         super();
-        this.withJunctionPoint = true;
+        this.withJunctionPoint = lineService.showJunctionPoints;
     }
 
     colorSliderLabel(value: number): string {

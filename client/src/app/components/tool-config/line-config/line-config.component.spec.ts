@@ -4,11 +4,13 @@ import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatButtonHarness } from '@angular/material/button/testing';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatButtonToggleGroupHarness } from '@angular/material/button-toggle/testing';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
+import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { LineConfigComponent } from './line-config.component';
@@ -20,18 +22,19 @@ describe('LineConfigComponent', () => {
     let component: LineConfigComponent;
     let fixture: ComponentFixture<LineConfigComponent>;
     let loader: HarnessLoader;
-    const buttonHarness = MatButtonHarness;
     const DEFAULT_VALUE = 12;
+    let buttonToggleLabelElements: HTMLLabelElement[];
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [LineConfigComponent, StubColorIconComponent],
-            imports: [MatDividerModule, MatSliderModule, NoopAnimationsModule, FormsModule, MatInputModule, MatButtonModule],
+            imports: [MatDividerModule, MatSliderModule, NoopAnimationsModule, FormsModule, MatInputModule, MatButtonModule, MatButtonToggleModule],
         }).compileComponents();
         fixture = TestBed.createComponent(LineConfigComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
         loader = TestbedHarnessEnvironment.loader(fixture);
+        buttonToggleLabelElements = fixture.debugElement.queryAll(By.css('button')).map((debugEl) => debugEl.nativeElement);
     }));
 
     it('should create', () => {
@@ -63,31 +66,39 @@ describe('LineConfigComponent', () => {
         expect(await slider.getValue()).toBe(setValue);
     });
 
-    it('withJunctionPoint should be true by default', () => {
-        expect(component.withJunctionPoint).toBeTrue();
-    });
-
-    it('should load all button harnesses', async () => {
-        const buttons = await loader.getAllHarnesses(MatButtonHarness);
-        expect(buttons.length).toBe(2);
-    });
-
-    it('should load button with exact text', async () => {
-        const buttons = await loader.getAllHarnesses(buttonHarness.with({ text: 'Sans jonction' }));
+    it('should load all button toggle group harnesses', async () => {
+        const buttons = await loader.getAllHarnesses(MatButtonToggleGroupHarness);
         expect(buttons.length).toBe(1);
-        expect(await buttons[0].getText()).toBe('Sans jonction');
     });
 
-    it('withJunctionPoint should be false when normal button is clicked ', async () => {
-        const button = await loader.getHarness(buttonHarness.with({ text: 'Sans jonction' }));
-        await button.click();
-        expect(fixture.componentInstance.withJunctionPoint).toBe(false);
+    it('should load the the toggles inside the group', async () => {
+        const group = await loader.getHarness(MatButtonToggleGroupHarness);
+        const toggles = await group.getToggles();
+        expect(toggles.length).toBe(2);
     });
 
-    it('withJunctionPoint should be false when normal button is clicked ', async () => {
-        const button = await loader.getHarness(buttonHarness.with({ text: 'Avec point' }));
-        await button.click();
-        expect(fixture.componentInstance.withJunctionPoint).toBe(true);
+    it('should get first button in group as button with Sans jonction text', async () => {
+        const group = await loader.getHarness(MatButtonToggleGroupHarness);
+        const toggles = await group.getToggles();
+        expect(await toggles[0].getText()).toBe('Sans jonction');
+    });
+
+    it('should get second button in group as button with Avec point text', async () => {
+        const group = await loader.getHarness(MatButtonToggleGroupHarness);
+        const toggles = await group.getToggles();
+        expect(await toggles[1].getText()).toBe('Avec point');
+    });
+
+    it('withJunctionPoint should be false when Sans jonction button is clicked ', async () => {
+        buttonToggleLabelElements[0].click();
+        fixture.detectChanges();
+        expect(fixture.componentInstance.withJunctionPoint).toEqual(false);
+    });
+
+    it('withJunctionPoint should be true when Avec point button is clicked ', async () => {
+        buttonToggleLabelElements[1].click();
+        fixture.detectChanges();
+        expect(fixture.componentInstance.withJunctionPoint).toEqual(true);
     });
 
     it('should call function toggleLineType() when button clicked', async(() => {

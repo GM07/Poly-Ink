@@ -15,7 +15,7 @@ export class EllipseConfigComponent extends ToolConfig {
 
     constructor(public ellipseService: EllipseService) {
         super();
-        this.traceTypeIn = EllipseMode.Contour;
+        this.traceTypeIn = ellipseService.ellipseMode;
     }
 
     toggleTraceType(traceType: EllipseMode): void {

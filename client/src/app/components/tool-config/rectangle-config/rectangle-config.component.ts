@@ -15,7 +15,7 @@ export class RectangleConfigComponent extends ToolConfig {
 
     constructor(public rectangleService: RectangleService) {
         super();
-        this.traceTypeIn = RectangleMode.Contour;
+        this.traceTypeIn = rectangleService.rectangleMode;
     }
 
     toggleTraceType(rectangleMode: RectangleMode): void {
