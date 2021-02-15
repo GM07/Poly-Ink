@@ -1,7 +1,7 @@
 <div class="parent">
     <div class="colorIcon">
-        <div class="primaryColor" [style.background]="colorService.primaryColor.rgbString"></div>
-        <div class="secondaryColor" [style.background]="colorService.secondaryColor.rgbString"></div>
+        <div (click)="openColorPicker()" class="primaryColor" [style.background]="colorService.primaryColor.rgbString"></div>
+        <div (click)="openColorPicker()" class="secondaryColor" [style.background]="colorService.secondaryColor.rgbString"></div>
     </div>
     <mat-icon (click)="swap()"> autorenew </mat-icon>
 </div>

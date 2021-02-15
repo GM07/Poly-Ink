@@ -203,7 +203,16 @@ export class LineService extends Tool {
         const angle: number = Geometry.getAngle(this.getLastPoint(), cursor) + LineService.ANGLE_STEPS / 2;
         const finalAngle = Math.floor(angle / LineService.ANGLE_STEPS) * LineService.ANGLE_STEPS;
 
-        const distance = Geometry.getDistanceBetween(this.getLastPoint(), cursor);
+        const distanceX = cursor.x - this.getLastPoint().x;
+        const distanceY = cursor.y - this.getLastPoint().y;
+        let distance = Geometry.getDistanceBetween(this.getLastPoint(), cursor);
+
+        if (Math.abs(Math.cos(finalAngle)) >= Geometry.ZERO_THRESHOLD) {
+            distance = Math.abs(distanceX / Math.cos(finalAngle));
+        } else {
+            distance = Math.abs(distanceY / Math.sin(finalAngle));
+        }
+
         const dx = distance * Math.cos(finalAngle) + this.getLastPoint().x;
         const dy = -(distance * Math.sin(finalAngle)) + this.getLastPoint().y;
 
