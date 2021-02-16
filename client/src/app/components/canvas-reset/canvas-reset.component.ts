@@ -23,7 +23,9 @@ export class NewDrawingComponent {
     }
 
     @HostListener('document:keydown', ['$event'])
-    onKeyPressed(event: KeyboardEvent): void {
+    onKeyDown(event: KeyboardEvent): void {
+        if (this.showWarning()) event.stopImmediatePropagation();
+
         if (event.ctrlKey && event.key !== 'Control') {
             if (event.key.toLocaleLowerCase() === 'o') {
                 event.preventDefault();
