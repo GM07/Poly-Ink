@@ -10,8 +10,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { PencilConfigComponent } from './pencil-config.component';
 
-@Component({ selector: 'app-color-icon', template: '' })
-class StubColorIconComponent {}
+@Component({ selector: 'app-color-config', template: '' })
+class StubColorConfigComponent {}
 
 describe('PencilConfigComponent', () => {
     let component: PencilConfigComponent;
@@ -21,7 +21,7 @@ describe('PencilConfigComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [PencilConfigComponent, StubColorIconComponent],
+            declarations: [PencilConfigComponent, StubColorConfigComponent],
             imports: [MatDividerModule, MatSliderModule, FormsModule, NoopAnimationsModule],
         }).compileComponents();
         fixture = TestBed.createComponent(PencilConfigComponent);
