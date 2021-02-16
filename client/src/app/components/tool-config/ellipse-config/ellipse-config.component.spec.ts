@@ -13,7 +13,7 @@ import { MatSliderHarness } from '@angular/material/slider/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { EllipseMode } from '@app/services/tools/ellipse-service';
+import { EllipseMode } from '@app/services/tools/ellipse.service';
 import { EllipseConfigComponent } from './ellipse-config.component';
 
 @Component({ selector: 'app-color-icon', template: '' })
@@ -66,8 +66,8 @@ describe('EllipseConfigComponent', () => {
         expect(await slider.getValue()).toBe(setValue);
     });
 
-    it('traceType should be Contour by default', () => {
-        expect(component.traceTypeIn).toEqual(EllipseMode.Contour);
+    it('traceType should be Plein & Contour by default', () => {
+        expect(component.traceTypeIn).toEqual(EllipseMode.FilledWithContour);
     });
 
     it('should load all button toggle group harnesses', async () => {

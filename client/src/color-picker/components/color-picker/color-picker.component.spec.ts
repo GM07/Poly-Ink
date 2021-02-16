@@ -43,6 +43,7 @@ describe('ColorPickerComponent', () => {
             primaryColorAlpha: {},
             secondaryColor: {},
             secondaryColorAlpha: {},
+            shouldChangeColor: {},
         });
         TestBed.configureTestingModule({
             declarations: [
@@ -137,40 +138,16 @@ describe('ColorPickerComponent', () => {
         expect(component.colorService.selectedAlpha).toEqual(alpha);
     });
 
-    it('should set primary color and alpha when chosen', () => {
-        const color: Color = Colors.CYAN;
-        const alpha = 0.5;
-        spyOn(component, 'closeColorPicker').and.stub();
-
-        component.colorService.selectedColor = color;
-        component.colorService.selectedAlpha = alpha;
-
-        component.chosePrimary();
-
-        expect(component.colorService.primaryColor).toEqual(color);
-        expect(component.colorService.primaryColorAlpha).toEqual(alpha);
+    it('should not allow for color change when cancelling color change', () => {
+        spyOn(component, 'closeColorPicker');
+        component.cancelColorChange();
+        expect(component.colorService.shouldChangeColor).toBeFalse();
+        expect(component.closeColorPicker).toHaveBeenCalled();
     });
 
-    it('should set secondary color and alpha when chosen', () => {
-        const color: Color = Colors.CYAN;
-        const alpha = 0.5;
-        spyOn(component, 'closeColorPicker').and.stub();
-
-        component.colorService.selectedColor = color;
-        component.colorService.selectedAlpha = alpha;
-
-        component.choseSecondary();
-
-        expect(component.colorService.secondaryColor).toEqual(color);
-        expect(component.colorService.secondaryColorAlpha).toEqual(alpha);
-    });
-
-    it('should emit close event on color selection or cancelation', () => {
-        const timesCalled = 3;
-        spyOn(component.closeMenuEvent, 'emit');
-        component.chosePrimary();
-        component.choseSecondary();
+    it('should emit a closeColorPicker event', () => {
+        spyOn(component.closeMenuEvent, 'emit').and.stub();
         component.closeColorPicker();
-        expect(component.closeMenuEvent.emit).toHaveBeenCalledTimes(timesCalled);
+        expect(component.closeMenuEvent.emit).toHaveBeenCalled();
     });
 });

@@ -12,12 +12,21 @@ export class PreviousColorsComponent {
 
     selectPrimaryColor(color: Color): void {
         this.colorService.primaryColor = color;
+        this.changeSelectedColor();
     }
 
     selectSecondaryColor(color: Color): boolean {
         this.colorService.secondaryColor = color;
-
+        this.changeSelectedColor();
         // Prevents context menu from apearing
         return false;
+    }
+
+    changeSelectedColor(): void {
+        if (this.colorService.changePrimary) {
+            this.colorService.selectedColorFromHex = this.colorService.primaryColor;
+        } else {
+            this.colorService.selectedColorFromHex = this.colorService.secondaryColor;
+        }
     }
 }

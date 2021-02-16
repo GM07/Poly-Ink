@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
-import { RectangleToolConstants } from '@app/classes/tool_settings/tools.constants';
+import { RectangleToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -24,7 +24,7 @@ export class RectangleService extends Tool {
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
-        this.shortCutKey = '1';
+        this.shortcutKey = RectangleToolConstants.SHORTCUT_KEY;
         this.shiftPressed = false;
         this.lineWidthIn = 1;
         this.rectangleMode = RectangleMode.FilledWithContour;
@@ -123,6 +123,7 @@ export class RectangleService extends Tool {
         ctx.strokeStyle = this.colorService.secondaryRgba;
         ctx.fillStyle = this.colorService.primaryRgba;
         ctx.lineJoin = 'miter' as CanvasLineJoin;
+        ctx.lineCap = 'square' as CanvasLineCap;
         ctx.beginPath();
 
         switch (this.rectangleMode) {

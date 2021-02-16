@@ -14,6 +14,9 @@ export class ColorService {
 
     private previous: Color[] = [];
 
+    changePrimary: boolean = true;
+    shouldChangeColor: boolean = true;
+
     selectedColor: Color = Colors.BLACK;
     selectedColorChangeFromHex: Subject<Color> = new Subject<Color>();
 
@@ -104,5 +107,17 @@ export class ColorService {
         const tmpAlpha: number = this.primaryColorAlpha;
         this.primaryColorAlpha = this.secondaryColorAlpha;
         this.secondaryColorAlpha = tmpAlpha;
+    }
+
+    choseColor(): void {
+        if (!this.shouldChangeColor) return;
+
+        if (this.changePrimary) {
+            this.primaryColor = this.selectedColor;
+            this.primaryColorAlpha = this.selectedAlpha;
+        } else {
+            this.secondaryColor = this.selectedColor;
+            this.secondaryColorAlpha = this.selectedAlpha;
+        }
     }
 }

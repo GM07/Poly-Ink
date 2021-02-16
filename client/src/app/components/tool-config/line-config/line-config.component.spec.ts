@@ -22,7 +22,7 @@ describe('LineConfigComponent', () => {
     let component: LineConfigComponent;
     let fixture: ComponentFixture<LineConfigComponent>;
     let loader: HarnessLoader;
-    const DEFAULT_VALUE = 12;
+    const DEFAULT_VALUE = 6;
     let buttonToggleLabelElements: HTMLLabelElement[];
 
     beforeEach(async(() => {

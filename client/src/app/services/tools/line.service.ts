@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Geometry } from '@app/classes/math/geometry';
 import { Tool } from '@app/classes/tool';
-import { LineToolConstants } from '@app/classes/tool_settings/tools.constants';
+import { LineToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -13,7 +13,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
 export class LineService extends Tool {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
-        this.shortCutKey = 'l';
+        this.shortcutKey = LineToolConstants.SHORTCUT_KEY;
     }
     static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
     static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;
@@ -22,12 +22,13 @@ export class LineService extends Tool {
     private points: Vec2[] = [];
     private pointToAdd: Vec2;
     private mousePosition: Vec2;
+    private awaitsDoubleClick: boolean = false;
     private timeoutID: number = 0;
 
     // Attributs
     showJunctionPoints: boolean = true;
-    diameterJunctions: number = 50;
-    thickness: number = 12;
+    diameterJunctions: number = 10;
+    thickness: number = 6;
     color: string = 'black';
 
     private keyEvents: Map<string, boolean> = new Map([
@@ -43,6 +44,11 @@ export class LineService extends Tool {
         this.points = [];
         this.pointToAdd = {} as Vec2;
         this.mousePosition = {} as Vec2;
+        this.awaitsDoubleClick = false;
+        if (this.timeoutID > 0) {
+            clearTimeout(this.timeoutID);
+            this.timeoutID = 0;
+        }
     }
 
     applyAttributes(ctx: CanvasRenderingContext2D): void {
@@ -58,6 +64,8 @@ export class LineService extends Tool {
             clearTimeout(this.timeoutID);
             this.timeoutID = 0;
         }
+
+        this.awaitsDoubleClick = true;
 
         if (event.detail === 1) {
             this.timeoutID = window.setTimeout(() => {
@@ -78,6 +86,7 @@ export class LineService extends Tool {
             this.points.push(this.pointToAdd);
             this.handleLinePreview();
         }
+        this.awaitsDoubleClick = false;
     }
 
     handleDoubleClick(event: MouseEvent): void {
@@ -101,6 +110,7 @@ export class LineService extends Tool {
     }
 
     onMouseMove(event: MouseEvent): void {
+        if (this.awaitsDoubleClick) return;
         if (this.points.length === 0 || event.offsetX === undefined || event.offsetY === undefined) {
             return;
         }
@@ -115,6 +125,7 @@ export class LineService extends Tool {
     }
 
     onKeyDown(event: KeyboardEvent): void {
+        if (this.awaitsDoubleClick) return;
         if (this.keyEvents.has(event.key)) {
             this.keyEvents.set(event.key, true);
             this.handleKeys(event.key);
@@ -122,6 +133,9 @@ export class LineService extends Tool {
     }
 
     onKeyUp(event: KeyboardEvent): void {
+        if (this.awaitsDoubleClick) return;
+        this.keyEvents.set('Shift', event.shiftKey);
+
         if (this.keyEvents.has(event.key)) {
             this.keyEvents.set(event.key, false);
             this.handleKeys(event.key);
@@ -188,7 +202,16 @@ export class LineService extends Tool {
         const angle: number = Geometry.getAngle(this.getLastPoint(), cursor) + LineService.ANGLE_STEPS / 2;
         const finalAngle = Math.floor(angle / LineService.ANGLE_STEPS) * LineService.ANGLE_STEPS;
 
-        const distance = Geometry.getDistanceBetween(this.getLastPoint(), cursor);
+        const distanceX = cursor.x - this.getLastPoint().x;
+        const distanceY = cursor.y - this.getLastPoint().y;
+        let distance = Geometry.getDistanceBetween(this.getLastPoint(), cursor);
+
+        if (Math.abs(Math.cos(finalAngle)) >= Geometry.ZERO_THRESHOLD) {
+            distance = Math.abs(distanceX / Math.cos(finalAngle));
+        } else {
+            distance = Math.abs(distanceY / Math.sin(finalAngle));
+        }
+
         const dx = distance * Math.cos(finalAngle) + this.getLastPoint().x;
         const dy = -(distance * Math.sin(finalAngle)) + this.getLastPoint().y;
 

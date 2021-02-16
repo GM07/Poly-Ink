@@ -51,15 +51,8 @@ export class ColorPickerComponent {
         }
     }
 
-    chosePrimary(): void {
-        this.colorService.primaryColor = this.colorService.selectedColor;
-        this.colorService.primaryColorAlpha = this.colorService.selectedAlpha;
-        this.closeColorPicker();
-    }
-
-    choseSecondary(): void {
-        this.colorService.secondaryColor = this.colorService.selectedColor;
-        this.colorService.secondaryColorAlpha = this.colorService.selectedAlpha;
+    cancelColorChange(): void {
+        this.colorService.shouldChangeColor = false;
         this.closeColorPicker();
     }
 

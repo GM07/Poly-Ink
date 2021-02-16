@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
-import { PencilToolConstants } from '@app/classes/tool_settings/tools.constants';
+import { PencilToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -26,7 +26,7 @@ export class PencilService extends Tool {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.clearPath();
-        this.shortCutKey = 'c';
+        this.shortcutKey = PencilToolConstants.SHORTCUT_KEY;
     }
 
     get lineWidth(): number {
@@ -117,10 +117,10 @@ export class PencilService extends Tool {
         ctx.lineJoin = 'round' as CanvasLineJoin; // Essentiel pour avoir une allure "smooth"
 
         for (const paths of pathData) {
-            // Cas spécial pour permettre de dessiner exactement un seul pixel (sinon il n'est pas visible)
+            // Cas spécial pour permettre de dessiner exactement un seul point (sinon il n'est pas visible)
             if (paths.length === 1 || (paths.length === 2 && paths[0].x === paths[1].x && paths[0].y === paths[1].y)) {
-                ctx.arc(paths[0].x, paths[0].y, 1 / 2, 0, Math.PI * 2);
-                ctx.stroke();
+                ctx.arc(paths[0].x, paths[0].y, this.lineWidthIn / 2, 0, Math.PI * 2);
+                ctx.fill();
                 ctx.beginPath();
             } else {
                 for (const point of paths) {

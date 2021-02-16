@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
+import { EraserToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -20,7 +21,8 @@ export class EraserService extends Tool {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.clearPath();
-        this.shortCutKey = 'e';
+        this.shortcutKey = EraserToolConstants.SHORTCUT_KEY;
+        this.toolID = EraserToolConstants.TOOL_ID;
     }
 
     get lineWidth(): number {
@@ -110,10 +112,11 @@ export class EraserService extends Tool {
         ctx.fillStyle = 'white';
         ctx.strokeStyle = 'white';
         ctx.lineWidth = this.lineWidth;
-        ctx.lineCap = 'square' as CanvasLineCap;
+        ctx.lineCap = 'butt' as CanvasLineCap;
         ctx.lineJoin = 'bevel' as CanvasLineJoin;
-
         for (const paths of pathData) {
+            if (paths.length >= 1)
+                ctx.fillRect(paths[0].x - this.lineWidthIn / 2, paths[0].y - this.lineWidthIn / 2, this.lineWidthIn, this.lineWidthIn);
             for (const point of paths) {
                 ctx.lineTo(point.x, point.y);
             }

@@ -1,5 +1,6 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
@@ -10,6 +11,9 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { EraserConfigComponent } from '@app/components/tool-config/eraser-config/eraser-config.component';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 
+@Component({ selector: 'app-color-icon', template: '' })
+class StubColorIconComponent {}
+
 describe('EraserConfigComponent', () => {
     let component: EraserConfigComponent;
     let fixture: ComponentFixture<EraserConfigComponent>;
@@ -18,7 +22,7 @@ describe('EraserConfigComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [EraserConfigComponent],
+            declarations: [EraserConfigComponent, StubColorIconComponent],
             imports: [MatDividerModule, MatSliderModule, NoopAnimationsModule, FormsModule, MatInputModule],
         }).compileComponents();
         fixture = TestBed.createComponent(EraserConfigComponent);

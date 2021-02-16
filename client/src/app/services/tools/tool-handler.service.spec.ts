@@ -1,8 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import * as ToolsConstants from '@app/classes/tool_settings/tools.constants';
-import { LineService } from './line-service';
-import { PencilService } from './pencil-service';
-import { ToolHandlerService } from './tool-handler-service';
+import * as ToolsConstants from '@app/classes/tool_ui_settings/tools.constants';
+import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
+import { LineService } from './line.service';
+import { PencilService } from './pencil.service';
+import { ToolHandlerService } from './tool-handler.service';
+
 // tslint:disable:no-any
 describe('ToolHandlerService', () => {
     let service: ToolHandlerService;
@@ -11,11 +13,13 @@ describe('ToolHandlerService', () => {
 
     let pencilService: PencilService;
     let lineService: LineService;
+    let newDrawingService: NewDrawingService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
         pencilService = TestBed.inject(PencilService);
         lineService = TestBed.inject(LineService);
+        newDrawingService = TestBed.inject(NewDrawingService);
         modifyObjectToSpyOnAllFunctions(pencilService);
         service = TestBed.inject(ToolHandlerService);
 
@@ -86,6 +90,13 @@ describe('ToolHandlerService', () => {
         keyboardEvent = { key: 'c' } as KeyboardEvent;
         service.onKeyDown(keyboardEvent);
         expect(lineService.stopDrawing).toHaveBeenCalled();
+    });
+
+    it('should not do anything if menu is open', () => {
+        const func = spyOn<any>(service, 'findToolshortcutKey');
+        newDrawingService.showWarning = true;
+        service.onKeyDown(keyboardEvent);
+        expect(func).not.toHaveBeenCalled();
     });
 
     const modifyObjectToSpyOnAllFunctions = (object: any): void => {

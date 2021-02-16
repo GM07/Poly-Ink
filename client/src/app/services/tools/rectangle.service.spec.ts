@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { RectangleMode, RectangleService } from './rectangle-service';
+import { RectangleMode, RectangleService } from './rectangle.service';
 
 // tslint:disable:no-any
 describe('RectangleService', () => {
@@ -187,7 +187,7 @@ describe('RectangleService', () => {
 
     it('should allow for filled with contour drawing type', () => {
         service.rectangleMode = RectangleMode.FilledWithContour;
-        service.contourWidth = 1;
+        service.contourWidth = 2;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);

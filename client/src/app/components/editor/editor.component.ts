@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NewDrawingConstants } from '@app/classes/tool_settings/tools.constants';
+import { NewDrawingConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 
 @Component({

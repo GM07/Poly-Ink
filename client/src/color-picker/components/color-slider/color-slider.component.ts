@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Color } from 'src/color-picker/classes/color';
+import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 
 @Component({
@@ -35,22 +36,21 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
         });
     }
 
+    // Code provenant du tutoriel https://malcoded.com/posts/angular-color-picker/
     draw(): void {
         // Set width/height and clear Canvas
         const width = this.canvas.nativeElement.width;
         const height = this.canvas.nativeElement.height;
         this.context.clearRect(0, 0, width, height);
 
-        // Draw a rainbow-gradient
-        // TODO remove magic numbers
         const gradient = this.context.createLinearGradient(0, 0, 0, height);
-        gradient.addColorStop(this.RED_START, 'rgba(255, 0, 0, 1)');
-        gradient.addColorStop(this.YELLOW_START, 'rgba(255, 255, 0, 1)');
-        gradient.addColorStop(this.GREEN_START, 'rgba(0, 255, 0, 1)');
-        gradient.addColorStop(this.CYAN_START, 'rgba(0, 255, 255, 1)');
-        gradient.addColorStop(this.BLUE_START, 'rgba(0, 0, 255, 1)');
-        gradient.addColorStop(this.PURPLE_START, 'rgba(255, 0, 255, 1)');
-        gradient.addColorStop(this.RED_END, 'rgba(255, 0, 0, 1)');
+        gradient.addColorStop(this.RED_START, Colors.RED.rgbString);
+        gradient.addColorStop(this.YELLOW_START, Colors.YELLOW.rgbString);
+        gradient.addColorStop(this.GREEN_START, Colors.GREEN.rgbString);
+        gradient.addColorStop(this.CYAN_START, Colors.CYAN.rgbString);
+        gradient.addColorStop(this.BLUE_START, Colors.BLUE.rgbString);
+        gradient.addColorStop(this.PURPLE_START, Colors.PURPLE.rgbString);
+        gradient.addColorStop(this.RED_END, Colors.RED.rgbString);
 
         // Draw rectangle size of the canvas
         this.context.beginPath();

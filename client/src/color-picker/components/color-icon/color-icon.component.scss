@@ -1,55 +1,51 @@
-.parent {
-    position: relative;
-    background-color: transparent;
-    margin: 10px 5px 10px 10px;
-    width: 60px;
-    height: 60px;
-}
-
-.primaryColor {
-    position: absolute;
-    border: 1px solid black;
-    z-index: 2;
-    width: 35px;
-    height: 35px;
-}
-
+.primaryColor,
 .secondaryColor {
-    position: absolute;
+    width: 40px;
+    height: 40px;
     border: 1px solid black;
-    z-index: 1;
-    width: 35px;
-    height: 35px;
-    top: 7px;
-    left: 7px;
+    cursor: pointer;
 }
 
 mat-icon {
-    position: absolute;
-    z-index: 2;
     cursor: pointer;
-    -webkit-user-select: none;
+    margin: -5px 10px 10px 15px;
+
     -moz-user-select: none;
+    -khtml-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    font-size: 18px;
-    top: 42px;
-    left: 42px;
-}
-
-button {
-    margin: 10px 10px 10px 5px;
-}
-
-.menuTrigger {
-    position: absolute;
-    left: 100%;
-    top: 0px;
+    -webkit-user-select: none;
 }
 
 :host {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    flex-direction: column;
     position: relative;
+    align-items: center;
+    justify-content: center;
+}
+
+h5 {
+    margin: 5px 0px;
+    line-height: normal;
+}
+
+.color {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+}
+.colors {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.menuTrigger {
+    position: absolute;
+    top: 0;
+    left: 100%;
 }
