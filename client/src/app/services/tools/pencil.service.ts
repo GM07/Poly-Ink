@@ -3,6 +3,7 @@ import { Tool } from '@app/classes/tool';
 import { PencilToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
+import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 export enum LeftMouse {
@@ -29,6 +30,11 @@ export class PencilService extends Tool {
         this.shortcutKey = PencilToolConstants.SHORTCUT_KEY;
     }
 
+    static isAPoint(path: Vec2[]): boolean {
+        const isPoint = path.length === 1;
+        return isPoint || (path.length === 2 && path[0].x === path[1].x && path[0].y === path[1].y);
+    }
+
     get lineWidth(): number {
         return this.lineWidthIn;
     }
@@ -38,8 +44,7 @@ export class PencilService extends Tool {
      * est fait pour avoir une valeur entière
      */
     set lineWidth(width: number) {
-        const max = 50;
-        this.lineWidthIn = Math.min(Math.max(width, 1), max);
+        this.lineWidthIn = Math.min(Math.max(width, 1), ToolSettingsConst.MAX_WIDTH);
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -118,7 +123,7 @@ export class PencilService extends Tool {
 
         for (const paths of pathData) {
             // Cas spécial pour permettre de dessiner exactement un seul point (sinon il n'est pas visible)
-            if (paths.length === 1 || (paths.length === 2 && paths[0].x === paths[1].x && paths[0].y === paths[1].y)) {
+            if (PencilService.isAPoint(paths)) {
                 ctx.arc(paths[0].x, paths[0].y, this.lineWidthIn / 2, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.beginPath();
