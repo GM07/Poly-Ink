@@ -100,16 +100,16 @@ export class CanvasResizeComponent implements AfterViewInit {
 
     setStyleControl(): void {
         this.controlRightStyle = {
-            'margin-top': String(this.drawingService.canvas.height / 2 - CanvasConst.CONTROL_MARGIN) + 'px',
-            'margin-left': String(this.drawingService.canvas.width - CanvasConst.CONTROL_MARGIN) + 'px',
+            'margin-top': String(this.drawingService.canvas.height / 2) + 'px',
+            'margin-left': String(this.drawingService.canvas.width) + 'px',
         };
         this.controlBottomStyle = {
-            'margin-top': String(this.drawingService.canvas.height - CanvasConst.CONTROL_MARGIN) + 'px',
-            'margin-left': String(this.drawingService.canvas.width / 2 - CanvasConst.CONTROL_MARGIN) + 'px',
+            'margin-top': String(this.drawingService.canvas.height) + 'px',
+            'margin-left': String(this.drawingService.canvas.width / 2) + 'px',
         };
         this.controlCornerStyle = {
-            'margin-top': String(this.drawingService.canvas.height - CanvasConst.CONTROL_MARGIN) + 'px',
-            'margin-left': String(this.drawingService.canvas.width - CanvasConst.CONTROL_MARGIN) + 'px',
+            'margin-top': String(this.drawingService.canvas.height) + 'px',
+            'margin-left': String(this.drawingService.canvas.width) + 'px',
         };
     }
 
