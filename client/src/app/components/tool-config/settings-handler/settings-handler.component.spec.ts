@@ -28,11 +28,6 @@ class MockToolHandler extends ToolHandlerService {
         super(pencilService, lineService, rectangleService, ellipseService, eraserService, newDrawingService);
         this.TOOLS_MOCK.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
-        this.TOOLS_MOCK.set(ToolsConstants.AerosolToolConstants.TOOL_ID, pencilService);
-        this.TOOLS_MOCK.set(ToolsConstants.EllipseSelectionToolConstants.TOOL_ID, pencilService);
-        this.TOOLS_MOCK.set(ToolsConstants.EllipseToolConstants.TOOL_ID, ellipseService);
-        this.TOOLS_MOCK.set(ToolsConstants.EraserToolConstants.TOOL_ID, eraserService);
-        this.TOOLS_MOCK.set(ToolsConstants.RectangleSelectionToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.RectangleToolConstants.TOOL_ID, rectangleService);
         this.currentToolStub = this.TOOLS_MOCK.values().next().value;
     }

@@ -9,7 +9,6 @@ import { EraserService } from '@app/services/tools/eraser.service';
     styleUrls: ['./eraser-config.component.scss'],
 })
 export class EraserConfigComponent extends ToolConfig {
-    lineWidth: number;
     readonly MIN: number = ToolSettingsConst.MIN_ERASER_WIDTH;
     readonly MAX: number = ToolSettingsConst.MAX_WIDTH;
 

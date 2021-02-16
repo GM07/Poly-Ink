@@ -3,17 +3,15 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonToggleGroupHarness } from '@angular/material/button-toggle/testing';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { RectangleMode } from '@app/services/tools/rectangle.service';
+import { RectangleMode, RectangleService } from '@app/services/tools/rectangle.service';
 import { RectangleConfigComponent } from './rectangle-config.component';
 
 @Component({ selector: 'app-color-icon', template: '' })
@@ -23,18 +21,22 @@ describe('RectangleConfigComponent', () => {
     let component: RectangleConfigComponent;
     let fixture: ComponentFixture<RectangleConfigComponent>;
     let loader: HarnessLoader;
-    const DEFAULT_VALUE = 1;
     let buttonToggleLabelElements: HTMLLabelElement[];
+    let rectangleService: RectangleService;
+
+    const DEFAULT_VALUE = 1;
+
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [RectangleConfigComponent, StubColorIconComponent],
-            imports: [MatDividerModule, MatButtonModule, MatSliderModule, FormsModule, MatInputModule, NoopAnimationsModule, MatButtonToggleModule],
+            imports: [MatDividerModule, MatSliderModule, FormsModule, NoopAnimationsModule, MatButtonToggleModule],
         }).compileComponents();
         fixture = TestBed.createComponent(RectangleConfigComponent);
-        component = fixture.componentInstance;
         fixture.detectChanges();
+        component = fixture.componentInstance;
         loader = TestbedHarnessEnvironment.loader(fixture);
         buttonToggleLabelElements = fixture.debugElement.queryAll(By.css('button')).map((debugEl) => debugEl.nativeElement);
+        rectangleService = TestBed.inject(RectangleService);
     }));
 
     it('should create', () => {
@@ -59,10 +61,6 @@ describe('RectangleConfigComponent', () => {
         await slider.setValue(setValue);
 
         expect(await slider.getValue()).toBe(setValue);
-    });
-
-    it('traceType should be FilledWithContour by default', () => {
-        expect(component.traceTypeIn).toEqual(RectangleMode.FilledWithContour);
     });
 
     it('should load all button toggle group harnesses', async () => {
@@ -98,18 +96,18 @@ describe('RectangleConfigComponent', () => {
     it('traceType should be Contour when Contour button is clicked ', async () => {
         buttonToggleLabelElements[0].click();
         fixture.detectChanges();
-        expect(fixture.componentInstance.traceTypeIn).toEqual(RectangleMode.Contour);
+        expect(rectangleService.rectangleMode).toEqual(RectangleMode.Contour);
     });
 
     it('traceType should be Plein when Plein button is clicked ', async () => {
         buttonToggleLabelElements[1].click();
         fixture.detectChanges();
-        expect(fixture.componentInstance.traceTypeIn).toEqual(RectangleMode.Filled);
+        expect(rectangleService.rectangleMode).toEqual(RectangleMode.Filled);
     });
 
     it('traceType should be Plein & Contour when Plein & Contour button is clicked ', async () => {
         buttonToggleLabelElements[2].click();
         fixture.detectChanges();
-        expect(fixture.componentInstance.traceTypeIn).toEqual(RectangleMode.FilledWithContour);
+        expect(rectangleService.rectangleMode).toEqual(RectangleMode.FilledWithContour);
     });
 });

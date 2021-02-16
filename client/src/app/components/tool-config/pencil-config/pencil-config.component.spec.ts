@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -23,7 +22,7 @@ describe('PencilConfigComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [PencilConfigComponent, StubColorIconComponent],
-            imports: [MatDividerModule, MatSliderModule, FormsModule, NoopAnimationsModule, MatInputModule],
+            imports: [MatDividerModule, MatSliderModule, FormsModule, NoopAnimationsModule],
         }).compileComponents();
         fixture = TestBed.createComponent(PencilConfigComponent);
         component = fixture.componentInstance;

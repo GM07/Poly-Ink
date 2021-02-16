@@ -3,16 +3,15 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonToggleGroupHarness } from '@angular/material/button-toggle/testing';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { LineService } from '@app/services/tools/line.service';
 import { LineConfigComponent } from './line-config.component';
 
 @Component({ selector: 'app-color-icon', template: '' })
@@ -22,19 +21,22 @@ describe('LineConfigComponent', () => {
     let component: LineConfigComponent;
     let fixture: ComponentFixture<LineConfigComponent>;
     let loader: HarnessLoader;
-    const DEFAULT_VALUE = 6;
     let buttonToggleLabelElements: HTMLLabelElement[];
+    let lineService: LineService;
+
+    const DEFAULT_VALUE = 6;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [LineConfigComponent, StubColorIconComponent],
-            imports: [MatDividerModule, MatSliderModule, NoopAnimationsModule, FormsModule, MatInputModule, MatButtonModule, MatButtonToggleModule],
+            imports: [MatDividerModule, MatSliderModule, NoopAnimationsModule, FormsModule, MatButtonToggleModule],
         }).compileComponents();
         fixture = TestBed.createComponent(LineConfigComponent);
-        component = fixture.componentInstance;
         fixture.detectChanges();
+        component = fixture.componentInstance;
         loader = TestbedHarnessEnvironment.loader(fixture);
         buttonToggleLabelElements = fixture.debugElement.queryAll(By.css('button')).map((debugEl) => debugEl.nativeElement);
+        lineService = TestBed.inject(LineService);
     }));
 
     it('should create', () => {
@@ -92,13 +94,13 @@ describe('LineConfigComponent', () => {
     it('withJunctionPoint should be false when Sans jonction button is clicked ', async () => {
         buttonToggleLabelElements[0].click();
         fixture.detectChanges();
-        expect(fixture.componentInstance.withJunctionPoint).toEqual(false);
+        expect(lineService.showJunctionPoints).toEqual(false);
     });
 
     it('withJunctionPoint should be true when Avec point button is clicked ', async () => {
         buttonToggleLabelElements[1].click();
         fixture.detectChanges();
-        expect(fixture.componentInstance.withJunctionPoint).toEqual(true);
+        expect(lineService.showJunctionPoints).toEqual(true);
     });
 
     it('should call function toggleLineType() when button clicked', async(() => {
