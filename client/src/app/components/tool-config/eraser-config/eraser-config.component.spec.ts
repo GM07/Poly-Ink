@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,12 +17,13 @@ describe('EraserConfigComponent', () => {
     let component: EraserConfigComponent;
     let fixture: ComponentFixture<EraserConfigComponent>;
     let loader: HarnessLoader;
+
     const DEFAULT_VALUE = 25;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [EraserConfigComponent, StubColorIconComponent],
-            imports: [MatDividerModule, MatSliderModule, NoopAnimationsModule, FormsModule, MatInputModule],
+            imports: [MatDividerModule, MatSliderModule, NoopAnimationsModule, FormsModule],
         }).compileComponents();
         fixture = TestBed.createComponent(EraserConfigComponent);
         component = fixture.componentInstance;

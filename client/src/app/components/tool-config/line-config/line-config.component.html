@@ -2,12 +2,10 @@
     <h5 class="textFormat">Configurations ligne</h5>
     <mat-divider></mat-divider>
 
-    <!--Couleur-->
     <h5 class="textFormat">Couleur</h5>
     <app-color-icon></app-color-icon>
     <mat-divider></mat-divider>
 
-    <!--Epaisseur-->
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
         <mat-slider id="widthSlider" min="{{ MIN }}" max="{{ MAX }}" [(ngModel)]="lineService.thickness" thumbLabel [displayWith]="colorSliderLabel">
@@ -15,18 +13,20 @@
         {{ lineService.thickness }}px
     </div>
     <mat-divider></mat-divider>
-    <!--Type de jonction-->
+
     <h5 class="textFormat">Type de jonction</h5>
-    <div class="textFormatButton">
-        <button mat-raised-button text="Normal" class="buttons" (click)="toggleLineType(false)">Sans jonction</button>
-    </div>
-    <div class="textFormatButton">
-        <button mat-raised-button text="Avec point" class="buttons" (click)="toggleLineType(true)">Avec point</button>
-    </div>
+    <mat-button-toggle-group vertical=true name="fontStyle" aria-label="Font Style">
+        <div class="textFormatButton">
+            <mat-button-toggle [checked]="!lineService.showJunctionPoints" text="Normal" class="buttons" (click)="toggleLineType(false)">Sans jonction</mat-button-toggle>
+        </div>
+        <div class="textFormatButton">
+            <mat-button-toggle [checked]="lineService.showJunctionPoints" text="Avec point" class="buttons" (click)="toggleLineType(true)">Avec point</mat-button-toggle>
+        </div>
+    </mat-button-toggle-group>
     <br />
     <mat-divider></mat-divider>
-    <!-- Diametre des points de jonction-->
-    <div *ngIf="withJunctionPoint">
+
+    <div *ngIf="lineService.showJunctionPoints">
         <h5 class="textFormat">Diamètre points de jonction</h5>
         <div class="textFormatForSlider">
             <mat-slider thumbLabel [(ngModel)]="lineService.diameterJunctions" [displayWith]="colorSliderLabel" min="{{ MIN }}" max="{{ MAX }}">

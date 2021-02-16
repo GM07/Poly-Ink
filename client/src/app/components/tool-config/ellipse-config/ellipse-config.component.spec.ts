@@ -3,15 +3,15 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatButtonHarness } from '@angular/material/button/testing';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatButtonToggleGroupHarness } from '@angular/material/button-toggle/testing';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
+import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { EllipseMode } from '@app/services/tools/ellipse.service';
+import { EllipseMode, EllipseService } from '@app/services/tools/ellipse.service';
 import { EllipseConfigComponent } from './ellipse-config.component';
 
 @Component({ selector: 'app-color-icon', template: '' })
@@ -21,18 +21,22 @@ describe('EllipseConfigComponent', () => {
     let component: EllipseConfigComponent;
     let fixture: ComponentFixture<EllipseConfigComponent>;
     let loader: HarnessLoader;
-    const buttonHarness = MatButtonHarness;
+    let buttonToggleLabelElements: HTMLLabelElement[];
+    let ellipseService: EllipseService;
+
     const DEFAULT_VALUE = 1;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [EllipseConfigComponent, StubColorIconComponent],
-            imports: [MatDividerModule, MatButtonModule, MatSliderModule, NoopAnimationsModule, MatInputModule, FormsModule],
+            imports: [MatDividerModule, MatSliderModule, NoopAnimationsModule, FormsModule, MatButtonToggleModule],
         }).compileComponents();
         fixture = TestBed.createComponent(EllipseConfigComponent);
-        component = fixture.componentInstance;
         fixture.detectChanges();
+        component = fixture.componentInstance;
         loader = TestbedHarnessEnvironment.loader(fixture);
+        buttonToggleLabelElements = fixture.debugElement.queryAll(By.css('button')).map((debugEl) => debugEl.nativeElement);
+        ellipseService = TestBed.inject(EllipseService);
     }));
 
     it('should create', () => {
@@ -63,37 +67,48 @@ describe('EllipseConfigComponent', () => {
         expect(await slider.getValue()).toBe(setValue);
     });
 
-    it('traceType should be Contour by default', () => {
-        expect(component.traceTypeIn).toEqual(EllipseMode.Contour);
-    });
-
-    it('should load all button harnesses', async () => {
-        const nButtons = 3;
-        const buttons = await loader.getAllHarnesses(MatButtonHarness);
-        expect(buttons.length).toBe(nButtons);
-    });
-
-    it('should load button with exact text', async () => {
-        const buttons = await loader.getAllHarnesses(buttonHarness.with({ text: 'Contour' }));
+    it('should load all button toggle group harnesses', async () => {
+        const buttons = await loader.getAllHarnesses(MatButtonToggleGroupHarness);
         expect(buttons.length).toBe(1);
-        expect(await buttons[0].getText()).toBe('Contour');
+    });
+
+    it('should load the toggles inside the group', async () => {
+        const nToggles = 3;
+        const group = await loader.getHarness(MatButtonToggleGroupHarness);
+        const toggles = await group.getToggles();
+        expect(toggles.length).toBe(nToggles);
+    });
+
+    it('should get first button in group as button with Contour text', async () => {
+        const group = await loader.getHarness(MatButtonToggleGroupHarness);
+        const toggles = await group.getToggles();
+        expect(await toggles[0].getText()).toBe('Contour');
+    });
+
+    it('should get second button in group as button with Plein text', async () => {
+        const group = await loader.getHarness(MatButtonToggleGroupHarness);
+        const toggles = await group.getToggles();
+        expect(await toggles[1].getText()).toBe('Plein');
+    });
+
+    it('should get third button in group as button with Plein & Contour text', async () => {
+        const group = await loader.getHarness(MatButtonToggleGroupHarness);
+        const toggles = await group.getToggles();
+        expect(await toggles[2].getText()).toBe('Plein & Contour');
     });
 
     it('traceType should be Contour when Contour button is clicked ', async () => {
-        const button1 = await loader.getHarness(buttonHarness.with({ text: 'Contour' }));
-        await button1.click();
-        expect(fixture.componentInstance.traceTypeIn).toEqual(EllipseMode.Contour);
+        buttonToggleLabelElements[0].click(); // Element 0 is Contour button
+        expect(ellipseService.ellipseMode).toEqual(EllipseMode.Contour);
     });
 
     it('traceType should be Plein when Plein button is clicked ', async () => {
-        const button2 = await loader.getHarness(buttonHarness.with({ text: 'Plein' }));
-        await button2.click();
-        expect(fixture.componentInstance.traceTypeIn).toEqual(EllipseMode.Filled);
+        buttonToggleLabelElements[1].click(); // Element 1 is filled button
+        expect(ellipseService.ellipseMode).toEqual(EllipseMode.Filled);
     });
 
     it('traceType should be Plein & Contour when Plein & Contour button is clicked ', async () => {
-        const button3 = await loader.getHarness(buttonHarness.with({ text: 'Plein & Contour' }));
-        await button3.click();
-        expect(fixture.componentInstance.traceTypeIn).toEqual(EllipseMode.FilledWithContour);
+        buttonToggleLabelElements[2].click(); // Element 2 is FilleWithContour button
+        expect(ellipseService.ellipseMode).toEqual(EllipseMode.FilledWithContour);
     });
 });

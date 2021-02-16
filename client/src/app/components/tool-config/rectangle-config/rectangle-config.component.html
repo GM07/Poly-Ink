@@ -1,27 +1,25 @@
 <div class="tab">
     <h5 class="textFormat">Configuration rectangle</h5>
-    <!--Type de tracé-->
     <mat-divider></mat-divider>
 
-    <!--Couleur-->
     <h5 class="textFormat">Couleur</h5>
     <app-color-icon></app-color-icon>
     <mat-divider></mat-divider>
 
-    <!--Type de tracé-->
     <h5 class="textFormat">Type de tracé</h5>
-    <div class="textFormatButton">
-        <button mat-raised-button class="buttons" (click)="toggleTraceType(rectangleModeIn.Contour)">Contour</button>
-    </div>
-    <div class="textFormatButton">
-        <button mat-raised-button class="buttons" (click)="toggleTraceType(rectangleModeIn.Filled)">Plein</button>
-    </div>
-    <div class="textFormatButton">
-        <button mat-raised-button class="buttons" (click)="toggleTraceType(rectangleModeIn.FilledWithContour)">Plein & Contour</button>
-    </div>
+    <mat-button-toggle-group vertical=true name="fontStyle" aria-label="Font Style">
+        <div class="textFormatButton">
+            <mat-button-toggle [checked]="rectangleService.rectangleMode === rectangleModeIn.Contour" class="buttons" (click)="toggleTraceType(rectangleModeIn.Contour)" >Contour</mat-button-toggle>
+        </div>
+        <div class="textFormatButton">
+            <mat-button-toggle [checked]="rectangleService.rectangleMode === rectangleModeIn.Filled" class="buttons" (click)="toggleTraceType(rectangleModeIn.Filled)">Plein</mat-button-toggle>
+        </div>
+        <div class="textFormatButton">
+            <mat-button-toggle [checked]="rectangleService.rectangleMode === rectangleModeIn.FilledWithContour" class="buttons" (click)="toggleTraceType(rectangleModeIn.FilledWithContour)">Plein & Contour</mat-button-toggle>
+        </div>
+    </mat-button-toggle-group>
     <mat-divider></mat-divider>
 
-    <!--Epaisseur-->
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
         <mat-slider min="{{ MIN }}" max="{{ MAX }}" [(ngModel)]="rectangleService.contourWidth" thumbLabel [displayWith]="colorSliderLabel"> </mat-slider>

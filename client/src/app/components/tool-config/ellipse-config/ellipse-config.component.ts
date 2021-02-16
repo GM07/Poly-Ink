@@ -9,17 +9,14 @@ import { EllipseMode, EllipseService } from '@app/services/tools/ellipse.service
 })
 export class EllipseConfigComponent extends ToolConfig {
     ellipseModeIn: typeof EllipseMode = EllipseMode;
-    traceTypeIn: EllipseMode;
     readonly MIN: number = ToolSettingsConst.MIN_WIDTH;
     readonly MAX: number = ToolSettingsConst.MAX_WIDTH;
 
     constructor(public ellipseService: EllipseService) {
         super();
-        this.traceTypeIn = EllipseMode.Contour;
     }
 
     toggleTraceType(traceType: EllipseMode): void {
-        this.traceTypeIn = traceType;
         this.ellipseService.ellipseMode = traceType;
     }
 

@@ -8,7 +8,6 @@ import { PencilService } from '@app/services/tools/pencil.service';
     styleUrls: ['./pencil-config.component.scss'],
 })
 export class PencilConfigComponent extends ToolConfig {
-    lineWidth: number;
     readonly MIN: number = ToolSettingsConst.MIN_WIDTH;
     readonly MAX: number = ToolSettingsConst.MAX_WIDTH;
 
