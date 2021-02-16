@@ -1,6 +1,5 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -14,9 +13,6 @@ import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { EllipseMode, EllipseService } from '@app/services/tools/ellipse.service';
 import { EllipseConfigComponent } from './ellipse-config.component';
 
-@Component({ selector: 'app-color-icon', template: '' })
-class StubColorIconComponent {}
-
 describe('EllipseConfigComponent', () => {
     let component: EllipseConfigComponent;
     let fixture: ComponentFixture<EllipseConfigComponent>;
@@ -28,7 +24,7 @@ describe('EllipseConfigComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [EllipseConfigComponent, StubColorIconComponent],
+            declarations: [EllipseConfigComponent],
             imports: [MatDividerModule, MatSliderModule, NoopAnimationsModule, FormsModule, MatButtonToggleModule],
         }).compileComponents();
         fixture = TestBed.createComponent(EllipseConfigComponent);

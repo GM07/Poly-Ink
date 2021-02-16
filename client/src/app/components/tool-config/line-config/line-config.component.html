@@ -1,9 +1,4 @@
 <div class="tab">
-    <h5 class="textFormat">Configurations ligne</h5>
-    <mat-divider></mat-divider>
-
-    <h5 class="textFormat">Couleur</h5>
-    <app-color-icon></app-color-icon>
     <mat-divider></mat-divider>
 
     <h5 class="textFormat">Épaisseur</h5>
@@ -15,12 +10,16 @@
     <mat-divider></mat-divider>
 
     <h5 class="textFormat">Type de jonction</h5>
-    <mat-button-toggle-group vertical=true name="fontStyle" aria-label="Font Style">
+    <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style">
         <div class="textFormatButton">
-            <mat-button-toggle [checked]="!lineService.showJunctionPoints" text="Normal" class="buttons" (click)="toggleLineType(false)">Sans jonction</mat-button-toggle>
+            <mat-button-toggle [checked]="!lineService.showJunctionPoints" text="Normal" class="buttons" (click)="toggleLineType(false)"
+                >Sans jonction</mat-button-toggle
+            >
         </div>
         <div class="textFormatButton">
-            <mat-button-toggle [checked]="lineService.showJunctionPoints" text="Avec point" class="buttons" (click)="toggleLineType(true)">Avec point</mat-button-toggle>
+            <mat-button-toggle [checked]="lineService.showJunctionPoints" text="Avec point" class="buttons" (click)="toggleLineType(true)"
+                >Avec point</mat-button-toggle
+            >
         </div>
     </mat-button-toggle-group>
     <br />

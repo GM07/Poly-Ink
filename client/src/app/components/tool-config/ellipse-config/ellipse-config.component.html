@@ -1,23 +1,32 @@
 <div class="tab">
-    <h5 class="textFormat">Configuration ellipse</h5>
-    <mat-divider></mat-divider>
-
-    <h5 class="textFormat">Couleur</h5>
-    <app-color-icon></app-color-icon>
     <mat-divider></mat-divider>
 
     <h5 class="textFormat">Type de tracé</h5>
-    <mat-button-toggle-group vertical=true>
-    <div class="textFormatButton">
-        <mat-button-toggle [checked]="ellipseService.ellipseMode === ellipseModeIn.Contour" class="buttons" 
-        (click)="toggleTraceType(ellipseModeIn.Contour)">Contour</mat-button-toggle>
-    </div>
-    <div class="textFormatButton">
-        <mat-button-toggle [checked]="ellipseService.ellipseMode === ellipseModeIn.Filled" class="buttons" (click)="toggleTraceType(ellipseModeIn.Filled)">Plein</mat-button-toggle>
-    </div>
-    <div class="textFormatButton">
-        <mat-button-toggle [checked]="ellipseService.ellipseMode === ellipseModeIn.FilledWithContour" class="buttons" (click)="toggleTraceType(ellipseModeIn.FilledWithContour)">Plein & Contour</mat-button-toggle>
-    </div>
+    <mat-button-toggle-group vertical="true">
+        <div class="textFormatButton">
+            <mat-button-toggle
+                [checked]="ellipseService.ellipseMode === ellipseModeIn.Contour"
+                class="buttons"
+                (click)="toggleTraceType(ellipseModeIn.Contour)"
+                >Contour</mat-button-toggle
+            >
+        </div>
+        <div class="textFormatButton">
+            <mat-button-toggle
+                [checked]="ellipseService.ellipseMode === ellipseModeIn.Filled"
+                class="buttons"
+                (click)="toggleTraceType(ellipseModeIn.Filled)"
+                >Plein</mat-button-toggle
+            >
+        </div>
+        <div class="textFormatButton">
+            <mat-button-toggle
+                [checked]="ellipseService.ellipseMode === ellipseModeIn.FilledWithContour"
+                class="buttons"
+                (click)="toggleTraceType(ellipseModeIn.FilledWithContour)"
+                >Plein & Contour</mat-button-toggle
+            >
+        </div>
     </mat-button-toggle-group>
     <mat-divider></mat-divider>
 
