@@ -2,8 +2,6 @@
     <h5 class="textFormat">Configurations ligne</h5>
     <mat-divider></mat-divider>
 
-    <app-color-config></app-color-config>
-
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
         <mat-slider id="widthSlider" min="{{ MIN }}" max="{{ MAX }}" [(ngModel)]="lineService.thickness" thumbLabel [displayWith]="colorSliderLabel">

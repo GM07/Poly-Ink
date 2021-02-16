@@ -21,7 +21,6 @@ import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { ColorConfigComponent } from './components/tool-config/color-config/color-config.component';
 import { EllipseConfigComponent } from './components/tool-config/ellipse-config/ellipse-config.component';
 import { EraserConfigComponent } from './components/tool-config/eraser-config/eraser-config.component';
 import { LineConfigComponent } from './components/tool-config/line-config/line-config.component';
@@ -46,7 +45,6 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         SettingsHandlerComponent,
         CanvasResizeComponent,
         SidebarComponent,
-        ColorConfigComponent,
     ],
     imports: [
         AppRoutingModule,

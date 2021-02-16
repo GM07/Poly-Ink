@@ -10,8 +10,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { EraserConfigComponent } from '@app/components/tool-config/eraser-config/eraser-config.component';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 
-@Component({ selector: 'app-color-config', template: '' })
-class StubColorConfigComponent {}
+@Component({ selector: 'app-color-icon', template: '' })
+class StubColorIconComponent {}
 
 describe('EraserConfigComponent', () => {
     let component: EraserConfigComponent;
@@ -22,7 +22,7 @@ describe('EraserConfigComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [EraserConfigComponent, StubColorConfigComponent],
+            declarations: [EraserConfigComponent, StubColorIconComponent],
             imports: [MatDividerModule, MatSliderModule, NoopAnimationsModule, FormsModule],
         }).compileComponents();
         fixture = TestBed.createComponent(EraserConfigComponent);

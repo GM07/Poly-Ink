@@ -14,8 +14,8 @@ import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { EllipseMode, EllipseService } from '@app/services/tools/ellipse.service';
 import { EllipseConfigComponent } from './ellipse-config.component';
 
-@Component({ selector: 'app-color-config', template: '' })
-class StubColorConfigComponent {}
+@Component({ selector: 'app-color-icon', template: '' })
+class StubColorIconComponent {}
 
 describe('EllipseConfigComponent', () => {
     let component: EllipseConfigComponent;
@@ -28,7 +28,7 @@ describe('EllipseConfigComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [EllipseConfigComponent, StubColorConfigComponent],
+            declarations: [EllipseConfigComponent, StubColorIconComponent],
             imports: [MatDividerModule, MatSliderModule, NoopAnimationsModule, FormsModule, MatButtonToggleModule],
         }).compileComponents();
         fixture = TestBed.createComponent(EllipseConfigComponent);

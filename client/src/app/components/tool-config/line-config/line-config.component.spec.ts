@@ -14,8 +14,8 @@ import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { LineService } from '@app/services/tools/line.service';
 import { LineConfigComponent } from './line-config.component';
 
-@Component({ selector: 'app-color-config', template: '' })
-class StubColorConfigComponent {}
+@Component({ selector: 'app-color-icon', template: '' })
+class StubColorIconComponent {}
 
 describe('LineConfigComponent', () => {
     let component: LineConfigComponent;
@@ -28,7 +28,7 @@ describe('LineConfigComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [LineConfigComponent, StubColorConfigComponent],
+            declarations: [LineConfigComponent, StubColorIconComponent],
             imports: [MatDividerModule, MatSliderModule, NoopAnimationsModule, FormsModule, MatButtonToggleModule],
         }).compileComponents();
         fixture = TestBed.createComponent(LineConfigComponent);

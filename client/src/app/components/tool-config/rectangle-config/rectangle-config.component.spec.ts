@@ -14,8 +14,8 @@ import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { RectangleMode, RectangleService } from '@app/services/tools/rectangle.service';
 import { RectangleConfigComponent } from './rectangle-config.component';
 
-@Component({ selector: 'app-color-config', template: '' })
-class StubColorConfigComponent {}
+@Component({ selector: 'app-color-icon', template: '' })
+class StubColorIconComponent {}
 
 describe('RectangleConfigComponent', () => {
     let component: RectangleConfigComponent;
@@ -28,7 +28,7 @@ describe('RectangleConfigComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [RectangleConfigComponent, StubColorConfigComponent],
+            declarations: [RectangleConfigComponent, StubColorIconComponent],
             imports: [MatDividerModule, MatSliderModule, FormsModule, NoopAnimationsModule, MatButtonToggleModule],
         }).compileComponents();
         fixture = TestBed.createComponent(RectangleConfigComponent);
