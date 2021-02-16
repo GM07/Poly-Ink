@@ -1,5 +1,6 @@
-div {
+:host {
     display: flex;
+    flex-direction: column;
     background: white;
     margin-right: 0px;
     margin-left: 0px;
@@ -11,4 +12,9 @@ div {
     justify-content: space-evenly;
     align-items: left;
     padding-top: 30px;
+}
+
+.textFormat {
+    padding-left: 15px;
+    padding-right: 15px;
 }

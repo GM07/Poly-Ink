@@ -1,6 +1,5 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
@@ -10,9 +9,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { PencilConfigComponent } from './pencil-config.component';
 
-@Component({ selector: 'app-color-config', template: '' })
-class StubColorConfigComponent {}
-
 describe('PencilConfigComponent', () => {
     let component: PencilConfigComponent;
     let fixture: ComponentFixture<PencilConfigComponent>;
@@ -21,7 +17,7 @@ describe('PencilConfigComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [PencilConfigComponent, StubColorConfigComponent],
+            declarations: [PencilConfigComponent],
             imports: [MatDividerModule, MatSliderModule, FormsModule, NoopAnimationsModule],
         }).compileComponents();
         fixture = TestBed.createComponent(PencilConfigComponent);
