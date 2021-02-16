@@ -68,7 +68,7 @@ describe('RectangleConfigComponent', () => {
         expect(buttons.length).toBe(1);
     });
 
-    it('should load the the toggles inside the group', async () => {
+    it('should load the toggles inside the group', async () => {
         const nToggles = 3;
         const group = await loader.getHarness(MatButtonToggleGroupHarness);
         const toggles = await group.getToggles();
