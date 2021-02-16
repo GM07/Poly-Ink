@@ -190,6 +190,13 @@ describe('PencilService', () => {
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
+    it('verifies if it is a point', () => {
+        let point: Vec2[] = {} as Vec2[];
+        expect(PencilService.isAPoint(point)).toBeFalsy();
+        point = [{ x: 1, y: 1 }] as Vec2[];
+        expect(PencilService.isAPoint(point)).toBeTruthy();
+    });
+
     // Exemple de test d'intégration qui est quand même utile
     it(' should change the pixel of the canvas ', () => {
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
