@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgZone } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -16,10 +16,12 @@ import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resi
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
 import { SidebarComponent } from '@app/components/sidebar/sidebar.component';
-import { SettingsHandlerComponent } from '@app/components/tool-config/settings-handler/settings-handler.component';
 import { LineService } from '@app/services/tools/line.service';
 import { PencilService } from '@app/services/tools/pencil.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+
+@Component({ selector: 'app-settings-handler', template: '' })
+class StubSettingsHandlerComponent {}
 
 describe('SidebarComponent', () => {
     let component: SidebarComponent;
@@ -35,7 +37,7 @@ describe('SidebarComponent', () => {
         const lineSpy = jasmine.createSpyObj('LineService', ['stopDrawing'], { toolID: LineToolConstants.TOOL_ID });
 
         TestBed.configureTestingModule({
-            declarations: [CanvasResizeComponent, SidebarComponent, MatIcon, SettingsHandlerComponent],
+            declarations: [CanvasResizeComponent, SidebarComponent, MatIcon, StubSettingsHandlerComponent],
             imports: [
                 RouterTestingModule.withRoutes([
                     { path: 'home', component: HomePageComponent },

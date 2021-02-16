@@ -1,4 +1,6 @@
+import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { MatDividerModule } from '@angular/material/divider';
 import { Tool } from '@app/classes/tool';
 import * as ToolsConstants from '@app/classes/tool_ui_settings/tools.constants';
 import { LineConfigComponent } from '@app/components/tool-config/line-config/line-config.component';
@@ -12,6 +14,7 @@ import { PencilService } from '@app/services/tools/pencil.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
+// tslint:disable:max-classes-per-file
 class MockToolHandler extends ToolHandlerService {
     TOOLS_MOCK: Map<string, Tool> = new Map();
     currentToolStub: Tool;
@@ -46,6 +49,10 @@ class MockToolHandler extends ToolHandlerService {
     }
 }
 
+@Component({ selector: 'app-color-icon', template: '' })
+class StubColorIconComponent {}
+// tslint:enable:max-classes-per-file
+
 describe('SettingsHandlerComponent', () => {
     let component: SettingsHandlerComponent;
     let pencilService: PencilService;
@@ -56,6 +63,10 @@ describe('SettingsHandlerComponent', () => {
     let toolHandlerService: MockToolHandler;
 
     beforeEach(() => {
+        TestBed.configureTestingModule({
+            declarations: [SettingsHandlerComponent, StubColorIconComponent],
+            imports: [MatDividerModule],
+        }).compileComponents();
         pencilService = TestBed.inject(PencilService);
         lineService = TestBed.inject(LineService);
         rectangleService = TestBed.inject(RectangleService);
