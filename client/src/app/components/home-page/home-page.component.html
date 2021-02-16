@@ -3,7 +3,7 @@
 <div *ngIf="showComponent" [@fade]="state" (@fade.done)="endOfFadeAnimation()" id="background">
     <div id="main">
         <div id="content">
-            <h1 class="white" id="title">PAINT 2021</h1>
+            <h1 class="white" id="title">Poly Ink.</h1>
             <button class="button" mat-raised-button color="primary" (click)="createNewDrawing()">Nouveau dessin</button>
             <button class="button" mat-raised-button color="primary">Carrousel</button>
             <button *ngIf="continuingDrawing()" class="button" mat-raised-button color="primary">Continuer</button>
