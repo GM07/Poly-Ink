@@ -6,6 +6,7 @@ import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
+import { ToolSettingsConst } from 'app/constants/tool-settings';
 export enum LeftMouse {
     Released = 0,
     Pressed = 1,
@@ -21,13 +22,14 @@ export enum LeftMouse {
 })
 export class PencilService extends Tool {
     protected pathData: Vec2[][];
-    protected lineWidthIn: number = 12;
+    protected lineWidthIn: number;
     toolID: string = PencilToolConstants.TOOL_ID;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.clearPath();
         this.shortcutKey = PencilToolConstants.SHORTCUT_KEY;
+        this.lineWidthIn = ToolSettingsConst.DEFAULT_PENCIL_WIDTH;
     }
 
     static isAPoint(path: Vec2[]): boolean {

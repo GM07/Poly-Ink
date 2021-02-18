@@ -4,8 +4,7 @@ import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { PencilService } from '@app/services/tools/pencil.service';
 import { ColorService } from 'src/color-picker/services/color.service';
-
-const DEFAULT_WIDTH = 25;
+import { ToolSettingsConst } from '@app/constants/tool-settings';
 
 @Injectable({
     providedIn: 'root',
@@ -16,7 +15,7 @@ export class EraserService extends PencilService {
         this.clearPath();
         this.shortcutKey = EraserToolConstants.SHORTCUT_KEY;
         this.toolID = EraserToolConstants.TOOL_ID;
-        super.lineWidthIn = DEFAULT_WIDTH;
+        super.lineWidthIn = ToolSettingsConst.DEFAULT_ERASER_WIDTH;
     }
 
     onMouseMove(event: MouseEvent): void {
