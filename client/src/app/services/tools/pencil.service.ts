@@ -6,7 +6,6 @@ import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { ToolSettingsConst } from 'app/constants/tool-settings';
 export enum LeftMouse {
     Released = 0,
     Pressed = 1,

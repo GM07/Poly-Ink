@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { EraserToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
+import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { PencilService } from '@app/services/tools/pencil.service';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { ToolSettingsConst } from '@app/constants/tool-settings';
 
 @Injectable({
     providedIn: 'root',
