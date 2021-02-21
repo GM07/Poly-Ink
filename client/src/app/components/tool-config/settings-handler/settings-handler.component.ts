@@ -24,10 +24,10 @@ export class SettingsHandlerComponent {
     lastTab: ToolConfig = PencilConfigComponent;
 
     constructor(private toolHandler: ToolHandlerService) {
+        this.settingsList.set(EraserService, EraserConfigComponent);
         this.settingsList.set(PencilService, PencilConfigComponent);
         this.settingsList.set(LineService, LineConfigComponent);
         this.settingsList.set(RectangleService, RectangleConfigComponent);
-        this.settingsList.set(EraserService, EraserConfigComponent);
         this.settingsList.set(EllipseService, EllipseConfigComponent);
         this.applyNewTab();
     }
