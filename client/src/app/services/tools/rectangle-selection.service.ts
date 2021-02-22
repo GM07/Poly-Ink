@@ -95,6 +95,11 @@ export class RectangleSelectionService extends Tool {
     }
 
     onKeyDown(event: KeyboardEvent): void {
+        console.log(event.key);
+        if (event.key === 'Escape') {
+            this.stopDrawing();
+        }
+
         if (event.shiftKey && !this.shiftPressed && this.selectionData === undefined) {
             this.shiftPressed = true;
             if (this.mouseDown) {
