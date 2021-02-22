@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ShortcutKey } from '@app/classes/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { RectangleToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -24,7 +25,7 @@ export class RectangleService extends Tool {
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
-        this.shortcutKey = RectangleToolConstants.SHORTCUT_KEY;
+        this.shortcutKey = new ShortcutKey(RectangleToolConstants.SHORTCUT_KEY);
         this.shiftPressed = false;
         this.lineWidthIn = 1;
         this.rectangleMode = RectangleMode.FilledWithContour;

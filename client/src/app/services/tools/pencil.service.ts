@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ShortcutKey } from '@app/classes/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { PencilToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -20,14 +21,16 @@ export enum LeftMouse {
     providedIn: 'root',
 })
 export class PencilService extends Tool {
-    private pathData: Vec2[][];
-    private lineWidthIn: number = 12;
-    readonly toolID: string = PencilToolConstants.TOOL_ID;
+    protected pathData: Vec2[][];
+    protected lineWidthIn: number;
+    toolID: string = PencilToolConstants.TOOL_ID;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.clearPath();
-        this.shortcutKey = PencilToolConstants.SHORTCUT_KEY;
+
+        this.shortcutKey = new ShortcutKey(PencilToolConstants.SHORTCUT_KEY);
+        this.lineWidthIn = ToolSettingsConst.DEFAULT_PENCIL_WIDTH;
     }
 
     static isAPoint(path: Vec2[]): boolean {
@@ -107,13 +110,13 @@ export class PencilService extends Tool {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
-    private drawBackgroundPoint(point: Vec2): void {
+    protected drawBackgroundPoint(point: Vec2): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
         this.drawLine(ctx, [[point]]);
     }
 
-    private drawLine(ctx: CanvasRenderingContext2D, pathData: Vec2[][]): void {
+    protected drawLine(ctx: CanvasRenderingContext2D, pathData: Vec2[][]): void {
         ctx.beginPath();
         ctx.strokeStyle = this.colorService.primaryRgba;
         ctx.fillStyle = this.colorService.primaryRgba;
@@ -138,7 +141,7 @@ export class PencilService extends Tool {
         ctx.stroke();
     }
 
-    private clearPath(): void {
+    protected clearPath(): void {
         this.pathData = [];
         this.pathData.push([]);
     }

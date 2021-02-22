@@ -1,3 +1,4 @@
+import { ShortcutKey } from '@app/classes/shortcut-key';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { Vec2 } from './vec2';
@@ -8,7 +9,7 @@ export abstract class Tool {
     constructor(protected drawingService: DrawingService, protected colorService: ColorService) {}
     mouseDownCoord: Vec2;
     mouseDown: boolean = false;
-    shortcutKey: string;
+    shortcutKey: ShortcutKey;
     toolID: string;
 
     isInCanvas(event: MouseEvent): boolean {

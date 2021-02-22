@@ -9,18 +9,22 @@ import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resi
 import { DrawingComponent } from '@app/components/drawing/drawing.component';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
+import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 @Component({ selector: 'app-sidebar', template: '' })
 class StubSidebarComponent {}
 
 describe('EditorComponent', () => {
+    let shortcutHandlerServiceSpy: jasmine.SpyObj<ShortcutHandlerService>;
     let component: EditorComponent;
     let fixture: ComponentFixture<EditorComponent>;
     let newDrawingComponent: jasmine.SpyObj<NewDrawingComponent>;
 
     beforeEach(async(() => {
+        shortcutHandlerServiceSpy = jasmine.createSpyObj('ShortcutHandlerService', ['onKeyDown']);
         TestBed.configureTestingModule({
             declarations: [HomePageComponent, EditorComponent, DrawingComponent, CanvasResizeComponent, StubSidebarComponent, NewDrawingComponent],
+            providers: [{ provide: ShortcutHandlerService, useValue: shortcutHandlerServiceSpy }],
             imports: [
                 RouterTestingModule.withRoutes([
                     { path: 'home', component: HomePageComponent },
@@ -51,5 +55,10 @@ describe('EditorComponent', () => {
         component.newDrawingMenu = newDrawingComponent;
         component.resetDrawing('InvalidArgument');
         expect(newDrawingComponent.createNewDrawing).not.toHaveBeenCalled();
+    });
+
+    it('Transfer KeyDown events to the handler', () => {
+        component.onKeyDown({} as KeyboardEvent);
+        expect(shortcutHandlerServiceSpy.onKeyDown).toHaveBeenCalled();
     });
 });

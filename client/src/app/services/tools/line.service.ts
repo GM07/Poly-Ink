@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Geometry } from '@app/classes/math/geometry';
+import { ShortcutKey } from '@app/classes/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { LineToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -13,7 +14,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
 export class LineService extends Tool {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
-        this.shortcutKey = LineToolConstants.SHORTCUT_KEY;
+        this.shortcutKey = new ShortcutKey(LineToolConstants.SHORTCUT_KEY);
     }
     static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
     static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;

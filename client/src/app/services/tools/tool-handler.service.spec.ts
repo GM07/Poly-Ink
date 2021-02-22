@@ -28,6 +28,9 @@ describe('ToolHandlerService', () => {
 
         keyboardEvent = {
             key: 'c',
+            ctrlKey: false,
+            shiftKey: false,
+            altKey: false,
         } as KeyboardEvent;
     });
 
@@ -52,10 +55,10 @@ describe('ToolHandlerService', () => {
         pencilService.onMouseDown(mouseEvent);
         service.onKeyDown(keyboardEvent);
         expect(service.getTool()).toBeInstanceOf(PencilService);
-        keyboardEvent = { key: 'FakeKey' } as KeyboardEvent;
+        keyboardEvent = { key: 'FakeKey', ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
         service.onKeyDown(keyboardEvent);
         expect(service.getTool()).toBeInstanceOf(PencilService);
-        keyboardEvent = { key: 'l' } as KeyboardEvent;
+        keyboardEvent = { key: 'l', ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
         service.onKeyDown(keyboardEvent);
         expect(service.getTool()).toBeInstanceOf(LineService);
     });
@@ -77,14 +80,14 @@ describe('ToolHandlerService', () => {
         pencilService.onMouseDown(mouseEvent);
         service.onKeyDown(keyboardEvent);
         expect(pencilService.stopDrawing).not.toHaveBeenCalled();
-        keyboardEvent = { key: 'FakeKey' } as KeyboardEvent;
+        keyboardEvent = { key: 'FakeKey', ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
         service.onKeyDown(keyboardEvent);
         expect(pencilService.stopDrawing).not.toHaveBeenCalled();
-        keyboardEvent = { key: 'l' } as KeyboardEvent;
+        keyboardEvent = { key: 'l', ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
         service.onKeyDown(keyboardEvent);
         expect(pencilService.stopDrawing).toHaveBeenCalled();
         spyOn<any>(lineService, 'stopDrawing');
-        keyboardEvent = { key: 'c' } as KeyboardEvent;
+        keyboardEvent = { key: 'c', ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
         service.onKeyDown(keyboardEvent);
         expect(lineService.stopDrawing).toHaveBeenCalled();
     });
