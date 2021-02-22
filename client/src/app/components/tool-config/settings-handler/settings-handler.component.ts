@@ -10,9 +10,10 @@ import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
 import { LineService } from '@app/services/tools/line.service';
 import { PencilService } from '@app/services/tools/pencil.service';
+import { PolygoneService } from '@app/services/tools/polygone.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
-
+import { PolygoneConfigComponent } from '../polygone-config/polygone-config.component';
 @Component({
     selector: 'app-settings-handler',
     templateUrl: './settings-handler.component.html',
@@ -29,6 +30,7 @@ export class SettingsHandlerComponent {
         this.settingsList.set(LineService, LineConfigComponent);
         this.settingsList.set(RectangleService, RectangleConfigComponent);
         this.settingsList.set(EllipseService, EllipseConfigComponent);
+        this.settingsList.set(PolygoneService, PolygoneConfigComponent);
         this.applyNewTab();
     }
 
