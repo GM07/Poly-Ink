@@ -10,13 +10,13 @@ import { DrawingService } from '../drawing/drawing.service';
     providedIn: 'root',
 })
 export class RectangleSelectionService extends Tool {
-    private readonly LINE_DASH: number = 5;
-    private mouseUpCoord: Vec2;
-    private selectionCoord: Vec2;
-    private shiftPressed: boolean;
-    private width: number;
-    private height: number;
-    private selectionData: ImageData | undefined;
+    protected readonly LINE_DASH: number = 5;
+    protected mouseUpCoord: Vec2;
+    protected selectionCoord: Vec2;
+    protected shiftPressed: boolean;
+    protected width: number;
+    protected height: number;
+    protected selectionData: ImageData | undefined;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
@@ -43,7 +43,7 @@ export class RectangleSelectionService extends Tool {
                 this.endSelection();
                 this.mouseDownCoord = mousePos;
                 this.mouseUpCoord = this.mouseDownCoord;
-                this.drawPreviewRectangle(this.drawingService.previewCtx);
+                this.drawPreviewSelection(this.drawingService.previewCtx);
             }
         }
     }
@@ -76,21 +76,21 @@ export class RectangleSelectionService extends Tool {
             }
             const ctx = this.drawingService.previewCtx;
             this.drawingService.clearCanvas(ctx);
-            this.drawPreviewRectangle(ctx);
+            this.drawPreviewSelection(ctx);
         }
     }
 
     onMouseLeave(event: MouseEvent): void {
         if (this.mouseDown && this.selectionData === undefined) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
-            this.updateRectangle();
+            this.updateDrawingSelection();
         }
     }
 
     onMouseEnter(event: MouseEvent): void {
         if (this.mouseDown && this.selectionData === undefined) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
-            this.updateRectangle();
+            this.updateDrawingSelection();
         }
     }
 
@@ -98,7 +98,7 @@ export class RectangleSelectionService extends Tool {
         if (event.shiftKey && !this.shiftPressed && this.selectionData === undefined) {
             this.shiftPressed = true;
             if (this.mouseDown) {
-                this.updateRectangle();
+                this.updateDrawingSelection();
             }
         }
     }
@@ -107,12 +107,12 @@ export class RectangleSelectionService extends Tool {
         if (!event.shiftKey && this.shiftPressed && this.selectionData === undefined) {
             this.shiftPressed = false;
             if (this.mouseDown) {
-                this.updateRectangle();
+                this.updateDrawingSelection();
             }
         }
     }
 
-    private isInSelection(event: MouseEvent): boolean {
+    protected isInSelection(event: MouseEvent): boolean {
         if (this.selectionData === undefined) return false;
 
         let left: number;
@@ -139,7 +139,7 @@ export class RectangleSelectionService extends Tool {
         return !(currentPos.x <= left || currentPos.x >= right || currentPos.y <= top || currentPos.y >= bottom);
     }
 
-    private endSelection(): void {
+    protected endSelection(): void {
         if (this.selectionData === undefined) return;
         const baseCtx = this.drawingService.baseCtx;
         const imageDataCoords = this.getImageDataCoords();
@@ -158,7 +158,7 @@ export class RectangleSelectionService extends Tool {
         const imageDataCoords = this.getImageDataCoords();
         previewCtx.putImageData(this.selectionData, imageDataCoords.x, imageDataCoords.y);
 
-        this.drawPreviewRectangle(previewCtx);
+        this.drawPreviewSelection(previewCtx);
         baseCtx.fillStyle = 'red';
         baseCtx.beginPath();
         baseCtx.fillRect(this.mouseDownCoord.x, this.mouseDownCoord.y, this.width, this.height); // Tester
@@ -180,7 +180,7 @@ export class RectangleSelectionService extends Tool {
         imageDataCoords.y += translation.y;
         ctx.putImageData(this.selectionData, imageDataCoords.x, imageDataCoords.y);
         const rectangleCoords = { x: this.mouseDownCoord.x + translation.x, y: this.mouseDownCoord.y + translation.y } as Vec2;
-        this.drawRectangle(ctx, rectangleCoords);
+        this.drawSelection(ctx, rectangleCoords);
     }
 
     private getImageDataCoords(): Vec2 {
@@ -189,13 +189,13 @@ export class RectangleSelectionService extends Tool {
         return { x: x, y: y } as Vec2;
     }
 
-    private updateRectangle(): void {
+    private updateDrawingSelection(): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
-        this.drawPreviewRectangle(ctx);
+        this.drawPreviewSelection(ctx);
     }
 
-    private drawPreviewRectangle(ctx: CanvasRenderingContext2D): void {
+    protected drawPreviewSelection(ctx: CanvasRenderingContext2D): void {
         this.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
         this.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
         if (this.shiftPressed) {
@@ -203,10 +203,10 @@ export class RectangleSelectionService extends Tool {
             this.width = Math.sign(this.width) * Math.abs(this.height);
         }
 
-        this.drawRectangle(ctx, this.mouseDownCoord);
+        this.drawSelection(ctx, this.mouseDownCoord);
     }
 
-    private drawRectangle(ctx: CanvasRenderingContext2D, position: Vec2) {
+    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2) {
         ctx.lineWidth = 1;
         ctx.setLineDash([this.LINE_DASH, this.LINE_DASH]);
         ctx.strokeStyle = 'black';
