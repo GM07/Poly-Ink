@@ -12,6 +12,8 @@ export class PolygoneConfigComponent extends ToolConfig {
     polygoneModeIn: typeof PolygoneMode = PolygoneMode;
     readonly MIN: number = ToolSettingsConst.MIN_WIDTH;
     readonly MAX: number = ToolSettingsConst.MAX_WIDTH;
+    readonly MIN_NUM_EDGES: number = ToolSettingsConst.MIN_NUM_EDGES;
+    readonly MAX_NUM_EDGES: number = ToolSettingsConst.MAX_NUM_EDGES;
 
     constructor(public polygoneService: PolygoneService) {
         super();
