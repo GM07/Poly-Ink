@@ -1,11 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
+import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { NewDrawingComponent } from './canvas-reset.component';
 
 describe('NewDrawingComponent', () => {
     let component: NewDrawingComponent;
     let fixture: ComponentFixture<NewDrawingComponent>;
     let newDrawingService: NewDrawingService;
+    let shortcutHandler: ShortcutHandlerService;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -18,6 +20,7 @@ describe('NewDrawingComponent', () => {
         component = fixture.componentInstance;
         fixture.detectChanges();
         newDrawingService = TestBed.inject(NewDrawingService);
+        shortcutHandler = TestBed.inject(ShortcutHandlerService);
     });
 
     it('should create', () => {
@@ -57,10 +60,9 @@ describe('NewDrawingComponent', () => {
     });
 
     it('should stop propagations if the warning is displayed', () => {
-        newDrawingService.showWarning = true;
-        const keyEvent = new KeyboardEvent('document:keydown', { ctrlKey: false, key: 'o' });
-        const propagation = spyOn(keyEvent, 'stopImmediatePropagation');
+        spyOn(newDrawingService, 'newCanvas');
+        const keyEvent = new KeyboardEvent('document:keydown', { ctrlKey: true, key: 'o' });
         component.onKeyDown(keyEvent);
-        expect(propagation).toHaveBeenCalled();
+        expect(shortcutHandler.blockShortcuts).toBeTruthy();
     });
 });
