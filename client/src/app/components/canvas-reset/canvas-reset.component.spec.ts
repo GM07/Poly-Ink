@@ -28,8 +28,8 @@ describe('NewDrawingComponent', () => {
     });
 
     it('should set showWarning to false', () => {
-        component.removePopup();
-        expect(popupHandlerService.newDrawing.showWarning).toBe(false);
+        component.hidePopup();
+        expect(popupHandlerService.newDrawing.showPopup).toBe(false);
     });
 
     it('Should create a new Drawing', () => {

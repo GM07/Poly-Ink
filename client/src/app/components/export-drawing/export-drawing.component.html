@@ -1,13 +1,20 @@
 <div *ngIf="this.showPopup()" id="background">
     <div id="main">
         <div id="content">
-            <h1 class="white" id="title">HOLA</h1>
-            <h3 class="white" id="text">Êtes-vous sûr? Les changements actuels seront perdus</h3>
+            <h1 class="white" id="title">Exporter le dessins</h1>
             <div class="options">
-              <button class="button green white" mat-raised-button>Confirmer</button>
-              <button class="button red white" mat-raised-button (click)="removePopup();">Annuler</button>
+              <h3 class="white" id="format_text">Format</h3>
+              <mat-button-toggle-group name="fontStyle" aria-label="Font Style" value="png">
+                <mat-button-toggle id="png" value="png" (change)="changeExportFormat($event.value)">PNG</mat-button-toggle>
+                <mat-button-toggle id="jpg" value="jpg" (change)="changeExportFormat($event.value)">JPG</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+            <canvas #exportPreview id = "exportPreview" [attr.width]="300" [attr.height]="300"></canvas>
+            <div class="options">
+              <button class="button green white" mat-raised-button (click)="export()">Confirmer</button>
+              <button class="button red white" mat-raised-button (click)="hidePopup();">Annuler</button>
             </div>
           </div>
-    </div>
+        </div>
   </div>
   

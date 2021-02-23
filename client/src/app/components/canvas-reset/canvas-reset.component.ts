@@ -12,26 +12,26 @@ export class NewDrawingComponent {
     constructor(private popupHandlerService: PopupHandlerService, private shortcutHandler: ShortcutHandlerService) {
     }
 
-    removePopup(): void {
-        this.popupHandlerService.removeNewDrawingPopup();
+    hidePopup(): void {
+        this.popupHandlerService.hideNewDrawingPopup();
     }
 
     showPopup(): boolean {
-        return this.popupHandlerService.showNewDrawingPopup();
+        return this.popupHandlerService.isNewDrawingPopupShowing();
     }
 
     createNewDrawing(confirm: boolean): void {
-        this.popupHandlerService.removeNewDrawingPopup();
+        this.popupHandlerService.hideNewDrawingPopup();
         this.popupHandlerService.newDrawing.newCanvas(confirm);
     }
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
+
         if (this.popupHandlerService.newDrawing.shortcut.equals(event)) {
             event.preventDefault();
             this.popupHandlerService.newDrawing.newCanvas();
-            console.log('new drawing');
-            this.shortcutHandler.blockShortcuts = true;
+            this.shortcutHandler.blockShortcuts = false;
         }
     }
 }
