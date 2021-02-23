@@ -13,7 +13,7 @@ export enum LeftMouse {
 }
 
 const MS_PER_SECOND = 1000;
-const DEGRES = 360;
+const DEGREES = 360;
 
 @Injectable({
     providedIn: 'root',
@@ -22,15 +22,19 @@ export class AerosolService extends Tool {
     toolID: string = AerosolToolConstants.TOOL_ID;
     private mousePosition: Vec2;
 
-    private areaDiameterIn: number = 30;
-    private dropletDiameterIn: number = 0.5;
+    private areaDiameterIn: number;
+    private dropletDiameterIn: number;
     sprayIntervalID: number;
-    private nDropletsPerSpray: number = this.areaDiameter;
-    private emissionsPerSecondIn: number = 100;
+    private nDropletsPerSpray: number;
+    private emissionsPerSecondIn: number;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(AerosolToolConstants.SHORTCUT_KEY);
+        this.areaDiameterIn = ToolSettingsConst.DEFAULT_AEROSOL_AREA_DIAMETER;
+        this.nDropletsPerSpray = ToolSettingsConst.DEFAULT_AEROSOL_AREA_DIAMETER;
+        this.dropletDiameterIn = ToolSettingsConst.MIN_DROPLETS_WIDTH;
+        this.emissionsPerSecondIn = ToolSettingsConst.DEFAULT_AEROSOL_EMISSIONS_PER_SECOND;
     }
 
     stopDrawing(): void {
@@ -144,7 +148,7 @@ export class AerosolService extends Tool {
     }
 
     randomDroplet(): Vec2 {
-        const randAngle = Math.random() * DEGRES;
+        const randAngle = Math.random() * DEGREES;
         const randRadius = (Math.random() * this.areaDiameter) / 2;
 
         return {
