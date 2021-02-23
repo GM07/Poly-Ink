@@ -12,6 +12,12 @@ import { ShortcutKey } from '@app/classes/shortcut-key';
 export class EllipseSelectionService extends RectangleSelectionService {
   stopDrawing(): void { }
 
+  private centerX : number;
+  private centerY: number;
+  private radiusXAbs : number;
+  private radiusYAbs : number;
+
+
   constructor(drawingService: DrawingService, colorService: ColorService) {
     super(drawingService, colorService);
     this.shortcutKey = new ShortcutKey(EllipseSelectionToolConstants.SHORTCUT_KEY);
@@ -28,25 +34,28 @@ export class EllipseSelectionService extends RectangleSelectionService {
     this.drawSelection(ctx, this.mouseDownCoord);
   }
 
-  protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2): void {
-    let radiusX: number = (this.width) / 2;
-    let radiusY: number = (this.height) / 2;
-    let centerX: number = position.x + radiusX;
-    let centerY: number = position.y + radiusY;
+  private updateSize(width:number, height:number, x:number, y:number){
+    let radiusX: number = (width) / 2;
+    let radiusY: number = (height) / 2;
+    this.centerX = x + radiusX;
+    this.centerY = y + radiusY;
 
     if (this.shiftPressed) {
       const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
-      centerX = position.x + Math.sign(radiusX) * minRadius;
-      centerY = position.y + Math.sign(radiusY) * minRadius;
+      this.centerX = x + Math.sign(radiusX) * minRadius;
+      this.centerY = y + Math.sign(radiusY) * minRadius;
       radiusX = minRadius;
       radiusY = minRadius;
     }
 
-    const radiusXAbs = Math.abs(radiusX);
-    const radiusYAbs = Math.abs(radiusY);
+    this.radiusXAbs = Math.abs(radiusX);
+    this.radiusYAbs = Math.abs(radiusY);
+  }
 
+  protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2): void {
+    this.updateSize(this.width, this.height, position.x, position.y);
     if (ctx === this.drawingService.previewCtx) {
-      this.drawRectanglePerimeter(ctx, centerX, centerY, radiusXAbs, radiusYAbs);
+      this.drawRectanglePerimeter(ctx, this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs);
     }
 
     ctx.setLineDash([this.LINE_DASH, this.LINE_DASH]);
@@ -56,7 +65,7 @@ export class EllipseSelectionService extends RectangleSelectionService {
 
     ctx.beginPath();
     ctx.lineWidth = 1;
-    ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
+    ctx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
     ctx.stroke();
     ctx.setLineDash([0]);
 
@@ -85,21 +94,7 @@ export class EllipseSelectionService extends RectangleSelectionService {
 
   protected startSelection(): void {
     if (this.width === 0 || this.height === 0) return;
-    let radiusX: number = (this.mouseUpCoord.x - this.mouseDownCoord.x) / 2;
-    let radiusY: number = (this.mouseUpCoord.y - this.mouseDownCoord.y) / 2;
-    let centerX: number = this.mouseDownCoord.x + radiusX;
-    let centerY: number = this.mouseDownCoord.y + radiusY;
-
-    if (this.shiftPressed) {
-      const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
-      centerX = this.mouseDownCoord.x + Math.sign(radiusX) * minRadius;
-      centerY = this.mouseDownCoord.y + Math.sign(radiusY) * minRadius;
-      radiusX = minRadius;
-      radiusY = minRadius;
-    }
-
-    const radiusXAbs = Math.abs(radiusX);
-    const radiusYAbs = Math.abs(radiusY);
+    this.updateSize(this.mouseUpCoord.x-this.mouseDownCoord.x, this.mouseUpCoord.y - this.mouseDownCoord.y, this.mouseDownCoord.x, this.mouseDownCoord.y);
 
     const baseCtx = this.drawingService.baseCtx;
     this.selectionData = baseCtx.getImageData(this.mouseDownCoord.x, this.mouseDownCoord.y, this.width, this.height);
@@ -107,18 +102,12 @@ export class EllipseSelectionService extends RectangleSelectionService {
     const previewCtx = this.drawingService.previewCtx;
     const imageDataCoords = this.getImageDataCoords();
 
-
-    previewCtx.save();
-    previewCtx.beginPath();
-    previewCtx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
-    previewCtx.clip();
     previewCtx.putImageData(this.selectionData, imageDataCoords.x, imageDataCoords.y);
     this.drawPreviewSelection(previewCtx);
-    previewCtx.restore();
 
     baseCtx.fillStyle = 'red';
     baseCtx.beginPath();
-    baseCtx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
+    baseCtx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
     baseCtx.fill();
     baseCtx.closePath();
   }
@@ -129,40 +118,47 @@ export class EllipseSelectionService extends RectangleSelectionService {
     imageDataCoords.x += translation.x;
     imageDataCoords.y += translation.y;
 
-    let radiusX: number = (this.width) / 2;
-    let radiusY: number = (this.height) / 2;
-    let centerX: number = imageDataCoords.x + radiusX;
-    let centerY: number = imageDataCoords.y + radiusY;
-
-    if (this.shiftPressed) {
-      const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
-      centerX = imageDataCoords.x + Math.sign(radiusX) * minRadius;
-      centerY = imageDataCoords.y + Math.sign(radiusY) * minRadius;
-      radiusX = minRadius;
-      radiusY = minRadius;
-    }
-
-    const radiusXAbs = Math.abs(radiusX);
-    const radiusYAbs = Math.abs(radiusY);
+    this.updateSize(this.width, this.height,imageDataCoords.x, imageDataCoords.y);
 
     const ctx = this.drawingService.previewCtx;
     const rectangleCoords = { x: this.mouseDownCoord.x + translation.x, y: this.mouseDownCoord.y + translation.y } as Vec2;
     this.drawingService.clearCanvas(ctx);
-    ctx.putImageData(this.selectionData, imageDataCoords.x, imageDataCoords.y);
+    ctx.beginPath();
+    ctx.save();
+    ctx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+    ctx.clip();
+    ctx.drawImage(this.imagedata_to_image(this.selectionData), imageDataCoords.x, imageDataCoords.y);
     this.drawSelection(ctx, rectangleCoords);
+    ctx.restore();
+    this.drawRectanglePerimeter(ctx, this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs);
+  }
 
-    var maskCanvas = document.createElement('canvas');
-    maskCanvas.width = this.drawingService.previewCanvas.width;
-    maskCanvas.height = this.drawingService.previewCanvas.height;
-    var maskCtx = maskCanvas.getContext('2d');
+  protected endSelection(): void {
+    if (this.selectionData === undefined) return;
+    const baseCtx = this.drawingService.baseCtx;
+    const imageDataCoords = this.getImageDataCoords();
 
-    maskCtx.fillStyle = "rgba(255,255,255,1)";
-    maskCtx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
-    maskCtx.globalCompositeOperation = 'destination-in';
-    maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
-    maskCtx.fill();
+    this.updateSize(this.width,this.height,imageDataCoords.x,imageDataCoords.y);
 
-    ctx.drawImage(maskCanvas, 0, 0);1
-
+    baseCtx.beginPath();
+    baseCtx.save();                                   // for removing clip later
+    baseCtx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);  // draw a full arc on target
+    baseCtx.clip();
+    baseCtx.drawImage(this.imagedata_to_image(this.selectionData), imageDataCoords.x, imageDataCoords.y);
+    baseCtx.restore();
+    this.drawingService.clearCanvas(this.drawingService.previewCtx);
+    this.selectionData = undefined;
 }
+
+  private imagedata_to_image(imagedata : ImageData): HTMLImageElement{
+    let canvas = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
+    canvas.width = imagedata.width;
+    canvas.height = imagedata.height;
+    ctx.putImageData(imagedata, 0, 0);
+
+    let image = new Image();
+    image.src = canvas.toDataURL();
+    return image;
+  }
 }
