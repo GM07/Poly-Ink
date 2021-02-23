@@ -10,19 +10,18 @@ import { RectangleSelectionService } from './rectangle-selection.service';
     providedIn: 'root',
 })
 export class EllipseSelectionService extends RectangleSelectionService {
-    stopDrawing(): void {
-        super.stopDrawing();
+    constructor(drawingService: DrawingService, colorService: ColorService) {
+        super(drawingService, colorService);
+        this.shortcutKey = new ShortcutKey(EllipseSelectionToolConstants.SHORTCUT_KEY);
+        this.toolID = EllipseSelectionToolConstants.TOOL_ID;
     }
 
     private centerX: number;
     private centerY: number;
     private radiusXAbs: number;
     private radiusYAbs: number;
-
-    constructor(drawingService: DrawingService, colorService: ColorService) {
-        super(drawingService, colorService);
-        this.shortcutKey = new ShortcutKey(EllipseSelectionToolConstants.SHORTCUT_KEY);
-        this.toolID = EllipseSelectionToolConstants.TOOL_ID;
+    stopDrawing(): void {
+        super.stopDrawing();
     }
 
     // private updateSize(width: number, height: number, x: number, y: number) {
@@ -111,7 +110,7 @@ export class EllipseSelectionService extends RectangleSelectionService {
     }
 
     protected fillBackground(baseCtx: CanvasRenderingContext2D): void {
-        baseCtx.ellipse(this.centerX, this.centerY, this.radiusXAbs-1, this.radiusYAbs-1, 0, 0, 2 * Math.PI);
+        baseCtx.ellipse(this.centerX, this.centerY, this.radiusXAbs - 1, this.radiusYAbs - 1, 0, 0, 2 * Math.PI);
         baseCtx.fill();
     }
 
