@@ -10,8 +10,10 @@ import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
 import { LineService } from '@app/services/tools/line.service';
 import { PencilService } from '@app/services/tools/pencil.service';
+import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+import { RectangleSelectionConfigComponent } from '../rectangle-selection-config/rectangle-selection-config.component';
 
 @Component({
     selector: 'app-settings-handler',
@@ -24,11 +26,12 @@ export class SettingsHandlerComponent {
     lastTab: ToolConfig = PencilConfigComponent;
 
     constructor(private toolHandler: ToolHandlerService) {
+        this.settingsList.set(EraserService, EraserConfigComponent);
         this.settingsList.set(PencilService, PencilConfigComponent);
         this.settingsList.set(LineService, LineConfigComponent);
         this.settingsList.set(RectangleService, RectangleConfigComponent);
-        this.settingsList.set(EraserService, EraserConfigComponent);
         this.settingsList.set(EllipseService, EllipseConfigComponent);
+        this.settingsList.set(RectangleSelectionService, RectangleSelectionConfigComponent);
         this.applyNewTab();
     }
 

@@ -1,5 +1,7 @@
 <div class="container">
-    <app-canvas-reset #newCanvasMenu></app-canvas-reset>
+    <div (document:keydown)="shortcutHandler.handleKeyEvent($event)">
+        <app-canvas-reset #newCanvasMenu></app-canvas-reset>
+    </div>
     <app-sidebar (settingClicked)="resetDrawing($event)"></app-sidebar>
     <div class="drawing-container">
         <app-canvas-resize class="drawing" tabindex="0" ondragstart="return false;"> </app-canvas-resize>

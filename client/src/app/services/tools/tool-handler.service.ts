@@ -81,7 +81,7 @@ export class ToolHandlerService {
 
     onKeyDown(event: KeyboardEvent): void {
         this.currentTool.onKeyDown(event);
-        const tool = this.findToolshortcutKey(event.key.toLocaleLowerCase());
+        const tool = this.findToolshortcutKey(event);
         if (tool != undefined) {
             this.currentTool.stopDrawing();
             this.currentTool = tool;
@@ -101,11 +101,11 @@ export class ToolHandlerService {
         this.currentTool.onMouseEnter(event);
     }
 
-    private findToolshortcutKey(key: string): Tool | undefined {
-        if (this.currentTool.shortcutKey === key) return undefined;
+    private findToolshortcutKey(event: KeyboardEvent): Tool | undefined {
+        if (this.currentTool.shortcutKey.equals(event)) return undefined;
 
         for (const tool of this.TOOLS.values()) {
-            if (tool.shortcutKey === key) {
+            if (tool.shortcutKey.equals(event)) {
                 return tool;
             }
         }
