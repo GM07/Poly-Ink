@@ -80,7 +80,7 @@ export class EllipseSelectionService extends RectangleSelectionService {
 
   protected fillBackground(baseCtx: CanvasRenderingContext2D):void{
     this.updateSize(this.mouseUpCoord.x-this.mouseDownCoord.x, this.mouseUpCoord.y - this.mouseDownCoord.y, this.mouseDownCoord.x, this.mouseDownCoord.y);
-    baseCtx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+    baseCtx.ellipse(this.centerX, this.centerY, this.radiusXAbs-1, this.radiusYAbs-1, 0, 0, 2 * Math.PI);
     baseCtx.fill();
   }
 
