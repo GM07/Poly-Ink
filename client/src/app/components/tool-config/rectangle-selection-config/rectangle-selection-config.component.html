@@ -1,0 +1,9 @@
+<div class="tab">
+    <div class="textFormatButton">
+        <button mat-flat-button (click)="rectangleSelectionService.selectAll()">Tout sélectionner</button>
+    </div>
+</div>
+
+<div (document:mousemove)="onMouseMove($event)"></div>
+<div (document:mousedown)="onMouseDown($event)"></div>
+<div (document:mouseup)="onMouseUp($event)"></div>

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ShortcutKey } from '@app/classes/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { RectangleSelectionToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -10,7 +11,9 @@ import { DrawingService } from '../drawing/drawing.service';
     providedIn: 'root',
 })
 export class RectangleSelectionService extends Tool {
-    protected readonly LINE_DASH: number = 5;
+    protected readonly LINE_DASH: number = 8;
+    protected readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
+    protected readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
     protected mouseUpCoord: Vec2;
     protected selectionCoord: Vec2;
     protected shiftPressed: boolean;
@@ -20,14 +23,13 @@ export class RectangleSelectionService extends Tool {
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
-        this.shortcutKey = RectangleSelectionToolConstants.SHORTCUT_KEY;
+        this.shortcutKey = new ShortcutKey(RectangleSelectionToolConstants.SHORTCUT_KEY);
         this.toolID = RectangleSelectionToolConstants.TOOL_ID;
         this.selectionData = undefined;
     }
 
     stopDrawing(): void {
         this.endSelection();
-        this.selectionData = undefined;
         this.mouseDown = false;
         this.shiftPressed = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
@@ -81,43 +83,59 @@ export class RectangleSelectionService extends Tool {
     }
 
     onMouseLeave(event: MouseEvent): void {
-        if (this.mouseDown && this.selectionData === undefined) {
+        if (this.mouseDown && this.isInCanvas(event) && this.selectionData === undefined) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
             this.updateDrawingSelection();
         }
     }
 
     onMouseEnter(event: MouseEvent): void {
-        if (this.mouseDown && this.selectionData === undefined) {
+        if (this.mouseDown && this.isInCanvas(event) && this.selectionData === undefined) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
             this.updateDrawingSelection();
         }
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        console.log(event.key);
-        if (event.key === 'Escape') {
+        if (this.CANCEL_SELECTION.equals(event)) {
             this.stopDrawing();
+            return;
+        }
+        if (this.SELECT_ALL.equals(event)) {
+            this.stopDrawing();
+            event.preventDefault();
+            this.selectAll();
+            return;
         }
 
-        if (event.shiftKey && !this.shiftPressed && this.selectionData === undefined) {
+        if (event.shiftKey && !this.shiftPressed) {
             this.shiftPressed = true;
-            if (this.mouseDown) {
+            if (this.mouseDown && this.selectionData === undefined) {
                 this.updateDrawingSelection();
             }
         }
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if (!event.shiftKey && this.shiftPressed && this.selectionData === undefined) {
+        if (!event.shiftKey && this.shiftPressed) {
             this.shiftPressed = false;
-            if (this.mouseDown) {
+            if (this.mouseDown && this.selectionData === undefined) {
                 this.updateDrawingSelection();
             }
         }
     }
 
-    protected isInSelection(event: MouseEvent): boolean {
+    selectAll(): void {
+        const width = this.drawingService.canvas.width;
+        const height = this.drawingService.canvas.height;
+        this.mouseDownCoord = { x: 0, y: 0 } as Vec2;
+        this.mouseUpCoord = { x: width, y: height } as Vec2;
+        this.width = width;
+        this.height = height;
+        this.startSelection();
+    }
+
+    isInSelection(event: MouseEvent): boolean {
         if (this.selectionData === undefined) return false;
 
         let left: number;
@@ -176,7 +194,6 @@ export class RectangleSelectionService extends Tool {
 
     private updateSelection(translation: Vec2): void {
         if (this.selectionData === undefined) return;
-        console.log(translation);
 
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
@@ -212,16 +229,16 @@ export class RectangleSelectionService extends Tool {
     }
 
     protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2) {
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 2;
         ctx.setLineDash([this.LINE_DASH, this.LINE_DASH]);
         ctx.strokeStyle = 'black';
         ctx.lineJoin = 'miter' as CanvasLineJoin;
         ctx.lineCap = 'square' as CanvasLineCap;
 
-        ctx.strokeRect(position.x + 0.5, position.y + 0.5, this.width, this.height); // + 0.5 pour donner une allure "sharp"
+        ctx.strokeRect(position.x, position.y, this.width, this.height);
         ctx.lineDashOffset = this.LINE_DASH;
         ctx.strokeStyle = 'white';
-        ctx.strokeRect(position.x + 0.5, position.y + 0.5, this.width, this.height); // + 0.5 pour donner une allure "sharp"
+        ctx.strokeRect(position.x, position.y, this.width, this.height);
 
         ctx.lineDashOffset = 0;
         ctx.setLineDash([0]);
