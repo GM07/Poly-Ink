@@ -149,7 +149,7 @@ export class RectangleSelectionService extends Tool {
         this.selectionData = undefined;
     }
 
-    private startSelection(): void {
+    protected startSelection(): void {
         if (this.width === 0 || this.height === 0) return;
         const baseCtx = this.drawingService.baseCtx;
         this.selectionData = baseCtx.getImageData(this.mouseDownCoord.x, this.mouseDownCoord.y, this.width, this.height);
@@ -165,11 +165,11 @@ export class RectangleSelectionService extends Tool {
         baseCtx.closePath();
     }
 
-    private getTranslation(mousePos: Vec2): Vec2 {
+    protected getTranslation(mousePos: Vec2): Vec2 {
         return { x: mousePos.x - this.selectionCoord.x, y: mousePos.y - this.selectionCoord.y } as Vec2;
     }
 
-    private updateSelection(translation: Vec2): void {
+    protected updateSelection(translation: Vec2): void {
         if (this.selectionData === undefined) return;
         console.log(translation);
 
@@ -183,13 +183,13 @@ export class RectangleSelectionService extends Tool {
         this.drawSelection(ctx, rectangleCoords);
     }
 
-    private getImageDataCoords(): Vec2 {
+    protected getImageDataCoords(): Vec2 {
         const x = Math.min(this.mouseDownCoord.x, this.mouseDownCoord.x + this.width);
         const y = Math.min(this.mouseDownCoord.y, this.mouseDownCoord.y + this.height);
         return { x: x, y: y } as Vec2;
     }
 
-    private updateDrawingSelection(): void {
+    protected updateDrawingSelection(): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
         this.drawPreviewSelection(ctx);
