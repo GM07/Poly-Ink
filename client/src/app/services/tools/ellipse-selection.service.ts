@@ -97,23 +97,28 @@ export class EllipseSelectionService extends RectangleSelectionService {
     this.updateSize(this.mouseUpCoord.x-this.mouseDownCoord.x, this.mouseUpCoord.y - this.mouseDownCoord.y, this.mouseDownCoord.x, this.mouseDownCoord.y);
 
     const baseCtx = this.drawingService.baseCtx;
-    this.selectionData = baseCtx.getImageData(this.mouseDownCoord.x, this.mouseDownCoord.y, this.width, this.height);
+    this.selectionData.width = this.width;
+    this.selectionData.height = this.height;
+    this.selectionCtx = this.selectionData.getContext('2d');
+    if(this.selectionCtx != null){
+      this.selectionCtx.drawImage(this.drawingService.canvas, this.mouseDownCoord.x, this.mouseDownCoord.y, this.width, this.height, 0, 0, this.width, this.height);
 
-    const previewCtx = this.drawingService.previewCtx;
-    const imageDataCoords = this.getImageDataCoords();
+      const previewCtx = this.drawingService.previewCtx;
+      const imageDataCoords = this.getImageDataCoords();
 
-    previewCtx.putImageData(this.selectionData, imageDataCoords.x, imageDataCoords.y);
-    this.drawPreviewSelection(previewCtx);
+      previewCtx.drawImage(this.selectionData, 0, 0, this.width, this.height, imageDataCoords.x, imageDataCoords.y, this.width, this.height);
+      this.drawPreviewSelection(previewCtx);
 
-    baseCtx.fillStyle = 'red';
-    baseCtx.beginPath();
-    baseCtx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
-    baseCtx.fill();
-    baseCtx.closePath();
+      baseCtx.fillStyle = 'red';
+      baseCtx.beginPath();
+      baseCtx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+      baseCtx.fill();
+      baseCtx.closePath();
+    }
   }
 
   protected updateSelection(translation: Vec2): void {
-    if (this.selectionData === undefined) return;
+    if (this.selectionCtx === null) return;
     let imageDataCoords = this.getImageDataCoords();
     imageDataCoords.x += translation.x;
     imageDataCoords.y += translation.y;
@@ -127,38 +132,26 @@ export class EllipseSelectionService extends RectangleSelectionService {
     ctx.save();
     ctx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
     ctx.clip();
-    ctx.drawImage(this.imagedata_to_image(this.selectionData), imageDataCoords.x, imageDataCoords.y);
+    ctx.drawImage(this.selectionData, 0, 0, this.width, this.height, imageDataCoords.x, imageDataCoords.y, this.width, this.height);
     this.drawSelection(ctx, rectangleCoords);
     ctx.restore();
     this.drawRectanglePerimeter(ctx, this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs);
   }
 
   protected endSelection(): void {
-    if (this.selectionData === undefined) return;
+    if (this.selectionCtx === null) return;
     const baseCtx = this.drawingService.baseCtx;
     const imageDataCoords = this.getImageDataCoords();
 
     this.updateSize(this.width,this.height,imageDataCoords.x,imageDataCoords.y);
 
     baseCtx.beginPath();
-    baseCtx.save();                                   // for removing clip later
-    baseCtx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);  // draw a full arc on target
+    baseCtx.save();
+    baseCtx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
     baseCtx.clip();
-    baseCtx.drawImage(this.imagedata_to_image(this.selectionData), imageDataCoords.x, imageDataCoords.y);
+    baseCtx.drawImage(this.selectionData, 0, 0, this.width, this.height, imageDataCoords.x, imageDataCoords.y, this.width, this.height);
     baseCtx.restore();
     this.drawingService.clearCanvas(this.drawingService.previewCtx);
-    this.selectionData = undefined;
-}
-
-  private imagedata_to_image(imagedata : ImageData): HTMLImageElement{
-    let canvas = document.createElement('canvas');
-    let ctx = canvas.getContext('2d');
-    canvas.width = imagedata.width;
-    canvas.height = imagedata.height;
-    ctx.putImageData(imagedata, 0, 0);
-
-    let image = new Image();
-    image.src = canvas.toDataURL();
-    return image;
+    this.selectionCtx = null;
   }
 }
