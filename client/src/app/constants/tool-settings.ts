@@ -4,4 +4,6 @@ export abstract class ToolSettingsConst {
     static readonly MIN_ERASER_WIDTH: number = 5;
     static readonly MAX_DROPLETS_WIDTH: number = 5;
     static readonly MIN_DROPLETS_WIDTH: number = 0.1;
+    static readonly MIN_EMISSIONS_PER_SECOND: number = 50;
+    static readonly MAX_EMISSIONS_PER_SECOND: number = 1000;
 }

@@ -10,7 +10,7 @@ export enum LeftMouse {
   Pressed = 1,
 }
 
-const SPRAY_INTERVAL_MS: number = 10;
+const MS_IN_SECOND = 1000;
 
 @Injectable({
   providedIn: 'root'
@@ -19,12 +19,12 @@ export class AerosolService extends Tool {
 
   toolID: string = AerosolToolConstants.TOOL_ID;
   private mousePosition: Vec2;
-  private mouseMoving: boolean;
 
-  private areaDiameterIn: number = 10;
+  private areaDiameterIn: number = 30;
   private dropletDiameterIn: number = 0.5;
   public sprayIntervalID: number;
   private nDropletsPerSpray: number = this.areaDiameter;
+  private emissionsPerSecondIn: number = 100;
 
   constructor(drawingService: DrawingService, colorService: ColorService) {
     super(drawingService, colorService);
@@ -46,6 +46,12 @@ export class AerosolService extends Tool {
     this.dropletDiameterIn = Math.min(Math.max(diameter, 1), max);
   }
 
+  set emissionsPerSecond(emissionsPerSecond: number) {
+    const max = 1000;
+    const min = 50;
+    this.emissionsPerSecondIn = Math.min(Math.max(emissionsPerSecond, min), max)
+  }
+
   get areaDiameter(): number {
     return this.areaDiameterIn;
   }
@@ -54,12 +60,16 @@ export class AerosolService extends Tool {
     return this.dropletDiameterIn;
   }
 
+  get emissionsPerSecond(): number {
+    return this.emissionsPerSecondIn;
+  }
+
   onMouseDown(event: MouseEvent): void {
     this.mouseDown = event.button === MouseButton.Left;
     if (this.mouseDown) {
       this.mouseDownCoord = this.getPositionFromMouse(event);
-      const mousePosition = this.mouseDownCoord;
-      this.sprayContinuously(this.drawingService.previewCtx, mousePosition);
+      const mousePos= this.mouseDownCoord;
+      this.sprayContinuously(this.drawingService.previewCtx, mousePos);
     }
   }
 
@@ -81,13 +91,8 @@ export class AerosolService extends Tool {
     if (this.mouseDown) {
       window.clearInterval(this.sprayIntervalID);
       
-      const mousePosition = this.getPositionFromMouse(event);
-      this.drawSpray(this.drawingService.previewCtx, mousePosition);
-      this.mouseMoving = false; 
-      // Si la souris ne bouge plus, on doit spray quand même à intervalle régulier
-      if (!this.mouseMoving) {
-        this.sprayContinuously(this.drawingService.previewCtx, mousePosition);
-      }
+      const mousePos = this.getPositionFromMouse(event);
+      this.sprayContinuously(this.drawingService.previewCtx, mousePos);
     } else {
       this.mouseDownCoord = this.getPositionFromMouse(event);
     }
@@ -112,7 +117,7 @@ export class AerosolService extends Tool {
 
   sprayContinuously(ctx: CanvasRenderingContext2D, mousePosition: Vec2): void {
     let self = this;
-    this.sprayIntervalID = window.setInterval(function() { self.drawSpray(self.drawingService.previewCtx, mousePosition) }, SPRAY_INTERVAL_MS);
+    this.sprayIntervalID = window.setInterval(function() { self.drawSpray(self.drawingService.previewCtx, mousePosition) }, MS_IN_SECOND / this.emissionsPerSecondIn);
   }
 
   drawSpray(ctx: CanvasRenderingContext2D, mousePosition: Vec2): void {
@@ -137,7 +142,7 @@ export class AerosolService extends Tool {
 
   randomDroplet(): Vec2 { 
     let randAngle = Math.random() * 360;
-    let randRadius = Math.random() * this.areaDiameter;
+    let randRadius = Math.random() * this.areaDiameter / 2;
 
     return { 
       x: Math.cos(randAngle) * randRadius, 

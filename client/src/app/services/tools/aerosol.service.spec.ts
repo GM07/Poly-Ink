@@ -17,6 +17,7 @@ describe('AerosolService', () => {
   let previewCtxStub: CanvasRenderingContext2D;
   let drawSpraySpy: jasmine.Spy<any>;
   let sprayContinuouslySpy: jasmine.Spy<any>;
+  let onMouseMoveSpy: jasmine.Spy<any>;
 
   const ALPHA = 3;
 
@@ -37,6 +38,7 @@ describe('AerosolService', () => {
     service = TestBed.inject(AerosolService);
     drawSpraySpy = spyOn<any>(service, 'drawSpray').and.callThrough();
     sprayContinuouslySpy = spyOn<any>(service, 'sprayContinuously').and.callThrough();
+    onMouseMoveSpy = spyOn<any>(service, 'onMouseMove').and.callThrough();
   
     // Configuration du spy du service
     // tslint:disable:no-string-literal
@@ -55,20 +57,20 @@ describe('AerosolService', () => {
     expect(service).toBeTruthy();
   });
 
-  it(' mouseDown should set mouseDownCoord to correct position', () => {
+  it('mouseDown should set mouseDownCoord to correct position', () => {
     const expectedResult: Vec2 = { x: 25, y: 25 };
     service.onMouseDown(mouseEvent);
     expect(service.mouseDownCoord).toEqual(expectedResult);
     window.clearInterval(service.sprayIntervalID);
   });
 
-  it(' mouseDown should set mouseDown property to true on left click', () => {
+  it('mouseDown should set mouseDown property to true on left click', () => {
     service.onMouseDown(mouseEvent);
     expect(service.mouseDown).toEqual(true);
     window.clearInterval(service.sprayIntervalID);
   });
 
-  it(' mouseDown should set mouseDown property to false on right click', () => {
+  it('mouseDown should set mouseDown property to false on right click', () => {
     const mouseEventRClick = {
       offsetX: 25,
       offsetY: 25,
@@ -79,7 +81,7 @@ describe('AerosolService', () => {
     window.clearInterval(service.sprayIntervalID);
   });
 
-  it(' onMouseUp should call drawSpray if mouse was already down', () => {
+  it('onMouseUp should call drawSpray if mouse was already down', () => {
     service.mouseDownCoord = { x: 0, y: 0 };
     service.mouseDown = true;
 
@@ -87,7 +89,7 @@ describe('AerosolService', () => {
     expect(drawSpraySpy).toHaveBeenCalled();
   });
 
-  it(' onMouseUp should not call drawSpray if mouse was not already down', () => {
+  it('onMouseUp should not call drawSpray if mouse was not already down', () => {
     service.mouseDown = false;
     service.mouseDownCoord = { x: 0, y: 0 };
 
@@ -95,16 +97,15 @@ describe('AerosolService', () => {
     expect(drawSpraySpy).not.toHaveBeenCalled();
   });
 
-  it(' onMouseMove should call drawSpray if mouse was already down', () => {
+  it('onMouseMove should call sprayContinuouslySpy if mouse was already down', () => {
     service.mouseDownCoord = { x: 0, y: 0 };
     service.mouseDown = true;
 
     service.onMouseMove(mouseEvent);
-    expect(drawSpraySpy).toHaveBeenCalled();
+    expect(sprayContinuouslySpy).toHaveBeenCalled();
     window.clearInterval(service.sprayIntervalID);
   });
 
-  /* TODO
   it('should not spray between the points where it left and entered the canvas', () => {
     service.areaDiameter = 2;
     let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
@@ -112,25 +113,14 @@ describe('AerosolService', () => {
     service.onMouseLeave(mouseEventLClick);
     mouseEventLClick = { offsetX: 0, offsetY: 50, button: 0, buttons: 1 } as MouseEvent;
     service.onMouseEnter(mouseEventLClick);
-    expect(drawSpraySpy).toHaveBeenCalled();
+    expect(sprayContinuouslySpy).toHaveBeenCalled();
     mouseEventLClick = { offsetX: 0, offsetY: 50, button: 0 } as MouseEvent;
     service.onMouseUp(mouseEventLClick);
 
     // tslint:disable-next-line:no-magic-numbers
-    let imageData: ImageData = baseCtxStub.getImageData(2, 2, 25, 25);
+    let imageData: ImageData = previewCtxStub.getImageData(2, 2, 25, 25);
     expect(imageData.data[ALPHA]).toEqual(0); // A, rien ne doit être dessiné
-    imageData = baseCtxStub.getImageData(0, 0, 1, 1);
-    expect(imageData.data[0]).toEqual(0); // R
-    expect(imageData.data[1]).toEqual(0); // G
-    expect(imageData.data[2]).toEqual(0); // B
-    expect(imageData.data[ALPHA]).not.toEqual(0); // A
-    // tslint:disable-next-line:no-magic-numbers
-    imageData = baseCtxStub.getImageData(0, 50, 1, 1);
-    expect(imageData.data[0]).toEqual(0); // R
-    expect(imageData.data[1]).toEqual(0); // G
-    expect(imageData.data[2]).toEqual(0); // B
-    //expect(imageData.data[ALPHA]).not.toEqual(0); // A
-  });*/
+  });
 
   it('should stop drawing when the mouse is up', () => {
     let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
@@ -151,6 +141,12 @@ describe('AerosolService', () => {
     expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
   });
 
+  it('should call onMouseMove when entering the canvas if mouse is down', () => {
+    mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1} as MouseEvent;
+    service.onMouseEnter(mouseEvent);
+    expect(onMouseMoveSpy).toHaveBeenCalled();
+  });
+
   it('should do nothing when entering the canvas, with an unsupported mouse state', () => {
     mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 3 } as MouseEvent;
     service.onMouseEnter(mouseEvent);
@@ -168,7 +164,7 @@ describe('AerosolService', () => {
     expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
   });
 
-  it('Should only draw nothing on base canvas when moving the mouse, left click released', () => {
+  it('should only draw nothing on base canvas when moving the mouse, left click released', () => {
     service.mouseDown = false;
     mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
     service.onMouseMove(mouseEvent);
@@ -180,6 +176,15 @@ describe('AerosolService', () => {
   it('should stop drawing when asked to', () => {
     service.stopDrawing();
     expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
-});
+  });
 
+  it('droplet should be inside area circle determined by diameter input', () => {
+    mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
+    service.onMouseDown(mouseEvent);
+    let droplet = service.randomDroplet();
+    let randX = droplet.x;
+    let randY = droplet.y;
+    let distFromCenter = Math.sqrt( randX * randX + randY * randY);
+    expect(distFromCenter).toBeLessThanOrEqual(service.areaDiameter / 2);
+  }); 
 });
