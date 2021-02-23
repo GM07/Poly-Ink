@@ -171,8 +171,6 @@ export class RectangleSelectionService extends Tool {
         this.selectionCoords.x = Math.min(this.mouseDownCoord.x, this.mouseDownCoord.x + this.width);
         this.selectionCoords.y = Math.min(this.mouseDownCoord.y, this.mouseDownCoord.y + this.height);
 
-        console.log(this.selectionCoords);
-
         this.selectionCtx.drawImage(
             this.drawingService.canvas,
             this.selectionCoords.x,
@@ -200,6 +198,7 @@ export class RectangleSelectionService extends Tool {
     }
 
     protected getTranslation(mousePos: Vec2): Vec2 {
+        //console.log('mpos', mousePos, 'origin', this.translationOrigin);
         return { x: mousePos.x - this.translationOrigin.x, y: mousePos.y - this.translationOrigin.y } as Vec2;
     }
 
@@ -245,6 +244,6 @@ export class RectangleSelectionService extends Tool {
         ctx.strokeRect(position.x, position.y, width, height);
 
         ctx.lineDashOffset = 0;
-        ctx.setLineDash([0]);
+        ctx.setLineDash([]);
     }
 }
