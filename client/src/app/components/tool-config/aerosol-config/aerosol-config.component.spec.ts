@@ -10,90 +10,91 @@ import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { AerosolConfigComponent } from './aerosol-config.component';
 
 describe('AerosolConfigComponent', () => {
-  let component: AerosolConfigComponent;
-  let fixture: ComponentFixture<AerosolConfigComponent>;
-  let loader: HarnessLoader;
-  const DEFAULT_VALUE_AREA_SLIDER = 30;
-  const DEFAULT_VALUE_DROPLETS_SLIDER = 0.5;
-  const DEFAULT_VALUE_EMISSIONS_SLIDER = 100;
+    let component: AerosolConfigComponent;
+    let fixture: ComponentFixture<AerosolConfigComponent>;
+    let loader: HarnessLoader;
+    const DEFAULT_VALUE_AREA_SLIDER = 30;
+    const DEFAULT_VALUE_DROPLETS_SLIDER = 0.5;
+    const DEFAULT_VALUE_EMISSIONS_SLIDER = 100;
 
-  beforeEach(async(() => {
-      TestBed.configureTestingModule({
-          declarations: [AerosolConfigComponent],
-          imports: [MatDividerModule, MatSliderModule, FormsModule, NoopAnimationsModule],
-      }).compileComponents();
-      fixture = TestBed.createComponent(AerosolConfigComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-      loader = TestbedHarnessEnvironment.loader(fixture);
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [AerosolConfigComponent],
+            imports: [MatDividerModule, MatSliderModule, FormsModule, NoopAnimationsModule],
+        }).compileComponents();
+        fixture = TestBed.createComponent(AerosolConfigComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+        loader = TestbedHarnessEnvironment.loader(fixture);
+    }));
 
-  it('should create', () => {
-      expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 
-  it('should load all slider harnesses', async () => {
-      const sliders = await loader.getAllHarnesses(MatSliderHarness);
-      expect(sliders.length).toBe(3);
-  });
+    it('should load all slider harnesses', async () => {
+        const nSliders = 3;
+        const sliders = await loader.getAllHarnesses(MatSliderHarness);
+        expect(sliders.length).toBe(nSliders);
+    });
 
-  it('should get default value of area slider', async () => {
-      const slider = await loader.getAllHarnesses(MatSliderHarness);
-      expect(await slider[0].getValue()).toBe(DEFAULT_VALUE_AREA_SLIDER);
-  });
-  
-  it('should get default value of droplets slider', async () => {
-      const slider = await loader.getAllHarnesses(MatSliderHarness);
-      expect(await slider[1].getValue()).toBe(DEFAULT_VALUE_DROPLETS_SLIDER);
-  });
+    it('should get default value of area slider', async () => {
+        const slider = await loader.getAllHarnesses(MatSliderHarness);
+        expect(await slider[0].getValue()).toBe(DEFAULT_VALUE_AREA_SLIDER);
+    });
 
-  it('should get default value of emissionsPerSecond slider', async () => {
-    const slider = await loader.getAllHarnesses(MatSliderHarness);
-    expect(await slider[2].getValue()).toBe(DEFAULT_VALUE_EMISSIONS_SLIDER);
-  });
+    it('should get default value of droplets slider', async () => {
+        const slider = await loader.getAllHarnesses(MatSliderHarness);
+        expect(await slider[1].getValue()).toBe(DEFAULT_VALUE_DROPLETS_SLIDER);
+    });
 
-  it('should get max value of area slider', async () => {
-      const slider = await loader.getAllHarnesses(MatSliderHarness);
-      expect(await slider[0].getMaxValue()).toBe(ToolSettingsConst.MAX_WIDTH);
-  });
-  
-  it('should get max value of droplets slider', async () => {
-      const slider = await loader.getAllHarnesses(MatSliderHarness);
-      expect(await slider[1].getMaxValue()).toBe(ToolSettingsConst.MAX_DROPLETS_WIDTH);
-  });
+    it('should get default value of emissionsPerSecond slider', async () => {
+        const slider = await loader.getAllHarnesses(MatSliderHarness);
+        expect(await slider[2].getValue()).toBe(DEFAULT_VALUE_EMISSIONS_SLIDER);
+    });
 
-  it('should get max value of emissions slider', async () => {
-    const slider = await loader.getAllHarnesses(MatSliderHarness);
-    expect(await slider[2].getMaxValue()).toBe(ToolSettingsConst.MAX_EMISSIONS_PER_SECOND);
-  });
+    it('should get max value of area slider', async () => {
+        const slider = await loader.getAllHarnesses(MatSliderHarness);
+        expect(await slider[0].getMaxValue()).toBe(ToolSettingsConst.MAX_WIDTH);
+    });
 
-  it('should be able to set value of area slider', async () => {
-      const setValue = 33;
-      const slider = await loader.getAllHarnesses(MatSliderHarness);
-      expect(await slider[0].getValue()).toBe(DEFAULT_VALUE_AREA_SLIDER);
+    it('should get max value of droplets slider', async () => {
+        const slider = await loader.getAllHarnesses(MatSliderHarness);
+        expect(await slider[1].getMaxValue()).toBe(ToolSettingsConst.MAX_DROPLETS_WIDTH);
+    });
 
-      await slider[0].setValue(setValue);
+    it('should get max value of emissions slider', async () => {
+        const slider = await loader.getAllHarnesses(MatSliderHarness);
+        expect(await slider[2].getMaxValue()).toBe(ToolSettingsConst.MAX_EMISSIONS_PER_SECOND);
+    });
 
-      expect(await slider[0].getValue()).toBe(setValue);
-  });
+    it('should be able to set value of area slider', async () => {
+        const setValue = 33;
+        const slider = await loader.getAllHarnesses(MatSliderHarness);
+        expect(await slider[0].getValue()).toBe(DEFAULT_VALUE_AREA_SLIDER);
 
-  it('should be able to set value of droplets slider', async () => {
-      const setValue = 4.1;
-      const slider = await loader.getAllHarnesses(MatSliderHarness);
-      expect(await slider[1].getValue()).toBe(DEFAULT_VALUE_DROPLETS_SLIDER);
+        await slider[0].setValue(setValue);
 
-      await slider[1].setValue(setValue);
+        expect(await slider[0].getValue()).toBe(setValue);
+    });
 
-      expect(await slider[1].getValue()).toBe(setValue);
-  });
+    it('should be able to set value of droplets slider', async () => {
+        const setValue = 4.5;
+        const slider = await loader.getAllHarnesses(MatSliderHarness);
+        expect(await slider[1].getValue()).toBe(DEFAULT_VALUE_DROPLETS_SLIDER);
 
-  it('should be able to set value of emissions slider', async () => {
-    const setValue = 98;
-    const slider = await loader.getAllHarnesses(MatSliderHarness);
-    expect(await slider[2].getValue()).toBe(DEFAULT_VALUE_EMISSIONS_SLIDER);
+        await slider[1].setValue(setValue);
 
-    await slider[2].setValue(setValue);
+        expect(await slider[1].getValue()).toBe(setValue);
+    });
 
-    expect(await slider[2].getValue()).toBe(setValue);
-});
+    it('should be able to set value of emissions slider', async () => {
+        const setValue = 98;
+        const slider = await loader.getAllHarnesses(MatSliderHarness);
+        expect(await slider[2].getValue()).toBe(DEFAULT_VALUE_EMISSIONS_SLIDER);
+
+        await slider[2].setValue(setValue);
+
+        expect(await slider[2].getValue()).toBe(setValue);
+    });
 });

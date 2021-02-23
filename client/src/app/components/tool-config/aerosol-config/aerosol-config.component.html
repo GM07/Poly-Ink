@@ -10,7 +10,7 @@
 
     <h5 class="textFormat">Diamètre des goutelettes</h5>
     <div class="textFormatForSlider">
-        <mat-slider min="{{ MIN_DROPLETS }}" max="{{ MAX_DROPLETS }}" step="0.1" [(ngModel)]="aerosolService.dropletDiameter" thumbLabel [displayWith]="sliderLabel"> </mat-slider>
+        <mat-slider min="{{ MIN_DROPLETS }}" max="{{ MAX_DROPLETS }}" step="0.5" [(ngModel)]="aerosolService.dropletDiameter" thumbLabel [displayWith]="sliderLabel"> </mat-slider>
         {{ aerosolService.dropletDiameter }}px
     </div>
     <mat-divider></mat-divider>
