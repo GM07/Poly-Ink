@@ -186,7 +186,7 @@ export class RectangleSelectionService extends Tool {
     }
 
     protected fillBackground(baseCtx: CanvasRenderingContext2D): void{
-      baseCtx.fillRect(this.mouseDownCoord.x, this.mouseDownCoord.y, this.width, this.height); // Tester
+      baseCtx.fillRect(this.mouseDownCoord.x, this.mouseDownCoord.y, this.width, this.height);
     }
 
     protected getTranslation(mousePos: Vec2): Vec2 {
