@@ -1,7 +1,6 @@
 import { Component, HostListener } from '@angular/core';
-import { ShortcutKey } from '@app/classes/shortcut-key';
-import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
+import { PopupHandlerService } from '@app/services/popups/popup-handler.service';
 
 @Component({
     selector: 'app-canvas-reset',
@@ -9,31 +8,29 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
     styleUrls: ['./canvas-reset.component.scss'],
 })
 export class NewDrawingComponent {
-    private shortcut: ShortcutKey;
 
-    constructor(private newDrawing: NewDrawingService, private shortcutHandler: ShortcutHandlerService) {
-        this.shortcut = new ShortcutKey('o', true);
+    constructor(private popupHandlerService: PopupHandlerService, private shortcutHandler: ShortcutHandlerService) {
     }
 
-    removeWarning(): void {
-        this.newDrawing.showWarning = false;
-        this.shortcutHandler.blockShortcuts = false;
+    removePopup(): void {
+        this.popupHandlerService.removeNewDrawingPopup();
     }
 
-    showWarning(): boolean {
-        return this.newDrawing.showWarning;
+    showPopup(): boolean {
+        return this.popupHandlerService.showNewDrawingPopup();
     }
 
     createNewDrawing(confirm: boolean): void {
-        this.removeWarning();
-        this.newDrawing.newCanvas(confirm);
+        this.popupHandlerService.removeNewDrawingPopup();
+        this.popupHandlerService.newDrawing.newCanvas(confirm);
     }
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
-        if (this.shortcut.equals(event)) {
+        if (this.popupHandlerService.newDrawing.shortcut.equals(event)) {
             event.preventDefault();
-            this.newDrawing.newCanvas();
+            this.popupHandlerService.newDrawing.newCanvas();
+            console.log('new drawing');
             this.shortcutHandler.blockShortcuts = true;
         }
     }
