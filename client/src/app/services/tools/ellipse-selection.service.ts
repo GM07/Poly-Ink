@@ -84,16 +84,23 @@ export class EllipseSelectionService extends RectangleSelectionService {
     baseCtx.fill();
   }
 
-  protected drawPreview(ctx: CanvasRenderingContext2D, rectangleCoords : Vec2, left: number, top: number): void {
+  protected updateSelection(translation: Vec2): void {
+    if (this.selectionCtx === null) return;
+
+    const ctx = this.drawingService.previewCtx;
+    this.drawingService.clearCanvas(ctx);
+    const left = this.selectionCoords.x + translation.x;
+    const top = this.selectionCoords.y + translation.y;
+    const rectangleCoords = { x: this.mouseDownCoord.x + translation.x, y: this.mouseDownCoord.y + translation.y } as Vec2;
+
     ctx.beginPath();
     ctx.save();
     ctx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
     ctx.clip();
-    ctx.drawImage(this.selectionData, 0, 0, this.width, this.height, left, top, this.width, this.height);
+    ctx.drawImage(this.SELECTION_DATA, 0, 0, this.width, this.height, left, top, this.width, this.height);
     this.drawSelection(ctx, rectangleCoords);
     ctx.restore();
     this.drawRectanglePerimeter(ctx, this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs);
-
   }
 
   protected endSelection(): void {
@@ -106,7 +113,7 @@ export class EllipseSelectionService extends RectangleSelectionService {
     baseCtx.save();
     baseCtx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
     baseCtx.clip();
-    baseCtx.drawImage(this.selectionData, 0, 0, this.width, this.height, this.selectionCoords.x, this.selectionCoords.y, this.width, this.height);
+    baseCtx.drawImage(this.SELECTION_DATA, 0, 0, this.width, this.height, this.selectionCoords.x, this.selectionCoords.y, this.width, this.height);
     baseCtx.restore();
     this.drawingService.clearCanvas(this.drawingService.previewCtx);
     this.selectionCtx = null;
