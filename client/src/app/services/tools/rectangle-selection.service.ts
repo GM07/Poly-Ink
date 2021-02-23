@@ -49,7 +49,7 @@ export class RectangleSelectionService extends Tool {
             } else {
                 this.endSelection();
                 this.mouseDownCoord = mousePos;
-                this.mouseUpCoord = this.mouseDownCoord;
+                this.mouseUpCoord = mousePos;
                 this.drawPreviewSelection(this.drawingService.previewCtx);
             }
         }
@@ -68,8 +68,6 @@ export class RectangleSelectionService extends Tool {
                 this.updateSelection(translation);
                 this.selectionCoords.x += translation.x;
                 this.selectionCoords.y += translation.y;
-                this.mouseDownCoord.x += translation.x;
-                this.mouseDownCoord.y += translation.y;
             }
         }
         this.mouseDown = false;
@@ -198,7 +196,7 @@ export class RectangleSelectionService extends Tool {
     }
 
     protected fillBackground(baseCtx: CanvasRenderingContext2D): void {
-        baseCtx.fillRect(this.mouseDownCoord.x, this.mouseDownCoord.y, this.width, this.height);
+        baseCtx.fillRect(this.selectionCoords.x, this.selectionCoords.y, Math.abs(this.width), Math.abs(this.height));
     }
 
     protected getTranslation(mousePos: Vec2): Vec2 {
@@ -212,9 +210,9 @@ export class RectangleSelectionService extends Tool {
         this.drawingService.clearCanvas(ctx);
         const left = this.selectionCoords.x + translation.x;
         const top = this.selectionCoords.y + translation.y;
-        const rectangleCoords = { x: this.mouseDownCoord.x + translation.x, y: this.mouseDownCoord.y + translation.y } as Vec2;
+        const rectangleCoords = { x: this.selectionCoords.x + translation.x, y: this.selectionCoords.y + translation.y } as Vec2;
         ctx.drawImage(this.SELECTION_DATA, left, top);
-        this.drawSelection(ctx, rectangleCoords, this.width, this.height);
+        this.drawSelection(ctx, rectangleCoords, Math.abs(this.width), Math.abs(this.height));
     }
 
     protected updateDrawingSelection(): void {
