@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ShortcutKey } from '@app/classes/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { AerosolToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -29,7 +30,7 @@ export class AerosolService extends Tool {
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
-        this.shortcutKey = AerosolToolConstants.SHORTCUT_KEY;
+        this.shortcutKey = new ShortcutKey(AerosolToolConstants.SHORTCUT_KEY);
     }
 
     stopDrawing(): void {
