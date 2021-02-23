@@ -15,7 +15,8 @@ export class RectangleSelectionService extends Tool {
     protected readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
     protected readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
     protected mouseUpCoord: Vec2;
-    protected selectionCoord: Vec2;
+    protected translationOrigin: Vec2;
+    protected selectionCoords: Vec2;
     protected shiftPressed: boolean;
     protected width: number;
     protected height: number;
@@ -28,6 +29,7 @@ export class RectangleSelectionService extends Tool {
         this.toolID = RectangleSelectionToolConstants.TOOL_ID;
         this.selectionData = document.createElement('canvas');
         this.selectionCtx = null;
+        this.selectionCoords = { x: 0, y: 0 } as Vec2;
     }
 
     stopDrawing(): void {
@@ -42,7 +44,7 @@ export class RectangleSelectionService extends Tool {
         if (this.mouseDown) {
             const mousePos = this.getPositionFromMouse(event);
             if (this.isInSelection(event)) {
-                this.selectionCoord = mousePos;
+                this.translationOrigin = mousePos;
             } else {
                 this.endSelection();
                 this.mouseDownCoord = mousePos;
@@ -63,6 +65,8 @@ export class RectangleSelectionService extends Tool {
             } else {
                 const translation = this.getTranslation(this.mouseUpCoord);
                 this.updateSelection(translation);
+                this.selectionCoords.x += translation.x;
+                this.selectionCoords.y += translation.y;
                 this.mouseDownCoord.x += translation.x;
                 this.mouseDownCoord.y += translation.y;
             }
@@ -140,25 +144,10 @@ export class RectangleSelectionService extends Tool {
     isInSelection(event: MouseEvent): boolean {
         if (this.selectionCtx === null) return false;
 
-        let left: number;
-        let right: number;
-        let top: number;
-        let bottom: number;
-        if (this.mouseDownCoord.x < this.mouseDownCoord.x + this.width) {
-            left = this.mouseDownCoord.x;
-            right = this.mouseDownCoord.x + this.width;
-        } else {
-            left = this.mouseDownCoord.x + this.width;
-            right = this.mouseDownCoord.x;
-        }
-
-        if (this.mouseDownCoord.y < this.mouseDownCoord.y + this.height) {
-            top = this.mouseDownCoord.y;
-            bottom = this.mouseDownCoord.y + this.height;
-        } else {
-            top = this.mouseDownCoord.y + this.height;
-            bottom = this.mouseDownCoord.y;
-        }
+        const left = this.selectionCoords.x;
+        const right = this.selectionCoords.x + Math.abs(this.width);
+        const top = this.selectionCoords.y;
+        const bottom = this.selectionCoords.y + Math.abs(this.height);
 
         const currentPos = this.getPositionFromMouse(event);
         return !(currentPos.x <= left || currentPos.x >= right || currentPos.y <= top || currentPos.y >= bottom);
@@ -167,11 +156,11 @@ export class RectangleSelectionService extends Tool {
     protected endSelection(): void {
         if (this.selectionCtx === null) return;
         const baseCtx = this.drawingService.baseCtx;
-        const imageDataCoords = this.getImageDataCoords();
 
-        baseCtx.drawImage(this.selectionData,0,0,this.width,this.height, imageDataCoords.x, imageDataCoords.y,this.width, this.height);
+        baseCtx.drawImage(this.selectionData,0,0,this.width,this.height, this.selectionCoords.x, this.selectionCoords.y,this.width, this.height);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.selectionCtx = null;
+        this.selectionCoords = { x: 0, y: 0 } as Vec2;
     }
 
     protected startSelection(): void {
@@ -180,12 +169,13 @@ export class RectangleSelectionService extends Tool {
         this.selectionData.width = this.width;
         this.selectionData.height = this.height;
         this.selectionCtx = this.selectionData.getContext('2d');
+        this.selectionCoords.x = Math.min(this.mouseDownCoord.x, this.mouseDownCoord.x + this.width);
+        this.selectionCoords.y = Math.min(this.mouseDownCoord.y, this.mouseDownCoord.y + this.height);
         if(this.selectionCtx !== null){
-          this.selectionCtx.drawImage(this.drawingService.canvas, this.mouseDownCoord.x, this.mouseDownCoord.y, this.width, this.height, 0, 0, this.width, this.height);
+          this.selectionCtx.drawImage(this.drawingService.canvas, this.selectionCoords.x, this.selectionCoords.y, this.width, this.height, 0, 0, this.width, this.height);
 
           const previewCtx = this.drawingService.previewCtx;
-          const imageDataCoords = this.getImageDataCoords();
-          previewCtx.drawImage(this.selectionData, 0,0,this.width,this.height,imageDataCoords.x, imageDataCoords.y, this.width,this.height);
+          previewCtx.drawImage(this.selectionData, 0,0,this.width,this.height,this.selectionCoords.x, this.selectionCoords.y, this.width,this.height);
 
           this.drawPreviewSelection(previewCtx);
           baseCtx.fillStyle = 'red';
@@ -196,7 +186,7 @@ export class RectangleSelectionService extends Tool {
     }
 
     protected getTranslation(mousePos: Vec2): Vec2 {
-        return { x: mousePos.x - this.selectionCoord.x, y: mousePos.y - this.selectionCoord.y } as Vec2;
+        return { x: mousePos.x - this.translationOrigin.x, y: mousePos.y - this.translationOrigin.y } as Vec2;
     }
 
     protected updateSelection(translation: Vec2): void {
@@ -204,18 +194,11 @@ export class RectangleSelectionService extends Tool {
 
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
-        let imageDataCoords = this.getImageDataCoords();
-        imageDataCoords.x += translation.x;
-        imageDataCoords.y += translation.y;
-        ctx.drawImage(this.selectionData, 0,0,this.width,this.height,imageDataCoords.x, imageDataCoords.y,this.width,this.height);
+        const left = this.selectionCoords.x + translation.x;
+        const top = this.selectionCoords.y + translation.y;
+        ctx.drawImage(this.selectionData, 0,0,this.width,this.height, left, top,this.width,this.height);
         const rectangleCoords = { x: this.mouseDownCoord.x + translation.x, y: this.mouseDownCoord.y + translation.y } as Vec2;
         this.drawSelection(ctx, rectangleCoords);
-    }
-
-    protected getImageDataCoords(): Vec2 {
-        const x = Math.min(this.mouseDownCoord.x, this.mouseDownCoord.x + this.width);
-        const y = Math.min(this.mouseDownCoord.y, this.mouseDownCoord.y + this.height);
-        return { x: x, y: y } as Vec2;
     }
 
     protected updateDrawingSelection(): void {
