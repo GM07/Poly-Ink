@@ -180,9 +180,13 @@ export class RectangleSelectionService extends Tool {
           this.drawPreviewSelection(previewCtx);
           baseCtx.fillStyle = 'red';
           baseCtx.beginPath();
-          baseCtx.fillRect(this.mouseDownCoord.x, this.mouseDownCoord.y, this.width, this.height); // Tester
+          this.fillBackground(baseCtx);
           baseCtx.closePath();
         }
+    }
+
+    protected fillBackground(baseCtx: CanvasRenderingContext2D): void{
+      baseCtx.fillRect(this.mouseDownCoord.x, this.mouseDownCoord.y, this.width, this.height); // Tester
     }
 
     protected getTranslation(mousePos: Vec2): Vec2 {
@@ -196,9 +200,13 @@ export class RectangleSelectionService extends Tool {
         this.drawingService.clearCanvas(ctx);
         const left = this.selectionCoords.x + translation.x;
         const top = this.selectionCoords.y + translation.y;
-        ctx.drawImage(this.selectionData, 0,0,this.width,this.height, left, top,this.width,this.height);
         const rectangleCoords = { x: this.mouseDownCoord.x + translation.x, y: this.mouseDownCoord.y + translation.y } as Vec2;
-        this.drawSelection(ctx, rectangleCoords);
+        this.drawPreview(ctx, rectangleCoords, left, top);
+    }
+
+    protected drawPreview(ctx: CanvasRenderingContext2D, rectangleCoords : Vec2, left: number, top: number) : void{
+      ctx.drawImage(this.selectionData, 0,0,this.width,this.height, left, top,this.width,this.height);
+      this.drawSelection(ctx, rectangleCoords);
     }
 
     protected updateDrawingSelection(): void {
