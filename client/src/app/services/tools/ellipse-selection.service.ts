@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { ShortcutKey } from '@app/classes/shortcut-key';
 import { EllipseSelectionToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
+import { DrawingService } from '@app/services/drawing/drawing.service';
+import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { DrawingService } from '../drawing/drawing.service';
-import { RectangleSelectionService } from './rectangle-selection.service';
 
 @Injectable({
     providedIn: 'root',
 })
-export class EllipseSelectionService extends RectangleSelectionService {
+export class EllipseSelectionService extends AbstractSelectionService {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(EllipseSelectionToolConstants.SHORTCUT_KEY);
@@ -43,10 +43,10 @@ export class EllipseSelectionService extends RectangleSelectionService {
         this.radiusXAbs = Math.abs(radiusX);
         this.radiusYAbs = Math.abs(radiusY);
 
-        this.drawEllipseSelection(ctx, this.centerX, this.centerY);
+        this.drawSelection(ctx, { x: this.centerX, y: this.centerY }, this.radiusXAbs, this.radiusYAbs);
     }
 
-    protected drawEllipseSelection(ctx: CanvasRenderingContext2D, centerX: number, centerY: number) {
+    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, width: number, height: number): void {
         ctx.beginPath();
 
         ctx.lineWidth = 2;
@@ -55,7 +55,7 @@ export class EllipseSelectionService extends RectangleSelectionService {
         ctx.lineJoin = 'round' as CanvasLineJoin;
 
         ctx.strokeStyle = 'black';
-        ctx.ellipse(centerX, centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+        ctx.ellipse(position.x, position.y, width, height, 0, 0, 2 * Math.PI);
         ctx.stroke();
 
         ctx.closePath();
@@ -63,7 +63,7 @@ export class EllipseSelectionService extends RectangleSelectionService {
 
         ctx.lineDashOffset = this.LINE_DASH;
         ctx.strokeStyle = 'white';
-        ctx.ellipse(centerX, centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+        ctx.ellipse(position.x, position.y, width, height, 0, 0, 2 * Math.PI);
         ctx.stroke();
 
         ctx.lineDashOffset = 0;
@@ -71,7 +71,7 @@ export class EllipseSelectionService extends RectangleSelectionService {
 
         ctx.closePath();
 
-        this.drawRectanglePerimeter(ctx, centerX, centerY, this.radiusXAbs, this.radiusYAbs);
+        this.drawRectanglePerimeter(ctx, position.x, position.y, width, height);
     }
 
     private drawRectanglePerimeter(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, radiusX: number, radiusY: number): void {
@@ -113,11 +113,11 @@ export class EllipseSelectionService extends RectangleSelectionService {
 
         ctx.beginPath();
         ctx.save();
-        ctx.ellipse(centerX, centerY, this.radiusXAbs+ctx.lineWidth, this.radiusYAbs+ctx.lineWidth, 0, 0, 2 * Math.PI);
+        ctx.ellipse(centerX, centerY, this.radiusXAbs + ctx.lineWidth, this.radiusYAbs + ctx.lineWidth, 0, 0, 2 * Math.PI);
         ctx.clip();
         ctx.drawImage(this.SELECTION_DATA, left, top);
         ctx.restore();
-        this.drawEllipseSelection(ctx, centerX, centerY);
+        this.drawSelection(ctx, { x: centerX, y: centerY }, this.radiusXAbs, this.radiusYAbs);
     }
 
     protected endSelection(): void {
@@ -130,7 +130,7 @@ export class EllipseSelectionService extends RectangleSelectionService {
 
         baseCtx.beginPath();
         baseCtx.save();
-        baseCtx.ellipse(centerX, centerY, this.radiusXAbs+baseCtx.lineWidth, this.radiusYAbs+baseCtx.lineWidth, 0, 0, 2 * Math.PI);
+        baseCtx.ellipse(centerX, centerY, this.radiusXAbs + baseCtx.lineWidth, this.radiusYAbs + baseCtx.lineWidth, 0, 0, 2 * Math.PI);
         baseCtx.clip();
         baseCtx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         baseCtx.restore();
