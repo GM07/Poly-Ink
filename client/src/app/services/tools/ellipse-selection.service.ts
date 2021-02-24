@@ -25,24 +25,6 @@ export class EllipseSelectionService extends RectangleSelectionService {
         this.toolID = EllipseSelectionToolConstants.TOOL_ID;
     }
 
-    // private updateSize(width: number, height: number, x: number, y: number) {
-    //     let radiusX: number = width / 2;
-    //     let radiusY: number = height / 2;
-    //     this.centerX = x + radiusX;
-    //     this.centerY = y + radiusY;
-
-    //     if (this.shiftPressed) {
-    //         const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
-    //         this.centerX = x + Math.sign(radiusX) * minRadius;
-    //         this.centerY = y + Math.sign(radiusY) * minRadius;
-    //         radiusX = minRadius;
-    //         radiusY = minRadius;
-    //     }
-
-    //     this.radiusXAbs = Math.abs(radiusX);
-    //     this.radiusYAbs = Math.abs(radiusY);
-    // }
-
     protected drawPreviewSelection(ctx: CanvasRenderingContext2D): void {
         this.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
         this.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
@@ -66,10 +48,6 @@ export class EllipseSelectionService extends RectangleSelectionService {
     }
 
     protected drawEllipseSelection(ctx: CanvasRenderingContext2D, centerX: number, centerY: number) {
-        if (ctx === this.drawingService.previewCtx) {
-            this.drawRectanglePerimeter(ctx, centerX, centerY, this.radiusXAbs, this.radiusYAbs);
-        }
-
         ctx.beginPath();
 
         ctx.lineWidth = 2;
@@ -93,15 +71,17 @@ export class EllipseSelectionService extends RectangleSelectionService {
         ctx.setLineDash([]);
 
         ctx.closePath();
+
+        this.drawRectanglePerimeter(ctx, centerX, centerY, this.radiusXAbs, this.radiusYAbs);
     }
 
     private drawRectanglePerimeter(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, radiusX: number, radiusY: number): void {
         const lineWidth = 2;
         ctx.lineWidth = lineWidth;
-        const x = centerX - radiusX - lineWidth / 2;
-        const y = centerY - radiusY - lineWidth / 2;
-        const width = radiusX * 2 + lineWidth;
-        const height = radiusY * 2 + lineWidth;
+        const x = centerX - radiusX;
+        const y = centerY - radiusY;
+        const width = radiusX * 2;
+        const height = radiusY * 2;
 
         ctx.strokeStyle = 'blue';
         ctx.beginPath();
@@ -110,9 +90,14 @@ export class EllipseSelectionService extends RectangleSelectionService {
         ctx.closePath();
     }
 
-    protected fillBackground(baseCtx: CanvasRenderingContext2D): void {
-        baseCtx.ellipse(this.centerX, this.centerY, this.radiusXAbs-1, this.radiusYAbs-1, 0, 0, 2 * Math.PI);
-        baseCtx.fill();
+    protected fillBackground(ctx: CanvasRenderingContext2D, currentPosX: number, currentPosY: number): void {
+        if (this.firstSelectionCoords.x !== currentPosX || this.firstSelectionCoords.y !== currentPosY) {
+            ctx.beginPath();
+            ctx.fillStyle = 'red';
+            ctx.ellipse(this.centerX, this.centerY, Math.max(0, this.radiusXAbs), Math.max(0, this.radiusYAbs), 0, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.closePath();
+        }
     }
 
     protected updateSelection(translation: Vec2): void {
@@ -124,6 +109,8 @@ export class EllipseSelectionService extends RectangleSelectionService {
         const top = this.selectionCoords.y + translation.y;
         const centerX = left + this.radiusXAbs;
         const centerY = top + this.radiusYAbs;
+
+        this.fillBackground(ctx, left, top);
 
         ctx.beginPath();
         ctx.save();
@@ -139,6 +126,8 @@ export class EllipseSelectionService extends RectangleSelectionService {
         const baseCtx = this.drawingService.baseCtx;
         const centerX = this.selectionCoords.x + this.radiusXAbs;
         const centerY = this.selectionCoords.y + this.radiusYAbs;
+
+        this.fillBackground(baseCtx, this.selectionCoords.x, this.selectionCoords.y);
 
         baseCtx.beginPath();
         baseCtx.save();

@@ -18,6 +18,7 @@ export class RectangleSelectionService extends Tool {
 
     protected mouseUpCoord: Vec2;
     protected translationOrigin: Vec2;
+    protected firstSelectionCoords: Vec2;
     protected selectionCoords: Vec2;
     protected shiftPressed: boolean;
     protected width: number;
@@ -156,6 +157,8 @@ export class RectangleSelectionService extends Tool {
         if (this.selectionCtx === null) return;
         const baseCtx = this.drawingService.baseCtx;
 
+        this.fillBackground(baseCtx, this.selectionCoords.x, this.selectionCoords.y);
+
         baseCtx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.selectionCtx = null;
@@ -164,17 +167,19 @@ export class RectangleSelectionService extends Tool {
 
     protected startSelection(): void {
         if (this.width === 0 || this.height === 0) return;
-        const baseCtx = this.drawingService.baseCtx;
+        //const baseCtx = this.drawingService.baseCtx;
         this.SELECTION_DATA.width = Math.abs(this.width);
         this.SELECTION_DATA.height = Math.abs(this.height);
         this.selectionCtx = this.SELECTION_DATA.getContext('2d') as CanvasRenderingContext2D;
-        this.selectionCoords.x = Math.min(this.mouseDownCoord.x, this.mouseDownCoord.x + this.width);
-        this.selectionCoords.y = Math.min(this.mouseDownCoord.y, this.mouseDownCoord.y + this.height);
+        const x = Math.min(this.mouseDownCoord.x, this.mouseDownCoord.x + this.width);
+        const y = Math.min(this.mouseDownCoord.y, this.mouseDownCoord.y + this.height);
+        this.selectionCoords = { x: x, y: y } as Vec2;
+        this.firstSelectionCoords = { x: x, y: y } as Vec2;
 
         this.selectionCtx.drawImage(
             this.drawingService.canvas,
-            this.selectionCoords.x,
-            this.selectionCoords.y,
+            x,
+            y,
             Math.abs(this.width),
             Math.abs(this.height),
             0,
@@ -184,21 +189,24 @@ export class RectangleSelectionService extends Tool {
         );
 
         const previewCtx = this.drawingService.previewCtx;
-        previewCtx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
+        previewCtx.drawImage(this.SELECTION_DATA, x, y);
 
         this.drawPreviewSelection(previewCtx);
-        baseCtx.fillStyle = 'red';
-        baseCtx.beginPath();
-        this.fillBackground(baseCtx);
-        baseCtx.closePath();
+        //baseCtx.fillStyle = 'red';
+
+        //this.fillBackground(baseCtx);
     }
 
-    protected fillBackground(baseCtx: CanvasRenderingContext2D): void {
-        baseCtx.fillRect(this.selectionCoords.x, this.selectionCoords.y, Math.abs(this.width), Math.abs(this.height));
+    protected fillBackground(ctx: CanvasRenderingContext2D, currentPosX: number, currentPosY: number): void {
+        if (this.firstSelectionCoords.x !== currentPosX || this.firstSelectionCoords.y !== currentPosY) {
+            ctx.beginPath();
+            ctx.fillStyle = 'red';
+            ctx.fillRect(this.firstSelectionCoords.x, this.firstSelectionCoords.y, Math.abs(this.width), Math.abs(this.height));
+            ctx.closePath();
+        }
     }
 
     protected getTranslation(mousePos: Vec2): Vec2 {
-        //console.log('mpos', mousePos, 'origin', this.translationOrigin);
         return { x: mousePos.x - this.translationOrigin.x, y: mousePos.y - this.translationOrigin.y } as Vec2;
     }
 
@@ -209,6 +217,9 @@ export class RectangleSelectionService extends Tool {
         this.drawingService.clearCanvas(ctx);
         const left = this.selectionCoords.x + translation.x;
         const top = this.selectionCoords.y + translation.y;
+
+        this.fillBackground(ctx, left, top);
+
         const rectangleCoords = { x: this.selectionCoords.x + translation.x, y: this.selectionCoords.y + translation.y } as Vec2;
         ctx.drawImage(this.SELECTION_DATA, left, top);
         this.drawSelection(ctx, rectangleCoords, Math.abs(this.width), Math.abs(this.height));
