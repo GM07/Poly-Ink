@@ -21,8 +21,8 @@ const DEGREES = 360;
 export class AerosolService extends Tool {
     toolID: string = AerosolToolConstants.TOOL_ID;
 
-    private areaDiameterIn: number;
     private dropletDiameterIn: number;
+    private areaDiameterIn: number;
     sprayIntervalID: number;
     private nDropletsPerSpray: number;
     private emissionsPerSecondIn: number;
@@ -31,9 +31,9 @@ export class AerosolService extends Tool {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(AerosolToolConstants.SHORTCUT_KEY);
-        this.areaDiameterIn = ToolSettingsConst.DEFAULT_AEROSOL_AREA_DIAMETER;
         this.nDropletsPerSpray = ToolSettingsConst.DEFAULT_AEROSOL_AREA_DIAMETER;
         this.dropletDiameterIn = ToolSettingsConst.MIN_DROPLETS_WIDTH;
+        this.areaDiameterIn = ToolSettingsConst.DEFAULT_AEROSOL_AREA_DIAMETER;
         this.emissionsPerSecondIn = ToolSettingsConst.DEFAULT_AEROSOL_EMISSIONS_PER_SECOND;
     }
 
@@ -139,7 +139,7 @@ export class AerosolService extends Tool {
 
     randomDroplet(): Vec2 {
         const randAngle = Math.random() * DEGREES;
-        const randRadius = (Math.random() * this.areaDiameter) / 2;
+        const randRadius = (Math.random() * (this.areaDiameter - this.dropletDiameter)) / 2;
 
         return {
             x: Math.cos(randAngle) * randRadius,
