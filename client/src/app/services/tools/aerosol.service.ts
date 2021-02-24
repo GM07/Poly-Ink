@@ -90,7 +90,7 @@ export class AerosolService extends Tool {
     onMouseMove(event: MouseEvent): void {
         if (this.mouseDown) {
             this.mousePosition = this.getPositionFromMouse(event);
-        } 
+        }
     }
 
     onMouseLeave(event: MouseEvent): void {
@@ -113,11 +113,11 @@ export class AerosolService extends Tool {
     sprayContinuously(ctx: CanvasRenderingContext2D): void {
         const self = this;
         this.sprayIntervalID = window.setInterval(() => {
-            self.drawSpray(self.drawingService.previewCtx, this.mousePosition);
+            self.drawSpray(self.drawingService.previewCtx);
         }, MS_PER_SECOND / this.emissionsPerSecondIn);
     }
 
-    drawSpray(ctx: CanvasRenderingContext2D, mousePosition: Vec2): void {
+    drawSpray(ctx: CanvasRenderingContext2D): void {
         ctx.beginPath();
         ctx.fillStyle = this.colorService.primaryRgba;
         ctx.strokeStyle = this.colorService.primaryRgba;
@@ -128,9 +128,9 @@ export class AerosolService extends Tool {
         for (let i = 0; i < this.nDropletsPerSpray; i++) {
             const randOffset: Vec2 = this.randomDroplet();
 
-            const randX: number = mousePosition.x + randOffset.x;
-            const randY: number = mousePosition.y + randOffset.y;
-            ctx.arc(randX, randY, this.dropletDiameter, 0, 2 * Math.PI);
+            const randX: number = this.mousePosition.x + randOffset.x;
+            const randY: number = this.mousePosition.y + randOffset.y;
+            ctx.arc(randX, randY, this.dropletDiameter / 2, 0, 2 * Math.PI);
             ctx.fill();
             ctx.beginPath();
             ctx.stroke();
