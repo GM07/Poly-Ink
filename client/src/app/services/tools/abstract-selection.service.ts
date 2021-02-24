@@ -241,7 +241,7 @@ export abstract class AbstractSelectionService extends Tool {
         return { x: mousePos.x - this.translationOrigin.x, y: mousePos.y - this.translationOrigin.y } as Vec2;
     }
 
-    protected updateDrawingSelection(): void {
+    private updateDrawingSelection(): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
         this.drawPreviewSelection(ctx);
