@@ -17,7 +17,7 @@
     
     <h5 class="textFormat">Émissions par seconde</h5>
     <div class="textFormatForSlider">
-        <mat-slider min="{{ MIN_EMISSIONS_PER_SECOND }}" max="{{ MAX_EMISSIONS_PER_SECOND }}" step="1" [(ngModel)]="aerosolService.emissionsPerSecond" thumbLabel> </mat-slider>
+        <mat-slider min="{{ MIN_EMISSIONS_PER_SECOND }}" max="{{ MAX_EMISSIONS_PER_SECOND }}" step="25" [(ngModel)]="aerosolService.emissionsPerSecond" thumbLabel> </mat-slider>
         {{ aerosolService.emissionsPerSecond }}
     </div>
 </div>
