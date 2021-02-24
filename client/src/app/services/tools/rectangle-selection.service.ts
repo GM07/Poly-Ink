@@ -163,10 +163,10 @@ export class RectangleSelectionService extends Tool {
 
     private moveSelection(x: number, y: number): void {
         if (this.translationOrigin === undefined) this.translationOrigin = { x: 0, y: 0 };
-        this.translationOrigin.x += x;
-        this.translationOrigin.y += y;
-        this.updateSelection(this.translationOrigin);
-    }
+        this.updateSelection(this.getTranslation({x: this.translationOrigin.x+x, y:this.translationOrigin.y + y} as Vec2));
+        this.selectionCoords.x += x;
+        this.selectionCoords.y += y;
+      }
 
     selectAll(): void {
         this.stopDrawing();
@@ -195,7 +195,7 @@ export class RectangleSelectionService extends Tool {
         if (this.selectionCtx === null) return;
         const baseCtx = this.drawingService.baseCtx;
 
-        baseCtx.drawImage(this.SELECTION_DATA, this.selectionCoords.x + this.translationOrigin.x, this.selectionCoords.y + this.translationOrigin.y);
+        baseCtx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.selectionCtx = null;
 
@@ -257,7 +257,7 @@ export class RectangleSelectionService extends Tool {
         const rectangleCoords = { x: this.selectionCoords.x + translation.x, y: this.selectionCoords.y + translation.y } as Vec2;
         ctx.drawImage(this.SELECTION_DATA, left, top);
         this.drawSelection(ctx, rectangleCoords, Math.abs(this.width), Math.abs(this.height));
-    }
+      }
 
     protected updateDrawingSelection(): void {
         const ctx = this.drawingService.previewCtx;
