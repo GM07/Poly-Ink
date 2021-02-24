@@ -14,6 +14,10 @@ export class RectangleSelectionService extends Tool {
     protected readonly LINE_DASH: number = 8;
     protected readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
     protected readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
+    protected readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
+    protected readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
+    protected readonly DOWN_ARROW: ShortcutKey = new ShortcutKey('arrowdown');
+    protected readonly UP_ARROW: ShortcutKey = new ShortcutKey('arrowup');
     protected readonly SELECTION_DATA: HTMLCanvasElement;
 
     protected mouseUpCoord: Vec2;
@@ -24,6 +28,10 @@ export class RectangleSelectionService extends Tool {
     protected width: number;
     protected height: number;
     protected selectionCtx: CanvasRenderingContext2D | null;
+    protected isLeftArrowDown: boolean;
+    protected isRightArrowDown: boolean;
+    protected isUpArrowDown: boolean;
+    protected isDownArrowDown: boolean;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
@@ -32,6 +40,10 @@ export class RectangleSelectionService extends Tool {
         this.SELECTION_DATA = document.createElement('canvas');
         this.selectionCtx = null;
         this.selectionCoords = { x: 0, y: 0 } as Vec2;
+        this.isLeftArrowDown = false;
+        this.isRightArrowDown = false;
+        this.isUpArrowDown = false;
+        this.isDownArrowDown = false;
     }
 
     stopDrawing(): void {
@@ -119,6 +131,20 @@ export class RectangleSelectionService extends Tool {
                 this.updateDrawingSelection();
             }
         }
+        if (this.selectionCtx !== null) {
+            const PIXELS = 3;
+            if (this.RIGHT_ARROW.equals(event) || this.LEFT_ARROW.equals(event) || this.UP_ARROW.equals(event) || this.DOWN_ARROW.equals(event)) {
+                event.preventDefault();
+                if (this.RIGHT_ARROW.equals(event)) this.isRightArrowDown = true;
+                if (this.LEFT_ARROW.equals(event)) this.isLeftArrowDown = true;
+                if (this.UP_ARROW.equals(event)) this.isUpArrowDown = true;
+                if (this.DOWN_ARROW.equals(event)) this.isDownArrowDown = true;
+                this.moveSelection(
+                    (this.isRightArrowDown ? PIXELS : 0) - (this.isLeftArrowDown ? PIXELS : 0),
+                    (this.isDownArrowDown ? PIXELS : 0) - (this.isUpArrowDown ? PIXELS : 0),
+                );
+            }
+        }
     }
 
     onKeyUp(event: KeyboardEvent): void {
@@ -128,7 +154,20 @@ export class RectangleSelectionService extends Tool {
                 this.updateDrawingSelection();
             }
         }
+        if (this.selectionCtx !== null) {
+            if (this.RIGHT_ARROW.equals(event)) this.isRightArrowDown = false;
+            if (this.LEFT_ARROW.equals(event)) this.isLeftArrowDown = false;
+            if (this.UP_ARROW.equals(event)) this.isUpArrowDown = false;
+            if (this.DOWN_ARROW.equals(event)) this.isDownArrowDown = false;
+        }
     }
+
+    private moveSelection(x: number, y: number): void {
+        if (this.translationOrigin === undefined) this.translationOrigin = { x: 0, y: 0 };
+        this.updateSelection(this.getTranslation({x: this.translationOrigin.x+x, y:this.translationOrigin.y + y} as Vec2));
+        this.selectionCoords.x += x;
+        this.selectionCoords.y += y;
+      }
 
     selectAll(): void {
         this.stopDrawing();
@@ -162,7 +201,14 @@ export class RectangleSelectionService extends Tool {
         baseCtx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.selectionCtx = null;
+
         this.selectionCoords = { x: 0, y: 0 } as Vec2;
+        this.translationOrigin = { x: 0, y: 0 } as Vec2;
+
+        this.isRightArrowDown = false;
+        this.isLeftArrowDown = false;
+        this.isUpArrowDown = false;
+        this.isDownArrowDown = false;
     }
 
     protected startSelection(): void {
@@ -223,7 +269,7 @@ export class RectangleSelectionService extends Tool {
         const rectangleCoords = { x: this.selectionCoords.x + translation.x, y: this.selectionCoords.y + translation.y } as Vec2;
         ctx.drawImage(this.SELECTION_DATA, left, top);
         this.drawSelection(ctx, rectangleCoords, Math.abs(this.width), Math.abs(this.height));
-    }
+      }
 
     protected updateDrawingSelection(): void {
         const ctx = this.drawingService.previewCtx;
@@ -242,7 +288,7 @@ export class RectangleSelectionService extends Tool {
         this.drawSelection(ctx, this.mouseDownCoord, this.width, this.height);
     }
 
-    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, width: number, height: number) {
+    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, width: number, height: number): void {
         ctx.lineWidth = 2;
         ctx.setLineDash([this.LINE_DASH, this.LINE_DASH]);
         ctx.strokeStyle = 'black';

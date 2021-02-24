@@ -10,19 +10,18 @@ import { RectangleSelectionService } from './rectangle-selection.service';
     providedIn: 'root',
 })
 export class EllipseSelectionService extends RectangleSelectionService {
-    stopDrawing(): void {
-        super.stopDrawing();
+    constructor(drawingService: DrawingService, colorService: ColorService) {
+        super(drawingService, colorService);
+        this.shortcutKey = new ShortcutKey(EllipseSelectionToolConstants.SHORTCUT_KEY);
+        this.toolID = EllipseSelectionToolConstants.TOOL_ID;
     }
 
     private centerX: number;
     private centerY: number;
     private radiusXAbs: number;
     private radiusYAbs: number;
-
-    constructor(drawingService: DrawingService, colorService: ColorService) {
-        super(drawingService, colorService);
-        this.shortcutKey = new ShortcutKey(EllipseSelectionToolConstants.SHORTCUT_KEY);
-        this.toolID = EllipseSelectionToolConstants.TOOL_ID;
+    stopDrawing(): void {
+        super.stopDrawing();
     }
 
     protected drawPreviewSelection(ctx: CanvasRenderingContext2D): void {
@@ -114,7 +113,7 @@ export class EllipseSelectionService extends RectangleSelectionService {
 
         ctx.beginPath();
         ctx.save();
-        ctx.ellipse(centerX, centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+        ctx.ellipse(centerX, centerY, this.radiusXAbs+ctx.lineWidth, this.radiusYAbs+ctx.lineWidth, 0, 0, 2 * Math.PI);
         ctx.clip();
         ctx.drawImage(this.SELECTION_DATA, left, top);
         ctx.restore();
@@ -131,7 +130,7 @@ export class EllipseSelectionService extends RectangleSelectionService {
 
         baseCtx.beginPath();
         baseCtx.save();
-        baseCtx.ellipse(centerX, centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+        baseCtx.ellipse(centerX, centerY, this.radiusXAbs+baseCtx.lineWidth, this.radiusYAbs+baseCtx.lineWidth, 0, 0, 2 * Math.PI);
         baseCtx.clip();
         baseCtx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         baseCtx.restore();

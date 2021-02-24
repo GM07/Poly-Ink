@@ -26,8 +26,8 @@ import { EraserConfigComponent } from './components/tool-config/eraser-config/er
 import { LineConfigComponent } from './components/tool-config/line-config/line-config.component';
 import { PencilConfigComponent } from './components/tool-config/pencil-config/pencil-config.component';
 import { RectangleConfigComponent } from './components/tool-config/rectangle-config/rectangle-config.component';
-import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
 import { RectangleSelectionConfigComponent } from './components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
+import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
 
 @NgModule({
     declarations: [
