@@ -3,7 +3,7 @@
 
     <h5 class="textFormat">Diamètre du jet</h5>
     <div class="textFormatForSlider">
-        <mat-slider min="{{ MIN_AREA }}" max="{{ MAX_AREA }}" [(ngModel)]="aerosolService.areaDiameter" thumbLabel [displayWith]="sliderLabel"> </mat-slider>
+        <mat-slider min="{{ MIN_AREA }}" max="{{ MAX_AREA }}" step="1" [(ngModel)]="aerosolService.areaDiameter" thumbLabel [displayWith]="sliderLabel"> </mat-slider>
         {{ aerosolService.areaDiameter }}px
     </div>
     <mat-divider></mat-divider>
@@ -17,7 +17,7 @@
     
     <h5 class="textFormat">Émissions par seconde</h5>
     <div class="textFormatForSlider">
-        <mat-slider min="{{ MIN_EMISSIONS_PER_SECOND }}" max="{{ MAX_EMISSIONS_PER_SECOND }}" [(ngModel)]="aerosolService.emissionsPerSecond" thumbLabel> </mat-slider>
+        <mat-slider min="{{ MIN_EMISSIONS_PER_SECOND }}" max="{{ MAX_EMISSIONS_PER_SECOND }}" step="1" [(ngModel)]="aerosolService.emissionsPerSecond" thumbLabel> </mat-slider>
         {{ aerosolService.emissionsPerSecond }}
     </div>
 </div>

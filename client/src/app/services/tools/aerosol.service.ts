@@ -20,13 +20,13 @@ const DEGREES = 360;
 })
 export class AerosolService extends Tool {
     toolID: string = AerosolToolConstants.TOOL_ID;
-    private mousePosition: Vec2;
 
     private areaDiameterIn: number;
     private dropletDiameterIn: number;
     sprayIntervalID: number;
     private nDropletsPerSpray: number;
     private emissionsPerSecondIn: number;
+    mousePosition: Vec2;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
@@ -47,7 +47,7 @@ export class AerosolService extends Tool {
     }
 
     set areaDiameter(diameter: number) {
-        this.areaDiameterIn = Math.min(Math.max(diameter, ToolSettingsConst.MIN_WIDTH), ToolSettingsConst.MAX_WIDTH);
+        this.areaDiameterIn = Math.min(Math.max(diameter, ToolSettingsConst.MIN_AREA_WIDTH), ToolSettingsConst.MAX_WIDTH);
     }
 
     get dropletDiameter(): number {
@@ -72,18 +72,13 @@ export class AerosolService extends Tool {
     onMouseDown(event: MouseEvent): void {
         this.mouseDown = event.button === MouseButton.Left;
         if (this.mouseDown) {
-            this.mouseDownCoord = this.getPositionFromMouse(event);
-            const mousePos = this.mouseDownCoord;
-            this.sprayContinuously(this.drawingService.previewCtx, mousePos);
+            this.mousePosition = this.getPositionFromMouse(event);
+            this.sprayContinuously(this.drawingService.previewCtx);
         }
     }
 
     onMouseUp(event: MouseEvent): void {
         if (this.mouseDown) {
-            if (this.isInCanvas(event)) {
-                this.mousePosition = this.getPositionFromMouse(event);
-                this.drawSpray(this.drawingService.previewCtx, this.mousePosition);
-            }
             // Copie du preview sur le base
             this.drawingService.baseCtx.drawImage(this.drawingService.previewCtx.canvas, 0, 0);
         }
@@ -94,13 +89,8 @@ export class AerosolService extends Tool {
 
     onMouseMove(event: MouseEvent): void {
         if (this.mouseDown) {
-            window.clearInterval(this.sprayIntervalID);
-
-            const mousePos = this.getPositionFromMouse(event);
-            this.sprayContinuously(this.drawingService.previewCtx, mousePos);
-        } else {
-            this.mouseDownCoord = this.getPositionFromMouse(event);
-        }
+            this.mousePosition = this.getPositionFromMouse(event);
+        } 
     }
 
     onMouseLeave(event: MouseEvent): void {
@@ -112,7 +102,7 @@ export class AerosolService extends Tool {
         if (event.button !== MouseButton.Left) return;
 
         if (event.buttons === LeftMouse.Pressed) {
-            this.onMouseMove(event);
+            this.onMouseDown(event);
         } else if (event.buttons === LeftMouse.Released) {
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawingService.baseCtx.drawImage(this.drawingService.previewCtx.canvas, 0, 0);
@@ -120,10 +110,10 @@ export class AerosolService extends Tool {
         }
     }
 
-    sprayContinuously(ctx: CanvasRenderingContext2D, mousePosition: Vec2): void {
+    sprayContinuously(ctx: CanvasRenderingContext2D): void {
         const self = this;
         this.sprayIntervalID = window.setInterval(() => {
-            self.drawSpray(self.drawingService.previewCtx, mousePosition);
+            self.drawSpray(self.drawingService.previewCtx, this.mousePosition);
         }, MS_PER_SECOND / this.emissionsPerSecondIn);
     }
 

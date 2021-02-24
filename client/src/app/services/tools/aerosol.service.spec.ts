@@ -17,7 +17,7 @@ describe('AerosolService', () => {
     let previewCtxStub: CanvasRenderingContext2D;
     let drawSpraySpy: jasmine.Spy<any>;
     let sprayContinuouslySpy: jasmine.Spy<any>;
-    let onMouseMoveSpy: jasmine.Spy<any>;
+    let onMouseDownSpy: jasmine.Spy<any>;
 
     const ALPHA = 3;
 
@@ -38,7 +38,7 @@ describe('AerosolService', () => {
         service = TestBed.inject(AerosolService);
         drawSpraySpy = spyOn<any>(service, 'drawSpray').and.callThrough();
         sprayContinuouslySpy = spyOn<any>(service, 'sprayContinuously').and.callThrough();
-        onMouseMoveSpy = spyOn<any>(service, 'onMouseMove').and.callThrough();
+        onMouseDownSpy = spyOn<any>(service, 'onMouseDown').and.callThrough();
 
         // Configuration du spy du service
         // tslint:disable:no-string-literal
@@ -55,13 +55,6 @@ describe('AerosolService', () => {
 
     it('should be created', () => {
         expect(service).toBeTruthy();
-    });
-
-    it('mouseDown should set mouseDownCoord to correct position', () => {
-        const expectedResult: Vec2 = { x: 25, y: 25 };
-        service.onMouseDown(mouseEvent);
-        expect(service.mouseDownCoord).toEqual(expectedResult);
-        window.clearInterval(service.sprayIntervalID);
     });
 
     it('mouseDown should set mouseDown property to true on left click', () => {
@@ -81,14 +74,6 @@ describe('AerosolService', () => {
         window.clearInterval(service.sprayIntervalID);
     });
 
-    it('onMouseUp should call drawSpray if mouse was already down', () => {
-        service.mouseDownCoord = { x: 0, y: 0 };
-        service.mouseDown = true;
-
-        service.onMouseUp(mouseEvent);
-        expect(drawSpraySpy).toHaveBeenCalled();
-    });
-
     it('onMouseUp should not call drawSpray if mouse was not already down', () => {
         service.mouseDown = false;
         service.mouseDownCoord = { x: 0, y: 0 };
@@ -98,11 +83,10 @@ describe('AerosolService', () => {
     });
 
     it('onMouseMove should call sprayContinuouslySpy if mouse was already down', () => {
-        service.mouseDownCoord = { x: 0, y: 0 };
+        const expectedResult: Vec2 = { x: 25, y: 25 };
         service.mouseDown = true;
-
         service.onMouseMove(mouseEvent);
-        expect(sprayContinuouslySpy).toHaveBeenCalled();
+        expect(service.mousePosition).toEqual(expectedResult);
         window.clearInterval(service.sprayIntervalID);
     });
 
@@ -141,10 +125,10 @@ describe('AerosolService', () => {
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
-    it('should call onMouseMove when entering the canvas if mouse is down', () => {
+    it('should call onMousDown when entering the canvas if mouse is down', () => {
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
-        expect(onMouseMoveSpy).toHaveBeenCalled();
+        expect(onMouseDownSpy).toHaveBeenCalled();
     });
 
     it('should do nothing when entering the canvas, with an unsupported mouse state', () => {

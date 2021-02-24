@@ -13,9 +13,6 @@ describe('AerosolConfigComponent', () => {
     let component: AerosolConfigComponent;
     let fixture: ComponentFixture<AerosolConfigComponent>;
     let loader: HarnessLoader;
-    const DEFAULT_VALUE_AREA_SLIDER = 30;
-    const DEFAULT_VALUE_DROPLETS_SLIDER = 0.5;
-    const DEFAULT_VALUE_EMISSIONS_SLIDER = 100;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -40,17 +37,17 @@ describe('AerosolConfigComponent', () => {
 
     it('should get default value of area slider', async () => {
         const slider = await loader.getAllHarnesses(MatSliderHarness);
-        expect(await slider[0].getValue()).toBe(DEFAULT_VALUE_AREA_SLIDER);
+        expect(await slider[0].getValue()).toBe(ToolSettingsConst.DEFAULT_AEROSOL_AREA_DIAMETER);
     });
 
     it('should get default value of droplets slider', async () => {
         const slider = await loader.getAllHarnesses(MatSliderHarness);
-        expect(await slider[1].getValue()).toBe(DEFAULT_VALUE_DROPLETS_SLIDER);
+        expect(await slider[1].getValue()).toBe(ToolSettingsConst.MIN_DROPLETS_WIDTH);
     });
 
     it('should get default value of emissionsPerSecond slider', async () => {
         const slider = await loader.getAllHarnesses(MatSliderHarness);
-        expect(await slider[2].getValue()).toBe(DEFAULT_VALUE_EMISSIONS_SLIDER);
+        expect(await slider[2].getValue()).toBe(ToolSettingsConst.DEFAULT_AEROSOL_EMISSIONS_PER_SECOND);
     });
 
     it('should get max value of area slider', async () => {
@@ -71,7 +68,7 @@ describe('AerosolConfigComponent', () => {
     it('should be able to set value of area slider', async () => {
         const setValue = 33;
         const slider = await loader.getAllHarnesses(MatSliderHarness);
-        expect(await slider[0].getValue()).toBe(DEFAULT_VALUE_AREA_SLIDER);
+        expect(await slider[0].getValue()).toBe(ToolSettingsConst.DEFAULT_AEROSOL_AREA_DIAMETER);
 
         await slider[0].setValue(setValue);
 
@@ -81,7 +78,7 @@ describe('AerosolConfigComponent', () => {
     it('should be able to set value of droplets slider', async () => {
         const setValue = 4.5;
         const slider = await loader.getAllHarnesses(MatSliderHarness);
-        expect(await slider[1].getValue()).toBe(DEFAULT_VALUE_DROPLETS_SLIDER);
+        expect(await slider[1].getValue()).toBe(ToolSettingsConst.MIN_DROPLETS_WIDTH);
 
         await slider[1].setValue(setValue);
 
@@ -89,9 +86,9 @@ describe('AerosolConfigComponent', () => {
     });
 
     it('should be able to set value of emissions slider', async () => {
-        const setValue = 98;
+        const setValue = 1000;
         const slider = await loader.getAllHarnesses(MatSliderHarness);
-        expect(await slider[2].getValue()).toBe(DEFAULT_VALUE_EMISSIONS_SLIDER);
+        expect(await slider[2].getValue()).toBe(ToolSettingsConst.DEFAULT_AEROSOL_EMISSIONS_PER_SECOND);
 
         await slider[2].setValue(setValue);
 
