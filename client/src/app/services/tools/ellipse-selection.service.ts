@@ -24,24 +24,6 @@ export class EllipseSelectionService extends RectangleSelectionService {
         super.stopDrawing();
     }
 
-    // private updateSize(width: number, height: number, x: number, y: number) {
-    //     let radiusX: number = width / 2;
-    //     let radiusY: number = height / 2;
-    //     this.centerX = x + radiusX;
-    //     this.centerY = y + radiusY;
-
-    //     if (this.shiftPressed) {
-    //         const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
-    //         this.centerX = x + Math.sign(radiusX) * minRadius;
-    //         this.centerY = y + Math.sign(radiusY) * minRadius;
-    //         radiusX = minRadius;
-    //         radiusY = minRadius;
-    //     }
-
-    //     this.radiusXAbs = Math.abs(radiusX);
-    //     this.radiusYAbs = Math.abs(radiusY);
-    // }
-
     protected drawPreviewSelection(ctx: CanvasRenderingContext2D): void {
         this.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
         this.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
@@ -110,7 +92,7 @@ export class EllipseSelectionService extends RectangleSelectionService {
     }
 
     protected fillBackground(baseCtx: CanvasRenderingContext2D): void {
-        baseCtx.ellipse(this.centerX, this.centerY, this.radiusXAbs - 1, this.radiusYAbs - 1, 0, 0, 2 * Math.PI);
+        baseCtx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
         baseCtx.fill();
     }
 
@@ -126,7 +108,7 @@ export class EllipseSelectionService extends RectangleSelectionService {
 
         ctx.beginPath();
         ctx.save();
-        ctx.ellipse(centerX, centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+        ctx.ellipse(centerX, centerY, this.radiusXAbs+ctx.lineWidth, this.radiusYAbs+ctx.lineWidth, 0, 0, 2 * Math.PI);
         ctx.clip();
         ctx.drawImage(this.SELECTION_DATA, left, top);
         ctx.restore();
@@ -141,7 +123,7 @@ export class EllipseSelectionService extends RectangleSelectionService {
 
         baseCtx.beginPath();
         baseCtx.save();
-        baseCtx.ellipse(centerX, centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+        baseCtx.ellipse(centerX, centerY, this.radiusXAbs+baseCtx.lineWidth, this.radiusYAbs+baseCtx.lineWidth, 0, 0, 2 * Math.PI);
         baseCtx.clip();
         baseCtx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         baseCtx.restore();
