@@ -28,7 +28,7 @@ class MockToolHandler extends ToolHandlerService {
         eraserService: EraserService,
         ellipseService: EllipseService,
         ellipseSelectionService: EllipseSelectionService,
-        rectangleSelectionService: RectangleSelectionService
+        rectangleSelectionService: RectangleSelectionService,
     ) {
         super(pencilService, lineService, rectangleService, ellipseService, rectangleSelectionService, ellipseSelectionService, eraserService);
         this.TOOLS_MOCK.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
@@ -82,7 +82,15 @@ describe('SettingsHandlerComponent', () => {
         ellipseService = TestBed.inject(EllipseService);
         ellipseSelectionService = TestBed.inject(EllipseSelectionService);
         rectangleSelectionService = TestBed.inject(RectangleSelectionService);
-        toolHandlerService = new MockToolHandler(pencilService, lineService, rectangleService, eraserService, ellipseService, ellipseSelectionService, rectangleSelectionService);
+        toolHandlerService = new MockToolHandler(
+            pencilService,
+            lineService,
+            rectangleService,
+            eraserService,
+            ellipseService,
+            ellipseSelectionService,
+            rectangleSelectionService,
+        );
         component = new SettingsHandlerComponent(toolHandlerService);
     });
 

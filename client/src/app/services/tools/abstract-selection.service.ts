@@ -33,6 +33,7 @@ export abstract class AbstractSelectionService extends Tool {
     protected isRightArrowDown: boolean;
     protected isUpArrowDown: boolean;
     protected isDownArrowDown: boolean;
+    private moveId: number;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
@@ -43,6 +44,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.isRightArrowDown = false;
         this.isUpArrowDown = false;
         this.isDownArrowDown = false;
+        this.moveId = -1;
     }
 
     protected abstract endSelection(): void;
@@ -130,11 +132,22 @@ export abstract class AbstractSelectionService extends Tool {
                 this.updateDrawingSelection();
             }
         } else if (this.selectionCtx !== null) {
+            if (event.repeat) {
+                return;
+            }
             const PIXELS = 3;
             if (this.RIGHT_ARROW.equals(event) || this.LEFT_ARROW.equals(event) || this.UP_ARROW.equals(event) || this.DOWN_ARROW.equals(event)) {
                 event.preventDefault();
                 this.setArrowKeyUp(event);
                 this.moveSelection(PIXELS * this.getXArrow(), PIXELS * this.getYArrow());
+
+                if (this.moveId === -1) {
+                    setTimeout(() => {
+                        this.moveId = window.setInterval(() => {
+                            this.moveSelection(PIXELS * this.getXArrow(), PIXELS * this.getYArrow());
+                        }, 100);
+                    }, 500);
+                }
             }
         }
     }
@@ -148,10 +161,14 @@ export abstract class AbstractSelectionService extends Tool {
         }
         if (this.selectionCtx !== null) {
             this.setArrowKeyDown(event);
+            if (!this.isRightArrowDown && !this.isLeftArrowDown && !this.isUpArrowDown && !this.isDownArrowDown) {
+                window.clearInterval(this.moveId);
+                this.moveId = -1;
+            }
         }
     }
 
-    public selectAll(): void {
+    selectAll(): void {
         this.stopDrawing();
         const width = this.drawingService.canvas.width;
         const height = this.drawingService.canvas.height;
@@ -162,7 +179,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.startSelection();
     }
 
-    public isInSelection(event: MouseEvent): boolean {
+    isInSelection(event: MouseEvent): boolean {
         if (this.selectionCtx === null) return false;
 
         const left = this.selectionCoords.x;
@@ -174,7 +191,7 @@ export abstract class AbstractSelectionService extends Tool {
         return !(currentPos.x <= left || currentPos.x >= right || currentPos.y <= top || currentPos.y >= bottom);
     }
 
-    public stopDrawing(): void {
+    stopDrawing(): void {
         this.endSelection();
         this.mouseDown = false;
         this.shiftPressed = false;
