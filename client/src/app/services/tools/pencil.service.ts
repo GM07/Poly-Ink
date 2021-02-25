@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ShortcutKey } from '@app/classes/shortcut-key';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { PencilToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -7,6 +7,7 @@ import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
+
 export enum LeftMouse {
     Released = 0,
     Pressed = 1,
@@ -42,10 +43,6 @@ export class PencilService extends Tool {
         return this.lineWidthIn;
     }
 
-    /**
-     * La taille se choisit par pixel, donc un arrondissement
-     * est fait pour avoir une valeur entière
-     */
     set lineWidth(width: number) {
         this.lineWidthIn = Math.min(Math.max(width, 1), ToolSettingsConst.MAX_WIDTH);
     }

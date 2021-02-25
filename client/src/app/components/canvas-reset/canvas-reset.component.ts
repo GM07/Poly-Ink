@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { ShortcutKey } from '@app/classes/shortcut-key';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
