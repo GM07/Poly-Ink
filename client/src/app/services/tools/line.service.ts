@@ -112,11 +112,9 @@ export class LineService extends Tool {
 
     onKeyDown(event: KeyboardEvent): void {
         const shortcut = ShortcutKey.get(this.SHORTCUT_LIST, event, true);
-        if (shortcut !== undefined) {
-            if (shortcut.isDown !== true) {
-                shortcut.isDown = true;
-                this.handleKeys(shortcut);
-            }
+        if (shortcut !== undefined && shortcut.isDown !== true) {
+            shortcut.isDown = true;
+            this.handleKeys(shortcut);
         }
     }
 
