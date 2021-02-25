@@ -30,12 +30,6 @@ export class LineService extends Tool {
     thickness: number = 6;
     color: string = 'black';
 
-    // private keyEvents: Map<string, boolean> = new Map([
-    //     ['Shift', false],
-    //     ['Escape', false],
-    //     ['Backspace', false],
-    // ]);
-
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(LineToolConstants.SHORTCUT_KEY);
@@ -45,9 +39,6 @@ export class LineService extends Tool {
         this.SHIFT.isDown = false;
         this.ESCAPE.isDown = false;
         this.BACKSPACE.isDown = false;
-        // for (const event of this.keyEvents) {
-        //     event[1] = false;
-        // }
         this.points = [];
         this.pointToAdd = {} as Vec2;
         this.mousePosition = {} as Vec2;
