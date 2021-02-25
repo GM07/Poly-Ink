@@ -17,7 +17,7 @@ export class EditorComponent {
 
     constructor(public shortcutHandler: ShortcutHandlerService) {}
 
-    @HostListener('keydown', ['$event'])
+    @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
         this.shortcutHandler.onKeyDown(event);
     }
