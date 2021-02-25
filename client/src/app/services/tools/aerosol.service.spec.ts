@@ -112,6 +112,7 @@ describe('AerosolService', () => {
         service.onMouseDown(mouseEventLClick);
         service.onMouseLeave(mouseEventLClick);
         mouseEventLClick = { offsetX: 0, offsetY: 2, button: 0, buttons: 0 } as MouseEvent;
+        service.onMouseUp(mouseEventLClick);
         service.onMouseEnter(mouseEventLClick);
         expect(sprayContinuouslySpy).toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
