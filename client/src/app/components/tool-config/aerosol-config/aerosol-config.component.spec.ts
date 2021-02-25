@@ -52,7 +52,7 @@ describe('AerosolConfigComponent', () => {
 
     it('should get max value of area slider', async () => {
         const slider = await loader.getAllHarnesses(MatSliderHarness);
-        expect(await slider[0].getMaxValue()).toBe(ToolSettingsConst.MAX_WIDTH);
+        expect(await slider[0].getMaxValue()).toBe(ToolSettingsConst.MAX_AREA_WIDTH);
     });
 
     it('should get max value of droplets slider', async () => {

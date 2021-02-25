@@ -10,7 +10,7 @@ import { AerosolService } from '@app/services/tools/aerosol.service';
 })
 export class AerosolConfigComponent extends ToolConfig {
     readonly MIN_AREA: number = ToolSettingsConst.MIN_AREA_WIDTH;
-    readonly MAX_AREA: number = ToolSettingsConst.MAX_WIDTH;
+    readonly MAX_AREA: number = ToolSettingsConst.MAX_AREA_WIDTH;
     readonly MIN_DROPLETS: number = ToolSettingsConst.MIN_DROPLETS_WIDTH;
     readonly MAX_DROPLETS: number = ToolSettingsConst.MAX_DROPLETS_WIDTH;
     readonly MIN_EMISSIONS_PER_SECOND: number = ToolSettingsConst.MIN_EMISSIONS_PER_SECOND;

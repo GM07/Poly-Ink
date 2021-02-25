@@ -27,6 +27,7 @@ export class AerosolService extends Tool {
     private nDropletsPerSpray: number;
     private emissionsPerSecondIn: number;
     mousePosition: Vec2;
+    //private everyThreeDroplets: number;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
@@ -35,6 +36,7 @@ export class AerosolService extends Tool {
         this.dropletDiameterIn = ToolSettingsConst.MIN_DROPLETS_WIDTH;
         this.areaDiameterIn = ToolSettingsConst.DEFAULT_AEROSOL_AREA_DIAMETER;
         this.emissionsPerSecondIn = ToolSettingsConst.DEFAULT_AEROSOL_EMISSIONS_PER_SECOND;
+        //this.everyThreeDroplets = 0;
     }
 
     stopDrawing(): void {
@@ -47,7 +49,7 @@ export class AerosolService extends Tool {
     }
 
     set areaDiameter(diameter: number) {
-        this.areaDiameterIn = Math.min(Math.max(diameter, ToolSettingsConst.MIN_AREA_WIDTH), ToolSettingsConst.MAX_WIDTH);
+        this.areaDiameterIn = Math.min(Math.max(diameter, ToolSettingsConst.MIN_AREA_WIDTH), ToolSettingsConst.MAX_AREA_WIDTH);
     }
 
     get dropletDiameter(): number {
@@ -125,6 +127,7 @@ export class AerosolService extends Tool {
         ctx.lineCap = 'round' as CanvasLineCap;
         ctx.lineJoin = 'round' as CanvasLineJoin;
 
+
         for (let i = 0; i < this.nDropletsPerSpray; i++) {
             const randOffset: Vec2 = this.randomDroplet();
 
@@ -138,9 +141,14 @@ export class AerosolService extends Tool {
     }
 
     randomDroplet(): Vec2 {
-        const randAngle = Math.random() * DEGREES;
-        const randRadius = (Math.random() * (this.areaDiameter - this.dropletDiameter)) / 2;
-
+        let randAngle = Math.random() * DEGREES;
+        let randRadius = (Math.random() * (this.areaDiameter - this.dropletDiameter)) / 2;
+        /*if (this.everyThreeDroplets !== 2) {
+            while (randRadius < this.areaDiameter / 10) {
+                randRadius = (Math.random() * (this.areaDiameter - this.dropletDiameter)) / 2;
+            }
+        }
+        this.everyThreeDroplets === 3 ? this.everyThreeDroplets = 0 : this.everyThreeDroplets++;*/
         return {
             x: Math.cos(randAngle) * randRadius,
             y: Math.sin(randAngle) * randRadius,
