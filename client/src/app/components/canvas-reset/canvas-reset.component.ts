@@ -34,7 +34,7 @@ export class NewDrawingComponent {
         if (this.shortcut.equals(event)) {
             event.preventDefault();
             this.newDrawing.newCanvas();
-            this.shortcutHandler.blockShortcuts = true;
+            if (this.newDrawing.showWarning) this.shortcutHandler.blockShortcuts = true;
         }
     }
 }

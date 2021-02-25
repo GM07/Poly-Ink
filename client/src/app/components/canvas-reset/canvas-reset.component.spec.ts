@@ -60,6 +60,7 @@ describe('NewDrawingComponent', () => {
     });
 
     it('should stop propagations if the warning is displayed', () => {
+        newDrawingService.showWarning = true;
         spyOn(newDrawingService, 'newCanvas');
         const keyEvent = new KeyboardEvent('document:keydown', { ctrlKey: true, key: 'o' });
         component.onKeyDown(keyEvent);
