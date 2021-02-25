@@ -11,12 +11,12 @@ import { ColorService } from 'src/color-picker/services/color.service';
 })
 export abstract class AbstractSelectionService extends Tool {
     protected readonly LINE_DASH: number = 8;
-    protected readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
-    protected readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
-    protected readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
-    protected readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
-    protected readonly DOWN_ARROW: ShortcutKey = new ShortcutKey('arrowdown');
-    protected readonly UP_ARROW: ShortcutKey = new ShortcutKey('arrowup');
+    private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
+    private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
+    private readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
+    private readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
+    private readonly DOWN_ARROW: ShortcutKey = new ShortcutKey('arrowdown');
+    private readonly UP_ARROW: ShortcutKey = new ShortcutKey('arrowup');
     protected readonly SELECTION_DATA: HTMLCanvasElement;
 
     protected mouseUpCoord: Vec2;
@@ -42,7 +42,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.selectionCoords = { x: 0, y: 0 } as Vec2;
         this.isLeftArrowDown = false;
         this.isRightArrowDown = false;
-        this.isUpArrowDown = false;
+        this.isUpArrowDown = false; //TODO changer avec merge request de Paul
         this.isDownArrowDown = false;
         this.moveId = -1;
     }
@@ -82,9 +82,7 @@ export abstract class AbstractSelectionService extends Tool {
                 this.startSelection();
             } else {
                 const translation = this.getTranslation(this.mouseUpCoord);
-                this.updateSelection(translation);
-                this.selectionCoords.x += translation.x;
-                this.selectionCoords.y += translation.y;
+                this.moveSelection(translation.x, translation.y);
             }
         }
         this.mouseDown = false;
@@ -132,16 +130,17 @@ export abstract class AbstractSelectionService extends Tool {
                 this.updateDrawingSelection();
             }
         } else if (this.selectionCtx !== null) {
-            if (event.repeat) {
+            if (event.repeat)
                 return;
-            }
+
             const PIXELS = 3;
             if (this.RIGHT_ARROW.equals(event) || this.LEFT_ARROW.equals(event) || this.UP_ARROW.equals(event) || this.DOWN_ARROW.equals(event)) {
-                event.preventDefault();
+                event.preventDefault(); //TODO Changer pour qqchose de correct
                 this.setArrowKeyUp(event);
                 this.moveSelection(PIXELS * this.getXArrow(), PIXELS * this.getYArrow());
 
                 if (this.moveId === -1) {
+                  //TODO S'assurer de register une seule fois
                     setTimeout(() => {
                         this.moveId = window.setInterval(() => {
                             this.moveSelection(PIXELS * this.getXArrow(), PIXELS * this.getYArrow());
@@ -188,7 +187,7 @@ export abstract class AbstractSelectionService extends Tool {
         const bottom = this.selectionCoords.y + Math.abs(this.height);
 
         const currentPos = this.getPositionFromMouse(event);
-        return !(currentPos.x <= left || currentPos.x >= right || currentPos.y <= top || currentPos.y >= bottom);
+        return !(currentPos.x < left || currentPos.x > right || currentPos.y < top || currentPos.y > bottom);
     }
 
     stopDrawing(): void {
@@ -196,8 +195,15 @@ export abstract class AbstractSelectionService extends Tool {
         this.mouseDown = false;
         this.shiftPressed = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
+
+        this.isRightArrowDown = false;
+        this.isLeftArrowDown = false;
+        this.isUpArrowDown = false;
+        this.isDownArrowDown = false;
     }
 
+
+    //TODO Renommer les fonctions
     private setArrowKeyUp(event: KeyboardEvent): void {
         if (this.RIGHT_ARROW.equals(event)) this.isRightArrowDown = true;
         if (this.LEFT_ARROW.equals(event)) this.isLeftArrowDown = true;

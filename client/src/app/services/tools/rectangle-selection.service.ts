@@ -28,11 +28,6 @@ export class RectangleSelectionService extends AbstractSelectionService {
 
         this.selectionCoords = { x: 0, y: 0 } as Vec2;
         this.translationOrigin = { x: 0, y: 0 } as Vec2;
-
-        this.isRightArrowDown = false;
-        this.isLeftArrowDown = false;
-        this.isUpArrowDown = false;
-        this.isDownArrowDown = false;
     }
 
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPosX: number, currentPosY: number): void {

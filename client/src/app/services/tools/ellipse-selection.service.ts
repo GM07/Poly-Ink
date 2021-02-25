@@ -71,7 +71,8 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
         ctx.closePath();
 
-        this.drawRectanglePerimeter(ctx, position.x, position.y, width, height);
+        if(this.selectionCtx !== null)
+          this.drawRectanglePerimeter(ctx, position.x, position.y, width, height);
     }
 
     private drawRectanglePerimeter(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, radiusX: number, radiusY: number): void {
@@ -93,7 +94,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         if (this.firstSelectionCoords.x !== currentPosX || this.firstSelectionCoords.y !== currentPosY) {
             ctx.beginPath();
             ctx.fillStyle = 'rgb(255,20,147)';
-            ctx.ellipse(this.centerX, this.centerY, Math.max(0, this.radiusXAbs), Math.max(0, this.radiusYAbs), 0, 0, 2 * Math.PI);
+            ctx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
             ctx.fill();
             ctx.closePath();
         }
@@ -113,7 +114,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
         ctx.beginPath();
         ctx.save();
-        ctx.ellipse(centerX, centerY, this.radiusXAbs + ctx.lineWidth, this.radiusYAbs + ctx.lineWidth, 0, 0, 2 * Math.PI);
+        ctx.ellipse(centerX, centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
         ctx.clip();
         ctx.drawImage(this.SELECTION_DATA, left, top);
         ctx.restore();
@@ -130,7 +131,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
         baseCtx.beginPath();
         baseCtx.save();
-        baseCtx.ellipse(centerX, centerY, this.radiusXAbs + baseCtx.lineWidth, this.radiusYAbs + baseCtx.lineWidth, 0, 0, 2 * Math.PI);
+        baseCtx.ellipse(centerX, centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
         baseCtx.clip();
         baseCtx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         baseCtx.restore();
