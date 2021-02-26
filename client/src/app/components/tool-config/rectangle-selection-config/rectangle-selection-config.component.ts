@@ -23,14 +23,12 @@ export class RectangleSelectionConfigComponent extends ToolConfig implements OnD
 
     private readonly CANVAS_COORD: DOMRect;
     private readonly PREVIEW_CANVAS: HTMLCanvasElement;
-    private controlPointList: ElementRef<HTMLElement>[];
+    private controlPointList: Map<ElementRef<HTMLElement>, DOMRect>;
     private lastCursor: string;
 
     isOverSelection: boolean = false;
     mouseDown: boolean = false;
     displayControlPoints = false;
-
-    controlRightStyle: { [key: string]: string };
 
     constructor(public selectionService: RectangleSelectionService, drawingService: DrawingService) {
         super();
@@ -46,13 +44,24 @@ export class RectangleSelectionConfigComponent extends ToolConfig implements OnD
         this.PREVIEW_CANVAS.style.cursor = this.lastCursor;
     }
 
-    onMouseDown(event: MouseEvent) {
-        this.mouseDown = event.button === MouseButton.Left;
-        this.displayControlPoints = this.selectionService.selectionCtx !== null;
+    initPoints() {
+        this.controlPointList = new Map([
+            [this.topLeft, this.topLeft.nativeElement.getBoundingClientRect()],
+            [this.topMiddle, this.topMiddle.nativeElement.getBoundingClientRect()],
+            [this.topRight, this.topRight.nativeElement.getBoundingClientRect()],
+            [this.middleLeft, this.middleLeft.nativeElement.getBoundingClientRect()],
+            [this.middleRight, this.middleRight.nativeElement.getBoundingClientRect()],
+            [this.bottomLeft, this.bottomLeft.nativeElement.getBoundingClientRect()],
+            [this.bottomMiddle, this.bottomMiddle.nativeElement.getBoundingClientRect()],
+            [this.bottomRight, this.bottomRight.nativeElement.getBoundingClientRect()],
+        ]);
+
+        this.placePoints();
+
+        this.controlPointContainer.nativeElement.style.zIndex = '1';
     }
 
-    placePoints() {
-        this.controlPointContainer.nativeElement.style.zIndex = '-1';
+    private placePoints() {
         if (this.selectionService.selectionCtx === null) return;
 
         const x = this.selectionService.selectionCoords.x;
@@ -78,48 +87,19 @@ export class RectangleSelectionConfigComponent extends ToolConfig implements OnD
         this.bottomMiddle.nativeElement.style.top = String(this.getCanvasCoord(this.bottomMiddle).y + y + height) + 'px';
         this.bottomRight.nativeElement.style.left = String(this.getCanvasCoord(this.bottomRight).x + x + width) + 'px';
         this.bottomRight.nativeElement.style.top = String(this.getCanvasCoord(this.bottomRight).y + y + height) + 'px';
-
-        this.controlPointContainer.nativeElement.style.zIndex = '1';
-
-        this.controlPointList = [
-            this.topLeft,
-            this.topMiddle,
-            this.topRight,
-            this.middleLeft,
-            this.middleRight,
-            this.bottomLeft,
-            this.bottomMiddle,
-            this.bottomRight,
-        ];
     }
 
-    translatePoints(translation: Vec2) {
-        const x = translation.x;
-        const y = translation.y;
-        for (const elementRef of this.controlPointList) {
-            elementRef.nativeElement.style.transform = `translate(${x}px,${y}px)`;
-        }
-    }
-
-    updatePoints(translation: Vec2) {
-        console.log(translation);
-        const x = translation.x;
-        const y = translation.y;
-        for (const elementRef of this.controlPointList) {
-            console.log(parseInt(elementRef.nativeElement.style.left));
-            console.log(elementRef.nativeElement.style.left);
-            elementRef.nativeElement.style.left = String(x + parseInt(elementRef.nativeElement.style.left)) + 'px';
-            elementRef.nativeElement.style.top = String(y + parseInt(elementRef.nativeElement.style.top)) + 'px';
-        }
+    onMouseDown(event: MouseEvent) {
+        this.mouseDown = event.button === MouseButton.Left;
+        this.displayControlPoints = this.selectionService.selectionCtx !== null;
     }
 
     onMouseUp(event: MouseEvent) {
+        if (this.displayControlPoints) {
+            this.placePoints();
+        }
         this.mouseDown = false;
         this.displayControlPoints = this.selectionService.selectionCtx !== null;
-        if (this.displayControlPoints) {
-            //this.updatePoints(this.selectionService.getTranslation(this.selectionService.mouseUpCoord));
-            //console.log(this.topLeft.nativeElement.style.transform);
-        }
     }
 
     onMouseMove(event: MouseEvent) {
@@ -132,15 +112,14 @@ export class RectangleSelectionConfigComponent extends ToolConfig implements OnD
             }
         } else {
             if (this.displayControlPoints) {
-                this.translatePoints(this.selectionService.getTranslation(this.selectionService.getPositionFromMouse(event)));
-                //const event = new NgInitControlPointDirective();
-                //event.ngOnInit();
+                this.placePoints();
             }
         }
     }
 
     private getCanvasCoord(control: ElementRef<HTMLElement>): Vec2 {
-        const pos = control.nativeElement.getBoundingClientRect();
+        const pos = this.controlPointList.get(control);
+        if (pos === undefined) return { x: 0, y: 0 } as Vec2;
         const left = this.CANVAS_COORD.x - pos.x;
         const top = this.CANVAS_COORD.y - pos.y;
         return { x: left, y: top } as Vec2;

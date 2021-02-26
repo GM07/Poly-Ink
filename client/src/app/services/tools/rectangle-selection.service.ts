@@ -42,15 +42,18 @@ export class RectangleSelectionService extends AbstractSelectionService {
     protected updateSelection(translation: Vec2): void {
         if (this.selectionCtx === null) return;
 
+        this.selectionCoords.x += translation.x;
+        this.selectionCoords.y += translation.y;
+        this.translationOrigin.x += translation.x;
+        this.translationOrigin.y += translation.y;
+
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
-        const left = this.selectionCoords.x + translation.x;
-        const top = this.selectionCoords.y + translation.y;
 
-        this.fillBackground(ctx, left, top);
+        this.fillBackground(ctx, this.selectionCoords.x, this.selectionCoords.y);
 
-        const rectangleCoords = { x: this.selectionCoords.x + translation.x, y: this.selectionCoords.y + translation.y } as Vec2;
-        ctx.drawImage(this.SELECTION_DATA, left, top);
+        const rectangleCoords = { x: this.selectionCoords.x, y: this.selectionCoords.y } as Vec2;
+        ctx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         this.drawSelection(ctx, rectangleCoords, Math.abs(this.width), Math.abs(this.height));
     }
 

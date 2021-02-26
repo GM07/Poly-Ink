@@ -40,6 +40,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.SELECTION_DATA = document.createElement('canvas');
         this.selectionCtx = null;
         this.selectionCoords = { x: 0, y: 0 } as Vec2;
+        this.translationOrigin = { x: 0, y: 0 } as Vec2;
         this.isLeftArrowDown = false;
         this.isRightArrowDown = false;
         this.isUpArrowDown = false; //TODO changer avec merge request de Paul
@@ -81,8 +82,7 @@ export abstract class AbstractSelectionService extends Tool {
                 this.drawingService.clearCanvas(this.drawingService.previewCtx);
                 this.startSelection();
             } else {
-                const translation = this.getTranslation(this.mouseUpCoord);
-                this.moveSelection(translation.x, translation.y);
+                this.updateSelection(this.getTranslation(this.mouseUpCoord));
             }
         }
         this.mouseDown = false;
@@ -94,11 +94,11 @@ export abstract class AbstractSelectionService extends Tool {
             this.mouseUpCoord = mousePos;
             if (this.selectionCtx !== null) {
                 this.updateSelection(this.getTranslation(mousePos));
-                return;
+            } else {
+                const ctx = this.drawingService.previewCtx;
+                this.drawingService.clearCanvas(ctx);
+                this.drawPreviewSelection(ctx);
             }
-            const ctx = this.drawingService.previewCtx;
-            this.drawingService.clearCanvas(ctx);
-            this.drawPreviewSelection(ctx);
         }
     }
 
@@ -133,17 +133,16 @@ export abstract class AbstractSelectionService extends Tool {
             const PIXELS = 3;
             if (this.RIGHT_ARROW.equals(event) || this.LEFT_ARROW.equals(event) || this.UP_ARROW.equals(event) || this.DOWN_ARROW.equals(event)) {
                 event.preventDefault();
-                if (event.repeat)
-                  return;
+                if (event.repeat) return;
                 this.setArrowKeyDown(event);
-                this.moveSelection(PIXELS * this.getXArrow(), PIXELS * this.getYArrow());
+                this.updateSelection({ x: PIXELS * this.getXArrow(), y: PIXELS * this.getYArrow() } as Vec2);
 
                 if (this.moveId === -1) {
                     setTimeout(() => {
-                      if(this.moveId === -1)
-                        this.moveId = window.setInterval(() => {
-                            this.moveSelection(PIXELS * this.getXArrow(), PIXELS * this.getYArrow());
-                        }, 100);
+                        if (this.moveId === -1)
+                            this.moveId = window.setInterval(() => {
+                                this.updateSelection({ x: PIXELS * this.getXArrow(), y: PIXELS * this.getYArrow() } as Vec2);
+                            }, 100);
                     }, 500);
                 }
             }
@@ -201,7 +200,6 @@ export abstract class AbstractSelectionService extends Tool {
         this.isDownArrowDown = false;
     }
 
-
     private setArrowKeyDown(event: KeyboardEvent): void {
         if (this.RIGHT_ARROW.equals(event)) this.isRightArrowDown = true;
         if (this.LEFT_ARROW.equals(event)) this.isLeftArrowDown = true;
@@ -214,12 +212,6 @@ export abstract class AbstractSelectionService extends Tool {
         if (this.LEFT_ARROW.equals(event)) this.isLeftArrowDown = false;
         if (this.UP_ARROW.equals(event)) this.isUpArrowDown = false;
         if (this.DOWN_ARROW.equals(event)) this.isDownArrowDown = false;
-    }
-
-    private moveSelection(x: number, y: number): void {
-        this.updateSelection({ x, y } as Vec2);
-        this.selectionCoords.x += x;
-        this.selectionCoords.y += y;
     }
 
     private getXArrow(): number {
