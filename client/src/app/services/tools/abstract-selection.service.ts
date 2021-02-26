@@ -130,17 +130,17 @@ export abstract class AbstractSelectionService extends Tool {
                 this.updateDrawingSelection();
             }
         } else if (this.selectionCtx !== null) {
-            if (event.repeat) return;
-
             const PIXELS = 3;
             if (this.RIGHT_ARROW.equals(event) || this.LEFT_ARROW.equals(event) || this.UP_ARROW.equals(event) || this.DOWN_ARROW.equals(event)) {
-                event.preventDefault(); //TODO Changer pour qqchose de correct
-                this.setArrowKeyUp(event);
+                event.preventDefault();
+                if (event.repeat)
+                  return;
+                this.setArrowKeyDown(event);
                 this.moveSelection(PIXELS * this.getXArrow(), PIXELS * this.getYArrow());
 
                 if (this.moveId === -1) {
-                    //TODO S'assurer de register une seule fois
                     setTimeout(() => {
+                      if(this.moveId === -1)
                         this.moveId = window.setInterval(() => {
                             this.moveSelection(PIXELS * this.getXArrow(), PIXELS * this.getYArrow());
                         }, 100);
@@ -158,7 +158,7 @@ export abstract class AbstractSelectionService extends Tool {
             }
         }
         if (this.selectionCtx !== null) {
-            this.setArrowKeyDown(event);
+            this.setArrowKeyUp(event);
             if (!this.isRightArrowDown && !this.isLeftArrowDown && !this.isUpArrowDown && !this.isDownArrowDown) {
                 window.clearInterval(this.moveId);
                 this.moveId = -1;
@@ -201,15 +201,15 @@ export abstract class AbstractSelectionService extends Tool {
         this.isDownArrowDown = false;
     }
 
-    //TODO Renommer les fonctions
-    private setArrowKeyUp(event: KeyboardEvent): void {
+
+    private setArrowKeyDown(event: KeyboardEvent): void {
         if (this.RIGHT_ARROW.equals(event)) this.isRightArrowDown = true;
         if (this.LEFT_ARROW.equals(event)) this.isLeftArrowDown = true;
         if (this.UP_ARROW.equals(event)) this.isUpArrowDown = true;
         if (this.DOWN_ARROW.equals(event)) this.isDownArrowDown = true;
     }
 
-    private setArrowKeyDown(event: KeyboardEvent): void {
+    private setArrowKeyUp(event: KeyboardEvent): void {
         if (this.RIGHT_ARROW.equals(event)) this.isRightArrowDown = false;
         if (this.LEFT_ARROW.equals(event)) this.isLeftArrowDown = false;
         if (this.UP_ARROW.equals(event)) this.isUpArrowDown = false;
