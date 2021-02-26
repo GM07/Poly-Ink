@@ -1,20 +1,19 @@
-import { Injectable } from "@angular/core";
-import { NewDrawing } from "@app/services/popups/new-drawing";
-import { DrawingService } from "../drawing/drawing.service";
-import { ToolHandlerService } from "@app/services/tools/tool-handler.service";
+import { Injectable } from '@angular/core';
 import { ExportDrawing } from '@app/services/popups/export-drawing';
+import { NewDrawing } from '@app/services/popups/new-drawing';
+import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+import { DrawingService } from '../drawing/drawing.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class PopupHandlerService {
-
     newDrawing: NewDrawing;
     exportDrawing: ExportDrawing;
 
     constructor(drawingService: DrawingService, toolHandler: ToolHandlerService) {
         this.newDrawing = new NewDrawing(drawingService, toolHandler);
-        this.exportDrawing = new ExportDrawing(drawingService);
+        this.exportDrawing = new ExportDrawing();
     }
 
     initPopups(): void {
@@ -46,4 +45,3 @@ export class PopupHandlerService {
         return this.exportDrawing.showPopup && !this.newDrawing.showPopup;
     }
 }
-

@@ -1,34 +1,24 @@
-import { ShortcutKey } from "@app/classes/shortcut-key";
-import { DrawingService } from "../drawing/drawing.service";
-
+import { ShortcutKey } from '@app/classes/shortcut-key';
 
 export class ExportDrawing {
-
     shortcut: ShortcutKey;
     showPopup: boolean;
 
-    constructor(private drawingService: DrawingService) {
+    constructor() {
         this.showPopup = false;
         this.shortcut = new ShortcutKey('e', true);
     }
 
-    getImage(): void {
-        let image: string = this.drawingService.canvas.toDataURL('image/png');
-        window.location.href = image;
-    }
+    exportImage(image: string, format: string, name: string): void {
+        console.log(image);
+        let byte_image = image.replace('image/' + format, 'image/octet-stream');
 
-    exportImage(canvas: HTMLCanvasElement, format: string, name: string): void {
-        
-        let image = canvas.toDataURL('image/' + format).replace('image/' + format, 'image/octet-stream');
-        
         let downloadElement = document.createElement('a');
         downloadElement.download = name + '.' + format;
-        downloadElement.href = image;
+        downloadElement.href = byte_image;
         downloadElement.dataset.downloadurl = ['image/' + format, downloadElement.download, downloadElement.href].join(':');
         document.body.appendChild(downloadElement);
         downloadElement.click();
         document.body.removeChild(downloadElement);
     }
-
-
 }
