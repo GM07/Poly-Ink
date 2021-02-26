@@ -24,9 +24,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         super.stopDrawing();
     }
 
-    protected drawPreviewSelection(ctx: CanvasRenderingContext2D): void {
-        this.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
-        this.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
+    protected drawPreviewSelectionRequired(ctx: CanvasRenderingContext2D): void {
         let radiusX: number = this.width / 2;
         let radiusY: number = this.height / 2;
         this.centerX = this.mouseDownCoord.x + radiusX;
@@ -99,14 +97,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         }
     }
 
-    protected updateSelection(translation: Vec2): void {
-        if (this.selectionCtx === null) return;
-
-        this.selectionCoords.x += translation.x;
-        this.selectionCoords.y += translation.y;
-        this.translationOrigin.x += translation.x;
-        this.translationOrigin.y += translation.y;
-
+    protected updateSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
         const centerX = this.selectionCoords.x + this.radiusXAbs;

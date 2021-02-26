@@ -39,14 +39,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
         }
     }
 
-    protected updateSelection(translation: Vec2): void {
-        if (this.selectionCtx === null) return;
-
-        this.selectionCoords.x += translation.x;
-        this.selectionCoords.y += translation.y;
-        this.translationOrigin.x += translation.x;
-        this.translationOrigin.y += translation.y;
-
+    protected updateSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
 
@@ -57,9 +50,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
         this.drawSelection(ctx, rectangleCoords, Math.abs(this.width), Math.abs(this.height));
     }
 
-    protected drawPreviewSelection(ctx: CanvasRenderingContext2D): void {
-        this.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
-        this.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
+    protected drawPreviewSelectionRequired(ctx: CanvasRenderingContext2D): void {
         if (this.shiftPressed) {
             this.height = Math.sign(this.height) * Math.min(Math.abs(this.width), Math.abs(this.height));
             this.width = Math.sign(this.width) * Math.abs(this.height);

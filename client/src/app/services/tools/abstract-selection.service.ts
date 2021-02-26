@@ -52,9 +52,9 @@ export abstract class AbstractSelectionService extends Tool {
 
     protected abstract fillBackground(ctx: CanvasRenderingContext2D, currentPosX: number, currentPosY: number): void;
 
-    protected abstract updateSelection(translation: Vec2): void;
+    protected abstract updateSelectionRequired(): void;
 
-    protected abstract drawPreviewSelection(ctx: CanvasRenderingContext2D): void;
+    protected abstract drawPreviewSelectionRequired(ctx: CanvasRenderingContext2D): void;
 
     protected abstract drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, width: number, height: number): void;
 
@@ -248,6 +248,24 @@ export abstract class AbstractSelectionService extends Tool {
         previewCtx.drawImage(this.SELECTION_DATA, x, y);
 
         this.drawPreviewSelection(previewCtx);
+    }
+
+    private updateSelection(translation: Vec2): void {
+        if (this.selectionCtx === null) return;
+
+        this.selectionCoords.x += translation.x;
+        this.selectionCoords.y += translation.y;
+        this.translationOrigin.x += translation.x;
+        this.translationOrigin.y += translation.y;
+
+        this.updateSelectionRequired();
+    }
+
+    private drawPreviewSelection(ctx: CanvasRenderingContext2D): void {
+        this.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
+        this.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
+
+        this.drawPreviewSelectionRequired(ctx);
     }
 
     public getTranslation(mousePos: Vec2): Vec2 {
