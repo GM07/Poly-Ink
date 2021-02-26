@@ -6,6 +6,7 @@
 .drawing-container {
     overflow: visible;
     flex: 1 1 auto;
+    z-index: 1;
 }
 
 .drawing {

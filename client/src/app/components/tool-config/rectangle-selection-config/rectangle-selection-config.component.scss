@@ -20,6 +20,17 @@
     padding-bottom: 10px;
 }
 
-.cursor {
-    cursor: not-allowed !important;
+.control-point-container {
+}
+
+.control-point-group {
+    overflow: hidden;
+}
+
+.control-point {
+    top: 0px;
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    position: absolute;
 }
