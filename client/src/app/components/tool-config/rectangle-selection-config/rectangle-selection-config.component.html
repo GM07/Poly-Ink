@@ -1,6 +1,6 @@
 <div class="tab">
     <div class="textFormatButton">
-        <button mat-flat-button (click)="rectangleSelectionService.selectAll()">Tout sélectionner</button>
+        <button mat-flat-button (click)="selectionService.selectAll()">Tout sélectionner</button>
     </div>
 </div>
 
@@ -8,8 +8,19 @@
 <div (document:mousedown)="onMouseDown($event)"></div>
 <div (document:mouseup)="onMouseUp($event)"></div>
 
-<div class="control-point-container">
-    <div class="control-point-group">
-        <div class="control-point" id="rectangle-resize" [ngStyle]="controlRightStyle">sup!</div>
+<div *ngIf="displayControlPoints">
+    <div class="control-point-container" #controlPointContainer>
+        <div class="control-point-group" appNgInitControlPoint (ngInit)="placePoints()">
+            <div class="control-point" #topLeft></div>
+            <div class="control-point" #topMiddle></div>
+            <div class="control-point" #topRight></div>
+
+            <div class="control-point" #middleLeft></div>
+            <div class="control-point" #middleRight></div>
+
+            <div class="control-point" #bottomLeft></div>
+            <div class="control-point" #bottomMiddle></div>
+            <div class="control-point" #bottomRight></div>
+        </div>
     </div>
 </div>

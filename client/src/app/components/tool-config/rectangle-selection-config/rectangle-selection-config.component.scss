@@ -21,6 +21,8 @@
 }
 
 .control-point-container {
+    position: relative;
+    z-index: -1;
 }
 
 .control-point-group {
@@ -28,7 +30,6 @@
 }
 
 .control-point {
-    top: 0px;
     width: 10px;
     height: 10px;
     background-color: black;

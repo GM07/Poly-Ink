@@ -19,14 +19,14 @@ export abstract class AbstractSelectionService extends Tool {
     private readonly UP_ARROW: ShortcutKey = new ShortcutKey('arrowup');
     protected readonly SELECTION_DATA: HTMLCanvasElement;
 
-    protected mouseUpCoord: Vec2;
+    public mouseUpCoord: Vec2;
     protected translationOrigin: Vec2;
     protected firstSelectionCoords: Vec2;
-    protected selectionCoords: Vec2;
+    public selectionCoords: Vec2;
 
-    protected width: number;
-    protected height: number;
-    protected selectionCtx: CanvasRenderingContext2D | null;
+    public width: number;
+    public height: number;
+    public selectionCtx: CanvasRenderingContext2D | null;
 
     protected shiftPressed: boolean;
     protected isLeftArrowDown: boolean;
@@ -130,8 +130,7 @@ export abstract class AbstractSelectionService extends Tool {
                 this.updateDrawingSelection();
             }
         } else if (this.selectionCtx !== null) {
-            if (event.repeat)
-                return;
+            if (event.repeat) return;
 
             const PIXELS = 3;
             if (this.RIGHT_ARROW.equals(event) || this.LEFT_ARROW.equals(event) || this.UP_ARROW.equals(event) || this.DOWN_ARROW.equals(event)) {
@@ -140,7 +139,7 @@ export abstract class AbstractSelectionService extends Tool {
                 this.moveSelection(PIXELS * this.getXArrow(), PIXELS * this.getYArrow());
 
                 if (this.moveId === -1) {
-                  //TODO S'assurer de register une seule fois
+                    //TODO S'assurer de register une seule fois
                     setTimeout(() => {
                         this.moveId = window.setInterval(() => {
                             this.moveSelection(PIXELS * this.getXArrow(), PIXELS * this.getYArrow());
@@ -202,7 +201,6 @@ export abstract class AbstractSelectionService extends Tool {
         this.isDownArrowDown = false;
     }
 
-
     //TODO Renommer les fonctions
     private setArrowKeyUp(event: KeyboardEvent): void {
         if (this.RIGHT_ARROW.equals(event)) this.isRightArrowDown = true;
@@ -260,7 +258,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.drawPreviewSelection(previewCtx);
     }
 
-    private getTranslation(mousePos: Vec2): Vec2 {
+    public getTranslation(mousePos: Vec2): Vec2 {
         return { x: mousePos.x - this.translationOrigin.x, y: mousePos.y - this.translationOrigin.y } as Vec2;
     }
 
