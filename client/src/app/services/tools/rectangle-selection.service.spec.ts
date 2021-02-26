@@ -119,13 +119,16 @@ describe('RectangleSelectionService', () => {
       expect((service as any).updateDrawingSelection).toHaveBeenCalled();
     });
 
-   /* it('it should move the selection when there is one and an arrow is pressed', () => {
-      let keyboardEvent = new KeyboardEvent('document:keydown', {key: 'arrowleft', ctrlKey: false, shiftKey: false, altKey: false});
+   it('it should move the selection when there is a selection and an arrow is pressed', () => {
+    jasmine.clock().install()
+      let keyboardEvent = new KeyboardEvent('keydown', {key: 'arrowdown'});
       spyOn(service as any, 'moveSelection');
       (service as any).selectionCtx = canvasSelection.getContext('2d');
       service.onKeyDown(keyboardEvent);
+      jasmine.clock().tick(100);
       expect((service as any).moveSelection).toHaveBeenCalled();
-    });*/ //For some reason this test is breaking jasmine.
+      jasmine.clock().uninstall()
+    });
 
     it('should update the selection when key up', () => {
       let keyboardEvent = {ctrlKey: false, shiftKey: false, altKey: false} as KeyboardEvent;
@@ -138,7 +141,7 @@ describe('RectangleSelectionService', () => {
 
     it('should update arrowkey on key up', () => {
       let keyboardEvent = {ctrlKey: false, shiftKey: false, altKey: false} as KeyboardEvent;
-      spyOn(service as any, 'setArrowKeyDown');
+      spyOn(service as any, 'setArrowKeyUp');
       spyOn(window, 'clearInterval');
       (service as any).selectionCtx = canvasSelection.getContext('2d');
       service.onKeyUp(keyboardEvent);

@@ -35,10 +35,10 @@ describe('AbstractSelectionService', () => {
       let keyboardEventRight = new KeyboardEvent('keydown', {key: 'arrowright'});
       let keyboardEventDown = new KeyboardEvent('keydown', {key: 'arrowdown'});
       let keyboardEventUp = new KeyboardEvent('keydown', {key: 'arrowup'});
-      (service as any).setArrowKeyUp(keyboardEventLeft);
-      (service as any).setArrowKeyUp(keyboardEventRight);
-      (service as any).setArrowKeyUp(keyboardEventUp);
-      (service as any).setArrowKeyUp(keyboardEventDown);
+      (service as any).setArrowKeyDown(keyboardEventLeft);
+      (service as any).setArrowKeyDown(keyboardEventRight);
+      (service as any).setArrowKeyDown(keyboardEventUp);
+      (service as any).setArrowKeyDown(keyboardEventDown);
       expect((service as any).isLeftArrowDown).toBe(true);
       expect((service as any).isRightArrowDown).toBe(true);
       expect((service as any).isDownArrowDown).toBe(true);
@@ -47,7 +47,7 @@ describe('AbstractSelectionService', () => {
 
     it('set ArrowKeyUp should update the keys when not down', () =>{
       let keyboardEventLeft = new KeyboardEvent('keydown', {key: 'randomKey'});
-      (service as any).setArrowKeyUp(keyboardEventLeft);
+      (service as any).setArrowKeyDown(keyboardEventLeft);
       expect((service as any).isLeftArrowDown).toBe(false);
       expect((service as any).isRightArrowDown).toBe(false);
       expect((service as any).isDownArrowDown).toBe(false);
@@ -63,10 +63,10 @@ describe('AbstractSelectionService', () => {
       let keyboardEventRight = new KeyboardEvent('keyup', {key: 'arrowright'});
       let keyboardEventDown = new KeyboardEvent('keyup', {key: 'arrowdown'});
       let keyboardEventUp = new KeyboardEvent('keyup', {key: 'arrowup'});
-      (service as any).setArrowKeyDown(keyboardEventLeft);
-      (service as any).setArrowKeyDown(keyboardEventRight);
-      (service as any).setArrowKeyDown(keyboardEventUp);
-      (service as any).setArrowKeyDown(keyboardEventDown);
+      (service as any).setArrowKeyUp(keyboardEventLeft);
+      (service as any).setArrowKeyUp(keyboardEventRight);
+      (service as any).setArrowKeyUp(keyboardEventUp);
+      (service as any).setArrowKeyUp(keyboardEventDown);
       expect((service as any).isLeftArrowDown).toBe(false);
       expect((service as any).isRightArrowDown).toBe(false);
       expect((service as any).isDownArrowDown).toBe(false);
@@ -75,7 +75,7 @@ describe('AbstractSelectionService', () => {
 
     it('set ArrowKeyDown should update the keys when not up', () =>{
       let keyboardEventLeft = new KeyboardEvent('keydown', {key: 'randomKey'});
-      (service as any).setArrowKeyDown(keyboardEventLeft);
+      (service as any).setArrowKeyUp(keyboardEventLeft);
       expect((service as any).isLeftArrowDown).toBe(false);
       expect((service as any).isRightArrowDown).toBe(false);
       expect((service as any).isDownArrowDown).toBe(false);
@@ -130,6 +130,71 @@ describe('AbstractSelectionService', () => {
       let saveTranslation : Vec2 = (service as any).translationOrigin;
       service.onMouseDown(mouseEvent);
       expect((service as any).translationOrigin).not.toEqual(saveTranslation);
+    });
+
+    it('should do nothing on mouseUp if mouse is not down', () => {
+      spyOn((service as any), 'isInCanvas');
+      service.onMouseUp(mouseEvent);
+      expect((service as any).isInCanvas).not.toHaveBeenCalled();
+    });
+
+    it('on mouse move should do nothing if mouse is not down', () => {
+      spyOn(service, 'getPositionFromMouse');
+      service.onMouseMove(mouseEvent);
+      expect(service.getPositionFromMouse).not.toHaveBeenCalled();
+    });
+
+    it('pressing shift should do nothing if selection is not null', () => {
+      (service as any).mouseDown = true;
+      let keyboardEventDown = new KeyboardEvent('keydown', {shiftKey: true});
+      let keyboardEventUp = new KeyboardEvent('keydown', {shiftKey: false});
+      spyOn(service as any, 'updateDrawingSelection');
+      (service as any).selectionCtx = canvasSelection.getContext('2d');
+      service.onKeyDown(keyboardEventDown);
+      service.onKeyUp(keyboardEventUp);
+      expect((service as any).updateDrawingSelection).not.toHaveBeenCalled();
+    })
+
+    it('key down should do nothing on invalid key', () => {
+      let keyboardEvent = new KeyboardEvent('keydown', {key: 'invalid'});
+      spyOn(service, 'stopDrawing');
+      spyOn(service, 'selectAll');
+      spyOn(service as any, 'updateDrawingSelection');
+      service.onKeyDown(keyboardEvent);
+      expect(service.stopDrawing).not.toHaveBeenCalled();
+      expect(service.selectAll).not.toHaveBeenCalled();
+      expect((service as any).updateDrawingSelection).not.toHaveBeenCalled();
+    });
+
+    it('selection should not move with different keys than arrow', () => {
+      spyOn(service as any, 'moveSelection');
+      let keyboardEvent = new KeyboardEvent('keydown', {key: 'invalid'});
+      (service as any).selectionCtx = canvasSelection.getContext('2d');
+      service.onKeyDown(keyboardEvent);
+      expect((service as any).moveSelection).not.toHaveBeenCalled();
+    });
+
+    it('should do nothing on event repeat', () => {
+      let keyboardEvent = new KeyboardEvent('keydown', {key: 'arrowleft', repeat:true});
+      (service as any).selectionCtx = canvasSelection.getContext('2d');
+      spyOn(service as any, 'moveSelection');
+      service.onKeyDown(keyboardEvent);
+      expect((service as any).moveSelection).not.toHaveBeenCalled();
+    });
+
+    it('should not stop moving the selection if we release a different key than an arrow', () => {
+      (service as any).isLeftArrowDown = true;
+      let keyboardEventUp = new KeyboardEvent('keydown', {shiftKey: false});
+      (service as any).selectionCtx = canvasSelection.getContext('2d');
+      spyOn(window, 'clearInterval');
+      service.onKeyUp(keyboardEventUp);
+      expect(window.clearInterval).not.toHaveBeenCalled();
+    });
+
+    it('isInSelection should do nothing if there is no selection', () => {
+      spyOn(service, 'getPositionFromMouse');
+      service.isInSelection(mouseEvent);
+      expect(service.getPositionFromMouse).not.toHaveBeenCalled();
     });
 
 });
