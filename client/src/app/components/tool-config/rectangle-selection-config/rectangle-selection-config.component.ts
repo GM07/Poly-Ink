@@ -24,7 +24,6 @@ export class RectangleSelectionConfigComponent extends ToolConfig implements OnD
     private readonly CONTROL_INNER: number = 8;
     private readonly BORDER: number = 2;
     private readonly MIDDLE_OFFSET: number = (this.CONTROL_INNER - this.BORDER) / 2;
-
     private readonly CANVAS_COORD: Vec2;
 
     private controlPointList: Map<ElementRef<HTMLElement>, Vec2>;
@@ -45,6 +44,41 @@ export class RectangleSelectionConfigComponent extends ToolConfig implements OnD
 
     ngOnDestroy(): void {
         this.drawingService.previewCanvas.style.cursor = this.lastCursor;
+    }
+
+    onMouseDown(event: MouseEvent) {
+        this.mouseDown = event.button === MouseButton.Left;
+        this.displayControlPoints = this.selectionService.selectionCtx !== null;
+    }
+
+    onMouseUp(event: MouseEvent) {
+        if (this.displayControlPoints) {
+            this.placePoints();
+        }
+        this.mouseDown = false;
+        this.displayControlPoints = this.selectionService.selectionCtx !== null;
+    }
+
+    onMouseMove(event: MouseEvent) {
+        if (!this.mouseDown) {
+            this.isOverSelection = this.selectionService.isInSelection(event);
+            if (this.isOverSelection) {
+                this.drawingService.previewCanvas.style.cursor = 'all-scroll';
+            } else {
+                this.drawingService.previewCanvas.style.cursor = this.lastCursor;
+            }
+        } else {
+            if (this.displayControlPoints) {
+                this.placePoints();
+            }
+        }
+    }
+
+    onKeyDown(event: KeyboardEvent) {
+        if (this.displayControlPoints) {
+            this.placePoints();
+        }
+        this.displayControlPoints = this.selectionService.selectionCtx !== null;
     }
 
     initPoints() {
@@ -91,7 +125,7 @@ export class RectangleSelectionConfigComponent extends ToolConfig implements OnD
         this.bottomRight.nativeElement.style.left = String(this.getCanvasCoord(this.bottomRight).x + x + width + this.BORDER) + 'px';
         this.bottomRight.nativeElement.style.top = String(this.getCanvasCoord(this.bottomRight).y + y + height + this.BORDER) + 'px';
 
-        for (const [elementRef, domRect] of this.controlPointList) {
+        for (const [elementRef, pos] of this.controlPointList) {
             const pos = elementRef.nativeElement.getBoundingClientRect();
             if (this.isInCanvas({ x: pos.x, y: pos.y } as Vec2)) {
                 elementRef.nativeElement.style.opacity = '1';
@@ -99,34 +133,6 @@ export class RectangleSelectionConfigComponent extends ToolConfig implements OnD
             } else {
                 elementRef.nativeElement.style.opacity = '0';
                 elementRef.nativeElement.style.pointerEvents = 'none';
-            }
-        }
-    }
-
-    onMouseDown(event: MouseEvent) {
-        this.mouseDown = event.button === MouseButton.Left;
-        this.displayControlPoints = this.selectionService.selectionCtx !== null;
-    }
-
-    onMouseUp(event: MouseEvent) {
-        if (this.displayControlPoints) {
-            this.placePoints();
-        }
-        this.mouseDown = false;
-        this.displayControlPoints = this.selectionService.selectionCtx !== null;
-    }
-
-    onMouseMove(event: MouseEvent) {
-        if (!this.mouseDown) {
-            this.isOverSelection = this.selectionService.isInSelection(event);
-            if (this.isOverSelection) {
-                this.drawingService.previewCanvas.style.cursor = 'all-scroll';
-            } else {
-                this.drawingService.previewCanvas.style.cursor = this.lastCursor;
-            }
-        } else {
-            if (this.displayControlPoints) {
-                this.placePoints();
             }
         }
     }
@@ -145,7 +151,10 @@ export class RectangleSelectionConfigComponent extends ToolConfig implements OnD
         const right = clientRect.x + clientRect.width;
         const top = clientRect.y;
         const bottom = clientRect.y + clientRect.height;
-        if (position.x <= left || position.x >= right || position.y <= top || position.y >= bottom) return false;
+        const posX = position.x + (this.CONTROL_INNER + this.BORDER) / 2;
+        const posY = position.y + (this.CONTROL_INNER + this.BORDER) / 2;
+
+        if (posX <= left || posX >= right || posY <= top || posY >= bottom) return false;
         return true;
     }
 

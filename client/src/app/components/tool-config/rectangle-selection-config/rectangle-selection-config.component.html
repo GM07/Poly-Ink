@@ -7,6 +7,7 @@
 <div (document:mousemove)="onMouseMove($event)"></div>
 <div (document:mousedown)="onMouseDown($event)"></div>
 <div (document:mouseup)="onMouseUp($event)"></div>
+<div (document:keydown)="onKeyDown($event)"></div>
 
 <div *ngIf="displayControlPoints">
     <div class="control-point-container" #controlPointContainer>
