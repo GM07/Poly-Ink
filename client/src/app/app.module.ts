@@ -31,6 +31,9 @@ import { PencilConfigComponent } from './components/tool-config/pencil-config/pe
 import { RectangleConfigComponent } from './components/tool-config/rectangle-config/rectangle-config.component';
 import { RectangleSelectionConfigComponent } from './components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
 import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
+import { AbstractSelectionComponent } from './components/selection/abstract-selection/abstract-selection.component';
+import { RectangleSelectionComponent } from './components/selection/rectangle-selection/rectangle-selection.component';
+import { EllipseSelectionComponent } from './components/selection/ellipse-selection/ellipse-selection.component';
 
 @NgModule({
     declarations: [
@@ -53,6 +56,9 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         NgInitControlPointDirective,
         EllipseSelectionConfigComponent,
         AbstractSelectionConfigComponent,
+        AbstractSelectionComponent,
+        RectangleSelectionComponent,
+        EllipseSelectionComponent,
     ],
     imports: [
         AppRoutingModule,

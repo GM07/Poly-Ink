@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { DrawingService } from '@app/services/drawing/drawing.service';
 import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.service';
 import { AbstractSelectionConfigComponent } from '../abstract-selection-config/abstract-selection-config.component';
 
@@ -9,7 +8,7 @@ import { AbstractSelectionConfigComponent } from '../abstract-selection-config/a
     styleUrls: ['./../abstract-selection-config/abstract-selection-config.component.scss'],
 })
 export class EllipseSelectionConfigComponent extends AbstractSelectionConfigComponent {
-    constructor(selectionService: EllipseSelectionService, drawingService: DrawingService) {
-        super(selectionService, drawingService);
+    constructor(selectionService: EllipseSelectionService) {
+        super(selectionService);
     }
 }

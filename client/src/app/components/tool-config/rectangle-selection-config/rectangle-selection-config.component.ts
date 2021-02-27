@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { DrawingService } from '@app/services/drawing/drawing.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { AbstractSelectionConfigComponent } from '../abstract-selection-config/abstract-selection-config.component';
 
@@ -9,7 +8,7 @@ import { AbstractSelectionConfigComponent } from '../abstract-selection-config/a
     styleUrls: ['./../abstract-selection-config/abstract-selection-config.component.scss'],
 })
 export class RectangleSelectionConfigComponent extends AbstractSelectionConfigComponent {
-    constructor(rectangleSelectionService: RectangleSelectionService, drawingService: DrawingService) {
-        super(rectangleSelectionService, drawingService);
+    constructor(rectangleSelectionService: RectangleSelectionService) {
+        super(rectangleSelectionService);
     }
 }

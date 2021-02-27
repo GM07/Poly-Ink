@@ -1,5 +1,7 @@
 <div class="working-zone" [ngStyle]="workZoneStyle">
     <app-drawing class="drawing-container"> </app-drawing>
+    <app-rectangle-selection></app-rectangle-selection>
+    <app-ellipse-selection></app-ellipse-selection>
     <div class="resize-control" id="right" [ngStyle]="controlRightStyle" (mousedown)="mouseDown(true, false)"></div>
     <div class="resize-control" id="bottom" [ngStyle]="controlBottomStyle" (mousedown)="mouseDown(false, true)"></div>
     <div class="resize-control" id="corner" [ngStyle]="controlCornerStyle" (mousedown)="mouseDown(true, true)"></div>

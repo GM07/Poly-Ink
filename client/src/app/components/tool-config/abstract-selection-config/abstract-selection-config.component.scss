@@ -19,20 +19,3 @@
     padding-top: 10px;
     padding-bottom: 10px;
 }
-
-.control-point-container {
-    position: relative;
-    z-index: -1;
-}
-
-.control-point-group {
-    overflow: hidden;
-}
-
-.control-point {
-    width: 8px;
-    height: 8px;
-    background-color: white;
-    position: absolute;
-    border: 1px solid blue;
-}
