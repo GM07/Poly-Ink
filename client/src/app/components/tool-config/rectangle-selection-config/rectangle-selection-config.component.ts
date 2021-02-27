@@ -125,7 +125,7 @@ export class RectangleSelectionConfigComponent extends ToolConfig implements OnD
         this.bottomRight.nativeElement.style.left = String(this.getCanvasCoord(this.bottomRight).x + x + width + this.BORDER) + 'px';
         this.bottomRight.nativeElement.style.top = String(this.getCanvasCoord(this.bottomRight).y + y + height + this.BORDER) + 'px';
 
-        for (const [elementRef, pos] of this.controlPointList) {
+        for (const [elementRef] of this.controlPointList) {
             const pos = elementRef.nativeElement.getBoundingClientRect();
             if (this.isInCanvas({ x: pos.x, y: pos.y } as Vec2)) {
                 elementRef.nativeElement.style.opacity = '1';
