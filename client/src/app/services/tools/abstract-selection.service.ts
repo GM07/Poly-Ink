@@ -167,6 +167,7 @@ export abstract class AbstractSelectionService extends Tool {
 
     selectAll(): void {
         this.stopDrawing();
+        this.selectionCoords = { x: 0, y: 0 } as Vec2;
         const width = this.drawingService.canvas.width;
         const height = this.drawingService.canvas.height;
         this.mouseDownCoord = { x: 0, y: 0 } as Vec2;

@@ -21,8 +21,10 @@ export class RectangleSelectionConfigComponent extends ToolConfig implements OnD
     @ViewChild('bottomMiddle', { static: false }) bottomMiddle: ElementRef<HTMLElement>;
     @ViewChild('bottomRight', { static: false }) bottomRight: ElementRef<HTMLElement>;
 
-    private readonly CONTROL_POSITION: number = 8;
+    private readonly CONTROL_INNER: number = 8;
     private readonly BORDER: number = 2;
+    private readonly MIDDLE_OFFSET: number = (this.CONTROL_INNER - this.BORDER) / 2;
+
     private readonly CANVAS_COORD: Vec2;
 
     private controlPointList: Map<ElementRef<HTMLElement>, Vec2>;
@@ -70,21 +72,21 @@ export class RectangleSelectionConfigComponent extends ToolConfig implements OnD
         const width = Math.abs(this.selectionService.width);
         const height = Math.abs(this.selectionService.height);
 
-        this.topLeft.nativeElement.style.left = String(this.getCanvasCoord(this.topLeft).x + x - this.CONTROL_POSITION) + 'px';
-        this.topLeft.nativeElement.style.top = String(this.getCanvasCoord(this.topLeft).y + y - this.CONTROL_POSITION) + 'px';
-        this.topMiddle.nativeElement.style.left = String(this.getCanvasCoord(this.topMiddle).x + x + width / 2) + 'px';
-        this.topMiddle.nativeElement.style.top = String(this.getCanvasCoord(this.topMiddle).y + y - this.CONTROL_POSITION) + 'px';
+        this.topLeft.nativeElement.style.left = String(this.getCanvasCoord(this.topLeft).x + x - this.CONTROL_INNER) + 'px';
+        this.topLeft.nativeElement.style.top = String(this.getCanvasCoord(this.topLeft).y + y - this.CONTROL_INNER) + 'px';
+        this.topMiddle.nativeElement.style.left = String(this.getCanvasCoord(this.topMiddle).x + x + width / 2 - this.MIDDLE_OFFSET) + 'px';
+        this.topMiddle.nativeElement.style.top = String(this.getCanvasCoord(this.topMiddle).y + y - this.CONTROL_INNER) + 'px';
         this.topRight.nativeElement.style.left = String(this.getCanvasCoord(this.topRight).x + x + width + this.BORDER) + 'px';
-        this.topRight.nativeElement.style.top = String(this.getCanvasCoord(this.topRight).y + y - this.CONTROL_POSITION) + 'px';
+        this.topRight.nativeElement.style.top = String(this.getCanvasCoord(this.topRight).y + y - this.CONTROL_INNER) + 'px';
 
-        this.middleLeft.nativeElement.style.left = String(this.getCanvasCoord(this.middleLeft).x + x - this.CONTROL_POSITION) + 'px';
-        this.middleLeft.nativeElement.style.top = String(this.getCanvasCoord(this.middleLeft).y + y + height / 2) + 'px';
+        this.middleLeft.nativeElement.style.left = String(this.getCanvasCoord(this.middleLeft).x + x - this.CONTROL_INNER) + 'px';
+        this.middleLeft.nativeElement.style.top = String(this.getCanvasCoord(this.middleLeft).y + y + height / 2 - this.MIDDLE_OFFSET) + 'px';
         this.middleRight.nativeElement.style.left = String(this.getCanvasCoord(this.middleRight).x + x + width + this.BORDER) + 'px';
-        this.middleRight.nativeElement.style.top = String(this.getCanvasCoord(this.middleRight).y + y + height / 2) + 'px';
+        this.middleRight.nativeElement.style.top = String(this.getCanvasCoord(this.middleRight).y + y + height / 2 - this.MIDDLE_OFFSET) + 'px';
 
-        this.bottomLeft.nativeElement.style.left = String(this.getCanvasCoord(this.bottomLeft).x + x - this.CONTROL_POSITION) + 'px';
+        this.bottomLeft.nativeElement.style.left = String(this.getCanvasCoord(this.bottomLeft).x + x - this.CONTROL_INNER) + 'px';
         this.bottomLeft.nativeElement.style.top = String(this.getCanvasCoord(this.bottomLeft).y + y + height + this.BORDER) + 'px';
-        this.bottomMiddle.nativeElement.style.left = String(this.getCanvasCoord(this.bottomMiddle).x + x + width / 2) + 'px';
+        this.bottomMiddle.nativeElement.style.left = String(this.getCanvasCoord(this.bottomMiddle).x + x + width / 2 - this.MIDDLE_OFFSET) + 'px';
         this.bottomMiddle.nativeElement.style.top = String(this.getCanvasCoord(this.bottomMiddle).y + y + height + this.BORDER) + 'px';
         this.bottomRight.nativeElement.style.left = String(this.getCanvasCoord(this.bottomRight).x + x + width + this.BORDER) + 'px';
         this.bottomRight.nativeElement.style.top = String(this.getCanvasCoord(this.bottomRight).y + y + height + this.BORDER) + 'px';
@@ -127,6 +129,14 @@ export class RectangleSelectionConfigComponent extends ToolConfig implements OnD
                 this.placePoints();
             }
         }
+    }
+
+    selectAll() {
+        this.selectionService.selectAll();
+        if (this.displayControlPoints) {
+            this.placePoints();
+        }
+        this.displayControlPoints = true;
     }
 
     private isInCanvas(position: Vec2): boolean {
