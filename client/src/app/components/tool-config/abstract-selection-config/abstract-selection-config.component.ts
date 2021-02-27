@@ -51,13 +51,16 @@ export class AbstractSelectionConfigComponent extends ToolConfig implements OnDe
     }
 
     onMouseDown(event: MouseEvent) {
+        if (this.selectionService.isInSelection(event)) {
+            this.makeControlsUnselectable();
+        }
         this.mouseDown = event.button === MouseButton.Left;
         this.displayControlPoints = this.selectionService.selectionCtx !== null;
     }
 
     onMouseUp(event: MouseEvent) {
-        console.log(this.selectionService);
         if (this.displayControlPoints) {
+            this.makeControlsSelectable();
             this.placePoints();
         }
         this.mouseDown = false;
@@ -75,6 +78,7 @@ export class AbstractSelectionConfigComponent extends ToolConfig implements OnDe
         } else {
             if (this.displayControlPoints) {
                 this.placePoints();
+                this.makeControlsUnselectable();
             }
         }
     }
@@ -87,8 +91,6 @@ export class AbstractSelectionConfigComponent extends ToolConfig implements OnDe
     }
 
     initPoints() {
-        console.log(this.topLeft);
-
         this.controlPointList = new Map([
             [this.topLeft, this.setOriginalPosition(this.topLeft.nativeElement.getBoundingClientRect())],
             [this.topMiddle, this.setOriginalPosition(this.topMiddle.nativeElement.getBoundingClientRect())],
@@ -177,5 +179,17 @@ export class AbstractSelectionConfigComponent extends ToolConfig implements OnDe
     // sinon lorsqu'il y a une barre de défilement, la position des points devient erronée
     private setOriginalPosition(domRect: DOMRect): Vec2 {
         return { x: domRect.x + window.scrollX, y: domRect.y + window.scrollY } as Vec2;
+    }
+
+    private makeControlsUnselectable() {
+        for (const [elementRef] of this.controlPointList) {
+            elementRef.nativeElement.style.pointerEvents = 'none';
+        }
+    }
+
+    private makeControlsSelectable() {
+        for (const [elementRef] of this.controlPointList) {
+            elementRef.nativeElement.style.pointerEvents = 'auto';
+        }
     }
 }
