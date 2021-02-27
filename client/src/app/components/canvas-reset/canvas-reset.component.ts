@@ -29,7 +29,7 @@ export class NewDrawingComponent {
         if (this.popupHandlerService.newDrawing.shortcut.equals(event)) {
             event.preventDefault();
             this.popupHandlerService.newDrawing.newCanvas();
-            this.shortcutHandler.blockShortcuts = true;
+            if (this.popupHandlerService.newDrawing.showPopup) this.shortcutHandler.blockShortcuts = true;
         }
     }
 }
