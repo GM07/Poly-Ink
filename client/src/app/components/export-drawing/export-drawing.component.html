@@ -16,12 +16,13 @@
                 </mat-form-field>
             </form>
             <div class="options">
-                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [value]="currentFilter">
+                <mat-button-toggle-group [value]="currentFilter">
                     <mat-button-toggle id="corner-left" value="no" (change)="changeFilter($event.value)">AUCUN</mat-button-toggle>
+                    <mat-button-toggle value="funky" (change)="changeFilter($event.value)">FUNKY</mat-button-toggle>
                     <mat-button-toggle id="corner-right" value="negative" (change)="changeFilter($event.value)">NEGATIF</mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
-            <canvas #exportPreview id="exportPreview" [attr.width]="300" [attr.height]="300"></canvas>
+            <canvas #exportPreview id="exportPreview" [attr.width]="500" [attr.height]="500"></canvas>
             <div class="options">
                 <button class="button green white" mat-raised-button (click)="export()">Confirmer</button>
                 <button class="button red white" mat-sraised-button (click)="hidePopup()">Annuler</button>

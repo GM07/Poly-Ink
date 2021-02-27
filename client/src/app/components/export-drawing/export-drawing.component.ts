@@ -1,8 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Filter } from '@app/classes/filters/filter';
+import { FunkyFilter } from '@app/classes/filters/funky-filter';
 import { NegativeFilter } from '@app/classes/filters/negative-filter';
-import { NoFilter } from '@app/classes/filters/no-filter';
-import { RandomFilter } from '@app/classes/filters/random-filter';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { PopupHandlerService } from '@app/services/popups/popup-handler.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
@@ -13,8 +12,8 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
     styleUrls: ['./export-drawing.component.scss'],
 })
 export class ExportDrawingComponent {
-    static readonly EXPORT_PREVIEW_CANVAS_WIDTH = 300;
-    static readonly EXPORT_PREVIEW_CANVAS_HEIGHT = 300;
+    static readonly EXPORT_PREVIEW_CANVAS_WIDTH = 500;
+    static readonly EXPORT_PREVIEW_CANVAS_HEIGHT = 500;
 
     exportPreview: ElementRef<HTMLCanvasElement>;
     @ViewChild('exportPreview', { static: false }) set content(element: ElementRef) {
@@ -33,9 +32,9 @@ export class ExportDrawingComponent {
     public currentFilter: string = 'no';
 
     private filterMap: Map<String, Filter> = new Map([
-        ['no', new NoFilter()],
+        ['no', new Filter()],
         ['negative', new NegativeFilter()],
-        ['random', new RandomFilter()],
+        ['funky', new FunkyFilter()],
     ]);
 
     constructor(
