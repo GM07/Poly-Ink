@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Vec2 } from '@app/classes/vec2';
+import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { RectangleSelectionService } from './rectangle-selection.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
@@ -9,6 +10,9 @@ describe('RectangleSelectionService', () => {
     let service: RectangleSelectionService;
     let drawServiceSpy: jasmine.SpyObj<DrawingService>;
     let canvasSelection: HTMLCanvasElement;
+    let canvasTestHelper: CanvasTestHelper;
+    let baseCtxStub: CanvasRenderingContext2D;
+    let previewCtxStub: CanvasRenderingContext2D
 
     let mouseEvent = {
       offsetX: 25,
@@ -24,7 +28,12 @@ describe('RectangleSelectionService', () => {
         ],
         });
         service = TestBed.inject(RectangleSelectionService);
+        canvasTestHelper = TestBed.inject(CanvasTestHelper);
+        baseCtxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
+        previewCtxStub = canvasTestHelper.drawCanvas.getContext('2d') as CanvasRenderingContext2D;
         canvasSelection = document.createElement('canvas');
+        service['drawingService'].baseCtx = baseCtxStub;
+        service['drawingService'].previewCtx = previewCtxStub;
     });
 
     it('should be created', () => {
@@ -242,5 +251,77 @@ describe('RectangleSelectionService', () => {
       drawServiceSpy.canvas.height = 30;
       (service as any).BORDER_WIDTH = 0;
       expect((service as any).isInCanvas(mouseEvent)).toBe(true);
+    });
+
+    it('end selection should do nothing if there is no selection', () => {
+      (service as any).endSelection();
+      spyOn(service as any, 'fillBackground');
+      expect((service as any).fillBackground).not.toHaveBeenCalled();
+    });
+
+    it('end selection should draw the selection on the base canvas', () =>{
+      (service as any).selectionCtx = previewCtxStub;
+      (service as any).selectionCoords =  {x: 0, y: 0 } as Vec2;
+      spyOn(baseCtxStub, 'drawImage');
+      spyOn(service as any, 'fillBackground');
+      (service as any).endSelection();
+      expect(baseCtxStub.drawImage).toHaveBeenCalled();
+      expect((service as any).fillBackground).toHaveBeenCalled();
+    });
+
+    it('fill background should fill a rectangle at the location', () => {
+      (service as any).firstSelectionCoords = {x: 0, y: 0} as Vec2;
+      spyOn(previewCtxStub, 'fillRect');
+      (service as any).fillBackground(previewCtxStub, 10, 25);
+      expect(previewCtxStub.fillRect).toHaveBeenCalled();
+    });
+
+    it('update selection required should draw the image, update it and update the background', () => {
+      (service as any).selectionCoords =  {x: 0, y: 0 } as Vec2;
+      spyOn(previewCtxStub, 'drawImage');
+      spyOn(service as any, 'fillBackground');
+      spyOn(service as any, 'drawSelection');
+      (service as any).updateSelectionRequired();
+      expect(previewCtxStub.drawImage).toHaveBeenCalled();
+      expect((service as any).fillBackground).toHaveBeenCalled();
+      expect((service as any).drawSelection).toHaveBeenCalled();
+    });
+
+    it('drawSelection should call drawPreview and not change size if shift hasnt changed', () => {
+      spyOn(service as any, 'drawSelection');
+      let saveWidth = (service as any).width = 5;
+      let saveHeight = (service as any).height = 25;
+      (service as any).mouseDownCoord = {x: 0, y: 0} as Vec2;
+      (service as any).drawPreviewSelectionRequired(baseCtxStub);
+      expect(saveWidth).toEqual((service as any).width);
+      expect(saveHeight).toEqual((service as any).height);
+      expect((service as any).drawSelection).toHaveBeenCalled();
+    });
+
+    it('drawSelection should call drawPreview and change size if shift has changed', () => {
+      spyOn(service as any, 'drawSelection');
+      let saveWidth = (service as any).width = 5;
+      let saveHeight = (service as any).height = 25;
+      (service as any).shiftPressed = true;
+      (service as any).mouseDownCoord = {x: 0, y: 0} as Vec2;
+      (service as any).drawPreviewSelectionRequired(baseCtxStub);
+      expect(saveWidth).toEqual((service as any).width);
+      expect(saveHeight).not.toEqual((service as any).height);
+      expect((service as any).drawSelection).toHaveBeenCalled();
+    });
+
+    it('draw selection should draw a rectangle and a border around the selection', () => {
+      spyOn(baseCtxStub, 'strokeRect');
+      spyOn(baseCtxStub, 'setLineDash');
+      (service as any).drawSelection(baseCtxStub, {x: 10, y: 25} as Vec2);
+      expect(baseCtxStub.strokeRect).toHaveBeenCalledTimes(2);
+      expect(baseCtxStub.setLineDash).toHaveBeenCalledTimes(2);
+    });
+
+    it('fill background should do nothing if the mouse hasn\'t move', () => {
+      (service as any).firstSelectionCoords = {x: 0, y: 0};
+      spyOn(previewCtxStub, 'beginPath');
+      (service as any).fillBackground(previewCtxStub, 0, 0);
+      expect(previewCtxStub.beginPath).not.toHaveBeenCalled();
     });
 });

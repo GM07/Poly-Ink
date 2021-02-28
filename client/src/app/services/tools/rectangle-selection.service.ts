@@ -74,4 +74,5 @@ export class RectangleSelectionService extends AbstractSelectionService {
         ctx.lineDashOffset = 0;
         ctx.setLineDash([]);
     }
+
 }
