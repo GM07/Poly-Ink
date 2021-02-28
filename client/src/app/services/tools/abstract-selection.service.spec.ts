@@ -167,19 +167,19 @@ describe('AbstractSelectionService', () => {
     });
 
     it('selection should not move with different keys than arrow', () => {
-      spyOn(service as any, 'moveSelection');
+      spyOn(service as any, 'updateSelection');
       let keyboardEvent = new KeyboardEvent('keydown', {key: 'invalid'});
       (service as any).selectionCtx = canvasSelection.getContext('2d');
       service.onKeyDown(keyboardEvent);
-      expect((service as any).moveSelection).not.toHaveBeenCalled();
+      expect((service as any).updateSelection).not.toHaveBeenCalled();
     });
 
     it('should do nothing on event repeat', () => {
       let keyboardEvent = new KeyboardEvent('keydown', {key: 'arrowleft', repeat:true});
       (service as any).selectionCtx = canvasSelection.getContext('2d');
-      spyOn(service as any, 'moveSelection');
+      spyOn(service as any, 'updateSelection');
       service.onKeyDown(keyboardEvent);
-      expect((service as any).moveSelection).not.toHaveBeenCalled();
+      expect((service as any).updateSelection).not.toHaveBeenCalled();
     });
 
     it('should not stop moving the selection if we release a different key than an arrow', () => {

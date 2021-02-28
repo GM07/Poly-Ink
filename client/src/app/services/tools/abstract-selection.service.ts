@@ -1,9 +1,14 @@
+import { Injectable } from '@angular/core';
 import { ShortcutKey } from '@app/classes/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
+
+@Injectable({
+  providedIn: 'root',
+})
 
 export abstract class AbstractSelectionService extends Tool {
     protected readonly LINE_DASH: number = 8;

@@ -10,22 +10,24 @@ describe('EllipseSelectionComponent', () => {
   let service: DrawingService;
 
   beforeEach(async(() => {
+    service = new DrawingService();
     TestBed.configureTestingModule({
-      declarations: [ EllipseSelectionComponent ]
+      declarations: [ EllipseSelectionComponent ],
+      providers: [{ provide: DrawingService, useValue: service }],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
     canvasTestHelper = TestBed.inject(CanvasTestHelper);
-    fixture = TestBed.createComponent(EllipseSelectionComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
     service.canvas = canvasTestHelper.canvas;
     service.previewCanvas = canvasTestHelper.canvas;
     service.baseCtx = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
     service.previewCtx = canvasTestHelper.drawCanvas.getContext('2d') as CanvasRenderingContext2D;
     service = TestBed.inject(DrawingService);
+    fixture = TestBed.createComponent(EllipseSelectionComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {

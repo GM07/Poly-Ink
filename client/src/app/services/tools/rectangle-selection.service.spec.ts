@@ -48,19 +48,20 @@ describe('RectangleSelectionService', () => {
       expect((service as any).startSelection).toHaveBeenCalled();
     });
 
-    it('on mouse up should moveSelection if canvas is set', () => {
+    it('on mouse up should move selection if canvas is set', () => {
       (service as any).mouseDown = true;
       spyOn(service, 'isInCanvas').and.returnValue(false);
       spyOn(service as any, 'getTranslation').and.returnValue({x: 0, y: 0} as Vec2);
       spyOn(service as any, 'updateSelection');
       (service as any).selectionCtx = canvasSelection.getContext('2d');
       service.onMouseUp(mouseEvent);
-      expect((service as any).moveSelection).toHaveBeenCalled();
+      expect((service as any).updateSelection).toHaveBeenCalled();
     })
 
     it('should draw preview on mouse move', () => {
       (service as any).mouseDown = true;
       spyOn((service as any), 'drawPreviewSelection');
+      spyOn(service, 'isInCanvas').and.returnValue(false);
       service.onMouseMove(mouseEvent);
       expect((service as any).drawPreviewSelection).toHaveBeenCalled();
     });
@@ -70,31 +71,9 @@ describe('RectangleSelectionService', () => {
       (service as any).selectionCtx = canvasSelection.getContext('2d');
       spyOn((service as any), 'updateSelection');
       spyOn(service as any, 'getTranslation');
+      spyOn(service, 'isInCanvas').and.returnValue(false);
       service.onMouseMove(mouseEvent);
       expect((service as any).updateSelection).toHaveBeenCalled();
-    });
-
-    it('should do nothing on mouse leave/enter if selection is empty', () => {
-      spyOn(service as any, 'updateDrawingSelection');
-      service.onMouseLeave(mouseEvent);
-      service.onMouseEnter(mouseEvent);
-      expect((service as any).updateDrawingSelection).not.toHaveBeenCalled();
-    });
-
-    it('should update the selection on mouse leave if the selection is null', () => {
-      spyOn(service as any, 'updateDrawingSelection');
-      (service as any).mouseDown = true;
-      spyOn(service, 'isInCanvas').and.returnValue(true);
-      service.onMouseLeave(mouseEvent);
-      expect((service as any).updateDrawingSelection).toHaveBeenCalled();
-    });
-
-    it('should update the selection on mouse enter if the selection is null', () => {
-      spyOn(service as any, 'updateDrawingSelection');
-      (service as any).mouseDown = true;
-      spyOn(service, 'isInCanvas').and.returnValue(true);
-      service.onMouseEnter(mouseEvent);
-      expect((service as any).updateDrawingSelection).toHaveBeenCalled();
     });
 
     it('should stop drawing when the esc key is pressed', () => {
