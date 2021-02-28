@@ -34,6 +34,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
 import { AbstractSelectionComponent } from './components/selection/abstract-selection/abstract-selection.component';
 import { RectangleSelectionComponent } from './components/selection/rectangle-selection/rectangle-selection.component';
 import { EllipseSelectionComponent } from './components/selection/ellipse-selection/ellipse-selection.component';
+import { SelectionHandlerComponent } from './components/selection/selection-handler/selection-handler.component';
 
 @NgModule({
     declarations: [
@@ -59,6 +60,7 @@ import { EllipseSelectionComponent } from './components/selection/ellipse-select
         AbstractSelectionComponent,
         RectangleSelectionComponent,
         EllipseSelectionComponent,
+        SelectionHandlerComponent,
     ],
     imports: [
         AppRoutingModule,
