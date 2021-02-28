@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ShortcutKey } from '@app/classes/shortcut-key';
 import { EraserToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
@@ -13,7 +14,7 @@ export class EraserService extends PencilService {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.clearPath();
-        this.shortcutKey = EraserToolConstants.SHORTCUT_KEY;
+        this.shortcutKey = new ShortcutKey(EraserToolConstants.SHORTCUT_KEY);
         this.toolID = EraserToolConstants.TOOL_ID;
         super.lineWidthIn = ToolSettingsConst.DEFAULT_ERASER_WIDTH;
     }

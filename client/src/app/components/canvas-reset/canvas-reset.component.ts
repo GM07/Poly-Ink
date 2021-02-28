@@ -1,5 +1,7 @@
 import { Component, HostListener } from '@angular/core';
+import { ShortcutKey } from '@app/classes/shortcut-key';
 import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
+import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 @Component({
     selector: 'app-canvas-reset',
@@ -7,10 +9,15 @@ import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
     styleUrls: ['./canvas-reset.component.scss'],
 })
 export class NewDrawingComponent {
-    constructor(private newDrawing: NewDrawingService) {}
+    private shortcut: ShortcutKey;
+
+    constructor(private newDrawing: NewDrawingService, private shortcutHandler: ShortcutHandlerService) {
+        this.shortcut = new ShortcutKey('o', true);
+    }
 
     removeWarning(): void {
         this.newDrawing.showWarning = false;
+        this.shortcutHandler.blockShortcuts = false;
     }
 
     showWarning(): boolean {
@@ -24,13 +31,10 @@ export class NewDrawingComponent {
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
-        if (this.showWarning()) event.stopImmediatePropagation();
-
-        if (event.ctrlKey && event.key !== 'Control') {
-            if (event.key.toLocaleLowerCase() === 'o') {
-                event.preventDefault();
-                this.newDrawing.newCanvas();
-            }
+        if (this.shortcut.equals(event)) {
+            event.preventDefault();
+            this.newDrawing.newCanvas();
+            if (this.newDrawing.showWarning) this.shortcutHandler.blockShortcuts = true;
         }
     }
 }
