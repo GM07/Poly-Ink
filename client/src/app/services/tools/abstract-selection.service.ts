@@ -7,7 +7,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
 
 export abstract class AbstractSelectionService extends Tool {
     protected readonly LINE_DASH: number = 8;
-    protected readonly BORDER_WIDTH: number = 2;
+    protected readonly BORDER_WIDTH: number = 16;
     private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
     private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
     private readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
@@ -266,11 +266,12 @@ export abstract class AbstractSelectionService extends Tool {
 
     isInCanvas(event: MouseEvent): boolean {
         const clientRect = this.drawingService.canvas.getBoundingClientRect();
-        console.log(event.x, clientRect.x + clientRect.width - this.BORDER_WIDTH);
+        console.log(event.x.toPrecision(10), (clientRect.x + clientRect.width - this.BORDER_WIDTH).toPrecision(10));
+        console.log(!(event.x >= clientRect.x + clientRect.width - this.BORDER_WIDTH));
         const left = clientRect.x + this.BORDER_WIDTH / 2;
-        const right = clientRect.x + clientRect.width - this.BORDER_WIDTH / 2;
+        const right = clientRect.x + clientRect.width - this.BORDER_WIDTH / 2 - 1;
         const top = clientRect.y + +this.BORDER_WIDTH / 2;
-        const bottom = clientRect.y + clientRect.height - +this.BORDER_WIDTH / 2;
+        const bottom = clientRect.y + clientRect.height - this.BORDER_WIDTH / 2 - 1;
         console.log(!(event.x <= left || event.x >= right || event.y <= top || event.y >= bottom));
         return !(event.x <= left || event.x >= right || event.y <= top || event.y >= bottom);
     }
