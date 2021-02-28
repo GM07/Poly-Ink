@@ -4,6 +4,8 @@ import { DrawingComponent } from '@app/components/drawing/drawing.component';
 import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { CanvasResizeComponent } from './canvas-resize.component';
+import { RectangleSelectionComponent } from '@app/components/selection/rectangle-selection/rectangle-selection.component';
+import { EllipseSelectionComponent } from '@app/components/selection/ellipse-selection/ellipse-selection.component';
 
 describe('CanvasResizeComponent', () => {
     let component: CanvasResizeComponent;
@@ -14,7 +16,7 @@ describe('CanvasResizeComponent', () => {
     beforeEach(async(() => {
         service = new DrawingService();
         TestBed.configureTestingModule({
-            declarations: [CanvasResizeComponent, DrawingComponent],
+            declarations: [CanvasResizeComponent, DrawingComponent, RectangleSelectionComponent, EllipseSelectionComponent],
             providers: [{ provide: DrawingService, useValue: service }],
         }).compileComponents();
     }));

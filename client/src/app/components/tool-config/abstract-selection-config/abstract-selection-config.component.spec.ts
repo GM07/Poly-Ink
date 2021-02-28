@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
 import { AbstractSelectionConfigComponent } from './abstract-selection-config.component';
 
 describe('AbstractSelectionConfigComponent', () => {
@@ -8,7 +8,8 @@ describe('AbstractSelectionConfigComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AbstractSelectionConfigComponent ]
+      declarations: [ AbstractSelectionConfigComponent ],
+      providers: [AbstractSelectionService]
     })
     .compileComponents();
   }));

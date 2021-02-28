@@ -197,6 +197,10 @@ export abstract class AbstractSelectionService extends Tool {
         this.isDownArrowDown = false;
     }
 
+    getTranslation(mousePos: Vec2): Vec2 {
+      return { x: mousePos.x - this.translationOrigin.x, y: mousePos.y - this.translationOrigin.y } as Vec2;
+  }
+
     private setArrowKeyDown(event: KeyboardEvent): void {
         if (this.RIGHT_ARROW.equals(event)) this.isRightArrowDown = true;
         if (this.LEFT_ARROW.equals(event)) this.isLeftArrowDown = true;
@@ -263,10 +267,6 @@ export abstract class AbstractSelectionService extends Tool {
         this.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
 
         this.drawPreviewSelectionRequired(ctx);
-    }
-
-    public getTranslation(mousePos: Vec2): Vec2 {
-        return { x: mousePos.x - this.translationOrigin.x, y: mousePos.y - this.translationOrigin.y } as Vec2;
     }
 
     private updateDrawingSelection(): void {

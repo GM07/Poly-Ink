@@ -39,6 +39,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit {
     }
 
     ngOnDestroy(): void {
+      if(this.drawingService.canvas !== undefined)
         this.drawingService.canvas.style.cursor = this.lastCursor;
     }
 
