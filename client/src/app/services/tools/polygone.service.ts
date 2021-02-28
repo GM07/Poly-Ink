@@ -29,7 +29,7 @@ export class PolygoneService extends Tool {
         this.shortcutKey = PolygoneToolConstants.SHORTCUT_KEY;
         // this.shiftPressed = false;
         this.lineWidthIn = 1;
-        this.numEdgesIn = 3;
+        this.numEdgesIn = ToolSettingsConst.MIN_NUM_EDGES;
         this.polygoneMode = PolygoneMode.FilledWithContour;
     }
 
@@ -73,6 +73,7 @@ export class PolygoneService extends Tool {
                 this.mouseUpCoord = this.getPositionFromMouse(event);
             }
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
+            this.drawPolygone(this.drawingService.baseCtx);
         }
         this.mouseDown = false;
     }
@@ -83,6 +84,7 @@ export class PolygoneService extends Tool {
             const ctx = this.drawingService.previewCtx;
             this.drawingService.clearCanvas(ctx);
             this.drawPolygone(ctx);
+            console.log(event.x, event.y);
         }
     }
 
@@ -130,56 +132,51 @@ export class PolygoneService extends Tool {
         let radius: number = Math.min(radiusX, radiusY);
         let centerX: number = this.mouseDownCoord.x + radius;
         let centerY: number = this.mouseDownCoord.y + radius;
+        let radiusAbs = Math.abs(radius);            
+        ctx.lineCap = 'round' as CanvasLineCap;
+        ctx.lineJoin = 'round' as CanvasLineJoin;
 
-        let radiusAbs = Math.abs(radius);
 
         if (ctx === this.drawingService.previewCtx) {
             this.drawCirclePerimeter(ctx, centerX, centerY, radiusAbs);
         }
 
-        // ctx.strokeStyle = this.colorService.secondaryRgba;
-        // ctx.lineCap = 'round' as CanvasLineCap;
-        // ctx.lineJoin = 'round' as CanvasLineJoin;
-
-        // ctx.beginPath();
-        // switch (this.polygoneMode) {
-        //     case PolygoneMode.Contour:
-        //         ctx.lineWidth = this.lineWidthIn;
-        //         ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
-        //         ctx.stroke();
-        //         break;
-        //     case PolygoneMode.Filled:
-        //         ctx.lineWidth = 0;
-        //         ctx.fillStyle = this.colorService.primaryRgba;
-        //         ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
-        //         ctx.fill();
-        //         break;
-        //     case PolygoneMode.FilledWithContour:
-        //         ctx.lineWidth = this.lineWidthIn;
-        //         ctx.fillStyle = this.colorService.primaryRgba;
-        //         ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
-        //         ctx.fill();
-        //         ctx.stroke();
-        //         break;
-        //     default:
-        //         break;
-        // }
-
+        this.drawPolygoneSides(ctx, centerX, centerY, radiusAbs);
         ctx.closePath();
     }
+
+    private drawPolygoneSides(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, radiusAbs: number) {
+        let angle = 2*Math.PI / this.numEdgesIn;
+        let startingAngle = this.numEdgesIn === ToolSettingsConst.NUM_EDGES_SQUARE ? (-Math.PI / 2) / 2 : -Math.PI / 2;
+        ctx.lineWidth =  this.polygoneMode === PolygoneMode.Filled ? 0 : this.lineWidthIn;
+        let lineWidthWeightedRadius = radiusAbs - ctx.lineWidth / 2; 
+
+        ctx.beginPath();
+        for(let i = 0; i < this.numEdges; i++) {
+            let currentX = centerX + lineWidthWeightedRadius * Math.cos(startingAngle + i * angle);
+            let currentY = centerY + lineWidthWeightedRadius * Math.sin(startingAngle + i * angle);
+            ctx.lineTo(currentX, currentY);
+        }
+        ctx.closePath();
+
+        ctx.strokeStyle = this.colorService.secondaryRgba;
+        ctx.fillStyle = this.colorService.primaryRgba;
+        if (this.polygoneMode === PolygoneMode.Filled || this.polygoneMode === PolygoneMode.FilledWithContour) {
+            ctx.fill();
+        } 
+        if (this.polygoneMode === PolygoneMode.Contour || this.polygoneMode === PolygoneMode.FilledWithContour) {
+            ctx.stroke();
+        }
+    }
+
+
     private drawCirclePerimeter(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, radiusAbs: number): void {
         const dashWidth = 1;
-        // let lineWidth: number = this.lineWidthIn;
-        // if (this.polygoneMode === PolygoneMode.Filled) {
-        //     lineWidth = 0;
-        // }
-        console.log('Drawing');
         const lineDash = 6;
         ctx.lineWidth = dashWidth;
         ctx.strokeStyle = 'gray';
         ctx.setLineDash([lineDash]);
         ctx.beginPath();
-        console.log(centerX, centerY, radiusAbs);
         ctx.arc(centerX, centerY, radiusAbs, 0, Math.PI * 2, true);
         ctx.stroke();
         ctx.closePath();

@@ -6,4 +6,5 @@ export abstract class ToolSettingsConst {
     static readonly DEFAULT_PENCIL_WIDTH: number = 12;
     static readonly MAX_NUM_EDGES: number = 12;
     static readonly MIN_NUM_EDGES: number = 3;
+    static readonly NUM_EDGES_SQUARE: number = 4;
 }
