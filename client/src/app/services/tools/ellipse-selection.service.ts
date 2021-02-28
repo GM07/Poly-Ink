@@ -21,10 +21,6 @@ export class EllipseSelectionService extends AbstractSelectionService {
         this.toolID = EllipseSelectionToolConstants.TOOL_ID;
     }
 
-    stopDrawing(): void {
-        super.stopDrawing();
-    }
-
     protected drawPreviewSelectionRequired(ctx: CanvasRenderingContext2D): void {
         let radiusX: number = this.width / 2;
         let radiusY: number = this.height / 2;
@@ -87,6 +83,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         ctx.closePath();
     }
 
+    //Todo changer pour un vec2 ?
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPosX: number, currentPosY: number): void {
         if (this.firstSelectionCoords.x !== currentPosX || this.firstSelectionCoords.y !== currentPosY) {
             ctx.beginPath();
