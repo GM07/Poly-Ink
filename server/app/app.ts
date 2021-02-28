@@ -1,3 +1,4 @@
+import { IndexController } from '@app/controllers/index.controller';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as cors from 'cors';
@@ -7,7 +8,6 @@ import * as logger from 'morgan';
 import * as swaggerJSDoc from 'swagger-jsdoc';
 import * as swaggerUi from 'swagger-ui-express';
 import { DateController } from './controllers/date.controller';
-import { IndexController } from './controllers/index.controller';
 import { TYPES } from './types';
 
 @injectable()
@@ -50,7 +50,7 @@ export class Application {
     bindRoutes(): void {
         // Notre application utilise le routeur de notre API `Index`
         this.app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(this.swaggerOptions)));
-        this.app.use('/api/index', this.indexController.router);
+        this.app.use('/api/drawing', this.indexController.router);
         this.app.use('/api/date', this.dateController.router);
         this.errorHandling();
     }

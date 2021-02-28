@@ -1,4 +1,5 @@
 import { TYPES } from '@app/types';
+import { Drawing } from '@common/communication/drawing';
 import { Message } from '@common/communication/message';
 import { NextFunction, Request, Response, Router } from 'express';
 import { inject, injectable } from 'inversify';
@@ -103,9 +104,9 @@ export class IndexController {
          *       201:
          *         description: Created
          */
-        this.router.post('/send', (req: Request, res: Response, next: NextFunction) => {
-            const message: Message = req.body;
-            this.indexService.storeMessage(message);
+        this.router.post('/', (req: Request, res: Response, next: NextFunction) => {
+            const drawing: Drawing = req.body;
+            this.indexService.storeDrawing(drawing);
             res.sendStatus(HTTP_STATUS_CREATED);
         });
 

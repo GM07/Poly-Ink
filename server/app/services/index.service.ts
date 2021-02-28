@@ -1,5 +1,7 @@
 import { TYPES } from '@app/types';
+import { Drawing, ROOT_DIRECTORY } from '@common/communication/drawing';
 import { Message } from '@common/communication/message';
+import * as fs from 'fs';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { DateService } from './date.service';
@@ -41,6 +43,18 @@ export class IndexService {
     storeMessage(message: Message): void {
         console.log(message);
         this.clientMessages.push(message);
+    }
+
+    async storeDrawing(drawing: Drawing): Promise<void> {
+        const drawingId = Math.ceil(Math.random() * 1000);
+        const drawingPath =  `${ROOT_DIRECTORY}/${drawingId}.png`;
+        if(!fs.existsSync(ROOT_DIRECTORY)) {
+            fs.mkdirSync(ROOT_DIRECTORY);
+        }
+        console.log(drawing.drawing64Str);
+        fs.writeFile(drawingPath, drawing.drawing64Str, 'base64', function(err) {
+            console.log(err);
+        });
     }
 
     getAllMessages(): Message[] {
