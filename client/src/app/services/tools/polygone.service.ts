@@ -18,8 +18,7 @@ export enum PolygoneMode {
     providedIn: 'root',
 })
 export class PolygoneService extends Tool {
-    toolID: string = PolygoneToolConstants.TOOL_ID;
-    private shiftPressed: boolean;
+    toolID: string;
     private lineWidthIn: number;
     polygoneMode: PolygoneMode;
     private numEdgesIn: number;
@@ -28,7 +27,7 @@ export class PolygoneService extends Tool {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(PolygoneToolConstants.SHORTCUT_KEY);
-        // this.shiftPressed = false;
+        this.toolID = PolygoneToolConstants.TOOL_ID;
         this.lineWidthIn = 1;
         this.numEdgesIn = ToolSettingsConst.MIN_NUM_EDGES;
         this.polygoneMode = PolygoneMode.FilledWithContour;
@@ -55,7 +54,6 @@ export class PolygoneService extends Tool {
 
     stopDrawing(): void {
         this.mouseDown = false;
-        // this.shiftPressed = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
@@ -82,10 +80,7 @@ export class PolygoneService extends Tool {
     onMouseMove(event: MouseEvent): void {
         if (this.mouseDown) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
-            const ctx = this.drawingService.previewCtx;
-            this.drawingService.clearCanvas(ctx);
-            this.drawPolygone(ctx);
-            console.log(event.x, event.y);
+            this.updatePolygone();
         }
     }
 
@@ -103,24 +98,6 @@ export class PolygoneService extends Tool {
         }
     }
 
-    onKeyDown(event: KeyboardEvent): void {
-        if (event.shiftKey && !this.shiftPressed) {
-            this.shiftPressed = true;
-            if (this.mouseDown) {
-                this.updatePolygone();
-            }
-        }
-    }
-
-    onKeyUp(event: KeyboardEvent): void {
-        if (!event.shiftKey && this.shiftPressed) {
-            this.shiftPressed = false;
-            if (this.mouseDown) {
-                this.updatePolygone();
-            }
-        }
-    }
-
     private updatePolygone(): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
@@ -134,8 +111,8 @@ export class PolygoneService extends Tool {
         const centerX: number = this.mouseDownCoord.x + radius;
         const centerY: number = this.mouseDownCoord.y + radius;
         const radiusAbs = Math.abs(radius);
-        ctx.lineCap = 'round' as CanvasLineCap;
-        ctx.lineJoin = 'round' as CanvasLineJoin;
+        ctx.lineCap = 'square' as CanvasLineCap;
+        ctx.lineJoin = 'miter' as CanvasLineJoin;
 
         if (ctx === this.drawingService.previewCtx) {
             this.drawCirclePerimeter(ctx, centerX, centerY, radiusAbs);

@@ -24,7 +24,7 @@ describe('PolygoneConfigComponent', () => {
     const NUM_SLIDERS = 2;
     const NUM_EDGES_SLIDER_ID = 'polygone-edges-slider';
 
-    beforeEach(async() => {
+    beforeEach(async () => {
         await TestBed.configureTestingModule({
             declarations: [PolygoneConfigComponent],
             imports: [MatDividerModule, MatSliderModule, FormsModule, NoopAnimationsModule, MatButtonToggleModule],
@@ -37,34 +37,34 @@ describe('PolygoneConfigComponent', () => {
         polygoneService = TestBed.inject(PolygoneService);
         const sliders = await loader.getAllHarnesses(MatSliderHarness);
         for (const slider of sliders) {
-            if(await slider.getId() === NUM_EDGES_SLIDER_ID) {
-                numEdgesSliderHarness = slider; 
+            if ((await slider.getId()) === NUM_EDGES_SLIDER_ID) {
+                numEdgesSliderHarness = slider;
             } else {
                 widthSliderHarness = slider;
-            } 
-        } 
+            }
+        }
     });
 
     it('should create', () => {
         expect(component).toBeTruthy();
     });
-    
-    it('should load all slider harnesses', async() => {
+
+    it('should load all slider harnesses', async () => {
         const sliders = await loader.getAllHarnesses(MatSliderHarness);
         expect(sliders.length).toBe(NUM_SLIDERS);
     });
 
-    it('should have sliders with appropriate maximum values', async() => {
+    it('should have sliders with appropriate maximum values', async () => {
         expect(await numEdgesSliderHarness.getMaxValue()).toBe(ToolSettingsConst.MAX_NUM_EDGES);
         expect(await widthSliderHarness.getMaxValue()).toBe(ToolSettingsConst.MAX_WIDTH);
     });
 
-    it('should have sliders with appropriate minimum values', async() => {
+    it('should have sliders with appropriate minimum values', async () => {
         expect(await numEdgesSliderHarness.getMinValue()).toBe(ToolSettingsConst.MIN_NUM_EDGES);
         expect(await widthSliderHarness.getMinValue()).toBe(ToolSettingsConst.MIN_WIDTH);
     });
 
-    it('should be able to set inbounds the value of width slider', async() => {
+    it('should be able to set inbounds the value of width slider', async () => {
         const testSetValue = 15;
         expect(await widthSliderHarness.getValue()).toBe(ToolSettingsConst.MIN_WIDTH);
 
@@ -72,7 +72,7 @@ describe('PolygoneConfigComponent', () => {
         expect(await widthSliderHarness.getValue()).toBe(testSetValue);
     });
 
-    it('should be able to set inbounds value for number of edges slider', async() => {
+    it('should be able to set inbounds value for number of edges slider', async () => {
         const testSetValue = 10;
         expect(await numEdgesSliderHarness.getValue()).toBe(ToolSettingsConst.MIN_NUM_EDGES);
 
@@ -80,7 +80,7 @@ describe('PolygoneConfigComponent', () => {
         expect(await numEdgesSliderHarness.getValue()).toBe(testSetValue);
     });
 
-    it('should prevent from setting an out of bounds value for number of edges slider', async() => {
+    it('should prevent from setting an out of bounds value for number of edges slider', async () => {
         const testInvalidSetValue = 20;
         expect(await numEdgesSliderHarness.getValue()).toBe(ToolSettingsConst.MIN_NUM_EDGES);
 
@@ -88,8 +88,7 @@ describe('PolygoneConfigComponent', () => {
         expect(await numEdgesSliderHarness.getValue()).not.toBe(testInvalidSetValue);
     });
 
-
-    it('should prevent from setting an out of bounds value for width slider', async() => {
+    it('should prevent from setting an out of bounds value for width slider', async () => {
         const testInvalidSetValue = -1;
         expect(await widthSliderHarness.getValue()).toBe(ToolSettingsConst.MIN_WIDTH);
 
@@ -97,12 +96,12 @@ describe('PolygoneConfigComponent', () => {
         expect(await widthSliderHarness.getValue()).toBe(ToolSettingsConst.MIN_WIDTH);
     });
 
-    it('should have a button toggle group', async() => {
+    it('should have a button toggle group', async () => {
         const buttonsGroup = await loader.getAllHarnesses(MatButtonToggleGroupHarness);
-        expect(buttonsGroup.length).toBe(1); 
+        expect(buttonsGroup.length).toBe(1);
     });
 
-    it('should have the right amount of toggle buttons inside the first group', async() => {
+    it('should have the right amount of toggle buttons inside the first group', async () => {
         const nToggles = 3;
         const buttonsGroup = await loader.getHarness(MatButtonToggleGroupHarness);
         const toggles = await buttonsGroup.getToggles();
@@ -110,10 +109,10 @@ describe('PolygoneConfigComponent', () => {
     });
 
     it('should have the first button in group as button with Contour text', async () => {
-            const group = await loader.getHarness(MatButtonToggleGroupHarness);
-            const toggles = await group.getToggles();
-            expect(await toggles[0].getText()).toBe('Contour');
-        });
+        const group = await loader.getHarness(MatButtonToggleGroupHarness);
+        const toggles = await group.getToggles();
+        expect(await toggles[0].getText()).toBe('Contour');
+    });
 
     it('should have the second button in group as button with Plein text', async () => {
         const group = await loader.getHarness(MatButtonToggleGroupHarness);
@@ -126,20 +125,20 @@ describe('PolygoneConfigComponent', () => {
         const toggles = await group.getToggles();
         expect(await toggles[2].getText()).toBe('Plein & Contour');
     });
-    
-    it('should set the traceType to Contour when Contour toggle button is clicked', async() => {
+
+    it('should set the traceType to Contour when Contour toggle button is clicked', async () => {
         buttonToggleLabelElements[0].click();
         fixture.detectChanges();
         expect(polygoneService.polygoneMode).toEqual(PolygoneMode.Contour);
     });
 
-    it('should set the traceType to Plein when Plein toggle button is clicked', async() => {
+    it('should set the traceType to Plein when Plein toggle button is clicked', async () => {
         buttonToggleLabelElements[1].click();
         fixture.detectChanges();
         expect(polygoneService.polygoneMode).toEqual(PolygoneMode.Filled);
     });
 
-    it('should set the traceType to Plein & Contour when Plein & Contour toggle button is clicked', async() => {
+    it('should set the traceType to Plein & Contour when Plein & Contour toggle button is clicked', async () => {
         buttonToggleLabelElements[2].click();
         fixture.detectChanges();
         expect(polygoneService.polygoneMode).toEqual(PolygoneMode.FilledWithContour);

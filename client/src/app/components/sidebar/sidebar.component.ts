@@ -21,7 +21,6 @@ export class SidebarComponent implements OnInit {
         this.selectedTool = this.toolHandlerService.getTool();
         this.toolHandlerService.currentToolSubject.subscribe((newTool) => {
             this.selectedTool = newTool;
-            console.log(this.toolHandlerService.getTool());
         });
     }
 

@@ -75,6 +75,7 @@ describe('SettingsHandlerComponent', () => {
         rectangleService = TestBed.inject(RectangleService);
         eraserService = TestBed.inject(EraserService);
         ellipseService = TestBed.inject(EllipseService);
+        polygoneService = TestBed.inject(PolygoneService);
         toolHandlerService = new MockToolHandler(pencilService, lineService, rectangleService, eraserService, ellipseService, polygoneService);
         component = new SettingsHandlerComponent(toolHandlerService);
     });
