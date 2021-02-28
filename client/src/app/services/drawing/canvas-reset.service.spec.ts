@@ -3,7 +3,6 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { NewDrawingService } from './canvas-reset.service';
 import { DrawingService } from './drawing.service';
 
-
 describe('NewDrawingService', () => {
     let service: NewDrawingService;
     let drawingService: DrawingService;
@@ -44,7 +43,9 @@ describe('NewDrawingService', () => {
     it('should reset if confirm is true', () => {
         const spyFunc = spyOn(drawingService, 'resizeCanvas');
         const spyFunc2 = spyOn(drawingService, 'initBackground');
-        spyOn(toolHandler.getTool(), 'stopDrawing').and.callFake(() => {});
+        spyOn(toolHandler.getTool(), 'stopDrawing').and.callFake(() => {
+            /**/
+        });
         service.newCanvas(true);
         expect(spyFunc).toHaveBeenCalled();
         expect(spyFunc2).toHaveBeenCalled();
@@ -53,7 +54,9 @@ describe('NewDrawingService', () => {
     it('should not reset if confirm is false and not empty', () => {
         const spyFunc = spyOn(service, 'isNotEmpty').and.returnValue(true);
         const spyFunc2 = spyOn(drawingService, 'resizeCanvas');
-        spyOn(toolHandler.getTool(), 'stopDrawing').and.callFake(() => {});
+        spyOn(toolHandler.getTool(), 'stopDrawing').and.callFake(() => {
+            /**/
+        });
         service.newCanvas(false);
         expect(spyFunc).toHaveBeenCalled();
         expect(spyFunc2).not.toHaveBeenCalled();
@@ -63,7 +66,9 @@ describe('NewDrawingService', () => {
         drawingService.baseCtx = context;
         const spyFunc = spyOn(drawingService, 'resizeCanvas');
         const spyFunc2 = spyOn(service, 'isNotEmpty').and.returnValue(false);
-        spyOn(toolHandler.getTool(), 'stopDrawing').and.callFake(() => {});
+        spyOn(toolHandler.getTool(), 'stopDrawing').and.callFake(() => {
+            /**/
+        });
         context.fillStyle = 'white';
         context.fillRect(0, 0, canvas.width, canvas.height);
         service.newCanvas(false);
