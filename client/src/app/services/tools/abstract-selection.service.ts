@@ -7,6 +7,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
 
 export abstract class AbstractSelectionService extends Tool {
     protected readonly LINE_DASH: number = 8;
+    protected readonly BORDER_WIDTH: number = 2;
     private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
     private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
     private readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
@@ -87,7 +88,9 @@ export abstract class AbstractSelectionService extends Tool {
     onMouseMove(event: MouseEvent): void {
         if (this.mouseDown) {
             const mousePos = this.getPositionFromMouse(event);
-            this.mouseUpCoord = mousePos;
+            if (this.isInCanvas(event)) {
+                this.mouseUpCoord = mousePos;
+            }
             if (this.selectionCtx !== null) {
                 this.updateSelection(this.getTranslation(mousePos));
             } else {
@@ -95,20 +98,6 @@ export abstract class AbstractSelectionService extends Tool {
                 this.drawingService.clearCanvas(ctx);
                 this.drawPreviewSelection(ctx);
             }
-        }
-    }
-
-    onMouseLeave(event: MouseEvent): void {
-        if (this.mouseDown && this.isInCanvas(event) && this.selectionCtx === null) {
-            this.mouseUpCoord = this.getPositionFromMouse(event);
-            this.updateDrawingSelection();
-        }
-    }
-
-    onMouseEnter(event: MouseEvent): void {
-        if (this.mouseDown && this.isInCanvas(event) && this.selectionCtx === null) {
-            this.mouseUpCoord = this.getPositionFromMouse(event);
-            this.updateDrawingSelection();
         }
     }
 
@@ -273,5 +262,16 @@ export abstract class AbstractSelectionService extends Tool {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
         this.drawPreviewSelection(ctx);
+    }
+
+    isInCanvas(event: MouseEvent): boolean {
+        const clientRect = this.drawingService.canvas.getBoundingClientRect();
+        console.log(event.x, clientRect.x + clientRect.width - this.BORDER_WIDTH);
+        const left = clientRect.x + this.BORDER_WIDTH / 2;
+        const right = clientRect.x + clientRect.width - this.BORDER_WIDTH / 2;
+        const top = clientRect.y + +this.BORDER_WIDTH / 2;
+        const bottom = clientRect.y + clientRect.height - +this.BORDER_WIDTH / 2;
+        console.log(!(event.x <= left || event.x >= right || event.y <= top || event.y >= bottom));
+        return !(event.x <= left || event.x >= right || event.y <= top || event.y >= bottom);
     }
 }

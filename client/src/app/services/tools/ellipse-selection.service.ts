@@ -47,7 +47,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
     protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, width: number, height: number): void {
         ctx.beginPath();
 
-        ctx.lineWidth = 2;
+        ctx.lineWidth = this.BORDER_WIDTH;
         ctx.setLineDash([this.LINE_DASH, this.LINE_DASH]);
         ctx.lineCap = 'round' as CanvasLineCap;
         ctx.lineJoin = 'round' as CanvasLineJoin;
@@ -69,14 +69,13 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
         ctx.closePath();
 
-        if (this.selectionCtx !== null) this.drawRectanglePerimeter(ctx, position.x, position.y, width, height);
+        if (this.selectionCtx !== null) this.drawRectanglePerimeter(ctx, position, width, height);
     }
 
-    private drawRectanglePerimeter(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, radiusX: number, radiusY: number): void {
-        const lineWidth = 2;
-        ctx.lineWidth = lineWidth;
-        const x = centerX - radiusX;
-        const y = centerY - radiusY;
+    private drawRectanglePerimeter(ctx: CanvasRenderingContext2D, center: Vec2, radiusX: number, radiusY: number): void {
+        ctx.lineWidth = this.BORDER_WIDTH;
+        const x = center.x - radiusX;
+        const y = center.x - radiusY;
         const width = radiusX * 2;
         const height = radiusY * 2;
 

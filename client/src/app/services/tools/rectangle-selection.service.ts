@@ -60,7 +60,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
     }
 
     protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, width: number, height: number): void {
-        ctx.lineWidth = 2;
+        ctx.lineWidth = this.BORDER_WIDTH;
         ctx.setLineDash([this.LINE_DASH, this.LINE_DASH]);
         ctx.strokeStyle = 'black';
         ctx.lineJoin = 'miter' as CanvasLineJoin;
