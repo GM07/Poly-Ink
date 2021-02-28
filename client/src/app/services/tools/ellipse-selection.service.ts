@@ -18,8 +18,6 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
     private centerX: number;
     private centerY: number;
-    private radiusXAbs: number;
-    private radiusYAbs: number;
     stopDrawing(): void {
         super.stopDrawing();
     }
@@ -38,10 +36,10 @@ export class EllipseSelectionService extends AbstractSelectionService {
             radiusY = minRadius;
         }
 
-        this.radiusXAbs = Math.abs(radiusX);
-        this.radiusYAbs = Math.abs(radiusY);
+        this.width = 2*Math.abs(radiusX);
+        this.height = 2*Math.abs(radiusY);
 
-        this.drawSelection(ctx, { x: this.centerX, y: this.centerY }, this.radiusXAbs, this.radiusYAbs);
+        this.drawSelection(ctx, { x: this.centerX, y: this.centerY }, this.width/2, this.height/2);
     }
 
     protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, width: number, height: number): void {
@@ -90,7 +88,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         if (this.firstSelectionCoords.x !== currentPosX || this.firstSelectionCoords.y !== currentPosY) {
             ctx.beginPath();
             ctx.fillStyle = 'rgb(255,20,147)';
-            ctx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+            ctx.ellipse(this.centerX, this.centerY, this.width/2, this.height/2, 0, 0, 2 * Math.PI);
             ctx.fill();
             ctx.closePath();
         }
@@ -99,31 +97,31 @@ export class EllipseSelectionService extends AbstractSelectionService {
     protected updateSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
-        const centerX = this.selectionCoords.x + this.radiusXAbs;
-        const centerY = this.selectionCoords.y + this.radiusYAbs;
+        const centerX = this.selectionCoords.x + this.width/2;
+        const centerY = this.selectionCoords.y + this.height/2;
 
         this.fillBackground(ctx, this.selectionCoords.x, this.selectionCoords.y);
 
         ctx.beginPath();
         ctx.save();
-        ctx.ellipse(centerX, centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+        ctx.ellipse(centerX, centerY, this.width/2, this.height/2, 0, 0, 2 * Math.PI);
         ctx.clip();
         ctx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         ctx.restore();
-        this.drawSelection(ctx, { x: centerX, y: centerY }, this.radiusXAbs, this.radiusYAbs);
+        this.drawSelection(ctx, { x: centerX, y: centerY }, this.width/2, this.height/2);
     }
 
     protected endSelection(): void {
         if (this.selectionCtx === null) return;
         const baseCtx = this.drawingService.baseCtx;
-        const centerX = this.selectionCoords.x + this.radiusXAbs;
-        const centerY = this.selectionCoords.y + this.radiusYAbs;
+        const centerX = this.selectionCoords.x + this.width/2;
+        const centerY = this.selectionCoords.y + this.height/2;
 
         this.fillBackground(baseCtx, this.selectionCoords.x, this.selectionCoords.y);
 
         baseCtx.beginPath();
         baseCtx.save();
-        baseCtx.ellipse(centerX, centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+        baseCtx.ellipse(centerX, centerY, this.width/2, this.height/2, 0, 0, 2 * Math.PI);
         baseCtx.clip();
         baseCtx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         baseCtx.restore();
