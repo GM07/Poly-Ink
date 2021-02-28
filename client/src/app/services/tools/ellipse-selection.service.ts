@@ -75,7 +75,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
     private drawRectanglePerimeter(ctx: CanvasRenderingContext2D, center: Vec2, radiusX: number, radiusY: number): void {
         ctx.lineWidth = this.BORDER_WIDTH;
         const x = center.x - radiusX;
-        const y = center.x - radiusY;
+        const y = center.y - radiusY;
         const width = radiusX * 2;
         const height = radiusY * 2;
 
