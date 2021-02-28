@@ -8,6 +8,19 @@ import { DateService } from './date.service';
 
 @injectable()
 export class IndexService {
+    validateName(name: string): boolean {
+        if (name) {
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    // TODO: Tag Validation
+    validateTags(tags: string[]) {
+        return true;
+    }
+
     clientMessages: Message[];
     constructor(@inject(TYPES.DateService) private dateService: DateService) {
         this.clientMessages = [];
