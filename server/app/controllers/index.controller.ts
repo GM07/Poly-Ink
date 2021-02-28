@@ -6,7 +6,7 @@ import { inject, injectable } from 'inversify';
 import { IndexService } from '../services/index.service';
 
 const HTTP_STATUS_CREATED = 201;
-
+const HTTP_BAD_REQUEST = 400;
 @injectable()
 export class IndexController {
     router: Router;
@@ -106,6 +106,13 @@ export class IndexController {
          */
         this.router.post('/', (req: Request, res: Response, next: NextFunction) => {
             const drawing: Drawing = req.body;
+            if (!this.indexService.validateTags(drawing.tags)) {
+                res.sendStatus(HTTP_BAD_REQUEST);
+            };
+
+            if(!this.indexService.validateName(drawing.name)) {
+                res.sendStatus(HTTP_BAD_REQUEST);
+            }
             this.indexService.storeDrawing(drawing);
             res.sendStatus(HTTP_STATUS_CREATED);
         });
