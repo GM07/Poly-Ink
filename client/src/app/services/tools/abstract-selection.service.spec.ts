@@ -137,10 +137,13 @@ describe('AbstractSelectionService', () => {
     });
 
     it('should change translationOrigin when mouseDown and inSelection', () => {
+        service['translationOrigin'] = { x: 1, y: 1 };
+        const translationOrigin = service['translationOrigin'];
+        const lastTranslation = { x: translationOrigin.x, y: translationOrigin.y } as Vec2;
         spyOn(service, 'isInSelection').and.returnValue(true);
-        let saveTranslation: Vec2 = (service as any).translationOrigin;
         service.onMouseDown(mouseEvent);
-        expect((service as any).translationOrigin).not.toEqual(saveTranslation);
+        console.info(translationOrigin, lastTranslation);
+        expect(translationOrigin).not.toEqual(lastTranslation); ///
     });
 
     it('should change update selection on mouseMove', () => {

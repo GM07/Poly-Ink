@@ -97,8 +97,8 @@ export class EllipseSelectionService extends AbstractSelectionService {
     protected updateSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
-        const centerX = this.selectionCoords.x + this.width / 2;
-        const centerY = this.selectionCoords.y + this.height / 2;
+        const centerX = this.selectionCoords.x + Math.abs(this.width / 2);
+        const centerY = this.selectionCoords.y + Math.abs(this.height / 2);
 
         this.fillBackground(ctx, this.selectionCoords.x, this.selectionCoords.y);
 
@@ -114,8 +114,8 @@ export class EllipseSelectionService extends AbstractSelectionService {
     protected endSelection(): void {
         if (this.selectionCtx === null) return;
         const baseCtx = this.drawingService.baseCtx;
-        const centerX = this.selectionCoords.x + this.width / 2;
-        const centerY = this.selectionCoords.y + this.height / 2;
+        const centerX = this.selectionCoords.x + Math.abs(this.width / 2);
+        const centerY = this.selectionCoords.y + Math.abs(this.height / 2);
 
         this.fillBackground(baseCtx, this.selectionCoords.x, this.selectionCoords.y);
 
