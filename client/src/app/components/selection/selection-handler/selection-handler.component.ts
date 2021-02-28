@@ -19,7 +19,6 @@ export class SelectionHandlerComponent {
 
     constructor(private toolHandler: ToolHandlerService) {
         this.applyNewTab();
-        this.settingsList;
         this.settingsList.set(RectangleSelectionService, RectangleSelectionComponent);
         this.settingsList.set(EllipseSelectionService, EllipseSelectionComponent);
     }

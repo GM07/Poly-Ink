@@ -5,6 +5,7 @@ import { AbstractSelectionConfigComponent } from './abstract-selection-config.co
 describe('AbstractSelectionConfigComponent', () => {
   let component: AbstractSelectionConfigComponent;
   let fixture: ComponentFixture<AbstractSelectionConfigComponent>;
+  let abstractSelectionService: AbstractSelectionService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -16,6 +17,7 @@ describe('AbstractSelectionConfigComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AbstractSelectionConfigComponent);
+    abstractSelectionService = TestBed.inject(AbstractSelectionService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -23,4 +25,10 @@ describe('AbstractSelectionConfigComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('select all should call select all of abstractSelectionService', () => {
+    spyOn(abstractSelectionService, 'selectAll');
+    component.selectAll();
+    expect(abstractSelectionService.selectAll).toHaveBeenCalled();
+  })
 });
