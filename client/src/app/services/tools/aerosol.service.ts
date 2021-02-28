@@ -13,7 +13,6 @@ export enum LeftMouse {
 }
 
 const MS_PER_SECOND = 1000;
-const DEGREES = 360;
 
 @Injectable({
     providedIn: 'root',
@@ -48,6 +47,7 @@ export class AerosolService extends Tool {
 
     set areaDiameter(diameter: number) {
         this.areaDiameterIn = Math.min(Math.max(diameter, ToolSettingsConst.MIN_AREA_WIDTH), ToolSettingsConst.MAX_AREA_WIDTH);
+        this.nDropletsPerSpray = this.areaDiameterIn;
     }
 
     get dropletDiameter(): number {
@@ -79,7 +79,6 @@ export class AerosolService extends Tool {
 
     onMouseUp(event: MouseEvent): void {
         if (this.mouseDown) {
-            // Copie du preview sur le base
             this.drawingService.baseCtx.drawImage(this.drawingService.previewCtx.canvas, 0, 0);
         }
         this.mouseDown = false;
@@ -106,13 +105,13 @@ export class AerosolService extends Tool {
         }
     }
 
-    sprayContinuously(ctx: CanvasRenderingContext2D): void {
+    private sprayContinuously(ctx: CanvasRenderingContext2D): void {
         this.sprayIntervalID = window.setInterval(() => {
             this.drawSpray(this.drawingService.previewCtx);
         }, MS_PER_SECOND / this.emissionsPerSecondIn);
     }
 
-    drawSpray(ctx: CanvasRenderingContext2D): void {
+    private drawSpray(ctx: CanvasRenderingContext2D): void {
         ctx.beginPath();
         ctx.fillStyle = this.colorService.primaryRgba;
         ctx.strokeStyle = this.colorService.primaryRgba;
@@ -133,11 +132,13 @@ export class AerosolService extends Tool {
     }
 
     randomDroplet(): Vec2 {
-        const randAngle = Math.random() * DEGREES;
-        const randRadius = (Math.random() * (this.areaDiameter - this.dropletDiameter)) / 2;
+        const areaRadius = this.areaDiameter / 2;
+        const angle = 2 * Math.PI * (Math.random() * areaRadius);
+        const randomDistFromCenter = Math.random() * areaRadius + Math.random() * areaRadius;
+        const randomRadius: number = randomDistFromCenter > areaRadius ? this.areaDiameter - randomDistFromCenter : randomDistFromCenter;
         return {
-            x: Math.cos(randAngle) * randRadius,
-            y: Math.sin(randAngle) * randRadius,
+            x: Math.cos(angle) * randomRadius,
+            y: Math.sin(angle) * randomRadius,
         };
     }
 }
