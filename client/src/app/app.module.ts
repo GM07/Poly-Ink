@@ -20,9 +20,13 @@ import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { AbstractSelectionComponent } from './components/selection/abstract-selection/abstract-selection.component';
+import { NgInitControlPointDirective } from './components/selection/abstract-selection/ng-init-control-point.directive';
+import { EllipseSelectionComponent } from './components/selection/ellipse-selection/ellipse-selection.component';
+import { RectangleSelectionComponent } from './components/selection/rectangle-selection/rectangle-selection.component';
+import { SelectionHandlerComponent } from './components/selection/selection-handler/selection-handler.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { AbstractSelectionConfigComponent } from './components/tool-config/abstract-selection-config/abstract-selection-config.component';
-import { NgInitControlPointDirective } from './components/tool-config/abstract-selection-config/ng-init-control-point.directive';
 import { EllipseConfigComponent } from './components/tool-config/ellipse-config/ellipse-config.component';
 import { EllipseSelectionConfigComponent } from './components/tool-config/ellipse-selection-config/ellipse-selection-config.component';
 import { EraserConfigComponent } from './components/tool-config/eraser-config/eraser-config.component';
@@ -31,10 +35,6 @@ import { PencilConfigComponent } from './components/tool-config/pencil-config/pe
 import { RectangleConfigComponent } from './components/tool-config/rectangle-config/rectangle-config.component';
 import { RectangleSelectionConfigComponent } from './components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
 import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
-import { AbstractSelectionComponent } from './components/selection/abstract-selection/abstract-selection.component';
-import { RectangleSelectionComponent } from './components/selection/rectangle-selection/rectangle-selection.component';
-import { EllipseSelectionComponent } from './components/selection/ellipse-selection/ellipse-selection.component';
-import { SelectionHandlerComponent } from './components/selection/selection-handler/selection-handler.component';
 
 @NgModule({
     declarations: [

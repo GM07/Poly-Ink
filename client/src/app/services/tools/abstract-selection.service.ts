@@ -106,7 +106,6 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     onMouseLeave(event: MouseEvent) {
-        console.log(this.mouseUpCoord);
         if (this.mouseDown && this.selectionCtx === null) {
             const rect = this.drawingService.canvas.getBoundingClientRect();
             let mousePos: Vec2 = this.mouseUpCoord;
@@ -117,7 +116,6 @@ export abstract class AbstractSelectionService extends Tool {
             this.mouseUpCoord = mousePos;
             this.updateDrawingSelection();
         }
-        console.log(this.mouseUpCoord);
     }
 
     onKeyDown(event: KeyboardEvent): void {
