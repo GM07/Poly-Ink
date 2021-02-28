@@ -44,8 +44,6 @@ export class EllipseSelectionService extends AbstractSelectionService {
         this.width = 2 * this.radiusXAbs * Math.sign(this.width);
         this.height = 2 * this.radiusYAbs * Math.sign(this.height);
 
-        console.log(this.width);
-
         this.drawSelection(ctx, { x: this.centerX, y: this.centerY } as Vec2);
     }
 

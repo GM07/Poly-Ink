@@ -105,6 +105,21 @@ export abstract class AbstractSelectionService extends Tool {
         }
     }
 
+    onMouseLeave(event: MouseEvent) {
+        console.log(this.mouseUpCoord);
+        if (this.mouseDown && this.selectionCtx === null) {
+            const rect = this.drawingService.canvas.getBoundingClientRect();
+            let mousePos: Vec2 = this.mouseUpCoord;
+            if (event.x >= rect.right) mousePos.x = this.drawingService.canvas.width;
+            if (event.x <= rect.left) mousePos.x = 0;
+            if (event.y <= rect.top) mousePos.y = 0;
+            if (event.y >= rect.bottom) mousePos.y = this.drawingService.canvas.height;
+            this.mouseUpCoord = mousePos;
+            this.updateDrawingSelection();
+        }
+        console.log(this.mouseUpCoord);
+    }
+
     onKeyDown(event: KeyboardEvent): void {
         if (this.CANCEL_SELECTION.equals(event)) {
             this.stopDrawing();
@@ -270,10 +285,10 @@ export abstract class AbstractSelectionService extends Tool {
 
     isInCanvas(event: MouseEvent): boolean {
         const clientRect = this.drawingService.canvas.getBoundingClientRect();
-        const left = clientRect.x + this.BORDER_WIDTH / 2;
-        const right = clientRect.x + clientRect.width - this.BORDER_WIDTH / 2 - 1;
-        const top = clientRect.y + +this.BORDER_WIDTH / 2;
-        const bottom = clientRect.y + clientRect.height - this.BORDER_WIDTH / 2 - 1;
+        const left = clientRect.x + this.BORDER_WIDTH - 1;
+        const right = clientRect.x + clientRect.width - this.BORDER_WIDTH;
+        const top = clientRect.y + this.BORDER_WIDTH - 1;
+        const bottom = clientRect.y + clientRect.height - this.BORDER_WIDTH;
         return !(event.x <= left || event.x >= right || event.y <= top || event.y >= bottom);
     }
 }
