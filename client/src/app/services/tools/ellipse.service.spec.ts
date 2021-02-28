@@ -170,7 +170,7 @@ describe('EllipseService', () => {
 
         // Inside is untouched
         // tslint:disable-next-line:no-magic-numbers
-        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagore
+        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagoras
         // tslint:disable-next-line:no-magic-numbers
         const x = 25 - 2 * maxSquareRadius;
         const y = x;
@@ -186,7 +186,7 @@ describe('EllipseService', () => {
         expect(drawEllipseSpy).toHaveBeenCalled();
 
         // tslint:disable-next-line:no-magic-numbers
-        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagore
+        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagoras
         // tslint:disable-next-line:no-magic-numbers
         const x = 25 - 2 * maxSquareRadius;
         const y = x;
@@ -218,7 +218,7 @@ describe('EllipseService', () => {
 
         // Inside is present
         // tslint:disable-next-line:no-magic-numbers
-        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagore
+        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagoras
         // tslint:disable-next-line:no-magic-numbers
         const x = 25 - 2 * maxSquareRadius;
         const y = x;

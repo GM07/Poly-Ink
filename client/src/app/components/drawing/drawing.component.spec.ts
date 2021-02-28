@@ -7,9 +7,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
 import { DrawingComponent } from './drawing.component';
 
 class ToolStub extends Tool {
-    stopDrawing(): void {
-        // Clear
-    }
+    stopDrawing(): void {}
 }
 
 describe('DrawingComponent', () => {

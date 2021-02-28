@@ -3,7 +3,7 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { Vec2 } from './vec2';
 
-// Ceci est justifié vu qu'on a des fonctions qui seront gérés par les classes enfant
+// Justified since there are functions that will be managed by child classes
 // tslint:disable:no-empty
 export abstract class Tool {
     constructor(protected drawingService: DrawingService, protected colorService: ColorService) {}
