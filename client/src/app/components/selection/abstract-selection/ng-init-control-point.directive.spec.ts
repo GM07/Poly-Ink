@@ -1,18 +1,22 @@
 import { NgInitControlPointDirective } from './ng-init-control-point.directive';
 
 describe('NgInitControlPointDirective', () => {
-  it('should create an instance', () => {
-    const directive = new NgInitControlPointDirective();
-    expect(directive).toBeTruthy();
-  });
+    let directive: NgInitControlPointDirective;
 
-  it('should emit', () => {
-    const directive = new NgInitControlPointDirective();
-    spyOn(directive.initEvent, 'emit');
-    jasmine.clock().install();
-    directive.ngOnInit();
-    jasmine.clock().tick(15);
-    expect(directive.initEvent.emit).toHaveBeenCalled();
-    jasmine.clock().uninstall();
-  });
+    const delay = async (ms: number) => new Promise((result) => setTimeout(result, ms));
+    beforeEach(() => {
+        directive = new NgInitControlPointDirective();
+    });
+
+    it('should create an instance', () => {
+        const directive = new NgInitControlPointDirective();
+        expect(directive).toBeTruthy();
+    });
+
+    it('should emit an event when initialised', async () => {
+        spyOn(directive.initEvent, 'emit');
+        directive.ngOnInit();
+        await delay(11);
+        expect(directive.initEvent.emit).toHaveBeenCalledTimes(1);
+    });
 });
