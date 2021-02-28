@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { ShortcutKey } from '@app/classes/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { PolygoneToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { DrawingService } from '../drawing/drawing.service';
 
 export enum PolygoneMode {
     Contour = 0,
@@ -26,7 +27,7 @@ export class PolygoneService extends Tool {
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
-        this.shortcutKey = PolygoneToolConstants.SHORTCUT_KEY;
+        this.shortcutKey = new ShortcutKey(PolygoneToolConstants.SHORTCUT_KEY);
         // this.shiftPressed = false;
         this.lineWidthIn = 1;
         this.numEdgesIn = ToolSettingsConst.MIN_NUM_EDGES;
@@ -38,18 +39,18 @@ export class PolygoneService extends Tool {
         this.lineWidthIn = Math.min(Math.max(width, 1), max);
     }
 
+    get contourWidth(): number {
+        return this.lineWidthIn;
+    }
+
     set numEdges(numEdges: number) {
         if (numEdges >= ToolSettingsConst.MIN_NUM_EDGES && numEdges <= ToolSettingsConst.MAX_NUM_EDGES) {
             this.numEdgesIn = numEdges;
         }
     }
 
-    get numEdges() {
+    get numEdges(): number {
         return this.numEdgesIn;
-    }
-
-    get contourWidth(): number {
-        return this.lineWidthIn;
     }
 
     stopDrawing(): void {
@@ -127,15 +128,14 @@ export class PolygoneService extends Tool {
     }
 
     private drawPolygone(ctx: CanvasRenderingContext2D): void {
-        let radiusX: number = (this.mouseUpCoord.x - this.mouseDownCoord.x) / 2;
-        let radiusY: number = (this.mouseUpCoord.y - this.mouseDownCoord.y) / 2;
-        let radius: number = Math.min(radiusX, radiusY);
-        let centerX: number = this.mouseDownCoord.x + radius;
-        let centerY: number = this.mouseDownCoord.y + radius;
-        let radiusAbs = Math.abs(radius);            
+        const radiusX: number = (this.mouseUpCoord.x - this.mouseDownCoord.x) / 2;
+        const radiusY: number = (this.mouseUpCoord.y - this.mouseDownCoord.y) / 2;
+        const radius: number = Math.min(radiusX, radiusY);
+        const centerX: number = this.mouseDownCoord.x + radius;
+        const centerY: number = this.mouseDownCoord.y + radius;
+        const radiusAbs = Math.abs(radius);
         ctx.lineCap = 'round' as CanvasLineCap;
         ctx.lineJoin = 'round' as CanvasLineJoin;
-
 
         if (ctx === this.drawingService.previewCtx) {
             this.drawCirclePerimeter(ctx, centerX, centerY, radiusAbs);
@@ -145,16 +145,16 @@ export class PolygoneService extends Tool {
         ctx.closePath();
     }
 
-    private drawPolygoneSides(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, radiusAbs: number) {
-        let angle = 2*Math.PI / this.numEdgesIn;
-        let startingAngle = this.numEdgesIn === ToolSettingsConst.NUM_EDGES_SQUARE ? (-Math.PI / 2) / 2 : -Math.PI / 2;
-        ctx.lineWidth =  this.polygoneMode === PolygoneMode.Filled ? 0 : this.lineWidthIn;
-        let lineWidthWeightedRadius = radiusAbs - ctx.lineWidth / 2; 
+    private drawPolygoneSides(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, radiusAbs: number): void {
+        const angle = (2 * Math.PI) / this.numEdgesIn;
+        const startingAngle = this.numEdgesIn === ToolSettingsConst.NUM_EDGES_SQUARE ? -Math.PI / 2 / 2 : -Math.PI / 2;
+        ctx.lineWidth = this.polygoneMode === PolygoneMode.Filled ? 0 : this.lineWidthIn;
+        const lineWidthWeightedRadius = radiusAbs - ctx.lineWidth / 2;
 
         ctx.beginPath();
-        for(let i = 0; i < this.numEdges; i++) {
-            let currentX = centerX + lineWidthWeightedRadius * Math.cos(startingAngle + i * angle);
-            let currentY = centerY + lineWidthWeightedRadius * Math.sin(startingAngle + i * angle);
+        for (let i = 0; i < this.numEdges; i++) {
+            const currentX = centerX + lineWidthWeightedRadius * Math.cos(startingAngle + i * angle);
+            const currentY = centerY + lineWidthWeightedRadius * Math.sin(startingAngle + i * angle);
             ctx.lineTo(currentX, currentY);
         }
         ctx.closePath();
@@ -163,12 +163,11 @@ export class PolygoneService extends Tool {
         ctx.fillStyle = this.colorService.primaryRgba;
         if (this.polygoneMode === PolygoneMode.Filled || this.polygoneMode === PolygoneMode.FilledWithContour) {
             ctx.fill();
-        } 
+        }
         if (this.polygoneMode === PolygoneMode.Contour || this.polygoneMode === PolygoneMode.FilledWithContour) {
             ctx.stroke();
         }
     }
-
 
     private drawCirclePerimeter(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, radiusAbs: number): void {
         const dashWidth = 1;

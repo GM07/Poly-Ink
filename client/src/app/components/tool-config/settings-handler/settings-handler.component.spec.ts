@@ -11,6 +11,7 @@ import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
 import { LineService } from '@app/services/tools/line.service';
 import { PencilService } from '@app/services/tools/pencil.service';
+import { PolygoneService } from '@app/services/tools/polygone.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
@@ -25,8 +26,9 @@ class MockToolHandler extends ToolHandlerService {
         rectangleService: RectangleService,
         eraserService: EraserService,
         ellipseService: EllipseService,
+        polygoneService: PolygoneService,
     ) {
-        super(pencilService, lineService, rectangleService, ellipseService, eraserService);
+        super(pencilService, lineService, rectangleService, ellipseService, eraserService, polygoneService);
         this.TOOLS_MOCK.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
         this.TOOLS_MOCK.set(ToolsConstants.RectangleToolConstants.TOOL_ID, rectangleService);
@@ -60,6 +62,7 @@ describe('SettingsHandlerComponent', () => {
     let rectangleService: RectangleService;
     let eraserService: EraserService;
     let ellipseService: EllipseService;
+    let polygoneService: PolygoneService;
     let toolHandlerService: MockToolHandler;
 
     beforeEach(() => {
@@ -72,7 +75,7 @@ describe('SettingsHandlerComponent', () => {
         rectangleService = TestBed.inject(RectangleService);
         eraserService = TestBed.inject(EraserService);
         ellipseService = TestBed.inject(EllipseService);
-        toolHandlerService = new MockToolHandler(pencilService, lineService, rectangleService, eraserService, ellipseService);
+        toolHandlerService = new MockToolHandler(pencilService, lineService, rectangleService, eraserService, ellipseService, polygoneService);
         component = new SettingsHandlerComponent(toolHandlerService);
     });
 

@@ -38,7 +38,8 @@
 
     <h5 class="textFormat">Nombre de côtés</h5>
     <div class="textFormatForSlider">
-        <mat-slider min="{{ MIN_NUM_EDGES }}" max="{{ MAX_NUM_EDGES }}" [(ngModel)]="polygoneService.numEdges" thumbLabel> </mat-slider>
+        <mat-slider id="polygone-edges-slider" min="{{ MIN_NUM_EDGES }}" max="{{ MAX_NUM_EDGES }}" [(ngModel)]="polygoneService.numEdges" thumbLabel>
+        </mat-slider>
         {{ polygoneService.numEdges }} côtés
     </div>
 </div>
