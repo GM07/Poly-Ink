@@ -7,9 +7,8 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
-
 export abstract class AbstractSelectionService extends Tool {
     protected readonly LINE_DASH: number = 8;
     protected readonly BORDER_WIDTH: number = 2;
@@ -192,8 +191,8 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     getTranslation(mousePos: Vec2): Vec2 {
-      return { x: mousePos.x - this.translationOrigin.x, y: mousePos.y - this.translationOrigin.y } as Vec2;
-  }
+        return { x: mousePos.x - this.translationOrigin.x, y: mousePos.y - this.translationOrigin.y } as Vec2;
+    }
 
     private setArrowKeyDown(event: KeyboardEvent): void {
         if (this.RIGHT_ARROW.equals(event)) this.isRightArrowDown = true;

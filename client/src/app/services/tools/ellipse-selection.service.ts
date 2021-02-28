@@ -10,14 +10,17 @@ import { ColorService } from 'src/color-picker/services/color.service';
     providedIn: 'root',
 })
 export class EllipseSelectionService extends AbstractSelectionService {
+    private centerX: number;
+    private centerY: number;
+    private radiusXAbs: number;
+    private radiusYAbs: number;
+
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(EllipseSelectionToolConstants.SHORTCUT_KEY);
         this.toolID = EllipseSelectionToolConstants.TOOL_ID;
     }
 
-    private centerX: number;
-    private centerY: number;
     stopDrawing(): void {
         super.stopDrawing();
     }
@@ -36,13 +39,17 @@ export class EllipseSelectionService extends AbstractSelectionService {
             radiusY = minRadius;
         }
 
-        this.width = 2*Math.abs(radiusX);
-        this.height = 2*Math.abs(radiusY);
+        this.radiusXAbs = Math.abs(radiusX);
+        this.radiusYAbs = Math.abs(radiusY);
+        this.width = 2 * this.radiusXAbs * Math.sign(this.width);
+        this.height = 2 * this.radiusYAbs * Math.sign(this.height);
 
-        this.drawSelection(ctx, { x: this.centerX, y: this.centerY }, this.width/2, this.height/2);
+        console.log(this.width);
+
+        this.drawSelection(ctx, { x: this.centerX, y: this.centerY } as Vec2);
     }
 
-    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, width: number, height: number): void {
+    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2): void {
         ctx.beginPath();
 
         ctx.lineWidth = this.BORDER_WIDTH;
@@ -51,7 +58,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         ctx.lineJoin = 'round' as CanvasLineJoin;
 
         ctx.strokeStyle = 'black';
-        ctx.ellipse(position.x, position.y, width, height, 0, 0, 2 * Math.PI);
+        ctx.ellipse(position.x, position.y, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
         ctx.stroke();
 
         ctx.closePath();
@@ -59,7 +66,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
         ctx.lineDashOffset = this.LINE_DASH;
         ctx.strokeStyle = 'white';
-        ctx.ellipse(position.x, position.y, width, height, 0, 0, 2 * Math.PI);
+        ctx.ellipse(position.x, position.y, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
         ctx.stroke();
 
         ctx.lineDashOffset = 0;
@@ -67,19 +74,17 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
         ctx.closePath();
 
-        if (this.selectionCtx !== null) this.drawRectanglePerimeter(ctx, position, width, height);
+        if (this.selectionCtx !== null) this.drawRectanglePerimeter(ctx, position);
     }
 
-    private drawRectanglePerimeter(ctx: CanvasRenderingContext2D, center: Vec2, radiusX: number, radiusY: number): void {
+    private drawRectanglePerimeter(ctx: CanvasRenderingContext2D, center: Vec2): void {
         ctx.lineWidth = this.BORDER_WIDTH;
-        const x = center.x - radiusX;
-        const y = center.y - radiusY;
-        const width = radiusX * 2;
-        const height = radiusY * 2;
+        const x = center.x - this.width / 2;
+        const y = center.y - this.height / 2;
 
         ctx.strokeStyle = 'blue';
         ctx.beginPath();
-        ctx.strokeRect(x, y, width, height);
+        ctx.strokeRect(x, y, this.width, this.height);
         ctx.stroke();
         ctx.closePath();
     }
@@ -88,7 +93,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         if (this.firstSelectionCoords.x !== currentPosX || this.firstSelectionCoords.y !== currentPosY) {
             ctx.beginPath();
             ctx.fillStyle = 'rgb(255,20,147)';
-            ctx.ellipse(this.centerX, this.centerY, this.width/2, this.height/2, 0, 0, 2 * Math.PI);
+            ctx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
             ctx.fill();
             ctx.closePath();
         }
@@ -97,31 +102,31 @@ export class EllipseSelectionService extends AbstractSelectionService {
     protected updateSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
-        const centerX = this.selectionCoords.x + this.width/2;
-        const centerY = this.selectionCoords.y + this.height/2;
+        const centerX = this.selectionCoords.x + this.width / 2;
+        const centerY = this.selectionCoords.y + this.height / 2;
 
         this.fillBackground(ctx, this.selectionCoords.x, this.selectionCoords.y);
 
         ctx.beginPath();
         ctx.save();
-        ctx.ellipse(centerX, centerY, this.width/2, this.height/2, 0, 0, 2 * Math.PI);
+        ctx.ellipse(centerX, centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
         ctx.clip();
         ctx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         ctx.restore();
-        this.drawSelection(ctx, { x: centerX, y: centerY }, this.width/2, this.height/2);
+        this.drawSelection(ctx, { x: centerX, y: centerY } as Vec2);
     }
 
     protected endSelection(): void {
         if (this.selectionCtx === null) return;
         const baseCtx = this.drawingService.baseCtx;
-        const centerX = this.selectionCoords.x + this.width/2;
-        const centerY = this.selectionCoords.y + this.height/2;
+        const centerX = this.selectionCoords.x + this.width / 2;
+        const centerY = this.selectionCoords.y + this.height / 2;
 
         this.fillBackground(baseCtx, this.selectionCoords.x, this.selectionCoords.y);
 
         baseCtx.beginPath();
         baseCtx.save();
-        baseCtx.ellipse(centerX, centerY, this.width/2, this.height/2, 0, 0, 2 * Math.PI);
+        baseCtx.ellipse(centerX, centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
         baseCtx.clip();
         baseCtx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         baseCtx.restore();
