@@ -20,7 +20,6 @@ describe('AbstractSelectionComponent', () => {
         shiftKey: true,
     } as KeyboardEvent;
 
-    //const delay = async (ms: number) => new Promise((result) => setTimeout(result, ms));
     beforeEach(async(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
         TestBed.configureTestingModule({
