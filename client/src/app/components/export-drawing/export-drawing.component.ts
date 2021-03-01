@@ -97,17 +97,7 @@ export class ExportDrawingComponent {
 
         await createImageBitmap(this.imageData).then((image) => {
             this.baseContext.drawImage(image, 0, 0);
-            exportPreviewCtx.drawImage(
-                image,
-                0,
-                0,
-                image.width,
-                image.height,
-                0,
-                0,
-                ExportDrawingComponent.EXPORT_PREVIEW_CANVAS_WIDTH,
-                this.getPreviewHeight(),
-            );
+            exportPreviewCtx.drawImage(image, 0, 0, image.width, image.height, 0, 0, this.getPreviewWidth(), this.getPreviewHeight());
         });
         this.canvasImage = this.baseCanvas.toDataURL('image/' + this.exportFormat);
     }

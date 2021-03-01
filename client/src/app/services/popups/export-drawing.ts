@@ -10,7 +10,6 @@ export class ExportDrawing {
     }
 
     exportImage(image: string, format: string, name: string): void {
-        console.log(image);
         let byte_image = image.replace('image/' + format, 'image/octet-stream');
 
         let downloadElement = document.createElement('a');
