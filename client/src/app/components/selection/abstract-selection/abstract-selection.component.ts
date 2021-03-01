@@ -28,27 +28,31 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     private controlPointList: ElementRef<HTMLElement>[];
     private lastCursor: string;
 
-    isOverSelection: boolean = false;
-    mouseDown: boolean = false;
+    private isOverSelection: boolean = false;
+    private mouseDown: boolean = false;
     displayControlPoints: boolean = false;
 
     constructor(protected selectionService: AbstractSelectionService, protected drawingService: DrawingService) {}
 
     ngOnInit(): void {
-        this.selectionService.updatePoints.subscribe(() => {
-            if (this.displayControlPoints) {
-                this.placePoints();
+        this.selectionService.updatePoints.subscribe((display: boolean) => {
+            if (display) {
+                if (this.displayControlPoints) {
+                    this.placePoints();
+                }
+                this.displayControlPoints = true;
+            } else {
+                this.displayControlPoints = false;
             }
-            this.displayControlPoints = true;
         });
     }
 
     ngAfterViewInit(): void {
-        this.lastCursor = this.drawingService.canvas.style.cursor;
+        this.lastCursor = this.drawingService.previewCanvas.style.cursor;
     }
 
     ngOnDestroy(): void {
-        this.drawingService.canvas.style.cursor = this.lastCursor;
+        this.drawingService.previewCanvas.style.cursor = this.lastCursor;
     }
 
     onMouseDown(event: MouseEvent): void {

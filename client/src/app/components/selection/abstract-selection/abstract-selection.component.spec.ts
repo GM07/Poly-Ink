@@ -84,7 +84,7 @@ describe('AbstractSelectionComponent', () => {
     });
 
     it("should do nothing if mouse is down and we're not diplaying the control points", () => {
-        component.mouseDown = true;
+        component['mouseDown'] = true;
         const placePoints = spyOn<any>(component, 'placePoints');
         component.onMouseMove(mouseEvent);
         expect(placePoints).not.toHaveBeenCalled();
@@ -92,7 +92,7 @@ describe('AbstractSelectionComponent', () => {
 
     it('should update the control point on mouse move', () => {
         component.displayControlPoints = true;
-        component.mouseDown = true;
+        component['mouseDown'] = true;
         const placePoints = spyOn<any>(component, 'placePoints');
         const makeControlsSelectable = spyOn<any>(component, 'makeControlsUnselectable');
         component.onMouseMove(mouseEvent);
@@ -163,16 +163,19 @@ describe('AbstractSelectionComponent', () => {
     });
 
     it('should update control point on init if update is true', () => {
-        component.displayControlPoints = true;
+        component.displayControlPoints = false;
         const placePoints = spyOn<any>(component, 'placePoints');
-        abstractSelectionService.updatePoints.next();
+        abstractSelectionService.updatePoints.next(true);
+        expect(placePoints).not.toHaveBeenCalled();
+        component.displayControlPoints = true;
+        abstractSelectionService.updatePoints.next(true);
         expect(placePoints).toHaveBeenCalled();
     });
 
     it('should not update control point on init if update is false', () => {
         component.displayControlPoints = false;
         const placePoints = spyOn<any>(component, 'placePoints');
-        abstractSelectionService.updatePoints.next();
+        abstractSelectionService.updatePoints.next(false);
         expect(placePoints).not.toHaveBeenCalled();
     });
 });

@@ -146,14 +146,14 @@ export abstract class AbstractSelectionService extends Tool {
                 if (event.repeat) return;
                 this.setArrowKeyDown(event);
                 this.updateSelection({ x: PIXELS * this.getXArrow(), y: PIXELS * this.getYArrow() } as Vec2);
-                this.updatePoints.next();
+                this.updatePoints.next(true);
 
                 if (this.moveId === this.DEFAULT_MOVE_ID) {
                     setTimeout(() => {
                         if (this.moveId === this.DEFAULT_MOVE_ID)
                             this.moveId = window.setInterval(() => {
                                 this.updateSelection({ x: PIXELS * this.getXArrow(), y: PIXELS * this.getYArrow() } as Vec2);
-                                this.updatePoints.next();
+                                this.updatePoints.next(true);
                             }, this.NEXT_MOVES_TIMEOUT);
                     }, this.FIRST_MOVE_TIMEOUT);
                 }
@@ -188,7 +188,6 @@ export abstract class AbstractSelectionService extends Tool {
         this.height = height;
         this.startSelection();
         this.updatePoints.next(true);
-        this.updatePoints.next(false);
     }
 
     isInSelection(event: MouseEvent): boolean {
@@ -213,6 +212,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.isLeftArrowDown = false;
         this.isUpArrowDown = false;
         this.isDownArrowDown = false;
+        this.updatePoints.next(false);
     }
 
     getTranslation(mousePos: Vec2): Vec2 {
