@@ -25,18 +25,20 @@
 
 .mat-button-toggle {
     background-color: white;
-    font-size: 24px;
+    font-size: 16px;
     margin: 12px 0px;
     display: inline-flex;
     color: black;
+    border: none;
 }
 
 .mat-button-toggle-checked {
     background-color: green;
-    font-size: 24px;
+    font-size: 16px;
     margin: 12px 0px;
     display: inline-flex;
     color: white;
+    border: none;
 }
 
 .green {

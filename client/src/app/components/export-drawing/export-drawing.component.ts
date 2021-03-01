@@ -1,7 +1,10 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { BlackWhiteFilter } from '@app/classes/filters/black-white-filter';
 import { Filter } from '@app/classes/filters/filter';
 import { FunkyFilter } from '@app/classes/filters/funky-filter';
 import { NegativeFilter } from '@app/classes/filters/negative-filter';
+import { SepiaFilter } from '@app/classes/filters/sepia-filter';
+import { SpotlightFilter } from '@app/classes/filters/spotlight-filter';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { PopupHandlerService } from '@app/services/popups/popup-handler.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
@@ -35,7 +38,12 @@ export class ExportDrawingComponent {
         ['no', new Filter()],
         ['negative', new NegativeFilter()],
         ['funky', new FunkyFilter()],
+        ['spotlight', new SpotlightFilter()],
+        ['sepia', new SepiaFilter()],
+        ['black-white', new BlackWhiteFilter()],
     ]);
+
+    private defaultFileNames: string[] = ['Mona Lisa', 'Guenica', 'Le Cri', 'La nuit étoilée', 'Impression, soleil levant'];
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -47,10 +55,11 @@ export class ExportDrawingComponent {
     }
 
     initValues(): void {
+        this.shortcutHandler.setIgnoreFunctionToDefault();
         this.exportFormat = 'png';
-        this.filename = 'Mona Lisa';
         this.currentFilter = 'no';
         this.aspectRatio = 1;
+        this.filename = this.defaultFileNames[Math.floor(Math.random() * 5)];
     }
 
     backupBaseCanvas(): void {
@@ -72,7 +81,7 @@ export class ExportDrawingComponent {
     }
 
     export(): void {
-        this.popupHandlerService.exportDrawing.exportImage(this.canvasImage, this.exportFormat, this.filename);
+        this.popupHandlerService.exportDrawing.exportImage(this.canvasImage, this.exportFormat, this.filename === '' ? 'image' : this.filename);
     }
 
     async applyFilter(): Promise<void> {

@@ -28,4 +28,8 @@ export class ShortcutHandlerService {
     defaultIgnoreEvent(event: KeyboardEvent): boolean {
         return false;
     }
+
+    setIgnoreFunctionToDefault() {
+        this.ignoreEvent = this.defaultIgnoreEvent;
+    }
 }
