@@ -1,12 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { DrawingComponent } from '@app/components/drawing/drawing.component';
+import { EllipseSelectionComponent } from '@app/components/selection/ellipse-selection/ellipse-selection.component';
+import { RectangleSelectionComponent } from '@app/components/selection/rectangle-selection/rectangle-selection.component';
+import { SelectionHandlerComponent } from '@app/components/selection/selection-handler/selection-handler.component';
 import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { CanvasResizeComponent } from './canvas-resize.component';
-import { RectangleSelectionComponent } from '@app/components/selection/rectangle-selection/rectangle-selection.component';
-import { EllipseSelectionComponent } from '@app/components/selection/ellipse-selection/ellipse-selection.component';
-import { SelectionHandlerComponent } from '@app/components/selection/selection-handler/selection-handler.component';
 
 describe('CanvasResizeComponent', () => {
     let component: CanvasResizeComponent;
@@ -17,8 +17,13 @@ describe('CanvasResizeComponent', () => {
     beforeEach(async(() => {
         service = new DrawingService();
         TestBed.configureTestingModule({
-            declarations: [CanvasResizeComponent, SelectionHandlerComponent, DrawingComponent, RectangleSelectionComponent,
-              EllipseSelectionComponent],
+            declarations: [
+                CanvasResizeComponent,
+                SelectionHandlerComponent,
+                DrawingComponent,
+                RectangleSelectionComponent,
+                EllipseSelectionComponent,
+            ],
             providers: [{ provide: DrawingService, useValue: service }],
         }).compileComponents();
     }));

@@ -6,7 +6,6 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 
-
 @Injectable({
     providedIn: 'root',
 })
@@ -84,7 +83,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         ctx.closePath();
     }
 
-    //Todo changer pour un vec2 ?
+    // Todo changer pour un vec2 ?
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPosX: number, currentPosY: number): void {
         if (this.firstSelectionCoords.x !== currentPosX || this.firstSelectionCoords.y !== currentPosY) {
             ctx.beginPath();

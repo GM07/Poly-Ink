@@ -41,10 +41,10 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
 
     ngOnInit(): void {
         this.selectionService.updatePoints.subscribe(() => {
-                if (this.displayControlPoints) {
-                    this.placePoints();
-                }
-                this.displayControlPoints = true;
+            if (this.displayControlPoints) {
+                this.placePoints();
+            }
+            this.displayControlPoints = true;
         });
     }
 
@@ -53,7 +53,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     }
 
     ngOnDestroy(): void {
-      this.drawingService.canvas.style.cursor = this.lastCursor;
+        this.drawingService.canvas.style.cursor = this.lastCursor;
     }
 
     onMouseDown(event: MouseEvent) {

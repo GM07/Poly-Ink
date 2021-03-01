@@ -7,7 +7,6 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
 import { ColorService } from 'src/color-picker/services/color.service';
 
-
 @Injectable({
     providedIn: 'root',
 })
@@ -23,14 +22,14 @@ export abstract class AbstractSelectionService extends Tool {
     protected SELECTION_DATA: HTMLCanvasElement;
 
     updatePoints: Subject<Boolean> = new Subject();
-    public mouseUpCoord: Vec2;
+    mouseUpCoord: Vec2;
     protected translationOrigin: Vec2;
     protected firstSelectionCoords: Vec2;
-    public selectionCoords: Vec2;
+    selectionCoords: Vec2;
 
-    public width: number;
-    public height: number;
-    public selectionCtx: CanvasRenderingContext2D | null;
+    width: number;
+    height: number;
+    selectionCtx: CanvasRenderingContext2D | null;
 
     protected shiftPressed: boolean;
     protected isLeftArrowDown: boolean;
@@ -47,7 +46,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.translationOrigin = { x: 0, y: 0 } as Vec2;
         this.isLeftArrowDown = false;
         this.isRightArrowDown = false;
-        this.isUpArrowDown = false; //TODO changer avec merge request de Paul
+        this.isUpArrowDown = false; // TODO changer avec merge request de Paul
         this.isDownArrowDown = false;
         this.moveId = -1;
     }
@@ -68,7 +67,6 @@ export abstract class AbstractSelectionService extends Tool {
             const mousePos = this.getPositionFromMouse(event);
             if (this.isInSelection(event)) {
                 this.translationOrigin = mousePos;
-
             } else {
                 this.endSelection();
                 this.mouseDownCoord = mousePos;
@@ -112,7 +110,7 @@ export abstract class AbstractSelectionService extends Tool {
     onMouseLeave(event: MouseEvent) {
         if (this.mouseDown && this.selectionCtx === null) {
             const rect = this.drawingService.canvas.getBoundingClientRect();
-            let mousePos: Vec2 = this.mouseUpCoord;
+            const mousePos: Vec2 = this.mouseUpCoord;
             if (event.x >= rect.right) mousePos.x = this.drawingService.canvas.width;
             if (event.x <= rect.left) mousePos.x = 0;
             if (event.y <= rect.top) mousePos.y = 0;
@@ -137,7 +135,10 @@ export abstract class AbstractSelectionService extends Tool {
             }
         } else if (this.selectionCtx !== null) {
             const PIXELS = 3;
-            if (!this.mouseDown && (this.RIGHT_ARROW.equals(event) || this.LEFT_ARROW.equals(event) || this.UP_ARROW.equals(event) || this.DOWN_ARROW.equals(event))) {
+            if (
+                !this.mouseDown &&
+                (this.RIGHT_ARROW.equals(event) || this.LEFT_ARROW.equals(event) || this.UP_ARROW.equals(event) || this.DOWN_ARROW.equals(event))
+            ) {
                 event.preventDefault();
                 if (event.repeat) return;
                 this.setArrowKeyDown(event);

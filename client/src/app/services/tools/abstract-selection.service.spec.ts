@@ -44,10 +44,10 @@ describe('AbstractSelectionService', () => {
     });
 
     it('set ArrowKeyUp should update the keys when down', () => {
-        let keyboardEventLeft = new KeyboardEvent('keydown', { key: 'arrowleft' });
-        let keyboardEventRight = new KeyboardEvent('keydown', { key: 'arrowright' });
-        let keyboardEventDown = new KeyboardEvent('keydown', { key: 'arrowdown' });
-        let keyboardEventUp = new KeyboardEvent('keydown', { key: 'arrowup' });
+        const keyboardEventLeft = new KeyboardEvent('keydown', { key: 'arrowleft' });
+        const keyboardEventRight = new KeyboardEvent('keydown', { key: 'arrowright' });
+        const keyboardEventDown = new KeyboardEvent('keydown', { key: 'arrowdown' });
+        const keyboardEventUp = new KeyboardEvent('keydown', { key: 'arrowup' });
         service['setArrowKeyDown'](keyboardEventLeft);
         service['setArrowKeyDown'](keyboardEventRight);
         service['setArrowKeyDown'](keyboardEventUp);
@@ -59,7 +59,7 @@ describe('AbstractSelectionService', () => {
     });
 
     it('set ArrowKeyUp should update the keys when not down', () => {
-        let keyboardEventLeft = new KeyboardEvent('keydown', { key: 'randomKey' });
+        const keyboardEventLeft = new KeyboardEvent('keydown', { key: 'randomKey' });
         service['setArrowKeyDown'](keyboardEventLeft);
         expect(service['isLeftArrowDown']).toBe(false);
         expect(service['isRightArrowDown']).toBe(false);
@@ -72,10 +72,10 @@ describe('AbstractSelectionService', () => {
         service['isRightArrowDown'] = true;
         service['isUpArrowDown'] = true;
         service['isDownArrowDown'] = true;
-        let keyboardEventLeft = new KeyboardEvent('keyup', { key: 'arrowleft' });
-        let keyboardEventRight = new KeyboardEvent('keyup', { key: 'arrowright' });
-        let keyboardEventDown = new KeyboardEvent('keyup', { key: 'arrowdown' });
-        let keyboardEventUp = new KeyboardEvent('keyup', { key: 'arrowup' });
+        const keyboardEventLeft = new KeyboardEvent('keyup', { key: 'arrowleft' });
+        const keyboardEventRight = new KeyboardEvent('keyup', { key: 'arrowright' });
+        const keyboardEventDown = new KeyboardEvent('keyup', { key: 'arrowdown' });
+        const keyboardEventUp = new KeyboardEvent('keyup', { key: 'arrowup' });
         service['setArrowKeyUp'](keyboardEventLeft);
         service['setArrowKeyUp'](keyboardEventRight);
         service['setArrowKeyUp'](keyboardEventUp);
@@ -87,7 +87,7 @@ describe('AbstractSelectionService', () => {
     });
 
     it('set ArrowKeyDown should update the keys when not up', () => {
-        let keyboardEventLeft = new KeyboardEvent('keydown', { key: 'randomKey' });
+        const keyboardEventLeft = new KeyboardEvent('keydown', { key: 'randomKey' });
         service['setArrowKeyUp'](keyboardEventLeft);
         expect(service['isLeftArrowDown']).toBe(false);
         expect(service['isRightArrowDown']).toBe(false);
@@ -111,7 +111,7 @@ describe('AbstractSelectionService', () => {
     });
 
     it('getXArrow should return -1 if left Arrow is down', () => {
-      service['isRightArrowDown'] = false;
+        service['isRightArrowDown'] = false;
         service['isLeftArrowDown'] = true;
         expect(service['getXArrow']()).toEqual(-1);
     });
@@ -127,7 +127,7 @@ describe('AbstractSelectionService', () => {
     });
 
     it('get translation should return the current translation', () => {
-        let mousePos = { x: 25, y: 25 } as Vec2;
+        const mousePos = { x: 25, y: 25 } as Vec2;
         service['translationOrigin'] = { x: 25, y: 25 } as Vec2;
         expect(service['getTranslation'](mousePos)).toEqual({ x: 0, y: 0 } as Vec2);
     });
@@ -192,8 +192,8 @@ describe('AbstractSelectionService', () => {
 
     it('pressing shift should do nothing if selection is not null', () => {
         service['mouseDown'] = true;
-        let keyboardEventDown = new KeyboardEvent('keydown', { shiftKey: true });
-        let keyboardEventUp = new KeyboardEvent('keydown', { shiftKey: false });
+        const keyboardEventDown = new KeyboardEvent('keydown', { shiftKey: true });
+        const keyboardEventUp = new KeyboardEvent('keydown', { shiftKey: false });
         spyOn<any>(service, 'updateDrawingSelection');
         service['selectionCtx'] = canvasSelection.getContext('2d');
         service.onKeyDown(keyboardEventDown);
@@ -202,7 +202,7 @@ describe('AbstractSelectionService', () => {
     });
 
     it('key down should do nothing on invalid key', () => {
-        let keyboardEvent = new KeyboardEvent('keydown', { key: 'invalid' });
+        const keyboardEvent = new KeyboardEvent('keydown', { key: 'invalid' });
         spyOn(service, 'stopDrawing');
         spyOn(service, 'selectAll');
         spyOn<any>(service, 'updateDrawingSelection');
@@ -214,14 +214,14 @@ describe('AbstractSelectionService', () => {
 
     it('selection should not move with different keys than arrow', () => {
         spyOn<any>(service, 'updateSelection');
-        let keyboardEvent = new KeyboardEvent('keydown', { key: 'invalid' });
+        const keyboardEvent = new KeyboardEvent('keydown', { key: 'invalid' });
         service['selectionCtx'] = canvasSelection.getContext('2d');
         service.onKeyDown(keyboardEvent);
         expect(service['updateSelection']).not.toHaveBeenCalled();
     });
 
     it('should do nothing on event repeat', () => {
-        let keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowleft', repeat: true });
+        const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowleft', repeat: true });
         service['selectionCtx'] = canvasSelection.getContext('2d');
         spyOn<any>(service, 'updateSelection');
         service.onKeyDown(keyboardEvent);
@@ -230,7 +230,7 @@ describe('AbstractSelectionService', () => {
 
     it('should not stop moving the selection if we release a different key than an arrow', () => {
         service['isLeftArrowDown'] = true;
-        let keyboardEventUp = new KeyboardEvent('keydown', { shiftKey: false });
+        const keyboardEventUp = new KeyboardEvent('keydown', { shiftKey: false });
         service['selectionCtx'] = canvasSelection.getContext('2d');
         spyOn(window, 'clearInterval');
         service.onKeyUp(keyboardEventUp);

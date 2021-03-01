@@ -4,18 +4,21 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
 import { AbstractSelectionComponent } from './abstract-selection.component';
 
+//tslint:disable:no-any
+//tslint:disable:no-magic-number
+
 describe('AbstractSelectionComponent', () => {
     let component: AbstractSelectionComponent;
     let fixture: ComponentFixture<AbstractSelectionComponent>;
     let drawService: DrawingService;
     let abstractSelectionService: AbstractSelectionService;
-    let mouseEvent = {
+    const mouseEvent = {
         offsetX: 25,
         offsetY: 25,
         button: 0,
     } as MouseEvent;
 
-    //const delay = async (ms: number) => new Promise((result) => setTimeout(result, ms));
+    // const delay = async (ms: number) => new Promise((result) => setTimeout(result, ms));
     beforeEach(async(() => {
         drawService = new DrawingService();
         TestBed.configureTestingModule({
@@ -43,11 +46,11 @@ describe('AbstractSelectionComponent', () => {
         spyOn(abstractSelectionService, 'isInSelection').and.returnValue(true);
         spyOn<any>(component, 'makeControlsUnselectable');
         component.onMouseDown(mouseEvent);
-        expect(component['makeControlsUnselectable']).toHaveBeenCalled();
+        expect(component.makeControlsUnselectable).toHaveBeenCalled();
     });
 
     it('should update control points on mouse down', () => {
-        let controlSaveBoolean = (component.displayControlPoints = true);
+        const controlSaveBoolean = (component.displayControlPoints = true);
         component.onMouseDown(mouseEvent);
         expect(controlSaveBoolean).not.toEqual(component.displayControlPoints);
     });
@@ -57,12 +60,12 @@ describe('AbstractSelectionComponent', () => {
         spyOn<any>(component, 'makeControlsSelectable');
         spyOn<any>(component, 'placePoints');
         component.onMouseUp();
-        expect(component['makeControlsSelectable']).toHaveBeenCalled();
-        expect(component['placePoints']).toHaveBeenCalled();
+        expect(component.makeControlsSelectable).toHaveBeenCalled();
+        expect(component.placePoints).toHaveBeenCalled();
     });
 
     it('should update control points on mouse up', () => {
-        let controlSaveBoolean = (component.displayControlPoints = false);
+        const controlSaveBoolean = (component.displayControlPoints = false);
         abstractSelectionService.selectionCtx = drawService.previewCtx;
         component.onMouseUp();
         expect(controlSaveBoolean).not.toEqual(component.displayControlPoints);
@@ -76,7 +79,7 @@ describe('AbstractSelectionComponent', () => {
 
     it('should reset the cursor when not hovering the selection', () => {
         spyOn(abstractSelectionService, 'isInSelection').and.returnValue(false);
-        component['lastCursor'] = 'pointer';
+        component.lastCursor = 'pointer';
         component.onMouseMove(mouseEvent);
         expect(drawService.previewCanvas.style.cursor).toEqual('pointer');
     });
@@ -85,7 +88,7 @@ describe('AbstractSelectionComponent', () => {
         component.mouseDown = true;
         spyOn<any>(component, 'placePoints');
         component.onMouseMove(mouseEvent);
-        expect(component['placePoints']).not.toHaveBeenCalled();
+        expect(component.placePoints).not.toHaveBeenCalled();
     });
 
     it('should update the control point on mouse move', () => {
@@ -94,8 +97,8 @@ describe('AbstractSelectionComponent', () => {
         spyOn<any>(component, 'placePoints');
         spyOn<any>(component, 'makeControlsUnselectable');
         component.onMouseMove(mouseEvent);
-        expect(component['placePoints']).toHaveBeenCalled();
-        expect(component['makeControlsUnselectable']).toHaveBeenCalled();
+        expect(component.placePoints).toHaveBeenCalled();
+        expect(component.makeControlsUnselectable).toHaveBeenCalled();
     });
 
     it('init point should initialise the control points', () => {
@@ -103,30 +106,30 @@ describe('AbstractSelectionComponent', () => {
         component.displayControlPoints = true;
         fixture.detectChanges();
         component.initPoints();
-        expect(component['placePoints']).toHaveBeenCalled();
-        expect(component['controlPointList'].length).toBeGreaterThan(0);
+        expect(component.placePoints).toHaveBeenCalled();
+        expect(component.controlPointList.length).toBeGreaterThan(0);
     });
 
     it('place points should set all 8 points', () => {
-        abstractSelectionService['selectionCtx'] = drawService.previewCtx;
+        abstractSelectionService.selectionCtx = drawService.previewCtx;
         const numberOfPoints = 8;
         spyOn<any>(component, 'placeControlPoint');
         component.displayControlPoints = true;
         fixture.detectChanges();
         component.initPoints();
-        component['placePoints']();
-        expect(component['placeControlPoint']).toHaveBeenCalledTimes(numberOfPoints * 2);
+        component.placePoints();
+        expect(component.placeControlPoint).toHaveBeenCalledTimes(numberOfPoints * 2);
     });
 
     it('elements in canvas should be visible', () => {
-        abstractSelectionService['selectionCtx'] = drawService.previewCtx;
+        abstractSelectionService.selectionCtx = drawService.previewCtx;
         spyOn<any>(component, 'placeControlPoint');
         spyOn<any>(component, 'isInCanvas').and.returnValue(true);
         component.displayControlPoints = true;
         fixture.detectChanges();
         component.initPoints();
-        component['placePoints']();
-        expect(component['controlPointList'][0].nativeElement.style.opacity).toEqual('1');
+        component.placePoints();
+        expect(component.controlPointList[0].nativeElement.style.opacity).toEqual('1');
     });
 
     it('place control point should update the left and top style of an html element', () => {
@@ -134,7 +137,7 @@ describe('AbstractSelectionComponent', () => {
         fixture.detectChanges();
         const topSave: string = component.topLeft.nativeElement.style.top;
         const leftSave: string = component.topLeft.nativeElement.style.top;
-        component['placeControlPoint'](component.topLeft, 5, 5);
+        component.placeControlPoint(component.topLeft, 5, 5);
         expect(component.topLeft.nativeElement.style.top).not.toEqual(topSave);
         expect(component.topLeft.nativeElement.style.top).not.toEqual(leftSave);
     });
@@ -143,34 +146,34 @@ describe('AbstractSelectionComponent', () => {
         component.displayControlPoints = true;
         fixture.detectChanges();
         component.initPoints();
-        component['makeControlsUnselectable']();
-        expect(component['controlPointList'][0].nativeElement.style.pointerEvents).toEqual('none');
+        component.makeControlsUnselectable();
+        expect(component.controlPointList[0].nativeElement.style.pointerEvents).toEqual('none');
     });
 
     it('make control unselectable should set the pointer event to none', () => {
         component.displayControlPoints = true;
         fixture.detectChanges();
         component.initPoints();
-        component['makeControlsSelectable']();
-        expect(component['controlPointList'][0].nativeElement.style.pointerEvents).toEqual('auto');
+        component.makeControlsSelectable();
+        expect(component.controlPointList[0].nativeElement.style.pointerEvents).toEqual('auto');
     });
 
     it('is in canvas should return true if the position is in the canvas', () => {
         spyOn(drawService.canvas, 'getBoundingClientRect').and.returnValue({ x: 0, y: 0, width: 100, height: 100 } as DOMRect);
-       expect(component['isInCanvas']({ x: 1, y: 1 } as Vec2)).toBe(true);
+        expect(component.isInCanvas({ x: 1, y: 1 } as Vec2)).toBe(true);
     });
 
     it('should update control point on init if update is true', () => {
-      component['displayControlPoints']  = true;
-      spyOn<any>(component, 'placePoints');
-      abstractSelectionService['updatePoints'].next();
-      expect(component['placePoints']).toHaveBeenCalled();
+        component.displayControlPoints = true;
+        spyOn<any>(component, 'placePoints');
+        abstractSelectionService.updatePoints.next();
+        expect(component.placePoints).toHaveBeenCalled();
     });
 
     it('should not update control point on init if update is false', () => {
-      component['displayControlPoints']  = false;
-      spyOn<any>(component, 'placePoints');
-      abstractSelectionService['updatePoints'].next();
-      expect(component['placePoints']).not.toHaveBeenCalled();
+        component.displayControlPoints = false;
+        spyOn<any>(component, 'placePoints');
+        abstractSelectionService.updatePoints.next();
+        expect(component.placePoints).not.toHaveBeenCalled();
     });
 });
