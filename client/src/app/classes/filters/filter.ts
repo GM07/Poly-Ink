@@ -1,4 +1,6 @@
 export class Filter {
+    protected static readonly MAX_RBGA_VALUE = 255;
+
     apply(image: ImageData): void {
         for (let i = 0; i < image.data.length; i += 2 * 2) {
             image.data[i + 0] = this.changeRGBValue(image.data[i + 0]);

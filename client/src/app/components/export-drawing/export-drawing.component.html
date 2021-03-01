@@ -22,7 +22,7 @@
                     <mat-button-toggle id="corner-right" value="negative" (change)="changeFilter($event.value)">NEGATIF</mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
-            <canvas #exportPreview id="exportPreview" [attr.width]="500" [attr.height]="500"></canvas>
+            <canvas #exportPreview id="exportPreview" [attr.width]="500" [attr.height]="this.getPreviewHeight()"></canvas>
             <div class="options">
                 <button class="button green white" mat-raised-button (click)="export()">Confirmer</button>
                 <button class="button red white" mat-sraised-button (click)="hidePopup()">Annuler</button>

@@ -12,8 +12,7 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
     styleUrls: ['./export-drawing.component.scss'],
 })
 export class ExportDrawingComponent {
-    static readonly EXPORT_PREVIEW_CANVAS_WIDTH = 500;
-    static readonly EXPORT_PREVIEW_CANVAS_HEIGHT = 500;
+    private static readonly EXPORT_PREVIEW_CANVAS_WIDTH = 500;
 
     exportPreview: ElementRef<HTMLCanvasElement>;
     @ViewChild('exportPreview', { static: false }) set content(element: ElementRef) {
@@ -27,9 +26,10 @@ export class ExportDrawingComponent {
 
     private canvasImage: string;
     private imageData: ImageData;
-    public exportFormat: string = 'png';
-    public filename: string = 'Mona Lisa';
-    public currentFilter: string = 'no';
+    public exportFormat: string;
+    public filename: string;
+    public currentFilter: string;
+    public aspectRatio: number;
 
     private filterMap: Map<String, Filter> = new Map([
         ['no', new Filter()],
@@ -42,9 +42,18 @@ export class ExportDrawingComponent {
         private drawingService: DrawingService,
         private popupHandlerService: PopupHandlerService,
         private shortcutHandler: ShortcutHandlerService,
-    ) {}
+    ) {
+        this.initValues();
+    }
 
-    backupBaseCanvas() {
+    initValues(): void {
+        this.exportFormat = 'png';
+        this.filename = 'Mona Lisa';
+        this.currentFilter = 'no';
+        this.aspectRatio = 1;
+    }
+
+    backupBaseCanvas(): void {
         this.baseCanvas = document.createElement('canvas');
         this.baseCanvas.width = this.drawingService.canvas.width;
         this.baseCanvas.height = this.drawingService.canvas.height;
@@ -55,6 +64,7 @@ export class ExportDrawingComponent {
     hidePopup(): void {
         this.popupHandlerService.hideExportDrawingPopup();
         this.shortcutHandler.blockShortcuts = false;
+        this.initValues();
     }
 
     showPopup(): boolean {
@@ -66,9 +76,10 @@ export class ExportDrawingComponent {
     }
 
     async applyFilter(): Promise<void> {
-        console.log('filter changed: ' + this.currentFilter);
         let exportPreviewCtx = this.exportPreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
         this.imageData = this.baseContext.getImageData(0, 0, this.baseCanvas.width, this.baseCanvas.height);
+
+        this.aspectRatio = this.baseCanvas.width / this.baseCanvas.height;
 
         let filter = this.filterMap.get(this.currentFilter);
         if (filter !== undefined) {
@@ -86,7 +97,7 @@ export class ExportDrawingComponent {
                 0,
                 0,
                 ExportDrawingComponent.EXPORT_PREVIEW_CANVAS_WIDTH,
-                ExportDrawingComponent.EXPORT_PREVIEW_CANVAS_HEIGHT,
+                this.getPreviewHeight(),
             );
         });
         this.canvasImage = this.baseCanvas.toDataURL('image/' + this.exportFormat);
@@ -100,6 +111,10 @@ export class ExportDrawingComponent {
         this.currentFilter = newFilter;
         this.backupBaseCanvas();
         await this.applyFilter();
+    }
+
+    getPreviewHeight(): number {
+        return ExportDrawingComponent.EXPORT_PREVIEW_CANVAS_WIDTH / Math.max(1, this.aspectRatio);
     }
 
     @HostListener('document:keydown', ['$event'])

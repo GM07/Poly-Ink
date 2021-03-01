@@ -10,7 +10,6 @@ export class ShortcutHandlerService {
     constructor(private toolHandlerService: ToolHandlerService) {}
 
     handleKeyEvent(event: KeyboardEvent): void {
-        console.log('received event : ', this.blockShortcuts);
         if (this.blockShortcuts) {
             event.preventDefault();
             event.stopImmediatePropagation();

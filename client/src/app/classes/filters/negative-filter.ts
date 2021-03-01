@@ -2,6 +2,6 @@ import { Filter } from './filter';
 
 export class NegativeFilter extends Filter {
     changeRGBValue(value: number): number {
-        return 255 - value;
+        return Filter.MAX_RBGA_VALUE - value;
     }
 }
