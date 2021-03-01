@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -9,7 +9,7 @@ import { AbstractSelectionService } from '@app/services/tools/abstract-selection
     templateUrl: './abstract-selection.component.html',
     styleUrls: ['./abstract-selection.component.scss'],
 })
-export class AbstractSelectionComponent implements OnDestroy, AfterViewInit {
+export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnInit {
     @ViewChild('controlPointContainer', { static: false }) controlPointContainer: ElementRef<HTMLElement>;
     @ViewChild('topLeft', { static: false }) topLeft: ElementRef<HTMLElement>;
     @ViewChild('topMiddle', { static: false }) topMiddle: ElementRef<HTMLElement>;
@@ -37,6 +37,16 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit {
         this.BORDER = 2;
         this.MIDDLE_OFFSET = (this.CONTROL_INNER - this.BORDER) / 2;
         this.DESIRED_ZINDEX = 3;
+    }
+    ngOnInit(): void {
+        this.selectionService.updatePoints.subscribe((update: boolean) => {
+            if (update) {
+                if (this.displayControlPoints) {
+                    this.placePoints();
+                }
+                this.displayControlPoints = true;
+            }
+        });
     }
 
     ngAfterViewInit(): void {
@@ -78,13 +88,6 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit {
                 this.makeControlsUnselectable();
             }
         }
-    }
-
-    onKeyDown(event: KeyboardEvent) {
-        if (this.displayControlPoints) {
-            this.placePoints();
-        }
-        this.displayControlPoints = this.selectionService.selectionCtx !== null;
     }
 
     initPoints() {

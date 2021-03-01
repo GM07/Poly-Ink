@@ -4,6 +4,7 @@ import { Tool } from '@app/classes/tool';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { Subject } from 'rxjs';
 import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
@@ -20,6 +21,7 @@ export abstract class AbstractSelectionService extends Tool {
     private readonly UP_ARROW: ShortcutKey = new ShortcutKey('arrowup');
     protected readonly SELECTION_DATA: HTMLCanvasElement;
 
+    updatePoints: Subject<boolean> = new Subject<boolean>();
     public mouseUpCoord: Vec2;
     protected translationOrigin: Vec2;
     protected firstSelectionCoords: Vec2;
@@ -177,6 +179,8 @@ export abstract class AbstractSelectionService extends Tool {
         this.width = width;
         this.height = height;
         this.startSelection();
+        this.updatePoints.next(true);
+        this.updatePoints.next(false);
     }
 
     isInSelection(event: MouseEvent): boolean {

@@ -13,11 +13,7 @@ describe('AbstractSelectionService', () => {
     let baseCtxStub: CanvasRenderingContext2D;
     let previewCtxStub: CanvasRenderingContext2D;
 
-    let mouseEvent = {
-        offsetX: 25,
-        offsetY: 25,
-        button: 0,
-    } as MouseEvent;
+    let mouseEvent: MouseEvent;
 
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
@@ -35,6 +31,12 @@ describe('AbstractSelectionService', () => {
         service['drawingService'].baseCtx = baseCtxStub;
         service['drawingService'].previewCtx = previewCtxStub;
         service['drawingService'].canvas = canvasTestHelper.canvas;
+
+        mouseEvent = {
+            offsetX: 25,
+            offsetY: 25,
+            button: 0,
+        } as MouseEvent;
     });
 
     it('should be created', () => {
@@ -138,12 +140,12 @@ describe('AbstractSelectionService', () => {
 
     it('should change translationOrigin when mouseDown and inSelection', () => {
         service['translationOrigin'] = { x: 1, y: 1 };
-        const translationOrigin = service['translationOrigin'];
-        const lastTranslation = { x: translationOrigin.x, y: translationOrigin.y } as Vec2;
+        const lastTranslation = { x: service['translationOrigin'].x, y: service['translationOrigin'].y } as Vec2;
         spyOn(service, 'isInSelection').and.returnValue(true);
+        spyOn(service, 'getPositionFromMouse').and.returnValue({ x: 2, y: 2 } as Vec2);
         service.onMouseDown(mouseEvent);
-        console.info(translationOrigin, lastTranslation);
-        expect(translationOrigin).not.toEqual(lastTranslation); ///
+        expect(service.getPositionFromMouse).toHaveBeenCalled();
+        expect(service['translationOrigin']).not.toEqual(lastTranslation);
     });
 
     it('should change update selection on mouseMove', () => {
