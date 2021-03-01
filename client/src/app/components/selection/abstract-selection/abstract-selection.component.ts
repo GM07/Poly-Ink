@@ -38,6 +38,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         this.MIDDLE_OFFSET = (this.CONTROL_INNER - this.BORDER) / 2;
         this.DESIRED_ZINDEX = 3;
     }
+
     ngOnInit(): void {
         this.selectionService.updatePoints.subscribe((update: boolean) => {
             if (update) {
@@ -54,7 +55,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     }
 
     ngOnDestroy(): void {
-        if (this.drawingService.canvas !== undefined) this.drawingService.canvas.style.cursor = this.lastCursor;
+      this.drawingService.canvas.style.cursor = this.lastCursor;
     }
 
     onMouseDown(event: MouseEvent) {

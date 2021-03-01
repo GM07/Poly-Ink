@@ -157,6 +157,27 @@ describe('AbstractSelectionComponent', () => {
 
     it('is in canvas should return true if the position is in the canvas', () => {
         spyOn(drawService.canvas, 'getBoundingClientRect').and.returnValue({ x: 0, y: 0, width: 100, height: 100 } as DOMRect);
-        expect(component['isInCanvas']({ x: 1, y: 1 } as Vec2)).toBe(true);
+       expect(component['isInCanvas']({ x: 1, y: 1 } as Vec2)).toBe(true);
+    });
+
+    it('should update control point on init if update is true', () => {
+      component['displayControlPoints']  = true;
+      spyOn<any>(component, 'placePoints');
+      abstractSelectionService['updatePoints'].next(true);
+      expect(component['placePoints']).toHaveBeenCalled();
+    });
+
+    it('should not update control point on init if update is false', () => {
+      component['displayControlPoints']  = true;
+      spyOn<any>(component, 'placePoints');
+      abstractSelectionService['updatePoints'].next(false);
+      expect(component['placePoints']).not.toHaveBeenCalled();
+    });
+
+    it('should not update control point on init if update is false', () => {
+      component['displayControlPoints']  = false;
+      spyOn<any>(component, 'placePoints');
+      abstractSelectionService['updatePoints'].next(true);
+      expect(component['placePoints']).not.toHaveBeenCalled();
     });
 });
