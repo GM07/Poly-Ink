@@ -30,8 +30,8 @@ describe('RectangleSelectionService', () => {
         baseCtxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
         previewCtxStub = canvasTestHelper.drawCanvas.getContext('2d') as CanvasRenderingContext2D;
         canvasSelection = document.createElement('canvas');
-        service.drawingService.baseCtx = baseCtxStub;
-        service.drawingService.previewCtx = previewCtxStub;
+        service['drawingService'].baseCtx = baseCtxStub;
+        service['drawingService'].previewCtx = previewCtxStub;
     });
 
     it('should be created', () => {
@@ -50,40 +50,40 @@ describe('RectangleSelectionService', () => {
         service.mouseDown = true;
         spyOn<any>(service, 'getPositionFromMouse');
         spyOn(service, 'isInCanvas').and.returnValue(true);
-        spyOn<any>(service, 'startSelection');
+        const startSelection = spyOn<any>(service, 'startSelection');
         service.onMouseUp(mouseEvent);
         expect(service.getPositionFromMouse).toHaveBeenCalled();
-        expect(service.startSelection).toHaveBeenCalled();
+        expect(startSelection).toHaveBeenCalled();
     });
 
     it('on mouse up should move selection if canvas is set', () => {
         service.mouseDown = true;
         spyOn(service, 'isInCanvas').and.returnValue(false);
         spyOn<any>(service, 'getTranslation').and.returnValue({ x: 0, y: 0 } as Vec2);
-        spyOn<any>(service, 'updateSelection');
+        const updateSelection = spyOn<any>(service, 'updateSelection');
         service.selectionCtx = canvasSelection.getContext('2d');
         service.onMouseUp(mouseEvent);
-        expect(service.updateSelection).toHaveBeenCalled();
+        expect(updateSelection).toHaveBeenCalled();
     });
 
     it('should draw preview on mouse move', () => {
         service.mouseUpCoord = { x: 0, y: 0 } as Vec2;
         service.mouseDown = true;
-        spyOn<any>(service, 'drawPreviewSelection');
+        const drawPreviewSelection = spyOn<any>(service, 'drawPreviewSelection');
         spyOn(service, 'isInCanvas').and.returnValue(true);
         service.onMouseMove(mouseEvent);
-        expect(service.drawPreviewSelection).toHaveBeenCalled();
+        expect(drawPreviewSelection).toHaveBeenCalled();
         expect(service.mouseUpCoord).not.toEqual({ x: 0, y: 0 } as Vec2);
     });
 
     it('should update the selection on mouse move if the selection is not null', () => {
         service.mouseDown = true;
         service.selectionCtx = canvasSelection.getContext('2d');
-        spyOn<any>(service, 'updateSelection');
+        const updateSelection = spyOn<any>(service, 'updateSelection');
         spyOn<any>(service, 'getTranslation');
         spyOn(service, 'isInCanvas').and.returnValue(false);
         service.onMouseMove(mouseEvent);
-        expect(service.updateSelection).toHaveBeenCalled();
+        expect(updateSelection).toHaveBeenCalled();
     });
 
     it('should stop drawing when the esc key is pressed', () => {
@@ -103,57 +103,57 @@ describe('RectangleSelectionService', () => {
     it('should update the rectangle on shift pressed', () => {
         const keyboardEvent = { ctrlKey: false, shiftKey: true, altKey: false } as KeyboardEvent;
         service.mouseDown = true;
-        spyOn<any>(service, 'updateDrawingSelection');
+        const updateDrawingSelection = spyOn<any>(service, 'updateDrawingSelection');
         service.onKeyDown(keyboardEvent);
-        expect(service.updateDrawingSelection).toHaveBeenCalled();
+        expect(updateDrawingSelection).toHaveBeenCalled();
     });
 
     it('it should move the selection when there is a selection and an arrow is pressed', () => {
         jasmine.clock().install();
         const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowdown' });
-        spyOn<any>(service, 'updateSelection');
+        const updateSelection = spyOn<any>(service, 'updateSelection');
         spyOn<any>(service, 'getXArrow').and.returnValue(1);
         spyOn<any>(service, 'getYArrow').and.returnValue(1);
         service.selectionCtx = canvasSelection.getContext('2d');
         service.onKeyDown(keyboardEvent);
         jasmine.clock().tick(600);
-        expect(service.updateSelection).toHaveBeenCalled();
-        expect(service.updateSelection).toHaveBeenCalledTimes(2);
+        expect(updateSelection).toHaveBeenCalled();
+        expect(updateSelection).toHaveBeenCalledTimes(2);
         jasmine.clock().uninstall();
     });
 
     it('should not move the selection multiple times if the key was pressed multiple times', () => {
         jasmine.clock().install();
-        spyOn<any>(service, 'updateSelection');
+        const updateSelection = spyOn<any>(service, 'updateSelection');
         const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowdown' });
         service.selectionCtx = canvasSelection.getContext('2d');
         service.onKeyDown(keyboardEvent);
         jasmine.clock().tick(200);
-        service.moveId = 1;
+        service['moveId'] = 1;
         jasmine.clock().tick(350);
-        expect(service.updateSelection).toHaveBeenCalledTimes(1);
+        expect(updateSelection).toHaveBeenCalledTimes(1);
         jasmine.clock().uninstall();
     });
 
     it('should not move the selection if it is already moving', () => {
         jasmine.clock().install();
-        spyOn<any>(service, 'updateSelection');
+        const updateSelection = spyOn<any>(service, 'updateSelection');
         const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowdown' });
         service.selectionCtx = canvasSelection.getContext('2d');
-        service.moveId = 1;
+        service['moveId'] = 1;
         service.onKeyDown(keyboardEvent);
         jasmine.clock().tick(500);
-        expect(service.updateSelection).toHaveBeenCalledTimes(1);
+        expect(updateSelection).toHaveBeenCalledTimes(1);
         jasmine.clock().uninstall();
     });
 
     it('should update the selection when key up', () => {
         const keyboardEvent = { ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
-        service.shiftPressed = true;
+        service['shiftPressed'] = true;
         service.mouseDown = true;
-        spyOn<any>(service, 'updateDrawingSelection');
+        const updateDrawingSelection = spyOn<any>(service, 'updateDrawingSelection');
         service.onKeyUp(keyboardEvent);
-        expect(service.updateDrawingSelection).toHaveBeenCalled();
+        expect(updateDrawingSelection).toHaveBeenCalled();
     });
 
     it('should update arrowkey on key up', () => {
@@ -179,17 +179,17 @@ describe('RectangleSelectionService', () => {
     });
 
     it('should call endSelection and clear the preview on stop drawing', () => {
-        spyOn<any>(service, 'endSelection');
+        const endSelection = spyOn<any>(service, 'endSelection');
         service.stopDrawing();
-        expect(service.endSelection).toHaveBeenCalled();
+        expect(endSelection).toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
     it('start selection should do nothing if width or height is not set', () => {
         service.width = 0;
-        spyOn<any>(service, 'drawPreviewSelection');
-        service.startSelection();
-        expect(service.drawPreviewSelection).not.toHaveBeenCalled();
+        const drawPreviewSelection = spyOn<any>(service, 'drawPreviewSelection');
+        service['startSelection']();
+        expect(drawPreviewSelection).not.toHaveBeenCalled();
     });
 
     it('start selection should init needed variables', () => {
@@ -201,47 +201,47 @@ describe('RectangleSelectionService', () => {
         canvasSelection.height = 250;
         drawServiceSpy.previewCanvas = document.createElement('canvas');
         drawServiceSpy.previewCtx = drawServiceSpy.previewCanvas.getContext('2d') as CanvasRenderingContext2D;
-        service.SELECTION_DATA = canvasSelection;
-        spyOn<any>(service, 'drawPreviewSelection');
+        service['SELECTION_DATA'] = canvasSelection;
+        const drawPreviewSelection = spyOn<any>(service, 'drawPreviewSelection');
         spyOn(drawServiceSpy.previewCtx, 'drawImage');
         spyOn<any>(service.selectionCtx, 'drawImage');
-        service.startSelection();
+        service['startSelection']();
         expect(drawServiceSpy.previewCtx.drawImage).toHaveBeenCalled();
-        expect(service.drawPreviewSelection).toHaveBeenCalled();
+        expect(drawPreviewSelection).toHaveBeenCalled();
     });
 
     it('update drawing should clear canvas and draw new preview', () => {
-        spyOn<any>(service, 'drawPreviewSelection');
-        service.updateDrawingSelection();
+        const drawPreviewSelection = spyOn<any>(service, 'drawPreviewSelection');
+        service['updateDrawingSelection']();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
-        expect(service.drawPreviewSelection).toHaveBeenCalled();
+        expect(drawPreviewSelection).toHaveBeenCalled();
     });
 
     it('update selection should do nothing if there is no selection', () => {
         const translation = { x: 0, y: 0 } as Vec2;
-        spyOn<any>(service, 'updateSelectionRequired');
-        service.updateSelection(translation);
-        expect(service.updateSelectionRequired).not.toHaveBeenCalled();
+        const updateSelectionRequired = spyOn<any>(service, 'updateSelectionRequired');
+        service['updateSelection'](translation);
+        expect(updateSelectionRequired).not.toHaveBeenCalled();
     });
 
     it('update selection should call the child class to update', () => {
         const translation = { x: 0, y: 0 } as Vec2;
-        spyOn<any>(service, 'updateSelectionRequired');
+        const updateSelectionRequired = spyOn<any>(service, 'updateSelectionRequired');
         service.selectionCoords = { x: 0, y: 0 } as Vec2;
-        service.translationOrigin = { x: 0, y: 0 } as Vec2;
+        service['translationOrigin'] = { x: 0, y: 0 } as Vec2;
         service.selectionCtx = canvasSelection.getContext('2d');
-        service.updateSelection(translation);
-        expect(service.updateSelectionRequired).toHaveBeenCalled();
+        service['updateSelection'](translation);
+        expect(updateSelectionRequired).toHaveBeenCalled();
     });
 
     it('draw preview should update width and height and call child method', () => {
         service.mouseUpCoord = { x: 25, y: 25 } as Vec2;
         service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
-        spyOn<any>(service, 'drawPreviewSelectionRequired');
-        service.drawPreviewSelection(baseCtxStub);
+        const drawPreviewSelectionRequired = spyOn<any>(service, 'drawPreviewSelectionRequired');
+        service['drawPreviewSelection'](baseCtxStub);
         expect(service.width).toEqual(25);
         expect(service.height).toEqual(25);
-        expect(service.drawPreviewSelectionRequired).toHaveBeenCalled();
+        expect(drawPreviewSelectionRequired).toHaveBeenCalled();
     });
 
     it('isInCanvas should return true if is in canvas', () => {
@@ -252,74 +252,74 @@ describe('RectangleSelectionService', () => {
     });
 
     it('end selection should do nothing if there is no selection', () => {
-        service.endSelection();
-        spyOn<any>(service, 'fillBackground');
-        expect(service.fillBackground).not.toHaveBeenCalled();
+        service['endSelection']();
+        const fillBackground = spyOn<any>(service, 'fillBackground');
+        expect(fillBackground).not.toHaveBeenCalled();
     });
 
     it('end selection should draw the selection on the base canvas', () => {
         service.selectionCtx = previewCtxStub;
         service.selectionCoords = { x: 0, y: 0 } as Vec2;
         spyOn(baseCtxStub, 'drawImage');
-        spyOn<any>(service, 'fillBackground');
-        service.endSelection();
+        const fillBackground = spyOn<any>(service, 'fillBackground');
+        service['endSelection']();
         expect(baseCtxStub.drawImage).toHaveBeenCalled();
-        expect(service.fillBackground).toHaveBeenCalled();
+        expect(fillBackground).toHaveBeenCalled();
     });
 
     it('fill background should fill a rectangle at the location', () => {
-        service.firstSelectionCoords = { x: 0, y: 0 } as Vec2;
+        service['firstSelectionCoords'] = { x: 0, y: 0 } as Vec2;
         spyOn(previewCtxStub, 'fillRect');
-        service.fillBackground(previewCtxStub, 10, 25);
+        service['fillBackground'](previewCtxStub, 10, 25);
         expect(previewCtxStub.fillRect).toHaveBeenCalled();
     });
 
     it('update selection required should draw the image, update it and update the background', () => {
         service.selectionCoords = { x: 0, y: 0 } as Vec2;
         spyOn(previewCtxStub, 'drawImage');
-        spyOn<any>(service, 'fillBackground');
-        spyOn<any>(service, 'drawSelection');
-        service.updateSelectionRequired();
+        const fillBackground = spyOn<any>(service, 'fillBackground');
+        const drawSelection = spyOn<any>(service, 'drawSelection');
+        service['updateSelectionRequired']();
         expect(previewCtxStub.drawImage).toHaveBeenCalled();
-        expect(service.fillBackground).toHaveBeenCalled();
-        expect(service.drawSelection).toHaveBeenCalled();
+        expect(fillBackground).toHaveBeenCalled();
+        expect(drawSelection).toHaveBeenCalled();
     });
 
     it('drawSelection should call drawPreview and not change size if shift hasnt changed', () => {
-        spyOn<any>(service, 'drawSelection');
+        const drawSelection = spyOn<any>(service, 'drawSelection');
         const saveWidth = (service.width = 5);
         const saveHeight = (service.height = 25);
         service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
-        service.drawPreviewSelectionRequired(baseCtxStub);
+        service['drawPreviewSelectionRequired'](baseCtxStub);
         expect(saveWidth).toEqual(service.width);
         expect(saveHeight).toEqual(service.height);
-        expect(service.drawSelection).toHaveBeenCalled();
+        expect(drawSelection).toHaveBeenCalled();
     });
 
     it('drawSelection should call drawPreview and change size if shift has changed', () => {
-        spyOn<any>(service, 'drawSelection');
+        const drawSelection = spyOn<any>(service, 'drawSelection');
         const saveWidth = (service.width = 5);
         const saveHeight = (service.height = 25);
-        service.shiftPressed = true;
+        service['shiftPressed'] = true;
         service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
-        service.drawPreviewSelectionRequired(baseCtxStub);
+        service['drawPreviewSelectionRequired'](baseCtxStub);
         expect(saveWidth).toEqual(service.width);
         expect(saveHeight).not.toEqual(service.height);
-        expect(service.drawSelection).toHaveBeenCalled();
+        expect(drawSelection).toHaveBeenCalled();
     });
 
     it('draw selection should draw a rectangle and a border around the selection', () => {
         spyOn(baseCtxStub, 'strokeRect');
         spyOn(baseCtxStub, 'setLineDash');
-        service.drawSelection(baseCtxStub, { x: 10, y: 25 } as Vec2, 0, 0);
+        service['drawSelection'](baseCtxStub, { x: 10, y: 25 } as Vec2, 0, 0);
         expect(baseCtxStub.strokeRect).toHaveBeenCalledTimes(2);
         expect(baseCtxStub.setLineDash).toHaveBeenCalledTimes(2);
     });
 
     it("fill background should do nothing if the mouse hasn't move", () => {
-        service.firstSelectionCoords = { x: 0, y: 0 };
+        service['firstSelectionCoords'] = { x: 0, y: 0 };
         spyOn(previewCtxStub, 'beginPath');
-        service.fillBackground(previewCtxStub, 0, 0);
+        service['fillBackground'](previewCtxStub, 0, 0);
         expect(previewCtxStub.beginPath).not.toHaveBeenCalled();
     });
 });
