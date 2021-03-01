@@ -140,12 +140,16 @@ export abstract class AbstractSelectionService extends Tool {
                 if (event.repeat) return;
                 this.setArrowKeyDown(event);
                 this.updateSelection({ x: PIXELS * this.getXArrow(), y: PIXELS * this.getYArrow() } as Vec2);
+                this.updatePoints.next(true);
+                this.updatePoints.next(false);
 
                 if (this.moveId === -1) {
                     setTimeout(() => {
                         if (this.moveId === -1)
                             this.moveId = window.setInterval(() => {
                                 this.updateSelection({ x: PIXELS * this.getXArrow(), y: PIXELS * this.getYArrow() } as Vec2);
+                                this.updatePoints.next(true);
+                                this.updatePoints.next(false);
                             }, 100);
                     }, 500);
                 }
