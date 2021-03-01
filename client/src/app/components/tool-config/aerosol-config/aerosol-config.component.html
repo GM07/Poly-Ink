@@ -1,0 +1,23 @@
+<div class="tab">
+    <mat-divider></mat-divider>
+
+    <h5 class="textFormat">Diamètre du jet</h5>
+    <div class="textFormatForSlider">
+        <mat-slider min="{{ MIN_AREA }}" max="{{ MAX_AREA }}" step="1" [(ngModel)]="aerosolService.areaDiameter" thumbLabel [displayWith]="sliderLabel"> </mat-slider>
+        {{ aerosolService.areaDiameter }}px
+    </div>
+    <mat-divider></mat-divider>
+
+    <h5 class="textFormat">Diamètre des goutelettes</h5>
+    <div class="textFormatForSlider">
+        <mat-slider min="{{ MIN_DROPLETS }}" max="{{ MAX_DROPLETS }}" step="0.5" [(ngModel)]="aerosolService.dropletDiameter" thumbLabel [displayWith]="sliderLabel"> </mat-slider>
+        {{ aerosolService.dropletDiameter }}px
+    </div>
+    <mat-divider></mat-divider>
+    
+    <h5 class="textFormat">Émissions par seconde</h5>
+    <div class="textFormatForSlider">
+        <mat-slider min="{{ MIN_EMISSIONS_PER_SECOND }}" max="{{ MAX_EMISSIONS_PER_SECOND }}" step="25" [(ngModel)]="aerosolService.emissionsPerSecond" thumbLabel> </mat-slider>
+        {{ aerosolService.emissionsPerSecond }}
+    </div>
+</div>
