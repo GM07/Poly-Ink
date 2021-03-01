@@ -15,10 +15,6 @@ describe('AbstractSelectionComponent', () => {
     button: 0,
   } as MouseEvent;
 
-  let keyboardEvent = {
-    shiftKey: true,
-  } as KeyboardEvent;
-
   //const delay = async (ms: number) => new Promise((result) => setTimeout(result, ms));
   beforeEach(async(() => {
     drawService = new DrawingService();
@@ -100,19 +96,6 @@ describe('AbstractSelectionComponent', () => {
     component.onMouseMove(mouseEvent);
     expect((component as any).placePoints).toHaveBeenCalled();
     expect((component as any).makeControlsUnselectable).toHaveBeenCalled();
-  });
-
-  it('should update the control point on key down', () => {
-    component.displayControlPoints = true;
-    spyOn(component as any, 'placePoints');
-    component.onKeyDown(keyboardEvent);
-    expect((component as any).placePoints).toHaveBeenCalled();
-  });
-
-  it('should update the display of control points on key down', () => {
-    let saveValue = (component.displayControlPoints = true);
-    component.onKeyDown(keyboardEvent);
-    expect(component.displayControlPoints).not.toEqual(saveValue);
   });
 
   it('init point should initialise the control points', () => {
