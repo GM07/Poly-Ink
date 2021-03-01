@@ -5,18 +5,27 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
     providedIn: 'root',
 })
 export class ShortcutHandlerService {
-    blockShortcuts: boolean = false;
+    public blockShortcuts: boolean = false;
+    public ignoreEvent = (event: KeyboardEvent): boolean => {
+        return false;
+    };
 
-    constructor(private toolHandlerService: ToolHandlerService) {}
+    constructor(private toolHandlerService: ToolHandlerService) {
+        this.ignoreEvent = this.defaultIgnoreEvent;
+    }
 
     handleKeyEvent(event: KeyboardEvent): void {
-        if (this.blockShortcuts) {
+        if (this.blockShortcuts || this.ignoreEvent(event)) {
             event.preventDefault();
             event.stopImmediatePropagation();
         }
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (!this.blockShortcuts) this.toolHandlerService.onKeyDown(event);
+        if (!this.blockShortcuts && !this.ignoreEvent(event)) this.toolHandlerService.onKeyDown(event);
+    }
+
+    defaultIgnoreEvent(event: KeyboardEvent): boolean {
+        return false;
     }
 }

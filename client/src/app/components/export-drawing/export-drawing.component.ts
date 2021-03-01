@@ -12,7 +12,7 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
     styleUrls: ['./export-drawing.component.scss'],
 })
 export class ExportDrawingComponent {
-    private static readonly EXPORT_PREVIEW_CANVAS_WIDTH = 500;
+    private static readonly EXPORT_PREVIEW_CANVAS_WIDTH = 300;
 
     exportPreview: ElementRef<HTMLCanvasElement>;
     @ViewChild('exportPreview', { static: false }) set content(element: ElementRef) {
@@ -117,6 +117,10 @@ export class ExportDrawingComponent {
         return ExportDrawingComponent.EXPORT_PREVIEW_CANVAS_WIDTH / Math.max(1, this.aspectRatio);
     }
 
+    getPreviewWidth(): number {
+        return ExportDrawingComponent.EXPORT_PREVIEW_CANVAS_WIDTH;
+    }
+
     @HostListener('document:keydown', ['$event'])
     async onKeyDown(event: KeyboardEvent): Promise<void> {
         if (this.popupHandlerService.exportDrawing.shortcut.equals(event)) {
@@ -125,7 +129,10 @@ export class ExportDrawingComponent {
             this.changeDetectorRef.detectChanges();
             this.backupBaseCanvas();
             await this.applyFilter();
-            this.shortcutHandler.blockShortcuts = true;
+            this.shortcutHandler.blockShortcuts = false;
+            this.shortcutHandler.ignoreEvent = (event: KeyboardEvent): boolean => {
+                return event.ctrlKey;
+            };
         }
     }
 }
