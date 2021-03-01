@@ -162,14 +162,4 @@ describe('AerosolService', () => {
         service.stopDrawing();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
-
-    it('droplet should be inside area circle determined by diameter input', () => {
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
-        service.onMouseDown(mouseEvent);
-        const droplet = service.randomDroplet();
-        const randX = droplet.x;
-        const randY = droplet.y;
-        const distFromCenter = Math.sqrt(randX * randX + randY * randY);
-        expect(distFromCenter).toBeLessThanOrEqual(service.areaDiameter / 2);
-    });
 });

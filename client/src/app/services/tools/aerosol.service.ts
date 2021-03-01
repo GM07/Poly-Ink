@@ -131,7 +131,7 @@ export class AerosolService extends Tool {
         }
     }
 
-    randomDroplet(): Vec2 {
+    private randomDroplet(): Vec2 {
         const areaRadius = this.areaDiameter / 2;
         const angle = Math.PI * Math.random() * this.areaDiameter;
         const randomDistFromCenter = Math.random() * areaRadius + Math.random() * areaRadius;
