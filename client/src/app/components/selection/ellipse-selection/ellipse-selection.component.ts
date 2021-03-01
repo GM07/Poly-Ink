@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
+import { AbstractSelectionComponent } from '@app/components/selection/abstract-selection/abstract-selection.component';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.service';
-import { AbstractSelectionComponent } from '../abstract-selection/abstract-selection.component';
 
 @Component({
     selector: 'app-ellipse-selection',

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
+import { AbstractSelectionConfigComponent } from '@app/components/tool-config/abstract-selection-config/abstract-selection-config.component';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
-import { AbstractSelectionConfigComponent } from '../abstract-selection-config/abstract-selection-config.component';
 
 @Component({
     selector: 'app-rectangle-selection-config',

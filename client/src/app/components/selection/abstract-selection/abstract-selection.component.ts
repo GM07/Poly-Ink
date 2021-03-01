@@ -20,24 +20,19 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     @ViewChild('bottomMiddle', { static: false }) bottomMiddle: ElementRef<HTMLElement>;
     @ViewChild('bottomRight', { static: false }) bottomRight: ElementRef<HTMLElement>;
 
-    private readonly CONTROL_INNER: number;
-    private readonly BORDER: number;
-    private readonly MIDDLE_OFFSET: number;
-    private readonly DESIRED_ZINDEX: number;
+    private readonly CONTROL_INNER: number = 8;
+    private readonly BORDER: number = 2;
+    private readonly MIDDLE_OFFSET: number = (this.CONTROL_INNER - this.BORDER) / 2;
+    private readonly DESIRED_ZINDEX: number = 3;
 
     private controlPointList: ElementRef<HTMLElement>[];
     private lastCursor: string;
 
     isOverSelection: boolean = false;
     mouseDown: boolean = false;
-    displayControlPoints = false;
+    displayControlPoints: boolean = false;
 
-    constructor(protected selectionService: AbstractSelectionService, protected drawingService: DrawingService) {
-        this.CONTROL_INNER = 8;
-        this.BORDER = 2;
-        this.MIDDLE_OFFSET = (this.CONTROL_INNER - this.BORDER) / 2;
-        this.DESIRED_ZINDEX = 3;
-    }
+    constructor(protected selectionService: AbstractSelectionService, protected drawingService: DrawingService) {}
 
     ngOnInit(): void {
         this.selectionService.updatePoints.subscribe(() => {
@@ -56,7 +51,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         this.drawingService.canvas.style.cursor = this.lastCursor;
     }
 
-    onMouseDown(event: MouseEvent) {
+    onMouseDown(event: MouseEvent): void {
         if (this.selectionService.isInSelection(event)) {
             this.makeControlsUnselectable();
         }
@@ -64,7 +59,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         this.displayControlPoints = this.selectionService.selectionCtx !== null;
     }
 
-    onMouseUp() {
+    onMouseUp(): void {
         if (this.displayControlPoints) {
             this.makeControlsSelectable();
             this.placePoints();
@@ -73,7 +68,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         this.displayControlPoints = this.selectionService.selectionCtx !== null;
     }
 
-    onMouseMove(event: MouseEvent) {
+    onMouseMove(event: MouseEvent): void {
         if (!this.mouseDown) {
             this.isOverSelection = this.selectionService.isInSelection(event);
             if (this.isOverSelection) {
@@ -89,7 +84,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         }
     }
 
-    initPoints() {
+    initPoints(): void {
         this.controlPointList = [
             this.topLeft,
             this.topMiddle,
@@ -106,18 +101,18 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         this.controlPointContainer.nativeElement.style.zIndex = this.DESIRED_ZINDEX.toString();
     }
 
-    private placePoints() {
+    private placePoints(): void {
         if (this.selectionService.selectionCtx === null) return;
 
         const width = Math.abs(this.selectionService.width);
         const height = Math.abs(this.selectionService.height);
 
-        this.placeControlPoint(this.topLeft, -1 * this.CONTROL_INNER, -1 * this.CONTROL_INNER);
-        this.placeControlPoint(this.topMiddle, width / 2 - this.MIDDLE_OFFSET, -1 * this.CONTROL_INNER);
-        this.placeControlPoint(this.topRight, width + this.BORDER, -1 * this.CONTROL_INNER);
-        this.placeControlPoint(this.middleLeft, -1 * this.CONTROL_INNER, height / 2 - this.MIDDLE_OFFSET);
+        this.placeControlPoint(this.topLeft, 0 - this.CONTROL_INNER, 0 - this.CONTROL_INNER);
+        this.placeControlPoint(this.topMiddle, width / 2 - this.MIDDLE_OFFSET, 0 - this.CONTROL_INNER);
+        this.placeControlPoint(this.topRight, width + this.BORDER, 0 - this.CONTROL_INNER);
+        this.placeControlPoint(this.middleLeft, 0 - this.CONTROL_INNER, height / 2 - this.MIDDLE_OFFSET);
         this.placeControlPoint(this.middleRight, width + this.BORDER, height / 2 - this.MIDDLE_OFFSET);
-        this.placeControlPoint(this.bottomLeft, -1 * this.CONTROL_INNER, height + this.BORDER);
+        this.placeControlPoint(this.bottomLeft, 0 - this.CONTROL_INNER, height + this.BORDER);
         this.placeControlPoint(this.bottomMiddle, width / 2 - this.MIDDLE_OFFSET, height + this.BORDER);
         this.placeControlPoint(this.bottomRight, width + this.BORDER, height + this.BORDER);
 
@@ -133,7 +128,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         }
     }
 
-    private placeControlPoint(element: ElementRef<HTMLElement>, offsetX: number, offsetY: number) {
+    private placeControlPoint(element: ElementRef<HTMLElement>, offsetX: number, offsetY: number): void {
         const x = this.selectionService.selectionCoords.x;
         const y = this.selectionService.selectionCoords.y;
         element.nativeElement.style.left = String(x + offsetX) + 'px';
@@ -153,13 +148,13 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         return true;
     }
 
-    private makeControlsUnselectable() {
+    private makeControlsUnselectable(): void {
         for (const elementRef of this.controlPointList) {
             elementRef.nativeElement.style.pointerEvents = 'none';
         }
     }
 
-    private makeControlsSelectable() {
+    private makeControlsSelectable(): void {
         for (const elementRef of this.controlPointList) {
             elementRef.nativeElement.style.pointerEvents = 'auto';
         }

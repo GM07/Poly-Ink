@@ -1,11 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Tool } from '@app/classes/tool';
+import { EllipseSelectionComponent } from '@app/components/selection/ellipse-selection/ellipse-selection.component';
+import { RectangleSelectionComponent } from '@app/components/selection/rectangle-selection/rectangle-selection.component';
 import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.service';
 import { PencilService } from '@app/services/tools/pencil.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
-import { EllipseSelectionComponent } from '../ellipse-selection/ellipse-selection.component';
-import { RectangleSelectionComponent } from '../rectangle-selection/rectangle-selection.component';
 import { SelectionHandlerComponent } from './selection-handler.component';
 
 describe('SelectionHandlerComponent', () => {
@@ -15,6 +15,7 @@ describe('SelectionHandlerComponent', () => {
     let pencilService: PencilService;
     let rectangleSelectionService: RectangleSelectionService;
     let ellipseSelectionService: EllipseSelectionService;
+    // tslint:disable:no-any
     let getToolSpy: jasmine.Spy<any>;
 
     beforeEach(async(() => {
@@ -33,6 +34,7 @@ describe('SelectionHandlerComponent', () => {
         rectangleSelectionService = TestBed.inject(RectangleSelectionService);
         ellipseSelectionService = TestBed.inject(EllipseSelectionService);
 
+        // tslint:disable:no-any
         getToolSpy = spyOn<any>(toolHandlerService, 'getTool').and.returnValue(pencilService);
     });
 

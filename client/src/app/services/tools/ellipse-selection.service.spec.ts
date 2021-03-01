@@ -6,6 +6,9 @@ import { EllipseSelectionService } from './ellipse-selection.service';
 
 // TODO ajouter des tests d'intégrations pour vérifier que les éléments sont correctement dessinés?
 
+// tslint:disable:no-any
+// tslint:disable:no-magic-numbers
+// tslint:disable:no-string-literal
 describe('EllipseSelectionService', () => {
     let service: EllipseSelectionService;
     let canvasTestHelper: CanvasTestHelper;

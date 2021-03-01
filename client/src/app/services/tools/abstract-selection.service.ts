@@ -19,9 +19,12 @@ export abstract class AbstractSelectionService extends Tool {
     private readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
     private readonly DOWN_ARROW: ShortcutKey = new ShortcutKey('arrowdown');
     private readonly UP_ARROW: ShortcutKey = new ShortcutKey('arrowup');
+    private readonly DEFAULT_MOVE_ID: number = -1;
+    private readonly FIRST_MOVE_TIMEOUT: number = 500;
+    private readonly NEXT_MOVES_TIMEOUT: number = 100;
     protected SELECTION_DATA: HTMLCanvasElement;
 
-    updatePoints: Subject<Boolean> = new Subject();
+    updatePoints: Subject<boolean> = new Subject();
     mouseUpCoord: Vec2;
     protected translationOrigin: Vec2;
     protected firstSelectionCoords: Vec2;
@@ -48,7 +51,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.isRightArrowDown = false;
         this.isUpArrowDown = false; // TODO changer avec merge request de Paul
         this.isDownArrowDown = false;
-        this.moveId = -1;
+        this.moveId = this.DEFAULT_MOVE_ID;
     }
 
     protected abstract endSelection(): void;
@@ -107,7 +110,7 @@ export abstract class AbstractSelectionService extends Tool {
         }
     }
 
-    onMouseLeave(event: MouseEvent) {
+    onMouseLeave(event: MouseEvent): void {
         if (this.mouseDown && this.selectionCtx === null) {
             const rect = this.drawingService.canvas.getBoundingClientRect();
             const mousePos: Vec2 = this.mouseUpCoord;
@@ -145,14 +148,14 @@ export abstract class AbstractSelectionService extends Tool {
                 this.updateSelection({ x: PIXELS * this.getXArrow(), y: PIXELS * this.getYArrow() } as Vec2);
                 this.updatePoints.next();
 
-                if (this.moveId === -1) {
+                if (this.moveId === this.DEFAULT_MOVE_ID) {
                     setTimeout(() => {
-                        if (this.moveId === -1)
+                        if (this.moveId === this.DEFAULT_MOVE_ID)
                             this.moveId = window.setInterval(() => {
                                 this.updateSelection({ x: PIXELS * this.getXArrow(), y: PIXELS * this.getYArrow() } as Vec2);
                                 this.updatePoints.next();
-                            }, 100);
-                    }, 500);
+                            }, this.NEXT_MOVES_TIMEOUT);
+                    }, this.FIRST_MOVE_TIMEOUT);
                 }
             }
         }
@@ -169,7 +172,7 @@ export abstract class AbstractSelectionService extends Tool {
             this.setArrowKeyUp(event);
             if (!this.isRightArrowDown && !this.isLeftArrowDown && !this.isUpArrowDown && !this.isDownArrowDown) {
                 window.clearInterval(this.moveId);
-                this.moveId = -1;
+                this.moveId = this.DEFAULT_MOVE_ID;
             }
         }
     }

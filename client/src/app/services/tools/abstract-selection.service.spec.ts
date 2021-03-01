@@ -4,6 +4,8 @@ import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractSelectionService } from './abstract-selection.service';
 
+// tslint:disable:no-any
+// tslint:disable:no-string-literal
 describe('AbstractSelectionService', () => {
     let service: AbstractSelectionService;
     let drawServiceSpy: jasmine.SpyObj<DrawingService>;
@@ -27,7 +29,6 @@ describe('AbstractSelectionService', () => {
         baseCtxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
         previewCtxStub = canvasTestHelper.drawCanvas.getContext('2d') as CanvasRenderingContext2D;
 
-        // tslint:disable:no-string-literal
         service['drawingService'].baseCtx = baseCtxStub;
         service['drawingService'].previewCtx = previewCtxStub;
         service['drawingService'].canvas = canvasTestHelper.canvas;
@@ -96,6 +97,7 @@ describe('AbstractSelectionService', () => {
     });
 
     it('is in selection should return true if is in selection', () => {
+        // tslint:disable:no-magic-numbers
         service['selectionCtx'] = canvasSelection.getContext('2d');
         service['selectionCoords'] = { x: 0, y: 0 } as Vec2;
         service['width'] = 50;
@@ -111,6 +113,7 @@ describe('AbstractSelectionService', () => {
     });
 
     it('getXArrow should return -1 if left Arrow is down', () => {
+        // tslint:disable:no-magic-numbers
         service['isRightArrowDown'] = false;
         service['isLeftArrowDown'] = true;
         expect(service['getXArrow']()).toEqual(-1);
@@ -122,6 +125,7 @@ describe('AbstractSelectionService', () => {
     });
 
     it('getYArrow should return -1 if up Arrow is down', () => {
+        // tslint:disable:no-magic-numbers
         service['isUpArrowDown'] = true;
         expect(service['getYArrow']()).toEqual(-1);
     });

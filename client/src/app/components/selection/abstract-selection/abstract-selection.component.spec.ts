@@ -4,9 +4,9 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
 import { AbstractSelectionComponent } from './abstract-selection.component';
 
-//tslint:disable:no-any
-//tslint:disable:no-magic-number
-
+// tslint:disable:no-any
+// tslint:disable:no-magic-numbers
+// tslint:disable:no-string-literal
 describe('AbstractSelectionComponent', () => {
     let component: AbstractSelectionComponent;
     let fixture: ComponentFixture<AbstractSelectionComponent>;
@@ -18,7 +18,6 @@ describe('AbstractSelectionComponent', () => {
         button: 0,
     } as MouseEvent;
 
-    // const delay = async (ms: number) => new Promise((result) => setTimeout(result, ms));
     beforeEach(async(() => {
         drawService = new DrawingService();
         TestBed.configureTestingModule({

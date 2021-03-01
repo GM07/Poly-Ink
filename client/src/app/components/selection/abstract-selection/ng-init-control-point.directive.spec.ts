@@ -9,14 +9,15 @@ describe('NgInitControlPointDirective', () => {
     });
 
     it('should create an instance', () => {
-        const directive = new NgInitControlPointDirective();
-        expect(directive).toBeTruthy();
+        const directiveInit = new NgInitControlPointDirective();
+        expect(directiveInit).toBeTruthy();
     });
 
     it('should emit an event when initialised', async () => {
-        spyOn(directive.initEvent, 'emit');
+        spyOn(directive.ngInit, 'emit');
         directive.ngOnInit();
+        // tslint:disable-next-line:no-magic-numbers
         await delay(11);
-        expect(directive.initEvent.emit).toHaveBeenCalledTimes(1);
+        expect(directive.ngInit.emit).toHaveBeenCalledTimes(1);
     });
 });

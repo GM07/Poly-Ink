@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
+import { AbstractSelectionConfigComponent } from '@app/components/tool-config/abstract-selection-config/abstract-selection-config.component';
 import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.service';
-import { AbstractSelectionConfigComponent } from '../abstract-selection-config/abstract-selection-config.component';
 
 @Component({
     selector: 'app-abstract-selection-config',

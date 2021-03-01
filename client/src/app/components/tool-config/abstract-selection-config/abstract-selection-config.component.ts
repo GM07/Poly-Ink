@@ -13,7 +13,7 @@ export class AbstractSelectionConfigComponent extends ToolConfig {
         super();
     }
 
-    selectAll() {
+    selectAll(): void {
         this.selectionService.selectAll();
     }
 }

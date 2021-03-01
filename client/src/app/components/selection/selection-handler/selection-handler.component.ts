@@ -1,11 +1,11 @@
 import { Component, Type } from '@angular/core';
 import { Tool } from '@app/classes/tool';
+import { AbstractSelectionComponent } from '@app/components/selection/abstract-selection/abstract-selection.component';
+import { EllipseSelectionComponent } from '@app/components/selection/ellipse-selection/ellipse-selection.component';
+import { RectangleSelectionComponent } from '@app/components/selection/rectangle-selection/rectangle-selection.component';
 import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
-import { AbstractSelectionComponent } from '../abstract-selection/abstract-selection.component';
-import { EllipseSelectionComponent } from '../ellipse-selection/ellipse-selection.component';
-import { RectangleSelectionComponent } from '../rectangle-selection/rectangle-selection.component';
 
 @Component({
     selector: 'app-selection-handler',

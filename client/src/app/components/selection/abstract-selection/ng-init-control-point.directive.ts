@@ -1,14 +1,16 @@
-import { Directive, EventEmitter, Output } from '@angular/core';
+import { Directive, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Directive({
     selector: '[appNgInitControlPoint]',
 })
-export class NgInitControlPointDirective {
-    @Output('ngInit') initEvent: EventEmitter<void> = new EventEmitter();
+export class NgInitControlPointDirective implements OnInit {
+    private readonly TIMEOUT_TIME: number = 10;
 
-    ngOnInit() {
+    @Output() ngInit: EventEmitter<void> = new EventEmitter();
+
+    ngOnInit(): void {
         setTimeout(() => {
-            this.initEvent.emit();
-        }, 10);
+            this.ngInit.emit();
+        }, this.TIMEOUT_TIME);
     }
 }

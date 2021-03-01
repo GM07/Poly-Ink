@@ -6,6 +6,9 @@ import { RectangleSelectionService } from './rectangle-selection.service';
 
 // TODO should use the canvasTestHelper
 
+// tslint:disable:no-any
+// tslint:disable:no-magic-numbers
+// tslint:disable:no-string-literal
 describe('RectangleSelectionService', () => {
     let service: RectangleSelectionService;
     let drawServiceSpy: jasmine.SpyObj<DrawingService>;
