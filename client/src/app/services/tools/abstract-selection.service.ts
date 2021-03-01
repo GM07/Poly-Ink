@@ -7,6 +7,7 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
 import { ColorService } from 'src/color-picker/services/color.service';
 
+
 @Injectable({
     providedIn: 'root',
 })
@@ -19,9 +20,9 @@ export abstract class AbstractSelectionService extends Tool {
     private readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
     private readonly DOWN_ARROW: ShortcutKey = new ShortcutKey('arrowdown');
     private readonly UP_ARROW: ShortcutKey = new ShortcutKey('arrowup');
-    protected readonly SELECTION_DATA: HTMLCanvasElement;
+    protected SELECTION_DATA: HTMLCanvasElement;
 
-    updatePoints: Subject<boolean> = new Subject<boolean>();
+    updatePoints: Subject<Boolean> = new Subject();
     public mouseUpCoord: Vec2;
     protected translationOrigin: Vec2;
     protected firstSelectionCoords: Vec2;
@@ -67,6 +68,7 @@ export abstract class AbstractSelectionService extends Tool {
             const mousePos = this.getPositionFromMouse(event);
             if (this.isInSelection(event)) {
                 this.translationOrigin = mousePos;
+
             } else {
                 this.endSelection();
                 this.mouseDownCoord = mousePos;
@@ -135,21 +137,19 @@ export abstract class AbstractSelectionService extends Tool {
             }
         } else if (this.selectionCtx !== null) {
             const PIXELS = 3;
-            if (this.RIGHT_ARROW.equals(event) || this.LEFT_ARROW.equals(event) || this.UP_ARROW.equals(event) || this.DOWN_ARROW.equals(event)) {
+            if (!this.mouseDown && (this.RIGHT_ARROW.equals(event) || this.LEFT_ARROW.equals(event) || this.UP_ARROW.equals(event) || this.DOWN_ARROW.equals(event))) {
                 event.preventDefault();
                 if (event.repeat) return;
                 this.setArrowKeyDown(event);
                 this.updateSelection({ x: PIXELS * this.getXArrow(), y: PIXELS * this.getYArrow() } as Vec2);
-                this.updatePoints.next(true);
-                this.updatePoints.next(false);
+                this.updatePoints.next();
 
                 if (this.moveId === -1) {
                     setTimeout(() => {
                         if (this.moveId === -1)
                             this.moveId = window.setInterval(() => {
                                 this.updateSelection({ x: PIXELS * this.getXArrow(), y: PIXELS * this.getYArrow() } as Vec2);
-                                this.updatePoints.next(true);
-                                this.updatePoints.next(false);
+                                this.updatePoints.next();
                             }, 100);
                     }, 500);
                 }

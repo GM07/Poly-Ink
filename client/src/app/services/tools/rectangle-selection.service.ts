@@ -6,6 +6,7 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 
+
 @Injectable({
     providedIn: 'root',
 })

@@ -41,9 +41,9 @@ describe('AbstractSelectionComponent', () => {
 
     it('it should disable control if in selection on mouse down', () => {
         spyOn(abstractSelectionService, 'isInSelection').and.returnValue(true);
-        spyOn(component as any, 'makeControlsUnselectable');
+        spyOn<any>(component, 'makeControlsUnselectable');
         component.onMouseDown(mouseEvent);
-        expect((component as any).makeControlsUnselectable).toHaveBeenCalled();
+        expect(component['makeControlsUnselectable']).toHaveBeenCalled();
     });
 
     it('should update control points on mouse down', () => {
@@ -54,11 +54,11 @@ describe('AbstractSelectionComponent', () => {
 
     it('should enable control point if there are control point', () => {
         component.displayControlPoints = true;
-        spyOn(component as any, 'makeControlsSelectable');
-        spyOn(component as any, 'placePoints');
+        spyOn<any>(component, 'makeControlsSelectable');
+        spyOn<any>(component, 'placePoints');
         component.onMouseUp();
-        expect((component as any).makeControlsSelectable).toHaveBeenCalled();
-        expect((component as any).placePoints).toHaveBeenCalled();
+        expect(component['makeControlsSelectable']).toHaveBeenCalled();
+        expect(component['placePoints']).toHaveBeenCalled();
     });
 
     it('should update control points on mouse up', () => {
@@ -76,35 +76,35 @@ describe('AbstractSelectionComponent', () => {
 
     it('should reset the cursor when not hovering the selection', () => {
         spyOn(abstractSelectionService, 'isInSelection').and.returnValue(false);
-        (component as any).lastCursor = 'pointer';
+        component['lastCursor'] = 'pointer';
         component.onMouseMove(mouseEvent);
         expect(drawService.previewCanvas.style.cursor).toEqual('pointer');
     });
 
     it("should do nothing if mouse is down and we're not diplaying the control points", () => {
         component.mouseDown = true;
-        spyOn(component as any, 'placePoints');
+        spyOn<any>(component, 'placePoints');
         component.onMouseMove(mouseEvent);
-        expect((component as any).placePoints).not.toHaveBeenCalled();
+        expect(component['placePoints']).not.toHaveBeenCalled();
     });
 
     it('should update the control point on mouse move', () => {
         component.displayControlPoints = true;
         component.mouseDown = true;
-        spyOn(component as any, 'placePoints');
-        spyOn(component as any, 'makeControlsUnselectable');
+        spyOn<any>(component, 'placePoints');
+        spyOn<any>(component, 'makeControlsUnselectable');
         component.onMouseMove(mouseEvent);
-        expect((component as any).placePoints).toHaveBeenCalled();
-        expect((component as any).makeControlsUnselectable).toHaveBeenCalled();
+        expect(component['placePoints']).toHaveBeenCalled();
+        expect(component['makeControlsUnselectable']).toHaveBeenCalled();
     });
 
     it('init point should initialise the control points', () => {
-        spyOn(component as any, 'placePoints');
+        spyOn<any>(component, 'placePoints');
         component.displayControlPoints = true;
         fixture.detectChanges();
         component.initPoints();
-        expect((component as any).placePoints).toHaveBeenCalled();
-        expect((component as any).controlPointList.length).toBeGreaterThan(0);
+        expect(component['placePoints']).toHaveBeenCalled();
+        expect(component['controlPointList'].length).toBeGreaterThan(0);
     });
 
     it('place points should set all 8 points', () => {
@@ -163,21 +163,14 @@ describe('AbstractSelectionComponent', () => {
     it('should update control point on init if update is true', () => {
       component['displayControlPoints']  = true;
       spyOn<any>(component, 'placePoints');
-      abstractSelectionService['updatePoints'].next(true);
+      abstractSelectionService['updatePoints'].next();
       expect(component['placePoints']).toHaveBeenCalled();
-    });
-
-    it('should not update control point on init if update is false', () => {
-      component['displayControlPoints']  = true;
-      spyOn<any>(component, 'placePoints');
-      abstractSelectionService['updatePoints'].next(false);
-      expect(component['placePoints']).not.toHaveBeenCalled();
     });
 
     it('should not update control point on init if update is false', () => {
       component['displayControlPoints']  = false;
       spyOn<any>(component, 'placePoints');
-      abstractSelectionService['updatePoints'].next(true);
+      abstractSelectionService['updatePoints'].next();
       expect(component['placePoints']).not.toHaveBeenCalled();
     });
 });

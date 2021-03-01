@@ -40,13 +40,11 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     }
 
     ngOnInit(): void {
-        this.selectionService.updatePoints.subscribe((update: boolean) => {
-            if (update) {
+        this.selectionService.updatePoints.subscribe(() => {
                 if (this.displayControlPoints) {
                     this.placePoints();
                 }
                 this.displayControlPoints = true;
-            }
         });
     }
 
