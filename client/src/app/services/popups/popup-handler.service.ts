@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ExportDrawing } from '@app/services/popups/export-drawing';
 import { NewDrawing } from '@app/services/popups/new-drawing';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
-import { DrawingService } from '../drawing/drawing.service';
 
 @Injectable({
     providedIn: 'root',
@@ -29,7 +29,7 @@ export class PopupHandlerService {
         this.newDrawing.showPopup = true;
     }
 
-    isNewDrawingPopupShowing(): boolean {
+    canShowNewDrawingPopup(): boolean {
         return this.newDrawing.showPopup && !this.exportDrawing.showPopup;
     }
 
@@ -41,7 +41,7 @@ export class PopupHandlerService {
         this.exportDrawing.showPopup = true;
     }
 
-    isExportDrawingPopupShowing(): boolean {
+    canShowExportDrawingPopup(): boolean {
         return this.exportDrawing.showPopup && !this.newDrawing.showPopup;
     }
 }

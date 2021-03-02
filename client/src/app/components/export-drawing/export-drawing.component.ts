@@ -15,9 +15,9 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
     styleUrls: ['./export-drawing.component.scss'],
 })
 export class ExportDrawingComponent {
-    private static readonly EXPORT_PREVIEW_CANVAS_WIDTH = 300;
+    private static readonly EXPORT_PREVIEW_CANVAS_WIDTH: number = 300;
 
-    exportPreview: ElementRef<HTMLCanvasElement>;
+    private exportPreview: ElementRef<HTMLCanvasElement>;
     @ViewChild('exportPreview', { static: false }) set content(element: ElementRef) {
         if (element) {
             this.exportPreview = element;
@@ -29,12 +29,12 @@ export class ExportDrawingComponent {
 
     private canvasImage: string;
     private imageData: ImageData;
-    public exportFormat: string;
-    public filename: string;
-    public currentFilter: string;
-    public aspectRatio: number;
+    exportFormat: string;
+    filename: string;
+    currentFilter: string;
+    aspectRatio: number;
 
-    private filterMap: Map<String, Filter> = new Map([
+    private filterMap: Map<string, Filter> = new Map([
         ['no', new Filter()],
         ['negative', new NegativeFilter()],
         ['funky', new FunkyFilter()],
@@ -59,7 +59,7 @@ export class ExportDrawingComponent {
         this.exportFormat = 'png';
         this.currentFilter = 'no';
         this.aspectRatio = 1;
-        this.filename = this.defaultFileNames[Math.floor(Math.random() * 5)];
+        this.filename = this.defaultFileNames[Math.floor(Math.random() * this.defaultFileNames.length)];
     }
 
     backupBaseCanvas(): void {
@@ -72,12 +72,11 @@ export class ExportDrawingComponent {
 
     hidePopup(): void {
         this.popupHandlerService.hideExportDrawingPopup();
-        this.shortcutHandler.blockShortcuts = false;
         this.initValues();
     }
 
-    showPopup(): boolean {
-        return this.popupHandlerService.isExportDrawingPopupShowing();
+    canShowPopup(): boolean {
+        return this.popupHandlerService.canShowExportDrawingPopup();
     }
 
     export(): void {
@@ -85,12 +84,12 @@ export class ExportDrawingComponent {
     }
 
     async applyFilter(): Promise<void> {
-        let exportPreviewCtx = this.exportPreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+        const exportPreviewCtx = this.exportPreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
         this.imageData = this.baseContext.getImageData(0, 0, this.baseCanvas.width, this.baseCanvas.height);
 
         this.aspectRatio = this.baseCanvas.width / this.baseCanvas.height;
 
-        let filter = this.filterMap.get(this.currentFilter);
+        const filter = this.filterMap.get(this.currentFilter);
         if (filter !== undefined) {
             filter.apply(this.imageData);
         }
@@ -102,11 +101,11 @@ export class ExportDrawingComponent {
         this.canvasImage = this.baseCanvas.toDataURL('image/' + this.exportFormat);
     }
 
-    changeExportFormat(newFormat: string) {
+    changeExportFormat(newFormat: string): void {
         this.exportFormat = newFormat;
     }
 
-    async changeFilter(newFilter: string) {
+    async changeFilter(newFilter: string): Promise<void> {
         this.currentFilter = newFilter;
         this.backupBaseCanvas();
         await this.applyFilter();
@@ -116,6 +115,7 @@ export class ExportDrawingComponent {
         return ExportDrawingComponent.EXPORT_PREVIEW_CANVAS_WIDTH / Math.max(1, this.aspectRatio);
     }
 
+    // Permettre l'acces dans le html
     getPreviewWidth(): number {
         return ExportDrawingComponent.EXPORT_PREVIEW_CANVAS_WIDTH;
     }
@@ -128,9 +128,8 @@ export class ExportDrawingComponent {
             this.changeDetectorRef.detectChanges();
             this.backupBaseCanvas();
             await this.applyFilter();
-            this.shortcutHandler.blockShortcuts = false;
-            this.shortcutHandler.ignoreEvent = (event: KeyboardEvent): boolean => {
-                return event.ctrlKey;
+            this.shortcutHandler.ignoreEvent = (eventKey: KeyboardEvent): boolean => {
+                return eventKey.ctrlKey;
             };
         }
     }

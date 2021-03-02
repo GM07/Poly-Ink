@@ -1,6 +1,6 @@
 export class Filter {
-    protected static readonly MAX_RBGA_VALUE = 255;
-    protected static readonly PIXEL_FORMAT_LENGTH = 4;
+    protected static readonly MAX_RBGA_VALUE: number = 255;
+    protected static readonly PIXEL_FORMAT_LENGTH: number = 4;
 
     apply(image: ImageData): void {
         for (let i = 0; i < image.data.length; i += Filter.PIXEL_FORMAT_LENGTH) {

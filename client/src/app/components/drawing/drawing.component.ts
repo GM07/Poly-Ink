@@ -2,8 +2,8 @@ import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@
 import { Vec2 } from '@app/classes/vec2';
 import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { PopupHandlerService } from '@app/services/popups/popup-handler.service';
+import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
 @Component({
     selector: 'app-drawing',
@@ -19,7 +19,11 @@ export class DrawingComponent implements AfterViewInit {
     private previewCtx: CanvasRenderingContext2D;
     private canvasSize: Vec2 = { x: CanvasConst.DEFAULT_WIDTH, y: CanvasConst.DEFAULT_HEIGHT };
 
-    constructor(private drawingService: DrawingService, readonly toolHandlerService: ToolHandlerService, private popupHandlerService: PopupHandlerService) {}
+    constructor(
+        private drawingService: DrawingService,
+        readonly toolHandlerService: ToolHandlerService,
+        private popupHandlerService: PopupHandlerService,
+    ) {}
 
     ngAfterViewInit(): void {
         this.baseCtx = this.baseCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
@@ -29,7 +33,7 @@ export class DrawingComponent implements AfterViewInit {
         this.drawingService.canvas = this.baseCanvas.nativeElement;
         this.drawingService.previewCanvas = this.previewCanvas.nativeElement;
         document.body.style.overflow = 'auto';
-        
+
         this.popupHandlerService.newDrawing.newCanvas();
         this.popupHandlerService.initPopups();
     }

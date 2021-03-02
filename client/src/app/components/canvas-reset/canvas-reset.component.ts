@@ -15,8 +15,8 @@ export class NewDrawingComponent {
         this.shortcutHandler.blockShortcuts = false;
     }
 
-    showPopup(): boolean {
-        return this.popupHandlerService.isNewDrawingPopupShowing();
+    canShowPopup(): boolean {
+        return this.popupHandlerService.canShowNewDrawingPopup();
     }
 
     createNewDrawing(confirm: boolean): void {

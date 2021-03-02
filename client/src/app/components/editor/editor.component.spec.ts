@@ -8,6 +8,7 @@ import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.c
 import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resize.component';
 import { DrawingComponent } from '@app/components/drawing/drawing.component';
 import { EditorComponent } from '@app/components/editor/editor.component';
+import { ExportDrawingComponent } from '@app/components/export-drawing/export-drawing.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
@@ -15,16 +16,22 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
 class StubSidebarComponent {}
 
 describe('EditorComponent', () => {
-    let shortcutHandlerServiceSpy: jasmine.SpyObj<ShortcutHandlerService>;
+    let shortcutHandlerServiceSpy: jasmine.Spy<(event: KeyboardEvent) => void>;
     let component: EditorComponent;
     let fixture: ComponentFixture<EditorComponent>;
     let newDrawingComponent: jasmine.SpyObj<NewDrawingComponent>;
 
     beforeEach(async(() => {
-        shortcutHandlerServiceSpy = jasmine.createSpyObj('ShortcutHandlerService', ['onKeyDown']);
         TestBed.configureTestingModule({
-            declarations: [HomePageComponent, EditorComponent, DrawingComponent, CanvasResizeComponent, StubSidebarComponent, NewDrawingComponent],
-            providers: [{ provide: ShortcutHandlerService, useValue: shortcutHandlerServiceSpy }],
+            declarations: [
+                HomePageComponent,
+                EditorComponent,
+                DrawingComponent,
+                CanvasResizeComponent,
+                StubSidebarComponent,
+                NewDrawingComponent,
+                ExportDrawingComponent,
+            ],
             imports: [
                 RouterTestingModule.withRoutes([
                     { path: 'home', component: HomePageComponent },
@@ -40,6 +47,8 @@ describe('EditorComponent', () => {
         fixture = TestBed.createComponent(EditorComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
+        const shortCut = TestBed.inject(ShortcutHandlerService);
+        shortcutHandlerServiceSpy = spyOn(shortCut, 'onKeyDown');
         newDrawingComponent = jasmine.createSpyObj('NewDrawingComponent', ['createNewDrawing']);
     });
 
@@ -59,6 +68,6 @@ describe('EditorComponent', () => {
 
     it('Transfer KeyDown events to the handler', () => {
         component.onKeyDown({} as KeyboardEvent);
-        expect(shortcutHandlerServiceSpy.onKeyDown).toHaveBeenCalled();
+        expect(shortcutHandlerServiceSpy).toHaveBeenCalled();
     });
 });

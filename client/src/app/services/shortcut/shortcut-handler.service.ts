@@ -5,10 +5,8 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
     providedIn: 'root',
 })
 export class ShortcutHandlerService {
-    public blockShortcuts: boolean = false;
-    public ignoreEvent = (event: KeyboardEvent): boolean => {
-        return false;
-    };
+    blockShortcuts: boolean = false;
+    ignoreEvent: (event: KeyboardEvent) => boolean;
 
     constructor(private toolHandlerService: ToolHandlerService) {
         this.ignoreEvent = this.defaultIgnoreEvent;
@@ -29,7 +27,7 @@ export class ShortcutHandlerService {
         return false;
     }
 
-    setIgnoreFunctionToDefault() {
+    setIgnoreFunctionToDefault(): void {
         this.ignoreEvent = this.defaultIgnoreEvent;
     }
 }

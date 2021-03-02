@@ -1,8 +1,8 @@
 import { ShortcutKey } from '@app/classes/shortcut-key';
 import { CanvasConst } from '@app/constants/canvas';
+import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { BehaviorSubject } from 'rxjs';
-import { DrawingService } from '@app/services/drawing/drawing.service';
 
 export class NewDrawing {
     showPopup: boolean;

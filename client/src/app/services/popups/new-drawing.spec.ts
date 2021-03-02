@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { DrawingService } from '../drawing/drawing.service';
-
+import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { NewDrawing } from './new-drawing';
 
@@ -13,9 +12,9 @@ describe('NewDrawing', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
-        service = TestBed.inject(NewDrawing);
         drawingService = TestBed.inject(DrawingService);
         toolHandler = TestBed.inject(ToolHandlerService);
+        service = new NewDrawing(drawingService, toolHandler);
         canvas = document.createElement('canvas');
         context = canvas.getContext('2d') as CanvasRenderingContext2D;
         drawingService.canvas = canvas;
