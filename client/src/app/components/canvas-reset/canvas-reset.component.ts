@@ -32,13 +32,11 @@ export class NewDrawingComponent {
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
-        if (!this.shortcutHandler.blockShortcuts || this.shortcut.isDown) {
-            if (this.shortcut.equals(event) && !this.newDrawing.showWarning) {
-                this.shortcut.isDown = true;
-                event.preventDefault();
-                this.newDrawing.newCanvas();
-                if (this.newDrawing.showWarning) this.shortcutHandler.blockShortcuts = true;
-            }
+        if ((!this.shortcutHandler.blockShortcuts || this.shortcut.isDown) && this.shortcut.equals(event) && !this.newDrawing.showWarning) {
+            this.shortcut.isDown = true;
+            event.preventDefault();
+            this.newDrawing.newCanvas();
+            if (this.newDrawing.showWarning) this.shortcutHandler.blockShortcuts = true;
         }
     }
 }
