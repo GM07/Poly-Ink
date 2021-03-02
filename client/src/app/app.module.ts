@@ -27,6 +27,7 @@ import { RectangleSelectionComponent } from './components/selection/rectangle-se
 import { SelectionHandlerComponent } from './components/selection/selection-handler/selection-handler.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { AbstractSelectionConfigComponent } from './components/tool-config/abstract-selection-config/abstract-selection-config.component';
+import { AerosolConfigComponent } from './components/tool-config/aerosol-config/aerosol-config.component';
 import { EllipseConfigComponent } from './components/tool-config/ellipse-config/ellipse-config.component';
 import { EllipseSelectionConfigComponent } from './components/tool-config/ellipse-selection-config/ellipse-selection-config.component';
 import { EraserConfigComponent } from './components/tool-config/eraser-config/eraser-config.component';
@@ -61,6 +62,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         RectangleSelectionComponent,
         EllipseSelectionComponent,
         SelectionHandlerComponent,
+        AerosolConfigComponent,
     ],
     imports: [
         AppRoutingModule,

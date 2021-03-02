@@ -87,7 +87,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPosX: number, currentPosY: number): void {
         if (this.firstSelectionCoords.x !== currentPosX || this.firstSelectionCoords.y !== currentPosY) {
             ctx.beginPath();
-            ctx.fillStyle = 'rgb(255,20,147)';
+            ctx.fillStyle = 'white';
             ctx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
             ctx.fill();
             ctx.closePath();

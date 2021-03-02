@@ -33,7 +33,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPosX: number, currentPosY: number): void {
         if (this.firstSelectionCoords.x !== currentPosX || this.firstSelectionCoords.y !== currentPosY) {
             ctx.beginPath();
-            ctx.fillStyle = 'rgb(255,20,147)';
+            ctx.fillStyle = 'white';
             ctx.fillRect(this.firstSelectionCoords.x, this.firstSelectionCoords.y, Math.abs(this.width), Math.abs(this.height));
             ctx.closePath();
         }
