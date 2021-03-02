@@ -49,14 +49,14 @@ export abstract class AbstractSelectionService extends Tool {
         this.translationOrigin = { x: 0, y: 0 } as Vec2;
         this.isLeftArrowDown = false;
         this.isRightArrowDown = false;
-        this.isUpArrowDown = false; // TODO changer avec merge request de Paul
+        this.isUpArrowDown = false; // TODO change with shortcutHandler
         this.isDownArrowDown = false;
         this.moveId = this.DEFAULT_MOVE_ID;
     }
 
     protected abstract endSelection(): void;
 
-    protected abstract fillBackground(ctx: CanvasRenderingContext2D, currentPosX: number, currentPosY: number): void;
+    protected abstract fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void;
 
     protected abstract updateSelectionRequired(): void;
 

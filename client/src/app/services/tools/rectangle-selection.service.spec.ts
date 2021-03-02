@@ -4,8 +4,6 @@ import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { RectangleSelectionService } from './rectangle-selection.service';
 
-// TODO should use the canvasTestHelper
-
 // tslint:disable:no-any
 // tslint:disable:no-magic-numbers
 // tslint:disable:no-string-literal
@@ -273,7 +271,7 @@ describe('RectangleSelectionService', () => {
     it('fill background should fill a rectangle at the location', () => {
         service['firstSelectionCoords'] = { x: 0, y: 0 } as Vec2;
         spyOn(previewCtxStub, 'fillRect');
-        service['fillBackground'](previewCtxStub, 10, 25);
+        service['fillBackground'](previewCtxStub, { x: 10, y: 25 } as Vec2);
         expect(previewCtxStub.fillRect).toHaveBeenCalled();
     });
 
@@ -322,7 +320,7 @@ describe('RectangleSelectionService', () => {
     it("fill background should do nothing if the mouse hasn't move", () => {
         service['firstSelectionCoords'] = { x: 0, y: 0 };
         spyOn(previewCtxStub, 'beginPath');
-        service['fillBackground'](previewCtxStub, 0, 0);
+        service['fillBackground'](previewCtxStub, { x: 0, y: 0 } as Vec2);
         expect(previewCtxStub.beginPath).not.toHaveBeenCalled();
     });
 });

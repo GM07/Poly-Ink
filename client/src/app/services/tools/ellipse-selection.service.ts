@@ -83,9 +83,8 @@ export class EllipseSelectionService extends AbstractSelectionService {
         ctx.closePath();
     }
 
-    // Todo changer pour un vec2 ?
-    protected fillBackground(ctx: CanvasRenderingContext2D, currentPosX: number, currentPosY: number): void {
-        if (this.firstSelectionCoords.x !== currentPosX || this.firstSelectionCoords.y !== currentPosY) {
+    protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {
+        if (this.firstSelectionCoords.x !== currentPos.x || this.firstSelectionCoords.y !== currentPos.y) {
             ctx.beginPath();
             ctx.fillStyle = 'white';
             ctx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
@@ -100,7 +99,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         const centerX = this.selectionCoords.x + Math.abs(this.width / 2);
         const centerY = this.selectionCoords.y + Math.abs(this.height / 2);
 
-        this.fillBackground(ctx, this.selectionCoords.x, this.selectionCoords.y);
+        this.fillBackground(ctx, this.selectionCoords);
 
         ctx.beginPath();
         ctx.save();
@@ -117,7 +116,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         const centerX = this.selectionCoords.x + Math.abs(this.width / 2);
         const centerY = this.selectionCoords.y + Math.abs(this.height / 2);
 
-        this.fillBackground(baseCtx, this.selectionCoords.x, this.selectionCoords.y);
+        this.fillBackground(baseCtx, this.selectionCoords);
 
         baseCtx.beginPath();
         baseCtx.save();

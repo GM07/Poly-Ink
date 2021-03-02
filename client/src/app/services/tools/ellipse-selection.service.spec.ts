@@ -4,8 +4,6 @@ import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { EllipseSelectionService } from './ellipse-selection.service';
 
-// TODO ajouter des tests d'intégrations pour vérifier que les éléments sont correctement dessinés?
-
 // tslint:disable:no-any
 // tslint:disable:no-magic-numbers
 // tslint:disable:no-string-literal
@@ -78,7 +76,7 @@ describe('EllipseSelectionService', () => {
         service['firstSelectionCoords'] = { x: 0, y: 0 } as Vec2;
         spyOn(previewCtxStub, 'ellipse');
         spyOn(previewCtxStub, 'fill');
-        service['fillBackground'](previewCtxStub, 10, 25);
+        service['fillBackground'](previewCtxStub, { x: 10, y: 25 } as Vec2);
         expect(previewCtxStub.ellipse).toHaveBeenCalled();
         expect(previewCtxStub.fill).toHaveBeenCalled();
     });
@@ -128,7 +126,7 @@ describe('EllipseSelectionService', () => {
     it("fill background should do nothing if the mouse hasn't move", () => {
         service['firstSelectionCoords'] = { x: 0, y: 0 };
         spyOn(previewCtxStub, 'beginPath');
-        service['fillBackground'](previewCtxStub, 0, 0);
+        service['fillBackground'](previewCtxStub, { x: 0, y: 0 } as Vec2);
         expect(previewCtxStub.beginPath).not.toHaveBeenCalled();
     });
 });

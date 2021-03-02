@@ -20,7 +20,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
         if (this.selectionCtx === null) return;
         const baseCtx = this.drawingService.baseCtx;
 
-        this.fillBackground(baseCtx, this.selectionCoords.x, this.selectionCoords.y);
+        this.fillBackground(baseCtx, this.selectionCoords);
 
         baseCtx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
@@ -30,8 +30,8 @@ export class RectangleSelectionService extends AbstractSelectionService {
         this.translationOrigin = { x: 0, y: 0 } as Vec2;
     }
 
-    protected fillBackground(ctx: CanvasRenderingContext2D, currentPosX: number, currentPosY: number): void {
-        if (this.firstSelectionCoords.x !== currentPosX || this.firstSelectionCoords.y !== currentPosY) {
+    protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {
+        if (this.firstSelectionCoords.x !== currentPos.x || this.firstSelectionCoords.y !== currentPos.y) {
             ctx.beginPath();
             ctx.fillStyle = 'white';
             ctx.fillRect(this.firstSelectionCoords.x, this.firstSelectionCoords.y, Math.abs(this.width), Math.abs(this.height));
@@ -43,7 +43,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
 
-        this.fillBackground(ctx, this.selectionCoords.x, this.selectionCoords.y);
+        this.fillBackground(ctx, this.selectionCoords);
 
         const rectangleCoords = { x: this.selectionCoords.x, y: this.selectionCoords.y } as Vec2;
         ctx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
