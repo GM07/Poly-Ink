@@ -12,11 +12,6 @@ export enum LeftMouse {
     Pressed = 1,
 }
 
-/**
- * Note: Pas besoin d'implémtenter le code pour commencer à dessiner un ligne quand le bouton de la souris
- * est enfoncé hors du canvas (Ref: Document de vision Polydessin 2 v1.0, p.10)
- */
-// Ceci est une implémentation de l'outil Crayon
 @Injectable({
     providedIn: 'root',
 })
@@ -42,10 +37,6 @@ export class PencilService extends Tool {
         return this.lineWidthIn;
     }
 
-    /**
-     * La taille se choisit par pixel, donc un arrondissement
-     * est fait pour avoir une valeur entière
-     */
     set lineWidth(width: number) {
         this.lineWidthIn = Math.min(Math.max(width, 1), ToolSettingsConst.MAX_WIDTH);
     }
@@ -78,7 +69,7 @@ export class PencilService extends Tool {
             const mousePosition = this.getPositionFromMouse(event);
             this.pathData[this.pathData.length - 1].push(mousePosition);
 
-            // On dessine sur le canvas de prévisualisation et on l'efface à chaque déplacement de la souris
+            // Drawing on preview canvas and then clear it with every mouse move
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawLine(this.drawingService.previewCtx, this.pathData);
         } else {
@@ -122,10 +113,10 @@ export class PencilService extends Tool {
         ctx.fillStyle = this.colorService.primaryRgba;
         ctx.lineWidth = this.lineWidth;
         ctx.lineCap = 'round' as CanvasLineCap;
-        ctx.lineJoin = 'round' as CanvasLineJoin; // Essentiel pour avoir une allure "smooth"
+        ctx.lineJoin = 'round' as CanvasLineJoin;
 
         for (const paths of pathData) {
-            // Cas spécial pour permettre de dessiner exactement un seul point (sinon il n'est pas visible)
+            // Special case to draw just one dot (or else it's not drawn)
             if (PencilService.isAPoint(paths)) {
                 ctx.arc(paths[0].x, paths[0].y, this.lineWidthIn / 2, 0, Math.PI * 2);
                 ctx.fill();

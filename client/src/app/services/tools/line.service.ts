@@ -16,14 +16,13 @@ export class LineService extends Tool {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(LineToolConstants.SHORTCUT_KEY);
     }
-    static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
+    static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint
     static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;
     readonly toolID: string = LineToolConstants.TOOL_ID;
     private points: Vec2[] = [];
     private pointToAdd: Vec2;
     private mousePosition: Vec2;
 
-    // Attributs
     showJunctionPoints: boolean = true;
     diameterJunctions: number = 10;
     thickness: number = 6;
@@ -49,7 +48,7 @@ export class LineService extends Tool {
         ctx.strokeStyle = this.colorService.primaryRgba;
         ctx.lineWidth = this.thickness;
         ctx.lineCap = 'round' as CanvasLineCap;
-        ctx.lineJoin = 'round' as CanvasLineJoin; // Essentiel pour avoir une allure "smooth"
+        ctx.lineJoin = 'round' as CanvasLineJoin;
     }
 
     onMouseDown(event: MouseEvent): void {

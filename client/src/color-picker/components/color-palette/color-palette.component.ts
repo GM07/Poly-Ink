@@ -36,7 +36,7 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
         this.draw();
     }
 
-    // Code provenant du tutoriel https://malcoded.com/posts/angular-color-picker/
+    // Code from tutorial https://malcoded.com/posts/angular-color-picker/
     draw(): void {
         const width = this.canvas.nativeElement.width;
         const height = this.canvas.nativeElement.height;
