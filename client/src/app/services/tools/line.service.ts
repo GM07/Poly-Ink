@@ -24,7 +24,6 @@ export class LineService extends Tool {
     private pointToAdd: Vec2;
     private mousePosition: Vec2;
 
-    // Attributs
     showJunctionPoints: boolean = true;
     diameterJunctions: number = 10;
     thickness: number = 6;
@@ -49,7 +48,7 @@ export class LineService extends Tool {
         ctx.strokeStyle = this.colorService.primaryRgba;
         ctx.lineWidth = this.thickness;
         ctx.lineCap = 'round' as CanvasLineCap;
-        ctx.lineJoin = 'round' as CanvasLineJoin; // Essentiel pour avoir une allure "smooth"
+        ctx.lineJoin = 'round' as CanvasLineJoin;
     }
 
     onMouseDown(event: MouseEvent): void {

@@ -18,7 +18,7 @@ export class PreviousColorsComponent {
     selectSecondaryColor(color: Color): boolean {
         this.colorService.secondaryColor = color;
         this.changeSelectedColor();
-        // Prevents context menu from apearing
+        // Prevents context menu from appearing
         return false;
     }
 
