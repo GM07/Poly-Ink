@@ -14,11 +14,11 @@ export class DrawingService {
     }
 
     resizeCanvas(width: number, height: number): void {
-        const memoryCanvas = document.createElement('canvas'); // canvas temporaire
+        const memoryCanvas = document.createElement('canvas'); // Temporary canvas
         this.saveCanvas(memoryCanvas);
         this.canvas.width = width;
         this.canvas.height = height;
-        this.previewCanvas.width = width; // Redimensionnement du canvas
+        this.previewCanvas.width = width; // Canvas resize
         this.previewCanvas.height = height;
         this.baseCtx.drawImage(memoryCanvas, 0, 0);
 
@@ -30,9 +30,9 @@ export class DrawingService {
     saveCanvas(memoryCanvas: HTMLCanvasElement): void {
         const memoryCtx = memoryCanvas.getContext('2d');
         memoryCanvas.width = this.canvas.width;
-        memoryCanvas.height = this.canvas.height; // Sauvegarde du canvas
+        memoryCanvas.height = this.canvas.height; // Saving canvas
         if (memoryCtx != null) {
-            memoryCtx.drawImage(this.canvas, 0, 0); // Ne devrait jamais être égal à nul.
+            memoryCtx.drawImage(this.canvas, 0, 0); // Should never be null
         } else {
             alert('Erreur when resizing');
         }

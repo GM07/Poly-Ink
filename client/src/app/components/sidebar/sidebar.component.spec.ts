@@ -56,10 +56,8 @@ describe('SidebarComponent', () => {
     }));
 
     beforeEach(() => {
-        // Inject  service to test //
         toolHandlerService = TestBed.inject(ToolHandlerService);
 
-        // Inject its spy dependecies
         pencilServiceSpy = TestBed.inject(PencilService) as jasmine.SpyObj<PencilService>;
         lineServiceSpy = TestBed.inject(LineService) as jasmine.SpyObj<LineService>;
         fixture = TestBed.createComponent(SidebarComponent);

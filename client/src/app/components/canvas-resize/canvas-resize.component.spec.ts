@@ -60,7 +60,7 @@ describe('CanvasResizeComponent', () => {
         component.resizeCanvas(CanvasConst.MIN_WIDTH + 1, CanvasConst.MIN_HEIGHT + 1);
         const pixelBuffer = service.baseCtx.getImageData(CanvasConst.MIN_WIDTH, CanvasConst.MIN_HEIGHT, 1, 1).data;
         const stringPixelBuffer = String(pixelBuffer[0]) + String(pixelBuffer[1]) + String(pixelBuffer[2]);
-        expect(stringPixelBuffer).toBe('255255255'); // Représente un pixel avec le rvb à 255
+        expect(stringPixelBuffer).toBe('255255255'); // Is a pixel with rgb set to 255
     });
 
     it('should resize when dragging the bottom side', () => {

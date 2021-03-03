@@ -31,7 +31,7 @@ describe('EraserService', () => {
         service = TestBed.inject(EraserService);
         drawLineSpy = spyOn<any>(service, 'drawLine').and.callThrough();
 
-        // Configuration du spy du service
+        // Configuration of the service spy
         // tslint:disable:no-string-literal
         service['drawingService'].baseCtx = baseCtxStub;
         service['drawingService'].previewCtx = previewCtxStub;
@@ -109,7 +109,7 @@ describe('EraserService', () => {
 
         // tslint:disable-next-line:no-magic-numbers
         let imageData: ImageData = baseCtxStub.getImageData(0, 6, 1, 1);
-        expect(imageData.data[0]).toEqual(0); // A, rien ne doit être dessiné
+        expect(imageData.data[0]).toEqual(0); // A, nothing should be drawn
         imageData = baseCtxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[0]).toEqual(WHITE); // R
         expect(imageData.data[1]).toEqual(WHITE); // G
@@ -133,7 +133,7 @@ describe('EraserService', () => {
         expect(drawLineSpy).toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
         const imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
-        expect(imageData.data[0]).toEqual(0); // A, rien ne doit être dessiné où on est entré
+        expect(imageData.data[0]).toEqual(0); // A, nothing should be drawn where mouse entered
 
         service.mouseDown = true;
         mouseEventLClick = { x: 1000, y: 1000, button: 0, buttons: 0 } as MouseEvent;
@@ -174,7 +174,7 @@ describe('EraserService', () => {
         mouseEvent = { x: 0, y: 0, offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
-        // Premier pixel seulement
+        // First pixel only
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[0]).toEqual(WHITE); // R
         expect(imageData.data[1]).toEqual(WHITE); // G
@@ -187,14 +187,14 @@ describe('EraserService', () => {
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
-    // Exemple de test d'intégration qui est quand même utile
+    // Useful integration test example
     it(' should change the pixel of the canvas ', () => {
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
-        // Premier pixel seulement
+        // First pixel only
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[0]).toEqual(WHITE); // R
         expect(imageData.data[1]).toEqual(WHITE); // G
