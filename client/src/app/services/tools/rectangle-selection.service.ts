@@ -50,7 +50,8 @@ export class RectangleSelectionService extends AbstractSelectionService {
         this.drawSelection(ctx, rectangleCoords, Math.abs(this.width), Math.abs(this.height));
     }
 
-    protected drawPreviewSelectionRequired(ctx: CanvasRenderingContext2D): void {
+    protected drawPreviewSelectionRequired(): void {
+        let ctx = this.drawingService.previewCtx;
         if (this.shiftPressed) {
             this.height = Math.sign(this.height) * Math.min(Math.abs(this.width), Math.abs(this.height));
             this.width = Math.sign(this.width) * Math.abs(this.height);

@@ -60,7 +60,7 @@ export abstract class AbstractSelectionService extends Tool {
 
     protected abstract updateSelectionRequired(): void;
 
-    protected abstract drawPreviewSelectionRequired(ctx: CanvasRenderingContext2D): void;
+    protected abstract drawPreviewSelectionRequired(): void;
 
     protected abstract drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, width: number, height: number): void;
 
@@ -74,7 +74,7 @@ export abstract class AbstractSelectionService extends Tool {
                 this.endSelection();
                 this.mouseDownCoord = mousePos;
                 this.mouseUpCoord = mousePos;
-                this.drawPreviewSelection(this.drawingService.previewCtx);
+                this.drawPreviewSelection();
             }
         }
     }
@@ -105,7 +105,7 @@ export abstract class AbstractSelectionService extends Tool {
             } else {
                 const ctx = this.drawingService.previewCtx;
                 this.drawingService.clearCanvas(ctx);
-                this.drawPreviewSelection(ctx);
+                this.drawPreviewSelection();
             }
         }
     }
@@ -126,11 +126,9 @@ export abstract class AbstractSelectionService extends Tool {
     onKeyDown(event: KeyboardEvent): void {
         if (this.CANCEL_SELECTION.equals(event)) {
             this.stopDrawing();
-            return;
         } else if (this.SELECT_ALL.equals(event)) {
             event.preventDefault();
             this.selectAll();
-            return;
         } else if (event.shiftKey && !this.shiftPressed) {
             this.shiftPressed = true;
             if (this.mouseDown && this.selectionCtx === null) {
@@ -266,7 +264,7 @@ export abstract class AbstractSelectionService extends Tool {
         const previewCtx = this.drawingService.previewCtx;
         previewCtx.drawImage(this.SELECTION_DATA, x, y);
 
-        this.drawPreviewSelection(previewCtx);
+        this.drawPreviewSelection();
     }
 
     private updateSelection(translation: Vec2): void {
@@ -280,17 +278,17 @@ export abstract class AbstractSelectionService extends Tool {
         this.updateSelectionRequired();
     }
 
-    private drawPreviewSelection(ctx: CanvasRenderingContext2D): void {
+    private drawPreviewSelection(): void {
         this.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
         this.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
 
-        this.drawPreviewSelectionRequired(ctx);
+        this.drawPreviewSelectionRequired();
     }
 
     private updateDrawingSelection(): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
-        this.drawPreviewSelection(ctx);
+        this.drawPreviewSelection();
     }
 
     isInCanvas(event: MouseEvent): boolean {

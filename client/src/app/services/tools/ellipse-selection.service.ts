@@ -10,10 +10,8 @@ import { ColorService } from 'src/color-picker/services/color.service';
     providedIn: 'root',
 })
 export class EllipseSelectionService extends AbstractSelectionService {
-    private centerX: number;
-    private centerY: number;
-    private radiusXAbs: number;
-    private radiusYAbs: number;
+    private center: Vec2;
+    private radiusAbs: Vec2;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
@@ -21,26 +19,24 @@ export class EllipseSelectionService extends AbstractSelectionService {
         this.toolID = EllipseSelectionToolConstants.TOOL_ID;
     }
 
-    protected drawPreviewSelectionRequired(ctx: CanvasRenderingContext2D): void {
+    protected drawPreviewSelectionRequired(): void {
+        let ctx = this.drawingService.previewCtx;
         let radiusX: number = this.width / 2;
         let radiusY: number = this.height / 2;
-        this.centerX = this.mouseDownCoord.x + radiusX;
-        this.centerY = this.mouseDownCoord.y + radiusY;
-
+        this.center = {x: this.mouseDownCoord.x + radiusX, y:this.mouseDownCoord.y + radiusY};
         if (this.shiftPressed) {
             const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
-            this.centerX = this.mouseDownCoord.x + Math.sign(radiusX) * minRadius;
-            this.centerY = this.mouseDownCoord.y + Math.sign(radiusY) * minRadius;
+            this.center.x = this.mouseDownCoord.x + Math.sign(radiusX) * minRadius;
+            this.center.y = this.mouseDownCoord.y + Math.sign(radiusY) * minRadius;
             radiusX = minRadius;
             radiusY = minRadius;
         }
 
-        this.radiusXAbs = Math.abs(radiusX);
-        this.radiusYAbs = Math.abs(radiusY);
-        this.width = 2 * this.radiusXAbs * Math.sign(this.width);
-        this.height = 2 * this.radiusYAbs * Math.sign(this.height);
+        this.radiusAbs = {x: Math.abs(radiusX), y: Math.abs(radiusY)};
+        this.width = 2 * this.radiusAbs.x * Math.sign(this.width);
+        this.height = 2 * this.radiusAbs.y * Math.sign(this.height);
 
-        this.drawSelection(ctx, { x: this.centerX, y: this.centerY } as Vec2);
+        this.drawSelection(ctx, this.center);
     }
 
     protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2): void {
@@ -52,7 +48,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         ctx.lineJoin = 'round' as CanvasLineJoin;
 
         ctx.strokeStyle = 'black';
-        ctx.ellipse(position.x, position.y, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+        ctx.ellipse(position.x, position.y, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
         ctx.stroke();
 
         ctx.closePath();
@@ -60,7 +56,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
         ctx.lineDashOffset = this.LINE_DASH;
         ctx.strokeStyle = 'white';
-        ctx.ellipse(position.x, position.y, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+        ctx.ellipse(position.x, position.y, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
         ctx.stroke();
 
         ctx.lineDashOffset = 0;
@@ -87,7 +83,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         if (this.firstSelectionCoords.x !== currentPos.x || this.firstSelectionCoords.y !== currentPos.y) {
             ctx.beginPath();
             ctx.fillStyle = 'white';
-            ctx.ellipse(this.centerX, this.centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+            ctx.ellipse(this.center.x, this.center.y, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
             ctx.fill();
             ctx.closePath();
         }
@@ -103,7 +99,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
         ctx.beginPath();
         ctx.save();
-        ctx.ellipse(centerX, centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+        ctx.ellipse(centerX, centerY, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
         ctx.clip();
         ctx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         ctx.restore();
@@ -120,7 +116,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
         baseCtx.beginPath();
         baseCtx.save();
-        baseCtx.ellipse(centerX, centerY, this.radiusXAbs, this.radiusYAbs, 0, 0, 2 * Math.PI);
+        baseCtx.ellipse(centerX, centerY, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
         baseCtx.clip();
         baseCtx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         baseCtx.restore();
