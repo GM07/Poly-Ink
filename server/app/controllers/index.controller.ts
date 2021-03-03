@@ -4,8 +4,6 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { inject, injectable } from 'inversify';
 import { IndexService } from '../services/index.service';
 
-const HTTP_STATUS_CREATED = 201;
-
 @injectable()
 export class IndexController {
     router: Router;
@@ -103,11 +101,8 @@ export class IndexController {
          *       201:
          *         description: Created
          */
-        this.router.post('/send', (req: Request, res: Response, next: NextFunction) => {
-            const message: Message = req.body;
-            this.indexService.storeMessage(message);
-            res.sendStatus(HTTP_STATUS_CREATED);
-        });
+        // this.router.post('/', (req: Request, res: Response, next: NextFunction) => {
+        // });
 
         /**
          * @swagger

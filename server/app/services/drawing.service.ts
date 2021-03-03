@@ -1,9 +1,13 @@
 import { DatabaseService } from '@app/services/database.service';
 import { TYPES } from '@app/types';
+import { Drawing } from '@common/communication/drawing';
 import { DrawingData } from '@common/communication/drawing-data';
 import { Tag } from '@common/communication/tag';
+import * as fs from 'fs';
 import { inject, injectable } from 'inversify';
 import { Collection, FindAndModifyWriteOpResultObject } from 'mongodb';
+
+const ROOT_DIRECTORY = 'drawings';
 
 @injectable()
 export class DrawingService {
@@ -17,7 +21,32 @@ export class DrawingService {
         return this.databaseService.db.collection(DrawingService.COLLECTION);
     }
 
-    async getAllDrawings(): Promise<DrawingData[]> {
+    validateName(name: string): boolean {
+        if (name) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // TODO: Tag Validation
+    validateTags(tags: Tag[]) {
+        return true;
+    }
+
+    async storeDrawing(drawing: Drawing): Promise<void> {
+        const drawingId = drawing.id ?? 'image';
+        const drawingPath = `${ROOT_DIRECTORY}/${drawingId}.png`;
+        if (!fs.existsSync(ROOT_DIRECTORY)) {
+            fs.mkdirSync(ROOT_DIRECTORY);
+        }
+        console.log(drawing.image);
+        fs.writeFile(drawingPath, drawing.image, 'base64', function (err) {
+            console.log(err);
+        });
+    }
+
+    async getAllDrawingsData(): Promise<DrawingData[]> {
         return this.collection
             .find({})
             .toArray()
@@ -26,7 +55,7 @@ export class DrawingService {
             });
     }
 
-    async getDrawingsFromTag(tag: Tag): Promise<DrawingData[]> {
+    async getDrawingsDataFromTag(tag: Tag): Promise<DrawingData[]> {
         return this.collection
             .find({ tags: { $all: [tag] } })
             .toArray()
@@ -35,7 +64,7 @@ export class DrawingService {
             });
     }
 
-    async getDrawingsFromTags(drawingTags: Tag[]): Promise<DrawingData[]> {
+    async getDrawingsDataFromTags(drawingTags: Tag[]): Promise<DrawingData[]> {
         return this.collection
             .find({ tags: { $all: drawingTags } })
             .toArray()
@@ -44,7 +73,7 @@ export class DrawingService {
             });
     }
 
-    async getDrawingFromName(drawingName: string): Promise<DrawingData[]> {
+    async getDrawingDataFromName(drawingName: string): Promise<DrawingData[]> {
         return this.collection
             .find({ name: drawingName })
             .toArray()
@@ -53,18 +82,20 @@ export class DrawingService {
             });
     }
 
-    async createNewDrawing(drawing: DrawingData): Promise<void> {
-        await this.collection.insertOne(drawing).catch((error: Error) => {
+    async createNewDrawingData(drawing: DrawingData): Promise<string> {
+        try {
+            return await (await this.collection.insertOne(drawing)).insertedId.toHexString();
+        } catch (e) {
             throw new Error('Erreur lors de la creation du dessin dans la base de donnee');
-        });
+        }
     }
 
-    async createNewDrawingFromTitle(title: string): Promise<void> {
+    async createNewDrawingDataFromTitle(title: string): Promise<string> {
         const drawing = new DrawingData(title);
-        await this.createNewDrawing(drawing);
+        return await this.createNewDrawingData(drawing);
     }
 
-    async deleteDrawing(drawing: DrawingData): Promise<void> {
+    async deleteDrawingData(drawing: DrawingData): Promise<void> {
         await this.collection
             .findOneAndDelete(drawing)
             .then((result: FindAndModifyWriteOpResultObject<DrawingData>) => {
