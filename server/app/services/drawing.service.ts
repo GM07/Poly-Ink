@@ -35,15 +35,25 @@ export class DrawingService {
     }
 
     async storeDrawing(drawing: Drawing): Promise<void> {
-        const drawingId = drawing.id ?? 'image';
+        const drawingId = drawing.data._id ?? 'image';
         const drawingPath = `${ROOT_DIRECTORY}/${drawingId}.png`;
         if (!fs.existsSync(ROOT_DIRECTORY)) {
             fs.mkdirSync(ROOT_DIRECTORY);
         }
-        console.log(drawing.image);
         fs.writeFile(drawingPath, drawing.image, 'base64', function (err) {
             console.log(err);
         });
+    }
+
+    getLocalDrawing(id: string): string {
+        const drawingPath = `${ROOT_DIRECTORY}/${id}.png`;
+        console.log(drawingPath);
+        if (!fs.existsSync(drawingPath)) {
+            throw Error("Dessin n'existe pas");
+        }
+
+        const buffer: Buffer = fs.readFileSync(drawingPath);
+        return Buffer.from(buffer).toString('base64');
     }
 
     async getAllDrawingsData(): Promise<DrawingData[]> {
@@ -84,7 +94,7 @@ export class DrawingService {
 
     async createNewDrawingData(drawing: DrawingData): Promise<string> {
         try {
-            return await (await this.collection.insertOne(drawing)).insertedId.toHexString();
+            return await (await this.collection.insertOne(drawing)).insertedId;
         } catch (e) {
             throw new Error('Erreur lors de la creation du dessin dans la base de donnee');
         }

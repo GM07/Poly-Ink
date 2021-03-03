@@ -53,7 +53,7 @@ export class Application {
         this.app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(this.swaggerOptions)));
         // this.app.use('/api/drawing', this.indexController.router);
         this.app.use('/api/date', this.dateController.router);
-        this.app.use('/drawing', this.drawingController.router);
+        this.app.use('/drawings', this.drawingController.router);
         this.errorHandling();
     }
 
