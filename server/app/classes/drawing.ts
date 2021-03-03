@@ -1,8 +1,10 @@
+import { Tag } from "@app/classes/tag";
+
 export class Drawing {
     title: string;
-    tags: string[];
+    tags: Tag[];
 
-    constructor(title: string, tags: string[] = []) {
+    constructor(title: string, tags: Tag[] = []) {
         this.title = title;
         this.tags = tags;
     }

@@ -1,4 +1,5 @@
 import { Drawing } from '@app/classes/drawing';
+import { Tag } from "@app/classes/tag";
 import { DatabaseService } from '@app/services/database.service';
 import { TYPES } from '@app/types';
 import { inject, injectable } from 'inversify';
@@ -25,7 +26,7 @@ export class DrawingService {
             });
     }
 
-    async getDrawingsFromTag(tag: string): Promise<Drawing[]> {
+    async getDrawingsFromTag(tag: Tag): Promise<Drawing[]> {
         return this.collection
             .find({ tags: { $all: [tag] } })
             .toArray()
@@ -34,7 +35,7 @@ export class DrawingService {
             });
     }
 
-    async getDrawingsFromTags(drawingTags: string[]): Promise<Drawing[]> {
+    async getDrawingsFromTags(drawingTags: Tag[]): Promise<Drawing[]> {
         return this.collection
             .find({ tags: { $all: drawingTags } })
             .toArray()
