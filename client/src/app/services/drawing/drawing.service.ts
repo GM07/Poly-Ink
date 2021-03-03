@@ -27,18 +27,18 @@ export class DrawingService {
         }
     }
 
-    saveCanvas(memoryCanvas: HTMLCanvasElement): void {
+    private saveCanvas(memoryCanvas: HTMLCanvasElement): void {
         const memoryCtx = memoryCanvas.getContext('2d');
         memoryCanvas.width = this.canvas.width;
         memoryCanvas.height = this.canvas.height; // Saving canvas
         if (memoryCtx != null) {
             memoryCtx.drawImage(this.canvas, 0, 0); // Should never be null
         } else {
-            alert('Erreur when resizing');
+            alert('Error when resizing');
         }
     }
 
-    drawWhite(memoryCanvas: HTMLCanvasElement): void {
+    private drawWhite(memoryCanvas: HTMLCanvasElement): void {
         const color = this.baseCtx.fillStyle;
         this.baseCtx.fillStyle = 'white';
         this.baseCtx.fillRect(memoryCanvas.width, 0, this.canvas.width - memoryCanvas.width, this.canvas.height);

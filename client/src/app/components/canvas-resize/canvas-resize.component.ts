@@ -78,14 +78,6 @@ export class CanvasResizeComponent implements AfterViewInit {
         this.previewResizeView = false;
     }
 
-    setCanvasMargin(): void {
-        const canvasOffset = this.drawingService.canvas.getBoundingClientRect();
-        const documentOffset = document.documentElement;
-
-        this.canvasTop = canvasOffset.top + window.pageYOffset - documentOffset.clientTop;
-        this.canvasLeft = canvasOffset.left + window.pageXOffset - documentOffset.clientLeft;
-    }
-
     resizeCanvas(xModifier: number, yModifier: number): void {
         this.drawingService.resizeCanvas(
             xModifier < CanvasConst.MIN_WIDTH ? CanvasConst.MIN_WIDTH : xModifier,
@@ -93,43 +85,9 @@ export class CanvasResizeComponent implements AfterViewInit {
         );
     }
 
-    resetCanvas(): void {
+    private resetCanvas(): void {
         this.setStyleControl();
         this.setStylePreview();
-    }
-
-    setStyleControl(): void {
-        this.controlRightStyle = {
-            'margin-top': String(this.drawingService.canvas.height / 2) + 'px',
-            'margin-left': String(this.drawingService.canvas.width) + 'px',
-        };
-        this.controlBottomStyle = {
-            'margin-top': String(this.drawingService.canvas.height) + 'px',
-            'margin-left': String(this.drawingService.canvas.width / 2) + 'px',
-        };
-        this.controlCornerStyle = {
-            'margin-top': String(this.drawingService.canvas.height) + 'px',
-            'margin-left': String(this.drawingService.canvas.width) + 'px',
-        };
-    }
-
-    setStylePreview(): void {
-        const borderWidth: string = window.getComputedStyle(this.drawingService.canvas).getPropertyValue('border-left-width');
-        const borderSize: number = parseInt(borderWidth.replace('px', ''), 10);
-        this.previewResizeStyle = {
-            'margin-left': String(this.canvasLeft) + 'px',
-            'margin-top': String(this.canvasTop) + 'px',
-            // prettier-ignore
-            'width': String(this.drawingService.canvas.width+borderSize) + 'px',
-            'height': String(this.drawingService.canvas.height+borderSize) + 'px',
-            // prettier-ignore
-        };
-        this.workZoneStyle = {
-            // prettier-ignore
-            width: String(this.drawingService.canvas.width + CanvasConst.WORKING_SIZE) + 'px',
-            height: String(this.drawingService.canvas.height + CanvasConst.WORKING_SIZE) + 'px',
-            // prettier-ignore
-        };
     }
 
     getCanvasLeft(): number {
@@ -146,5 +104,47 @@ export class CanvasResizeComponent implements AfterViewInit {
 
     getHeight(yPos: number): number {
         return yPos - this.canvasTop > CanvasConst.MIN_HEIGHT ? yPos - this.canvasTop : CanvasConst.MIN_HEIGHT;
+    }
+
+    private setCanvasMargin(): void {
+        const canvasOffset = this.drawingService.canvas.getBoundingClientRect();
+        const documentOffset = document.documentElement;
+
+        this.canvasTop = canvasOffset.top + window.pageYOffset - documentOffset.clientTop;
+        this.canvasLeft = canvasOffset.left + window.pageXOffset - documentOffset.clientLeft;
+    }
+
+    private setStyleControl(): void {
+        this.controlRightStyle = {
+            'margin-top': String(this.drawingService.canvas.height / 2) + 'px',
+            'margin-left': String(this.drawingService.canvas.width) + 'px',
+        };
+        this.controlBottomStyle = {
+            'margin-top': String(this.drawingService.canvas.height) + 'px',
+            'margin-left': String(this.drawingService.canvas.width / 2) + 'px',
+        };
+        this.controlCornerStyle = {
+            'margin-top': String(this.drawingService.canvas.height) + 'px',
+            'margin-left': String(this.drawingService.canvas.width) + 'px',
+        };
+    }
+
+    private setStylePreview(): void {
+        const borderWidth: string = window.getComputedStyle(this.drawingService.canvas).getPropertyValue('border-left-width');
+        const borderSize: number = parseInt(borderWidth.replace('px', ''), 10);
+        this.previewResizeStyle = {
+            'margin-left': String(this.canvasLeft) + 'px',
+            'margin-top': String(this.canvasTop) + 'px',
+            // prettier-ignore
+            'width': String(this.drawingService.canvas.width+borderSize) + 'px',
+            'height': String(this.drawingService.canvas.height+borderSize) + 'px',
+            // prettier-ignore
+        };
+        this.workZoneStyle = {
+            // prettier-ignore
+            width: String(this.drawingService.canvas.width + CanvasConst.WORKING_SIZE) + 'px',
+            height: String(this.drawingService.canvas.height + CanvasConst.WORKING_SIZE) + 'px',
+            // prettier-ignore
+        };
     }
 }

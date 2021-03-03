@@ -40,7 +40,7 @@ export class NewDrawingService {
         this.changes.next(0);
     }
 
-    isNotEmpty(baseCtx: CanvasRenderingContext2D, width: number, height: number): boolean {
+    private isNotEmpty(baseCtx: CanvasRenderingContext2D, width: number, height: number): boolean {
         const whiteColor = 4294967295; // White color constant
         const pixelBuffer = new Uint32Array(baseCtx.getImageData(0, 0, width, height).data.buffer);
         return pixelBuffer.some((color) => color !== whiteColor) && pixelBuffer.some((color) => color !== 0);

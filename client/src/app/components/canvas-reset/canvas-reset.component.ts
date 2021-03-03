@@ -15,9 +15,13 @@ export class NewDrawingComponent {
         this.shortcut = new ShortcutKey('o', true);
     }
 
-    removeWarning(): void {
-        this.newDrawing.showWarning = false;
-        this.shortcutHandler.blockShortcuts = false;
+    @HostListener('document:keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent): void {
+        if (this.shortcut.equals(event)) {
+            event.preventDefault();
+            this.newDrawing.newCanvas();
+            if (this.newDrawing.showWarning) this.shortcutHandler.blockShortcuts = true;
+        }
     }
 
     showWarning(): boolean {
@@ -29,12 +33,8 @@ export class NewDrawingComponent {
         this.newDrawing.newCanvas(confirm);
     }
 
-    @HostListener('document:keydown', ['$event'])
-    onKeyDown(event: KeyboardEvent): void {
-        if (this.shortcut.equals(event)) {
-            event.preventDefault();
-            this.newDrawing.newCanvas();
-            if (this.newDrawing.showWarning) this.shortcutHandler.blockShortcuts = true;
-        }
+    removeWarning(): void {
+        this.newDrawing.showWarning = false;
+        this.shortcutHandler.blockShortcuts = false;
     }
 }

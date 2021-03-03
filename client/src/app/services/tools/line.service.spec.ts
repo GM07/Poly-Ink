@@ -88,8 +88,8 @@ describe('LineService', () => {
     });
 
     it('should do nothing when awaiting a double click', () => {
-        const handlePreviewFunc = spyOn(service, 'handleLinePreview').and.callThrough();
-        const handleKeys = spyOn(service, 'handleKeys').and.callThrough();
+        const handlePreviewFunc = spyOn<any>(service, 'handleLinePreview').and.callThrough();
+        const handleKeys = spyOn<any>(service, 'handleKeys').and.callThrough();
         service.onMouseMove({} as MouseEvent);
         expect(handlePreviewFunc).not.toHaveBeenCalled();
         service.onKeyDown({} as KeyboardEvent);
@@ -101,8 +101,8 @@ describe('LineService', () => {
     it('should not do anything on triple click', () => {
         service['points'] = [{ x: 100, y: 800 } as Vec2];
         const lastEvent = { offsetX: 100, offsetY: 100, detail: 3 } as MouseEvent;
-        const simpleFunc = spyOn(service, 'handleSimpleClick').and.callThrough();
-        const doubleFunc = spyOn(service, 'handleDoubleClick').and.callThrough();
+        const simpleFunc = spyOn<any>(service, 'handleSimpleClick').and.callThrough();
+        const doubleFunc = spyOn<any>(service, 'handleDoubleClick').and.callThrough();
 
         service.onMouseDown(lastEvent);
         expect(simpleFunc).not.toHaveBeenCalled();
@@ -122,7 +122,7 @@ describe('LineService', () => {
         service['points'] = [{ x: 500, y: 400 }, { x: 200, y: 300 }, { x: 100, y: 819 } as Vec2];
         const lastEvent = { offsetX: 500, offsetY: 419, detail: 2 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath').and.callThrough();
-        service.handleDoubleClick(lastEvent);
+        service['handleDoubleClick'](lastEvent);
         expect(drawLinePath).toHaveBeenCalledWith(
             mockContext,
             [
@@ -135,11 +135,11 @@ describe('LineService', () => {
     });
 
     it('should move line on mouse move when point array is not empty', () => {
-        const getPositionFromMouse = spyOn(service, 'getPositionFromMouse').and.callThrough();
+        const getPositionFromMouse = spyOn<any>(service, 'getPositionFromMouse').and.callThrough();
         service.onMouseMove({} as MouseEvent);
         expect(getPositionFromMouse).not.toHaveBeenCalled();
         service['points'] = [{ x: 100, y: 200 } as Vec2];
-        const alignPointFunc = spyOn(service, 'alignPoint').and.callThrough();
+        const alignPointFunc = spyOn<any>(service, 'alignPoint').and.callThrough();
         service.onMouseMove({ offsetX: 120, offsetY: 540 } as MouseEvent);
         expect(alignPointFunc).not.toHaveBeenCalled();
         expect(service['pointToAdd']).toEqual({ x: 120, y: 540 } as Vec2);
@@ -148,15 +148,15 @@ describe('LineService', () => {
     it('should move and align line on mouse move when shift is pressed', () => {
         service['points'] = [{ x: 100, y: 200 } as Vec2];
         service['keyEvents'].set('Shift', true);
-        const alignPointFunc = spyOn(service, 'alignPoint').and.returnValue({ x: 40, y: 60 });
+        const alignPointFunc = spyOn<any>(service, 'alignPoint').and.returnValue({ x: 40, y: 60 });
         service.onMouseMove({ offsetX: 120, offsetY: 540 } as MouseEvent);
         expect(alignPointFunc).toHaveBeenCalled();
         expect(service['pointToAdd']).toEqual({ x: 40, y: 60 } as Vec2);
     });
 
     it('should not handle any key when point array is empty', () => {
-        const handleBackspace = spyOn(service, 'handleBackspaceKey').and.callThrough();
-        service.handleKeys('Backspace');
+        const handleBackspace = spyOn<any>(service, 'handleBackspaceKey').and.callThrough();
+        service['handleKeys']('Backspace');
         expect(handleBackspace).not.toHaveBeenCalled();
     });
 
@@ -203,44 +203,44 @@ describe('LineService', () => {
 
     it('should call correct function when Backspace key is pressed', () => {
         service['points'].push({ x: 100, y: 100 } as Vec2);
-        const handleBackspace = spyOn(service, 'handleBackspaceKey').and.callThrough();
-        service.handleKeys('Backspace');
+        const handleBackspace = spyOn<any>(service, 'handleBackspaceKey').and.callThrough();
+        service['handleKeys']('Backspace');
         expect(handleBackspace).toHaveBeenCalled();
     });
 
     it('should call correct function when Escape key is pressed', () => {
         service['points'].push({ x: 100, y: 100 } as Vec2);
-        const handleEscape = spyOn(service, 'handleEscapeKey').and.callThrough();
-        service.handleKeys('Escape');
+        const handleEscape = spyOn<any>(service, 'handleEscapeKey').and.callThrough();
+        service['handleKeys']('Escape');
         expect(handleEscape).toHaveBeenCalled();
     });
 
     it('should call correct function when Shift key is pressed', () => {
         service['points'].push({ x: 100, y: 100 } as Vec2);
-        const handleShift = spyOn(service, 'handleShiftKey').and.callThrough();
-        service.handleKeys('Shift');
+        const handleShift = spyOn<any>(service, 'handleShiftKey').and.callThrough();
+        service['handleKeys']('Shift');
         expect(handleShift).toHaveBeenCalled();
     });
 
     it('should not do anything when Backspace key is released', () => {
-        const handlePreviewFunc = spyOn(service, 'handleLinePreview').and.callThrough();
-        service.handleBackspaceKey();
+        const handlePreviewFunc = spyOn<any>(service, 'handleLinePreview').and.callThrough();
+        service['handleBackspaceKey']();
         expect(handlePreviewFunc).not.toHaveBeenCalled();
     });
 
     it('should delete point and update preview on a Backspace key event when there are 2 points', () => {
         service['points'] = pointsTest2;
         service['keyEvents'].set('Backspace', true);
-        const handlePreviewFunc = spyOn(service, 'handleLinePreview').and.callThrough();
-        service.handleBackspaceKey();
+        const handlePreviewFunc = spyOn<any>(service, 'handleLinePreview').and.callThrough();
+        service['handleBackspaceKey']();
         expect(handlePreviewFunc).toHaveBeenCalled();
         expect(service['points'].length).toBe(1);
     });
 
     it('should not do anything on a Backspace key event when points array is empty ', () => {
         service['keyEvents'].set('Backspace', true);
-        const handlePreviewFunc = spyOn(service, 'handleLinePreview').and.callThrough();
-        service.handleBackspaceKey();
+        const handlePreviewFunc = spyOn<any>(service, 'handleLinePreview').and.callThrough();
+        service['handleBackspaceKey']();
         expect(handlePreviewFunc).not.toHaveBeenCalled();
     });
 
@@ -248,16 +248,16 @@ describe('LineService', () => {
         service['keyEvents'].set('Shift', true);
         service['points'].push({ x: 10, y: 10 });
         service['mouseDown'] = true;
-        const alignFunc = spyOn(service, 'alignPoint').and.returnValue({ x: 100, y: 100 } as Vec2);
-        service.handleShiftKey();
+        const alignFunc = spyOn<any>(service, 'alignPoint').and.returnValue({ x: 100, y: 100 } as Vec2);
+        service['handleShiftKey']();
         expect(alignFunc).not.toHaveBeenCalled();
     });
 
     it('should align points when shift key is pressed', () => {
         service['keyEvents'].set('Shift', true);
         service['points'].push({ x: 10, y: 10 });
-        const alignFunc = spyOn(service, 'alignPoint').and.returnValue({ x: 100, y: 100 } as Vec2);
-        service.handleShiftKey();
+        const alignFunc = spyOn<any>(service, 'alignPoint').and.returnValue({ x: 100, y: 100 } as Vec2);
+        service['handleShiftKey']();
         expect(alignFunc).toHaveBeenCalled();
         expect(service['pointToAdd']).toEqual({ x: 100, y: 100 } as Vec2);
     });
@@ -265,14 +265,14 @@ describe('LineService', () => {
     it('should point to mouse position when shift key is released', () => {
         service['points'].push({ x: 10, y: 10 });
         service['keyEvents'].set('Shift', false);
-        service.handleShiftKey();
+        service['handleShiftKey']();
         expect(service['pointToAdd']).toEqual({ x: 0, y: 0 } as Vec2);
     });
 
     it('should clear points when escape key is pressed', () => {
         service['points'] = pointsTest2;
         service['keyEvents'].set('Escape', true);
-        service.handleEscapeKey();
+        service['handleEscapeKey']();
         expect(service['points'].length).toBe(0);
     });
 
@@ -287,7 +287,7 @@ describe('LineService', () => {
         service['pointToAdd'] = { x: 200, y: 200 };
         service['drawingService'].previewCtx = mockContext;
         const clearCanvasSpy = spyOn(service['drawingService'], 'clearCanvas').and.callThrough();
-        service.handleLinePreview();
+        service['handleLinePreview']();
         expect(clearCanvasSpy).toHaveBeenCalled();
     });
 
@@ -319,7 +319,7 @@ describe('LineService', () => {
             { x: 500, y: 500 },
             { x: 200, y: 300 },
         ];
-        const result: Vec2 = service.alignPoint({ x: 310, y: 405 });
+        const result: Vec2 = service['alignPoint']({ x: 310, y: 405 });
         expect(result).toEqual({ x: 310, y: 410 });
     });
 
@@ -328,7 +328,7 @@ describe('LineService', () => {
             { x: 500, y: 500 },
             { x: 200, y: 300 },
         ];
-        const result: Vec2 = service.alignPoint({ x: 205, y: 500 });
+        const result: Vec2 = service['alignPoint']({ x: 205, y: 500 });
         expect(result).toEqual({ x: 200, y: 500 });
     });
 });
