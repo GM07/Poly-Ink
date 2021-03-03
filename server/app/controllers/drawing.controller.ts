@@ -48,11 +48,17 @@ export class DrawingController {
                 drawingsData = await this.drawingService.getAllDrawingsData();
             }
 
-            let drawings: Drawing[] = drawingsData.map((data: DrawingData) => {
-                let drawing = new Drawing(data);
-                drawing.image = this.drawingService.getLocalDrawing(drawing.data._id ?? '');
-                return drawing;
-            });
+            let drawings: (Drawing | null)[] = drawingsData
+                .map((data: DrawingData) => {
+                    try {
+                        let drawing = new Drawing(data);
+                        drawing.image = this.drawingService.getLocalDrawing(drawing.data._id ?? '');
+                        return drawing;
+                    } catch (e) {
+                        return null;
+                    }
+                })
+                .filter((e) => e !== null);
 
             res.status(HTTP_STATUS_SUCCESS).json(drawings);
         });
