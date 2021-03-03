@@ -235,11 +235,11 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     private HorizontalTranslationModifier(): number {
-        return (this.isRightArrowDown ? 1 : 0) - (this.isLeftArrowDown ? 1 : 0);
+        return +this.isRightArrowDown - +this.isLeftArrowDown;
     }
 
     private VerticalTranslationModifier(): number {
-        return (this.isDownArrowDown ? 1 : 0) - (this.isUpArrowDown ? 1 : 0);
+        return +this.isDownArrowDown - +this.isUpArrowDown;
     }
 
     private startSelection(): void {
