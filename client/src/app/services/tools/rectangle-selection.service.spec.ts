@@ -16,6 +16,8 @@ describe('RectangleSelectionService', () => {
     let previewCtxStub: CanvasRenderingContext2D;
 
     const mouseEvent = {
+        x: 25,
+        y: 25,
         offsetX: 25,
         offsetY: 25,
         button: 0,
@@ -247,8 +249,7 @@ describe('RectangleSelectionService', () => {
 
     it('isInCanvas should return true if is in canvas', () => {
         drawServiceSpy.canvas = document.createElement('canvas');
-        drawServiceSpy.canvas.width = 30;
-        drawServiceSpy.canvas.height = 30;
+        spyOn(drawServiceSpy.canvas, 'getBoundingClientRect').and.returnValue({ x: 0, y: 0, width: 100, height: 100 } as DOMRect);
         expect(service.isInCanvas(mouseEvent)).toBe(true);
     });
 

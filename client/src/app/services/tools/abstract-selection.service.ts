@@ -200,7 +200,7 @@ export abstract class AbstractSelectionService extends Tool {
         const bottom = this.selectionCoords.y + Math.abs(this.height);
 
         const currentPos = this.getPositionFromMouse(event);
-        return !(currentPos.x < left || currentPos.x > right || currentPos.y < top || currentPos.y > bottom);
+        return currentPos.x >= left && currentPos.x <= right && currentPos.y >= top && currentPos.y <= bottom;
     }
 
     stopDrawing(): void {
@@ -300,6 +300,6 @@ export abstract class AbstractSelectionService extends Tool {
         const right = clientRect.x + clientRect.width - this.BORDER_WIDTH;
         const top = clientRect.y + this.BORDER_WIDTH - 1;
         const bottom = clientRect.y + clientRect.height - this.BORDER_WIDTH;
-        return !(event.x <= left || event.x >= right || event.y <= top || event.y >= bottom);
+        return event.x > left && event.x < right && event.y > top && event.y < bottom;
     }
 }

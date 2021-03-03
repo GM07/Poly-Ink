@@ -144,8 +144,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         const posX = position.x + (this.CONTROL_INNER + this.BORDER) / 2;
         const posY = position.y + (this.CONTROL_INNER + this.BORDER) / 2;
 
-        if (posX <= left || posX >= right || posY <= top || posY >= bottom) return false;
-        return true;
+        return posX > left && posX < right && posY > top && posY < bottom;
     }
 
     private makeControlsUnselectable(): void {

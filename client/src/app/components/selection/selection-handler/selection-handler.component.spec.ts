@@ -16,7 +16,7 @@ describe('SelectionHandlerComponent', () => {
     let rectangleSelectionService: RectangleSelectionService;
     let ellipseSelectionService: EllipseSelectionService;
     // tslint:disable:no-any
-    let getToolSpy: jasmine.Spy<any>;
+    let getToolSpy: jasmine.Spy;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -47,29 +47,29 @@ describe('SelectionHandlerComponent', () => {
     });
 
     it('lastTab should be a undefined as default', () => {
-        expect(component.lastTab === undefined).toBeTruthy();
+        expect(component.lastTab).toBe(undefined);
     });
 
     it('activeTab should be the display of the current selection tool', () => {
         getToolSpy.and.returnValue(rectangleSelectionService);
-        expect(component.activeTab === RectangleSelectionComponent).toBeTruthy();
+        expect(component.activeTab).toBe(RectangleSelectionComponent);
         getToolSpy.and.returnValue(ellipseSelectionService);
-        expect(component.activeTab === EllipseSelectionComponent).toBeTruthy();
+        expect(component.activeTab).toBe(EllipseSelectionComponent);
     });
 
     it('should change the return value of activeTab for undefined when a tool that is not a selection is used', () => {
         getToolSpy.and.returnValue(rectangleSelectionService);
-        expect(component.activeTab === RectangleSelectionComponent).toBeTruthy();
+        expect(component.activeTab).toBe(RectangleSelectionComponent);
         getToolSpy.and.returnValue(pencilService);
-        expect(component.activeTab === RectangleSelectionComponent).toBeFalsy();
-        expect(component.activeTab === undefined).toBeTruthy();
+        expect(component.activeTab).not.toBe(RectangleSelectionComponent);
+        expect(component.activeTab).toBe(undefined);
     });
 
     it('the active tab should not be undefined if we use a tool that is a selection', () => {
-        expect(component.activeTab === undefined).toBeTruthy();
+        expect(component.activeTab).toBe(undefined);
         getToolSpy.and.returnValue(ellipseSelectionService);
-        expect(component.activeTab === EllipseSelectionComponent).toBeTruthy();
+        expect(component.activeTab).toBe(EllipseSelectionComponent);
         getToolSpy.and.returnValue(rectangleSelectionService);
-        expect(component.activeTab === RectangleSelectionComponent).toBeTruthy();
+        expect(component.activeTab).toBe(RectangleSelectionComponent);
     });
 });
