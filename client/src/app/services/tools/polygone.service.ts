@@ -34,8 +34,7 @@ export class PolygoneService extends Tool {
     }
 
     set contourWidth(width: number) {
-        const max = 50;
-        this.lineWidthIn = Math.min(Math.max(width, 1), max);
+        this.lineWidthIn = Math.min(Math.max(width, 1), ToolSettingsConst.MAX_WIDTH);
     }
 
     get contourWidth(): number {
@@ -105,26 +104,52 @@ export class PolygoneService extends Tool {
     }
 
     private drawPolygone(ctx: CanvasRenderingContext2D): void {
-        const radiusX: number = (this.mouseUpCoord.x - this.mouseDownCoord.x) / 2;
-        const radiusY: number = (this.mouseUpCoord.y - this.mouseDownCoord.y) / 2;
+        const radiusX: number = Math.abs(this.mouseUpCoord.x - this.mouseDownCoord.x) / 2;
+        const radiusY: number = Math.abs(this.mouseUpCoord.y - this.mouseDownCoord.y) / 2;
         const radius: number = Math.min(radiusX, radiusY);
-        const centerX: number = this.mouseDownCoord.x + radius;
-        const centerY: number = this.mouseDownCoord.y + radius;
-        const radiusAbs = Math.abs(radius);
-        ctx.lineCap = 'square' as CanvasLineCap;
-        ctx.lineJoin = 'miter' as CanvasLineJoin;
+        let centerX: number;
+        let centerY: number;
 
-        if (ctx === this.drawingService.previewCtx) {
-            this.drawCirclePerimeter(ctx, centerX, centerY, radiusAbs);
+        if (this.mouseUpCoord.y > this.mouseDownCoord.y && this.mouseUpCoord.x < this.mouseDownCoord.x) {
+            // Bas-gauche
+            centerX = this.mouseDownCoord.x - radius;
+            centerY = this.mouseDownCoord.y + radius;
+        } else if (this.mouseUpCoord.y > this.mouseDownCoord.y && this.mouseUpCoord.x > this.mouseDownCoord.x) {
+            // Bas-droit
+            centerX = this.mouseDownCoord.x + radius;
+            centerY = this.mouseDownCoord.y + radius;
+        } else if (this.mouseUpCoord.y < this.mouseDownCoord.y && this.mouseUpCoord.x > this.mouseDownCoord.x) {
+            // Haut-droit
+            centerX = this.mouseDownCoord.x + radius;
+            centerY = this.mouseDownCoord.y - radius;
+        } else {
+            // Haut-gauche
+            centerX = this.mouseDownCoord.x - radius;
+            centerY = this.mouseDownCoord.y - radius;
         }
 
-        this.drawPolygoneSides(ctx, centerX, centerY, radiusAbs);
+        ctx.lineCap = 'round' as CanvasLineCap;
+        ctx.lineJoin = 'round' as CanvasLineJoin;
+        const center: Vec2 = {
+            x: centerX,
+            y: centerY,
+        };
+
+        if (ctx === this.drawingService.previewCtx) {
+            this.drawCirclePerimeter(ctx, center, radius);
+        }
+
+        this.drawPolygoneSides(ctx, center, radius);
         ctx.closePath();
     }
 
-    private drawPolygoneSides(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, radiusAbs: number): void {
+    private drawPolygoneSides(ctx: CanvasRenderingContext2D, center: Vec2, radiusAbs: number): void {
+        const centerX: number = center.x;
+        const centerY: number = center.y;
         const angle = (2 * Math.PI) / this.numEdgesIn;
-        const startingAngle = this.numEdgesIn === ToolSettingsConst.NUM_EDGES_SQUARE ? -Math.PI / 2 / 2 : -Math.PI / 2;
+
+        // tslint:disable-next-line:no-magic-numbers
+        const startingAngle = this.numEdgesIn === ToolSettingsConst.NUM_EDGES_SQUARE ? -Math.PI / 4 : -Math.PI / 2;
         ctx.lineWidth = this.polygoneMode === PolygoneMode.Filled ? 0 : this.lineWidthIn;
         const lineWidthWeightedRadius = radiusAbs - ctx.lineWidth / 2;
 
@@ -138,17 +163,19 @@ export class PolygoneService extends Tool {
 
         ctx.strokeStyle = this.colorService.secondaryRgba;
         ctx.fillStyle = this.colorService.primaryRgba;
-        if (this.polygoneMode === PolygoneMode.Filled || this.polygoneMode === PolygoneMode.FilledWithContour) {
+        if (this.polygoneMode !== PolygoneMode.Contour) {
             ctx.fill();
         }
-        if (this.polygoneMode === PolygoneMode.Contour || this.polygoneMode === PolygoneMode.FilledWithContour) {
+        if (this.polygoneMode !== PolygoneMode.Filled) {
             ctx.stroke();
         }
     }
 
-    private drawCirclePerimeter(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, radiusAbs: number): void {
+    private drawCirclePerimeter(ctx: CanvasRenderingContext2D, center: Vec2, radiusAbs: number): void {
         const dashWidth = 1;
         const lineDash = 6;
+        const centerX: number = center.x;
+        const centerY: number = center.y;
         ctx.lineWidth = dashWidth;
         ctx.strokeStyle = 'gray';
         ctx.setLineDash([lineDash]);

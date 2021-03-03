@@ -108,16 +108,17 @@ describe('PolygoneService', () => {
 
     it('should start drawing when the mouse is down on the left click', () => {
         service.mouseDown = true;
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { offsetX: 0, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
     });
+
 
     it('should stop drawing when the mouse is up', () => {
         service.onMouseUp(mouseEvent);
         expect(service.mouseDown).toEqual(false);
         service.onMouseDown(mouseEvent);
-        mouseEvent = { x: -1, y: -1, offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { offsetX: INIT_OFFSET_X + 1, offsetY: INIT_OFFSET_Y - 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
     });
@@ -131,7 +132,7 @@ describe('PolygoneService', () => {
 
     it('should draw a preview when the mouse is moving with left clicked pressed', () => {
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { offsetX: INIT_OFFSET_X - 1, offsetY: INIT_OFFSET_Y + 1, button: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
     });
@@ -143,7 +144,7 @@ describe('PolygoneService', () => {
         service.onMouseLeave(mouseEvent);
         expect(updatePolygoneSpy).toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { offsetX: INIT_OFFSET_X + 1, offsetY: INIT_OFFSET_Y + 1, button: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         expect(updatePolygoneSpy).toHaveBeenCalled();
     });
@@ -152,7 +153,7 @@ describe('PolygoneService', () => {
         service.onMouseEnter(mouseEvent);
         expect(updatePolygoneSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { offsetX: 1, offsetY: -1, button: 0 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(updatePolygoneSpy);
     });
@@ -256,7 +257,7 @@ describe('PolygoneService', () => {
     it('should do nothing with an unknown mode', () => {
         service.polygoneMode = {} as PolygoneMode;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { offsetX: -1, offsetY: -1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
         // tslint:disable-next-line:no-magic-numbers
