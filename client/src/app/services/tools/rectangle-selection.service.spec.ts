@@ -113,8 +113,8 @@ describe('RectangleSelectionService', () => {
         jasmine.clock().install();
         const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowdown' });
         const updateSelection = spyOn<any>(service, 'updateSelection');
-        spyOn<any>(service, 'getXArrow').and.returnValue(1);
-        spyOn<any>(service, 'getYArrow').and.returnValue(1);
+        spyOn<any>(service, 'HorizontalTranslationModifier').and.returnValue(1);
+        spyOn<any>(service, 'VerticalTranslationModifier').and.returnValue(1);
         service.selectionCtx = canvasSelection.getContext('2d');
         service.onKeyDown(keyboardEvent);
         jasmine.clock().tick(600);
@@ -239,7 +239,7 @@ describe('RectangleSelectionService', () => {
         service.mouseUpCoord = { x: 25, y: 25 } as Vec2;
         service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
         const drawPreviewSelectionRequired = spyOn<any>(service, 'drawPreviewSelectionRequired');
-        service['drawPreviewSelection'](baseCtxStub);
+        service['drawPreviewSelection']();
         expect(service.width).toEqual(25);
         expect(service.height).toEqual(25);
         expect(drawPreviewSelectionRequired).toHaveBeenCalled();
@@ -291,7 +291,7 @@ describe('RectangleSelectionService', () => {
         const saveWidth = (service.width = 5);
         const saveHeight = (service.height = 25);
         service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
-        service['drawPreviewSelectionRequired'](baseCtxStub);
+        service['drawPreviewSelectionRequired']();
         expect(saveWidth).toEqual(service.width);
         expect(saveHeight).toEqual(service.height);
         expect(drawSelection).toHaveBeenCalled();
@@ -303,7 +303,7 @@ describe('RectangleSelectionService', () => {
         const saveHeight = (service.height = 25);
         service['shiftPressed'] = true;
         service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
-        service['drawPreviewSelectionRequired'](baseCtxStub);
+        service['drawPreviewSelectionRequired']();
         expect(saveWidth).toEqual(service.width);
         expect(saveHeight).not.toEqual(service.height);
         expect(drawSelection).toHaveBeenCalled();

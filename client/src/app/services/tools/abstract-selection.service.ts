@@ -143,14 +143,17 @@ export abstract class AbstractSelectionService extends Tool {
                 event.preventDefault();
                 if (event.repeat) return;
                 this.setArrowKeyDown(event);
-                this.updateSelection({ x: PIXELS * this.getXArrow(), y: PIXELS * this.getYArrow() } as Vec2);
+                this.updateSelection({ x: PIXELS * this.HorizontalTranslationModifier(), y: PIXELS * this.VerticalTranslationModifier() } as Vec2);
                 this.updatePoints.next(true);
 
                 if (this.moveId === this.DEFAULT_MOVE_ID) {
                     setTimeout(() => {
                         if (this.moveId === this.DEFAULT_MOVE_ID)
                             this.moveId = window.setInterval(() => {
-                                this.updateSelection({ x: PIXELS * this.getXArrow(), y: PIXELS * this.getYArrow() } as Vec2);
+                                this.updateSelection({
+                                    x: PIXELS * this.HorizontalTranslationModifier(),
+                                    y: PIXELS * this.VerticalTranslationModifier(),
+                                } as Vec2);
                                 this.updatePoints.next(true);
                             }, this.NEXT_MOVES_TIMEOUT);
                     }, this.FIRST_MOVE_TIMEOUT);
@@ -231,11 +234,11 @@ export abstract class AbstractSelectionService extends Tool {
         if (this.DOWN_ARROW.equals(event)) this.isDownArrowDown = false;
     }
 
-    private getXArrow(): number {
+    private HorizontalTranslationModifier(): number {
         return (this.isRightArrowDown ? 1 : 0) - (this.isLeftArrowDown ? 1 : 0);
     }
 
-    private getYArrow(): number {
+    private VerticalTranslationModifier(): number {
         return (this.isDownArrowDown ? 1 : 0) - (this.isUpArrowDown ? 1 : 0);
     }
 

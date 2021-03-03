@@ -38,7 +38,7 @@ describe('EllipseSelectionService', () => {
         const saveWidth = (service.width = 5);
         const saveHeight = (service.height = 25);
         service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
-        service['drawPreviewSelectionRequired'](baseCtxStub);
+        service['drawPreviewSelectionRequired']();
         expect(saveWidth).toEqual(service.width);
         expect(saveHeight).toEqual(service.height);
         expect(drawSelection).toHaveBeenCalled();
@@ -50,13 +50,14 @@ describe('EllipseSelectionService', () => {
         const saveHeight = (service.height = 25);
         service['shiftPressed'] = true;
         service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
-        service['drawPreviewSelectionRequired'](baseCtxStub);
+        service['drawPreviewSelectionRequired']();
         expect(saveWidth).toEqual(service.width);
         expect(saveHeight).not.toEqual(service.height);
         expect(drawSelection).toHaveBeenCalled();
     });
 
     it('draw selection should draw an ellipse and a border around the selection', () => {
+        service['radiusAbs'] = { x: 0, y: 0 } as Vec2;
         spyOn(baseCtxStub, 'ellipse');
         spyOn(baseCtxStub, 'setLineDash');
         service['drawSelection'](baseCtxStub, { x: 10, y: 25 } as Vec2);
@@ -73,6 +74,8 @@ describe('EllipseSelectionService', () => {
     });
 
     it('fill background should fill an ellipse at the location', () => {
+        service['center'] = { x: 0, y: 0 } as Vec2;
+        service['radiusAbs'] = { x: 0, y: 0 } as Vec2;
         service['firstSelectionCoords'] = { x: 0, y: 0 } as Vec2;
         spyOn(previewCtxStub, 'ellipse');
         spyOn(previewCtxStub, 'fill');
@@ -82,6 +85,7 @@ describe('EllipseSelectionService', () => {
     });
 
     it('update selection required should clip the image, draw it, update it and update the background', () => {
+        service['radiusAbs'] = { x: 0, y: 0 } as Vec2;
         service.selectionCoords = { x: 0, y: 0 } as Vec2;
         spyOn(previewCtxStub, 'ellipse');
         spyOn(previewCtxStub, 'clip');
@@ -105,6 +109,7 @@ describe('EllipseSelectionService', () => {
     it('end selection should draw the selection on the base canvas', () => {
         service.selectionCtx = previewCtxStub;
         service.selectionCoords = { x: 0, y: 0 } as Vec2;
+        service['radiusAbs'] = { x: 0, y: 0 } as Vec2;
         spyOn(baseCtxStub, 'ellipse');
         spyOn(baseCtxStub, 'clip');
         spyOn(baseCtxStub, 'drawImage');
@@ -117,6 +122,7 @@ describe('EllipseSelectionService', () => {
     });
 
     it('draw selection should draw the rectangle perimeter if there is a selection', () => {
+        service['radiusAbs'] = { x: 0, y: 0 } as Vec2;
         service.selectionCtx = previewCtxStub;
         const drawRectanglePerimeter = spyOn<any>(service, 'drawRectanglePerimeter');
         service['drawSelection'](previewCtxStub, { x: 0, y: 0 } as Vec2);

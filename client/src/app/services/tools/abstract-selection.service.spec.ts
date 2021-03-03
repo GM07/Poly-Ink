@@ -107,27 +107,27 @@ describe('AbstractSelectionService', () => {
         expect(service.isInSelection(mouseEvent)).toEqual(true);
     });
 
-    it('getXArrow should return 1 if right Arrow is down', () => {
+    it('HorizontalTranslationModifier should return 1 if right Arrow is down', () => {
         service['isRightArrowDown'] = true;
-        expect(service['getXArrow']()).toEqual(1);
+        expect(service['HorizontalTranslationModifier']()).toEqual(1);
     });
 
-    it('getXArrow should return -1 if left Arrow is down', () => {
+    it('HorizontalTranslationModifier should return -1 if left Arrow is down', () => {
         // tslint:disable:no-magic-numbers
         service['isRightArrowDown'] = false;
         service['isLeftArrowDown'] = true;
-        expect(service['getXArrow']()).toEqual(-1);
+        expect(service['HorizontalTranslationModifier']()).toEqual(-1);
     });
 
-    it('getYArrow should return 1 if down Arrow is down', () => {
+    it('VerticalTranslationModifier should return 1 if down Arrow is down', () => {
         service['isDownArrowDown'] = true;
-        expect(service['getYArrow']()).toEqual(1);
+        expect(service['VerticalTranslationModifier']()).toEqual(1);
     });
 
-    it('getYArrow should return -1 if up Arrow is down', () => {
+    it('VerticalTranslationModifier should return -1 if up Arrow is down', () => {
         // tslint:disable:no-magic-numbers
         service['isUpArrowDown'] = true;
-        expect(service['getYArrow']()).toEqual(-1);
+        expect(service['VerticalTranslationModifier']()).toEqual(-1);
     });
 
     it('get translation should return the current translation', () => {

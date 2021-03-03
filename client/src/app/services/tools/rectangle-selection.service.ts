@@ -51,7 +51,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
     }
 
     protected drawPreviewSelectionRequired(): void {
-        let ctx = this.drawingService.previewCtx;
+        const ctx = this.drawingService.previewCtx;
         if (this.shiftPressed) {
             this.height = Math.sign(this.height) * Math.min(Math.abs(this.width), Math.abs(this.height));
             this.width = Math.sign(this.width) * Math.abs(this.height);
