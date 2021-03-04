@@ -11,7 +11,7 @@ export class PopupHandlerService {
     newDrawing: NewDrawing;
     exportDrawing: ExportDrawing;
 
-    constructor(drawingService: DrawingService, toolHandler: ToolHandlerService) {
+    constructor(drawingService: DrawingService, private toolHandler: ToolHandlerService) {
         this.newDrawing = new NewDrawing(drawingService, toolHandler);
         this.exportDrawing = new ExportDrawing();
     }
@@ -26,6 +26,7 @@ export class PopupHandlerService {
     }
 
     showNewDrawingPopup(): void {
+        this.toolHandler.getTool().stopDrawing();
         this.newDrawing.showPopup = true;
     }
 
@@ -38,6 +39,7 @@ export class PopupHandlerService {
     }
 
     showExportDrawingPopup(): void {
+        this.toolHandler.getTool().stopDrawing();
         this.exportDrawing.showPopup = true;
     }
 

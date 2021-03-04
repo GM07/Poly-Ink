@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { BlackWhiteFilter } from './black-white-filter';
+import { Monochrome } from './monochrome-filter';
 
 /* tslint:disable:no-magic-numbers */
 describe('Black and White filter', () => {
-    let filter: BlackWhiteFilter;
+    let filter: Monochrome;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
-        filter = new BlackWhiteFilter();
+        filter = new Monochrome();
     });
 
     it('should apply filter', () => {

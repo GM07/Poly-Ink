@@ -1,12 +1,19 @@
 import { TestBed } from '@angular/core/testing';
+import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { PopupHandlerService } from './popup-handler.service';
 
 describe('PopupHandlerService', () => {
     let service: PopupHandlerService;
+    let toolHandlerService: ToolHandlerService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
         service = TestBed.inject(PopupHandlerService);
+        toolHandlerService = TestBed.inject(ToolHandlerService);
+        /* tslint:disable:no-empty */
+        spyOn(toolHandlerService.getTool(), 'stopDrawing').and.callFake(() => {});
+        /* tslint:enable:no-empty */
+
         service.initPopups();
     });
 

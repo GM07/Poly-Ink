@@ -9,9 +9,9 @@
                     <mat-button-toggle id="corner-right" value="jpg" (change)="changeExportFormat($event.value)">JPG</mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
-            <form class="example-form">
+            <form>
                 <mat-form-field>
-                    <input matInput [(ngModel)]="filename" name="filename" />
+                    <input matInput [(ngModel)]="filename" name="filename" maxlength="100" />
                     <span matSuffix>{{ '.' + exportFormat }} &nbsp;</span>
                 </mat-form-field>
             </form>

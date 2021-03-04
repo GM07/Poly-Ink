@@ -1,7 +1,7 @@
 import { Filter } from './filter';
 
 /* tslint:disable:no-magic-numbers */
-export class BlackWhiteFilter extends Filter {
+export class Monochrome extends Filter {
     apply(image: ImageData): void {
         for (let i = 0; i < image.data.length; i += Filter.PIXEL_FORMAT_LENGTH) {
             const r: number = image.data[i + 0];

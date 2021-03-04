@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { BlackWhiteFilter } from '@app/classes/filters/black-white-filter';
 import { Filter } from '@app/classes/filters/filter';
 import { FunkyFilter } from '@app/classes/filters/funky-filter';
+import { Monochrome } from '@app/classes/filters/monochrome-filter';
 import { NegativeFilter } from '@app/classes/filters/negative-filter';
 import { SepiaFilter } from '@app/classes/filters/sepia-filter';
 import { SpotlightFilter } from '@app/classes/filters/spotlight-filter';
@@ -17,6 +17,16 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
 export class ExportDrawingComponent {
     private static readonly EXPORT_PREVIEW_CANVAS_WIDTH: number = 300;
 
+    private baseCanvas: HTMLCanvasElement;
+    private baseContext: CanvasRenderingContext2D;
+    private canvasImage: string;
+    private imageData: ImageData;
+
+    exportFormat: string;
+    filename: string;
+    currentFilter: string;
+    aspectRatio: number;
+
     private exportPreview: ElementRef<HTMLCanvasElement>;
     @ViewChild('exportPreview', { static: false }) set content(element: ElementRef) {
         if (element) {
@@ -24,23 +34,13 @@ export class ExportDrawingComponent {
         }
     }
 
-    private baseCanvas: HTMLCanvasElement;
-    private baseContext: CanvasRenderingContext2D;
-
-    private canvasImage: string;
-    private imageData: ImageData;
-    exportFormat: string;
-    filename: string;
-    currentFilter: string;
-    aspectRatio: number;
-
     private filterMap: Map<string, Filter> = new Map([
         ['no', new Filter()],
         ['negative', new NegativeFilter()],
         ['funky', new FunkyFilter()],
         ['spotlight', new SpotlightFilter()],
         ['sepia', new SepiaFilter()],
-        ['black-white', new BlackWhiteFilter()],
+        ['black-white', new Monochrome()],
     ]);
 
     private defaultFileNames: string[] = ['Mona Lisa', 'Guenica', 'Le Cri', 'La nuit étoilée', 'Impression, soleil levant'];
@@ -115,7 +115,7 @@ export class ExportDrawingComponent {
         return ExportDrawingComponent.EXPORT_PREVIEW_CANVAS_WIDTH / Math.max(1, this.aspectRatio);
     }
 
-    // Permettre l'acces dans le html
+    // Give access to html
     getPreviewWidth(): number {
         return ExportDrawingComponent.EXPORT_PREVIEW_CANVAS_WIDTH;
     }
@@ -125,6 +125,7 @@ export class ExportDrawingComponent {
         if (this.popupHandlerService.exportDrawing.shortcut.equals(event)) {
             event.preventDefault();
             this.popupHandlerService.showExportDrawingPopup();
+
             this.changeDetectorRef.detectChanges();
             this.backupBaseCanvas();
             await this.applyFilter();
