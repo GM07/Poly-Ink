@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ShortcutKey } from '@app/classes/shortcut-key';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { EllipseSelectionToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -24,7 +24,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         let radiusX: number = this.width / 2;
         let radiusY: number = this.height / 2;
         this.center = { x: this.mouseDownCoord.x + radiusX, y: this.mouseDownCoord.y + radiusY };
-        if (this.shiftPressed) {
+        if (this.SHIFT.isDown) {
             const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
             this.center.x = this.mouseDownCoord.x + Math.sign(radiusX) * minRadius;
             this.center.y = this.mouseDownCoord.y + Math.sign(radiusY) * minRadius;

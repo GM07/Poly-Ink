@@ -53,26 +53,26 @@ describe('AbstractSelectionService', () => {
         service['setArrowKeyDown'](keyboardEventRight);
         service['setArrowKeyDown'](keyboardEventUp);
         service['setArrowKeyDown'](keyboardEventDown);
-        expect(service['isLeftArrowDown']).toBe(true);
-        expect(service['isRightArrowDown']).toBe(true);
-        expect(service['isDownArrowDown']).toBe(true);
-        expect(service['isUpArrowDown']).toBe(true);
+        expect(service['LEFT_ARROW'].isDown).toBeTruthy();
+        expect(service['RIGHT_ARROW'].isDown).toBeTruthy();
+        expect(service['DOWN_ARROW'].isDown).toBeTruthy();
+        expect(service['UP_ARROW'].isDown).toBeTruthy();
     });
 
     it('set ArrowKeyUp should update the keys when not down', () => {
         const keyboardEventLeft = new KeyboardEvent('keydown', { key: 'randomKey' });
         service['setArrowKeyDown'](keyboardEventLeft);
-        expect(service['isLeftArrowDown']).toBe(false);
-        expect(service['isRightArrowDown']).toBe(false);
-        expect(service['isDownArrowDown']).toBe(false);
-        expect(service['isUpArrowDown']).toBe(false);
+        expect(service['LEFT_ARROW'].isDown).toBeFalsy();
+        expect(service['RIGHT_ARROW'].isDown).toBeFalsy();
+        expect(service['DOWN_ARROW'].isDown).toBeFalsy();
+        expect(service['UP_ARROW'].isDown).toBeFalsy();
     });
 
     it('set arrowKeyDown should update the keys when up', () => {
-        service['isLeftArrowDown'] = true;
-        service['isRightArrowDown'] = true;
-        service['isUpArrowDown'] = true;
-        service['isDownArrowDown'] = true;
+        service['LEFT_ARROW'].isDown = true;
+        service['RIGHT_ARROW'].isDown = true;
+        service['DOWN_ARROW'].isDown = true;
+        service['UP_ARROW'].isDown = true;
         const keyboardEventLeft = new KeyboardEvent('keyup', { key: 'arrowleft' });
         const keyboardEventRight = new KeyboardEvent('keyup', { key: 'arrowright' });
         const keyboardEventDown = new KeyboardEvent('keyup', { key: 'arrowdown' });
@@ -81,19 +81,19 @@ describe('AbstractSelectionService', () => {
         service['setArrowKeyUp'](keyboardEventRight);
         service['setArrowKeyUp'](keyboardEventUp);
         service['setArrowKeyUp'](keyboardEventDown);
-        expect(service['isLeftArrowDown']).toBe(false);
-        expect(service['isRightArrowDown']).toBe(false);
-        expect(service['isDownArrowDown']).toBe(false);
-        expect(service['isUpArrowDown']).toBe(false);
+        expect(service['LEFT_ARROW'].isDown).toBeFalsy();
+        expect(service['RIGHT_ARROW'].isDown).toBeFalsy();
+        expect(service['DOWN_ARROW'].isDown).toBeFalsy();
+        expect(service['UP_ARROW'].isDown).toBeFalsy();
     });
 
     it('set ArrowKeyDown should update the keys when not up', () => {
         const keyboardEventLeft = new KeyboardEvent('keydown', { key: 'randomKey' });
         service['setArrowKeyUp'](keyboardEventLeft);
-        expect(service['isLeftArrowDown']).toBe(false);
-        expect(service['isRightArrowDown']).toBe(false);
-        expect(service['isDownArrowDown']).toBe(false);
-        expect(service['isUpArrowDown']).toBe(false);
+        expect(service['LEFT_ARROW'].isDown).toBeFalsy();
+        expect(service['RIGHT_ARROW'].isDown).toBeFalsy();
+        expect(service['DOWN_ARROW'].isDown).toBeFalsy();
+        expect(service['UP_ARROW'].isDown).toBeFalsy();
     });
 
     it('is in selection should return true if is in selection', () => {
@@ -104,29 +104,29 @@ describe('AbstractSelectionService', () => {
         service['height'] = 50;
         spyOn<any>(service, 'getPositionFromMouse').and.returnValue({ x: 25, y: 25 } as Vec2);
         spyOn<any>(service, 'isInSelection').and.callThrough();
-        expect(service.isInSelection(mouseEvent)).toEqual(true);
+        expect(service.isInSelection(mouseEvent)).toBeTruthy();
     });
 
     it('HorizontalTranslationModifier should return 1 if right Arrow is down', () => {
-        service['isRightArrowDown'] = true;
+        service['RIGHT_ARROW'].isDown = true;
         expect(service['HorizontalTranslationModifier']()).toEqual(1);
     });
 
     it('HorizontalTranslationModifier should return -1 if left Arrow is down', () => {
         // tslint:disable:no-magic-numbers
-        service['isRightArrowDown'] = false;
-        service['isLeftArrowDown'] = true;
+        service['RIGHT_ARROW'].isDown = false;
+        service['LEFT_ARROW'].isDown = true;
         expect(service['HorizontalTranslationModifier']()).toEqual(-1);
     });
 
     it('VerticalTranslationModifier should return 1 if down Arrow is down', () => {
-        service['isDownArrowDown'] = true;
+        service['DOWN_ARROW'].isDown = true;
         expect(service['VerticalTranslationModifier']()).toEqual(1);
     });
 
     it('VerticalTranslationModifier should return -1 if up Arrow is down', () => {
         // tslint:disable:no-magic-numbers
-        service['isUpArrowDown'] = true;
+        service['UP_ARROW'].isDown = true;
         expect(service['VerticalTranslationModifier']()).toEqual(-1);
     });
 
@@ -233,7 +233,7 @@ describe('AbstractSelectionService', () => {
     });
 
     it('should not stop moving the selection if we release a different key than an arrow', () => {
-        service['isLeftArrowDown'] = true;
+        service['LEFT_ARROW'].isDown = true;
         const keyboardEventUp = new KeyboardEvent('keydown', { shiftKey: false });
         service['selectionCtx'] = canvasSelection.getContext('2d');
         spyOn(window, 'clearInterval');
@@ -245,5 +245,10 @@ describe('AbstractSelectionService', () => {
         spyOn(service, 'getPositionFromMouse');
         service.isInSelection(mouseEvent);
         expect(service.getPositionFromMouse).not.toHaveBeenCalled();
+    });
+
+    it('should clear the translation interval for the arrow keys', () => {
+        service['clearArrowKeys']();
+        expect(service['moveId']).toEqual(service['DEFAULT_MOVE_ID']);
     });
 });

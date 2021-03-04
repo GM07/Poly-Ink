@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ShortcutKey } from '@app/classes/shortcut-key';
+import { ShiftKey } from '@app/classes/shortcut/shift-key';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
@@ -22,6 +23,7 @@ export abstract class AbstractSelectionService extends Tool {
     private readonly DEFAULT_MOVE_ID: number = -1;
     private readonly FIRST_MOVE_TIMEOUT: number = 500;
     private readonly NEXT_MOVES_TIMEOUT: number = 100;
+    protected readonly SHIFT: ShortcutKey = new ShiftKey();
     protected SELECTION_DATA: HTMLCanvasElement;
 
     updatePoints: Subject<boolean> = new Subject();
@@ -34,11 +36,6 @@ export abstract class AbstractSelectionService extends Tool {
     height: number;
     selectionCtx: CanvasRenderingContext2D | null;
 
-    protected shiftPressed: boolean;
-    protected isLeftArrowDown: boolean;
-    protected isRightArrowDown: boolean;
-    protected isUpArrowDown: boolean;
-    protected isDownArrowDown: boolean;
     private moveId: number;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
@@ -47,10 +44,6 @@ export abstract class AbstractSelectionService extends Tool {
         this.selectionCtx = null;
         this.selectionCoords = { x: 0, y: 0 } as Vec2;
         this.translationOrigin = { x: 0, y: 0 } as Vec2;
-        this.isLeftArrowDown = false;
-        this.isRightArrowDown = false;
-        this.isUpArrowDown = false; // TODO change with shortcutHandler
-        this.isDownArrowDown = false;
         this.moveId = this.DEFAULT_MOVE_ID;
     }
 
@@ -101,7 +94,7 @@ export abstract class AbstractSelectionService extends Tool {
                 this.mouseUpCoord = mousePos;
             }
             if (this.selectionCtx !== null) {
-                this.updateSelection(this.getTranslation(mousePos));
+                this.updateSelection(this.getTranslation(this.mouseUpCoord));
             } else {
                 const ctx = this.drawingService.previewCtx;
                 this.drawingService.clearCanvas(ctx);
@@ -129,8 +122,8 @@ export abstract class AbstractSelectionService extends Tool {
         } else if (this.SELECT_ALL.equals(event)) {
             event.preventDefault();
             this.selectAll();
-        } else if (event.shiftKey && !this.shiftPressed) {
-            this.shiftPressed = true;
+        } else if (this.SHIFT.equals(event)) {
+            this.SHIFT.isDown = true;
             if (this.mouseDown && this.selectionCtx === null) {
                 this.updateDrawingSelection();
             }
@@ -138,23 +131,25 @@ export abstract class AbstractSelectionService extends Tool {
             const PIXELS = 3;
             if (
                 !this.mouseDown &&
-                (this.RIGHT_ARROW.equals(event) || this.LEFT_ARROW.equals(event) || this.UP_ARROW.equals(event) || this.DOWN_ARROW.equals(event))
+                (this.RIGHT_ARROW.equals(event, true) ||
+                    this.LEFT_ARROW.equals(event, true) ||
+                    this.UP_ARROW.equals(event, true) ||
+                    this.DOWN_ARROW.equals(event, true))
             ) {
                 event.preventDefault();
                 if (event.repeat) return;
                 this.setArrowKeyDown(event);
                 this.updateSelection({ x: PIXELS * this.HorizontalTranslationModifier(), y: PIXELS * this.VerticalTranslationModifier() } as Vec2);
-                this.updatePoints.next(true);
 
                 if (this.moveId === this.DEFAULT_MOVE_ID) {
                     setTimeout(() => {
-                        if (this.moveId === this.DEFAULT_MOVE_ID)
+                        if (this.moveId === this.DEFAULT_MOVE_ID && this.selectionCtx !== null)
                             this.moveId = window.setInterval(() => {
+                                this.clearArrowKeys();
                                 this.updateSelection({
                                     x: PIXELS * this.HorizontalTranslationModifier(),
                                     y: PIXELS * this.VerticalTranslationModifier(),
                                 } as Vec2);
-                                this.updatePoints.next(true);
                             }, this.NEXT_MOVES_TIMEOUT);
                     }, this.FIRST_MOVE_TIMEOUT);
                 }
@@ -163,23 +158,20 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if (!event.shiftKey && this.shiftPressed) {
-            this.shiftPressed = false;
+        if (this.SHIFT.equals(event)) {
+            this.SHIFT.isDown = false;
             if (this.mouseDown && this.selectionCtx === null) {
                 this.updateDrawingSelection();
             }
         }
         if (this.selectionCtx !== null) {
             this.setArrowKeyUp(event);
-            if (!this.isRightArrowDown && !this.isLeftArrowDown && !this.isUpArrowDown && !this.isDownArrowDown) {
-                window.clearInterval(this.moveId);
-                this.moveId = this.DEFAULT_MOVE_ID;
-            }
+            this.clearArrowKeys();
         }
     }
 
     selectAll(): void {
-        this.stopDrawing();
+        this.endSelection();
         this.selectionCoords = { x: 0, y: 0 } as Vec2;
         const width = this.drawingService.canvas.width;
         const height = this.drawingService.canvas.height;
@@ -187,6 +179,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.mouseUpCoord = { x: width, y: height } as Vec2;
         this.width = width;
         this.height = height;
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.startSelection();
         this.updatePoints.next(true);
     }
@@ -206,13 +199,15 @@ export abstract class AbstractSelectionService extends Tool {
     stopDrawing(): void {
         this.endSelection();
         this.mouseDown = false;
-        this.shiftPressed = false;
+        this.SHIFT.isDown = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
 
-        this.isRightArrowDown = false;
-        this.isLeftArrowDown = false;
-        this.isUpArrowDown = false;
-        this.isDownArrowDown = false;
+        this.RIGHT_ARROW.isDown = false;
+        this.LEFT_ARROW.isDown = false;
+        this.UP_ARROW.isDown = false;
+        this.DOWN_ARROW.isDown = false;
+        window.clearInterval(this.moveId);
+        this.moveId = this.DEFAULT_MOVE_ID;
         this.updatePoints.next(false);
     }
 
@@ -221,25 +216,32 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     private setArrowKeyDown(event: KeyboardEvent): void {
-        if (this.RIGHT_ARROW.equals(event)) this.isRightArrowDown = true;
-        if (this.LEFT_ARROW.equals(event)) this.isLeftArrowDown = true;
-        if (this.UP_ARROW.equals(event)) this.isUpArrowDown = true;
-        if (this.DOWN_ARROW.equals(event)) this.isDownArrowDown = true;
+        if (this.RIGHT_ARROW.equals(event, true)) this.RIGHT_ARROW.isDown = true;
+        if (this.LEFT_ARROW.equals(event, true)) this.LEFT_ARROW.isDown = true;
+        if (this.UP_ARROW.equals(event, true)) this.UP_ARROW.isDown = true;
+        if (this.DOWN_ARROW.equals(event, true)) this.DOWN_ARROW.isDown = true;
     }
 
     private setArrowKeyUp(event: KeyboardEvent): void {
-        if (this.RIGHT_ARROW.equals(event)) this.isRightArrowDown = false;
-        if (this.LEFT_ARROW.equals(event)) this.isLeftArrowDown = false;
-        if (this.UP_ARROW.equals(event)) this.isUpArrowDown = false;
-        if (this.DOWN_ARROW.equals(event)) this.isDownArrowDown = false;
+        if (this.RIGHT_ARROW.equals(event, true)) this.RIGHT_ARROW.isDown = false;
+        if (this.LEFT_ARROW.equals(event, true)) this.LEFT_ARROW.isDown = false;
+        if (this.UP_ARROW.equals(event, true)) this.UP_ARROW.isDown = false;
+        if (this.DOWN_ARROW.equals(event, true)) this.DOWN_ARROW.isDown = false;
+    }
+
+    private clearArrowKeys(): void {
+        if (!this.RIGHT_ARROW.isDown && !this.LEFT_ARROW.isDown && !this.UP_ARROW.isDown && !this.DOWN_ARROW.isDown) {
+            window.clearInterval(this.moveId);
+            this.moveId = this.DEFAULT_MOVE_ID;
+        }
     }
 
     private HorizontalTranslationModifier(): number {
-        return +this.isRightArrowDown - +this.isLeftArrowDown;
+        return +this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown;
     }
 
     private VerticalTranslationModifier(): number {
-        return +this.isDownArrowDown - +this.isUpArrowDown;
+        return +this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown;
     }
 
     private startSelection(): void {
@@ -277,8 +279,9 @@ export abstract class AbstractSelectionService extends Tool {
         this.selectionCoords.y += translation.y;
         this.translationOrigin.x += translation.x;
         this.translationOrigin.y += translation.y;
-
         this.updateSelectionRequired();
+
+        this.updatePoints.next(true);
     }
 
     private drawPreviewSelection(): void {

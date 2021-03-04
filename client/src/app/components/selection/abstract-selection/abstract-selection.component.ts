@@ -62,7 +62,6 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     onMouseUp(): void {
         if (this.displayControlPoints) {
             this.makeControlsSelectable();
-            this.placePoints();
         }
         this.mouseDown = false;
         this.displayControlPoints = this.selectionService.selectionCtx !== null;
@@ -75,11 +74,6 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
                 this.drawingService.previewCanvas.style.cursor = 'all-scroll';
             } else {
                 this.drawingService.previewCanvas.style.cursor = this.lastCursor;
-            }
-        } else {
-            if (this.displayControlPoints) {
-                this.placePoints();
-                this.makeControlsUnselectable();
             }
         }
     }

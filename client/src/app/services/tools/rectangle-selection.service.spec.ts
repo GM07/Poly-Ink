@@ -104,9 +104,12 @@ describe('RectangleSelectionService', () => {
     });
 
     it('should update the rectangle on shift pressed', () => {
-        const keyboardEvent = { ctrlKey: false, shiftKey: true, altKey: false } as KeyboardEvent;
-        service.mouseDown = true;
+        const keyboardEvent = { key: 'shift', ctrlKey: false, shiftKey: true, altKey: false } as KeyboardEvent;
+        service.mouseDown = false;
         const updateDrawingSelection = spyOn<any>(service, 'updateDrawingSelection');
+        service.onKeyDown(keyboardEvent);
+        expect(updateDrawingSelection).not.toHaveBeenCalled();
+        service.mouseDown = true;
         service.onKeyDown(keyboardEvent);
         expect(updateDrawingSelection).toHaveBeenCalled();
     });
@@ -151,10 +154,13 @@ describe('RectangleSelectionService', () => {
     });
 
     it('should update the selection when key up', () => {
-        const keyboardEvent = { ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
-        service['shiftPressed'] = true;
-        service.mouseDown = true;
+        const keyboardEvent = { key: 'shift', ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
+        service['SHIFT'].isDown = true;
+        service.mouseDown = false;
         const updateDrawingSelection = spyOn<any>(service, 'updateDrawingSelection');
+        service.onKeyUp(keyboardEvent);
+        expect(updateDrawingSelection).not.toHaveBeenCalled();
+        service.mouseDown = true;
         service.onKeyUp(keyboardEvent);
         expect(updateDrawingSelection).toHaveBeenCalled();
     });
@@ -250,7 +256,7 @@ describe('RectangleSelectionService', () => {
     it('isInCanvas should return true if is in canvas', () => {
         drawServiceSpy.canvas = document.createElement('canvas');
         spyOn(drawServiceSpy.canvas, 'getBoundingClientRect').and.returnValue({ x: 0, y: 0, width: 100, height: 100 } as DOMRect);
-        expect(service.isInCanvas(mouseEvent)).toBe(true);
+        expect(service.isInCanvas(mouseEvent)).toBeTruthy();
     });
 
     it('end selection should do nothing if there is no selection', () => {
@@ -302,7 +308,7 @@ describe('RectangleSelectionService', () => {
         const drawSelection = spyOn<any>(service, 'drawSelection');
         const saveWidth = (service.width = 5);
         const saveHeight = (service.height = 25);
-        service['shiftPressed'] = true;
+        service['SHIFT'].isDown = true;
         service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
         service['drawPreviewSelectionRequired']();
         expect(saveWidth).toEqual(service.width);

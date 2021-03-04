@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ShortcutKey } from '@app/classes/shortcut-key';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { RectangleSelectionToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -33,7 +33,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {
         if (this.firstSelectionCoords.x !== currentPos.x || this.firstSelectionCoords.y !== currentPos.y) {
             ctx.beginPath();
-            ctx.fillStyle = 'white';
+            ctx.fillStyle = 'pink';
             ctx.fillRect(this.firstSelectionCoords.x, this.firstSelectionCoords.y, Math.abs(this.width), Math.abs(this.height));
             ctx.closePath();
         }
@@ -52,7 +52,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
 
     protected drawPreviewSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
-        if (this.shiftPressed) {
+        if (this.SHIFT.isDown) {
             this.height = Math.sign(this.height) * Math.min(Math.abs(this.width), Math.abs(this.height));
             this.width = Math.sign(this.width) * Math.abs(this.height);
         }

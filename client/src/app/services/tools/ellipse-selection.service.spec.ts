@@ -48,7 +48,7 @@ describe('EllipseSelectionService', () => {
         const drawSelection = spyOn<any>(service, 'drawSelection');
         const saveWidth = (service.width = 5);
         const saveHeight = (service.height = 25);
-        service['shiftPressed'] = true;
+        service['SHIFT'].isDown = true;
         service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
         service['drawPreviewSelectionRequired']();
         expect(saveWidth).toEqual(service.width);
