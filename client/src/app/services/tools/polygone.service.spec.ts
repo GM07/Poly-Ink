@@ -113,12 +113,11 @@ describe('PolygoneService', () => {
         expect(drawPolygoneSpy).toHaveBeenCalled();
     });
 
-
     it('should stop drawing when the mouse is up', () => {
         service.onMouseUp(mouseEvent);
         expect(service.mouseDown).toEqual(false);
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: INIT_OFFSET_X + 1, offsetY: INIT_OFFSET_Y - 1, button: 0 } as MouseEvent;
+        mouseEvent = { x: -1, y: -1, offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
     });
@@ -153,7 +152,7 @@ describe('PolygoneService', () => {
         service.onMouseEnter(mouseEvent);
         expect(updatePolygoneSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: -1, button: 0 } as MouseEvent;
+        mouseEvent = { offsetX: INIT_OFFSET_X + 1, offsetY: INIT_OFFSET_Y - 1, button: 0 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(updatePolygoneSpy);
     });
