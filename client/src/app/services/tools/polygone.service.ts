@@ -146,7 +146,6 @@ export class PolygoneService extends Tool {
     private drawPolygoneSides(ctx: CanvasRenderingContext2D, center: Vec2, radiusAbs: number): void {
         const centerX: number = center.x;
         const centerY: number = center.y;
-        const angle = (2 * Math.PI) / this.numEdgesIn;
 
         // tslint:disable-next-line:no-magic-numbers
         const startingAngle = -Math.PI / 2 + (this.numEdgesIn % 2 !== 0 ? 0 : Math.PI / this.numEdgesIn);
@@ -155,8 +154,8 @@ export class PolygoneService extends Tool {
 
         ctx.beginPath();
         for (let i = 0; i < this.numEdges; i++) {
-            const currentX = centerX + lineWidthWeightedRadius * Math.cos(startingAngle + i * angle);
-            const currentY = centerY + lineWidthWeightedRadius * Math.sin(startingAngle + i * angle);
+            const currentX = centerX + lineWidthWeightedRadius * Math.cos(startingAngle + i * (2 * Math.PI) / this.numEdgesIn);
+            const currentY = centerY + lineWidthWeightedRadius * Math.sin(startingAngle + i * (2 * Math.PI) / this.numEdgesIn);
             ctx.lineTo(currentX, currentY);
         }
         ctx.closePath();
