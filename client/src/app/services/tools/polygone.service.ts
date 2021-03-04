@@ -149,7 +149,7 @@ export class PolygoneService extends Tool {
         const angle = (2 * Math.PI) / this.numEdgesIn;
 
         // tslint:disable-next-line:no-magic-numbers
-        const startingAngle = this.numEdgesIn === ToolSettingsConst.NUM_EDGES_SQUARE ? -Math.PI / 4 : -Math.PI / 2;
+        const startingAngle = -Math.PI / 2 + (this.numEdgesIn % 2 != 0 ? 0 : Math.PI / this.numEdgesIn);
         ctx.lineWidth = this.polygoneMode === PolygoneMode.Filled ? 0 : this.lineWidthIn;
         const lineWidthWeightedRadius = radiusAbs - ctx.lineWidth / 2;
 

@@ -231,7 +231,8 @@ describe('PolygoneService', () => {
         expect(fillImageData.data[2]).toEqual(PRIMARY_RGB); // B
         expect(fillImageData.data[ALPHA]).not.toEqual(0); // A
 
-        service.numEdges = ToolSettingsConst.NUM_EDGES_SQUARE;
+        // tslint:disable-next-line:no-magic-numbers
+        service.numEdges = 4;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
