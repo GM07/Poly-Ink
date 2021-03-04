@@ -28,14 +28,14 @@ export class ColorIconComponent {
     changePrimaryColor(): void {
         this.colorService.selectedColorFromHex = this.colorService.primaryColor;
         this.colorService.selectedAlpha = this.colorService.primaryColorAlpha;
-        this.colorService.changePrimary = true; // TODO make enum
+        this.colorService.changePrimary = true;
         this.openColorPicker();
     }
 
     changeSecondaryColor(): void {
         this.colorService.selectedColorFromHex = this.colorService.secondaryColor;
         this.colorService.selectedAlpha = this.colorService.secondaryColorAlpha;
-        this.colorService.changePrimary = false; // TODO make enum
+        this.colorService.changePrimary = false;
         this.openColorPicker();
     }
 

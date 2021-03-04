@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Tool } from '@app/classes/tool';
 import * as ToolsConstants from '@app/classes/tool_ui_settings/tools.constants';
+import { AerosolService } from '@app/services/tools/aerosol.service';
 import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
 import { LineService } from '@app/services/tools/line.service';
@@ -21,6 +22,7 @@ export class ToolHandlerService {
     constructor(
         pencilService: PencilService,
         lineService: LineService,
+        aerosolService: AerosolService,
         rectangleService: RectangleService,
         ellipseService: EllipseService,
         eraserService: EraserService,
@@ -28,7 +30,7 @@ export class ToolHandlerService {
     ) {
         this.TOOLS.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
-        // this.TOOLS.set(ToolsConstants.AerosolToolConstants.TOOL_ID, pencilService);
+        this.TOOLS.set(ToolsConstants.AerosolToolConstants.TOOL_ID, aerosolService);
         // this.TOOLS.set(ToolsConstants.EllipseSelectionToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.EllipseToolConstants.TOOL_ID, ellipseService);
         this.TOOLS.set(ToolsConstants.EraserToolConstants.TOOL_ID, eraserService);
