@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Geometry } from '@app/classes/math/geometry';
-import { ShortcutKey } from '@app/classes/shortcut-key';
+import { ShiftKey } from '@app/classes/shortcut/shift-key';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { LineToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -12,12 +13,12 @@ import { ColorService } from 'src/color-picker/services/color.service';
     providedIn: 'root',
 })
 export class LineService extends Tool {
-    constructor(drawingService: DrawingService, colorService: ColorService) {
-        super(drawingService, colorService);
-        this.shortcutKey = new ShortcutKey(LineToolConstants.SHORTCUT_KEY);
-    }
-    static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint
+    static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
     static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;
+    private readonly SHIFT: ShiftKey = new ShiftKey();
+    private readonly ESCAPE: ShortcutKey = new ShortcutKey('escape');
+    private readonly BACKSPACE: ShortcutKey = new ShortcutKey('backspace');
+    private readonly SHORTCUT_LIST: ShortcutKey[] = [this.ESCAPE, this.BACKSPACE, this.SHIFT];
     readonly toolID: string = LineToolConstants.TOOL_ID;
     private points: Vec2[] = [];
     private pointToAdd: Vec2;
@@ -28,16 +29,15 @@ export class LineService extends Tool {
     thickness: number = 6;
     color: string = 'black';
 
-    private keyEvents: Map<string, boolean> = new Map([
-        ['Shift', false],
-        ['Escape', false],
-        ['Backspace', false],
-    ]);
+    constructor(drawingService: DrawingService, colorService: ColorService) {
+        super(drawingService, colorService);
+        this.shortcutKey = new ShortcutKey(LineToolConstants.SHORTCUT_KEY);
+    }
 
     initService(): void {
-        for (const event of this.keyEvents) {
-            event[1] = false;
-        }
+        this.SHIFT.isDown = false;
+        this.ESCAPE.isDown = false;
+        this.BACKSPACE.isDown = false;
         this.points = [];
         this.pointToAdd = {} as Vec2;
         this.mousePosition = {} as Vec2;
@@ -71,7 +71,7 @@ export class LineService extends Tool {
     }
 
     handleDoubleClick(event: MouseEvent): void {
-        if (!this.keyEvents.get('Shift')) {
+        if (!this.SHIFT.isDown) {
             this.pointToAdd = this.getPositionFromMouse(event);
         } else {
             this.pointToAdd = this.alignPoint(this.getPositionFromMouse(event));
@@ -101,7 +101,7 @@ export class LineService extends Tool {
         }
 
         let point: Vec2 = (this.mousePosition = this.getPositionFromMouse(event));
-        if (this.keyEvents.get('Shift')) {
+        if (this.SHIFT.isDown) {
             point = this.alignPoint(point);
         }
 
@@ -110,43 +110,43 @@ export class LineService extends Tool {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (this.keyEvents.has(event.key)) {
-            if (this.keyEvents.get(event.key) !== true) {
-                this.keyEvents.set(event.key, true);
-                this.handleKeys(event.key);
-            }
+        const shortcut = ShortcutKey.get(this.SHORTCUT_LIST, event, true);
+        if (shortcut !== undefined && shortcut.isDown !== true) {
+            shortcut.isDown = true;
+            this.handleKeys(shortcut);
         }
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        this.keyEvents.set('Shift', event.shiftKey);
+        this.SHIFT.isDown = event.shiftKey;
 
-        if (this.keyEvents.has(event.key)) {
-            this.keyEvents.set(event.key, false);
-            this.handleKeys(event.key);
+        const shortcut = ShortcutKey.get(this.SHORTCUT_LIST, event, true);
+        if (shortcut !== undefined) {
+            shortcut.isDown = false;
+            this.handleKeys(shortcut);
         }
     }
 
-    handleKeys(currentKey: string): void {
+    handleKeys(shortcutKey: ShortcutKey): void {
         if (this.points.length === 0) {
             return;
         }
 
-        switch (currentKey) {
-            case 'Escape':
+        switch (shortcutKey) {
+            case this.ESCAPE:
                 this.handleEscapeKey();
                 break;
-            case 'Backspace':
+            case this.BACKSPACE:
                 this.handleBackspaceKey();
                 break;
-            case 'Shift':
+            case this.SHIFT:
                 this.handleShiftKey();
                 break;
         }
     }
 
     handleBackspaceKey(): void {
-        if (this.keyEvents.get('Backspace')) {
+        if (this.BACKSPACE.isDown) {
             if (this.points.length >= 2) {
                 this.points.pop();
                 this.handleLinePreview();
@@ -157,7 +157,7 @@ export class LineService extends Tool {
     handleShiftKey(): void {
         if (this.mouseDown) return;
 
-        if (this.keyEvents.get('Shift')) {
+        if (this.SHIFT.isDown) {
             this.pointToAdd = this.alignPoint(this.mousePosition);
         } else {
             this.pointToAdd = this.mousePosition;
@@ -166,7 +166,7 @@ export class LineService extends Tool {
     }
 
     handleEscapeKey(): void {
-        if (this.keyEvents.get('Escape')) {
+        if (this.ESCAPE.isDown) {
             this.points = [];
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
         }

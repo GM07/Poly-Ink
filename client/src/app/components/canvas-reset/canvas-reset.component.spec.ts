@@ -60,10 +60,20 @@ describe('NewDrawingComponent', () => {
     });
 
     it('should stop propagations if the warning is displayed', () => {
-        newDrawingService.showWarning = true;
-        spyOn(newDrawingService, 'newCanvas');
+        newDrawingService.showWarning = false;
+        spyOn(newDrawingService, 'newCanvas').and.callFake(() => {
+            newDrawingService.showWarning = true;
+        });
         const keyEvent = new KeyboardEvent('document:keydown', { ctrlKey: true, key: 'o' });
         component.onKeyDown(keyEvent);
         expect(shortcutHandler.blockShortcuts).toBeTruthy();
+    });
+
+    it('should do nothing if the shortcuts are blocked', () => {
+        shortcutHandler.blockShortcuts = true;
+        spyOn(newDrawingService, 'newCanvas');
+        const keyEvent = new KeyboardEvent('document:keydown', { ctrlKey: true, key: 'o' });
+        component.onKeyDown(keyEvent);
+        expect(newDrawingService.newCanvas).not.toHaveBeenCalled();
     });
 });
