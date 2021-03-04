@@ -154,8 +154,8 @@ export class PolygoneService extends Tool {
 
         ctx.beginPath();
         for (let i = 0; i < this.numEdges; i++) {
-            const currentX = centerX + lineWidthWeightedRadius * Math.cos(startingAngle + i * (2 * Math.PI) / this.numEdgesIn);
-            const currentY = centerY + lineWidthWeightedRadius * Math.sin(startingAngle + i * (2 * Math.PI) / this.numEdgesIn);
+            const currentX = centerX + lineWidthWeightedRadius * Math.cos(startingAngle + (i * (2 * Math.PI)) / this.numEdgesIn);
+            const currentY = centerY + lineWidthWeightedRadius * Math.sin(startingAngle + (i * (2 * Math.PI)) / this.numEdgesIn);
             ctx.lineTo(currentX, currentY);
         }
         ctx.closePath();
