@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ShortcutKey } from '@app/classes/shortcut-key';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { PolygoneToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
