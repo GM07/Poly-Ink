@@ -1,0 +1,43 @@
+<div *ngIf="CARROUSEL_URL === currentURL">
+    <div style="background-color: lightgray"></div>
+</div>
+
+<div *ngIf="showCarrousel" id="background">
+    <div id="main">
+        <div id="content">
+            <h1 class="white">Dessins sauvegardés sur le serveur</h1>
+            <div class="previewPresentation">
+                <button mat-icon-button (click)="clickLeft()">
+                    <mat-icon class="white">keyboard_arrow_left</mat-icon>
+                </button>
+                <div class="canvasDisplay">
+                    <!--div class="Row">
+                        <div class="Column">C1</div>
+                        <div class="Column">C2</div>
+                        <div class="Column">C3</div>
+                    </div-->
+                    <div class="previewDisplay" #previewDisplay [@translationState]="translationState" (@translationState.done)="translationDone()">
+                        <canvas #overflowLeftPreview></canvas>
+                        <canvas #leftPreview></canvas>
+                        <canvas #middlePreview></canvas>
+                        <canvas #rightPreview></canvas>
+                        <canvas #overflowRightPreview></canvas>
+                    </div>
+                </div>
+                <button mat-icon-button (click)="clickRight()">
+                    <mat-icon class="white">keyboard_arrow_right</mat-icon>
+                </button>
+            </div>
+
+            <div class="options">
+                <button class="button red white" mat-raised-button (click)="closeCarrousel()">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="Row">
+        <div class="Column">C1</div>
+        <div class="Column">C2</div>
+        <div class="Column">C3</div>
+    </div>
+</div>
