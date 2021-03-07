@@ -51,6 +51,7 @@ describe('RectangleService', () => {
         } as MouseEvent;
 
         keyboardEvent = {
+            key: 'Shift',
             shiftKey: true,
         } as KeyboardEvent;
     });
@@ -140,11 +141,11 @@ describe('RectangleService', () => {
         service.onKeyUp({} as KeyboardEvent);
         expect(updateRectangleSpy).not.toHaveBeenCalled();
         service.onKeyDown(keyboardEvent);
-        service.onKeyUp({ shiftKey: false } as KeyboardEvent);
+        service.onKeyUp({ shiftKey: false, key: 'Shift' } as KeyboardEvent);
         expect(updateRectangleSpy).not.toHaveBeenCalled();
         service.onKeyDown(keyboardEvent);
         service.onMouseDown(mouseEvent);
-        keyboardEvent = { shiftKey: false } as KeyboardEvent;
+        keyboardEvent = { shiftKey: false, key: 'Shift' } as KeyboardEvent;
         service.onKeyUp(keyboardEvent);
         expect(updateRectangleSpy).toHaveBeenCalled();
     });
