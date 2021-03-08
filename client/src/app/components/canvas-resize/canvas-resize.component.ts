@@ -1,7 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { PopupHandlerService } from '@app/services/popups/popup-handler.service';
 
 @Component({
     selector: 'app-canvas-resize',
@@ -27,7 +26,7 @@ export class CanvasResizeComponent implements AfterViewInit {
     previewResizeStyle: { [key: string]: string };
     @ViewChild('previewResize', { static: false }) previewResize: ElementRef<HTMLDivElement>;
 
-    constructor(private drawingService: DrawingService, private cd: ChangeDetectorRef, private popupHandlerService: PopupHandlerService) {
+    constructor(private drawingService: DrawingService, private cd: ChangeDetectorRef) {
         this.previewResizeView = false;
         this.previewResizeStyle = {
             'margin-left': '0',
@@ -41,7 +40,7 @@ export class CanvasResizeComponent implements AfterViewInit {
         this.resetCanvas();
         this.cd.detectChanges();
 
-        this.popupHandlerService.newDrawing.changes.subscribe((value: number) => this.resetCanvas());
+        this.drawingService.changes.subscribe(() => this.resetCanvas());
     }
 
     mouseDown(right: boolean, bottom: boolean): void {

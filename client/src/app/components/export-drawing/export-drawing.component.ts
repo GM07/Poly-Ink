@@ -67,6 +67,7 @@ export class ExportDrawingComponent {
         this.baseCanvas.height = this.drawingService.canvas.height;
         this.baseContext = this.baseCanvas.getContext('2d') as CanvasRenderingContext2D;
         this.baseContext.drawImage(this.drawingService.canvas, 0, 0);
+        this.canvasImage = this.baseCanvas.toDataURL('image/' + this.exportFormat);
     }
 
     hidePopup(): void {
@@ -99,6 +100,7 @@ export class ExportDrawingComponent {
             exportPreviewCtx.drawImage(image, 0, 0, image.width, image.height, 0, 0, this.getPreviewWidth(), this.getPreviewHeight());
         });
         this.canvasImage = this.baseCanvas.toDataURL('image/' + this.exportFormat);
+        console.log('image/' + this.exportFormat);
     }
 
     changeExportFormat(newFormat: string): void {

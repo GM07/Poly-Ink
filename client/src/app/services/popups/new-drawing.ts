@@ -2,13 +2,10 @@ import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
-import { BehaviorSubject } from 'rxjs';
 
 export class NewDrawing {
     showPopup: boolean;
     shortcut: ShortcutKey;
-
-    changes: BehaviorSubject<number> = new BehaviorSubject(0);
 
     constructor(private drawingService: DrawingService, private toolHandler: ToolHandlerService) {
         this.shortcut = new ShortcutKey('o', true);
@@ -37,8 +34,6 @@ export class NewDrawing {
 
         this.drawingService.resizeCanvas(width, height);
         this.drawingService.initBackground();
-
-        this.changes.next(0);
     }
 
     isNotEmpty(baseCtx: CanvasRenderingContext2D, width: number, height: number): boolean {
