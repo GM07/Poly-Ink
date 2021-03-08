@@ -56,7 +56,7 @@ describe('PolygoneConfigComponent', () => {
 
     it('should have sliders with appropriate maximum values', async () => {
         expect(await numEdgesSliderHarness.getMaxValue()).toBe(ToolSettingsConst.MAX_NUM_EDGES);
-        expect(await widthSliderHarness.getMaxValue()).toBe(ToolSettingsConst.MAX_WIDTH);
+        expect(await widthSliderHarness.getMaxValue()).toBe(ToolSettingsConst.MAX_WIDTH_POLYGONE);
     });
 
     it('should have sliders with appropriate minimum values', async () => {
@@ -65,7 +65,7 @@ describe('PolygoneConfigComponent', () => {
     });
 
     it('should be able to set inbounds the value of width slider', async () => {
-        const testSetValue = 15;
+        const testSetValue = 8;
         expect(await widthSliderHarness.getValue()).toBe(ToolSettingsConst.MIN_WIDTH);
 
         await widthSliderHarness.setValue(testSetValue);

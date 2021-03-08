@@ -73,7 +73,7 @@ describe('PolygoneService', () => {
     it('should prevent change to an invalid contourWidth value', () => {
         const invalidWidthValue = 51;
         service.contourWidth = invalidWidthValue;
-        expect(service.contourWidth).toEqual(ToolSettingsConst.MAX_WIDTH);
+        expect(service.contourWidth).toEqual(ToolSettingsConst.MAX_WIDTH_POLYGONE);
     });
 
     it('should change to a valid numberEdges', () => {

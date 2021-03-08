@@ -34,7 +34,7 @@ export class PolygoneService extends Tool {
     }
 
     set contourWidth(width: number) {
-        this.lineWidthIn = Math.min(Math.max(width, 1), ToolSettingsConst.MAX_WIDTH);
+        this.lineWidthIn = Math.min(Math.max(width, 1), ToolSettingsConst.MAX_WIDTH_POLYGONE);
     }
 
     get contourWidth(): number {
@@ -150,7 +150,7 @@ export class PolygoneService extends Tool {
         // tslint:disable-next-line:no-magic-numbers
         const startingAngle = -Math.PI / 2 + (this.numEdgesIn % 2 !== 0 ? 0 : Math.PI / this.numEdgesIn);
         ctx.lineWidth = this.polygoneMode === PolygoneMode.Filled ? 0 : this.lineWidthIn;
-        const lineWidthWeightedRadius = radiusAbs - ctx.lineWidth / 2;
+        const lineWidthWeightedRadius = Math.max(ctx.lineWidth / 2, radiusAbs - ctx.lineWidth / 2);
 
         ctx.beginPath();
         for (let i = 0; i < this.numEdges; i++) {

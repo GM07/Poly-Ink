@@ -11,6 +11,7 @@ export abstract class ToolSettingsConst {
     static readonly DEFAULT_ERASER_WIDTH: number = 25;
     static readonly DEFAULT_PENCIL_WIDTH: number = 12;
     static readonly MAX_NUM_EDGES: number = 12;
+    static readonly MAX_WIDTH_POLYGONE: number = 10;
     static readonly MIN_NUM_EDGES: number = 3;
     static readonly DEFAULT_AEROSOL_AREA_DIAMETER: number = 30;
     static readonly DEFAULT_AEROSOL_EMISSIONS_PER_SECOND: number = 100;
