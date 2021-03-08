@@ -13,7 +13,6 @@ import { LineSettings } from './line-settings';
 import { PencilSettings } from './pencil-settings';
 import { PolygoneSettings } from './polygone-settings';
 // import { RectangleSelectionSettings } from './rectangle-selection-settings';
-// import { PolygoneSettings } from './polygone-settings';
 import { RectangleSelectionSettings } from './rectangle-selection-settings';
 import { RectangleSettings } from './rectangle-settings';
 import { ToolSettings } from './tool-settings';
