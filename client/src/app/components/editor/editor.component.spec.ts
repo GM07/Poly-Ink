@@ -9,6 +9,7 @@ import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resi
 import { DrawingComponent } from '@app/components/drawing/drawing.component';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
+import { SelectionHandlerComponent } from '@app/components/selection/selection-handler/selection-handler.component';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 @Component({ selector: 'app-sidebar', template: '' })
@@ -23,7 +24,15 @@ describe('EditorComponent', () => {
     beforeEach(async(() => {
         shortcutHandlerServiceSpy = jasmine.createSpyObj('ShortcutHandlerService', ['onKeyDown']);
         TestBed.configureTestingModule({
-            declarations: [HomePageComponent, EditorComponent, DrawingComponent, CanvasResizeComponent, StubSidebarComponent, NewDrawingComponent],
+            declarations: [
+                HomePageComponent,
+                EditorComponent,
+                DrawingComponent,
+                CanvasResizeComponent,
+                StubSidebarComponent,
+                NewDrawingComponent,
+                SelectionHandlerComponent,
+            ],
             providers: [{ provide: ShortcutHandlerService, useValue: shortcutHandlerServiceSpy }],
             imports: [
                 RouterTestingModule.withRoutes([
