@@ -13,33 +13,34 @@
                 <div class="canvasDisplay">
                     <div class="previewDisplay" #previewDisplay [@translationState]="translationState" (@translationState.done)="translationDone()">
                         <div class="fiche">
-                            <p class="name">NOM1</p>
-                            <canvas #overflowLeftPreview></canvas>
+                            <p class="name">{{ overflowLeftElement.name }}</p>
+                            <canvas #overflowLeftPreview [attr.width]="CANVAS_PREVIEW_SIZE" [attr.height]="CANVAS_PREVIEW_SIZE"></canvas>
                             <p class="white">TAGS</p>
+                            <p class="white">{{ overflowLeftElement.tags }}</p>
                         </div>
                         <div class="fiche">
-                            <p class="name">NOM2</p>
-                            <canvas #leftPreview></canvas>
+                            <p class="name">{{ leftElement.name }}</p>
+                            <canvas #leftPreview [attr.width]="CANVAS_PREVIEW_SIZE" [attr.height]="CANVAS_PREVIEW_SIZE"></canvas>
                             <p class="white">TAGS</p>
+                            <p class="white">{{ leftElement.tags }}</p>
                         </div>
                         <div class="fiche">
-                            <p class="name">
-                                NOM3Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget cursus enim. Mauris lacinia elit ut metus
-                                gravida, sit amet euismod diam bibendum. Etiam ornare erat et tellus volutpat fringilla. Pellentesque nec ultricies
-                                turpis, eu ornare ipsumaaaaaaaaaaa
-                            </p>
-                            <canvas #middlePreview></canvas>
+                            <p class="name">{{ middleElement.name }}</p>
+                            <canvas #middlePreview [attr.width]="CANVAS_PREVIEW_SIZE" [attr.height]="CANVAS_PREVIEW_SIZE"></canvas>
                             <p class="white">TAGS</p>
+                            <p class="white">{{ middleElement.tags }}</p>
                         </div>
                         <div class="fiche">
-                            <p class="name">NOM4</p>
-                            <canvas #rightPreview></canvas>
+                            <p class="name">{{ rightElement.name }}</p>
+                            <canvas #rightPreview [attr.width]="CANVAS_PREVIEW_SIZE" [attr.height]="CANVAS_PREVIEW_SIZE"></canvas>
                             <p class="white">TAGS</p>
+                            <p class="white">{{ rightElement.tags }}</p>
                         </div>
                         <div class="fiche">
-                            <p class="name">NOM5</p>
-                            <canvas #overflowRightPreview></canvas>
+                            <p class="name">{{ overflowRightElement.name }}</p>
+                            <canvas #overflowRightPreview [attr.width]="CANVAS_PREVIEW_SIZE" [attr.height]="CANVAS_PREVIEW_SIZE"></canvas>
                             <p class="white">TAGS</p>
+                            <p class="white">{{ overflowRightElement.tags }}</p>
                         </div>
                     </div>
                 </div>

@@ -1,8 +1,14 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
+
+interface DrawingContent {
+    canvas: HTMLCanvasElement;
+    name: string;
+    tags: string[];
+}
 
 @Component({
     selector: 'app-carrousel',
@@ -30,25 +36,32 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
             ),
             transition('* => right', animate('300ms ease-out')),
             transition('* => left', animate('300ms ease-out')),
-            transition('* => reset', animate('0ms ease-out')),
+            transition('* => reset', animate('0ms')),
         ]),
     ],
 })
-export class CarrouselComponent implements AfterViewInit {
+export class CarrouselComponent implements AfterViewInit, OnInit {
     @ViewChild('overflowLeftPreview', { static: false }) overflowLeftPreview: ElementRef<HTMLCanvasElement>;
     @ViewChild('leftPreview', { static: false }) leftPreview: ElementRef<HTMLCanvasElement>;
     @ViewChild('middlePreview', { static: false }) middlePreview: ElementRef<HTMLCanvasElement>;
-    @ViewChild('middlePreviewFiche') middlePreviewFiche: ElementRef<HTMLElement>;
     @ViewChild('rightPreview', { static: false }) rightPreview: ElementRef<HTMLCanvasElement>;
     @ViewChild('overflowRightPreview', { static: false }) overflowRightPreview: ElementRef<HTMLCanvasElement>;
 
     private readonly SHORTCUT: ShortcutKey = new ShortcutKey('g', true);
     readonly CARROUSEL_URL = 'carrousel';
+    readonly CANVAS_PREVIEW_SIZE = '200px';
     currentURL: string;
     showCarrousel: boolean;
     translationState: string | null = null;
-    canvasList: HTMLCanvasElement[] = [];
+    drawingsList: DrawingContent[] = [];
     currentIndex: number = 0;
+
+    overflowLeftElement: DrawingContent = {} as DrawingContent;
+    leftElement: DrawingContent = {} as DrawingContent;
+    middleElement: DrawingContent = {} as DrawingContent;
+    rightElement: DrawingContent = {} as DrawingContent;
+    overflowRightElement: DrawingContent = {} as DrawingContent;
+
     private animationIsDone: boolean = false;
 
     constructor(private shortcutHandler: ShortcutHandlerService, private router: Router, activatedRoute: ActivatedRoute) {
@@ -60,33 +73,10 @@ export class CarrouselComponent implements AfterViewInit {
             }
         });
     }
-
-    ngAfterViewInit(): void {
-        if (this.showCarrousel) {
-            console.log('init');
-            this.initTest();
-        }
-    }
-
-    // TODO: Va être remplacé par la requète de dessins sauvegardés
-    // Ceci n'est utile que pour tester le fonctionnement.
-    initTest(): void {
-        this.leftPreview.nativeElement.width = 200;
-        this.leftPreview.nativeElement.height = 200;
-
-        this.middlePreview.nativeElement.width = 200;
-        this.middlePreview.nativeElement.height = 200;
-
-        this.rightPreview.nativeElement.width = 200;
-        this.rightPreview.nativeElement.height = 200;
-
-        this.overflowLeftPreview.nativeElement.width = 200;
-        this.overflowLeftPreview.nativeElement.height = 200;
-
-        this.overflowRightPreview.nativeElement.width = 200;
-        this.overflowRightPreview.nativeElement.height = 200;
-
-        // c1 à c3 créés pour tester
+    ngOnInit(): void {
+        // TODO: Va être remplacé par la requète de dessins sauvegardés
+        // Ceci n'est utile que pour tester le fonctionnement.
+        // c1 à c5 créés pour tester
         const c1 = document.createElement('canvas');
         c1.width = 200;
         c1.height = 200;
@@ -132,8 +122,14 @@ export class CarrouselComponent implements AfterViewInit {
             ctxc5.fillRect(0, 0, 200, 200);
         }
 
-        this.canvasList = [c1, c2, c3];
+        this.drawingsList = [
+            { canvas: c1, name: 'c1', tags: ['tagc1'] } as DrawingContent,
+            { canvas: c2, name: 'c2', tags: ['tagc2'] } as DrawingContent,
+            { canvas: c3, name: 'c3', tags: ['tagc3'] } as DrawingContent,
+        ];
     }
+
+    ngAfterViewInit(): void {}
 
     translationDone(): void {
         if (this.translationState === 'reset') {
@@ -146,30 +142,30 @@ export class CarrouselComponent implements AfterViewInit {
     }
 
     updateCanvasPreview(): void {
-        if (this.canvasList.length === 0) return;
-        const ctxLeftOverflow = this.overflowLeftPreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-        const ctxLeft = this.leftPreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-        const ctxMiddle = this.middlePreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-        const ctxRight = this.rightPreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-        const ctxRightOverflow = this.overflowRightPreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+        if (this.drawingsList.length === 0) return;
 
-        const leftOverflow = (this.currentIndex - 2 + this.canvasList.length) % this.canvasList.length;
-        const left = (this.currentIndex - 1 + this.canvasList.length) % this.canvasList.length;
-        const right = (this.currentIndex + 1) % this.canvasList.length;
-        const rightOverflow = (this.currentIndex + 2) % this.canvasList.length;
+        this.updateSingleDrawingContent(this.overflowLeftPreview, -2, this.overflowLeftElement);
+        this.updateSingleDrawingContent(this.leftPreview, -1, this.leftElement);
+        this.updateSingleDrawingContent(this.middlePreview, 0, this.middleElement);
+        this.updateSingleDrawingContent(this.rightPreview, 1, this.rightElement);
+        this.updateSingleDrawingContent(this.overflowRightPreview, 2, this.overflowRightElement);
+    }
 
-        ctxLeftOverflow.drawImage(this.canvasList[leftOverflow], 0, 0);
-        ctxLeft.drawImage(this.canvasList[left], 0, 0);
-        ctxMiddle.drawImage(this.canvasList[this.currentIndex], 0, 0);
-        ctxRight.drawImage(this.canvasList[right], 0, 0);
-        ctxRightOverflow.drawImage(this.canvasList[rightOverflow], 0, 0);
+    updateSingleDrawingContent(canvasRef: ElementRef<HTMLCanvasElement>, indexOffset: number, drawingContent: DrawingContent) {
+        const ctx = canvasRef.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+        const index = (this.currentIndex + indexOffset + 2 * this.drawingsList.length) % this.drawingsList.length;
+        ctx.drawImage(this.drawingsList[index].canvas, 0, 0);
+
+        drawingContent.canvas = canvasRef.nativeElement;
+        drawingContent.name = this.drawingsList[index].name;
+        drawingContent.tags = this.drawingsList[index].tags;
     }
 
     // Quand on clique à gauche, c'est pour avoir l'élément à droite
     clickLeft(): void {
         if (!this.animationIsDone) return;
 
-        if (this.translationState === 'reset') this.currentIndex = (this.currentIndex + 1) % this.canvasList.length;
+        this.currentIndex = (this.currentIndex + 1) % this.drawingsList.length;
         this.animationIsDone = false;
         this.translationState = 'left';
     }
@@ -178,7 +174,7 @@ export class CarrouselComponent implements AfterViewInit {
     clickRight(): void {
         if (!this.animationIsDone) return;
 
-        if (this.translationState === 'reset') this.currentIndex = (this.currentIndex - 1 + this.canvasList.length) % this.canvasList.length;
+        this.currentIndex = (this.currentIndex - 1 + this.drawingsList.length) % this.drawingsList.length;
         this.animationIsDone = false;
         this.translationState = 'right';
     }
@@ -200,7 +196,6 @@ export class CarrouselComponent implements AfterViewInit {
             this.shortcutHandler.blockShortcuts = true;
             this.showCarrousel = true;
             setTimeout(() => {
-                this.initTest();
                 this.updateCanvasPreview();
             }, 10);
         }
