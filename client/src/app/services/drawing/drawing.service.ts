@@ -64,10 +64,7 @@ export class DrawingService {
         if (this.loadedCanvas === undefined) return;
         const width = this.loadedCanvas.width;
         const height = this.loadedCanvas.height;
-        this.canvas.width = width;
-        this.canvas.height = height;
-        this.previewCanvas.width = width;
-        this.previewCanvas.height = height;
+        this.resizeCanvas(width, height);
         this.baseCtx.drawImage(this.loadedCanvas, 0, 0);
 
         this.loadedCanvas = undefined;

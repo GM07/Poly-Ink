@@ -2,6 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
@@ -55,6 +56,7 @@ export class CarrouselComponent implements OnInit {
     readonly CANVAS_PREVIEW_SIZE: number = 200;
     currentURL: string;
     showCarrousel: boolean;
+    showLoadingError: boolean;
     translationState: string | null = null;
     drawingsList: DrawingContent[] = [];
     currentIndex: number = 0;
@@ -70,10 +72,13 @@ export class CarrouselComponent implements OnInit {
     constructor(
         private shortcutHandler: ShortcutHandlerService,
         private router: Router,
-        activatedRoute: ActivatedRoute,
         private drawingService: DrawingService,
+        public newDrawing: NewDrawingService,
+        activatedRoute: ActivatedRoute,
     ) {
         this.showCarrousel = false;
+        this.showLoadingError = false;
+        this.newDrawing.showWarning = false;
         activatedRoute.url.subscribe((url: UrlSegment[]) => {
             this.currentURL = url[0].path;
             if (this.currentURL === this.CARROUSEL_URL) {
@@ -108,12 +113,12 @@ export class CarrouselComponent implements OnInit {
         }
 
         const c3 = document.createElement('canvas');
-        c3.width = 200;
+        c3.width = 400;
         c3.height = 200;
         const ctxc3 = c3.getContext('2d');
         if (ctxc3 !== null) {
             ctxc3.fillStyle = 'blue';
-            ctxc3.fillRect(0, 0, 200, 200);
+            ctxc3.fillRect(0, 0, 400, 200);
         }
 
         const c4 = document.createElement('canvas');
@@ -188,17 +193,8 @@ export class CarrouselComponent implements OnInit {
         drawingContent.tags = this.drawingsList[index].tags;
     }
 
-    // Quand on clique à gauche, c'est pour avoir l'élément à droite
+    // Quand on clique à gauche, c'est pour avoir l'élément à gauche
     clickLeft(): void {
-        if (!this.animationIsDone) return;
-
-        this.currentIndex = (this.currentIndex + 1) % this.drawingsList.length;
-        this.animationIsDone = false;
-        this.translationState = 'left';
-    }
-
-    // Quand on clique à droite, c'est pour avoir l'élément à gauche
-    clickRight(): void {
         if (!this.animationIsDone) return;
 
         this.currentIndex = (this.currentIndex - 1 + this.drawingsList.length) % this.drawingsList.length;
@@ -206,8 +202,19 @@ export class CarrouselComponent implements OnInit {
         this.translationState = 'right';
     }
 
+    // Quand on clique à droite, c'est pour avoir l'élément à droite
+    clickRight(): void {
+        if (!this.animationIsDone) return;
+
+        this.currentIndex = (this.currentIndex + 1) % this.drawingsList.length;
+        this.animationIsDone = false;
+        this.translationState = 'left';
+    }
+
     closeCarrousel(): void {
+        this.newDrawing.showWarning = false;
         this.showCarrousel = false;
+        this.showLoadingError = false;
         this.shortcutHandler.blockShortcuts = false;
         if (this.currentURL === this.CARROUSEL_URL) {
             this.router.navigateByUrl('home');
@@ -217,7 +224,23 @@ export class CarrouselComponent implements OnInit {
     loadDrawing(indexOffset: number): void {
         if (!this.animationIsDone || this.drawingsList.length === 0) return;
         const index = (this.currentIndex + indexOffset + 2 * this.drawingsList.length) % this.drawingsList.length;
+        this.currentIndex = index;
+        this.updateCanvasPreview();
+
+        if (this.drawingsList[index].canvas === undefined) {
+            this.showLoadingError = true;
+            return;
+        }
+
+        if (this.currentURL !== this.CARROUSEL_URL && !this.newDrawing.showWarning) {
+            if (this.newDrawing.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)) {
+                this.newDrawing.showWarning = true;
+                return;
+            }
+        }
+
         this.drawingService.loadedCanvas = this.drawingsList[index].canvas;
+
         this.closeCarrousel();
         if (this.currentURL === this.CARROUSEL_URL) {
             this.router.navigateByUrl('editor');
@@ -243,7 +266,7 @@ export class CarrouselComponent implements OnInit {
             }, 10);
         }
 
-        if (this.showCarrousel) {
+        if (this.showCarrousel && this.newDrawing.showWarning) {
             if (this.LEFT_ARROW.equals(event)) {
                 this.clickLeft();
             } else if (this.RIGHT_ARROW.equals(event)) {

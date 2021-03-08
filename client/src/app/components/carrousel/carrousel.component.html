@@ -2,6 +2,24 @@
     <div style="background-color: lightgray"></div>
 </div>
 
+<div *ngIf="newDrawing.showWarning" id="backgroundAlert">
+    <div id="main">
+        <div id="content">
+            <h1
+                class="white"
+                style="text-align: center"
+                [innerHTML]="
+                    'Le canvas actuel n\'est pas vide. Voulez-vous abandonner vos changements et charger ' + drawingsList[currentIndex].name + ' ?'
+                "
+            ></h1>
+            <div class="options">
+                <button class="button green white" mat-raised-button (click)="loadDrawing(0)">Charger</button>
+                <button class="button red white" mat-raised-button (click)="newDrawing.showWarning = false">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div *ngIf="showCarrousel" id="background">
     <div id="main">
         <div id="content">
@@ -62,6 +80,10 @@
                 <button mat-icon-button (click)="clickRight()">
                     <mat-icon class="white">keyboard_arrow_right</mat-icon>
                 </button>
+            </div>
+
+            <div *ngIf="showLoadingError" style="text-align: center">
+                <h3 class="white">Le dessin ne peut pas être chargé</h3>
             </div>
 
             <div class="options">
