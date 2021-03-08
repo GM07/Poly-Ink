@@ -3,8 +3,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -17,6 +19,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { NewDrawingComponent } from './components/canvas-reset/canvas-reset.component';
 import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.component';
+import { DrawingTagsComponent } from './components/drawing-tags/drawing-tags.component';
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
@@ -28,7 +31,6 @@ import { LineConfigComponent } from './components/tool-config/line-config/line-c
 import { PencilConfigComponent } from './components/tool-config/pencil-config/pencil-config.component';
 import { RectangleConfigComponent } from './components/tool-config/rectangle-config/rectangle-config.component';
 import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
-import { DrawingTagsComponent } from './drawing-tags/drawing-tags.component';
 
 @NgModule({
     declarations: [
@@ -68,6 +70,8 @@ import { DrawingTagsComponent } from './drawing-tags/drawing-tags.component';
         MatSliderModule,
         MatIconModule,
         FormsModule,
+        MatChipsModule,
+        MatFormFieldModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

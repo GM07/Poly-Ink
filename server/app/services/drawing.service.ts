@@ -76,7 +76,7 @@ export class DrawingService {
 
     async getDrawingsDataFromTags(drawingTags: Tag[]): Promise<DrawingData[]> {
         return this.collection
-            .find({ tags: { $all: drawingTags } })
+            .find({ tags: { $in: drawingTags } })
             .toArray()
             .then((drawings: DrawingData[]) => {
                 return drawings;
