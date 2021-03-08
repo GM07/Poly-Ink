@@ -19,9 +19,7 @@ export class HomePageComponent {
     state: OpacityState = 'visible';
     showComponent: boolean = true;
 
-    constructor(private router: Router, private zone: NgZone) {
-        //
-    }
+    constructor(private router: Router, private zone: NgZone) {}
 
     // Function called when the create new drawing button is pressed
     createNewDrawing(): void {

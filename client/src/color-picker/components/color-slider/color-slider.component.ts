@@ -36,7 +36,7 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
         });
     }
 
-    // Code provenant du tutoriel https://malcoded.com/posts/angular-color-picker/
+    // Code from tutorial https://malcoded.com/posts/angular-color-picker/
     draw(): void {
         // Set width/height and clear Canvas
         const width = this.canvas.nativeElement.width;

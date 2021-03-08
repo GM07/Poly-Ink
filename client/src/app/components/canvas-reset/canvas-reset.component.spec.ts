@@ -60,10 +60,23 @@ describe('NewDrawingComponent', () => {
     });
 
     it('should stop propagations if the warning is displayed', () => {
-        popupHandlerService.newDrawing.showPopup = true;
-        spyOn(popupHandlerService.newDrawing, 'newCanvas');
+        popupHandlerService.newDrawing.showPopup = false;
+        spyOn(popupHandlerService, 'showNewDrawingPopup').and.callFake(() => {
+            popupHandlerService.newDrawing.showPopup = true;
+        });
+        spyOn(popupHandlerService.newDrawing, 'newCanvas').and.callFake(() => {
+            popupHandlerService.newDrawing.showPopup = true;
+        });
         const keyEvent = new KeyboardEvent('document:keydown', { ctrlKey: true, key: 'o' });
         component.onKeyDown(keyEvent);
         expect(shortcutHandler.blockShortcuts).toBeTruthy();
+    });
+
+    it('should do nothing if the shortcuts are blocked', () => {
+        shortcutHandler.blockShortcuts = true;
+        spyOn(popupHandlerService.newDrawing, 'newCanvas');
+        const keyEvent = new KeyboardEvent('document:keydown', { ctrlKey: true, key: 'o' });
+        component.onKeyDown(keyEvent);
+        expect(popupHandlerService.newDrawing.newCanvas).not.toHaveBeenCalled();
     });
 });

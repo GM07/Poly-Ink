@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { DrawingComponent } from '@app/components/drawing/drawing.component';
+import { EllipseSelectionComponent } from '@app/components/selection/ellipse-selection/ellipse-selection.component';
+import { RectangleSelectionComponent } from '@app/components/selection/rectangle-selection/rectangle-selection.component';
+import { SelectionHandlerComponent } from '@app/components/selection/selection-handler/selection-handler.component';
 import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { CanvasResizeComponent } from './canvas-resize.component';
@@ -14,7 +17,13 @@ describe('CanvasResizeComponent', () => {
     beforeEach(async(() => {
         service = new DrawingService();
         TestBed.configureTestingModule({
-            declarations: [CanvasResizeComponent, DrawingComponent],
+            declarations: [
+                CanvasResizeComponent,
+                SelectionHandlerComponent,
+                DrawingComponent,
+                RectangleSelectionComponent,
+                EllipseSelectionComponent,
+            ],
             providers: [{ provide: DrawingService, useValue: service }],
         }).compileComponents();
     }));
@@ -60,7 +69,7 @@ describe('CanvasResizeComponent', () => {
         component.resizeCanvas(CanvasConst.MIN_WIDTH + 1, CanvasConst.MIN_HEIGHT + 1);
         const pixelBuffer = service.baseCtx.getImageData(CanvasConst.MIN_WIDTH, CanvasConst.MIN_HEIGHT, 1, 1).data;
         const stringPixelBuffer = String(pixelBuffer[0]) + String(pixelBuffer[1]) + String(pixelBuffer[2]);
-        expect(stringPixelBuffer).toBe('255255255'); // Représente un pixel avec le rvb à 255
+        expect(stringPixelBuffer).toBe('255255255'); // Is a pixel with rgb set to 255
     });
 
     it('should resize when dragging the bottom side', () => {

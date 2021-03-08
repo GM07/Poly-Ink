@@ -1,4 +1,4 @@
-import { ShortcutKey } from '@app/classes/shortcut-key';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
@@ -42,7 +42,7 @@ export class NewDrawing {
     }
 
     isNotEmpty(baseCtx: CanvasRenderingContext2D, width: number, height: number): boolean {
-        const whiteColor = 4294967295; // Constante pour la couleur blanche
+        const whiteColor = 4294967295; // White color constant
         const pixelBuffer = new Uint32Array(baseCtx.getImageData(0, 0, width, height).data.buffer);
         return pixelBuffer.some((color) => color !== whiteColor) && pixelBuffer.some((color) => color !== 0);
     }

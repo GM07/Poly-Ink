@@ -1,10 +1,9 @@
 <div class="container">
-    <div (document:keydown)="shortcutHandler.handleKeyEvent($event)">
-        <app-canvas-reset #newCanvasMenu></app-canvas-reset>
-        <app-export-drawing></app-export-drawing>
-    </div>
+    <app-canvas-reset #newCanvasMenu></app-canvas-reset>
+    <app-export-drawing></app-export-drawing>
     <app-sidebar (settingClicked)="resetDrawing($event)"></app-sidebar>
     <div class="drawing-container">
         <app-canvas-resize class="drawing" tabindex="0" ondragstart="return false;"> </app-canvas-resize>
     </div>
+    <app-canvas-reset #newCanvasMenu></app-canvas-reset>
 </div>

@@ -10,6 +10,7 @@ import { DrawingComponent } from '@app/components/drawing/drawing.component';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { ExportDrawingComponent } from '@app/components/export-drawing/export-drawing.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
+import { SelectionHandlerComponent } from '@app/components/selection/selection-handler/selection-handler.component';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 @Component({ selector: 'app-sidebar', template: '' })
@@ -31,6 +32,7 @@ describe('EditorComponent', () => {
                 StubSidebarComponent,
                 NewDrawingComponent,
                 ExportDrawingComponent,
+                SelectionHandlerComponent,
             ],
             imports: [
                 RouterTestingModule.withRoutes([

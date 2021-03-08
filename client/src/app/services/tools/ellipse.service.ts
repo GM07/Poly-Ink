@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ShortcutKey } from '@app/classes/shortcut-key';
+import { ShiftKey } from '@app/classes/shortcut/shift-key';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { EllipseToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -17,16 +18,16 @@ export enum EllipseMode {
     providedIn: 'root',
 })
 export class EllipseService extends Tool {
+    private readonly SHIFT: ShiftKey;
     toolID: string = EllipseToolConstants.TOOL_ID;
     private mouseUpCoord: Vec2;
-    private shiftPressed: boolean;
     private lineWidthIn: number;
     ellipseMode: EllipseMode;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(EllipseToolConstants.SHORTCUT_KEY);
-        this.shiftPressed = false;
+        this.SHIFT = new ShiftKey();
         this.lineWidthIn = 1;
         this.ellipseMode = EllipseMode.FilledWithContour;
     }
@@ -42,7 +43,7 @@ export class EllipseService extends Tool {
 
     stopDrawing(): void {
         this.mouseDown = false;
-        this.shiftPressed = false;
+        this.SHIFT.isDown = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
@@ -91,8 +92,8 @@ export class EllipseService extends Tool {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (event.shiftKey && !this.shiftPressed) {
-            this.shiftPressed = true;
+        if (this.SHIFT.equals(event)) {
+            this.SHIFT.isDown = true;
             if (this.mouseDown) {
                 this.updateEllipse();
             }
@@ -100,8 +101,8 @@ export class EllipseService extends Tool {
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if (!event.shiftKey && this.shiftPressed) {
-            this.shiftPressed = false;
+        if (this.SHIFT.equals(event)) {
+            this.SHIFT.isDown = false;
             if (this.mouseDown) {
                 this.updateEllipse();
             }
@@ -120,7 +121,7 @@ export class EllipseService extends Tool {
         let centerX: number = this.mouseDownCoord.x + radiusX;
         let centerY: number = this.mouseDownCoord.y + radiusY;
 
-        if (this.shiftPressed) {
+        if (this.SHIFT.isDown) {
             const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
             centerX = this.mouseDownCoord.x + Math.sign(radiusX) * minRadius;
             centerY = this.mouseDownCoord.y + Math.sign(radiusY) * minRadius;

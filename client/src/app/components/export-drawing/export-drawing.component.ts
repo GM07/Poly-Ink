@@ -55,7 +55,6 @@ export class ExportDrawingComponent {
     }
 
     initValues(): void {
-        this.shortcutHandler.setIgnoreFunctionToDefault();
         this.exportFormat = 'png';
         this.currentFilter = 'no';
         this.aspectRatio = 1;
@@ -72,6 +71,7 @@ export class ExportDrawingComponent {
 
     hidePopup(): void {
         this.popupHandlerService.hideExportDrawingPopup();
+        this.shortcutHandler.blockShortcuts = false;
         this.initValues();
     }
 
@@ -88,7 +88,6 @@ export class ExportDrawingComponent {
         this.imageData = this.baseContext.getImageData(0, 0, this.baseCanvas.width, this.baseCanvas.height);
 
         this.aspectRatio = this.baseCanvas.width / this.baseCanvas.height;
-        console.log(this.aspectRatio);
 
         const filter = this.filterMap.get(this.currentFilter);
         if (filter !== undefined) {
@@ -127,16 +126,13 @@ export class ExportDrawingComponent {
 
     @HostListener('document:keydown', ['$event'])
     async onKeyDown(event: KeyboardEvent): Promise<void> {
-        if (this.popupHandlerService.exportDrawing.shortcut.equals(event)) {
+        if (!this.shortcutHandler.blockShortcuts && this.popupHandlerService.exportDrawing.shortcut.equals(event)) {
+            this.shortcutHandler.blockShortcuts = true;
             event.preventDefault();
             this.popupHandlerService.showExportDrawingPopup();
-
             this.changeDetectorRef.detectChanges();
             this.backupBaseCanvas();
             await this.applyFilter();
-            this.shortcutHandler.ignoreEvent = (eventKey: KeyboardEvent): boolean => {
-                return eventKey.ctrlKey;
-            };
         }
     }
 }

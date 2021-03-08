@@ -1,4 +1,4 @@
-import { ShortcutKey } from '@app/classes/shortcut-key';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 
 export class ExportDrawing {
     shortcut: ShortcutKey;

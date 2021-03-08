@@ -13,6 +13,7 @@ export class NewDrawingComponent {
     hidePopup(): void {
         this.popupHandlerService.hideNewDrawingPopup();
         this.shortcutHandler.blockShortcuts = false;
+        this.popupHandlerService.newDrawing.shortcut.isDown = false;
     }
 
     canShowPopup(): boolean {
@@ -26,10 +27,13 @@ export class NewDrawingComponent {
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
-        if (this.popupHandlerService.newDrawing.shortcut.equals(event)) {
+        if (!this.shortcutHandler.blockShortcuts && this.popupHandlerService.newDrawing.shortcut.equals(event)) {
             event.preventDefault();
             this.popupHandlerService.newDrawing.newCanvas();
-            if (this.popupHandlerService.newDrawing.showPopup) this.shortcutHandler.blockShortcuts = true;
+            if (this.popupHandlerService.canShowNewDrawingPopup()) {
+                this.popupHandlerService.showNewDrawingPopup();
+                this.shortcutHandler.blockShortcuts = true;
+            }
         }
     }
 }

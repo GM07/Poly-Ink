@@ -176,7 +176,6 @@ describe('ExportDrawingComponent', () => {
 
         expect(popupSpy).toHaveBeenCalled();
         expect(filterSpy).toHaveBeenCalled();
-        expect(shortcutService.blockShortcuts).toBe(false);
     });
 
     it('should not open export popup', async () => {
@@ -201,10 +200,20 @@ describe('ExportDrawingComponent', () => {
         } as KeyboardEvent;
         await component.onKeyDown(event);
 
-        const shortcutSpy = spyOn(shortcutService, 'ignoreEvent').and.callThrough();
         const toolSpy = spyOn(toolHandlerService, 'onKeyDown').and.callThrough();
         await shortcutService.onKeyDown(event);
-        expect(shortcutSpy).toHaveBeenCalled();
         expect(toolSpy).not.toHaveBeenCalled();
+    });
+
+    it('should choose height when bigger', () => {
+        component.aspectRatio = 0.5;
+        const returnValue = component.getPreviewHeight();
+        expect(returnValue).toBe(ExportDrawingComponent['EXPORT_PREVIEW_MAX_SIZE']);
+    });
+
+    it('should choose width when bigger', () => {
+        component.aspectRatio = 2;
+        const returnValue = component.getPreviewWidth();
+        expect(returnValue).toBe(ExportDrawingComponent['EXPORT_PREVIEW_MAX_SIZE']);
     });
 });
