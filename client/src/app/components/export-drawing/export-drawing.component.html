@@ -21,11 +21,11 @@
                     <mat-button-toggle value="funky" (change)="changeFilter($event.value)">FUNKY</mat-button-toggle>
                     <mat-button-toggle value="spotlight" (change)="changeFilter($event.value)">SPOTLIGHT</mat-button-toggle>
                     <mat-button-toggle value="sepia" (change)="changeFilter($event.value)">SEPIA</mat-button-toggle>
-                    <mat-button-toggle value="black-white" (change)="changeFilter($event.value)">NOIR & BLANC</mat-button-toggle>
-                    <mat-button-toggle id="corner-right" value="negative" (change)="changeFilter($event.value)">NEGATIF</mat-button-toggle>
+                    <mat-button-toggle value="black-white" (change)="changeFilter($event.value)">MONOCHROME</mat-button-toggle>
+                    <mat-button-toggle id="corner-right" value="negative" (change)="changeFilter($event.valsue)">NEGATIF</mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
-            <canvas #exportPreview id="exportPreview" [attr.width]="getPreviewWidth()" [attr.height]="this.getPreviewHeight()"></canvas>
+            <canvas #exportPreview id="exportPreview" [attr.width]="this.getPreviewWidth()" [attr.height]="this.getPreviewHeight()"></canvas>
             <div class="options">
                 <button class="button green white" mat-raised-button (click)="export()">Confirmer</button>
                 <button class="button red white" mat-sraised-button (click)="hidePopup()">Annuler</button>

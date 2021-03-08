@@ -15,7 +15,7 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
     styleUrls: ['./export-drawing.component.scss'],
 })
 export class ExportDrawingComponent {
-    private static readonly EXPORT_PREVIEW_CANVAS_WIDTH: number = 300;
+    private static readonly EXPORT_PREVIEW_MAX_SIZE: number = 300;
 
     private baseCanvas: HTMLCanvasElement;
     private baseContext: CanvasRenderingContext2D;
@@ -88,6 +88,7 @@ export class ExportDrawingComponent {
         this.imageData = this.baseContext.getImageData(0, 0, this.baseCanvas.width, this.baseCanvas.height);
 
         this.aspectRatio = this.baseCanvas.width / this.baseCanvas.height;
+        console.log(this.aspectRatio);
 
         const filter = this.filterMap.get(this.currentFilter);
         if (filter !== undefined) {
@@ -112,12 +113,16 @@ export class ExportDrawingComponent {
     }
 
     getPreviewHeight(): number {
-        return ExportDrawingComponent.EXPORT_PREVIEW_CANVAS_WIDTH / Math.max(1, this.aspectRatio);
+        if (this.aspectRatio < 1) return ExportDrawingComponent.EXPORT_PREVIEW_MAX_SIZE;
+
+        return ExportDrawingComponent.EXPORT_PREVIEW_MAX_SIZE / this.aspectRatio;
     }
 
     // Give access to html
     getPreviewWidth(): number {
-        return ExportDrawingComponent.EXPORT_PREVIEW_CANVAS_WIDTH;
+        if (this.aspectRatio > 1) return ExportDrawingComponent.EXPORT_PREVIEW_MAX_SIZE;
+
+        return ExportDrawingComponent.EXPORT_PREVIEW_MAX_SIZE * this.aspectRatio;
     }
 
     @HostListener('document:keydown', ['$event'])
