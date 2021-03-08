@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CanvasConst } from '@app/constants/canvas';
+import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { BehaviorSubject } from 'rxjs';
 import { DrawingService } from './drawing.service';
-import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 @Injectable({
     providedIn: 'root',
