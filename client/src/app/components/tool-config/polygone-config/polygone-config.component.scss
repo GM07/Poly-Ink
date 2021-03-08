@@ -46,14 +46,3 @@
     padding-right: 15px;
     padding-bottom: 8px;
 }
-
-::ng-deep .mat-slider-wrapper {
-    .mat-slider-thumb-container {
-        .mat-slider-thumb-label {
-            width: 30px;
-            height: 30px;
-            top: -41px;
-            right: -15px;
-        }
-    }
-}

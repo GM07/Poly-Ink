@@ -49,6 +49,16 @@ describe('PolygoneConfigComponent', () => {
         expect(component).toBeTruthy();
     });
 
+    it('should toggle the traceType', () => {
+        component.toggleTraceType(PolygoneMode.FilledWithContour);
+        expect(polygoneService.polygoneMode).toBe(PolygoneMode.FilledWithContour);
+    });
+
+    it('should return the value and px string', () => {
+        const pixelValue = 10;
+        expect(component.colorSliderLabel(pixelValue)).toEqual('10px');
+    });
+
     it('should load all slider harnesses', async () => {
         const sliders = await loader.getAllHarnesses(MatSliderHarness);
         expect(sliders.length).toBe(NUM_SLIDERS);
@@ -56,7 +66,7 @@ describe('PolygoneConfigComponent', () => {
 
     it('should have sliders with appropriate maximum values', async () => {
         expect(await numEdgesSliderHarness.getMaxValue()).toBe(ToolSettingsConst.MAX_NUM_EDGES);
-        expect(await widthSliderHarness.getMaxValue()).toBe(ToolSettingsConst.MAX_WIDTH_POLYGONE);
+        expect(await widthSliderHarness.getMaxValue()).toBe(ToolSettingsConst.MAX_WIDTH);
     });
 
     it('should have sliders with appropriate minimum values', async () => {

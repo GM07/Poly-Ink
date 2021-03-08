@@ -6,6 +6,7 @@ import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 
 export enum PolygoneMode {
@@ -34,7 +35,7 @@ export class PolygoneService extends Tool {
     }
 
     set contourWidth(width: number) {
-        this.lineWidthIn = Math.min(Math.max(width, 1), ToolSettingsConst.MAX_WIDTH_POLYGONE);
+        this.lineWidthIn = Math.min(Math.max(width, 1), ToolSettingsConst.MAX_WIDTH);
     }
 
     get contourWidth(): number {
@@ -65,6 +66,7 @@ export class PolygoneService extends Tool {
             this.drawPolygone(ctx);
         }
     }
+
     onMouseUp(event: MouseEvent): void {
         if (this.mouseDown) {
             if (this.isInCanvas(event)) {
@@ -108,17 +110,14 @@ export class PolygoneService extends Tool {
         const radiusY: number = Math.abs(this.mouseUpCoord.y - this.mouseDownCoord.y) / 2;
         const radius: number = Math.min(radiusX, radiusY);
 
-        // We first consider that it's on the down right
         let centerX: number = this.mouseDownCoord.x + radius;
         let centerY: number = this.mouseDownCoord.y + radius;
 
         if (this.mouseUpCoord.y < this.mouseDownCoord.y) {
-            // If top, change value
             centerY = this.mouseDownCoord.y - radius;
         }
 
         if (this.mouseUpCoord.x < this.mouseDownCoord.x) {
-            // If left, change value
             centerX = this.mouseDownCoord.x - radius;
         }
 
@@ -173,7 +172,7 @@ export class PolygoneService extends Tool {
         const centerX: number = center.x;
         const centerY: number = center.y;
         ctx.lineWidth = dashWidth;
-        ctx.strokeStyle = 'gray';
+        ctx.strokeStyle = Colors.GRAY.toRgbaString(1);
         ctx.setLineDash([lineDash]);
         ctx.beginPath();
         ctx.arc(centerX, centerY, radiusAbs, 0, Math.PI * 2, true);

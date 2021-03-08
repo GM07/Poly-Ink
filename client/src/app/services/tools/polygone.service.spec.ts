@@ -2,9 +2,10 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { Color } from 'src/color-picker/classes/color';
+import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { PolygoneMode, PolygoneService } from './polygone.service';
-
 // tslint:disable:no-any
 describe('PolygoneService', () => {
     let service: PolygoneService;
@@ -20,17 +21,18 @@ describe('PolygoneService', () => {
     let mouseEvent: MouseEvent;
     const INIT_OFFSET_X = 25;
     const INIT_OFFSET_Y = 25;
-    const GRAY_RGB = 128;
-    const PRIMARY_RGB = 1;
-    const SECONDARY_RGB = 0;
+    // tslint:disable-next-line:no-magic-numbers
+    const GRAY_RGB = new Color(120, 120, 120);
+    const PRIMARY_RGB = new Color(1, 1, 1);
+    const SECONDARY_RGB = Colors.BLACK;
     const ALPHA = 3;
 
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
 
         colorServiceSpy = jasmine.createSpyObj('ColorService', [], {
-            primaryRgba: 'rgba(1, 1, 1, 1)',
-            secondaryRgba: 'rgba(0, 0, 0, 1)',
+            primaryRgba: new Color(1, 1, 1).toRgbaString(1),
+            secondaryRgba: Colors.BLACK.toRgbaString(1),
         });
 
         TestBed.configureTestingModule({
@@ -73,7 +75,7 @@ describe('PolygoneService', () => {
     it('should prevent change to an invalid contourWidth value', () => {
         const invalidWidthValue = 51;
         service.contourWidth = invalidWidthValue;
-        expect(service.contourWidth).toEqual(ToolSettingsConst.MAX_WIDTH_POLYGONE);
+        expect(service.contourWidth).toEqual(ToolSettingsConst.MAX_WIDTH);
     });
 
     it('should change to a valid numberEdges', () => {
@@ -168,9 +170,9 @@ describe('PolygoneService', () => {
         const middlePoint = INIT_OFFSET_X / 2;
         const previewImageData = previewCtxStub.getImageData(0, middlePoint, 1, 1);
 
-        expect(previewImageData.data[0]).toEqual(GRAY_RGB); // R
-        expect(previewImageData.data[1]).toEqual(GRAY_RGB); // G
-        expect(previewImageData.data[2]).toEqual(GRAY_RGB); // B
+        expect(previewImageData.data[0]).toEqual(GRAY_RGB.r); // R
+        expect(previewImageData.data[1]).toEqual(GRAY_RGB.g); // G
+        expect(previewImageData.data[2]).toEqual(GRAY_RGB.b); // B
         expect(previewImageData.data[ALPHA]).not.toEqual(0); // A
 
         const rightRectanglePoint = INIT_OFFSET_X;
@@ -189,9 +191,9 @@ describe('PolygoneService', () => {
         const middlePoint = INIT_OFFSET_X / 2;
         let imageData: ImageData = baseCtxStub.getImageData(middlePoint, 0, 1, 1);
 
-        expect(imageData.data[0]).toEqual(SECONDARY_RGB); // R
-        expect(imageData.data[1]).toEqual(SECONDARY_RGB); // G
-        expect(imageData.data[2]).toEqual(SECONDARY_RGB); // B
+        expect(imageData.data[0]).toEqual(SECONDARY_RGB.r); // R
+        expect(imageData.data[1]).toEqual(SECONDARY_RGB.g); // G
+        expect(imageData.data[2]).toEqual(SECONDARY_RGB.b); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
 
         const x = INIT_OFFSET_X / 2;
@@ -210,26 +212,34 @@ describe('PolygoneService', () => {
         const x = INIT_OFFSET_X / 2;
         const y = INIT_OFFSET_Y / 2;
         const imageData: ImageData = baseCtxStub.getImageData(x, y, 1, 1);
-        expect(imageData.data[0]).toEqual(PRIMARY_RGB); // R
-        expect(imageData.data[1]).toEqual(PRIMARY_RGB); // G
-        expect(imageData.data[2]).toEqual(PRIMARY_RGB); // B
+        expect(imageData.data[0]).toEqual(PRIMARY_RGB.r); // R
+        expect(imageData.data[1]).toEqual(PRIMARY_RGB.g); // G
+        expect(imageData.data[2]).toEqual(PRIMARY_RGB.b); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
-    it('should allow for filled and contour drawing type', () => {
+    it('should allow for filled and contour drawing type for a triangle', () => {
         service.polygoneMode = PolygoneMode.FilledWithContour;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
 
-        let fillX = INIT_OFFSET_X / 2;
-        let fillY = INIT_OFFSET_Y / 2;
-        let fillImageData: ImageData = baseCtxStub.getImageData(fillX, fillY, 1, 1);
-        expect(fillImageData.data[0]).toEqual(PRIMARY_RGB); // R
-        expect(fillImageData.data[1]).toEqual(PRIMARY_RGB); // G
-        expect(fillImageData.data[2]).toEqual(PRIMARY_RGB); // B
+        const fillX = INIT_OFFSET_X / 2;
+        const fillY = INIT_OFFSET_Y / 2;
+        const fillImageData: ImageData = baseCtxStub.getImageData(fillX, fillY, 1, 1);
+        expect(fillImageData.data[0]).toEqual(PRIMARY_RGB.r); // R
+        expect(fillImageData.data[1]).toEqual(PRIMARY_RGB.g); // G
+        expect(fillImageData.data[2]).toEqual(PRIMARY_RGB.b); // B
         expect(fillImageData.data[ALPHA]).not.toEqual(0); // A
+    });
+
+    it('should allow for filled and contour drawing type for a square', () => {
+        service.polygoneMode = PolygoneMode.FilledWithContour;
+        service.onMouseDown(mouseEvent);
+        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+        service.onMouseUp(mouseEvent);
+        expect(drawPolygoneSpy).toHaveBeenCalled();
 
         // tslint:disable-next-line:no-magic-numbers
         service.numEdges = 4;
@@ -238,19 +248,19 @@ describe('PolygoneService', () => {
         service.onMouseUp(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
 
-        fillX = INIT_OFFSET_X / 2;
-        fillY = INIT_OFFSET_Y / 2;
-        fillImageData = baseCtxStub.getImageData(fillX, fillY, 1, 1);
-        expect(fillImageData.data[0]).toEqual(PRIMARY_RGB); // R
-        expect(fillImageData.data[1]).toEqual(PRIMARY_RGB); // G
-        expect(fillImageData.data[2]).toEqual(PRIMARY_RGB); // B
+        const fillX: number = INIT_OFFSET_X / 2;
+        const fillY: number = INIT_OFFSET_Y / 2;
+        const fillImageData: ImageData = baseCtxStub.getImageData(fillX, fillY, 1, 1);
+        expect(fillImageData.data[0]).toEqual(PRIMARY_RGB.r); // R
+        expect(fillImageData.data[1]).toEqual(PRIMARY_RGB.g); // G
+        expect(fillImageData.data[2]).toEqual(PRIMARY_RGB.b); // B
         expect(fillImageData.data[ALPHA]).not.toEqual(0); // A
         const middlePoint = INIT_OFFSET_X / 2;
         const previewImageData: ImageData = baseCtxStub.getImageData(middlePoint, 0, 1, 1);
 
-        expect(previewImageData.data[0]).toEqual(SECONDARY_RGB); // R
-        expect(previewImageData.data[1]).toEqual(SECONDARY_RGB); // G
-        expect(previewImageData.data[2]).toEqual(SECONDARY_RGB); // B
+        expect(previewImageData.data[0]).toEqual(SECONDARY_RGB.r); // R
+        expect(previewImageData.data[1]).toEqual(SECONDARY_RGB.g); // G
+        expect(previewImageData.data[2]).toEqual(SECONDARY_RGB.b); // B
         expect(previewImageData.data[ALPHA]).not.toEqual(0); // A
     });
 
