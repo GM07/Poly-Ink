@@ -29,6 +29,7 @@ export class DrawingComponent implements AfterViewInit {
         this.drawingService.canvas = this.baseCanvas.nativeElement;
         this.drawingService.previewCanvas = this.previewCanvas.nativeElement;
         this.newDrawing.newCanvas();
+        this.drawingService.loadDrawing();
         document.body.style.overflow = 'auto';
     }
 

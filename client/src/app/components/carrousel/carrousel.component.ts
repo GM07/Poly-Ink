@@ -1,7 +1,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 interface DrawingContent {
@@ -40,7 +41,7 @@ interface DrawingContent {
         ]),
     ],
 })
-export class CarrouselComponent implements AfterViewInit, OnInit {
+export class CarrouselComponent implements OnInit {
     @ViewChild('overflowLeftPreview', { static: false }) overflowLeftPreview: ElementRef<HTMLCanvasElement>;
     @ViewChild('leftPreview', { static: false }) leftPreview: ElementRef<HTMLCanvasElement>;
     @ViewChild('middlePreview', { static: false }) middlePreview: ElementRef<HTMLCanvasElement>;
@@ -48,8 +49,10 @@ export class CarrouselComponent implements AfterViewInit, OnInit {
     @ViewChild('overflowRightPreview', { static: false }) overflowRightPreview: ElementRef<HTMLCanvasElement>;
 
     private readonly SHORTCUT: ShortcutKey = new ShortcutKey('g', true);
-    readonly CARROUSEL_URL = 'carrousel';
-    readonly CANVAS_PREVIEW_SIZE = '200px';
+    private readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
+    private readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
+    readonly CARROUSEL_URL: string = 'carrousel';
+    readonly CANVAS_PREVIEW_SIZE: number = 200;
     currentURL: string;
     showCarrousel: boolean;
     translationState: string | null = null;
@@ -64,7 +67,12 @@ export class CarrouselComponent implements AfterViewInit, OnInit {
 
     private animationIsDone: boolean = false;
 
-    constructor(private shortcutHandler: ShortcutHandlerService, private router: Router, activatedRoute: ActivatedRoute) {
+    constructor(
+        private shortcutHandler: ShortcutHandlerService,
+        private router: Router,
+        activatedRoute: ActivatedRoute,
+        private drawingService: DrawingService,
+    ) {
         this.showCarrousel = false;
         activatedRoute.url.subscribe((url: UrlSegment[]) => {
             this.currentURL = url[0].path;
@@ -79,20 +87,24 @@ export class CarrouselComponent implements AfterViewInit, OnInit {
         // c1 à c5 créés pour tester
         const c1 = document.createElement('canvas');
         c1.width = 200;
-        c1.height = 200;
+        c1.height = 1000;
         const ctxc1 = c1.getContext('2d');
         if (ctxc1 !== null) {
             ctxc1.fillStyle = 'red';
             ctxc1.fillRect(0, 0, 200, 200);
+            ctxc1.fillStyle = 'red';
+            ctxc1.fillRect(0, 200, 200, 800);
         }
 
         const c2 = document.createElement('canvas');
-        c2.width = 200;
-        c2.height = 200;
+        c2.width = 300;
+        c2.height = 300;
         const ctxc2 = c2.getContext('2d');
         if (ctxc2 !== null) {
             ctxc2.fillStyle = 'green';
-            ctxc2.fillRect(0, 0, 200, 200);
+            ctxc2.fillRect(0, 0, 300, 300);
+            ctxc2.fillStyle = 'lightblue';
+            ctxc2.fillRect(0, 0, 100, 100);
         }
 
         const c3 = document.createElement('canvas');
@@ -129,8 +141,6 @@ export class CarrouselComponent implements AfterViewInit, OnInit {
         ];
     }
 
-    ngAfterViewInit(): void {}
-
     translationDone(): void {
         if (this.translationState === 'reset') {
             this.animationIsDone = true;
@@ -151,12 +161,29 @@ export class CarrouselComponent implements AfterViewInit, OnInit {
         this.updateSingleDrawingContent(this.overflowRightPreview, 2, this.overflowRightElement);
     }
 
-    updateSingleDrawingContent(canvasRef: ElementRef<HTMLCanvasElement>, indexOffset: number, drawingContent: DrawingContent) {
+    updateSingleDrawingContent(canvasRef: ElementRef<HTMLCanvasElement>, indexOffset: number, drawingContent: DrawingContent): void {
         const ctx = canvasRef.nativeElement.getContext('2d') as CanvasRenderingContext2D;
         const index = (this.currentIndex + indexOffset + 2 * this.drawingsList.length) % this.drawingsList.length;
-        ctx.drawImage(this.drawingsList[index].canvas, 0, 0);
+        const aspectRatio = this.drawingsList[index].canvas.width / this.drawingsList[index].canvas.height;
 
-        drawingContent.canvas = canvasRef.nativeElement;
+        let leftOffset: number = 0;
+        let topOffset: number = 0;
+        let width: number;
+        let height: number;
+        if (this.drawingsList[index].canvas.width > this.drawingsList[index].canvas.height) {
+            width = this.CANVAS_PREVIEW_SIZE;
+            height = this.CANVAS_PREVIEW_SIZE / aspectRatio;
+            topOffset = (this.CANVAS_PREVIEW_SIZE - height) / 2;
+        } else {
+            height = this.CANVAS_PREVIEW_SIZE;
+            width = this.CANVAS_PREVIEW_SIZE * aspectRatio;
+            leftOffset = (this.CANVAS_PREVIEW_SIZE - width) / 2;
+        }
+
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.drawImage(this.drawingsList[index].canvas, leftOffset, topOffset, width, height);
+
+        drawingContent.canvas = this.drawingsList[index].canvas;
         drawingContent.name = this.drawingsList[index].name;
         drawingContent.tags = this.drawingsList[index].tags;
     }
@@ -187,7 +214,23 @@ export class CarrouselComponent implements AfterViewInit, OnInit {
         }
     }
 
-    replaceAll(): void {}
+    loadDrawing(indexOffset: number): void {
+        if (!this.animationIsDone || this.drawingsList.length === 0) return;
+        const index = (this.currentIndex + indexOffset + 2 * this.drawingsList.length) % this.drawingsList.length;
+        this.drawingService.loadedCanvas = this.drawingsList[index].canvas;
+        this.closeCarrousel();
+        if (this.currentURL === this.CARROUSEL_URL) {
+            this.router.navigateByUrl('editor');
+        } else {
+            this.drawingService.loadDrawing();
+        }
+    }
+
+    deleteDrawing(): void {
+        if (!this.animationIsDone || this.drawingsList.length === 0) return;
+        // delete
+        console.log(this.drawingsList[this.currentIndex].name);
+    }
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
@@ -198,6 +241,14 @@ export class CarrouselComponent implements AfterViewInit, OnInit {
             setTimeout(() => {
                 this.updateCanvasPreview();
             }, 10);
+        }
+
+        if (this.showCarrousel) {
+            if (this.LEFT_ARROW.equals(event)) {
+                this.clickLeft();
+            } else if (this.RIGHT_ARROW.equals(event)) {
+                this.clickRight();
+            }
         }
     }
 }

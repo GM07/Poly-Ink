@@ -20,19 +20,34 @@
                         </div>
                         <div class="fiche">
                             <p class="name">{{ leftElement.name }}</p>
-                            <canvas #leftPreview [attr.width]="CANVAS_PREVIEW_SIZE" [attr.height]="CANVAS_PREVIEW_SIZE"></canvas>
+                            <canvas
+                                #leftPreview
+                                [attr.width]="CANVAS_PREVIEW_SIZE"
+                                [attr.height]="CANVAS_PREVIEW_SIZE"
+                                (click)="loadDrawing(-1)"
+                            ></canvas>
                             <p class="white">TAGS</p>
                             <p class="white">{{ leftElement.tags }}</p>
                         </div>
                         <div class="fiche">
                             <p class="name">{{ middleElement.name }}</p>
-                            <canvas #middlePreview [attr.width]="CANVAS_PREVIEW_SIZE" [attr.height]="CANVAS_PREVIEW_SIZE"></canvas>
+                            <canvas
+                                #middlePreview
+                                [attr.width]="CANVAS_PREVIEW_SIZE"
+                                [attr.height]="CANVAS_PREVIEW_SIZE"
+                                (click)="loadDrawing(0)"
+                            ></canvas>
                             <p class="white">TAGS</p>
                             <p class="white">{{ middleElement.tags }}</p>
                         </div>
                         <div class="fiche">
                             <p class="name">{{ rightElement.name }}</p>
-                            <canvas #rightPreview [attr.width]="CANVAS_PREVIEW_SIZE" [attr.height]="CANVAS_PREVIEW_SIZE"></canvas>
+                            <canvas
+                                #rightPreview
+                                [attr.width]="CANVAS_PREVIEW_SIZE"
+                                [attr.height]="CANVAS_PREVIEW_SIZE"
+                                (click)="loadDrawing(1)"
+                            ></canvas>
                             <p class="white">TAGS</p>
                             <p class="white">{{ rightElement.tags }}</p>
                         </div>
@@ -50,6 +65,8 @@
             </div>
 
             <div class="options">
+                <button class="button green white" mat-raised-button (click)="loadDrawing(0)">Charger</button>
+                <button class="button red white" mat-raised-button (click)="deleteDrawing()">Supprimer</button>
                 <button class="button red white" mat-raised-button (click)="closeCarrousel()">Annuler</button>
             </div>
         </div>
