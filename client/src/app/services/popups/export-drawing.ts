@@ -10,11 +10,9 @@ export class ExportDrawing {
     }
 
     exportImage(image: string, format: string, name: string): void {
-        const byteImage = image;
-
         const downloadElement = document.createElement('a');
         downloadElement.download = name + '.' + format;
-        downloadElement.href = byteImage;
+        downloadElement.href = image;
         downloadElement.dataset.downloadurl = ['image/' + format, downloadElement.download, downloadElement.href].join(':');
         document.body.appendChild(downloadElement);
         downloadElement.click();
