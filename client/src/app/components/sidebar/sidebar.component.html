@@ -1,5 +1,5 @@
-<mat-drawer-container class="container">
-    <mat-drawer mode="side" opened>
+<mat-drawer-container>
+    <mat-drawer mode="side" opened="true">
         <mat-action-list class="top-sidebar">
             <button
                 id="back"
@@ -41,7 +41,7 @@
             </button>
         </mat-action-list>
     </mat-drawer>
-    <div class="attributes-tab">
+    <mat-drawer-content>
         <app-settings-handler></app-settings-handler>
-    </div>
+    </mat-drawer-content>
 </mat-drawer-container>

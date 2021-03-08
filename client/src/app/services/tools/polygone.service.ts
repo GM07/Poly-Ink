@@ -107,25 +107,19 @@ export class PolygoneService extends Tool {
         const radiusX: number = Math.abs(this.mouseUpCoord.x - this.mouseDownCoord.x) / 2;
         const radiusY: number = Math.abs(this.mouseUpCoord.y - this.mouseDownCoord.y) / 2;
         const radius: number = Math.min(radiusX, radiusY);
-        let centerX: number;
-        let centerY: number;
 
-        if (this.mouseUpCoord.y > this.mouseDownCoord.y && this.mouseUpCoord.x < this.mouseDownCoord.x) {
-            // Bas-gauche
-            centerX = this.mouseDownCoord.x - radius;
-            centerY = this.mouseDownCoord.y + radius;
-        } else if (this.mouseUpCoord.y > this.mouseDownCoord.y && this.mouseUpCoord.x > this.mouseDownCoord.x) {
-            // Bas-droit
-            centerX = this.mouseDownCoord.x + radius;
-            centerY = this.mouseDownCoord.y + radius;
-        } else if (this.mouseUpCoord.y < this.mouseDownCoord.y && this.mouseUpCoord.x > this.mouseDownCoord.x) {
-            // Haut-droit
-            centerX = this.mouseDownCoord.x + radius;
+        // We first consider that it's on the down right
+        let centerX: number = this.mouseDownCoord.x + radius;
+        let centerY: number = this.mouseDownCoord.y + radius;
+
+        if (this.mouseUpCoord.y < this.mouseDownCoord.y) {
+            // If top, change value
             centerY = this.mouseDownCoord.y - radius;
-        } else {
-            // Haut-gauche
+        }
+
+        if (this.mouseUpCoord.x < this.mouseDownCoord.x) {
+            // If left, change value
             centerX = this.mouseDownCoord.x - radius;
-            centerY = this.mouseDownCoord.y - radius;
         }
 
         ctx.lineCap = 'round' as CanvasLineCap;
@@ -150,6 +144,9 @@ export class PolygoneService extends Tool {
         // tslint:disable-next-line:no-magic-numbers
         const startingAngle = -Math.PI / 2 + (this.numEdgesIn % 2 !== 0 ? 0 : Math.PI / this.numEdgesIn);
         ctx.lineWidth = this.polygoneMode === PolygoneMode.Filled ? 0 : this.lineWidthIn;
+
+        if (ctx.lineWidth > radiusAbs) ctx.lineWidth = Math.max(1, radiusAbs);
+
         const lineWidthWeightedRadius = Math.max(ctx.lineWidth / 2, radiusAbs - ctx.lineWidth / 2);
 
         ctx.beginPath();
