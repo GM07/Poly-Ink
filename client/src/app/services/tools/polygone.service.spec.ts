@@ -21,8 +21,7 @@ describe('PolygoneService', () => {
     let mouseEvent: MouseEvent;
     const INIT_OFFSET_X = 25;
     const INIT_OFFSET_Y = 25;
-    // tslint:disable-next-line:no-magic-numbers
-    const GRAY_RGB = new Color(120, 120, 120);
+    const GRAY_RGB = 128;
     const PRIMARY_RGB = new Color(1, 1, 1);
     const SECONDARY_RGB = Colors.BLACK;
     const ALPHA = 3;
@@ -170,9 +169,9 @@ describe('PolygoneService', () => {
         const middlePoint = INIT_OFFSET_X / 2;
         const previewImageData = previewCtxStub.getImageData(0, middlePoint, 1, 1);
 
-        expect(previewImageData.data[0]).toEqual(GRAY_RGB.r); // R
-        expect(previewImageData.data[1]).toEqual(GRAY_RGB.g); // G
-        expect(previewImageData.data[2]).toEqual(GRAY_RGB.b); // B
+        expect(previewImageData.data[0]).toEqual(GRAY_RGB); // R
+        expect(previewImageData.data[1]).toEqual(GRAY_RGB); // G
+        expect(previewImageData.data[2]).toEqual(GRAY_RGB); // B
         expect(previewImageData.data[ALPHA]).not.toEqual(0); // A
 
         const rightRectanglePoint = INIT_OFFSET_X;

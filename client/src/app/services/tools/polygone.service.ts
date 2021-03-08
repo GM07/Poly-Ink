@@ -6,7 +6,6 @@ import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 
 export enum PolygoneMode {
@@ -172,7 +171,7 @@ export class PolygoneService extends Tool {
         const centerX: number = center.x;
         const centerY: number = center.y;
         ctx.lineWidth = dashWidth;
-        ctx.strokeStyle = Colors.GRAY.toRgbaString(1);
+        ctx.strokeStyle = 'gray';
         ctx.setLineDash([lineDash]);
         ctx.beginPath();
         ctx.arc(centerX, centerY, radiusAbs, 0, Math.PI * 2, true);
