@@ -28,6 +28,7 @@ import { LineConfigComponent } from './components/tool-config/line-config/line-c
 import { PencilConfigComponent } from './components/tool-config/pencil-config/pencil-config.component';
 import { RectangleConfigComponent } from './components/tool-config/rectangle-config/rectangle-config.component';
 import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
+import { DrawingTagsComponent } from './drawing-tags/drawing-tags.component';
 
 @NgModule({
     declarations: [
@@ -47,6 +48,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         CanvasResizeComponent,
         SidebarComponent,
         AerosolConfigComponent,
+        DrawingTagsComponent,
     ],
     imports: [
         AppRoutingModule,
