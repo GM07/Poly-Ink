@@ -27,16 +27,18 @@ describe('NewDrawingService', () => {
     });
 
     it('should return true if not white', () => {
+        // tslint:disable:no-string-literal
         context.fillStyle = 'grey';
         context.fillRect(0, 0, canvas.width, canvas.height);
-        const returnValue = service.isNotEmpty(context, canvas.width, canvas.height);
+        const returnValue = service['isNotEmpty'](context, canvas.width, canvas.height);
         expect(returnValue).toBe(true);
     });
 
     it('should return false if white', () => {
+        // tslint:disable:no-string-literal
         context.fillStyle = 'white';
         context.fillRect(0, 0, canvas.width, canvas.height);
-        const returnValue = service.isNotEmpty(context, canvas.width, canvas.height);
+        const returnValue = service['isNotEmpty'](context, canvas.width, canvas.height);
         expect(returnValue).toBe(false);
     });
 
@@ -52,7 +54,8 @@ describe('NewDrawingService', () => {
     });
 
     it('should not reset if confirm is false and not empty', () => {
-        const spyFunc = spyOn(service, 'isNotEmpty').and.returnValue(true);
+        // tslint:disable no-any
+        const spyFunc = spyOn<any>(service, 'isNotEmpty').and.returnValue(true);
         const spyFunc2 = spyOn(drawingService, 'resizeCanvas');
         spyOn(toolHandler.getTool(), 'stopDrawing').and.callFake(() => {
             /**/
@@ -65,7 +68,7 @@ describe('NewDrawingService', () => {
     it('should reset if confirm is false and empty', () => {
         drawingService.baseCtx = context;
         const spyFunc = spyOn(drawingService, 'resizeCanvas');
-        const spyFunc2 = spyOn(service, 'isNotEmpty').and.returnValue(false);
+        const spyFunc2 = spyOn<any>(service, 'isNotEmpty').and.returnValue(false);
         spyOn(toolHandler.getTool(), 'stopDrawing').and.callFake(() => {
             /**/
         });
