@@ -11,7 +11,8 @@ import { EraserSettings } from './eraser-settings';
 // import { LassoSettings } from './lasso-settings';
 import { LineSettings } from './line-settings';
 import { PencilSettings } from './pencil-settings';
-// import { PolygoneSettings } from './polygone-settings';
+import { PolygoneSettings } from './polygone-settings';
+// import { RectangleSelectionSettings } from './rectangle-selection-settings';
 import { RectangleSelectionSettings } from './rectangle-selection-settings';
 import { RectangleSettings } from './rectangle-settings';
 import { ToolSettings } from './tool-settings';
@@ -25,6 +26,7 @@ export const TOP_TOOLS: ToolSettings[] = [
     new RectangleSettings(),
     new EllipseSettings(),
     new EraserSettings(),
+    new PolygoneSettings(),
     new RectangleSelectionSettings(),
     new EllipseSelectionSettings(),
     new AerosolSettings(),
