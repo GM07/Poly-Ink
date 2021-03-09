@@ -1,7 +1,3 @@
-// Order matters here
-// Tool icons at the top of the side bar
-// export { AerosolSettings } from './aerosol-settings';
-
 import { AerosolSettings } from './aerosol-settings';
 import { EllipseSelectionSettings } from './ellipse-selection-settings';
 import { EllipseSettings } from './ellipse-settings';
