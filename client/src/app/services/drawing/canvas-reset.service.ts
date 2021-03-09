@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanvasConst } from '@app/constants/canvas';
+import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
 import { DrawingService } from './drawing.service';
@@ -10,10 +11,11 @@ import { DrawingService } from './drawing.service';
 export class NewDrawingService {
     showWarning: boolean;
 
-    constructor(private drawingService: DrawingService, private toolHandler: ToolHandlerService) {}
+    constructor(private drawingService: DrawingService, private toolHandler: ToolHandlerService, private shortcutHandler: ShortcutHandlerService) {}
 
     newCanvas(confirm: boolean = false): void {
         if (!confirm && this.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)) {
+            this.shortcutHandler.blockShortcuts = true;
             this.showWarning = true;
             return;
         }
