@@ -70,31 +70,31 @@ export class AerosolService extends Tool {
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.mouseDown = event.button === MouseButton.Left;
-        if (this.mouseDown) {
+        this.leftMouseDown = event.button === MouseButton.Left;
+        if (this.leftMouseDown) {
             this.mousePosition = this.getPositionFromMouse(event);
             this.sprayContinuously(this.drawingService.previewCtx);
         }
     }
 
     onMouseUp(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.drawingService.baseCtx.drawImage(this.drawingService.previewCtx.canvas, 0, 0);
         }
-        this.mouseDown = false;
+        this.leftMouseDown = false;
         window.clearInterval(this.sprayIntervalID);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.mousePosition = this.getPositionFromMouse(event);
         }
     }
 
     onMouseLeave(event: MouseEvent): void {
         window.clearInterval(this.sprayIntervalID);
-        if (!this.mouseDown) this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        if (!this.leftMouseDown) this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
     onMouseEnter(event: MouseEvent): void {

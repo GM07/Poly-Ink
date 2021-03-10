@@ -42,14 +42,14 @@ export class RectangleService extends Tool {
     }
 
     stopDrawing(): void {
-        this.mouseDown = false;
+        this.leftMouseDown = false;
         this.SHIFT.isDown = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.mouseDown = event.button === MouseButton.Left;
-        if (this.mouseDown) {
+        this.leftMouseDown = event.button === MouseButton.Left;
+        if (this.leftMouseDown) {
             this.mouseDownCoord = this.getPositionFromMouse(event);
             this.mouseUpCoord = this.mouseDownCoord;
             this.drawRectangle(this.drawingService.previewCtx);
@@ -57,18 +57,18 @@ export class RectangleService extends Tool {
     }
 
     onMouseUp(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             if (this.isInCanvas(event)) {
                 this.mouseUpCoord = this.getPositionFromMouse(event);
             }
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawRectangle(this.drawingService.baseCtx);
         }
-        this.mouseDown = false;
+        this.leftMouseDown = false;
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
             const ctx = this.drawingService.previewCtx;
             this.drawingService.clearCanvas(ctx);
@@ -77,14 +77,14 @@ export class RectangleService extends Tool {
     }
 
     onMouseLeave(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
             this.updateRectangle();
         }
     }
 
     onMouseEnter(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
             this.updateRectangle();
         }
@@ -93,7 +93,7 @@ export class RectangleService extends Tool {
     onKeyDown(event: KeyboardEvent): void {
         if (this.SHIFT.equals(event)) {
             this.SHIFT.isDown = true;
-            if (this.mouseDown) {
+            if (this.leftMouseDown) {
                 this.updateRectangle();
             }
         }
@@ -102,7 +102,7 @@ export class RectangleService extends Tool {
     onKeyUp(event: KeyboardEvent): void {
         if (this.SHIFT.equals(event)) {
             this.SHIFT.isDown = false;
-            if (this.mouseDown) {
+            if (this.leftMouseDown) {
                 this.updateRectangle();
             }
         }
