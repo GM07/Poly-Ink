@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ShortcutKey } from '@app/classes/shortcut-key';
+import { ShiftKey } from '@app/classes/shortcut/shift-key';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { RectangleToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -17,16 +18,16 @@ export enum RectangleMode {
     providedIn: 'root',
 })
 export class RectangleService extends Tool {
+    private readonly SHIFT: ShiftKey;
     toolID: string = RectangleToolConstants.TOOL_ID;
     private mouseUpCoord: Vec2;
-    private shiftPressed: boolean;
     private lineWidthIn: number;
     rectangleMode: RectangleMode;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(RectangleToolConstants.SHORTCUT_KEY);
-        this.shiftPressed = false;
+        this.SHIFT = new ShiftKey();
         this.lineWidthIn = 1;
         this.rectangleMode = RectangleMode.FilledWithContour;
     }
@@ -42,7 +43,7 @@ export class RectangleService extends Tool {
 
     stopDrawing(): void {
         this.mouseDown = false;
-        this.shiftPressed = false;
+        this.SHIFT.isDown = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
@@ -90,8 +91,8 @@ export class RectangleService extends Tool {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (event.shiftKey && !this.shiftPressed) {
-            this.shiftPressed = true;
+        if (this.SHIFT.equals(event)) {
+            this.SHIFT.isDown = true;
             if (this.mouseDown) {
                 this.updateRectangle();
             }
@@ -99,8 +100,8 @@ export class RectangleService extends Tool {
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if (!event.shiftKey && this.shiftPressed) {
-            this.shiftPressed = false;
+        if (this.SHIFT.equals(event)) {
+            this.SHIFT.isDown = false;
             if (this.mouseDown) {
                 this.updateRectangle();
             }
@@ -116,7 +117,7 @@ export class RectangleService extends Tool {
     private drawRectangle(ctx: CanvasRenderingContext2D): void {
         let width: number = this.mouseUpCoord.x - this.mouseDownCoord.x;
         let height: number = this.mouseUpCoord.y - this.mouseDownCoord.y;
-        if (this.shiftPressed) {
+        if (this.SHIFT.isDown) {
             height = Math.sign(height) * Math.min(Math.abs(width), Math.abs(height));
             width = Math.sign(width) * Math.abs(height);
         }

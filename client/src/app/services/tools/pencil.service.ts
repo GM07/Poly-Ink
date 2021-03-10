@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ShortcutKey } from '@app/classes/shortcut-key';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { PencilToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -7,16 +7,12 @@ import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
+
 export enum LeftMouse {
     Released = 0,
     Pressed = 1,
 }
 
-/**
- * Note: Pas besoin d'implémtenter le code pour commencer à dessiner un ligne quand le bouton de la souris
- * est enfoncé hors du canvas (Ref: Document de vision Polydessin 2 v1.0, p.10)
- */
-// Ceci est une implémentation de l'outil Crayon
 @Injectable({
     providedIn: 'root',
 })
@@ -33,7 +29,7 @@ export class PencilService extends Tool {
         this.lineWidthIn = ToolSettingsConst.DEFAULT_PENCIL_WIDTH;
     }
 
-    static isAPoint(path: Vec2[]): boolean {
+    private static isAPoint(path: Vec2[]): boolean {
         const isPoint = path.length === 1;
         return isPoint || (path.length === 2 && path[0].x === path[1].x && path[0].y === path[1].y);
     }
@@ -42,10 +38,6 @@ export class PencilService extends Tool {
         return this.lineWidthIn;
     }
 
-    /**
-     * La taille se choisit par pixel, donc un arrondissement
-     * est fait pour avoir une valeur entière
-     */
     set lineWidth(width: number) {
         this.lineWidthIn = Math.min(Math.max(width, 1), ToolSettingsConst.MAX_WIDTH);
     }
@@ -78,7 +70,7 @@ export class PencilService extends Tool {
             const mousePosition = this.getPositionFromMouse(event);
             this.pathData[this.pathData.length - 1].push(mousePosition);
 
-            // On dessine sur le canvas de prévisualisation et on l'efface à chaque déplacement de la souris
+            // Drawing on preview canvas and then clear it with every mouse move
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawLine(this.drawingService.previewCtx, this.pathData);
         } else {
@@ -122,10 +114,10 @@ export class PencilService extends Tool {
         ctx.fillStyle = this.colorService.primaryRgba;
         ctx.lineWidth = this.lineWidth;
         ctx.lineCap = 'round' as CanvasLineCap;
-        ctx.lineJoin = 'round' as CanvasLineJoin; // Essentiel pour avoir une allure "smooth"
+        ctx.lineJoin = 'round' as CanvasLineJoin;
 
         for (const paths of pathData) {
-            // Cas spécial pour permettre de dessiner exactement un seul point (sinon il n'est pas visible)
+            // Special case to draw just one dot (or else it's not drawn)
             if (PencilService.isAPoint(paths)) {
                 ctx.arc(paths[0].x, paths[0].y, this.lineWidthIn / 2, 0, Math.PI * 2);
                 ctx.fill();

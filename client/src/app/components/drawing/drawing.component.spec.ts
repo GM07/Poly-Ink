@@ -8,7 +8,7 @@ import { DrawingComponent } from './drawing.component';
 
 class ToolStub extends Tool {
     stopDrawing(): void {
-        // Clear
+        /**/
     }
 }
 

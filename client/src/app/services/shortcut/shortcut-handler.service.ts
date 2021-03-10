@@ -5,15 +5,10 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
     providedIn: 'root',
 })
 export class ShortcutHandlerService {
-    blockShortcuts: boolean = false;
+    blockShortcuts: boolean;
 
-    constructor(private toolHandlerService: ToolHandlerService) {}
-
-    handleKeyEvent(event: KeyboardEvent): void {
-        if (this.blockShortcuts) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-        }
+    constructor(private toolHandlerService: ToolHandlerService) {
+        this.blockShortcuts = false;
     }
 
     onKeyDown(event: KeyboardEvent): void {

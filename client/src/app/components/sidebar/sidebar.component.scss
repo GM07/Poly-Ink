@@ -1,8 +1,16 @@
-.container {
+mat-drawer-container {
     height: 100%;
     min-height: 100vh;
     border: 1px solid black;
     background: white;
+    z-index: 5;
+    overflow: visible;
+}
+
+mat-drawer-content {
+    display: flex;
+    justify-content: center;
+    overflow: visible;
 }
 
 .top-sidebar {
@@ -17,12 +25,6 @@
     flex-direction: column;
     justify-content: space-evenly;
     align-items: left;
-}
-
-.attributes-tab {
-    display: flex;
-    justify-content: center;
-    overflow: hidden;
 }
 
 .icon-button:hover {
