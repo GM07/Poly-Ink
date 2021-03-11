@@ -45,7 +45,7 @@ describe('NewDrawingService', () => {
     it('should reset if confirm is true', () => {
         const spyFunc = spyOn(drawingService, 'resizeCanvas');
         const spyFunc2 = spyOn(drawingService, 'initBackground');
-        spyOn(toolHandler.getTool(), 'stopDrawing').and.callFake(() => {
+        spyOn(toolHandler.getCurrentTool(), 'stopDrawing').and.callFake(() => {
             /**/
         });
         service.newCanvas(true);
@@ -57,7 +57,7 @@ describe('NewDrawingService', () => {
         // tslint:disable no-any
         const spyFunc = spyOn<any>(service, 'isNotEmpty').and.returnValue(true);
         const spyFunc2 = spyOn(drawingService, 'resizeCanvas');
-        spyOn(toolHandler.getTool(), 'stopDrawing').and.callFake(() => {
+        spyOn(toolHandler.getCurrentTool(), 'stopDrawing').and.callFake(() => {
             /**/
         });
         service.newCanvas(false);
@@ -69,7 +69,7 @@ describe('NewDrawingService', () => {
         drawingService.baseCtx = context;
         const spyFunc = spyOn(drawingService, 'resizeCanvas');
         const spyFunc2 = spyOn<any>(service, 'isNotEmpty').and.returnValue(false);
-        spyOn(toolHandler.getTool(), 'stopDrawing').and.callFake(() => {
+        spyOn(toolHandler.getCurrentTool(), 'stopDrawing').and.callFake(() => {
             /**/
         });
         context.fillStyle = 'white';

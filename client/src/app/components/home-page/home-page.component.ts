@@ -45,11 +45,7 @@ export class HomePageComponent {
 
     // When an animation is done, show component or not according to state
     endOfFadeAnimation(): void {
-        if (this.state === 'visible') {
-            this.showComponent = true;
-        } else {
-            this.showComponent = false;
-        }
+        this.showComponent = this.state === 'visible';
     }
 }
 
