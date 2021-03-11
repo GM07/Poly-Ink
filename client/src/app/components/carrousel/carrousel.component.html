@@ -113,7 +113,7 @@
             </div>
 
             <div *ngIf="showLoadingError" style="text-align: center">
-                <h3 class="white">Le dessin ne peut pas être chargé</h3>
+                <h3 class="white" [innerHTML]="'Le dessin ' + drawingsList[currentIndex].name + ' ne peut pas être chargé'"></h3>
             </div>
 
             <div class="options">

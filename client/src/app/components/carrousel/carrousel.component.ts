@@ -6,7 +6,7 @@ import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
-interface DrawingContent {
+export interface DrawingContent {
     canvas: HTMLCanvasElement;
     name: string;
     tags: string[];
@@ -79,12 +79,7 @@ export class CarrouselComponent implements OnInit {
         this.showCarrousel = false;
         this.showLoadingError = false;
         this.newDrawing.showWarning = false;
-        activatedRoute.url.subscribe((url: UrlSegment[]) => {
-            this.currentURL = url[0].path;
-            if (this.currentURL === this.CARROUSEL_URL) {
-                this.showCarrousel = true;
-            }
-        });
+        this.subscribeActivatedRoute(activatedRoute);
     }
     ngOnInit(): void {
         // TODO: Va être remplacé par la requète de dessins sauvegardés
@@ -352,6 +347,7 @@ export class CarrouselComponent implements OnInit {
     }
 
     translationDone(): void {
+        console.log('done');
         if (this.translationState === 'reset') {
             this.animationIsDone = true;
             return;
@@ -361,7 +357,16 @@ export class CarrouselComponent implements OnInit {
         this.translationState = 'reset';
     }
 
-    updateCanvasPreview(): void {
+    private subscribeActivatedRoute(activatedRoute: ActivatedRoute): void {
+        activatedRoute.url.subscribe((url: UrlSegment[]) => {
+            this.currentURL = url[0].path;
+            if (this.currentURL === this.CARROUSEL_URL) {
+                this.showCarrousel = true;
+            }
+        });
+    }
+
+    private updateCanvasPreview(): void {
         if (this.drawingsList.length === 0) return;
 
         this.updateSingleDrawingContent(this.overflowLeftPreview, -2, this.overflowLeftElement);
@@ -371,7 +376,7 @@ export class CarrouselComponent implements OnInit {
         this.updateSingleDrawingContent(this.overflowRightPreview, 2, this.overflowRightElement);
     }
 
-    updateSingleDrawingContent(canvasRef: ElementRef<HTMLCanvasElement>, indexOffset: number, drawingContent: DrawingContent): void {
+    private updateSingleDrawingContent(canvasRef: ElementRef<HTMLCanvasElement>, indexOffset: number, drawingContent: DrawingContent): void {
         const ctx = canvasRef.nativeElement.getContext('2d') as CanvasRenderingContext2D;
         const index = (this.currentIndex + indexOffset + 2 * this.drawingsList.length) % this.drawingsList.length;
         const aspectRatio = this.drawingsList[index].canvas.width / this.drawingsList[index].canvas.height;
@@ -466,9 +471,9 @@ export class CarrouselComponent implements OnInit {
             event.preventDefault();
             this.shortcutHandler.blockShortcuts = true;
             this.showCarrousel = true;
-            setTimeout(() => {
-                this.updateCanvasPreview();
-            }, 10);
+            //setTimeout(() => {
+            //    this.updateCanvasPreview();
+            //}, 10);
         }
 
         if (this.showCarrousel && !this.newDrawing.showWarning) {

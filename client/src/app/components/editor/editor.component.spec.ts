@@ -15,6 +15,9 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
 @Component({ selector: 'app-sidebar', template: '' })
 class StubSidebarComponent {}
 
+@Component({ selector: 'app-carrousel', template: '' })
+class StubCarrouselComponent {}
+
 describe('EditorComponent', () => {
     let shortcutHandlerServiceSpy: jasmine.SpyObj<ShortcutHandlerService>;
     let component: EditorComponent;
@@ -26,6 +29,7 @@ describe('EditorComponent', () => {
         TestBed.configureTestingModule({
             declarations: [
                 HomePageComponent,
+                StubCarrouselComponent,
                 EditorComponent,
                 DrawingComponent,
                 CanvasResizeComponent,

@@ -23,6 +23,7 @@ describe('HomePageComponent', () => {
                 RouterTestingModule.withRoutes([
                     { path: 'home', component: HomePageComponent },
                     { path: 'editor', component: EditorComponent },
+                    { path: 'carrousel', component: EditorComponent },
                 ]),
                 HttpClientModule,
                 NoopAnimationsModule,
@@ -77,6 +78,11 @@ describe('HomePageComponent', () => {
 
     it('should create new drawing', () => {
         component.createNewDrawing();
+        expect(component.state).toBe('invisible');
+    });
+
+    it('should open the carrousel', () => {
+        component.openCarrousel();
         expect(component.state).toBe('invisible');
     });
 
