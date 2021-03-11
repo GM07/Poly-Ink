@@ -17,6 +17,5 @@ describe('Funky filter', () => {
         filter.apply(image);
 
         expect(image.data).toEqual(new Uint8ClampedArray([60, 48, 12, 255]));
-        //
     });
 });

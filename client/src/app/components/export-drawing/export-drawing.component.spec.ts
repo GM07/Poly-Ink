@@ -8,6 +8,7 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 import { PopupHandlerService } from '@app/services/popups/popup-handler.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+import { Colors } from 'src/color-picker/constants/colors';
 import { ExportDrawingComponent } from './export-drawing.component';
 
 /* tslint:disable:no-magic-numbers */
@@ -133,7 +134,7 @@ describe('ExportDrawingComponent', () => {
     it('should not apply filter if not valid', async () => {
         component['currentFilter'] = 'fake filter';
         const context = component['exportPreview'].nativeElement.getContext('2d') as CanvasRenderingContext2D;
-        context.fillStyle = 'white';
+        context.fillStyle = Colors.WHITE.rgbString;
         context.fillRect(0, 0, 1, 1);
         await component.applyFilter();
         const imageData = context.getImageData(0, 0, 1, 1);
