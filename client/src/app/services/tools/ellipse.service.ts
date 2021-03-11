@@ -133,7 +133,7 @@ export class EllipseService extends Tool {
         const radiusYAbs = Math.abs(radiusY);
 
         if (ctx === this.drawingService.previewCtx) {
-            this.drawRectanglePerimeter(ctx, centerX, centerY, radiusXAbs, radiusYAbs);
+            this.drawRectanglePerimeter(ctx, { x: centerX, y: centerY } as Vec2, { x: radiusXAbs, y: radiusYAbs } as Vec2);
         }
 
         ctx.strokeStyle = this.colorService.secondaryRgba;
@@ -167,16 +167,16 @@ export class EllipseService extends Tool {
         ctx.closePath();
     }
 
-    private drawRectanglePerimeter(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, radiusX: number, radiusY: number): void {
+    private drawRectanglePerimeter(ctx: CanvasRenderingContext2D, center: Vec2, radius: Vec2): void {
         const dashWidth = 1;
         let lineWidth: number = this.lineWidthIn;
         if (this.ellipseMode === EllipseMode.Filled) {
             lineWidth = 0;
         }
-        const x = centerX - radiusX - lineWidth / 2;
-        const y = centerY - radiusY - lineWidth / 2;
-        const width = radiusX * 2 + lineWidth;
-        const height = radiusY * 2 + lineWidth;
+        const x = center.x - radius.x - lineWidth / 2;
+        const y = center.y - radius.y - lineWidth / 2;
+        const width = radius.x * 2 + lineWidth;
+        const height = radius.y * 2 + lineWidth;
 
         const lineDash = 6;
         ctx.lineWidth = dashWidth;
