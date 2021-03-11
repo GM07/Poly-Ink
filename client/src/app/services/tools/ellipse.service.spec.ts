@@ -51,6 +51,7 @@ describe('EllipseService', () => {
         } as MouseEvent;
 
         keyboardEvent = {
+            key: 'Shift',
             shiftKey: true,
         } as KeyboardEvent;
     });
@@ -140,11 +141,11 @@ describe('EllipseService', () => {
         service.onKeyUp({} as KeyboardEvent);
         expect(updateEllipseSpy).not.toHaveBeenCalled();
         service.onKeyDown(keyboardEvent);
-        service.onKeyUp({ shiftKey: false } as KeyboardEvent);
+        service.onKeyUp({ shiftKey: false, key: 'Shift' } as KeyboardEvent);
         expect(updateEllipseSpy).not.toHaveBeenCalled();
         service.onKeyDown(keyboardEvent);
         service.onMouseDown(mouseEvent);
-        keyboardEvent = { shiftKey: false } as KeyboardEvent;
+        keyboardEvent = { shiftKey: false, key: 'Shift' } as KeyboardEvent;
         service.onKeyUp(keyboardEvent);
         expect(updateEllipseSpy).toHaveBeenCalled();
     });
@@ -170,7 +171,7 @@ describe('EllipseService', () => {
 
         // Inside is untouched
         // tslint:disable-next-line:no-magic-numbers
-        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagore
+        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagoras
         // tslint:disable-next-line:no-magic-numbers
         const x = 25 - 2 * maxSquareRadius;
         const y = x;
@@ -186,7 +187,7 @@ describe('EllipseService', () => {
         expect(drawEllipseSpy).toHaveBeenCalled();
 
         // tslint:disable-next-line:no-magic-numbers
-        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagore
+        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagoras
         // tslint:disable-next-line:no-magic-numbers
         const x = 25 - 2 * maxSquareRadius;
         const y = x;
@@ -218,7 +219,7 @@ describe('EllipseService', () => {
 
         // Inside is present
         // tslint:disable-next-line:no-magic-numbers
-        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagore
+        const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagoras
         // tslint:disable-next-line:no-magic-numbers
         const x = 25 - 2 * maxSquareRadius;
         const y = x;

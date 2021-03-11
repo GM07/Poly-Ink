@@ -1,4 +1,4 @@
-import { Tag } from '@common/communication/tag';
+import { Tag } from "./tag";
 
 export class DrawingData {
     name: string;

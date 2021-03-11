@@ -112,7 +112,7 @@ describe('PencilService', () => {
 
         // tslint:disable-next-line:no-magic-numbers
         let imageData: ImageData = baseCtxStub.getImageData(2, 2, 25, 25);
-        expect(imageData.data[ALPHA]).toEqual(0); // A, rien ne doit être dessiné
+        expect(imageData.data[ALPHA]).toEqual(0); // A, nothing should be drawn
         imageData = baseCtxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
@@ -136,7 +136,7 @@ describe('PencilService', () => {
         expect(drawLineSpy).toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
         const imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
-        expect(imageData.data[ALPHA]).toEqual(0); // A, rien ne doit être dessiné où on est entré
+        expect(imageData.data[ALPHA]).toEqual(0); // A, nothing should be drawn where mouse entered
 
         service.mouseDown = true;
         mouseEventLClick = { x: 1000, y: 1000, button: 0, buttons: 0 } as MouseEvent;
@@ -177,7 +177,7 @@ describe('PencilService', () => {
         mouseEvent = { x: 0, y: 0, offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
-        // Premier pixel seulement
+        // First pixel only
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G
@@ -192,19 +192,19 @@ describe('PencilService', () => {
 
     it('verifies if it is a point', () => {
         let point: Vec2[] = {} as Vec2[];
-        expect(PencilService.isAPoint(point)).toBeFalsy();
+        expect(PencilService['isAPoint'](point)).toBeFalsy();
         point = [{ x: 1, y: 1 }] as Vec2[];
-        expect(PencilService.isAPoint(point)).toBeTruthy();
+        expect(PencilService['isAPoint'](point)).toBeTruthy();
     });
 
-    // Exemple de test d'intégration qui est quand même utile
+    // Useful integration test example
     it(' should change the pixel of the canvas ', () => {
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
-        // Premier pixel seulement
+        // First pixel only
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[0]).toEqual(0); // R
         expect(imageData.data[1]).toEqual(0); // G

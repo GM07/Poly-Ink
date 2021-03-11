@@ -18,20 +18,6 @@ describe('ShortcutHandlerService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('should not prevent event propagation if the shortcuts are not blocked', () => {
-        service.blockShortcuts = false;
-        const propagation = spyOn(keyboardEvent, 'stopImmediatePropagation');
-        service.handleKeyEvent(keyboardEvent);
-        expect(propagation).not.toHaveBeenCalled();
-    });
-
-    it('should prevent event propagation if the shortcuts are blocked', () => {
-        service.blockShortcuts = true;
-        const propagation = spyOn(keyboardEvent, 'stopImmediatePropagation');
-        service.handleKeyEvent(keyboardEvent);
-        expect(propagation).toHaveBeenCalled();
-    });
-
     it('should transfer the keyDown event to the tool Handler if the shortcuts are not blocked', () => {
         service.blockShortcuts = false;
         spyOn(toolHandlerService, 'onKeyDown').and.callThrough();

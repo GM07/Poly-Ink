@@ -62,5 +62,10 @@ export class DrawingController {
 
             res.status(HTTP_STATUS_SUCCESS).json(drawings);
         });
+
+        this.router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
+            const drawing: Drawing = req.body;
+            this.drawingService.deleteDrawingData(drawing.data);
+        });
     }
 }
