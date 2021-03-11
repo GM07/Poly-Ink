@@ -35,6 +35,7 @@ import { EllipseSelectionConfigComponent } from './components/tool-config/ellips
 import { EraserConfigComponent } from './components/tool-config/eraser-config/eraser-config.component';
 import { LineConfigComponent } from './components/tool-config/line-config/line-config.component';
 import { PencilConfigComponent } from './components/tool-config/pencil-config/pencil-config.component';
+import { PolygoneConfigComponent } from './components/tool-config/polygone-config/polygone-config.component';
 import { RectangleConfigComponent } from './components/tool-config/rectangle-config/rectangle-config.component';
 import { RectangleSelectionConfigComponent } from './components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
 import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
@@ -57,6 +58,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         CanvasResizeComponent,
         SidebarComponent,
         ExportDrawingComponent,
+        PolygoneConfigComponent,
         RectangleSelectionConfigComponent,
         NgInitControlPointDirective,
         EllipseSelectionConfigComponent,

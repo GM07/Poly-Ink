@@ -192,9 +192,9 @@ describe('PencilService', () => {
 
     it('verifies if it is a point', () => {
         let point: Vec2[] = {} as Vec2[];
-        expect(PencilService.isAPoint(point)).toBeFalsy();
+        expect(PencilService['isAPoint'](point)).toBeFalsy();
         point = [{ x: 1, y: 1 }] as Vec2[];
-        expect(PencilService.isAPoint(point)).toBeTruthy();
+        expect(PencilService['isAPoint'](point)).toBeTruthy();
     });
 
     // Useful integration test example

@@ -115,8 +115,9 @@ describe('CanvasResizeComponent', () => {
                 return null;
             },
         } as HTMLCanvasElement;
-        service.saveCanvas(elem);
-        expect(window.alert).toHaveBeenCalledWith('Erreur when resizing');
+        // tslint:disable:no-string-literal
+        service['saveCanvas'](elem);
+        expect(window.alert).toHaveBeenCalledWith('Error when resizing');
     });
     it('mouseDownShould should set previewResizeView to true', () => {
         component.mouseDown(true, false);
@@ -124,7 +125,8 @@ describe('CanvasResizeComponent', () => {
     });
 
     it('set canvasMargin should set value of canvasTop and canvasLeft', () => {
-        component.setCanvasMargin();
+        // tslint:disable:no-string-literal
+        component['setCanvasMargin']();
         const canvasTop = component.getCanvasTop();
         const canvasLeft = component.getCanvasLeft();
         expect(canvasTop).toBeDefined();
@@ -139,14 +141,16 @@ describe('CanvasResizeComponent', () => {
     });
 
     it('setStyleControl should change value of control css', () => {
-        component.setStyleControl();
+        // tslint:disable:no-string-literal
+        component['setStyleControl']();
         expect(component.controlRightStyle['margin-left']).toBeDefined();
         expect(component.controlBottomStyle['margin-left']).toBeDefined();
         expect(component.controlCornerStyle['margin-left']).toBeDefined();
     });
 
     it('setStylePreview should change value of preview css', () => {
-        component.setStylePreview();
+        // tslint:disable:no-string-literal
+        component['setStylePreview']();
         expect(component.previewResizeStyle.width).toBeDefined();
         expect(component.workZoneStyle.width).toBeDefined();
     });

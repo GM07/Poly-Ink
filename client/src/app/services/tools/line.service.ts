@@ -43,7 +43,7 @@ export class LineService extends Tool {
         this.mousePosition = {} as Vec2;
     }
 
-    applyAttributes(ctx: CanvasRenderingContext2D): void {
+    private applyAttributes(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = this.colorService.primaryRgba;
         ctx.strokeStyle = this.colorService.primaryRgba;
         ctx.lineWidth = this.thickness;
@@ -59,7 +59,7 @@ export class LineService extends Tool {
         }
     }
 
-    handleSimpleClick(event: MouseEvent): void {
+    private handleSimpleClick(event: MouseEvent): void {
         this.mouseDown = event.button === MouseButton.Left;
         if (this.mouseDown) {
             if (this.points.length === 0 || this.pointToAdd === undefined) {
@@ -70,7 +70,7 @@ export class LineService extends Tool {
         }
     }
 
-    handleDoubleClick(event: MouseEvent): void {
+    private handleDoubleClick(event: MouseEvent): void {
         if (!this.SHIFT.isDown) {
             this.pointToAdd = this.getPositionFromMouse(event);
         } else {
@@ -127,7 +127,7 @@ export class LineService extends Tool {
         }
     }
 
-    handleKeys(shortcutKey: ShortcutKey): void {
+    private handleKeys(shortcutKey: ShortcutKey): void {
         if (this.points.length === 0) {
             return;
         }
@@ -145,7 +145,7 @@ export class LineService extends Tool {
         }
     }
 
-    handleBackspaceKey(): void {
+    private handleBackspaceKey(): void {
         if (this.BACKSPACE.isDown) {
             if (this.points.length >= 2) {
                 this.points.pop();
@@ -154,7 +154,7 @@ export class LineService extends Tool {
         }
     }
 
-    handleShiftKey(): void {
+    private handleShiftKey(): void {
         if (this.mouseDown) return;
 
         if (this.SHIFT.isDown) {
@@ -165,7 +165,7 @@ export class LineService extends Tool {
         this.handleLinePreview();
     }
 
-    handleEscapeKey(): void {
+    private handleEscapeKey(): void {
         if (this.ESCAPE.isDown) {
             this.points = [];
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
@@ -177,7 +177,7 @@ export class LineService extends Tool {
         this.initService();
     }
 
-    handleLinePreview(): void {
+    private handleLinePreview(): void {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.applyAttributes(this.drawingService.previewCtx);
         this.drawLinePath(this.drawingService.previewCtx);
@@ -185,7 +185,7 @@ export class LineService extends Tool {
         this.drawLine(this.drawingService.previewCtx, lastPoint, this.pointToAdd);
     }
 
-    alignPoint(cursor: Vec2): Vec2 {
+    private alignPoint(cursor: Vec2): Vec2 {
         const angle: number = Geometry.getAngle(this.getLastPoint(), cursor) + LineService.ANGLE_STEPS / 2;
         const finalAngle = Math.floor(angle / LineService.ANGLE_STEPS) * LineService.ANGLE_STEPS;
 
