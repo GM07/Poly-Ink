@@ -111,7 +111,7 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
     }
 
     @HostListener('window:mouseup', ['$event'])
-    onMouseUp(event: MouseEvent): void {
+    onMouseUp(): void {
         this.mouseDown = false;
     }
 
