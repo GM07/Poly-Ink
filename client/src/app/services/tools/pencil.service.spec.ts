@@ -103,7 +103,7 @@ describe('PencilService', () => {
         service.lineWidth = 2;
         let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);
-        service.onMouseLeave(mouseEventLClick);
+        service.onMouseLeave();
         mouseEventLClick = { offsetX: 0, offsetY: 50, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
         expect(drawLineSpy).toHaveBeenCalled();
@@ -130,7 +130,7 @@ describe('PencilService', () => {
         let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.lineWidth = 1;
         service.onMouseDown(mouseEventLClick);
-        service.onMouseLeave(mouseEventLClick);
+        service.onMouseLeave();
         mouseEventLClick = { offsetX: 0, offsetY: 2, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
         expect(drawLineSpy).toHaveBeenCalled();
@@ -154,6 +154,12 @@ describe('PencilService', () => {
         service.onMouseEnter(mouseEvent);
         expect(drawLineSpy).not.toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
+    });
+
+    it('should clear the canvas preview when the mouse leaves the canvas, left click released', () => {
+        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
+        service.onMouseLeave();
+        expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
     it('Should only draw nothing on base canvas when moving the mouse, left click released', () => {

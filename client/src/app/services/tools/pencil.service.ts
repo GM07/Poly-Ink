@@ -79,6 +79,10 @@ export class PencilService extends Tool {
         }
     }
 
+    onMouseLeave(): void {
+        if (!this.mouseDown) this.drawingService.clearCanvas(this.drawingService.previewCtx);
+    }
+
     onMouseEnter(event: MouseEvent): void {
         if (event.button !== MouseButton.Left) return;
 
