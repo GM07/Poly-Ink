@@ -9,12 +9,12 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
 @Component({ selector: 'app-sidebar', templateUrl: './sidebar.component.html', styleUrls: ['./sidebar.component.scss'] })
 export class SidebarComponent implements OnInit {
-    topToolsSettings: ToolSettings[] = [];
-    bottomToolsSettings: ToolSettings[] = [];
+    topToolsSettings: ToolSettings[];
+    bottomToolsSettings: ToolSettings[];
     toolHandlerService: ToolHandlerService;
     selectedTool: Tool;
     readonly HIGHLIGHTED_COLOR: string = HIGHLIGHTED_COLOR;
-    @Output() settingClicked: EventEmitter<string> = new EventEmitter<string>();
+    @Output() settingClicked: EventEmitter<string>;
 
     constructor(toolHandlerService: ToolHandlerService, private router: Router, private zone: NgZone) {
         this.toolHandlerService = toolHandlerService;
@@ -22,6 +22,9 @@ export class SidebarComponent implements OnInit {
         this.toolHandlerService.currentToolSubject.subscribe((newTool) => {
             this.selectedTool = newTool;
         });
+        this.topToolsSettings = [];
+        this.bottomToolsSettings = [];
+        this.settingClicked = new EventEmitter<string>();
     }
 
     backToMenu(): void {
