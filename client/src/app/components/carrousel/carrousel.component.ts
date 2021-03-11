@@ -266,7 +266,7 @@ export class CarrouselComponent implements OnInit {
             }, 10);
         }
 
-        if (this.showCarrousel && this.newDrawing.showWarning) {
+        if (this.showCarrousel && !this.newDrawing.showWarning) {
             if (this.LEFT_ARROW.equals(event)) {
                 this.clickLeft();
             } else if (this.RIGHT_ARROW.equals(event)) {
