@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,6 +18,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { NewDrawingComponent } from './components/canvas-reset/canvas-reset.component';
 import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.component';
+import { CarrouselComponent } from './components/carrousel/carrousel.component';
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
@@ -37,7 +39,6 @@ import { PolygoneConfigComponent } from './components/tool-config/polygone-confi
 import { RectangleConfigComponent } from './components/tool-config/rectangle-config/rectangle-config.component';
 import { RectangleSelectionConfigComponent } from './components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
 import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
-import { CarrouselComponent } from './components/carrousel/carrousel.component';
 
 @NgModule({
     declarations: [
@@ -82,6 +83,7 @@ import { CarrouselComponent } from './components/carrousel/carrousel.component';
         MatListModule,
         MatExpansionModule,
         ColorPickerModule,
+        MatChipsModule,
         MatDividerModule,
         MatSliderModule,
         MatIconModule,

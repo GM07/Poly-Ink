@@ -25,7 +25,7 @@
         <div id="content">
             <h1 class="white" style="text-align: center">Dessins sauvegardés sur le serveur</h1>
             <div class="previewPresentation">
-                <button mat-icon-button (click)="clickLeft()">
+                <button class="arrow" mat-icon-button (click)="clickLeft()">
                     <mat-icon class="white">keyboard_arrow_left</mat-icon>
                 </button>
                 <div class="canvasDisplay">
@@ -33,8 +33,12 @@
                         <div class="fiche">
                             <p class="name">{{ overflowLeftElement.name }}</p>
                             <canvas #overflowLeftPreview [attr.width]="CANVAS_PREVIEW_SIZE" [attr.height]="CANVAS_PREVIEW_SIZE"></canvas>
-                            <p class="white">TAGS</p>
-                            <p class="white">{{ overflowLeftElement.tags }}</p>
+                            <p class="white">Étiquettes</p>
+                            <mat-chip-list>
+                                <mat-chip *ngFor="let tag of overflowLeftElement.tags">
+                                    {{ tag }}
+                                </mat-chip>
+                            </mat-chip-list>
                         </div>
                         <div class="fiche">
                             <p class="name">{{ leftElement.name }}</p>
@@ -44,8 +48,12 @@
                                 [attr.height]="CANVAS_PREVIEW_SIZE"
                                 (click)="loadDrawing(-1)"
                             ></canvas>
-                            <p class="white">TAGS</p>
-                            <p class="white">{{ leftElement.tags }}</p>
+                            <p class="white">Étiquettes</p>
+                            <mat-chip-list>
+                                <mat-chip *ngFor="let tag of leftElement.tags">
+                                    {{ tag }}
+                                </mat-chip>
+                            </mat-chip-list>
                         </div>
                         <div class="fiche">
                             <p class="name">{{ middleElement.name }}</p>
@@ -55,8 +63,12 @@
                                 [attr.height]="CANVAS_PREVIEW_SIZE"
                                 (click)="loadDrawing(0)"
                             ></canvas>
-                            <p class="white">TAGS</p>
-                            <p class="white">{{ middleElement.tags }}</p>
+                            <p class="white">Étiquettes</p>
+                            <mat-chip-list>
+                                <mat-chip *ngFor="let tag of middleElement.tags">
+                                    {{ tag }}
+                                </mat-chip>
+                            </mat-chip-list>
                         </div>
                         <div class="fiche">
                             <p class="name">{{ rightElement.name }}</p>
@@ -66,18 +78,26 @@
                                 [attr.height]="CANVAS_PREVIEW_SIZE"
                                 (click)="loadDrawing(1)"
                             ></canvas>
-                            <p class="white">TAGS</p>
-                            <p class="white">{{ rightElement.tags }}</p>
+                            <p class="white">Étiquettes</p>
+                            <mat-chip-list>
+                                <mat-chip *ngFor="let tag of rightElement.tags">
+                                    {{ tag }}
+                                </mat-chip>
+                            </mat-chip-list>
                         </div>
                         <div class="fiche">
                             <p class="name">{{ overflowRightElement.name }}</p>
                             <canvas #overflowRightPreview [attr.width]="CANVAS_PREVIEW_SIZE" [attr.height]="CANVAS_PREVIEW_SIZE"></canvas>
-                            <p class="white">TAGS</p>
-                            <p class="white">{{ overflowRightElement.tags }}</p>
+                            <p class="white">Étiquettes</p>
+                            <mat-chip-list>
+                                <mat-chip *ngFor="let tag of overflowRightElement.tags">
+                                    {{ tag }}
+                                </mat-chip>
+                            </mat-chip-list>
                         </div>
                     </div>
                 </div>
-                <button mat-icon-button (click)="clickRight()">
+                <button class="arrow" mat-icon-button (click)="clickRight()">
                     <mat-icon class="white">keyboard_arrow_right</mat-icon>
                 </button>
             </div>
