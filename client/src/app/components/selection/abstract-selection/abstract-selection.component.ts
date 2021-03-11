@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
@@ -19,6 +18,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     @ViewChild('bottomLeft', { static: false }) bottomLeft: ElementRef<HTMLElement>;
     @ViewChild('bottomMiddle', { static: false }) bottomMiddle: ElementRef<HTMLElement>;
     @ViewChild('bottomRight', { static: false }) bottomRight: ElementRef<HTMLElement>;
+    @ViewChild('border', {static: false}) border: ElementRef<HTMLElement>;
 
     private readonly CONTROL_INNER: number = 8;
     private readonly BORDER: number = 2;
@@ -88,6 +88,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
             this.bottomLeft,
             this.bottomMiddle,
             this.bottomRight,
+            this.border,
         ];
 
         this.placePoints();
@@ -109,16 +110,12 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         this.placeControlPoint(this.bottomLeft, 0 - this.CONTROL_INNER, height + this.BORDER);
         this.placeControlPoint(this.bottomMiddle, width / 2 - this.MIDDLE_OFFSET, height + this.BORDER);
         this.placeControlPoint(this.bottomRight, width + this.BORDER, height + this.BORDER);
+        this.placeBorder(this.border, width + this.BORDER, height+ this.BORDER);
 
         for (const elementRef of this.controlPointList) {
-            const pos = elementRef.nativeElement.getBoundingClientRect();
-            if (this.isInCanvas({ x: pos.x, y: pos.y } as Vec2)) {
-                elementRef.nativeElement.style.opacity = '1';
-                elementRef.nativeElement.style.pointerEvents = 'auto';
-            } else {
-                elementRef.nativeElement.style.opacity = '0';
-                elementRef.nativeElement.style.pointerEvents = 'none';
-            }
+            elementRef.nativeElement.style.opacity = '1';
+            elementRef.nativeElement.style.pointerEvents = 'auto';
+
         }
     }
 
@@ -129,16 +126,13 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         element.nativeElement.style.top = String(y + offsetY) + 'px';
     }
 
-    private isInCanvas(position: Vec2): boolean {
-        const clientRect = this.drawingService.canvas.getBoundingClientRect();
-        const left = clientRect.x;
-        const right = clientRect.x + clientRect.width;
-        const top = clientRect.y;
-        const bottom = clientRect.y + clientRect.height;
-        const posX = position.x + (this.CONTROL_INNER + this.BORDER) / 2;
-        const posY = position.y + (this.CONTROL_INNER + this.BORDER) / 2;
-
-        return posX > left && posX < right && posY > top && posY < bottom;
+    private placeBorder(element: ElementRef<HTMLElement>, sizeX: number, sizeY: number){
+      const x = this.selectionService.selectionCoords.x;
+      const y = this.selectionService.selectionCoords.y;
+      element.nativeElement.style.left = String(x) + 'px';
+      element.nativeElement.style.top = String(y) + 'px';
+      element.nativeElement.style.width = sizeX + 'px';
+      element.nativeElement.style.height = sizeY + 'px';
     }
 
     private makeControlsUnselectable(): void {
