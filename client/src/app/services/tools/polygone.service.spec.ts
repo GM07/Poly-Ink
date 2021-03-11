@@ -175,6 +175,9 @@ describe('PolygoneService', () => {
         expect(previewImageData.data[1]).toBeLessThanOrEqual(GRAY_RGB); // R
         expect(previewImageData.data[2]).toBeGreaterThanOrEqual(GRAY_RGB - 1);
         expect(previewImageData.data[2]).toBeLessThanOrEqual(GRAY_RGB); // R
+        // The real value here is 127.5
+        // Depending on which system you do this test it might return 127 or 128
+        // So we check if the value is either 127 or 128
         expect(previewImageData.data[ALPHA]).not.toEqual(0); // A
 
         const rightRectanglePoint = INIT_OFFSET_X;

@@ -88,12 +88,12 @@ describe('ColorService', () => {
     it('should remove least used color to remain under the max previous color limit', () => {
         spyOn(service, 'removeDuplicateColor').and.stub();
 
-        for (let i = 0; i < ColorService.MAX_NUMBER_PREVIOUS_COLORS + 1; i++) {
+        for (let i = 0; i < ColorService['MAX_NUMBER_PREVIOUS_COLORS'] + 1; i++) {
             const color: Color = new Color(i, i, i);
             service.addToPreviousColors(color);
         }
 
-        expect(service.previousColors.length).toEqual(ColorService.MAX_NUMBER_PREVIOUS_COLORS);
+        expect(service.previousColors.length).toEqual(ColorService['MAX_NUMBER_PREVIOUS_COLORS']);
     });
 
     it('should remove color if already present in previous colors', () => {
