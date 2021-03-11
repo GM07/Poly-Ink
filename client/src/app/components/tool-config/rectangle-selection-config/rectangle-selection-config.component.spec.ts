@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { RectangleSelectionConfigComponent } from './rectangle-selection-config.component';
 

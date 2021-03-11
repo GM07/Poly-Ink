@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanvasConst } from '@app/constants/canvas';
+import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
 import { DrawingService } from './drawing.service';
@@ -10,10 +11,11 @@ import { DrawingService } from './drawing.service';
 export class NewDrawingService {
     showWarning: boolean;
 
-    constructor(private drawingService: DrawingService, private toolHandler: ToolHandlerService) {}
+    constructor(private drawingService: DrawingService, private toolHandler: ToolHandlerService, private shortcutHandler: ShortcutHandlerService) {}
 
     newCanvas(confirm: boolean = false): void {
         if (!confirm && this.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)) {
+            this.shortcutHandler.blockShortcuts = true;
             this.showWarning = true;
             return;
         }
@@ -36,7 +38,7 @@ export class NewDrawingService {
         this.drawingService.initBackground();
     }
 
-    isNotEmpty(baseCtx: CanvasRenderingContext2D, width: number, height: number): boolean {
+    private isNotEmpty(baseCtx: CanvasRenderingContext2D, width: number, height: number): boolean {
         const whiteColor = 4294967295; // White color constant
         const pixelBuffer = new Uint32Array(baseCtx.getImageData(0, 0, width, height).data.buffer);
         return pixelBuffer.some((color) => color !== whiteColor) && pixelBuffer.some((color) => color !== 0);
