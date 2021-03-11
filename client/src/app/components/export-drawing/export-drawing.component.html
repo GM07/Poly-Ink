@@ -6,7 +6,7 @@
                 <h3 class="white" id="format_text">Format</h3>
                 <mat-button-toggle-group name="fontStyle" aria-label="Font Style" value="png">
                     <mat-button-toggle id="corner-left" value="png" (change)="changeExportFormat($event.value)">PNG</mat-button-toggle>
-                    <mat-button-toggle id="corner-right" value="svg" (change)="changeExportFormat($event.value)">JPEG</mat-button-toggle>
+                    <mat-button-toggle id="corner-right" value="jpeg" (change)="changeExportFormat($event.value)">JPEG</mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
             <form>
@@ -21,8 +21,8 @@
                     <mat-button-toggle value="funky" (change)="changeFilter($event.value)">FUNKY</mat-button-toggle>
                     <mat-button-toggle value="spotlight" (change)="changeFilter($event.value)">SPOTLIGHT</mat-button-toggle>
                     <mat-button-toggle value="sepia" (change)="changeFilter($event.value)">SEPIA</mat-button-toggle>
-                    <mat-button-toggle value="black-white" (change)="changeFilter($event.value)">MONOCHROME</mat-button-toggle>
-                    <mat-button-toggle id="corner-right" value="negative" (change)="changeFilter($event.valsue)">NEGATIF</mat-button-toggle>
+                    <mat-button-toggle value="monochrome" (change)="changeFilter($event.value)">MONOCHROME</mat-button-toggle>
+                    <mat-button-toggle id="corner-right" value="negative" (change)="changeFilter($event.value)">NEGATIF</mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
             <canvas #exportPreview id="exportPreview" [attr.width]="this.getPreviewWidth()" [attr.height]="this.getPreviewHeight()"></canvas>

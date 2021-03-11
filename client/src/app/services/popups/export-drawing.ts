@@ -13,7 +13,6 @@ export class ExportDrawing {
         const downloadElement = document.createElement('a');
         downloadElement.download = name + '.' + format;
         downloadElement.href = image;
-        downloadElement.dataset.downloadurl = ['image/' + format, downloadElement.download, downloadElement.href].join(':');
         document.body.appendChild(downloadElement);
         downloadElement.click();
         document.body.removeChild(downloadElement);

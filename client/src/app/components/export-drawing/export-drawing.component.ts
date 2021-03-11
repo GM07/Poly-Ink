@@ -40,7 +40,7 @@ export class ExportDrawingComponent {
         ['funky', new FunkyFilter()],
         ['spotlight', new SpotlightFilter()],
         ['sepia', new SepiaFilter()],
-        ['black-white', new Monochrome()],
+        ['monochrome', new Monochrome()],
     ]);
 
     private defaultFileNames: string[] = ['Mona Lisa', 'Guenica', 'Le Cri', 'La nuit étoilée', 'Impression, soleil levant'];
@@ -101,8 +101,9 @@ export class ExportDrawingComponent {
         this.canvasImage = this.baseCanvas.toDataURL('image/' + this.exportFormat);
     }
 
-    changeExportFormat(newFormat: string): void {
+    async changeExportFormat(newFormat: string): Promise<void> {
         this.exportFormat = newFormat;
+        await this.changeFilter(this.currentFilter);
     }
 
     async changeFilter(newFilter: string): Promise<void> {
