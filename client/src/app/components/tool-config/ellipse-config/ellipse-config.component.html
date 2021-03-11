@@ -27,12 +27,13 @@
         </div>
     </mat-button-toggle-group>
     <mat-divider></mat-divider>
-
-    <h5 class="textFormat">Épaisseur contour</h5>
-    <div class="textFormatForSlider">
-        <mat-slider min="{{ MIN }}" max="{{ MAX }}" [(ngModel)]="ellipseService.contourWidth" thumbLabel [displayWith]="colorSliderLabel">
-        </mat-slider>
-        {{ ellipseService.contourWidth }}px
+    <div *ngIf="ellipseService.ellipseMode !== ellipseModeIn.Filled">
+      <h5 class="textFormat">Épaisseur contour</h5>
+      <div class="textFormatForSlider">
+          <mat-slider min="{{ MIN }}" max="{{ MAX }}" [(ngModel)]="ellipseService.contourWidth" thumbLabel [displayWith]="colorSliderLabel">
+          </mat-slider>
+          {{ ellipseService.contourWidth }}px
+      </div>
     </div>
     <mat-divider></mat-divider>
 </div>
