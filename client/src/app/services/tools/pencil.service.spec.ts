@@ -156,12 +156,6 @@ describe('PencilService', () => {
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
     });
 
-    it('should clear the canvas preview when the mouse leaves the canvas, left click released', () => {
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
-        service.onMouseLeave(mouseEvent);
-        expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
-    });
-
     it('Should only draw nothing on base canvas when moving the mouse, left click released', () => {
         service.mouseDown = false;
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;

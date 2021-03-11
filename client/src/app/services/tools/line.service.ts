@@ -6,10 +6,10 @@ import { Tool } from '@app/classes/tool';
 import { LineToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
-import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 import { ToolMath } from '@app/constants/math';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { DrawingService } from '@app/services/drawing/drawing.service';
+import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',

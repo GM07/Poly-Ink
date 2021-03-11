@@ -169,9 +169,12 @@ describe('PolygoneService', () => {
         const middlePoint = INIT_OFFSET_X / 2;
         const previewImageData = previewCtxStub.getImageData(0, middlePoint, 1, 1);
 
-        expect(previewImageData.data[0]).toEqual(GRAY_RGB); // R
-        expect(previewImageData.data[1]).toEqual(GRAY_RGB); // G
-        expect(previewImageData.data[2]).toEqual(GRAY_RGB); // B
+        expect(previewImageData.data[0]).toBeGreaterThanOrEqual(GRAY_RGB - 1);
+        expect(previewImageData.data[0]).toBeLessThanOrEqual(GRAY_RGB); // R
+        expect(previewImageData.data[1]).toBeGreaterThanOrEqual(GRAY_RGB - 1);
+        expect(previewImageData.data[1]).toBeLessThanOrEqual(GRAY_RGB); // R
+        expect(previewImageData.data[2]).toBeGreaterThanOrEqual(GRAY_RGB - 1);
+        expect(previewImageData.data[2]).toBeLessThanOrEqual(GRAY_RGB); // R
         expect(previewImageData.data[ALPHA]).not.toEqual(0); // A
 
         const rightRectanglePoint = INIT_OFFSET_X;

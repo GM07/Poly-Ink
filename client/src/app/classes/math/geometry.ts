@@ -1,9 +1,7 @@
 import { Vec2 } from '@app/classes/vec2';
-import { ToolMath } from '@app/constants/math';
+import { ToolMath } from '@app/constants/math';
 
 export class Geometry {
-
-
     static getDistanceBetween(initial: Vec2, final: Vec2): number {
         const dx: number = final.x - initial.x;
         const dy: number = final.y - initial.y;
