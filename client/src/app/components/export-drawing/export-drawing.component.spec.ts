@@ -168,25 +168,28 @@ describe('ExportDrawingComponent', () => {
     });
 
     it('should open export popup', async () => {
-        const popupSpy = spyOn(popupService, 'showExportDrawingPopup').and.callFake(() => {});
-        const filterSpy = spyOn(component, 'applyFilter').and.callFake(async () => {});
+        const showSpy = spyOn(component, 'show').and.callFake(async () => {});
 
         const event = { key: 'e', ctrlKey: true, shiftKey: false, altKey: false, preventDefault: () => {} } as KeyboardEvent;
         await component.onKeyDown(event);
 
-        expect(popupSpy).toHaveBeenCalled();
-        expect(filterSpy).toHaveBeenCalled();
+        expect(showSpy).toHaveBeenCalled();
     });
 
     it('should not open export popup', async () => {
-        const popupSpy = spyOn(popupService, 'showExportDrawingPopup').and.callFake(() => {});
-        const filterSpy = spyOn(component, 'applyFilter').and.callFake(async () => {});
+        const showSpy = spyOn(component, 'show').and.callFake(async () => {});
 
         const event = { key: 'a', ctrlKey: true, shiftKey: false, altKey: false, preventDefault: () => {} } as KeyboardEvent;
         await component.onKeyDown(event);
 
-        expect(popupSpy).not.toHaveBeenCalled();
-        expect(filterSpy).not.toHaveBeenCalled();
+        expect(showSpy).not.toHaveBeenCalled();
+    });
+
+    it('should apply filter when showing', async () => {
+        const spyApply = spyOn(component, 'applyFilter').and.callFake(async () => {});
+
+        await component.show();
+        expect(spyApply).toHaveBeenCalled();
     });
 
     it('should ignore ctrl events', async () => {

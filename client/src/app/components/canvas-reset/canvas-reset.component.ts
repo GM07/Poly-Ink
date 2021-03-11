@@ -21,7 +21,6 @@ export class NewDrawingComponent {
     }
 
     createNewDrawing(confirm: boolean): void {
-        this.popupHandlerService.hideNewDrawingPopup();
         this.popupHandlerService.newDrawing.newCanvas(confirm);
     }
 

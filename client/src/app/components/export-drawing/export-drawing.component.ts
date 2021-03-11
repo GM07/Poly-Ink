@@ -125,15 +125,19 @@ export class ExportDrawingComponent {
         return ExportDrawingComponent.EXPORT_PREVIEW_MAX_SIZE * this.aspectRatio;
     }
 
+    async show(): Promise<void> {
+        this.shortcutHandler.blockShortcuts = true;
+        this.popupHandlerService.showExportDrawingPopup();
+        this.changeDetectorRef.detectChanges();
+        this.backupBaseCanvas();
+        await this.applyFilter();
+    }
+
     @HostListener('document:keydown', ['$event'])
     async onKeyDown(event: KeyboardEvent): Promise<void> {
         if (!this.shortcutHandler.blockShortcuts && this.popupHandlerService.exportDrawing.shortcut.equals(event)) {
-            this.shortcutHandler.blockShortcuts = true;
             event.preventDefault();
-            this.popupHandlerService.showExportDrawingPopup();
-            this.changeDetectorRef.detectChanges();
-            this.backupBaseCanvas();
-            await this.applyFilter();
+            await this.show();
         }
     }
 }
