@@ -105,16 +105,29 @@ export class DrawingService {
         return await this.createNewDrawingData(drawing);
     }
 
+    async deleteDrawingDataFromId(id: string): Promise<void> {
+        await this.collection
+            .findOneAndDelete({ _id: id })
+            .then((result: FindAndModifyWriteOpResultObject<DrawingData>) => {
+                if (!result.value) {
+                    throw new Error("Le dessin n'a pas pu etre trouvé");
+                }
+            })
+            .catch(() => {
+                throw new Error("Le dessin n'a pas pus etre supprimé");
+            });
+    }
+
     async deleteDrawingData(drawing: DrawingData): Promise<void> {
         await this.collection
             .findOneAndDelete(drawing)
             .then((result: FindAndModifyWriteOpResultObject<DrawingData>) => {
                 if (!result.value) {
-                    throw new Error("Le dessin n'a pas pu etre trouve");
+                    throw new Error("Le dessin n'a pas pu etre trouvé");
                 }
             })
             .catch(() => {
-                throw new Error("Le dessin n'a pas pu etre supprime");
+                throw new Error("Le dessin n'a pas pu etre supprimé");
             });
     }
 }

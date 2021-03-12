@@ -64,8 +64,16 @@ export class DrawingController {
         });
 
         this.router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
-            const drawing: Drawing = req.body;
-            this.drawingService.deleteDrawingData(drawing.data);
+            const ids: string = req.query.id;
+            if (ids) {
+                const idArray: string[] = ids.split(',');
+                idArray.forEach(async (id: string) => {
+                    await this.drawingService.deleteDrawingDataFromId(id);
+                });
+            } else {
+                const drawing: Drawing = req.body;
+                this.drawingService.deleteDrawingData(drawing.data);
+            }
         });
     }
 }
