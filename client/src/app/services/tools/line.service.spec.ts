@@ -78,13 +78,13 @@ describe('LineService', () => {
     });
 
     it('should change value of mouseDown when mouse left button is up', () => {
-        service['mouseDown'] = true;
+        service['leftMouseDown'] = true;
         let mouseEvent: MouseEvent = { button: MouseButton.Right } as MouseEvent;
         service.onMouseUp(mouseEvent);
-        expect(service['mouseDown']).toBe(true);
+        expect(service['leftMouseDown']).toBe(true);
         mouseEvent = { button: MouseButton.Left } as MouseEvent;
         service.onMouseUp(mouseEvent);
-        expect(service['mouseDown']).toBe(false);
+        expect(service['leftMouseDown']).toBe(false);
     });
 
     it('should do nothing when awaiting a double click', () => {
@@ -248,7 +248,7 @@ describe('LineService', () => {
     it('should not align points when shift key is pressed when mouse is down', () => {
         service['SHIFT'].isDown = true;
         service['points'].push({ x: 10, y: 10 });
-        service['mouseDown'] = true;
+        service['leftMouseDown'] = true;
         const alignFunc = spyOn<any>(service, 'alignPoint').and.returnValue({ x: 100, y: 100 } as Vec2);
         service['handleShiftKey']();
         expect(alignFunc).not.toHaveBeenCalled();

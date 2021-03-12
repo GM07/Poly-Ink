@@ -27,7 +27,7 @@ describe('ColorPaletteComponent', () => {
     });
 
     it('mouseDown has default value', () => {
-        expect(component.mouseDown).toEqual(false);
+        expect(component.leftMouseDown).toEqual(false);
     });
 
     it('should set position and draw on selected color change from hex', () => {
@@ -91,9 +91,9 @@ describe('ColorPaletteComponent', () => {
     });
 
     it('should set mouse down to false on mouse up', () => {
-        component.mouseDown = true;
+        component.leftMouseDown = true;
         component.onMouseUp(new MouseEvent('mouseup'));
-        expect(component.mouseDown).toBeFalse();
+        expect(component.leftMouseDown).toBeFalse();
     });
 
     it('should change selected position on mouseDown', () => {
@@ -104,14 +104,14 @@ describe('ColorPaletteComponent', () => {
 
         component.onMouseDown(new MouseEvent('mouseDown', { clientX: x, clientY: y }));
 
-        expect(component.mouseDown).toBeTrue();
+        expect(component.leftMouseDown).toBeTrue();
         expect(component.changeSelectedPosition).toHaveBeenCalledWith(x, y);
     });
 
     it('should move selected position on mouse move if mouse is down', () => {
         const x = 50;
         const y = 50;
-        component.mouseDown = true;
+        component.leftMouseDown = true;
 
         spyOn(component, 'changeSelectedPosition').and.stub();
 
@@ -123,7 +123,7 @@ describe('ColorPaletteComponent', () => {
     it('should not move selected position on mouse move if mouse up', () => {
         const x = 50;
         const y = 50;
-        component.mouseDown = false;
+        component.leftMouseDown = false;
 
         spyOn(component, 'changeSelectedPosition').and.stub();
 

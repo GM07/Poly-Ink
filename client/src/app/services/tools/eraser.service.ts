@@ -23,7 +23,7 @@ export class EraserService extends PencilService {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.drawBackgroundPoint(this.getPositionFromMouse(event));
 
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             const mousePosition = this.getPositionFromMouse(event);
             this.pathData[this.pathData.length - 1].push(mousePosition);
 

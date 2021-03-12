@@ -42,14 +42,14 @@ export class EllipseService extends Tool {
     }
 
     stopDrawing(): void {
-        this.mouseDown = false;
+        this.leftMouseDown = false;
         this.SHIFT.isDown = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.mouseDown = event.button === MouseButton.Left;
-        if (this.mouseDown) {
+        this.leftMouseDown = event.button === MouseButton.Left;
+        if (this.leftMouseDown) {
             this.mouseDownCoord = this.getPositionFromMouse(event);
             this.mouseUpCoord = this.mouseDownCoord;
             const ctx = this.drawingService.previewCtx;
@@ -58,18 +58,18 @@ export class EllipseService extends Tool {
     }
 
     onMouseUp(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             if (this.isInCanvas(event)) {
                 this.mouseUpCoord = this.getPositionFromMouse(event);
             }
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawEllipse(this.drawingService.baseCtx);
         }
-        this.mouseDown = false;
+        this.leftMouseDown = false;
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
             const ctx = this.drawingService.previewCtx;
             this.drawingService.clearCanvas(ctx);
@@ -78,14 +78,14 @@ export class EllipseService extends Tool {
     }
 
     onMouseLeave(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
             this.updateEllipse();
         }
     }
 
     onMouseEnter(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
             this.updateEllipse();
         }
@@ -94,7 +94,7 @@ export class EllipseService extends Tool {
     onKeyDown(event: KeyboardEvent): void {
         if (this.SHIFT.equals(event)) {
             this.SHIFT.isDown = true;
-            if (this.mouseDown) {
+            if (this.leftMouseDown) {
                 this.updateEllipse();
             }
         }
@@ -103,7 +103,7 @@ export class EllipseService extends Tool {
     onKeyUp(event: KeyboardEvent): void {
         if (this.SHIFT.equals(event)) {
             this.SHIFT.isDown = false;
-            if (this.mouseDown) {
+            if (this.leftMouseDown) {
                 this.updateEllipse();
             }
         }
