@@ -21,14 +21,14 @@ export class NewDrawingComponent {
 
     createNewDrawing(confirm: boolean): void {
         this.newDrawing.newCanvas(confirm);
+        if (this.newDrawing.showPopup) this.shortcutHandler.blockShortcuts = true;
     }
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
         if (!this.shortcutHandler.blockShortcuts && this.newDrawing.shortcut.equals(event)) {
             event.preventDefault();
-            this.newDrawing.newCanvas();
-            if (this.newDrawing.showPopup) this.shortcutHandler.blockShortcuts = true;
+            this.createNewDrawing(false);
         }
     }
 }
