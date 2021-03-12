@@ -52,6 +52,16 @@ describe('CarrouselComponent', () => {
         expect(component).toBeTruthy();
     });
 
+    it('should initialise correctly', () => {
+        const loadSpy = spyOn<any>(component, 'loadCarrousel');
+        component.showCarrousel = false;
+        component.ngOnInit();
+        expect(loadSpy).not.toHaveBeenCalled();
+        component.showCarrousel = true;
+        component.ngOnInit();
+        expect(loadSpy).toHaveBeenCalled();
+    });
+
     it('should subscribe to the activated route', () => {
         const activatedRoute = new ActivatedRoute();
         const urlSegments: UrlSegment[] = [];
@@ -59,6 +69,13 @@ describe('CarrouselComponent', () => {
         activatedRoute.url = of(urlSegments);
         component['subscribeActivatedRoute'](activatedRoute);
         expect(component.showCarrousel).toBeTruthy();
+    });
+
+    it('should load the carrousel', () => {
+        spyOn<any>(component, 'updateCanvasPreview');
+        const changeSpy = spyOn<any>(component['cd'], 'detectChanges');
+        component['loadCarrousel']();
+        expect(changeSpy).toHaveBeenCalledTimes(2);
     });
 
     it('should go back to the reset state when the translation is done', () => {
@@ -111,15 +128,21 @@ describe('CarrouselComponent', () => {
     });
 
     it('should allow to take the element on the left of the carrousel', () => {
-        component['animationIsDone'] = true;
         component.translationState = 'reset';
+        component['animationIsDone'] = false;
+        component.clickLeft();
+        expect(component.translationState).not.toEqual('right');
+        component['animationIsDone'] = true;
         component.clickLeft();
         expect(component.translationState).toEqual('right');
     });
 
     it('should allow to take the element on the right of the carrousel', () => {
-        component['animationIsDone'] = true;
         component.translationState = 'reset';
+        component['animationIsDone'] = false;
+        component.clickRight();
+        expect(component.translationState).not.toEqual('left');
+        component['animationIsDone'] = true;
         component.clickRight();
         expect(component.translationState).toEqual('left');
     });
@@ -127,10 +150,19 @@ describe('CarrouselComponent', () => {
     it('should close the carrousel', () => {
         const navigate = spyOn(component['router'], 'navigateByUrl');
         component.showCarrousel = true;
-        component.currentURL = component['CARROUSEL_URL'];
         component.closeCarrousel();
         expect(component.showCarrousel).toBeFalsy();
+        expect(navigate).not.toHaveBeenCalledWith('home');
+        component.currentURL = component['CARROUSEL_URL'];
+        component.closeCarrousel();
         expect(navigate).toHaveBeenCalledWith('home');
+    });
+
+    it('should not load if there is nothing', () => {
+        const update = spyOn<any>(component, 'updateCanvasPreview');
+        component['animationIsDone'] = false;
+        component.loadDrawing(0);
+        expect(update).not.toHaveBeenCalled();
     });
 
     it('should show a loading error', () => {
@@ -179,13 +211,21 @@ describe('CarrouselComponent', () => {
     });
 
     it('should delete a drawing', () => {
+        component['animationIsDone'] = false;
+        component.deleteDrawing();
+        component['animationIsDone'] = true;
         component.deleteDrawing();
     });
 
     it('should detect the shortcut to display the carrousel', () => {
-        component.showCarrousel = false;
+        const loadSpy = spyOn<any>(component, 'loadCarrousel');
+        component.showCarrousel = true;
+        component.newDrawing.showWarning = true;
         component['shortcutHandler'].blockShortcuts = false;
         const keyEvent = new KeyboardEvent('document:keydown', { ctrlKey: true, key: 'g' });
+        component.onKeyDown(keyEvent);
+        expect(loadSpy).not.toHaveBeenCalled();
+        component.newDrawing.showWarning = false;
         component.onKeyDown(keyEvent);
         expect(component.showCarrousel).toBeTruthy();
     });

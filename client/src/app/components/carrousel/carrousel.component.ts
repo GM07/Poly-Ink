@@ -178,7 +178,8 @@ export class CarrouselComponent implements OnInit {
         }
     }
 
-    loadCarrousel(): void {
+    // tslint:disable:no-magic-numbers
+    private loadCarrousel(): void {
         this.isLoadingCarrousel = true;
         this.cd.detectChanges(); // Must detect changes before loading
 
@@ -444,7 +445,7 @@ export class CarrouselComponent implements OnInit {
             { canvas: c2, name: 'c2', tags: ['tagc2'] } as DrawingContent,
             { canvas: c3, name: 'c3', tags: ['this tag is way too long, so it should be broken for an appropriate display'] } as DrawingContent,
         ];
-        
+
         this.isLoadingCarrousel = false;
         this.cd.detectChanges(); // Must detect changes when finished loading
         this.updateCanvasPreview();
@@ -461,11 +462,13 @@ export class CarrouselComponent implements OnInit {
             return;
         }
 
-        if (this.currentURL !== this.CARROUSEL_URL && !this.newDrawing.showWarning) {
-            if (this.newDrawing.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)) {
-                this.newDrawing.showWarning = true;
-                return;
-            }
+        if (
+            this.currentURL !== this.CARROUSEL_URL &&
+            !this.newDrawing.showWarning &&
+            this.newDrawing.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)
+        ) {
+            this.newDrawing.showWarning = true;
+            return;
         }
 
         this.drawingService.loadedCanvas = this.drawingsList[index].canvas;
@@ -480,8 +483,7 @@ export class CarrouselComponent implements OnInit {
 
     deleteDrawing(): void {
         if (!this.animationIsDone || this.drawingsList.length === 0) return;
-        // delete
-        console.log(this.drawingsList[this.currentIndex].name);
+        // TODO: Supprimer un dessin
     }
 
     @HostListener('document:keydown', ['$event'])
