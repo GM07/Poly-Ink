@@ -45,7 +45,9 @@ export class RectangleSelectionService extends AbstractSelectionService {
 
         this.fillBackground(ctx, this.selectionCoords);
 
+        const rectangleCoords = { x: this.selectionCoords.x, y: this.selectionCoords.y } as Vec2;
         ctx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
+        this.drawSelection(ctx, rectangleCoords, Math.abs(this.width), Math.abs(this.height));
     }
 
     protected drawPreviewSelectionRequired(): void {
@@ -54,8 +56,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
             this.height = Math.sign(this.height) * Math.min(Math.abs(this.width), Math.abs(this.height));
             this.width = Math.sign(this.width) * Math.abs(this.height);
         }
-        if(this.selectionCtx === null)
-          this.drawSelection(ctx, this.mouseDownCoord, this.width, this.height);
+        this.drawSelection(ctx, this.mouseDownCoord, this.width, this.height);
     }
 
     protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, width: number, height: number): void {
