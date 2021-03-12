@@ -50,7 +50,7 @@ describe('RectangleSelectionService', () => {
     });
 
     it('on mouse up should set mousePosition and clear canvas if in canvas', () => {
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         spyOn<any>(service, 'getPositionFromMouse');
         spyOn(service, 'isInCanvas').and.returnValue(true);
         const startSelection = spyOn<any>(service, 'startSelection');
@@ -60,7 +60,7 @@ describe('RectangleSelectionService', () => {
     });
 
     it('on mouse up should move selection if canvas is set', () => {
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         spyOn(service, 'isInCanvas').and.returnValue(false);
         spyOn<any>(service, 'getTranslation').and.returnValue({ x: 0, y: 0 } as Vec2);
         const updateSelection = spyOn<any>(service, 'updateSelection');
@@ -71,7 +71,7 @@ describe('RectangleSelectionService', () => {
 
     it('should draw preview on mouse move', () => {
         service.mouseUpCoord = { x: 0, y: 0 } as Vec2;
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         const drawPreviewSelection = spyOn<any>(service, 'drawPreviewSelection');
         spyOn(service, 'isInCanvas').and.returnValue(true);
         service.onMouseMove(mouseEvent);
@@ -80,7 +80,7 @@ describe('RectangleSelectionService', () => {
     });
 
     it('should update the selection on mouse move if the selection is not null', () => {
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         service.selectionCtx = canvasSelection.getContext('2d');
         const updateSelection = spyOn<any>(service, 'updateSelection');
         spyOn<any>(service, 'getTranslation');
@@ -105,11 +105,11 @@ describe('RectangleSelectionService', () => {
 
     it('should update the rectangle on shift pressed', () => {
         const keyboardEvent = { key: 'shift', ctrlKey: false, shiftKey: true, altKey: false } as KeyboardEvent;
-        service.mouseDown = false;
+        service.leftMouseDown = false;
         const updateDrawingSelection = spyOn<any>(service, 'updateDrawingSelection');
         service.onKeyDown(keyboardEvent);
         expect(updateDrawingSelection).not.toHaveBeenCalled();
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         service.onKeyDown(keyboardEvent);
         expect(updateDrawingSelection).toHaveBeenCalled();
     });
@@ -156,11 +156,11 @@ describe('RectangleSelectionService', () => {
     it('should update the selection when key up', () => {
         const keyboardEvent = { key: 'shift', ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
         service['SHIFT'].isDown = true;
-        service.mouseDown = false;
+        service.leftMouseDown = false;
         const updateDrawingSelection = spyOn<any>(service, 'updateDrawingSelection');
         service.onKeyUp(keyboardEvent);
         expect(updateDrawingSelection).not.toHaveBeenCalled();
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         service.onKeyUp(keyboardEvent);
         expect(updateDrawingSelection).toHaveBeenCalled();
     });

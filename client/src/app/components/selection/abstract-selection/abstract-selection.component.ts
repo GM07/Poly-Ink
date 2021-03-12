@@ -29,7 +29,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     private lastCursor: string;
 
     private isOverSelection: boolean = false;
-    private mouseDown: boolean = false;
+    private leftMouseDown: boolean = false;
     displayControlPoints: boolean = false;
 
     constructor(protected selectionService: AbstractSelectionService, protected drawingService: DrawingService) {}
@@ -55,7 +55,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         if (this.selectionService.isInSelection(event)) {
             this.makeControlsUnselectable();
         }
-        this.mouseDown = event.button === MouseButton.Left;
+        this.leftMouseDown = event.button === MouseButton.Left;
         this.displayControlPoints = this.selectionService.selectionCtx !== null;
     }
 
@@ -63,12 +63,12 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         if (this.displayControlPoints) {
             this.makeControlsSelectable();
         }
-        this.mouseDown = false;
+        this.leftMouseDown = false;
         this.displayControlPoints = this.selectionService.selectionCtx !== null;
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (!this.mouseDown) {
+        if (!this.leftMouseDown) {
             this.isOverSelection = this.selectionService.isInSelection(event);
             if (this.isOverSelection) {
                 this.drawingService.previewCanvas.style.cursor = 'all-scroll';

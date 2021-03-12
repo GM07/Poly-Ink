@@ -60,8 +60,8 @@ export class LineService extends Tool {
     }
 
     private handleSimpleClick(event: MouseEvent): void {
-        this.mouseDown = event.button === MouseButton.Left;
-        if (this.mouseDown) {
+        this.leftMouseDown = event.button === MouseButton.Left;
+        if (this.leftMouseDown) {
             if (this.points.length === 0 || this.pointToAdd === undefined) {
                 this.pointToAdd = this.getPositionFromMouse(event);
             }
@@ -91,7 +91,7 @@ export class LineService extends Tool {
 
     onMouseUp(event: MouseEvent): void {
         if (event.button === MouseButton.Left) {
-            this.mouseDown = false;
+            this.leftMouseDown = false;
         }
     }
 
@@ -155,7 +155,7 @@ export class LineService extends Tool {
     }
 
     private handleShiftKey(): void {
-        if (this.mouseDown) return;
+        if (this.leftMouseDown) return;
 
         if (this.SHIFT.isDown) {
             this.pointToAdd = this.alignPoint(this.mousePosition);
