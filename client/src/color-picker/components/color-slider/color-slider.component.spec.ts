@@ -27,7 +27,7 @@ describe('ColorSliderComponent', () => {
     });
 
     it('mouseDown has default value', () => {
-        expect(component.mouseDown).toEqual(false);
+        expect(component.leftMouseDown).toEqual(false);
     });
 
     it('selectedHeight has default value', () => {
@@ -53,12 +53,12 @@ describe('ColorSliderComponent', () => {
 
     it('should select height on mouseDown', () => {
         const event = new MouseEvent('click');
-        component.mouseDown = false;
+        component.leftMouseDown = false;
 
         spyOn(component, 'changeSelectedHeight');
         component.onMouseDown(event);
 
-        expect(component.mouseDown).toBeTrue();
+        expect(component.leftMouseDown).toBeTrue();
         expect(component.changeSelectedHeight).toHaveBeenCalled();
     });
 
@@ -81,14 +81,14 @@ describe('ColorSliderComponent', () => {
     });
 
     it('mouse move should not update without mouse down', () => {
-        component.mouseDown = false;
+        component.leftMouseDown = false;
         spyOn(component, 'changeSelectedHeight').and.stub();
         component.onMouseMove(new MouseEvent('mousemove'));
         expect(component.changeSelectedHeight).not.toHaveBeenCalled();
     });
 
     it('mouse move should update when mouse down', () => {
-        component.mouseDown = true;
+        component.leftMouseDown = true;
         spyOn(component, 'changeSelectedHeight').and.stub();
         component.onMouseMove(new MouseEvent('mousemove'));
         expect(component.changeSelectedHeight).toHaveBeenCalled();
@@ -137,9 +137,9 @@ describe('ColorSliderComponent', () => {
     });
 
     it('should set mousedown to false on mouse up', () => {
-        component.mouseDown = true;
+        component.leftMouseDown = true;
         component.onMouseUp();
-        expect(component.mouseDown).toBeFalse();
+        expect(component.leftMouseDown).toBeFalse();
     });
 
     it('should get proper color', () => {

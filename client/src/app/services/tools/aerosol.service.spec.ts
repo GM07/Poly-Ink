@@ -59,7 +59,7 @@ describe('AerosolService', () => {
 
     it('mouseDown should set mouseDown property to true on left click', () => {
         service.onMouseDown(mouseEvent);
-        expect(service.mouseDown).toEqual(true);
+        expect(service.leftMouseDown).toEqual(true);
         window.clearInterval(service.sprayIntervalID);
     });
 
@@ -70,12 +70,12 @@ describe('AerosolService', () => {
             button: 1,
         } as MouseEvent;
         service.onMouseDown(mouseEventRClick);
-        expect(service.mouseDown).toEqual(false);
+        expect(service.leftMouseDown).toEqual(false);
         window.clearInterval(service.sprayIntervalID);
     });
 
     it('onMouseUp should not call drawSpray if mouse was not already down', () => {
-        service.mouseDown = false;
+        service.leftMouseDown = false;
         service.mouseDownCoord = { x: 0, y: 0 };
 
         service.onMouseUp(mouseEvent);
@@ -84,7 +84,7 @@ describe('AerosolService', () => {
 
     it('onMouseMove should call sprayContinuouslySpy if mouse was already down', () => {
         const expectedResult: Vec2 = { x: 25, y: 25 };
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         service.onMouseMove(mouseEvent);
         expect(service.mousePosition).toEqual(expectedResult);
         window.clearInterval(service.sprayIntervalID);
@@ -119,7 +119,7 @@ describe('AerosolService', () => {
         const imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
         expect(imageData.data[ALPHA]).toEqual(0); // A, rien ne doit être dessiné où on est entré
 
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         mouseEventLClick = { x: 1000, y: 1000, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseUp(mouseEventLClick);
         expect(sprayContinuouslySpy).toHaveBeenCalled();
@@ -150,7 +150,7 @@ describe('AerosolService', () => {
     });
 
     it('should only draw nothing on base canvas when moving the mouse, left click released', () => {
-        service.mouseDown = false;
+        service.leftMouseDown = false;
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);

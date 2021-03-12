@@ -58,7 +58,7 @@ describe('EraserService', () => {
 
     it(' mouseDown should set mouseDown property to true on left click', () => {
         service.onMouseDown(mouseEvent);
-        expect(service.mouseDown).toEqual(true);
+        expect(service.leftMouseDown).toEqual(true);
     });
 
     it(' mouseDown should set mouseDown property to false on right click', () => {
@@ -68,19 +68,19 @@ describe('EraserService', () => {
             button: 1,
         } as MouseEvent;
         service.onMouseDown(mouseEventRClick);
-        expect(service.mouseDown).toEqual(false);
+        expect(service.leftMouseDown).toEqual(false);
     });
 
     it(' onMouseUp should call drawLine if mouse was already down', () => {
         service.mouseDownCoord = { x: 0, y: 0 };
-        service.mouseDown = true;
+        service.leftMouseDown = true;
 
         service.onMouseUp(mouseEvent);
         expect(drawLineSpy).toHaveBeenCalled();
     });
 
     it(' onMouseUp should not call drawLine if mouse was not already down', () => {
-        service.mouseDown = false;
+        service.leftMouseDown = false;
         service.mouseDownCoord = { x: 0, y: 0 };
 
         service.onMouseUp(mouseEvent);
@@ -89,7 +89,7 @@ describe('EraserService', () => {
 
     it(' onMouseMove should call drawLine if mouse was already down', () => {
         service.mouseDownCoord = { x: 0, y: 0 };
-        service.mouseDown = true;
+        service.leftMouseDown = true;
 
         service.onMouseMove(mouseEvent);
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
@@ -135,7 +135,7 @@ describe('EraserService', () => {
         const imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
         expect(imageData.data[0]).toEqual(0); // A, nothing should be drawn where mouse entered
 
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         mouseEventLClick = { x: 1000, y: 1000, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseUp(mouseEventLClick);
         expect(drawLineSpy).toHaveBeenCalled();
@@ -160,7 +160,7 @@ describe('EraserService', () => {
     });
 
     it('Should only erase nothing on base canvas when moving the mouse, left click released', () => {
-        service.mouseDown = false;
+        service.leftMouseDown = false;
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);

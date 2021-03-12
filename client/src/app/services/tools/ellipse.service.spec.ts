@@ -75,7 +75,7 @@ describe('EllipseService', () => {
     });
 
     it('should not draw when the mouse is up', () => {
-        service.mouseDown = false;
+        service.leftMouseDown = false;
         service.onMouseMove(mouseEvent);
         expect(drawShapeSpy).not.toHaveBeenCalled();
     });
@@ -91,7 +91,7 @@ describe('EllipseService', () => {
 
     it('should stop drawing when the mouse is up', () => {
         service.onMouseUp(mouseEvent);
-        expect(service.mouseDown).toEqual(false);
+        expect(service.leftMouseDown).toEqual(false);
         service.onMouseDown(mouseEvent);
         mouseEvent = { x: -1, y: -1, offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
@@ -99,7 +99,7 @@ describe('EllipseService', () => {
     });
 
     it('should stop drawing when asked to', () => {
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         service.onMouseDown(mouseEvent);
         service.stopDrawing();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();

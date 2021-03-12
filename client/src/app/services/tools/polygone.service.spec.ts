@@ -90,7 +90,7 @@ describe('PolygoneService', () => {
     });
 
     it('should not draw when the mouse is up', () => {
-        service.mouseDown = false;
+        service.leftMouseDown = false;
         service.onMouseMove(mouseEvent);
         expect(drawPolygoneSpy).not.toHaveBeenCalled();
     });
@@ -108,7 +108,7 @@ describe('PolygoneService', () => {
     });
 
     it('should start drawing when the mouse is down on the left click', () => {
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         mouseEvent = { offsetX: 0, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
@@ -116,7 +116,7 @@ describe('PolygoneService', () => {
 
     it('should stop drawing when the mouse is up', () => {
         service.onMouseUp(mouseEvent);
-        expect(service.mouseDown).toEqual(false);
+        expect(service.leftMouseDown).toEqual(false);
         service.onMouseDown(mouseEvent);
         mouseEvent = { x: -1, y: -1, offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
@@ -124,7 +124,7 @@ describe('PolygoneService', () => {
     });
 
     it('should clear the canvas when stops drawing when asked to', () => {
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         service.onMouseDown(mouseEvent);
         service.stopDrawing();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();

@@ -43,14 +43,14 @@ export abstract class AbstractShape extends Tool {
     }
 
     stopDrawing(): void {
-        this.mouseDown = false;
+        this.leftMouseDown = false;
         this.SHIFT.isDown = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.mouseDown = event.button === MouseButton.Left;
-        if (this.mouseDown) {
+        this.leftMouseDown = event.button === MouseButton.Left;
+        if (this.leftMouseDown) {
             this.mouseDownCoord = this.getPositionFromMouse(event);
             this.mouseUpCoord = this.mouseDownCoord;
             this.drawShape(this.drawingService.previewCtx);
@@ -58,18 +58,18 @@ export abstract class AbstractShape extends Tool {
     }
 
     onMouseUp(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             if (this.isInCanvas(event)) {
                 this.mouseUpCoord = this.getPositionFromMouse(event);
             }
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawShape(this.drawingService.baseCtx);
         }
-        this.mouseDown = false;
+        this.leftMouseDown = false;
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
             const ctx = this.drawingService.previewCtx;
             this.drawingService.clearCanvas(ctx);
@@ -78,13 +78,13 @@ export abstract class AbstractShape extends Tool {
     }
 
     onMouseLeave(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.updateShape();
         }
     }
 
     onMouseEnter(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.updateShape();
         }
     }
@@ -92,7 +92,7 @@ export abstract class AbstractShape extends Tool {
     onKeyDown(event: KeyboardEvent): void {
         if (this.SHIFT.equals(event)) {
             this.SHIFT.isDown = true;
-            if (this.mouseDown) {
+            if (this.leftMouseDown) {
                 this.updateShape();
             }
         }
@@ -101,7 +101,7 @@ export abstract class AbstractShape extends Tool {
     onKeyUp(event: KeyboardEvent): void {
         if (this.SHIFT.equals(event)) {
             this.SHIFT.isDown = false;
-            if (this.mouseDown) {
+            if (this.leftMouseDown) {
                 this.updateShape();
             }
         }

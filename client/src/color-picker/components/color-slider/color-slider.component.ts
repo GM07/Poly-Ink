@@ -24,7 +24,7 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
 
     context: CanvasRenderingContext2D;
 
-    mouseDown: boolean = false;
+    leftMouseDown: boolean = false;
     selectedHeight: number = 0;
 
     hueChangeFromHexSubscription: Subscription;
@@ -92,12 +92,12 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.mouseDown = true;
+        this.leftMouseDown = true;
         this.changeSelectedHeight(event.offsetY);
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.changeSelectedHeight(event.offsetY);
         }
     }
@@ -134,7 +134,7 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
     // Listener added globally since mouse up could be outside of canvas
     @HostListener('window:mouseup', ['$event'])
     onMouseUp(): void {
-        this.mouseDown = false;
+        this.leftMouseDown = false;
     }
 
     getColor(y: number): Color {

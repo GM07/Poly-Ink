@@ -8,7 +8,7 @@ import { Vec2 } from './vec2';
 export abstract class Tool {
     constructor(protected drawingService: DrawingService, protected colorService: ColorService) {}
     mouseDownCoord: Vec2;
-    mouseDown: boolean = false;
+    leftMouseDown: boolean = false;
     shortcutKey: ShortcutKey;
     toolID: string;
 

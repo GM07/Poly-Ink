@@ -81,7 +81,7 @@ describe('AbstractSelectionComponent', () => {
     });
 
     it('should do nothing if mouse is down and we are not diplaying the control points', () => {
-        component['mouseDown'] = true;
+        component['leftMouseDown'] = true;
         const placePoints = spyOn<any>(component, 'placePoints');
         component.onMouseMove(mouseEvent);
         expect(placePoints).not.toHaveBeenCalled();
