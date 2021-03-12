@@ -56,7 +56,7 @@
 }
 
 .arrow {
-    top: 316px;
+    top: 216px;
 }
 
 .drawingContents {
@@ -71,10 +71,11 @@
 
 .name {
     display: flex;
+    word-break: break-all;
     justify-content: center;
     align-items: center;
     color: white;
-    height: 200px;
+    height: 100px;
 }
 
 .tag {
@@ -84,7 +85,7 @@
 }
 
 .chipList {
-    height: 300px;
+    height: 200px;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -99,6 +100,10 @@
 .chipList::-webkit-scrollbar-thumb {
     border-radius: 30px;
     background-color: #e0e0e0;
+}
+
+mat-chip-list {
+    pointer-events: none;
 }
 
 mat-chip {
@@ -121,8 +126,9 @@ mat-chip {
 
 .options {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    justify-content: center;
 }
 
 .button {
@@ -130,4 +136,9 @@ mat-chip {
     font-size: 24px;
     display: inline-flex;
     border-radius: 12px;
+}
+
+.loader {
+    display: flex;
+    justify-content: center;
 }
