@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Vec2 } from '@app/classes/vec2';
 import { CanvasConst } from '@app/constants/canvas.ts';
-import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { PopupHandlerService } from '@app/services/popups/popup-handler.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
 @Component({
@@ -19,7 +19,11 @@ export class DrawingComponent implements AfterViewInit {
     private previewCtx: CanvasRenderingContext2D;
     private canvasSize: Vec2;
 
-    constructor(private drawingService: DrawingService, readonly toolHandlerService: ToolHandlerService, private newDrawing: NewDrawingService) {
+    constructor(
+        private drawingService: DrawingService,
+        readonly toolHandlerService: ToolHandlerService,
+        private popupHandlerService: PopupHandlerService,
+    ) {
         this.canvasSize = { x: CanvasConst.DEFAULT_WIDTH, y: CanvasConst.DEFAULT_HEIGHT } as Vec2;
     }
 
@@ -30,8 +34,10 @@ export class DrawingComponent implements AfterViewInit {
         this.drawingService.previewCtx = this.previewCtx;
         this.drawingService.canvas = this.baseCanvas.nativeElement;
         this.drawingService.previewCanvas = this.previewCanvas.nativeElement;
-        this.newDrawing.newCanvas();
         document.body.style.overflow = 'auto';
+
+        this.popupHandlerService.newDrawing.newCanvas();
+        this.popupHandlerService.initPopups();
     }
 
     @HostListener('document:mousemove', ['$event'])
