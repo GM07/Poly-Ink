@@ -20,7 +20,7 @@ export class DrawingComponent implements AfterViewInit {
     private canvasSize: Vec2;
 
     constructor(private drawingService: DrawingService, readonly toolHandlerService: ToolHandlerService, private newDrawing: NewDrawingService) {
-      this.canvasSize = { x: CanvasConst.DEFAULT_WIDTH, y: CanvasConst.DEFAULT_HEIGHT } as Vec2;
+        this.canvasSize = { x: CanvasConst.DEFAULT_WIDTH, y: CanvasConst.DEFAULT_HEIGHT } as Vec2;
     }
 
     ngAfterViewInit(): void {
@@ -34,7 +34,7 @@ export class DrawingComponent implements AfterViewInit {
         document.body.style.overflow = 'auto';
     }
 
-    @HostListener('mousemove', ['$event'])
+    @HostListener('document:mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
         this.toolHandlerService.onMouseMove(event);
     }

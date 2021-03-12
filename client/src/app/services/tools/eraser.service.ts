@@ -20,16 +20,18 @@ export class EraserService extends PencilService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.drawingService.clearCanvas(this.drawingService.previewCtx);
-        this.drawBackgroundPoint(this.getPositionFromMouse(event));
-
-        if (this.mouseDown) {
-            const mousePosition = this.getPositionFromMouse(event);
-            this.pathData[this.pathData.length - 1].push(mousePosition);
-
+        if (this.isInCanvas(event)) {
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
-            this.drawLine(this.drawingService.previewCtx, this.pathData);
             this.drawBackgroundPoint(this.getPositionFromMouse(event));
+
+            if (this.mouseDown) {
+                const mousePosition = this.getPositionFromMouse(event);
+                this.pathData[this.pathData.length - 1].push(mousePosition);
+
+                this.drawingService.clearCanvas(this.drawingService.previewCtx);
+                this.drawLine(this.drawingService.previewCtx, this.pathData);
+                this.drawBackgroundPoint(this.getPositionFromMouse(event));
+            }
         }
     }
 

@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
 import { AbstractSelectionComponent } from './abstract-selection.component';
@@ -111,7 +110,6 @@ describe('AbstractSelectionComponent', () => {
     it('elements in canvas should be visible', () => {
         abstractSelectionService.selectionCtx = drawService.previewCtx;
         spyOn<any>(component, 'placeControlPoint');
-        spyOn<any>(component, 'isInCanvas').and.returnValue(true);
         component.displayControlPoints = true;
         fixture.detectChanges();
         component.initPoints();
@@ -143,11 +141,6 @@ describe('AbstractSelectionComponent', () => {
         component.initPoints();
         component['makeControlsSelectable']();
         expect(component['controlPointList'][0].nativeElement.style.pointerEvents).toEqual('auto');
-    });
-
-    it('is in canvas should return true if the position is in the canvas', () => {
-        spyOn(drawService.canvas, 'getBoundingClientRect').and.returnValue({ x: 0, y: 0, width: 100, height: 100 } as DOMRect);
-        expect(component['isInCanvas']({ x: 1, y: 1 } as Vec2)).toBe(true);
     });
 
     it('should update control point on init if update is true', () => {

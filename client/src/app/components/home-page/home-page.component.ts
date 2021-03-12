@@ -20,8 +20,8 @@ export class HomePageComponent {
     showComponent: boolean;
 
     constructor(private router: Router, private zone: NgZone) {
-      this.state = 'visible';
-      this.showComponent = true;
+        this.state = 'visible';
+        this.showComponent = true;
     }
 
     // Function called when the create new drawing button is pressed

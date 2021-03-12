@@ -201,4 +201,11 @@ describe('EraserService', () => {
         expect(imageData.data[2]).toEqual(WHITE); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
+
+    it('preview should not appear if outside of canvas', () => {
+        spyOn(service, 'getPositionFromMouse');
+        spyOn(service, 'isInCanvas').and.returnValue(false);
+        service.onMouseMove({} as MouseEvent);
+        expect(service.getPositionFromMouse).not.toHaveBeenCalled();
+    });
 });

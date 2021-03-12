@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { EllipseMode, EllipseService } from '@app/services/tools/ellipse.service';
+import { Mode } from '@app/services/tools/abstract-shape.service';
+import { EllipseService } from '@app/services/tools/ellipse.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 
 // tslint:disable:no-any
@@ -15,8 +16,8 @@ describe('EllipseService', () => {
 
     let baseCtxStub: CanvasRenderingContext2D;
     let previewCtxStub: CanvasRenderingContext2D;
-    let drawEllipseSpy: jasmine.Spy<any>;
-    let updateEllipseSpy: jasmine.Spy<any>;
+    let drawShapeSpy: jasmine.Spy<any>;
+    let updateShapeSpy: jasmine.Spy<any>;
 
     const ALPHA = 3;
 
@@ -36,8 +37,8 @@ describe('EllipseService', () => {
         previewCtxStub = canvasTestHelper.drawCanvas.getContext('2d') as CanvasRenderingContext2D;
 
         service = TestBed.inject(EllipseService);
-        drawEllipseSpy = spyOn<any>(service, 'drawEllipse').and.callThrough();
-        updateEllipseSpy = spyOn<any>(service, 'updateEllipse').and.callThrough();
+        drawShapeSpy = spyOn<any>(service, 'drawShape').and.callThrough();
+        updateShapeSpy = spyOn<any>(service, 'updateShape').and.callThrough();
 
         // tslint:disable:no-string-literal
         service['drawingService'].baseCtx = baseCtxStub; // Jasmine doesnt copy properties with underlying data
@@ -76,16 +77,16 @@ describe('EllipseService', () => {
     it('should not draw when the mouse is up', () => {
         service.mouseDown = false;
         service.onMouseMove(mouseEvent);
-        expect(drawEllipseSpy).not.toHaveBeenCalled();
+        expect(drawShapeSpy).not.toHaveBeenCalled();
     });
 
     it('should start drawing when the mouse is down', () => {
         mouseEvent = { offsetX: 1, offsetY: 1, button: 3 } as MouseEvent;
         service.onMouseDown(mouseEvent);
-        expect(drawEllipseSpy).not.toHaveBeenCalled();
+        expect(drawShapeSpy).not.toHaveBeenCalled();
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
-        expect(drawEllipseSpy).toHaveBeenCalled();
+        expect(drawShapeSpy).toHaveBeenCalled();
     });
 
     it('should stop drawing when the mouse is up', () => {
@@ -94,7 +95,7 @@ describe('EllipseService', () => {
         service.onMouseDown(mouseEvent);
         mouseEvent = { x: -1, y: -1, offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
-        expect(drawEllipseSpy).toHaveBeenCalled();
+        expect(drawShapeSpy).toHaveBeenCalled();
     });
 
     it('should stop drawing when asked to', () => {
@@ -108,55 +109,55 @@ describe('EllipseService', () => {
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
-        expect(drawEllipseSpy).toHaveBeenCalled();
+        expect(drawShapeSpy).toHaveBeenCalled();
     });
 
     it('should update the rectangle when the mouse leaves', () => {
         service.onMouseLeave(mouseEvent);
-        expect(updateEllipseSpy).not.toHaveBeenCalled();
+        expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseLeave(mouseEvent);
-        expect(updateEllipseSpy).toHaveBeenCalled();
+        expect(updateShapeSpy).toHaveBeenCalled();
     });
 
     it('should update the rectangle when the mouse enters', () => {
         service.onMouseEnter(mouseEvent);
-        expect(updateEllipseSpy).not.toHaveBeenCalled();
+        expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
-        expect(updateEllipseSpy).toHaveBeenCalled();
+        expect(updateShapeSpy).toHaveBeenCalled();
     });
 
     it('should update the rectangle to a square with shift pressed', () => {
         service.onKeyDown({} as KeyboardEvent);
-        expect(updateEllipseSpy).not.toHaveBeenCalled();
+        expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         service.onKeyDown(keyboardEvent);
-        expect(updateEllipseSpy).toHaveBeenCalled();
+        expect(updateShapeSpy).toHaveBeenCalled();
     });
 
     it('should update the square to a rectangle with shift released', () => {
         service.onKeyUp({} as KeyboardEvent);
-        expect(updateEllipseSpy).not.toHaveBeenCalled();
+        expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onKeyDown(keyboardEvent);
         service.onKeyUp({ shiftKey: false, key: 'Shift' } as KeyboardEvent);
-        expect(updateEllipseSpy).not.toHaveBeenCalled();
+        expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onKeyDown(keyboardEvent);
         service.onMouseDown(mouseEvent);
         keyboardEvent = { shiftKey: false, key: 'Shift' } as KeyboardEvent;
         service.onKeyUp(keyboardEvent);
-        expect(updateEllipseSpy).toHaveBeenCalled();
+        expect(updateShapeSpy).toHaveBeenCalled();
     });
 
     it('should allow for contour drawing type', () => {
-        service.ellipseMode = EllipseMode.Contour;
+        service.mode = Mode.Contour;
         service.contourWidth = 1;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
-        expect(drawEllipseSpy).toHaveBeenCalled();
+        expect(drawShapeSpy).toHaveBeenCalled();
 
         // Border is present
         // tslint:disable-next-line:no-magic-numbers
@@ -180,11 +181,11 @@ describe('EllipseService', () => {
     });
 
     it('should allow for filled drawing type', () => {
-        service.ellipseMode = EllipseMode.Filled;
+        service.mode = Mode.Filled;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
-        expect(drawEllipseSpy).toHaveBeenCalled();
+        expect(drawShapeSpy).toHaveBeenCalled();
 
         // tslint:disable-next-line:no-magic-numbers
         const maxSquareRadius = Math.sqrt(((12 - 0) / 2) ** 2 * 2); // Pythagoras
@@ -199,12 +200,12 @@ describe('EllipseService', () => {
     });
 
     it('should allow for filled with contour drawing type', () => {
-        service.ellipseMode = EllipseMode.FilledWithContour;
+        service.mode = Mode.FilledWithContour;
         service.contourWidth = 1;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
-        expect(drawEllipseSpy).toHaveBeenCalled();
+        expect(drawShapeSpy).toHaveBeenCalled();
 
         // Border is present
         // tslint:disable-next-line:no-magic-numbers
@@ -231,7 +232,7 @@ describe('EllipseService', () => {
     });
 
     it('should do nothing with an unknown mode', () => {
-        service.ellipseMode = {} as EllipseMode;
+        service.mode = {} as Mode;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
@@ -243,7 +244,7 @@ describe('EllipseService', () => {
 
     it('should draw a circle when shift is pressed', () => {
         service.onKeyDown(keyboardEvent);
-        service.ellipseMode = EllipseMode.FilledWithContour;
+        service.mode = Mode.FilledWithContour;
         service.contourWidth = 1;
         service.onMouseDown(mouseEvent);
         // tslint:disable-next-line:no-magic-numbers

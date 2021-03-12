@@ -65,7 +65,6 @@ export class EllipseSelectionService extends AbstractSelectionService {
         ctx.closePath();
     }
 
-
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {
         if (this.firstSelectionCoords.x !== currentPos.x || this.firstSelectionCoords.y !== currentPos.y) {
             ctx.beginPath();

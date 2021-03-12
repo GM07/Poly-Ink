@@ -3,7 +3,7 @@
     <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style">
         <div class="textFormatButton">
             <mat-button-toggle
-                [checked]="rectangleService.rectangleMode === rectangleModeIn.Contour"
+                [checked]="rectangleService.mode === rectangleModeIn.Contour"
                 class="buttons"
                 (click)="toggleTraceType(rectangleModeIn.Contour)"
                 >Contour</mat-button-toggle
@@ -11,7 +11,7 @@
         </div>
         <div class="textFormatButton">
             <mat-button-toggle
-                [checked]="rectangleService.rectangleMode === rectangleModeIn.Filled"
+                [checked]="rectangleService.mode === rectangleModeIn.Filled"
                 class="buttons"
                 (click)="toggleTraceType(rectangleModeIn.Filled)"
                 >Plein</mat-button-toggle
@@ -19,7 +19,7 @@
         </div>
         <div class="textFormatButton">
             <mat-button-toggle
-                [checked]="rectangleService.rectangleMode === rectangleModeIn.FilledWithContour"
+                [checked]="rectangleService.mode === rectangleModeIn.FilledWithContour"
                 class="buttons"
                 (click)="toggleTraceType(rectangleModeIn.FilledWithContour)"
                 >Plein & Contour</mat-button-toggle
@@ -28,7 +28,7 @@
     </mat-button-toggle-group>
     <mat-divider></mat-divider>
 
-    <div *ngIf="rectangleService.rectangleMode !== rectangleModeIn.Filled">
+    <div *ngIf="rectangleService.mode !== rectangleModeIn.Filled">
         <h5 class="textFormat">Épaisseur contour</h5>
         <div class="textFormatForSlider">
             <mat-slider min="{{ MIN }}" max="{{ MAX }}" [(ngModel)]="rectangleService.contourWidth" thumbLabel [displayWith]="colorSliderLabel">

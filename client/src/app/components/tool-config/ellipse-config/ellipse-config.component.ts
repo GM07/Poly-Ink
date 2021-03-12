@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { EllipseMode, EllipseService } from '@app/services/tools/ellipse.service';
+import { Mode } from '@app/services/tools/abstract-shape.service';
+import { EllipseService } from '@app/services/tools/ellipse.service';
 @Component({
     selector: 'app-ellipse-config',
     templateUrl: './ellipse-config.component.html',
     styleUrls: ['./ellipse-config.component.scss'],
 })
 export class EllipseConfigComponent extends ToolConfig {
-    ellipseModeIn: typeof EllipseMode = EllipseMode;
+    ellipseModeIn: typeof Mode = Mode;
     readonly MIN: number = ToolSettingsConst.MIN_WIDTH;
     readonly MAX: number = ToolSettingsConst.MAX_WIDTH;
 
@@ -16,8 +17,8 @@ export class EllipseConfigComponent extends ToolConfig {
         super();
     }
 
-    toggleTraceType(traceType: EllipseMode): void {
-        this.ellipseService.ellipseMode = traceType;
+    toggleTraceType(traceType: Mode): void {
+        this.ellipseService.mode = traceType;
     }
 
     colorSliderLabel(value: number): string {
