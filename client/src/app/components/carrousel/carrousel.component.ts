@@ -369,8 +369,10 @@ export class CarrouselComponent implements OnInit {
     private updateCanvasPreview(): void {
         if (this.drawingsList.length === 0) return;
 
-        this.updateSingleDrawingContent(this.overflowLeftPreview, -2, this.overflowLeftElement);
-        this.updateSingleDrawingContent(this.leftPreview, -1, this.leftElement);
+        const overFlowLeft = -2;
+        const left = -1;
+        this.updateSingleDrawingContent(this.overflowLeftPreview, overFlowLeft, this.overflowLeftElement);
+        this.updateSingleDrawingContent(this.leftPreview, left, this.leftElement);
         this.updateSingleDrawingContent(this.middlePreview, 0, this.middleElement);
         this.updateSingleDrawingContent(this.rightPreview, 1, this.rightElement);
         this.updateSingleDrawingContent(this.overflowRightPreview, 2, this.overflowRightElement);
@@ -381,8 +383,8 @@ export class CarrouselComponent implements OnInit {
         const index = (this.currentIndex + indexOffset + 2 * this.drawingsList.length) % this.drawingsList.length;
         const aspectRatio = this.drawingsList[index].canvas.width / this.drawingsList[index].canvas.height;
 
-        let leftOffset: number = 0;
-        let topOffset: number = 0;
+        let leftOffset = 0;
+        let topOffset = 0;
         let width: number;
         let height: number;
         if (this.drawingsList[index].canvas.width > this.drawingsList[index].canvas.height) {
@@ -471,9 +473,9 @@ export class CarrouselComponent implements OnInit {
             event.preventDefault();
             this.shortcutHandler.blockShortcuts = true;
             this.showCarrousel = true;
-            //setTimeout(() => {
+            // setTimeout(() => {
             //    this.updateCanvasPreview();
-            //}, 10);
+            // }, 10);
         }
 
         if (this.showCarrousel && !this.newDrawing.showWarning) {

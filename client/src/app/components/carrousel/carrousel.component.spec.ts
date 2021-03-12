@@ -4,11 +4,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { CarrouselComponent, DrawingContent } from '@app/components/carrousel/carrousel.component';
+import { EditorComponent } from '@app/components/editor/editor.component';
+import { HomePageComponent } from '@app/components/home-page/home-page.component';
 import { of } from 'rxjs';
-import { EditorComponent } from '../editor/editor.component';
-import { HomePageComponent } from '../home-page/home-page.component';
-import { CarrouselComponent, DrawingContent } from './carrousel.component';
 
+// tslint:disable:no-any
+// tslint:disable:no-string-literal
 describe('CarrouselComponent', () => {
     let component: CarrouselComponent;
     let fixture: ComponentFixture<CarrouselComponent>;
@@ -36,7 +38,7 @@ describe('CarrouselComponent', () => {
 
         fixture = TestBed.createComponent(CarrouselComponent);
         component = fixture.componentInstance;
-        component.drawingsList = [{ canvas: canvas, name: '', tags: [] }];
+        component.drawingsList = [{ canvas, name: '', tags: [] }];
         canvasRef = new ElementRef<HTMLCanvasElement>(canvas);
         component.middlePreview = canvasRef;
         fixture.detectChanges();
@@ -78,8 +80,9 @@ describe('CarrouselComponent', () => {
 
     it('should update every drawing to be displayed', () => {
         const update = spyOn<any>(component, 'updateSingleDrawingContent');
+        const numberOfTimeCalled = 5;
         component['updateCanvasPreview']();
-        expect(update).toHaveBeenCalledTimes(5);
+        expect(update).toHaveBeenCalledTimes(numberOfTimeCalled);
     });
 
     it('should update a single displayed drawing', () => {
