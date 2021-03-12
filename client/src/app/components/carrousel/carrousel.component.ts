@@ -150,7 +150,7 @@ export class CarrouselComponent implements OnInit {
         drawingContent.tags = this.drawingsList[index].tags;
     }
 
-    // Quand on clique à gauche, c'est pour avoir l'élément à gauche
+    // Clicking on the left will bring the element on the left
     clickLeft(): void {
         if (!this.animationIsDone) return;
 
@@ -159,7 +159,7 @@ export class CarrouselComponent implements OnInit {
         this.translationState = 'right';
     }
 
-    // Quand on clique à droite, c'est pour avoir l'élément à droite
+    // Clicking on the right will bring the element on the right
     clickRight(): void {
         if (!this.animationIsDone) return;
 
@@ -183,9 +183,9 @@ export class CarrouselComponent implements OnInit {
         this.isLoadingCarrousel = true;
         this.cd.detectChanges(); // Must detect changes before loading
 
-        // TODO: Va être remplacé par la requète de dessins sauvegardés
-        // Ceci n'est utile que pour tester le fonctionnement.
-        // c1 à c5 créés pour tester
+        // TODO: This will be replaced with a server request for the saved drawings
+        // This current code is only usefull to test the current code logic
+        // c1 à c5 created for testing
         const c1 = document.createElement('canvas');
         c1.width = 200;
         c1.height = 1000;
