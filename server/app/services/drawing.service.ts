@@ -1,3 +1,4 @@
+import { DataNotCreated, DataNotDeleted, DataNotFound } from '@app/classes/errors';
 import { DatabaseService } from '@app/services/database.service';
 import { TYPES } from '@app/types';
 import { Drawing } from '@common/communication/drawing';
@@ -96,7 +97,7 @@ export class DrawingService {
         try {
             return await (await this.collection.insertOne(drawing)).insertedId;
         } catch (e) {
-            throw new Error('Erreur lors de la creation du dessin dans la base de donnee');
+            throw new DataNotCreated(drawing.toString());
         }
     }
 
@@ -110,11 +111,11 @@ export class DrawingService {
             .findOneAndDelete({ _id: id })
             .then((result: FindAndModifyWriteOpResultObject<DrawingData>) => {
                 if (!result.value) {
-                    throw new Error("Le dessin n'a pas pu etre trouvé");
+                    throw new DataNotFound(id);
                 }
             })
             .catch(() => {
-                throw new Error("Le dessin n'a pas pus etre supprimé");
+                throw new DataNotDeleted(id);
             });
     }
 
@@ -123,11 +124,11 @@ export class DrawingService {
             .findOneAndDelete(drawing)
             .then((result: FindAndModifyWriteOpResultObject<DrawingData>) => {
                 if (!result.value) {
-                    throw new Error("Le dessin n'a pas pu etre trouvé");
+                    throw new DataNotFound(drawing.toString());
                 }
             })
             .catch(() => {
-                throw new Error("Le dessin n'a pas pu etre supprimé");
+                throw new DataNotDeleted(drawing.toString());
             });
     }
 }

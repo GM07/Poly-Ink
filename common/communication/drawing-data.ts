@@ -1,4 +1,4 @@
-import { Tag } from "./tag";
+import { Tag } from './tag';
 
 export class DrawingData {
     name: string;
@@ -13,5 +13,9 @@ export class DrawingData {
 
     static fromAny(object: any): DrawingData {
         return new DrawingData(object.name, object.tags);
+    }
+
+    toString(): string {
+        return '[' + this._id + '] : ' + this.name + ' - ' + this.tags.toString();
     }
 }
