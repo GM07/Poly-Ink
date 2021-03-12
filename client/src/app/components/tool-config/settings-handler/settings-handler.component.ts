@@ -20,6 +20,8 @@ import { PolygoneService } from '@app/services/tools/polygone.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+import { PipetteService } from '@app/services/tools/pipette.service';
+import { PipetteConfigComponent } from '@app/components/tool-config/pipette-config/pipette-config.component';
 @Component({
     selector: 'app-settings-handler',
     templateUrl: './settings-handler.component.html',
@@ -40,6 +42,7 @@ export class SettingsHandlerComponent {
         this.settingsList.set(RectangleSelectionService, RectangleSelectionConfigComponent);
         this.settingsList.set(EllipseSelectionService, EllipseSelectionConfigComponent);
         this.settingsList.set(AerosolService, AerosolConfigComponent);
+        this.settingsList.set(PipetteService, PipetteConfigComponent);
         this.applyNewTab();
     }
 
