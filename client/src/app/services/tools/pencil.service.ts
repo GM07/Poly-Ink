@@ -73,11 +73,9 @@ export class PencilService extends Tool {
             // Drawing on preview canvas and then clear it with every mouse move
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawLine(this.drawingService.previewCtx, this.pathData);
-        } else {
-            if (this.isInCanvas(event)) {
-                this.mouseDownCoord = this.getPositionFromMouse(event);
-                this.drawBackgroundPoint(this.getPositionFromMouse(event));
-            }
+        } else if (this.isInCanvas(event)) {
+            this.mouseDownCoord = this.getPositionFromMouse(event);
+            this.drawBackgroundPoint(this.getPositionFromMouse(event));
         }
     }
 

@@ -114,7 +114,7 @@ describe('AbstractSelectionComponent', () => {
         fixture.detectChanges();
         component.initPoints();
         component['placePoints']();
-        expect(component['controlPointList'][0].nativeElement.style.opacity).toEqual('1');
+        expect(component['controlPointList'][0].nativeElement.style.opacity).not.toEqual('1');
     });
 
     it('place control point should update the left and top style of an html element', () => {

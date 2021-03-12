@@ -111,11 +111,6 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         this.placeControlPoint(this.bottomMiddle, width / 2 - this.MIDDLE_OFFSET, height + this.BORDER);
         this.placeControlPoint(this.bottomRight, width + this.BORDER, height + this.BORDER);
         this.placeBorder(this.border, width + this.BORDER, height + this.BORDER);
-
-        for (const elementRef of this.controlPointList) {
-            elementRef.nativeElement.style.opacity = '1';
-            elementRef.nativeElement.style.pointerEvents = 'auto';
-        }
     }
 
     private placeControlPoint(element: ElementRef<HTMLElement>, offsetX: number, offsetY: number): void {
