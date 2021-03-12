@@ -88,8 +88,7 @@ export class CarrouselComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        if (!this.showCarrousel) return;
-        this.loadCarrousel();
+        if (this.showCarrousel) this.loadCarrousel();
     }
 
     translationDone(): void {
