@@ -7,6 +7,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -22,6 +23,7 @@ import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.
 import { CarrouselComponent } from './components/carrousel/carrousel.component';
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
+import { ExportDrawingComponent } from './components/export-drawing/export-drawing.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { AbstractSelectionComponent } from './components/selection/abstract-selection/abstract-selection.component';
 import { NgInitControlPointDirective } from './components/selection/abstract-selection/ng-init-control-point.directive';
@@ -58,6 +60,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         SettingsHandlerComponent,
         CanvasResizeComponent,
         SidebarComponent,
+        ExportDrawingComponent,
         PolygoneConfigComponent,
         RectangleSelectionConfigComponent,
         NgInitControlPointDirective,
@@ -82,6 +85,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         MatTooltipModule,
         MatSidenavModule,
         MatListModule,
+        MatInputModule,
         MatExpansionModule,
         ColorPickerModule,
         MatChipsModule,

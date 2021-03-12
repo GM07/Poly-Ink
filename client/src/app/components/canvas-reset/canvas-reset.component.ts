@@ -1,6 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
-import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
+import { PopupHandlerService } from '@app/services/popups/popup-handler.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 @Component({
@@ -9,34 +8,31 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
     styleUrls: ['./canvas-reset.component.scss'],
 })
 export class NewDrawingComponent {
-    private shortcut: ShortcutKey;
+    constructor(private popupHandlerService: PopupHandlerService, private shortcutHandler: ShortcutHandlerService) {}
 
-    constructor(private newDrawing: NewDrawingService, private shortcutHandler: ShortcutHandlerService) {
-        this.shortcut = new ShortcutKey('o', true);
-    }
-
-    removeWarning(): void {
-        this.newDrawing.showWarning = false;
+    hidePopup(): void {
+        this.popupHandlerService.hideNewDrawingPopup();
         this.shortcutHandler.blockShortcuts = false;
-        this.shortcut.isDown = false;
+        this.popupHandlerService.newDrawing.shortcut.isDown = false;
     }
 
-    showWarning(): boolean {
-        return this.newDrawing.showWarning;
+    canShowPopup(): boolean {
+        return this.popupHandlerService.canShowNewDrawingPopup();
     }
 
     createNewDrawing(confirm: boolean): void {
-        this.removeWarning();
-        this.newDrawing.newCanvas(confirm);
+        this.popupHandlerService.newDrawing.newCanvas(confirm);
     }
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
-        if ((!this.shortcutHandler.blockShortcuts || this.shortcut.isDown) && this.shortcut.equals(event) && !this.newDrawing.showWarning) {
-            this.shortcut.isDown = true;
+        if (!this.shortcutHandler.blockShortcuts && this.popupHandlerService.newDrawing.shortcut.equals(event)) {
             event.preventDefault();
-            this.newDrawing.newCanvas();
-            if (this.newDrawing.showWarning) this.shortcutHandler.blockShortcuts = true;
+            this.popupHandlerService.newDrawing.newCanvas();
+            if (this.popupHandlerService.canShowNewDrawingPopup()) {
+                this.popupHandlerService.showNewDrawingPopup();
+                this.shortcutHandler.blockShortcuts = true;
+            }
         }
     }
 }

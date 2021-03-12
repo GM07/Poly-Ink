@@ -2,8 +2,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
-import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { NewDrawing } from '@app/services/popups/new-drawing';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 export interface DrawingContent {
@@ -57,6 +57,7 @@ export class CarrouselComponent implements OnInit {
     currentURL: string;
     showCarrousel: boolean;
     showLoadingError: boolean;
+    showLoadingWarning: boolean;
     isLoadingCarrousel: boolean;
     translationState: string | null;
     drawingsList: DrawingContent[] = [];
@@ -71,7 +72,6 @@ export class CarrouselComponent implements OnInit {
     private animationIsDone: boolean;
 
     constructor(
-        public newDrawing: NewDrawingService,
         private shortcutHandler: ShortcutHandlerService,
         private drawingService: DrawingService,
         private router: Router,
@@ -83,7 +83,7 @@ export class CarrouselComponent implements OnInit {
         this.animationIsDone = false;
         this.showCarrousel = false;
         this.showLoadingError = false;
-        this.newDrawing.showWarning = false;
+        this.showLoadingWarning = false;
         this.subscribeActivatedRoute(activatedRoute);
     }
 
@@ -169,7 +169,7 @@ export class CarrouselComponent implements OnInit {
     }
 
     closeCarrousel(): void {
-        this.newDrawing.showWarning = false;
+        this.showLoadingWarning = false;
         this.showCarrousel = false;
         this.showLoadingError = false;
         this.shortcutHandler.blockShortcuts = false;
@@ -464,10 +464,10 @@ export class CarrouselComponent implements OnInit {
 
         if (
             this.currentURL !== this.CARROUSEL_URL &&
-            !this.newDrawing.showWarning &&
-            this.newDrawing.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)
+            !this.showLoadingWarning &&
+            NewDrawing.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)
         ) {
-            this.newDrawing.showWarning = true;
+            this.showLoadingWarning = true;
             return;
         }
 
@@ -495,7 +495,7 @@ export class CarrouselComponent implements OnInit {
             this.loadCarrousel();
         }
 
-        if (this.showCarrousel && !this.newDrawing.showWarning) {
+        if (this.showCarrousel && !this.showLoadingWarning) {
             if (this.LEFT_ARROW.equals(event)) {
                 this.clickLeft();
             } else if (this.RIGHT_ARROW.equals(event)) {

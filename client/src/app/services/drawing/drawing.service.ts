@@ -15,7 +15,7 @@ export class DrawingService {
         this.loadedCanvas = undefined;
     }
 
-    changes: Subject<string> = new Subject<string>();
+    changes: Subject<void> = new Subject<void>();
 
     clearCanvas(context: CanvasRenderingContext2D): void {
         context.clearRect(0, 0, this.canvas.width, this.canvas.height);

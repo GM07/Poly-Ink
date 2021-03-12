@@ -9,6 +9,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { CarrouselComponent, DrawingContent } from '@app/components/carrousel/carrousel.component';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
+import { NewDrawing } from '@app/services/popups/new-drawing';
 import { of } from 'rxjs';
 
 // tslint:disable:no-any
@@ -177,12 +178,12 @@ describe('CarrouselComponent', () => {
     it('should show a warning when loading', () => {
         const update = spyOn<any>(component, 'updateCanvasPreview');
         component['drawingService'].canvas = canvasRef.nativeElement;
-        spyOn(component.newDrawing, 'isNotEmpty').and.returnValue(true);
+        spyOn(NewDrawing, 'isNotEmpty').and.returnValue(true);
         component.currentURL = '';
         component['animationIsDone'] = true;
         component.loadDrawing(0);
         expect(update).toHaveBeenCalled();
-        expect(component.newDrawing.showWarning).toBeTruthy();
+        expect(component.showLoadingWarning).toBeTruthy();
     });
 
     it('should close the carrousel and navigate by url when succesfully loading a drawing', () => {
@@ -203,7 +204,7 @@ describe('CarrouselComponent', () => {
         const closeCarrousel = spyOn<any>(component, 'closeCarrousel');
         component.currentURL = '';
         component['animationIsDone'] = true;
-        component.newDrawing.showWarning = true;
+        component.showLoadingWarning = true;
         component.loadDrawing(0);
         expect(update).toHaveBeenCalled();
         expect(closeCarrousel).toHaveBeenCalled();
@@ -220,19 +221,19 @@ describe('CarrouselComponent', () => {
     it('should detect the shortcut to display the carrousel', () => {
         const loadSpy = spyOn<any>(component, 'loadCarrousel');
         component.showCarrousel = true;
-        component.newDrawing.showWarning = true;
+        component.showLoadingWarning = true;
         component['shortcutHandler'].blockShortcuts = false;
         const keyEvent = new KeyboardEvent('document:keydown', { ctrlKey: true, key: 'g' });
         component.onKeyDown(keyEvent);
         expect(loadSpy).not.toHaveBeenCalled();
-        component.newDrawing.showWarning = false;
+        component.showLoadingWarning = false;
         component.onKeyDown(keyEvent);
         expect(component.showCarrousel).toBeTruthy();
     });
 
     it('should detect the left arrow key', () => {
         spyOn(component, 'clickLeft');
-        component.newDrawing.showWarning = false;
+        component.showLoadingWarning = false;
         component.showCarrousel = true;
         const keyBoardEvent = { key: 'arrowleft', ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
         component.onKeyDown(keyBoardEvent);
@@ -241,7 +242,7 @@ describe('CarrouselComponent', () => {
 
     it('should detect the right arrow key', () => {
         spyOn(component, 'clickRight');
-        component.newDrawing.showWarning = false;
+        component.showLoadingWarning = false;
         component.showCarrousel = true;
         const keyBoardEvent = { key: 'arrowright', ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
         component.onKeyDown(keyBoardEvent);
