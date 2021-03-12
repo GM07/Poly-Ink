@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { PopupHandlerService } from '@app/services/popups/popup-handler.service';
+import { NewDrawingService } from '@app/services/popups/new-drawing';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 @Component({
@@ -8,31 +8,27 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
     styleUrls: ['./canvas-reset.component.scss'],
 })
 export class NewDrawingComponent {
-    constructor(private popupHandlerService: PopupHandlerService, private shortcutHandler: ShortcutHandlerService) {}
+    constructor(private newDrawing: NewDrawingService, private shortcutHandler: ShortcutHandlerService) {}
 
     hidePopup(): void {
-        this.popupHandlerService.hideNewDrawingPopup();
+        this.newDrawing.showPopup = false;
         this.shortcutHandler.blockShortcuts = false;
-        this.popupHandlerService.newDrawing.shortcut.isDown = false;
     }
 
     canShowPopup(): boolean {
-        return this.popupHandlerService.canShowNewDrawingPopup();
+        return this.newDrawing.showPopup;
     }
 
     createNewDrawing(confirm: boolean): void {
-        this.popupHandlerService.newDrawing.newCanvas(confirm);
+        this.newDrawing.newCanvas(confirm);
     }
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
-        if (!this.shortcutHandler.blockShortcuts && this.popupHandlerService.newDrawing.shortcut.equals(event)) {
+        if (!this.shortcutHandler.blockShortcuts && this.newDrawing.shortcut.equals(event)) {
             event.preventDefault();
-            this.popupHandlerService.newDrawing.newCanvas();
-            if (this.popupHandlerService.canShowNewDrawingPopup()) {
-                this.popupHandlerService.showNewDrawingPopup();
-                this.shortcutHandler.blockShortcuts = true;
-            }
+            this.newDrawing.newCanvas();
+            if (this.newDrawing.showPopup) this.shortcutHandler.blockShortcuts = true;
         }
     }
 }

@@ -1,9 +1,13 @@
+import { Injectable } from '@angular/core';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
-export class NewDrawing {
+@Injectable({
+    providedIn: 'root',
+})
+export class NewDrawingService {
     showPopup: boolean;
     shortcut: ShortcutKey;
 

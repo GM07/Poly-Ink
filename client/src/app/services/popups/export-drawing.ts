@@ -1,6 +1,10 @@
+import { Injectable } from '@angular/core';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 
-export class ExportDrawing {
+@Injectable({
+    providedIn: 'root',
+})
+export class ExportDrawingService {
     shortcut: ShortcutKey;
     showPopup: boolean;
 

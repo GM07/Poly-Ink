@@ -5,7 +5,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { PopupHandlerService } from '@app/services/popups/popup-handler.service';
+import { ExportDrawingService } from '@app/services/popups/export-drawing';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { Colors } from 'src/color-picker/constants/colors';
@@ -19,7 +19,7 @@ describe('ExportDrawingComponent', () => {
     let component: ExportDrawingComponent;
     let fixture: ComponentFixture<ExportDrawingComponent>;
 
-    let popupService: PopupHandlerService;
+    let exportDrawingService: ExportDrawingService;
     let shortcutService: ShortcutHandlerService;
     let toolHandlerService: ToolHandlerService;
 
@@ -44,7 +44,7 @@ describe('ExportDrawingComponent', () => {
         drawServiceSpy.canvas.height = 300;
         drawServiceSpy.baseCtx = drawServiceSpy.canvas.getContext('2d') as CanvasRenderingContext2D;
 
-        popupService = TestBed.inject(PopupHandlerService);
+        exportDrawingService = TestBed.inject(ExportDrawingService);
     }));
 
     beforeEach(() => {
@@ -87,34 +87,32 @@ describe('ExportDrawingComponent', () => {
 
     it('should hide popup', () => {
         const initSpy = spyOn(component, 'initValues').and.callThrough();
-        const hideSpy = spyOn(popupService, 'hideExportDrawingPopup').and.callThrough();
         component.hidePopup();
         expect(initSpy).toHaveBeenCalled();
-        expect(hideSpy).toHaveBeenCalled();
+        expect(exportDrawingService.showPopup).toBeFalsy();
+        // TODO
     });
 
     it('should show popup', () => {
-        popupService.showExportDrawingPopup();
-        const showPopup = component.canShowPopup();
-        expect(showPopup).toBe(true);
+        exportDrawingService.showPopup = true;
+        expect(component.canShowPopup()).toBeTruthy();
     });
 
     it('should not show popup', () => {
-        popupService.showNewDrawingPopup();
-        const showPopup = component.canShowPopup();
-        expect(showPopup).toBe(false);
+        exportDrawingService.showPopup = false;
+        expect(component.canShowPopup()).toBeFalsy();
     });
 
     it('should export image with valid filename', () => {
         component['filename'] = 'test';
-        const spy = spyOn(popupService.exportDrawing, 'exportImage').and.callFake(() => {});
+        const spy = spyOn(exportDrawingService, 'exportImage').and.callFake(() => {});
         component.export();
         expect(spy).toHaveBeenCalledWith(component['canvasImage'], 'png', 'test');
     });
 
     it('should should change filename with invalid filename during export', () => {
         component['filename'] = '';
-        const spy = spyOn(popupService.exportDrawing, 'exportImage').and.callFake(() => {});
+        const spy = spyOn(exportDrawingService, 'exportImage').and.callFake(() => {});
         component.export();
         expect(spy).toHaveBeenCalledWith(component['canvasImage'], 'png', 'image');
     });
