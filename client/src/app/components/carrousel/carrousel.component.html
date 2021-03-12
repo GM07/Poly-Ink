@@ -1,5 +1,5 @@
-<div *ngIf="CARROUSEL_URL === currentURL">
-    <div style="background-color: lightgray"></div>
+<div *ngIf="currentURL == CARROUSEL_URL">
+    <div id="backgroundPage"></div>
 </div>
 
 <div *ngIf="newDrawing.showWarning && showCarrousel" id="backgroundAlert">
@@ -20,7 +20,8 @@
     </div>
 </div>
 
-<div *ngIf="showCarrousel" id="background">
+<div *ngIf="showCarrousel">
+    <div *ngIf="currentURL != CARROUSEL_URL" id="background"></div>
     <div id="main">
         <div id="content">
             <h1 class="white" style="text-align: center">Dessins sauvegardés sur le serveur</h1>
