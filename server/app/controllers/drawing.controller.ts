@@ -64,7 +64,7 @@ export class DrawingController {
         });
 
         this.router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
-            const ids: string = req.query.id;
+            const ids: string = req.query.ids;
             if (ids) {
                 const idArray: string[] = ids.split(',');
                 idArray.forEach(async (id: string) => {
