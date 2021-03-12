@@ -38,7 +38,7 @@ export class DrawingComponent implements AfterViewInit {
         this.popupHandlerService.initPopups();
     }
 
-    @HostListener('mousemove', ['$event'])
+    @HostListener('document:mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
         this.toolHandlerService.onMouseMove(event);
     }
