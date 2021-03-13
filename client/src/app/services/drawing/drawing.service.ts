@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -53,5 +54,15 @@ export class DrawingService {
     initBackground(): void {
         this.baseCtx.fillStyle = 'white';
         this.baseCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    draw(command: AbstractDraw): void {
+        command.execute(this.baseCtx);
+        // TODO - handle redo-undo
+    }
+
+    drawPreview(command: AbstractDraw): void {
+        this.clearCanvas(this.previewCtx);
+        command.execute(this.previewCtx);
     }
 }

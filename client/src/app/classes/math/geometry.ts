@@ -24,4 +24,9 @@ export class Geometry {
     static toRadians(degrees: number): number {
         return (degrees * Math.PI) / Geometry.DEGREE_CONVERSION_FACTOR;
     }
+
+    static isAPoint(path: Vec2[]): boolean {
+        const isPoint = path.length === 1;
+        return isPoint || (path.length === 2 && path[0].x === path[1].x && path[0].y === path[1].y);
+    }
 }

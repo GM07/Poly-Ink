@@ -34,4 +34,21 @@ describe('Geometry', () => {
         const angle: number = Geometry.toRadians(45);
         expect(angle).toBe(Math.PI / 4);
     });
+
+    it('verifies if it is a point', () => {
+        let point: Vec2[] = {} as Vec2[];
+        expect(Geometry.isAPoint(point)).toBeFalsy();
+        point = [{ x: 1, y: 1 }] as Vec2[];
+        expect(Geometry.isAPoint(point)).toBeTruthy();
+        point = [
+            { x: 1, y: 1 },
+            { x: 1, y: 1 },
+        ] as Vec2[];
+        expect(Geometry.isAPoint(point)).toBeTruthy();
+        point = [
+            { x: 1, y: 1 },
+            { x: 1, y: 2 },
+        ] as Vec2[];
+        expect(Geometry.isAPoint(point)).toBeFalsy();
+    });
 });

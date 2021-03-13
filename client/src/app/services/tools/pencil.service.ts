@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import { PencilDraw } from '@app/classes/commands/pencil-draw';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
+import { PencilConfig } from '@app/classes/tool-config/pencil-settings';
 import { PencilToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
@@ -17,29 +19,17 @@ export enum LeftMouse {
     providedIn: 'root',
 })
 export class PencilService extends Tool {
-    protected pathData: Vec2[][];
-    protected lineWidthIn: number;
+    config: PencilConfig = new PencilConfig();
     toolID: string = PencilToolConstants.TOOL_ID;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
-        this.clearPath();
 
         this.shortcutKey = new ShortcutKey(PencilToolConstants.SHORTCUT_KEY);
-        this.lineWidthIn = ToolSettingsConst.DEFAULT_PENCIL_WIDTH;
-    }
-
-    private static isAPoint(path: Vec2[]): boolean {
-        const isPoint = path.length === 1;
-        return isPoint || (path.length === 2 && path[0].x === path[1].x && path[0].y === path[1].y);
-    }
-
-    get lineWidth(): number {
-        return this.lineWidthIn;
     }
 
     set lineWidth(width: number) {
-        this.lineWidthIn = Math.min(Math.max(width, 1), ToolSettingsConst.MAX_WIDTH);
+        this.config.lineWidth = Math.min(Math.max(width, 1), ToolSettingsConst.MAX_WIDTH);
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -48,7 +38,7 @@ export class PencilService extends Tool {
             this.clearPath();
 
             this.mouseDownCoord = this.getPositionFromMouse(event);
-            this.pathData[this.pathData.length - 1].push(this.mouseDownCoord);
+            this.config.pathData[this.config.pathData.length - 1].push(this.mouseDownCoord);
         }
     }
 
@@ -56,9 +46,9 @@ export class PencilService extends Tool {
         if (this.leftMouseDown) {
             if (this.isInCanvas(event)) {
                 const mousePosition = this.getPositionFromMouse(event);
-                this.pathData[this.pathData.length - 1].push(mousePosition);
+                this.config.pathData[this.config.pathData.length - 1].push(mousePosition);
             }
-            this.drawLine(this.drawingService.baseCtx, this.pathData);
+            this.draw();
         }
         this.leftMouseDown = false;
         this.clearPath();
@@ -68,11 +58,11 @@ export class PencilService extends Tool {
     onMouseMove(event: MouseEvent): void {
         if (this.leftMouseDown) {
             const mousePosition = this.getPositionFromMouse(event);
-            this.pathData[this.pathData.length - 1].push(mousePosition);
+            this.config.pathData[this.config.pathData.length - 1].push(mousePosition);
 
             // Drawing on preview canvas and then clear it with every mouse move
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
-            this.drawLine(this.drawingService.previewCtx, this.pathData);
+            this.drawPreview();
         } else {
             this.mouseDownCoord = this.getPositionFromMouse(event);
             this.drawBackgroundPoint(this.getPositionFromMouse(event));
@@ -87,11 +77,11 @@ export class PencilService extends Tool {
         if (event.button !== MouseButton.Left) return;
 
         if (event.buttons === LeftMouse.Pressed) {
-            this.pathData.push([]);
+            this.config.pathData.push([]);
             this.onMouseMove(event);
         } else if (event.buttons === LeftMouse.Released) {
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
-            this.drawLine(this.drawingService.baseCtx, this.pathData);
+            this.drawPreview();
             this.leftMouseDown = false;
             this.clearPath();
         }
@@ -105,36 +95,22 @@ export class PencilService extends Tool {
     protected drawBackgroundPoint(point: Vec2): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
-        this.drawLine(ctx, [[point]]);
+        this.config.pathData = [[point]];
+        this.drawPreview();
     }
 
-    protected drawLine(ctx: CanvasRenderingContext2D, pathData: Vec2[][]): void {
-        ctx.beginPath();
-        ctx.strokeStyle = this.colorService.primaryRgba;
-        ctx.fillStyle = this.colorService.primaryRgba;
-        ctx.lineWidth = this.lineWidth;
-        ctx.lineCap = 'round' as CanvasLineCap;
-        ctx.lineJoin = 'round' as CanvasLineJoin;
+    drawPreview(): void {
+        const command = new PencilDraw(this.colorService, this.config);
+        this.drawingService.drawPreview(command);
+    }
 
-        for (const paths of pathData) {
-            // Special case to draw just one dot (or else it's not drawn)
-            if (PencilService.isAPoint(paths)) {
-                ctx.arc(paths[0].x, paths[0].y, this.lineWidthIn / 2, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.beginPath();
-            } else {
-                for (const point of paths) {
-                    ctx.lineTo(point.x, point.y);
-                }
-                ctx.stroke();
-                ctx.beginPath();
-            }
-        }
-        ctx.stroke();
+    draw(): void {
+        const command = new PencilDraw(this.colorService, this.config);
+        this.drawingService.draw(command);
     }
 
     protected clearPath(): void {
-        this.pathData = [];
-        this.pathData.push([]);
+        this.config.pathData = [];
+        this.config.pathData.push([]);
     }
 }
