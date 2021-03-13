@@ -26,7 +26,7 @@ export class PopupHandlerService {
     }
 
     showNewDrawingPopup(): void {
-        this.toolHandler.getTool().stopDrawing();
+        this.toolHandler.getCurrentTool().stopDrawing();
         this.newDrawing.showPopup = true;
     }
 
@@ -39,7 +39,7 @@ export class PopupHandlerService {
     }
 
     showExportDrawingPopup(): void {
-        this.toolHandler.getTool().stopDrawing();
+        this.toolHandler.getCurrentTool().stopDrawing();
         this.exportDrawing.showPopup = true;
     }
 

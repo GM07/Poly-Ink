@@ -55,7 +55,7 @@ class MockToolHandler extends ToolHandlerService {
         this.currentToolStub = this.TOOLS_MOCK.values().next().value;
     }
 
-    getTool(): Tool {
+    getCurrentTool(): Tool {
         return this.currentToolStub;
     }
 
@@ -129,8 +129,8 @@ describe('SettingsHandlerComponent', () => {
     });
 
     it('activeTab should be a the display of the current tool', () => {
-        if (toolHandlerService.getTool() instanceof PencilService) expect(component.activeTab === PencilConfigComponent).toBeTruthy();
-        if (toolHandlerService.getTool() instanceof LineService) expect(component.activeTab === LineConfigComponent).toBeTruthy();
+        if (toolHandlerService.getCurrentTool() instanceof PencilService) expect(component.activeTab === PencilConfigComponent).toBeTruthy();
+        if (toolHandlerService.getCurrentTool() instanceof LineService) expect(component.activeTab === LineConfigComponent).toBeTruthy();
     });
 
     it('should change the return value of activeTab for LineConfigComponent when setTool(LineService) is called', () => {

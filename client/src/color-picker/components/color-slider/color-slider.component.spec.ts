@@ -138,7 +138,7 @@ describe('ColorSliderComponent', () => {
 
     it('should set mousedown to false on mouse up', () => {
         component.leftMouseDown = true;
-        component.onMouseUp(new MouseEvent('mouseUp'));
+        component.onMouseUp();
         expect(component.leftMouseDown).toBeFalse();
     });
 
