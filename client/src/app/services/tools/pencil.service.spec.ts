@@ -103,7 +103,7 @@ describe('PencilService', () => {
         service.lineWidth = 2;
         let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);
-        service.onMouseLeave(mouseEventLClick);
+        service.onMouseLeave();
         mouseEventLClick = { offsetX: 0, offsetY: 50, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
         expect(drawLineSpy).toHaveBeenCalled();
@@ -130,7 +130,7 @@ describe('PencilService', () => {
         let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.lineWidth = 1;
         service.onMouseDown(mouseEventLClick);
-        service.onMouseLeave(mouseEventLClick);
+        service.onMouseLeave();
         mouseEventLClick = { offsetX: 0, offsetY: 2, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
         expect(drawLineSpy).toHaveBeenCalled();
@@ -158,7 +158,7 @@ describe('PencilService', () => {
 
     it('should clear the canvas preview when the mouse leaves the canvas, left click released', () => {
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
-        service.onMouseLeave(mouseEvent);
+        service.onMouseLeave();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
@@ -210,5 +210,12 @@ describe('PencilService', () => {
         expect(imageData.data[1]).toEqual(0); // G
         expect(imageData.data[2]).toEqual(0); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
+    });
+
+    it('preview should not appear if outside of canvas', () => {
+        spyOn(service, 'getPositionFromMouse');
+        spyOn(service, 'isInCanvas').and.returnValue(false);
+        service.onMouseMove({} as MouseEvent);
+        expect(service.getPositionFromMouse).not.toHaveBeenCalled();
     });
 });
