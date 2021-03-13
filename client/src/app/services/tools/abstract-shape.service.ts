@@ -3,10 +3,11 @@ import { ShiftKey } from '@app/classes/shortcut/shift-key';
 import { Tool } from '@app/classes/tool';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
+import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 
-export enum Mode {
+export enum ShapeMode {
     Contour = 0,
     Filled = 1,
     FilledWithContour = 2,
@@ -20,7 +21,7 @@ export abstract class AbstractShape extends Tool {
     toolID: string;
     protected mouseUpCoord: Vec2;
     protected lineWidthIn: number;
-    mode: Mode;
+    shapeMode: ShapeMode;
 
     protected abstract drawShape(ctx: CanvasRenderingContext2D): void;
 
@@ -30,12 +31,11 @@ export abstract class AbstractShape extends Tool {
         super(drawingService, colorService);
         this.SHIFT = new ShiftKey();
         this.lineWidthIn = 1;
-        this.mode = Mode.FilledWithContour;
+        this.shapeMode = ShapeMode.FilledWithContour;
     }
 
     set contourWidth(width: number) {
-        const max = 50;
-        this.lineWidthIn = Math.min(Math.max(width, 1), max);
+        this.lineWidthIn = Math.min(Math.max(width, 1), ToolSettingsConst.MAX_WIDTH);
     }
 
     get contourWidth(): number {

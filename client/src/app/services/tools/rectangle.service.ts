@@ -3,7 +3,7 @@ import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { RectangleToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { AbstractShape, Mode } from './abstract-shape.service';
+import { AbstractShape, ShapeMode } from './abstract-shape.service';
 
 @Injectable({
     providedIn: 'root',
@@ -34,14 +34,14 @@ export class RectangleService extends AbstractShape {
         ctx.lineCap = 'square' as CanvasLineCap;
         ctx.beginPath();
 
-        switch (this.mode) {
-            case Mode.Contour:
+        switch (this.shapeMode) {
+            case ShapeMode.Contour:
                 ctx.strokeRect(this.mouseDownCoord.x, this.mouseDownCoord.y, width, height);
                 break;
-            case Mode.Filled:
+            case ShapeMode.Filled:
                 ctx.fillRect(this.mouseDownCoord.x, this.mouseDownCoord.y, width, height);
                 break;
-            case Mode.FilledWithContour:
+            case ShapeMode.FilledWithContour:
                 ctx.rect(this.mouseDownCoord.x, this.mouseDownCoord.y, width, height);
                 ctx.fill();
                 break;

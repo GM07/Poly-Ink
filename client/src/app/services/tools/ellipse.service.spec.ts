@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { Mode } from '@app/services/tools/abstract-shape.service';
+import { ShapeMode } from '@app/services/tools/abstract-shape.service';
 import { EllipseService } from '@app/services/tools/ellipse.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 
@@ -152,7 +152,7 @@ describe('EllipseService', () => {
     });
 
     it('should allow for contour drawing type', () => {
-        service.mode = Mode.Contour;
+        service.shapeMode = ShapeMode.Contour;
         service.contourWidth = 1;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
@@ -181,7 +181,7 @@ describe('EllipseService', () => {
     });
 
     it('should allow for filled drawing type', () => {
-        service.mode = Mode.Filled;
+        service.shapeMode = ShapeMode.Filled;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
@@ -200,7 +200,7 @@ describe('EllipseService', () => {
     });
 
     it('should allow for filled with contour drawing type', () => {
-        service.mode = Mode.FilledWithContour;
+        service.shapeMode = ShapeMode.FilledWithContour;
         service.contourWidth = 1;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
@@ -232,7 +232,7 @@ describe('EllipseService', () => {
     });
 
     it('should do nothing with an unknown mode', () => {
-        service.mode = {} as Mode;
+        service.shapeMode = {} as ShapeMode;
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
@@ -244,7 +244,7 @@ describe('EllipseService', () => {
 
     it('should draw a circle when shift is pressed', () => {
         service.onKeyDown(keyboardEvent);
-        service.mode = Mode.FilledWithContour;
+        service.shapeMode = ShapeMode.FilledWithContour;
         service.contourWidth = 1;
         service.onMouseDown(mouseEvent);
         // tslint:disable-next-line:no-magic-numbers

@@ -4,7 +4,7 @@ import { EllipseToolConstants } from '@app/classes/tool_ui_settings/tools.consta
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { AbstractShape, Mode } from './abstract-shape.service';
+import { AbstractShape, ShapeMode } from './abstract-shape.service';
 
 @Injectable({
     providedIn: 'root',
@@ -47,19 +47,19 @@ export class EllipseService extends AbstractShape {
         ctx.lineJoin = 'round' as CanvasLineJoin;
 
         ctx.beginPath();
-        switch (this.mode) {
-            case Mode.Contour:
+        switch (this.shapeMode) {
+            case ShapeMode.Contour:
                 ctx.lineWidth = this.lineWidthIn;
                 ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
                 ctx.stroke();
                 break;
-            case Mode.Filled:
+            case ShapeMode.Filled:
                 ctx.lineWidth = 0;
                 ctx.fillStyle = this.colorService.primaryRgba;
                 ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
                 ctx.fill();
                 break;
-            case Mode.FilledWithContour:
+            case ShapeMode.FilledWithContour:
                 ctx.lineWidth = this.lineWidthIn;
                 ctx.fillStyle = this.colorService.primaryRgba;
                 ctx.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
@@ -76,7 +76,7 @@ export class EllipseService extends AbstractShape {
     private drawRectanglePerimeter(ctx: CanvasRenderingContext2D, center: Vec2, radius: Vec2): void {
         const dashWidth = 1;
         let lineWidth: number = this.lineWidthIn;
-        if (this.mode === Mode.Filled) {
+        if (this.shapeMode === ShapeMode.Filled) {
             lineWidth = 0;
         }
         const x = center.x - radius.x - lineWidth / 2;
