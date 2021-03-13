@@ -9,6 +9,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { CarrouselComponent, DrawingContent } from '@app/components/carrousel/carrousel.component';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
+import { DrawingService } from '@app/services/drawing/drawing.service';
 import { NewDrawing } from '@app/services/popups/new-drawing';
 import { of } from 'rxjs';
 
@@ -17,9 +18,14 @@ import { of } from 'rxjs';
 describe('CarrouselComponent', () => {
     let component: CarrouselComponent;
     let fixture: ComponentFixture<CarrouselComponent>;
-    let canvasRef: ElementRef<HTMLCanvasElement>;
+    let canvasDataURL: string;
+    let imageRef: ElementRef<HTMLImageElement>;
+    let createLoadedCanvasSpy: jasmine.Spy<any>;
+    let drawServiceSpy: jasmine.SpyObj<DrawingService>;
 
     beforeEach(async(() => {
+        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'loadDrawing']);
+
         TestBed.configureTestingModule({
             declarations: [CarrouselComponent],
             imports: [
@@ -33,6 +39,7 @@ describe('CarrouselComponent', () => {
                 MatChipsModule,
                 MatProgressSpinnerModule,
             ],
+            providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
         }).compileComponents();
     }));
 
@@ -43,9 +50,22 @@ describe('CarrouselComponent', () => {
 
         fixture = TestBed.createComponent(CarrouselComponent);
         component = fixture.componentInstance;
-        component.drawingsList = [{ canvas, name: '', tags: [] }];
-        canvasRef = new ElementRef<HTMLCanvasElement>(canvas);
-        component.middlePreview = canvasRef;
+        component.drawingsList = [{ drawingID: 'a', name: 'a', tags: ['a'] }];
+        canvasDataURL = canvas.toDataURL();
+
+        const image = new Image();
+        image.src = canvasDataURL;
+        imageRef = new ElementRef<HTMLImageElement>(image);
+        component.middlePreview = imageRef;
+
+        spyOn<any>(component, 'getDrawingFromServer').and.callFake((index: number) => {
+            if (index === 0) return canvasDataURL;
+            else return undefined;
+        });
+
+        createLoadedCanvasSpy = spyOn<any>(component, 'createLoadedCanvas');
+        component['drawingService'].canvas = document.createElement('canvas');
+
         fixture.detectChanges();
     });
 
@@ -108,24 +128,21 @@ describe('CarrouselComponent', () => {
     });
 
     it('should update a single displayed drawing', () => {
-        const drawImage = spyOn(canvasRef.nativeElement.getContext('2d') as CanvasRenderingContext2D, 'drawImage');
         let drawingContent = {} as DrawingContent;
-        component.drawingsList = [{ canvas: canvasRef.nativeElement, name: 'a', tags: ['a'] } as DrawingContent];
-        component['updateSingleDrawingContent'](canvasRef, 0, drawingContent);
-        expect(drawingContent.canvas).toEqual(canvasRef.nativeElement);
-        expect(drawingContent.name).toEqual('a');
-        expect(drawingContent.tags).toEqual(['a']);
-        expect(drawImage).toHaveBeenCalled();
-        drawImage.calls.reset();
-
-        drawingContent = {} as DrawingContent;
-        canvasRef.nativeElement.width = 2;
-        component.drawingsList = [{ canvas: canvasRef.nativeElement, name: 'b', tags: ['b'] } as DrawingContent];
-        component['updateSingleDrawingContent'](canvasRef, 0, drawingContent);
-        expect(drawingContent.canvas).toEqual(canvasRef.nativeElement);
+        component.drawingsList.push({ drawingID: 'b', name: 'b', tags: ['b'] } as DrawingContent);
+        component['updateSingleDrawingContent'](imageRef, 1, drawingContent);
+        expect(drawingContent.drawingID).toEqual('b');
         expect(drawingContent.name).toEqual('b');
         expect(drawingContent.tags).toEqual(['b']);
-        expect(drawImage).toHaveBeenCalled();
+        expect(imageRef.nativeElement.src).not.toEqual(canvasDataURL);
+
+        drawingContent = {} as DrawingContent;
+        component.drawingsList = [{ drawingID: 'b', name: 'b', tags: ['b'] } as DrawingContent];
+        component['updateSingleDrawingContent'](imageRef, 0, drawingContent);
+        expect(drawingContent.drawingID).toEqual('b');
+        expect(drawingContent.name).toEqual('b');
+        expect(drawingContent.tags).toEqual(['b']);
+        expect(imageRef.nativeElement.src).toEqual(canvasDataURL);
     });
 
     it('should allow to take the element on the left of the carrousel', () => {
@@ -161,23 +178,25 @@ describe('CarrouselComponent', () => {
 
     it('should not load if there is nothing', () => {
         const update = spyOn<any>(component, 'updateCanvasPreview');
-        component['animationIsDone'] = false;
+        component['animationIsDone'] = true;
+        component.drawingsList = [];
         component.loadDrawing(0);
         expect(update).not.toHaveBeenCalled();
     });
 
     it('should show a loading error', () => {
         const update = spyOn<any>(component, 'updateCanvasPreview');
+        component.drawingsList.push({ drawingID: 'b', name: 'b', tags: ['b'] } as DrawingContent);
         component['animationIsDone'] = true;
-        component.drawingsList[0].canvas = (undefined as unknown) as HTMLCanvasElement;
-        component.loadDrawing(0);
+        component.drawingsList[0].drawingID = '';
+        component.loadDrawing(1);
         expect(update).toHaveBeenCalled();
         expect(component.showLoadingError).toBeTruthy();
     });
 
     it('should show a warning when loading', () => {
+        spyOn<any>(component['router'], 'navigateByUrl');
         const update = spyOn<any>(component, 'updateCanvasPreview');
-        component['drawingService'].canvas = canvasRef.nativeElement;
         spyOn(NewDrawing, 'isNotEmpty').and.returnValue(true);
         component.currentURL = '';
         component['animationIsDone'] = true;
@@ -185,30 +204,36 @@ describe('CarrouselComponent', () => {
         expect(update).toHaveBeenCalled();
         expect(component.showLoadingWarning).toBeTruthy();
     });
+    //Apres
+
+    it('should display a loading screen when succesfully loading a drawing', () => {
+        spyOn<any>(component, 'updateCanvasPreview');
+        spyOn(NewDrawing, 'isNotEmpty').and.returnValue(false);
+        component.currentURL = '';
+        component['animationIsDone'] = true;
+        component.loadDrawing(0);
+        expect(component.isLoadingCarrousel).toBeTruthy();
+    });
+
+    //Avant
 
     it('should close the carrousel and navigate by url when succesfully loading a drawing', () => {
         const navigationSpy = spyOn<any>(component['router'], 'navigateByUrl');
-        const update = spyOn<any>(component, 'updateCanvasPreview');
         const closeCarrousel = spyOn<any>(component, 'closeCarrousel');
         component.currentURL = component['CARROUSEL_URL'];
-        component['animationIsDone'] = true;
-        component.loadDrawing(0);
-        expect(update).toHaveBeenCalled();
+        createLoadedCanvasSpy.and.callThrough();
+        component['createLoadedCanvas'](imageRef.nativeElement);
         expect(closeCarrousel).toHaveBeenCalled();
         expect(navigationSpy).toHaveBeenCalled();
     });
 
-    it('should close the carrousel load the drawing when succesfully loading a drawing', () => {
-        const loadrDrawingSpy = spyOn<any>(component['drawingService'], 'loadDrawing');
-        const update = spyOn<any>(component, 'updateCanvasPreview');
+    it('should close the carrousel and load the drawing when succesfully loading a drawing', () => {
         const closeCarrousel = spyOn<any>(component, 'closeCarrousel');
         component.currentURL = '';
-        component['animationIsDone'] = true;
-        component.showLoadingWarning = true;
-        component.loadDrawing(0);
-        expect(update).toHaveBeenCalled();
+        createLoadedCanvasSpy.and.callThrough();
+        component['createLoadedCanvas'](imageRef.nativeElement);
         expect(closeCarrousel).toHaveBeenCalled();
-        expect(loadrDrawingSpy).toHaveBeenCalled();
+        expect(drawServiceSpy.loadDrawing).toHaveBeenCalled();
     });
 
     it('should delete a drawing', () => {

@@ -7,7 +7,7 @@ import { NewDrawing } from '@app/services/popups/new-drawing';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 export interface DrawingContent {
-    canvas: HTMLCanvasElement;
+    drawingID: string;
     name: string;
     tags: string[];
 }
@@ -43,31 +43,32 @@ export interface DrawingContent {
     ],
 })
 export class CarrouselComponent implements OnInit {
-    @ViewChild('overflowLeftPreview', { static: false }) overflowLeftPreview: ElementRef<HTMLCanvasElement>;
-    @ViewChild('leftPreview', { static: false }) leftPreview: ElementRef<HTMLCanvasElement>;
-    @ViewChild('middlePreview', { static: false }) middlePreview: ElementRef<HTMLCanvasElement>;
-    @ViewChild('rightPreview', { static: false }) rightPreview: ElementRef<HTMLCanvasElement>;
-    @ViewChild('overflowRightPreview', { static: false }) overflowRightPreview: ElementRef<HTMLCanvasElement>;
+    @ViewChild('overflowLeftPreview', { static: false }) overflowLeftPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('leftPreview', { static: false }) leftPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('middlePreview', { static: false }) middlePreview: ElementRef<HTMLImageElement>;
+    @ViewChild('rightPreview', { static: false }) rightPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('overflowRightPreview', { static: false }) overflowRightPreview: ElementRef<HTMLImageElement>;
 
     private readonly SHORTCUT: ShortcutKey = new ShortcutKey('g', true);
     private readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
     private readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
     readonly CARROUSEL_URL: string = 'carrousel';
     readonly CANVAS_PREVIEW_SIZE: number = 200;
+
+    readonly overflowLeftElement: DrawingContent = {} as DrawingContent;
+    readonly leftElement: DrawingContent = {} as DrawingContent;
+    readonly middleElement: DrawingContent = {} as DrawingContent;
+    readonly rightElement: DrawingContent = {} as DrawingContent;
+    readonly overflowRightElement: DrawingContent = {} as DrawingContent;
+
     currentURL: string;
     showCarrousel: boolean;
     showLoadingError: boolean;
     showLoadingWarning: boolean;
     isLoadingCarrousel: boolean;
     translationState: string | null;
-    drawingsList: DrawingContent[] = [];
+    drawingsList: DrawingContent[];
     currentIndex: number;
-
-    overflowLeftElement: DrawingContent = {} as DrawingContent;
-    leftElement: DrawingContent = {} as DrawingContent;
-    middleElement: DrawingContent = {} as DrawingContent;
-    rightElement: DrawingContent = {} as DrawingContent;
-    overflowRightElement: DrawingContent = {} as DrawingContent;
 
     private animationIsDone: boolean;
 
@@ -78,6 +79,7 @@ export class CarrouselComponent implements OnInit {
         private cd: ChangeDetectorRef,
         activatedRoute: ActivatedRoute,
     ) {
+        this.drawingsList = [];
         this.currentIndex = 0;
         this.translationState = null;
         this.animationIsDone = false;
@@ -101,6 +103,88 @@ export class CarrouselComponent implements OnInit {
         this.translationState = 'reset';
     }
 
+    // Clicking on the left will bring the element on the left
+    clickLeft(): void {
+        if (!this.animationIsDone) return;
+
+        this.currentIndex = (this.currentIndex - 1 + this.drawingsList.length) % this.drawingsList.length;
+        this.animationIsDone = false;
+        this.translationState = 'right';
+    }
+
+    // Clicking on the right will bring the element on the right
+    clickRight(): void {
+        if (!this.animationIsDone) return;
+
+        this.currentIndex = (this.currentIndex + 1) % this.drawingsList.length;
+        this.animationIsDone = false;
+        this.translationState = 'left';
+    }
+
+    closeCarrousel(): void {
+        this.isLoadingCarrousel = false;
+        this.showLoadingWarning = false;
+        this.showCarrousel = false;
+        this.showLoadingError = false;
+        this.shortcutHandler.blockShortcuts = false;
+        if (this.currentURL === this.CARROUSEL_URL) {
+            this.router.navigateByUrl('home');
+        }
+    }
+
+    deleteDrawing(): void {
+        if (!this.animationIsDone || this.drawingsList.length === 0) return;
+        // TODO: Supprimer un dessin
+    }
+
+    loadDrawing(indexOffset: number): void {
+        if (!this.animationIsDone || this.drawingsList.length === 0) return;
+        const index = (this.currentIndex + indexOffset + 2 * this.drawingsList.length) % this.drawingsList.length;
+        this.currentIndex = index;
+        this.updateCanvasPreview();
+
+        const selectedDrawingSource = this.getDrawingFromServer(index);
+        if (selectedDrawingSource === undefined) {
+            this.showLoadingError = true;
+            return;
+        }
+
+        if (
+            this.currentURL !== this.CARROUSEL_URL &&
+            !this.showLoadingWarning &&
+            NewDrawing.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)
+        ) {
+            this.showLoadingWarning = true;
+            return;
+        }
+
+        const loadedImage = new Image();
+        loadedImage.onload = () => {
+            this.createLoadedCanvas(loadedImage);
+        };
+        loadedImage.src = selectedDrawingSource;
+        this.isLoadingCarrousel = true;
+        this.cd.detectChanges();
+    }
+
+    @HostListener('document:keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent): void {
+        if (!this.shortcutHandler.blockShortcuts && this.SHORTCUT.equals(event) && !this.showCarrousel) {
+            event.preventDefault();
+            this.shortcutHandler.blockShortcuts = true;
+            this.showCarrousel = true;
+            this.loadCarrousel();
+        }
+
+        if (this.showCarrousel && !this.showLoadingWarning) {
+            if (this.LEFT_ARROW.equals(event)) {
+                this.clickLeft();
+            } else if (this.RIGHT_ARROW.equals(event)) {
+                this.clickRight();
+            }
+        }
+    }
+
     private subscribeActivatedRoute(activatedRoute: ActivatedRoute): void {
         activatedRoute.url.subscribe((url: UrlSegment[]) => {
             this.currentURL = url[0].path;
@@ -122,60 +206,39 @@ export class CarrouselComponent implements OnInit {
         this.updateSingleDrawingContent(this.overflowRightPreview, 2, this.overflowRightElement);
     }
 
-    private updateSingleDrawingContent(canvasRef: ElementRef<HTMLCanvasElement>, indexOffset: number, drawingContent: DrawingContent): void {
-        const ctx = canvasRef.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+    private updateSingleDrawingContent(imageRef: ElementRef<HTMLImageElement>, indexOffset: number, drawingContent: DrawingContent): void {
         const index = (this.currentIndex + indexOffset + 2 * this.drawingsList.length) % this.drawingsList.length;
-        const aspectRatio = this.drawingsList[index].canvas.width / this.drawingsList[index].canvas.height;
+        const drawingData = this.getDrawingFromServer(index);
 
-        let leftOffset = 0;
-        let topOffset = 0;
-        let width: number;
-        let height: number;
-        if (this.drawingsList[index].canvas.width > this.drawingsList[index].canvas.height) {
-            width = this.CANVAS_PREVIEW_SIZE;
-            height = this.CANVAS_PREVIEW_SIZE / aspectRatio;
-            topOffset = (this.CANVAS_PREVIEW_SIZE - height) / 2;
-        } else {
-            height = this.CANVAS_PREVIEW_SIZE;
-            width = this.CANVAS_PREVIEW_SIZE * aspectRatio;
-            leftOffset = (this.CANVAS_PREVIEW_SIZE - width) / 2;
-        }
-
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.drawImage(this.drawingsList[index].canvas, leftOffset, topOffset, width, height);
-
-        drawingContent.canvas = this.drawingsList[index].canvas;
+        drawingContent.drawingID = this.drawingsList[index].drawingID;
         drawingContent.name = this.drawingsList[index].name;
         drawingContent.tags = this.drawingsList[index].tags;
+
+        imageRef.nativeElement.src = drawingData === undefined ? '' : drawingData;
     }
 
-    // Clicking on the left will bring the element on the left
-    clickLeft(): void {
-        if (!this.animationIsDone) return;
+    private createLoadedCanvas(loadedImage: HTMLImageElement): void {
+        const canvas = document.createElement('canvas');
+        const canvasCTX = canvas.getContext('2d') as CanvasRenderingContext2D;
+        canvas.width = loadedImage.width;
+        canvas.height = loadedImage.height;
+        canvasCTX.drawImage(loadedImage, 0, 0);
+        this.drawingService.loadedCanvas = canvas;
 
-        this.currentIndex = (this.currentIndex - 1 + this.drawingsList.length) % this.drawingsList.length;
-        this.animationIsDone = false;
-        this.translationState = 'right';
-    }
-
-    // Clicking on the right will bring the element on the right
-    clickRight(): void {
-        if (!this.animationIsDone) return;
-
-        this.currentIndex = (this.currentIndex + 1) % this.drawingsList.length;
-        this.animationIsDone = false;
-        this.translationState = 'left';
-    }
-
-    closeCarrousel(): void {
-        this.showLoadingWarning = false;
-        this.showCarrousel = false;
-        this.showLoadingError = false;
-        this.shortcutHandler.blockShortcuts = false;
+        this.closeCarrousel();
         if (this.currentURL === this.CARROUSEL_URL) {
-            this.router.navigateByUrl('home');
+            this.router.navigateByUrl('editor');
+        } else {
+            this.drawingService.loadDrawing();
         }
     }
+
+    private getDrawingFromServer(index: number): string | undefined {
+        return this.idAndBase64Drawing.get(this.drawingsList[index].drawingID);
+    }
+
+    // TODO: This is for testing purposes only
+    private idAndBase64Drawing = new Map<string, string>();
 
     // tslint:disable:no-magic-numbers
     private loadCarrousel(): void {
@@ -184,7 +247,7 @@ export class CarrouselComponent implements OnInit {
 
         // TODO: This will be replaced with a server request for the saved drawings
         // This current code is only usefull to test the current code logic
-        // c1 à c5 created for testing
+        // c1 to c5 created for testing
         const c1 = document.createElement('canvas');
         c1.width = 200;
         c1.height = 1000;
@@ -234,9 +297,15 @@ export class CarrouselComponent implements OnInit {
             ctxc5.fillRect(0, 0, 200, 200);
         }
 
+        this.idAndBase64Drawing.set('c1id', c1.toDataURL());
+        this.idAndBase64Drawing.set('c2id', c2.toDataURL());
+        this.idAndBase64Drawing.set('c3id', c3.toDataURL());
+        this.idAndBase64Drawing.set('c4id', c4.toDataURL());
+        this.idAndBase64Drawing.set('c5id', c5.toDataURL());
+
         this.drawingsList = [
             {
-                canvas: c1,
+                drawingID: 'c1id',
                 name: 'c111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111',
                 tags: [
                     'vGXlg6jwQk1111111111111111111111111111111111111111',
@@ -441,65 +510,17 @@ export class CarrouselComponent implements OnInit {
                     'YVQm5nLE8q',
                 ],
             } as DrawingContent,
-            { canvas: c2, name: 'c2', tags: ['tagc2'] } as DrawingContent,
-            { canvas: c3, name: 'c3', tags: ['this tag is way too long, so it should be broken for an appropriate display'] } as DrawingContent,
+            // { drawingID: 'error', name: 'cError', tags: ['tagcError'] } as DrawingContent,
+            { drawingID: 'c2id', name: 'c2', tags: ['tagc2'] } as DrawingContent,
+            {
+                drawingID: 'c3id',
+                name: 'c3',
+                tags: ['this tag is way too long, so it should be broken for an appropriate display'],
+            } as DrawingContent,
         ];
 
         this.isLoadingCarrousel = false;
         this.cd.detectChanges(); // Must detect changes when finished loading
         this.updateCanvasPreview();
-    }
-
-    loadDrawing(indexOffset: number): void {
-        if (!this.animationIsDone || this.drawingsList.length === 0) return;
-        const index = (this.currentIndex + indexOffset + 2 * this.drawingsList.length) % this.drawingsList.length;
-        this.currentIndex = index;
-        this.updateCanvasPreview();
-
-        if (this.drawingsList[index].canvas === undefined) {
-            this.showLoadingError = true;
-            return;
-        }
-
-        if (
-            this.currentURL !== this.CARROUSEL_URL &&
-            !this.showLoadingWarning &&
-            NewDrawing.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)
-        ) {
-            this.showLoadingWarning = true;
-            return;
-        }
-
-        this.drawingService.loadedCanvas = this.drawingsList[index].canvas;
-
-        this.closeCarrousel();
-        if (this.currentURL === this.CARROUSEL_URL) {
-            this.router.navigateByUrl('editor');
-        } else {
-            this.drawingService.loadDrawing();
-        }
-    }
-
-    deleteDrawing(): void {
-        if (!this.animationIsDone || this.drawingsList.length === 0) return;
-        // TODO: Supprimer un dessin
-    }
-
-    @HostListener('document:keydown', ['$event'])
-    onKeyDown(event: KeyboardEvent): void {
-        if (!this.shortcutHandler.blockShortcuts && this.SHORTCUT.equals(event) && !this.showCarrousel) {
-            event.preventDefault();
-            this.shortcutHandler.blockShortcuts = true;
-            this.showCarrousel = true;
-            this.loadCarrousel();
-        }
-
-        if (this.showCarrousel && !this.showLoadingWarning) {
-            if (this.LEFT_ARROW.equals(event)) {
-                this.clickLeft();
-            } else if (this.RIGHT_ARROW.equals(event)) {
-                this.clickRight();
-            }
-        }
     }
 }

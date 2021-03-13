@@ -40,7 +40,9 @@
                         >
                             <div class="drawingContents">
                                 <p class="name">{{ overflowLeftElement.name }}</p>
-                                <canvas #overflowLeftPreview [attr.width]="CANVAS_PREVIEW_SIZE" [attr.height]="CANVAS_PREVIEW_SIZE"></canvas>
+                                <div class="squareImage">
+                                    <img #overflowLeftPreview />
+                                </div>
                                 <p class="white">Étiquettes</p>
                                 <div class="chipList">
                                     <mat-chip-list>
@@ -52,12 +54,9 @@
                             </div>
                             <div class="drawingContents">
                                 <p class="name">{{ leftElement.name }}</p>
-                                <canvas
-                                    #leftPreview
-                                    [attr.width]="CANVAS_PREVIEW_SIZE"
-                                    [attr.height]="CANVAS_PREVIEW_SIZE"
-                                    (click)="loadDrawing(-1)"
-                                ></canvas>
+                                <div class="squareImage">
+                                    <img #leftPreview (click)="loadDrawing(-1)" />
+                                </div>
                                 <p class="white">Étiquettes</p>
                                 <div class="chipList">
                                     <mat-chip-list>
@@ -69,12 +68,9 @@
                             </div>
                             <div class="drawingContents">
                                 <p class="name">{{ middleElement.name }}</p>
-                                <canvas
-                                    #middlePreview
-                                    [attr.width]="CANVAS_PREVIEW_SIZE"
-                                    [attr.height]="CANVAS_PREVIEW_SIZE"
-                                    (click)="loadDrawing(0)"
-                                ></canvas>
+                                <div class="squareImage">
+                                    <img #middlePreview (click)="loadDrawing(0)" />
+                                </div>
                                 <p class="white">Étiquettes</p>
                                 <div class="chipList">
                                     <mat-chip-list class="chipList">
@@ -86,12 +82,9 @@
                             </div>
                             <div class="drawingContents">
                                 <p class="name">{{ rightElement.name }}</p>
-                                <canvas
-                                    #rightPreview
-                                    [attr.width]="CANVAS_PREVIEW_SIZE"
-                                    [attr.height]="CANVAS_PREVIEW_SIZE"
-                                    (click)="loadDrawing(1)"
-                                ></canvas>
+                                <div class="squareImage">
+                                    <img #rightPreview (click)="loadDrawing(1)" />
+                                </div>
                                 <p class="white">Étiquettes</p>
                                 <div class="chipList">
                                     <mat-chip-list>
@@ -103,7 +96,9 @@
                             </div>
                             <div class="drawingContents">
                                 <p class="name">{{ overflowRightElement.name }}</p>
-                                <canvas #overflowRightPreview [attr.width]="CANVAS_PREVIEW_SIZE" [attr.height]="CANVAS_PREVIEW_SIZE"></canvas>
+                                <div class="squareImage">
+                                    <img #overflowRightPreview />
+                                </div>
                                 <p class="white">Étiquettes</p>
                                 <div class="chipList">
                                     <mat-chip-list>
