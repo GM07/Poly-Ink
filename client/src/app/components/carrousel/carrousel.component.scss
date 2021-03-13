@@ -159,7 +159,19 @@ mat-chip {
     border-radius: 12px;
 }
 
+.button:disabled {
+    background-color: gray;
+}
+
 .loader {
     display: flex;
     justify-content: center;
+}
+
+.loadingAnimation {
+    max-height: 44px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }

@@ -116,21 +116,40 @@
                 </div>
 
                 <div *ngIf="showLoadingError" style="text-align: center">
-                    <h3 class="white" [innerHTML]="'Le dessin ' + drawingsList[currentIndex].name + ' ne peut pas être chargé'"></h3>
+                    <h3
+                        class="white"
+                        [innerHTML]="'Le dessin ' + drawingsList[currentIndex].name + ' ne peut pas être chargé. Veuillez en choisir un autre'"
+                    ></h3>
                 </div>
 
-                <div class="options">
-                    <button class="button green white" mat-raised-button (click)="loadDrawing(0)">Charger</button>
-                    <button class="button red white" mat-raised-button (click)="deleteDrawing()">Supprimer</button>
-                    <button class="button red white" mat-raised-button (click)="closeCarrousel()">Annuler</button>
+                <div *ngIf="showDeletionError" style="text-align: center">
+                    <h3 class="white" [innerHTML]="deletionErrorMessage"></h3>
                 </div>
-            </ng-template>
-            <ng-template #loadingBlock>
-                <h1 class="white" style="text-align: center">Chargement en cours...</h1>
-                <div class="loader">
-                    <mat-spinner></mat-spinner>
-                </div>
+
+                <div *ngIf="!animationIsDone; then loadingAnimationBlock; else optionsBlock"></div>
             </ng-template>
         </div>
     </div>
 </div>
+
+<ng-template #loadingBlock>
+    <h1 class="white" style="text-align: center">Chargement en cours...</h1>
+    <div class="loader">
+        <mat-spinner></mat-spinner>
+    </div>
+</ng-template>
+
+<ng-template #loadingAnimationBlock>
+    <div class="loadingAnimation">
+        <div class="white" style="flex: 0 0 200px">Chargement en cours...</div>
+        <mat-spinner [diameter]="44"></mat-spinner>
+    </div>
+</ng-template>
+
+<ng-template #optionsBlock>
+    <div class="options">
+        <button class="button green white" mat-raised-button (click)="loadDrawing(0)" [disabled]="!animationIsDone">Charger</button>
+        <button class="button red white" mat-raised-button (click)="deleteDrawing()" [disabled]="!animationIsDone">Supprimer</button>
+        <button class="button red white" mat-raised-button (click)="closeCarrousel()" [disabled]="!animationIsDone">Annuler</button>
+    </div>
+</ng-template>

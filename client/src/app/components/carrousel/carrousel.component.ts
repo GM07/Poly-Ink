@@ -62,6 +62,8 @@ export class CarrouselComponent implements OnInit {
     readonly overflowRightElement: DrawingContent = {} as DrawingContent;
 
     currentURL: string;
+    deletionErrorMessage: string;
+    showDeletionError: boolean;
     showCarrousel: boolean;
     showLoadingError: boolean;
     showLoadingWarning: boolean;
@@ -70,7 +72,7 @@ export class CarrouselComponent implements OnInit {
     drawingsList: DrawingContent[];
     currentIndex: number;
 
-    private animationIsDone: boolean;
+    animationIsDone: boolean;
 
     constructor(
         private shortcutHandler: ShortcutHandlerService,
@@ -86,6 +88,7 @@ export class CarrouselComponent implements OnInit {
         this.showCarrousel = false;
         this.showLoadingError = false;
         this.showLoadingWarning = false;
+        this.showDeletionError = false;
         this.subscribeActivatedRoute(activatedRoute);
     }
 
@@ -99,7 +102,7 @@ export class CarrouselComponent implements OnInit {
             return;
         }
 
-        this.updateCanvasPreview();
+        this.updateDrawingContent();
         this.translationState = 'reset';
     }
 
@@ -109,6 +112,7 @@ export class CarrouselComponent implements OnInit {
 
         this.currentIndex = (this.currentIndex - 1 + this.drawingsList.length) % this.drawingsList.length;
         this.animationIsDone = false;
+        this.showLoadingError = false;
         this.translationState = 'right';
     }
 
@@ -118,14 +122,17 @@ export class CarrouselComponent implements OnInit {
 
         this.currentIndex = (this.currentIndex + 1) % this.drawingsList.length;
         this.animationIsDone = false;
+        this.showLoadingError = false;
         this.translationState = 'left';
     }
 
     closeCarrousel(): void {
+        this.showDeletionError = false;
         this.isLoadingCarrousel = false;
         this.showLoadingWarning = false;
-        this.showCarrousel = false;
         this.showLoadingError = false;
+        this.showCarrousel = false;
+        this.deletionErrorMessage = '';
         this.shortcutHandler.blockShortcuts = false;
         if (this.currentURL === this.CARROUSEL_URL) {
             this.router.navigateByUrl('home');
@@ -134,6 +141,17 @@ export class CarrouselComponent implements OnInit {
 
     deleteDrawing(): void {
         if (!this.animationIsDone || this.drawingsList.length === 0) return;
+
+        const currentDrawingName = this.drawingsList[this.currentIndex].name;
+        this.drawingsList.splice(this.currentIndex, 1);
+        if (this.currentIndex === this.drawingsList.length && this.drawingsList.length !== 0) --this.currentIndex;
+        this.updateDrawingContent();
+
+        let deletionError = false;
+        this.showDeletionError = deletionError;
+        this.deletionErrorMessage = '';
+        if (deletionError) this.deletionErrorMessage = 'Erreur lors de la suppression du dessin ' + currentDrawingName;
+
         // TODO: Supprimer un dessin
     }
 
@@ -141,7 +159,7 @@ export class CarrouselComponent implements OnInit {
         if (!this.animationIsDone || this.drawingsList.length === 0) return;
         const index = (this.currentIndex + indexOffset + 2 * this.drawingsList.length) % this.drawingsList.length;
         this.currentIndex = index;
-        this.updateCanvasPreview();
+        this.updateDrawingContent();
 
         const selectedDrawingSource = this.getDrawingFromServer(index);
         if (selectedDrawingSource === undefined) {
@@ -194,9 +212,7 @@ export class CarrouselComponent implements OnInit {
         });
     }
 
-    private updateCanvasPreview(): void {
-        if (this.drawingsList.length === 0) return;
-
+    private updateDrawingContent(): void {
         const overFlowLeft = -2;
         const left = -1;
         this.updateSingleDrawingContent(this.overflowLeftPreview, overFlowLeft, this.overflowLeftElement);
@@ -210,9 +226,15 @@ export class CarrouselComponent implements OnInit {
         const index = (this.currentIndex + indexOffset + 2 * this.drawingsList.length) % this.drawingsList.length;
         const drawingData = this.getDrawingFromServer(index);
 
-        drawingContent.drawingID = this.drawingsList[index].drawingID;
-        drawingContent.name = this.drawingsList[index].name;
-        drawingContent.tags = this.drawingsList[index].tags;
+        if (this.drawingsList.length === 0) {
+            drawingContent.drawingID = '';
+            drawingContent.name = '';
+            drawingContent.tags = [];
+        } else {
+            drawingContent.drawingID = this.drawingsList[index].drawingID;
+            drawingContent.name = this.drawingsList[index].name;
+            drawingContent.tags = this.drawingsList[index].tags;
+        }
 
         imageRef.nativeElement.src = drawingData === undefined ? '' : drawingData;
     }
@@ -234,6 +256,7 @@ export class CarrouselComponent implements OnInit {
     }
 
     private getDrawingFromServer(index: number): string | undefined {
+        if (this.drawingsList.length === 0) return undefined;
         return this.idAndBase64Drawing.get(this.drawingsList[index].drawingID);
     }
 
@@ -510,17 +533,27 @@ export class CarrouselComponent implements OnInit {
                     'YVQm5nLE8q',
                 ],
             } as DrawingContent,
-            // { drawingID: 'error', name: 'cError', tags: ['tagcError'] } as DrawingContent,
+            { drawingID: 'error', name: 'cError', tags: ['tagcError'] } as DrawingContent,
             { drawingID: 'c2id', name: 'c2', tags: ['tagc2'] } as DrawingContent,
             {
                 drawingID: 'c3id',
                 name: 'c3',
                 tags: ['this tag is way too long, so it should be broken for an appropriate display'],
             } as DrawingContent,
+            {
+                drawingID: 'c4id',
+                name: 'c4',
+                tags: ['tagc4'],
+            } as DrawingContent,
+            {
+                drawingID: 'c5id',
+                name: 'c5',
+                tags: ['tagc5'],
+            } as DrawingContent,
         ];
 
         this.isLoadingCarrousel = false;
         this.cd.detectChanges(); // Must detect changes when finished loading
-        this.updateCanvasPreview();
+        this.updateDrawingContent();
     }
 }
