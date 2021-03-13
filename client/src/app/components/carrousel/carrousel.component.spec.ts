@@ -21,6 +21,7 @@ describe('CarrouselComponent', () => {
     let canvasDataURL: string;
     let imageRef: ElementRef<HTMLImageElement>;
     let createLoadedCanvasSpy: jasmine.Spy<any>;
+    let getDrawingFromServerSpy: jasmine.Spy<any>;
     let drawServiceSpy: jasmine.SpyObj<DrawingService>;
 
     beforeEach(async(() => {
@@ -58,11 +59,10 @@ describe('CarrouselComponent', () => {
         imageRef = new ElementRef<HTMLImageElement>(image);
         component.middlePreview = imageRef;
 
-        spyOn<any>(component, 'getDrawingFromServer').and.callFake((index: number) => {
+        getDrawingFromServerSpy = spyOn<any>(component, 'getDrawingFromServer').and.callFake((index: number) => {
             if (index === 0) return canvasDataURL;
             else return undefined;
         });
-
         createLoadedCanvasSpy = spyOn<any>(component, 'createLoadedCanvas');
         component['drawingService'].canvas = document.createElement('canvas');
 
@@ -204,7 +204,6 @@ describe('CarrouselComponent', () => {
         expect(update).toHaveBeenCalled();
         expect(component.showLoadingWarning).toBeTruthy();
     });
-    //Apres
 
     it('should display a loading screen when succesfully loading a drawing', () => {
         spyOn<any>(component, 'updateCanvasPreview');
@@ -214,8 +213,6 @@ describe('CarrouselComponent', () => {
         component.loadDrawing(0);
         expect(component.isLoadingCarrousel).toBeTruthy();
     });
-
-    //Avant
 
     it('should close the carrousel and navigate by url when succesfully loading a drawing', () => {
         const navigationSpy = spyOn<any>(component['router'], 'navigateByUrl');
@@ -251,9 +248,10 @@ describe('CarrouselComponent', () => {
         const keyEvent = new KeyboardEvent('document:keydown', { ctrlKey: true, key: 'g' });
         component.onKeyDown(keyEvent);
         expect(loadSpy).not.toHaveBeenCalled();
-        component.showLoadingWarning = false;
+        component.showCarrousel = false;
         component.onKeyDown(keyEvent);
         expect(component.showCarrousel).toBeTruthy();
+        expect(loadSpy).toHaveBeenCalled();
     });
 
     it('should detect the left arrow key', () => {
@@ -272,5 +270,10 @@ describe('CarrouselComponent', () => {
         const keyBoardEvent = { key: 'arrowright', ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
         component.onKeyDown(keyBoardEvent);
         expect(component.clickRight).toHaveBeenCalled();
+    });
+
+    it('should get a drawing from the server', () => {
+        getDrawingFromServerSpy.and.callThrough();
+        component['getDrawingFromServer'](0);
     });
 });
