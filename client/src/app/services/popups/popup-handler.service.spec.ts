@@ -11,7 +11,7 @@ describe('PopupHandlerService', () => {
         service = TestBed.inject(PopupHandlerService);
         toolHandlerService = TestBed.inject(ToolHandlerService);
         /* tslint:disable:no-empty */
-        spyOn(toolHandlerService.getTool(), 'stopDrawing').and.callFake(() => {});
+        spyOn(toolHandlerService.getCurrentTool(), 'stopDrawing').and.callFake(() => {});
         /* tslint:enable:no-empty */
 
         service.initPopups();

@@ -24,20 +24,20 @@ export class SelectionHandlerComponent {
     }
 
     get activeTab(): Type<AbstractSelectionComponent> | undefined {
-        if (this.toolHandler.getTool() === this.lastTool) return this.lastTab;
+        if (this.toolHandler.getCurrentTool() === this.lastTool) return this.lastTab;
         this.applyNewTab();
         return this.lastTab;
     }
 
     applyNewTab(): void {
         for (const [tool, selectionComponent] of this.settingsList) {
-            if (this.toolHandler.getTool() instanceof tool) {
-                this.lastTool = this.toolHandler.getTool();
+            if (this.toolHandler.getCurrentTool() instanceof tool) {
+                this.lastTool = this.toolHandler.getCurrentTool();
                 this.lastTab = selectionComponent;
                 return;
             }
         }
-        this.lastTool = this.toolHandler.getTool();
+        this.lastTool = this.toolHandler.getCurrentTool();
         this.lastTab = undefined;
     }
 }

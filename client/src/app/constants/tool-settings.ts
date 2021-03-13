@@ -16,4 +16,5 @@ export abstract class ToolSettingsConst {
     static readonly DEFAULT_AEROSOL_EMISSIONS_PER_SECOND: number = 100;
     static readonly DEFAULT_AEROSOL_SPRAY_INTERVAL: number = 10;
     static readonly MAX_AEROSOL_SPRAY_INTERVAL: number = 20;
+    static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;
 }

@@ -24,7 +24,7 @@ export class NewDrawing {
             return;
         }
 
-        this.toolHandler.getTool().stopDrawing();
+        this.toolHandler.getCurrentTool().stopDrawing();
 
         const canvasOffset = this.drawingService.canvas.getBoundingClientRect();
         const documentOffset = document.documentElement;

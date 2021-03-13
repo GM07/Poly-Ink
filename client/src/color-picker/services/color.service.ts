@@ -7,7 +7,7 @@ import { Colors } from 'src/color-picker/constants/colors';
     providedIn: 'root',
 })
 export class ColorService {
-    static readonly MAX_NUMBER_PREVIOUS_COLORS: number = 10;
+    private static readonly MAX_NUMBER_PREVIOUS_COLORS: number = 10;
 
     private primary: Color = Colors.BLACK;
     private secondary: Color = Colors.WHITE;
