@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
@@ -32,14 +32,14 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     private leftMouseDown: boolean = false;
     displayControlPoints: boolean = false;
 
-    constructor(protected selectionService: AbstractSelectionService, protected drawingService: DrawingService) {}
+    constructor(protected selectionService: AbstractSelectionService, protected drawingService: DrawingService, private cd: ChangeDetectorRef) {}
 
     ngOnInit(): void {
         this.selectionService.updatePoints.subscribe((display: boolean) => {
             if (display && this.displayControlPoints) {
                 this.placePoints();
             }
-            this.displayControlPoints = display;
+            this.updateControlPointDisplay(display);
         });
     }
 
@@ -56,7 +56,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
             this.makeControlsUnselectable();
         }
         this.leftMouseDown = event.button === MouseButton.Left;
-        this.displayControlPoints = this.selectionService.selectionCtx !== null;
+        this.updateControlPointDisplay(this.selectionService.selectionCtx !== null);
     }
 
     onMouseUp(): void {
@@ -64,7 +64,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
             this.makeControlsSelectable();
         }
         this.leftMouseDown = false;
-        this.displayControlPoints = this.selectionService.selectionCtx !== null;
+        this.updateControlPointDisplay(this.selectionService.selectionCtx !== null);
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -78,7 +78,16 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         }
     }
 
-    initPoints(): void {
+    private updateControlPointDisplay(display: boolean): void {
+        const lastDisplayControlPoints = this.displayControlPoints;
+        this.displayControlPoints = display;
+        if (!lastDisplayControlPoints && display) {
+            this.cd.detectChanges();
+            this.initPoints();
+        }
+    }
+
+    private initPoints(): void {
         this.controlPointList = [
             this.topLeft,
             this.topMiddle,

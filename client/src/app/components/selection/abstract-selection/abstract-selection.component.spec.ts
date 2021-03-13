@@ -87,11 +87,18 @@ describe('AbstractSelectionComponent', () => {
         expect(placePoints).not.toHaveBeenCalled();
     });
 
+    it('should check for change and init points detection when the control points are first displayed', () => {
+        spyOn<any>(component, 'initPoints');
+        component.displayControlPoints = false;
+        component['updateControlPointDisplay'](true);
+        expect(component['initPoints']).toHaveBeenCalled();
+    });
+
     it('init point should initialise the control points', () => {
         const placePoints = spyOn<any>(component, 'placePoints');
         component.displayControlPoints = true;
         fixture.detectChanges();
-        component.initPoints();
+        component['initPoints']();
         expect(placePoints).toHaveBeenCalled();
         expect(component['controlPointList'].length).toBeGreaterThan(0);
     });
@@ -102,7 +109,7 @@ describe('AbstractSelectionComponent', () => {
         const placeControlPoint = spyOn<any>(component, 'placeControlPoint');
         component.displayControlPoints = true;
         fixture.detectChanges();
-        component.initPoints();
+        component['initPoints']();
         component['placePoints']();
         expect(placeControlPoint).toHaveBeenCalledTimes(numberOfPoints * 2);
     });
@@ -112,7 +119,7 @@ describe('AbstractSelectionComponent', () => {
         spyOn<any>(component, 'placeControlPoint');
         component.displayControlPoints = true;
         fixture.detectChanges();
-        component.initPoints();
+        component['initPoints']();
         component['placePoints']();
         expect(component['controlPointList'][0].nativeElement.style.opacity).not.toEqual('1');
     });
@@ -130,7 +137,7 @@ describe('AbstractSelectionComponent', () => {
     it('make control unselectable should set the pointer event to none', () => {
         component.displayControlPoints = true;
         fixture.detectChanges();
-        component.initPoints();
+        component['initPoints']();
         component['makeControlsUnselectable']();
         expect(component['controlPointList'][0].nativeElement.style.pointerEvents).toEqual('none');
     });
@@ -138,7 +145,7 @@ describe('AbstractSelectionComponent', () => {
     it('make control unselectable should set the pointer event to none', () => {
         component.displayControlPoints = true;
         fixture.detectChanges();
-        component.initPoints();
+        component['initPoints']();
         component['makeControlsSelectable']();
         expect(component['controlPointList'][0].nativeElement.style.pointerEvents).toEqual('auto');
     });
@@ -147,10 +154,10 @@ describe('AbstractSelectionComponent', () => {
         component.displayControlPoints = false;
         const placePoints = spyOn<any>(component, 'placePoints');
         abstractSelectionService.updatePoints.next(true);
-        expect(placePoints).not.toHaveBeenCalled();
+        expect(placePoints).toHaveBeenCalled();
         component.displayControlPoints = true;
         abstractSelectionService.updatePoints.next(true);
-        expect(placePoints).toHaveBeenCalled();
+        expect(placePoints).toHaveBeenCalledTimes(2);
     });
 
     it('should not update control point on init if update is false', () => {
