@@ -56,7 +56,6 @@ export class RectangleSelectionService extends AbstractSelectionService {
             this.height = Math.sign(this.height) * Math.min(Math.abs(this.width), Math.abs(this.height));
             this.width = Math.sign(this.width) * Math.abs(this.height);
         }
-
         this.drawSelection(ctx, this.mouseDownCoord, this.width, this.height);
     }
 

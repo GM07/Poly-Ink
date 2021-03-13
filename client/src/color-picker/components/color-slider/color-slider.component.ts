@@ -133,7 +133,7 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
 
     // Listener added globally since mouse up could be outside of canvas
     @HostListener('window:mouseup', ['$event'])
-    onMouseUp(evt: MouseEvent): void {
+    onMouseUp(): void {
         this.leftMouseDown = false;
     }
 

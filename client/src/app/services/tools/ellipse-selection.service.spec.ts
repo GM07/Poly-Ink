@@ -65,14 +65,6 @@ describe('EllipseSelectionService', () => {
         expect(baseCtxStub.setLineDash).toHaveBeenCalledTimes(2);
     });
 
-    it('draw rectangle perimeter should draw a rectangle', () => {
-        spyOn(previewCtxStub, 'strokeRect');
-        spyOn(previewCtxStub, 'stroke');
-        service['drawRectanglePerimeter'](previewCtxStub, { x: 10, y: 25 } as Vec2);
-        expect(previewCtxStub.strokeRect).toHaveBeenCalled();
-        expect(previewCtxStub.stroke).toHaveBeenCalled();
-    });
-
     it('fill background should fill an ellipse at the location', () => {
         service['center'] = { x: 0, y: 0 } as Vec2;
         service['radiusAbs'] = { x: 0, y: 0 } as Vec2;
@@ -119,14 +111,6 @@ describe('EllipseSelectionService', () => {
         expect(baseCtxStub.clip).toHaveBeenCalled();
         expect(baseCtxStub.drawImage).toHaveBeenCalled();
         expect(fillBackground).toHaveBeenCalled();
-    });
-
-    it('draw selection should draw the rectangle perimeter if there is a selection', () => {
-        service['radiusAbs'] = { x: 0, y: 0 } as Vec2;
-        service.selectionCtx = previewCtxStub;
-        const drawRectanglePerimeter = spyOn<any>(service, 'drawRectanglePerimeter');
-        service['drawSelection'](previewCtxStub, { x: 0, y: 0 } as Vec2);
-        expect(drawRectanglePerimeter).toHaveBeenCalled();
     });
 
     it("fill background should do nothing if the mouse hasn't move", () => {

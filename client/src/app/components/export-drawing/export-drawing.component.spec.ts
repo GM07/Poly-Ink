@@ -33,7 +33,7 @@ describe('ExportDrawingComponent', () => {
         }).compileComponents();
 
         toolHandlerService = TestBed.inject(ToolHandlerService);
-        spyOn(toolHandlerService.getTool(), 'stopDrawing').and.callFake(() => {});
+        spyOn(toolHandlerService.getCurrentTool(), 'stopDrawing').and.callFake(() => {});
 
         shortcutService = TestBed.inject(ShortcutHandlerService);
 

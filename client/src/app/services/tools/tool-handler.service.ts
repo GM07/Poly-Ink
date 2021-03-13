@@ -54,7 +54,7 @@ export class ToolHandlerService {
         this.currentToolSubject.next(this.currentTool);
     }
 
-    getTool(): Tool {
+    getCurrentTool(): Tool {
         return this.currentTool;
     }
 
