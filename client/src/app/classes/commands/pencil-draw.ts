@@ -1,5 +1,5 @@
 import { Geometry } from '@app/classes/math/geometry';
-import { PencilConfig } from '@app/classes/tool-config/pencil-settings';
+import { PencilConfig } from '@app/classes/tool-config/pencil-config';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { AbstractDraw } from './abstract-draw';
 

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
-import { PencilConfig } from '@app/classes/tool-config/pencil-settings';
+import { PencilConfig } from '@app/classes/tool-config/pencil-config';
 import { Vec2 } from '@app/classes/vec2';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { Colors } from 'src/color-picker/constants/colors';
