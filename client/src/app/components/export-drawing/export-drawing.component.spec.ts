@@ -90,7 +90,6 @@ describe('ExportDrawingComponent', () => {
         component.hidePopup();
         expect(initSpy).toHaveBeenCalled();
         expect(exportDrawingService.showPopup).toBeFalsy();
-        // TODO
     });
 
     it('should show popup', () => {
