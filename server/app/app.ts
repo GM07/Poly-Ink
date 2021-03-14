@@ -6,7 +6,7 @@ import { inject, injectable } from 'inversify';
 import * as logger from 'morgan';
 import * as swaggerJSDoc from 'swagger-jsdoc';
 import * as swaggerUi from 'swagger-ui-express';
-import { DateController } from './controllers/date.controller';
+// import { DateController } from './controllers/date.controller';
 import { DrawingController } from './controllers/drawing.controller';
 import { TYPES } from './types';
 
@@ -18,7 +18,7 @@ export class Application {
 
     constructor(
         // @inject(TYPES.IndexController) private indexController: IndexController,
-        @inject(TYPES.DateController) private dateController: DateController,
+        // @inject(TYPES.DateController) private dateController: DateController,
         @inject(TYPES.DrawingController) private drawingController: DrawingController,
     ) {
         this.app = express();
@@ -52,7 +52,7 @@ export class Application {
         // Notre application utilise le routeur de notre API `Index`
         this.app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(this.swaggerOptions)));
         // this.app.use('/api/drawing', this.indexController.router);
-        this.app.use('/api/date', this.dateController.router);
+        // this.app.use('/api/date', this.dateController.router);
         this.app.use('/drawings', this.drawingController.router);
         this.errorHandling();
     }
