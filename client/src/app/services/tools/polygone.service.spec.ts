@@ -5,7 +5,7 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Color } from 'src/color-picker/classes/color';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { PolygoneMode, PolygoneService } from './polygone.service';
+import { PolygoneService } from './polygone.service';
 // tslint:disable:no-any
 describe('PolygoneService', () => {
     let service: PolygoneService;
@@ -15,19 +15,15 @@ describe('PolygoneService', () => {
     let previewCtxStub: CanvasRenderingContext2D;
     let baseCtxStub: CanvasRenderingContext2D;
 
-    let drawPolygoneSpy: jasmine.Spy<any>;
-    let updatePolygoneSpy: jasmine.Spy<any>;
+    let drawSpy: jasmine.Spy<any>;
+    let drawPreviewSpy: jasmine.Spy<any>;
 
     let mouseEvent: MouseEvent;
     const INIT_OFFSET_X = 25;
     const INIT_OFFSET_Y = 25;
-    const GRAY_RGB = 128;
-    const PRIMARY_RGB = new Color(1, 1, 1);
-    const SECONDARY_RGB = Colors.BLACK;
-    const ALPHA = 3;
 
     beforeEach(() => {
-        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
+        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'drawPreview']);
 
         colorServiceSpy = jasmine.createSpyObj('ColorService', [], {
             primaryRgba: new Color(1, 1, 1).toRgbaString(1),
@@ -42,8 +38,8 @@ describe('PolygoneService', () => {
         });
 
         service = TestBed.inject(PolygoneService);
-        drawPolygoneSpy = spyOn<any>(service, 'drawPolygone').and.callThrough();
-        updatePolygoneSpy = spyOn<any>(service, 'updatePolygone').and.callThrough();
+        drawSpy = spyOn<any>(service, 'draw').and.stub();
+        drawPreviewSpy = spyOn<any>(service, 'drawPreview').and.stub();
 
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         baseCtxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -92,26 +88,26 @@ describe('PolygoneService', () => {
     it('should not draw when the mouse is up', () => {
         service.leftMouseDown = false;
         service.onMouseMove(mouseEvent);
-        expect(drawPolygoneSpy).not.toHaveBeenCalled();
+        expect(drawPreviewSpy).not.toHaveBeenCalled();
     });
 
     it('should not start drawing when the mouse is moving but it is not the right button', () => {
         mouseEvent = { offsetX: 1, offsetY: 1, button: 3 } as MouseEvent;
         service.onMouseMove(mouseEvent);
-        expect(drawPolygoneSpy).not.toHaveBeenCalled();
+        expect(drawPreviewSpy).not.toHaveBeenCalled();
     });
 
     it('should not start drawing when the mouse is down but it is not the right button', () => {
         mouseEvent = { offsetX: 1, offsetY: 1, button: 3 } as MouseEvent;
         service.onMouseDown(mouseEvent);
-        expect(drawPolygoneSpy).not.toHaveBeenCalled();
+        expect(drawPreviewSpy).not.toHaveBeenCalled();
     });
 
     it('should start drawing when the mouse is down on the left click', () => {
         service.leftMouseDown = true;
         mouseEvent = { offsetX: 0, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
-        expect(drawPolygoneSpy).toHaveBeenCalled();
+        expect(drawPreviewSpy).toHaveBeenCalled();
     });
 
     it('should stop drawing when the mouse is up', () => {
@@ -120,7 +116,7 @@ describe('PolygoneService', () => {
         service.onMouseDown(mouseEvent);
         mouseEvent = { x: -1, y: -1, offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
-        expect(drawPolygoneSpy).toHaveBeenCalled();
+        expect(drawSpy).toHaveBeenCalled();
     });
 
     it('should clear the canvas when stops drawing when asked to', () => {
@@ -134,143 +130,51 @@ describe('PolygoneService', () => {
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: INIT_OFFSET_X - 1, offsetY: INIT_OFFSET_Y + 1, button: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
-        expect(drawPolygoneSpy).toHaveBeenCalled();
+        expect(drawPreviewSpy).toHaveBeenCalled();
     });
 
     it('should update the polygone when then mouse leaves', () => {
         service.onMouseLeave(mouseEvent);
-        expect(updatePolygoneSpy).not.toHaveBeenCalled();
+        expect(drawPreviewSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         service.onMouseLeave(mouseEvent);
-        expect(updatePolygoneSpy).toHaveBeenCalled();
+        expect(drawPreviewSpy).toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: INIT_OFFSET_X + 1, offsetY: INIT_OFFSET_Y + 1, button: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
-        expect(updatePolygoneSpy).toHaveBeenCalled();
+        expect(drawPreviewSpy).toHaveBeenCalled();
     });
 
     it('should update the polygone when the mouse enters', () => {
         service.onMouseEnter(mouseEvent);
-        expect(updatePolygoneSpy).not.toHaveBeenCalled();
+        expect(drawPreviewSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         mouseEvent = { offsetX: INIT_OFFSET_X + 1, offsetY: INIT_OFFSET_Y - 1, button: 0 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
-        expect(updatePolygoneSpy);
+        expect(drawPreviewSpy);
     });
 
-    it('should draw preview circle when drawing', () => {
-        service.polygoneMode = PolygoneMode.Contour;
-        service.contourWidth = 1;
-        service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
-        service.onMouseMove(mouseEvent);
-        expect(drawPolygoneSpy).toHaveBeenCalled();
-
-        const middlePoint = INIT_OFFSET_X / 2;
-        const previewImageData = previewCtxStub.getImageData(0, middlePoint, 1, 1);
-
-        expect(previewImageData.data[0]).toEqual(GRAY_RGB); // R
-        expect(previewImageData.data[1]).toEqual(GRAY_RGB); // G
-        expect(previewImageData.data[2]).toEqual(GRAY_RGB); // B
-        expect(previewImageData.data[ALPHA]).not.toEqual(0); // A
-
-        const rightRectanglePoint = INIT_OFFSET_X;
-        const voidImageData = previewCtxStub.getImageData(0, rightRectanglePoint, 1, 1);
-        expect(voidImageData.data[ALPHA]).toEqual(0); // A
+    it('should send command to drawing service to draw on preview', () => {
+        drawPreviewSpy.and.callThrough();
+        service.drawPreview();
+        expect(drawServiceSpy.drawPreview).toHaveBeenCalled();
     });
 
-    it('should allow for contour drawing type', () => {
-        service.polygoneMode = PolygoneMode.Contour;
-        service.contourWidth = 1;
-        service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
-        service.onMouseUp(mouseEvent);
-        expect(drawPolygoneSpy).toHaveBeenCalled();
-
-        const middlePoint = INIT_OFFSET_X / 2;
-        let imageData: ImageData = baseCtxStub.getImageData(middlePoint, 0, 1, 1);
-
-        expect(imageData.data[0]).toEqual(SECONDARY_RGB.r); // R
-        expect(imageData.data[1]).toEqual(SECONDARY_RGB.g); // G
-        expect(imageData.data[2]).toEqual(SECONDARY_RGB.b); // B
-        expect(imageData.data[ALPHA]).not.toEqual(0); // A
-
-        const x = INIT_OFFSET_X / 2;
-        const y = INIT_OFFSET_Y / 2;
-        imageData = baseCtxStub.getImageData(x, y, 1, 1);
-        expect(imageData.data[ALPHA]).toEqual(0); // A
+    it('should send command to drawing service to draw on base', () => {
+        drawSpy.and.callThrough();
+        service.draw();
+        expect(drawServiceSpy.draw).toHaveBeenCalled();
     });
 
-    it('should allow for filled drawing type', () => {
-        service.polygoneMode = PolygoneMode.Filled;
-        service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+    it('should not update rectangle end coordinates to mousePosition when mouseup outside canvas', () => {
+        mouseEvent = {
+            offsetX: baseCtxStub.canvas.width + 1,
+            offsetY: baseCtxStub.canvas.width + 1,
+            button: 0,
+        } as MouseEvent;
+        service.leftMouseDown = true;
         service.onMouseUp(mouseEvent);
-        expect(drawPolygoneSpy).toHaveBeenCalled();
-
-        const x = INIT_OFFSET_X / 2;
-        const y = INIT_OFFSET_Y / 2;
-        const imageData: ImageData = baseCtxStub.getImageData(x, y, 1, 1);
-        expect(imageData.data[0]).toEqual(PRIMARY_RGB.r); // R
-        expect(imageData.data[1]).toEqual(PRIMARY_RGB.g); // G
-        expect(imageData.data[2]).toEqual(PRIMARY_RGB.b); // B
-        expect(imageData.data[ALPHA]).not.toEqual(0); // A
-    });
-
-    it('should allow for filled and contour drawing type for a triangle', () => {
-        service.polygoneMode = PolygoneMode.FilledWithContour;
-        service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
-        service.onMouseUp(mouseEvent);
-        expect(drawPolygoneSpy).toHaveBeenCalled();
-
-        const fillX = INIT_OFFSET_X / 2;
-        const fillY = INIT_OFFSET_Y / 2;
-        const fillImageData: ImageData = baseCtxStub.getImageData(fillX, fillY, 1, 1);
-        expect(fillImageData.data[0]).toEqual(PRIMARY_RGB.r); // R
-        expect(fillImageData.data[1]).toEqual(PRIMARY_RGB.g); // G
-        expect(fillImageData.data[2]).toEqual(PRIMARY_RGB.b); // B
-        expect(fillImageData.data[ALPHA]).not.toEqual(0); // A
-    });
-
-    it('should allow for filled and contour drawing type for a square', () => {
-        service.polygoneMode = PolygoneMode.FilledWithContour;
-        service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
-        service.onMouseUp(mouseEvent);
-        expect(drawPolygoneSpy).toHaveBeenCalled();
-
-        // tslint:disable-next-line:no-magic-numbers
-        service.numEdges = 4;
-        service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
-        service.onMouseUp(mouseEvent);
-        expect(drawPolygoneSpy).toHaveBeenCalled();
-
-        const fillX: number = INIT_OFFSET_X / 2;
-        const fillY: number = INIT_OFFSET_Y / 2;
-        const fillImageData: ImageData = baseCtxStub.getImageData(fillX, fillY, 1, 1);
-        expect(fillImageData.data[0]).toEqual(PRIMARY_RGB.r); // R
-        expect(fillImageData.data[1]).toEqual(PRIMARY_RGB.g); // G
-        expect(fillImageData.data[2]).toEqual(PRIMARY_RGB.b); // B
-        expect(fillImageData.data[ALPHA]).not.toEqual(0); // A
-        const middlePoint = INIT_OFFSET_X / 2;
-        const previewImageData: ImageData = baseCtxStub.getImageData(middlePoint, 0, 1, 1);
-
-        expect(previewImageData.data[0]).toEqual(SECONDARY_RGB.r); // R
-        expect(previewImageData.data[1]).toEqual(SECONDARY_RGB.g); // G
-        expect(previewImageData.data[2]).toEqual(SECONDARY_RGB.b); // B
-        expect(previewImageData.data[ALPHA]).not.toEqual(0); // A
-    });
-
-    it('should do nothing with an unknown mode', () => {
-        service.polygoneMode = {} as PolygoneMode;
-        service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: -1, offsetY: -1, button: 0 } as MouseEvent;
-        service.onMouseUp(mouseEvent);
-
-        // tslint:disable-next-line:no-magic-numbers
-        const imageData = baseCtxStub.getImageData(1, 1, 25, 25);
-        expect(imageData.data[ALPHA]).toEqual(0); // A
+        spyOn(service, 'getPositionFromMouse').and.stub();
+        expect(service.getPositionFromMouse).not.toHaveBeenCalled();
     });
 });

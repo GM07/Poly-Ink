@@ -45,7 +45,6 @@ export class EllipseService extends Tool {
         if (this.leftMouseDown) {
             this.config.startCoords = this.getPositionFromMouse(event);
             this.config.endCoords = this.config.startCoords;
-            this.config.showPerimeter = false;
             this.drawPreview();
         }
     }
@@ -56,7 +55,6 @@ export class EllipseService extends Tool {
                 this.config.endCoords = this.getPositionFromMouse(event);
             }
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
-            this.config.showPerimeter = false;
             this.draw();
         }
         this.leftMouseDown = false;
@@ -65,7 +63,6 @@ export class EllipseService extends Tool {
     onMouseMove(event: MouseEvent): void {
         if (this.leftMouseDown) {
             this.config.endCoords = this.getPositionFromMouse(event);
-            this.config.showPerimeter = true;
             this.drawPreview();
         }
     }
@@ -103,16 +100,17 @@ export class EllipseService extends Tool {
     }
 
     private updateEllipse(): void {
-        this.config.showPerimeter = true;
         this.drawPreview();
     }
 
     draw(): void {
+        this.config.showPerimeter = false;
         const command = new EllipseDraw(this.colorService, this.config);
         this.drawingService.draw(command);
     }
 
     drawPreview(): void {
+        this.config.showPerimeter = true;
         const command = new EllipseDraw(this.colorService, this.config);
         this.drawingService.drawPreview(command);
     }
