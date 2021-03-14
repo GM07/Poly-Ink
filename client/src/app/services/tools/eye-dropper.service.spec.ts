@@ -87,10 +87,11 @@ describe('EyeDropperService', () => {
         expect(service['colorService'].primaryColor).toEqual(new Color(25, 25, 25));
     });
 
-    it('onMouseMove should do nothing if the previsualisation has not been detected', () => {
-        spyOn(service, 'isInCanvas');
+    it('should clear if is not in canvas', () => {
+        spyOn(service, 'isInCanvas').and.returnValue(false);
+        spyOn(service.previsualisationCtx, 'clearRect');
         service.onMouseMove({} as MouseEvent);
-        expect(service.isInCanvas).not.toHaveBeenCalled();
+        expect(service.previsualisationCtx.clearRect).toHaveBeenCalled();
     });
 
     it('onMouseMove should clear the previsualisation if outside of the canvas', () => {
@@ -116,7 +117,7 @@ describe('EyeDropperService', () => {
 
     it('drawSelectedPixelRect should draw a dotted rectangle at the center of the previsualisation', () => {
         spyOn(service['drawingService'].baseCtx, 'strokeRect');
-        service['drawSelectedPixelRect'](service['drawingService'].baseCtx, canvasTestHelper.canvas, 10);
+        service['drawSelectedPixelRect'](service['drawingService'].baseCtx);
         expect(service['drawingService'].baseCtx.strokeRect).toHaveBeenCalledTimes(2);
     });
 

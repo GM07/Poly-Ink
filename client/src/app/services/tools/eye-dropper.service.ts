@@ -4,7 +4,9 @@ import { Tool } from '@app/classes/tool';
 import { EyeDropperToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
+import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { Subject } from 'rxjs';
 import { Color } from 'src/color-picker/classes/color';
 import { ColorService } from 'src/color-picker/services/color.service';
 
@@ -15,11 +17,16 @@ export class EyeDropperService extends Tool {
     toolID: string;
     previsualisationCanvas: HTMLCanvasElement;
     previsualisationCtx: CanvasRenderingContext2D;
+    updatePrevisualisation: Subject<void> = new Subject();
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.toolID = EyeDropperToolConstants.TOOL_ID;
         this.shortcutKey = new ShortcutKey(EyeDropperToolConstants.SHORTCUT_KEY);
+        this.previsualisationCanvas = document.createElement('canvas');
+        this.previsualisationCanvas.width = ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH ** 2;
+        this.previsualisationCanvas.height = ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH ** 2;
+        this.previsualisationCtx = this.previsualisationCanvas.getContext('2d') as CanvasRenderingContext2D;
     }
 
     stopDrawing(): void {
@@ -39,40 +46,41 @@ export class EyeDropperService extends Tool {
     }
 
     onMouseMove(event: MouseEvent): void {
-        const size = 10;
-        const data: HTMLCanvasElement = this.getPrevisualisation(this.getPositionFromMouse(event), size);
-        if (this.previsualisationCtx !== undefined) {
-            if (this.isInCanvas(event)) {
-                this.previsualisationCtx.imageSmoothingEnabled = false;
-                this.previsualisationCtx.beginPath();
-                this.previsualisationCtx.drawImage(
-                    data,
-                    0,
-                    0,
-                    size,
-                    size,
-                    0,
-                    0,
-                    this.previsualisationCanvas.width,
-                    this.previsualisationCanvas.height,
-                );
-                this.drawSelectedPixelRect(this.previsualisationCtx, this.previsualisationCanvas, size);
-            } else {
-                this.previsualisationCtx.clearRect(0, 0, this.previsualisationCanvas.width, this.previsualisationCanvas.height);
-            }
+        const data: HTMLCanvasElement = this.getPrevisualisation(this.getPositionFromMouse(event), ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH);
+        if (this.isInCanvas(event)) {
+            this.previsualisationCtx.imageSmoothingEnabled = false;
+            this.previsualisationCtx.clearRect(0, 0, this.previsualisationCanvas.width, this.previsualisationCanvas.height);
+            this.previsualisationCtx.beginPath();
+            this.previsualisationCtx.drawImage(
+                data,
+                0,
+                0,
+                ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH,
+                ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH,
+                0,
+                0,
+                this.previsualisationCanvas.width,
+                this.previsualisationCanvas.height,
+            );
+            this.drawSelectedPixelRect(this.previsualisationCtx);
+            this.updatePrevisualisation.next();
+        } else {
+            this.previsualisationCtx.clearRect(0, 0, this.previsualisationCanvas.width, this.previsualisationCanvas.height);
         }
     }
 
-    private drawSelectedPixelRect(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, size: number): void {
+    private drawSelectedPixelRect(ctx: CanvasRenderingContext2D): void {
+        const centerX = ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH * Math.floor(ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH / 2);
+        const centerY = ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH * Math.floor(ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH / 2);
         ctx.lineWidth = 1;
         ctx.setLineDash([2, 2]);
         ctx.strokeStyle = 'black';
         ctx.lineJoin = 'miter' as CanvasLineJoin;
         ctx.lineCap = 'square' as CanvasLineCap;
-        ctx.strokeRect(canvas.width / 2, canvas.height / 2, canvas.width / size, canvas.height / size);
+        ctx.strokeRect(centerX, centerY, ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH, ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH);
         ctx.lineDashOffset = 2;
         ctx.strokeStyle = 'white';
-        ctx.strokeRect(canvas.width / 2, canvas.height / 2, canvas.width / size, canvas.height / size);
+        ctx.strokeRect(centerX, centerY, ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH, ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH);
         ctx.lineDashOffset = 0;
         ctx.setLineDash([]);
     }
@@ -83,6 +91,7 @@ export class EyeDropperService extends Tool {
         canvas.width = size;
         canvas.height = size;
         const radius = size / 2;
+        ctx.imageSmoothingEnabled = false;
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.beginPath();
