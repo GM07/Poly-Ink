@@ -46,6 +46,7 @@ describe('LineService', () => {
             { x: 100, y: 100 },
             { x: 200, y: 300 },
         ];
+        spyOn(service, 'isInCanvas').and.returnValue(true);
     });
 
     it('should be created', () => {
@@ -342,7 +343,6 @@ describe('LineService', () => {
     it('init service should init attributes', () => {
         service['initService']();
         expect(service['SHIFT'].isDown).toBe(false);
-        expect(service['ESCAPE'].isDown).toBe(false);
         expect(service['BACKSPACE'].isDown).toBe(false);
         expect(service['points'].length).toBe(0);
     });
