@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { PolygonConfig, PolygonMode } from '@app/classes/tool-config/polygon-config';
 import { Vec2 } from '@app/classes/vec2';
+import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { PolygonDraw } from './polygon-draw';
@@ -157,7 +158,7 @@ describe('PolygonDraw', () => {
     });
 
     it('should reduce border size if to big to show fully', () => {
-        polygonDraw.config.lineWidth = 50;
+        polygonDraw.config.lineWidth = ToolSettingsConst.MAX_WIDTH;
         polygonDraw.execute(ctxStub);
 
         expect(ctxStub.lineWidth).toBeLessThan(polygonDraw.config.lineWidth);
