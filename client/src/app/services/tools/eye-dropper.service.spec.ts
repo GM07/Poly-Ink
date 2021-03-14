@@ -4,14 +4,14 @@ import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Color } from 'src/color-picker/classes/color';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { PipetteService } from './pipette.service';
+import { EyeDropperService } from './eye-dropper.service';
 
 /* tslint:disable:no-magic-numbers */
 /* tslint:disable:no-string-literal */
 /* tslint:disable:no-any */
 
-describe('Pipette.ServiceService', () => {
-    let service: PipetteService;
+describe('EyeDropperService', () => {
+    let service: EyeDropperService;
     let colorServiceSpy: jasmine.SpyObj<ColorService>;
     let drawServiceSpy: jasmine.SpyObj<DrawingService>;
     let canvasTestHelper: CanvasTestHelper;
@@ -31,7 +31,7 @@ describe('Pipette.ServiceService', () => {
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         baseCtxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
         previewCtxStub = canvasTestHelper.drawCanvas.getContext('2d') as CanvasRenderingContext2D;
-        service = TestBed.inject(PipetteService);
+        service = TestBed.inject(EyeDropperService);
 
         // service's spy configuration
         // tslint:disable:no-string-literal
@@ -133,8 +133,8 @@ describe('Pipette.ServiceService', () => {
     });
 
     it('stop drawing should do nothing', () => {
-        const pipette: PipetteService = service;
+        const eyeDropper: EyeDropperService = service;
         service.stopDrawing();
-        expect(service).toEqual(pipette);
+        expect(service).toEqual(eyeDropper);
     });
 });

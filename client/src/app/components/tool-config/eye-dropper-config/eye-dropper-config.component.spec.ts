@@ -3,18 +3,18 @@ import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSliderModule } from '@angular/material/slider';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { PipetteConfigComponent } from './pipette-config.component';
+import { EyeDropperConfigComponent } from './eye-dropper-config.component';
 
 describe('PipetteConfigComponent', () => {
-    let component: PipetteConfigComponent;
-    let fixture: ComponentFixture<PipetteConfigComponent>;
+    let component: EyeDropperConfigComponent;
+    let fixture: ComponentFixture<EyeDropperConfigComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [PipetteConfigComponent],
+            declarations: [EyeDropperConfigComponent],
             imports: [MatDividerModule, MatSliderModule, FormsModule, NoopAnimationsModule],
         }).compileComponents();
-        fixture = TestBed.createComponent(PipetteConfigComponent);
+        fixture = TestBed.createComponent(EyeDropperConfigComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     }));

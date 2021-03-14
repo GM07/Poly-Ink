@@ -11,7 +11,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
 @Injectable({
     providedIn: 'root',
 })
-export class PipetteService extends Tool {
+export class EyeDropperService extends Tool {
     toolID: string;
     previsualisationCanvas: HTMLCanvasElement;
     previsualisationCtx: CanvasRenderingContext2D;
