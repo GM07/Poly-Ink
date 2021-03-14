@@ -9,8 +9,9 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RectangleMode } from '@app/classes/tool-config/rectangle-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { RectangleMode, RectangleService } from '@app/services/tools/rectangle.service';
+import { RectangleService } from '@app/services/tools/rectangle.service';
 import { RectangleConfigComponent } from './rectangle-config.component';
 
 describe('RectangleConfigComponent', () => {
@@ -92,18 +93,18 @@ describe('RectangleConfigComponent', () => {
     it('traceType should be Contour when Contour button is clicked ', async () => {
         buttonToggleLabelElements[0].click();
         fixture.detectChanges();
-        expect(rectangleService.rectangleMode).toEqual(RectangleMode.Contour);
+        expect(rectangleService.config.rectangleMode).toEqual(RectangleMode.Contour);
     });
 
     it('traceType should be Plein when Plein button is clicked ', async () => {
         buttonToggleLabelElements[1].click();
         fixture.detectChanges();
-        expect(rectangleService.rectangleMode).toEqual(RectangleMode.Filled);
+        expect(rectangleService.config.rectangleMode).toEqual(RectangleMode.Filled);
     });
 
     it('traceType should be Plein & Contour when Plein & Contour button is clicked ', async () => {
         buttonToggleLabelElements[2].click();
         fixture.detectChanges();
-        expect(rectangleService.rectangleMode).toEqual(RectangleMode.FilledWithContour);
+        expect(rectangleService.config.rectangleMode).toEqual(RectangleMode.FilledWithContour);
     });
 });

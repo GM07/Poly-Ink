@@ -16,8 +16,8 @@ export class LineDraw extends AbstractDraw {
     }
 
     private applyAttributes(ctx: CanvasRenderingContext2D): void {
-        ctx.fillStyle = this.colorService.primaryRgba;
-        ctx.strokeStyle = this.colorService.primaryRgba;
+        ctx.fillStyle = this.primaryRgba;
+        ctx.strokeStyle = this.primaryRgba;
         ctx.lineWidth = this.lineConfig.thickness;
         ctx.lineCap = 'round' as CanvasLineCap;
         ctx.lineJoin = 'round' as CanvasLineJoin;
