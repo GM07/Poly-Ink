@@ -55,8 +55,8 @@ describe('PolygoneService', () => {
         service['drawingService'].canvas = canvasTestHelper.canvas;
 
         mouseEvent = {
-            offsetX: INIT_OFFSET_X,
-            offsetY: INIT_OFFSET_Y,
+            pageX: INIT_OFFSET_X,
+            pageY: INIT_OFFSET_Y,
             button: 0,
         } as MouseEvent;
     });
@@ -96,20 +96,20 @@ describe('PolygoneService', () => {
     });
 
     it('should not start drawing when the mouse is moving but it is not the right button', () => {
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 3 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 3 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         expect(drawPolygoneSpy).not.toHaveBeenCalled();
     });
 
     it('should not start drawing when the mouse is down but it is not the right button', () => {
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 3 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 3 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(drawPolygoneSpy).not.toHaveBeenCalled();
     });
 
     it('should start drawing when the mouse is down on the left click', () => {
         service.leftMouseDown = true;
-        mouseEvent = { offsetX: 0, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
     });
@@ -118,7 +118,7 @@ describe('PolygoneService', () => {
         service.onMouseUp(mouseEvent);
         expect(service.leftMouseDown).toEqual(false);
         service.onMouseDown(mouseEvent);
-        mouseEvent = { x: -1, y: -1, offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { x: -1, y: -1, pageX: 1, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
     });
@@ -132,7 +132,7 @@ describe('PolygoneService', () => {
 
     it('should draw a preview when the mouse is moving with left clicked pressed', () => {
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: INIT_OFFSET_X - 1, offsetY: INIT_OFFSET_Y + 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: INIT_OFFSET_X - 1, pageY: INIT_OFFSET_Y + 1, button: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
     });
@@ -144,7 +144,7 @@ describe('PolygoneService', () => {
         service.onMouseLeave(mouseEvent);
         expect(updatePolygoneSpy).toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: INIT_OFFSET_X + 1, offsetY: INIT_OFFSET_Y + 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: INIT_OFFSET_X + 1, pageY: INIT_OFFSET_Y + 1, button: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         expect(updatePolygoneSpy).toHaveBeenCalled();
     });
@@ -153,7 +153,7 @@ describe('PolygoneService', () => {
         service.onMouseEnter(mouseEvent);
         expect(updatePolygoneSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: INIT_OFFSET_X + 1, offsetY: INIT_OFFSET_Y - 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: INIT_OFFSET_X + 1, pageY: INIT_OFFSET_Y - 1, button: 0 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(updatePolygoneSpy);
     });
@@ -162,7 +162,7 @@ describe('PolygoneService', () => {
         service.polygoneMode = PolygoneMode.Contour;
         service.contourWidth = 1;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
 
@@ -189,7 +189,7 @@ describe('PolygoneService', () => {
         service.polygoneMode = PolygoneMode.Contour;
         service.contourWidth = 1;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
 
@@ -210,7 +210,7 @@ describe('PolygoneService', () => {
     it('should allow for filled drawing type', () => {
         service.polygoneMode = PolygoneMode.Filled;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
 
@@ -226,7 +226,7 @@ describe('PolygoneService', () => {
     it('should allow for filled and contour drawing type for a triangle', () => {
         service.polygoneMode = PolygoneMode.FilledWithContour;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
 
@@ -242,14 +242,14 @@ describe('PolygoneService', () => {
     it('should allow for filled and contour drawing type for a square', () => {
         service.polygoneMode = PolygoneMode.FilledWithContour;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
 
         // tslint:disable-next-line:no-magic-numbers
         service.numEdges = 4;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawPolygoneSpy).toHaveBeenCalled();
 
@@ -272,7 +272,7 @@ describe('PolygoneService', () => {
     it('should do nothing with an unknown mode', () => {
         service.polygoneMode = {} as PolygoneMode;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: -1, offsetY: -1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: -1, pageY: -1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
         // tslint:disable-next-line:no-magic-numbers

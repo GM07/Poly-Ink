@@ -20,7 +20,7 @@ export class EraserService extends PencilService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.isInCanvas(event)) {
+        if (this.isInCanvas(event) && !this.colorService.isMenuOpen) {
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawBackgroundPoint(this.getPositionFromMouse(event));
 
