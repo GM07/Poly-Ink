@@ -10,7 +10,7 @@ import { CarrouselComponent, DrawingContent } from '@app/components/carrousel/ca
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { NewDrawing } from '@app/services/popups/new-drawing';
+import { NewDrawingService } from '@app/services/popups/new-drawing';
 import { of } from 'rxjs';
 
 // tslint:disable:no-any
@@ -190,7 +190,7 @@ describe('CarrouselComponent', () => {
     it('should show a warning when loading', () => {
         spyOn<any>(component['router'], 'navigateByUrl');
         const update = spyOn<any>(component, 'updateDrawingContent');
-        spyOn(NewDrawing, 'isNotEmpty').and.returnValue(true);
+        spyOn(NewDrawingService, 'isNotEmpty').and.returnValue(true);
         component.currentURL = '';
         component['animationIsDone'] = true;
         component.loadDrawing(0);
@@ -200,7 +200,7 @@ describe('CarrouselComponent', () => {
 
     it('should display a loading screen when succesfully loading a drawing', () => {
         spyOn<any>(component, 'updateDrawingContent');
-        spyOn(NewDrawing, 'isNotEmpty').and.returnValue(false);
+        spyOn(NewDrawingService, 'isNotEmpty').and.returnValue(false);
         component.currentURL = '';
         component['animationIsDone'] = true;
         component.loadDrawing(0);

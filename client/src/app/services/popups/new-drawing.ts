@@ -1,11 +1,16 @@
+import { Injectable } from '@angular/core';
+import { Popup } from '@app/classes/popup';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
-export class NewDrawing {
-    showPopup: boolean;
+@Injectable({
+    providedIn: 'root',
+})
+export class NewDrawingService implements Popup {
     shortcut: ShortcutKey;
+    showPopup: boolean;
 
     static isNotEmpty(baseCtx: CanvasRenderingContext2D, width: number, height: number): boolean {
         const whiteColor = 4294967295; // White color constant
@@ -19,7 +24,7 @@ export class NewDrawing {
     }
 
     newCanvas(confirm: boolean = false): void {
-        if (!confirm && NewDrawing.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)) {
+        if (!confirm && NewDrawingService.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)) {
             this.showPopup = true;
             return;
         }

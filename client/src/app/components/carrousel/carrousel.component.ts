@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChi
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { NewDrawing } from '@app/services/popups/new-drawing';
+import { NewDrawingService } from '@app/services/popups/new-drawing';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 export interface DrawingContent {
@@ -170,7 +170,7 @@ export class CarrouselComponent implements OnInit {
         if (
             this.currentURL !== this.CARROUSEL_URL &&
             !this.showLoadingWarning &&
-            NewDrawing.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)
+            NewDrawingService.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)
         ) {
             this.showLoadingWarning = true;
             return;

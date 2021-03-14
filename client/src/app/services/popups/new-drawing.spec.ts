@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
-import { NewDrawing } from './new-drawing';
+import { NewDrawingService } from './new-drawing';
 
 describe('NewDrawing', () => {
-    let service: NewDrawing;
+    let service: NewDrawingService;
     let drawingService: DrawingService;
     let canvas: HTMLCanvasElement;
     let context: CanvasRenderingContext2D;
@@ -14,7 +14,7 @@ describe('NewDrawing', () => {
         TestBed.configureTestingModule({});
         drawingService = TestBed.inject(DrawingService);
         toolHandler = TestBed.inject(ToolHandlerService);
-        service = new NewDrawing(drawingService, toolHandler);
+        service = new NewDrawingService(drawingService, toolHandler);
         canvas = document.createElement('canvas');
         context = canvas.getContext('2d') as CanvasRenderingContext2D;
         drawingService.canvas = canvas;
@@ -30,7 +30,7 @@ describe('NewDrawing', () => {
         // tslint:disable:no-string-literal
         context.fillStyle = 'grey';
         context.fillRect(0, 0, canvas.width, canvas.height);
-        const returnValue = NewDrawing.isNotEmpty(context, canvas.width, canvas.height);
+        const returnValue = NewDrawingService.isNotEmpty(context, canvas.width, canvas.height);
         expect(returnValue).toBe(true);
     });
 
@@ -38,7 +38,7 @@ describe('NewDrawing', () => {
         // tslint:disable:no-string-literal
         context.fillStyle = 'white';
         context.fillRect(0, 0, canvas.width, canvas.height);
-        const returnValue = NewDrawing.isNotEmpty(context, canvas.width, canvas.height);
+        const returnValue = NewDrawingService.isNotEmpty(context, canvas.width, canvas.height);
         expect(returnValue).toBe(false);
     });
 
@@ -55,7 +55,7 @@ describe('NewDrawing', () => {
 
     it('should not reset if confirm is false and not empty', () => {
         // tslint:disable no-any
-        const spyFunc = spyOn<any>(NewDrawing, 'isNotEmpty').and.returnValue(true);
+        const spyFunc = spyOn<any>(NewDrawingService, 'isNotEmpty').and.returnValue(true);
         const spyFunc2 = spyOn(drawingService, 'resizeCanvas');
         spyOn(toolHandler.getCurrentTool(), 'stopDrawing').and.callFake(() => {
             /**/
@@ -68,7 +68,7 @@ describe('NewDrawing', () => {
     it('should reset if confirm is false and empty', () => {
         drawingService.baseCtx = context;
         const spyFunc = spyOn(drawingService, 'resizeCanvas');
-        const spyFunc2 = spyOn<any>(NewDrawing, 'isNotEmpty').and.returnValue(false);
+        const spyFunc2 = spyOn<any>(NewDrawingService, 'isNotEmpty').and.returnValue(false);
         spyOn(toolHandler.getCurrentTool(), 'stopDrawing').and.callFake(() => {
             /**/
         });
