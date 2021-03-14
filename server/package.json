@@ -64,6 +64,7 @@
         "@types/cookie-parser": "1.4.2",
         "@types/cors": "2.8.6",
         "@types/express": "4.17.1",
+        "@types/jest": "^26.0.20",
         "@types/mocha": "5.2.7",
         "@types/mongodb": "^3.3.14",
         "@types/morgan": "~1.7.35",
