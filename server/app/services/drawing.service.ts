@@ -101,8 +101,8 @@ export class DrawingService {
         }
     }
 
-    async createNewDrawingDataFromTitle(title: string): Promise<string> {
-        const drawing = new DrawingData(title);
+    async createNewDrawingDataFromName(name: string): Promise<string> {
+        const drawing = new DrawingData(name);
         return await this.createNewDrawingData(drawing);
     }
 

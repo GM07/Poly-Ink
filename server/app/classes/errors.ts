@@ -1,7 +1,7 @@
 export class DataNotFound extends Error {
     constructor(message: string) {
         super(message);
-        this.name = 'Data Not Found';
+        this.name = 'DataNotFound';
     }
 }
 
