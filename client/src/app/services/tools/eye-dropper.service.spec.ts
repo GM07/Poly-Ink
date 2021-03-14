@@ -126,9 +126,7 @@ describe('EyeDropperService', () => {
         service['drawingService'].baseCtx.fillStyle = 'black';
         service['drawingService'].baseCtx.fillRect(0, 0, 5, 5);
         expect(
-            (service['getPrevisualisation']({ x: 1, y: 1 } as Vec2, 1).getContext(
-                '2d',
-            ) as CanvasRenderingContext2D).getImageData(1, 1, 1, 1).data[0],
+            (service['getPrevisualisation']({ x: 1, y: 1 } as Vec2, 1).getContext('2d') as CanvasRenderingContext2D).getImageData(1, 1, 1, 1).data[0],
         ).toEqual(0);
     });
 
