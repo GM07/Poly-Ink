@@ -30,12 +30,11 @@ export class DrawingController {
             if (!this.drawingService.validateName(drawing.data.name)) {
                 res.sendStatus(HTTP_BAD_REQUEST);
             }
-            res.sendStatus(HTTP_STATUS_CREATED);
 
             const id = await this.drawingService.createNewDrawingData(drawing.data);
             drawing.data._id = id;
             this.drawingService.storeDrawing(drawing);
-            res.status(200).send('<h1>Created</h1>');
+            res.status(HTTP_STATUS_CREATED).send('<h1>Created</h1>');
         });
 
         this.router.get('/', async (req: Request, res: Response, next: NextFunction) => {

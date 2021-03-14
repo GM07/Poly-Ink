@@ -2,13 +2,10 @@ import { expect } from 'chai';
 import { DataNotCreated, DataNotDeleted, DataNotFound, HttpException } from './errors';
 
 describe('Errors', () => {
-    let message: 'This is a message';
-
-    beforeEach(async () => {});
+    const message = 'This is a message';
 
     it('should create DataNotFound error', () => {
         const error = new DataNotFound(message);
-        console.log('test');
         expect(error.name).to.equal('DataNotFound');
         expect(error.message).to.equal(message);
     });
@@ -31,7 +28,7 @@ describe('Errors', () => {
         //tslint-disable:no-magic-numbers
         const error = new HttpException(200, message);
 
-        expect(error.name).to.equal('HttpException(200)');
+        expect(error.name).to.equal('HttpException (200)');
         expect(error.message).to.equal(message);
     });
 });

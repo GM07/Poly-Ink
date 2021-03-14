@@ -3,15 +3,15 @@ import { Db, MongoClient, MongoClientOptions } from 'mongodb';
 
 @injectable()
 export class DatabaseService {
-    private static readonly DATABASE_URL =
+    private static DATABASE_URL: string =
         'mongodb+srv://admin:ugbOOh4owMDAoNOQ@polyink.moize.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 
-    private static readonly DATABASE_NAME = 'carrousel';
+    protected static DATABASE_NAME: string = 'carrousel';
 
     public db: Db;
-    private client: MongoClient;
+    protected client: MongoClient;
 
-    private options: MongoClientOptions = {
+    protected options: MongoClientOptions = {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     };

@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { describe } from 'mocha';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import 'reflect-metadata';
 import { DatabaseService } from './database.service';
 
 describe('Database service', () => {
@@ -22,6 +23,14 @@ describe('Database service', () => {
     it('should connect to database on start', async () => {
         const uri = await mongoServer.getUri();
         await databaseService.start(uri);
+
+        expect(databaseService['client']).to.not.be.undefined;
+        expect(databaseService.db.databaseName).to.equal(DatabaseService['DATABASE_NAME']);
+    });
+
+    it('should connect to database on start with default url when none is provided', async () => {
+        DatabaseService['DATABASE_URL'] = await mongoServer.getUri();
+        await databaseService.start();
 
         expect(databaseService['client']).to.not.be.undefined;
         expect(databaseService.db.databaseName).to.equal(DatabaseService['DATABASE_NAME']);

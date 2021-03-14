@@ -23,16 +23,21 @@ export class DrawingService {
     }
 
     validateName(name: string): boolean {
-        if (name) {
-            return true;
-        } else {
-            return false;
-        }
+        return name !== undefined && name !== '';
     }
 
-    // TODO: Tag Validation
-    validateTags(tags: Tag[]) {
-        return true;
+    validateTags(tags: Tag[]): boolean {
+        let valid = true;
+        tags.forEach((tag) => {
+            if (!this.validateTag(tag)) {
+                valid = false;
+            }
+        });
+        return valid;
+    }
+
+    validateTag(tag: Tag): boolean {
+        return tag !== undefined && tag.name !== undefined && tag.name !== '';
     }
 
     async storeDrawing(drawing: Drawing): Promise<void> {
