@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { ExportDrawing } from './export-drawing';
+import { ExportDrawingService } from './export-drawing';
 
 describe('ExportDrawing', () => {
-    let service: ExportDrawing;
+    let service: ExportDrawingService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
-        service = new ExportDrawing();
+        service = new ExportDrawingService();
     });
 
     it('should create', () => {

@@ -6,7 +6,7 @@ import { NegativeFilter } from '@app/classes/filters/negative-filter';
 import { SepiaFilter } from '@app/classes/filters/sepia-filter';
 import { SpotlightFilter } from '@app/classes/filters/spotlight-filter';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { PopupHandlerService } from '@app/services/popups/popup-handler.service';
+import { ExportDrawingService } from '@app/services/popups/export-drawing';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 @Component({
@@ -48,8 +48,8 @@ export class ExportDrawingComponent {
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private drawingService: DrawingService,
-        private popupHandlerService: PopupHandlerService,
         private shortcutHandler: ShortcutHandlerService,
+        private exportDrawingService: ExportDrawingService,
     ) {
         this.initValues();
     }
@@ -70,17 +70,17 @@ export class ExportDrawingComponent {
     }
 
     hidePopup(): void {
-        this.popupHandlerService.hideExportDrawingPopup();
+        this.exportDrawingService.showPopup = false;
         this.shortcutHandler.blockShortcuts = false;
         this.initValues();
     }
 
     canShowPopup(): boolean {
-        return this.popupHandlerService.canShowExportDrawingPopup();
+        return this.exportDrawingService.showPopup;
     }
 
     export(): void {
-        this.popupHandlerService.exportDrawing.exportImage(this.canvasImage, this.exportFormat, this.filename === '' ? 'image' : this.filename);
+        this.exportDrawingService.exportImage(this.canvasImage, this.exportFormat, this.filename === '' ? 'image' : this.filename);
     }
 
     async applyFilter(): Promise<void> {
@@ -127,7 +127,7 @@ export class ExportDrawingComponent {
 
     async show(): Promise<void> {
         this.shortcutHandler.blockShortcuts = true;
-        this.popupHandlerService.showExportDrawingPopup();
+        this.exportDrawingService.showPopup = true;
         this.changeDetectorRef.detectChanges();
         this.backupBaseCanvas();
         await this.applyFilter();
@@ -135,7 +135,7 @@ export class ExportDrawingComponent {
 
     @HostListener('document:keydown', ['$event'])
     async onKeyDown(event: KeyboardEvent): Promise<void> {
-        if (!this.shortcutHandler.blockShortcuts && this.popupHandlerService.exportDrawing.shortcut.equals(event)) {
+        if (!this.shortcutHandler.blockShortcuts && this.exportDrawingService.shortcut.equals(event)) {
             event.preventDefault();
             await this.show();
         }
