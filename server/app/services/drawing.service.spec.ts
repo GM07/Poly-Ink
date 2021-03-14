@@ -1,8 +1,11 @@
 import { expect } from 'chai';
+import * as fs from 'fs';
 import { describe } from 'mocha';
 import 'reflect-metadata';
+import { Drawing } from '../../../common/communication/drawing';
 import { DrawingData } from '../../../common/communication/drawing-data';
 import { Tag } from '../../../common/communication/tag';
+import { BASE64_IMG } from '../classes/drawings.const';
 import { DatabaseServiceMock } from './database.service.mock';
 import { DrawingService } from './drawing.service';
 
@@ -34,6 +37,8 @@ describe('Drawing service', () => {
 
         await drawingService.createNewDrawingData(drawing);
         await drawingService.createNewDrawingData(drawing2);
+
+        DrawingService['ROOT_DIRECTORY'] = 'drawings_test';
     });
 
     afterEach(async () => {
@@ -132,5 +137,60 @@ describe('Drawing service', () => {
         drawingService.createNewDrawingData({} as DrawingData).catch((e) => {
             expect(e.type).to.eq('DataNotCreated');
         });
+    });
+
+    it('should store drawing and create directory if it does not exist', async () => {
+        const drawing: Drawing = new Drawing(new DrawingData('test', [], '2'));
+        drawing.image = BASE64_IMG;
+
+        if (fs.existsSync(DrawingService['ROOT_DIRECTORY'])) {
+            await fs.rmdir(DrawingService['ROOT_DIRECTORY'], () => {});
+        }
+
+        await drawingService.storeDrawing(drawing);
+        const path = DrawingService['ROOT_DIRECTORY'] + '/' + '2.png';
+        expect(fs.existsSync(path)).to.eq(true);
+
+        fs.unlinkSync(path);
+        fs.rmdirSync(DrawingService['ROOT_DIRECTORY']);
+    });
+
+    it('should store drawing and not create directory if it exists', async () => {
+        const drawing: Drawing = new Drawing(new DrawingData('test', [], '2'));
+        drawing.image = BASE64_IMG;
+
+        fs.mkdirSync(DrawingService['ROOT_DIRECTORY']);
+
+        await drawingService.storeDrawing(drawing);
+        const path = DrawingService['ROOT_DIRECTORY'] + '/' + '2.png';
+        expect(fs.existsSync(path)).to.eq(true);
+
+        fs.unlinkSync(path);
+        fs.rmdirSync(DrawingService['ROOT_DIRECTORY']);
+    });
+
+    it('should get local drawing if file exists', async () => {
+        const drawing: Drawing = new Drawing(new DrawingData('test', [], '2'));
+        drawing.image = BASE64_IMG;
+        const path = DrawingService['ROOT_DIRECTORY'] + '/' + '2.png';
+        fs.mkdirSync(DrawingService['ROOT_DIRECTORY']);
+        fs.writeFileSync(path, drawing.image, 'base64');
+
+        const image = drawingService.getLocalDrawing(drawing.data._id);
+
+        expect(image).to.eq(BASE64_IMG);
+
+        fs.unlinkSync(path);
+        fs.rmdirSync(DrawingService['ROOT_DIRECTORY']);
+    });
+
+    it('should not get local drawing if file doest not exist', async () => {
+        const drawing: Drawing = new Drawing(new DrawingData('test', [], '2'));
+        drawing.image = BASE64_IMG;
+        try {
+            drawingService.getLocalDrawing('2');
+        } catch (e) {
+            expect(e.name).to.eq('FileNotFound');
+        }
     });
 });

@@ -1,4 +1,4 @@
-import { DataNotCreated, DataNotDeleted, DataNotFound } from '@app/classes/errors';
+import { DataNotCreated, DataNotDeleted, DataNotFound, FileNotFound } from '@app/classes/errors';
 import { DatabaseService } from '@app/services/database.service';
 import { TYPES } from '@app/types';
 import { Drawing } from '@common/communication/drawing';
@@ -8,11 +8,10 @@ import * as fs from 'fs';
 import { inject, injectable } from 'inversify';
 import { Collection, FindAndModifyWriteOpResultObject } from 'mongodb';
 
-const ROOT_DIRECTORY = 'drawings';
-
 @injectable()
 export class DrawingService {
-    private static readonly COLLECTION = 'drawings';
+    private static ROOT_DIRECTORY: string = 'drawings';
+    private static readonly COLLECTION: string = 'drawings';
 
     constructor(@inject(TYPES.DatabaseService) private databaseService: DatabaseService) {
         databaseService.start();
@@ -41,21 +40,18 @@ export class DrawingService {
     }
 
     async storeDrawing(drawing: Drawing): Promise<void> {
-        const drawingId = drawing.data._id ?? 'image';
-        const drawingPath = `${ROOT_DIRECTORY}/${drawingId}.png`;
-        if (!fs.existsSync(ROOT_DIRECTORY)) {
-            fs.mkdirSync(ROOT_DIRECTORY);
+        const drawingId = drawing.data._id;
+        const drawingPath = `${DrawingService.ROOT_DIRECTORY}/${drawingId}.png`;
+        if (!fs.existsSync(DrawingService.ROOT_DIRECTORY)) {
+            fs.mkdirSync(DrawingService.ROOT_DIRECTORY);
         }
-        fs.writeFile(drawingPath, drawing.image, 'base64', function (err) {
-            console.log(err);
-        });
+        fs.writeFileSync(drawingPath, drawing.image, 'base64');
     }
 
     getLocalDrawing(id: string): string {
-        const drawingPath = `${ROOT_DIRECTORY}/${id}.png`;
-        console.log(drawingPath);
+        const drawingPath = `${DrawingService.ROOT_DIRECTORY}/${id}.png`;
         if (!fs.existsSync(drawingPath)) {
-            throw Error("Dessin n'existe pas");
+            throw new FileNotFound(id);
         }
 
         const buffer: Buffer = fs.readFileSync(drawingPath);

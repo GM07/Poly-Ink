@@ -3,7 +3,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import { DatabaseService } from './database.service';
 
 export class DatabaseServiceMock extends DatabaseService {
-    public db: Db;
+    db: Db;
     private server: MongoMemoryServer;
 
     async start(url?: string): Promise<MongoClient | null> {

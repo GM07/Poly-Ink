@@ -8,7 +8,7 @@ export class DatabaseService {
 
     protected static DATABASE_NAME: string = 'carrousel';
 
-    public db: Db;
+    db: Db;
     protected client: MongoClient;
 
     protected options: MongoClientOptions = {
@@ -18,7 +18,7 @@ export class DatabaseService {
 
     async start(url: string = DatabaseService.DATABASE_URL): Promise<MongoClient | null> {
         try {
-            let client = await MongoClient.connect(url, this.options);
+            const client = await MongoClient.connect(url, this.options);
             this.client = client;
             this.db = client.db(DatabaseService.DATABASE_NAME);
         } catch {
