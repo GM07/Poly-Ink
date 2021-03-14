@@ -40,7 +40,7 @@ describe('AerosolService', () => {
         sprayContinuouslySpy = spyOn<any>(service, 'sprayContinuously').and.callThrough();
         onMouseDownSpy = spyOn<any>(service, 'onMouseDown').and.callThrough();
 
-        // Configuration du spy du service
+        // service's spy configuration
         // tslint:disable:no-string-literal
         service['drawingService'].baseCtx = baseCtxStub; // Jasmine doesnt copy properties with underlying data
         service['drawingService'].previewCtx = previewCtxStub;
