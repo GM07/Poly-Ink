@@ -7,7 +7,6 @@ import { Tag } from '@common/communication/tag';
 import * as fs from 'fs';
 import { inject, injectable } from 'inversify';
 import { Collection, FindAndModifyWriteOpResultObject } from 'mongodb';
-
 const ROOT_DIRECTORY = 'drawings';
 
 @injectable()
@@ -48,7 +47,6 @@ export class DrawingService {
 
     getLocalDrawing(id: string): string {
         const drawingPath = `${ROOT_DIRECTORY}/${id}.png`;
-        console.log(drawingPath);
         if (!fs.existsSync(drawingPath)) {
             throw Error("Dessin n'existe pas");
         }

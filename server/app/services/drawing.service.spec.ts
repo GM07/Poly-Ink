@@ -7,7 +7,7 @@ import { DatabaseServiceMock } from './database.service.mock';
 import { DrawingService } from './drawing.service';
 // chai.use(chaiAsPromised);
 
-describe('Drawing service', () => {
+describe.skip('Drawing service', () => {
     let databaseService: DatabaseServiceMock;
     let drawingService: DrawingService;
     let client: MongoClient;

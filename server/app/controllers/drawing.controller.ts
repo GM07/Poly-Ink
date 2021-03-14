@@ -25,17 +25,19 @@ export class DrawingController {
             const drawing: Drawing = req.body;
             if (!this.drawingService.validateTags(drawing.data.tags)) {
                 res.sendStatus(HTTP_BAD_REQUEST);
+                return;
             }
 
             if (!this.drawingService.validateName(drawing.data.name)) {
                 res.sendStatus(HTTP_BAD_REQUEST);
+                return;
             }
-            res.sendStatus(HTTP_STATUS_CREATED);
-
             const id = await this.drawingService.createNewDrawingData(drawing.data);
             drawing.data._id = id;
             this.drawingService.storeDrawing(drawing);
-            res.status(200).send('<h1>Created</h1>');
+            res.status(HTTP_STATUS_CREATED).send({
+                message: "Success"
+            });
         });
 
         this.router.get('/', async (req: Request, res: Response, next: NextFunction) => {
@@ -52,7 +54,8 @@ export class DrawingController {
                 .map((data: DrawingData) => {
                     try {
                         let drawing = new Drawing(data);
-                        drawing.image = this.drawingService.getLocalDrawing(drawing.data._id ?? '');
+                        console.log('test', drawing.data._id);
+                        drawing.image = this.drawingService.getLocalDrawing(drawing.data._id);
                         return drawing;
                     } catch (e) {
                         return null;
@@ -74,6 +77,9 @@ export class DrawingController {
                 const drawing: Drawing = req.body;
                 this.drawingService.deleteDrawingData(drawing.data);
             }
+            res.status(HTTP_STATUS_SUCCESS).send({
+                message: 'Success'
+            });
         });
     }
 }
