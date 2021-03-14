@@ -1,15 +1,16 @@
-import { Drawing } from '../../../common/communication/drawing';
+import { expect } from 'chai';
+import 'reflect-metadata';
+import * as supertest from 'supertest';
 import { DrawingData } from '../../../common/communication/drawing-data';
 import { Tag } from '../../../common/communication/tag';
-import { Stubbed, testingContainer } from '../../test/test-utils';
+import { testingContainer } from '../../test/test-utils';
 import { Application } from '../app';
 import { BASE64_IMG } from '../classes/drawings.const';
-import { DrawingService } from '../services/drawing.service';
 import { TYPES } from '../types';
 
 // tslint:disable:no-any
 // const HTTP_STATUS_OK = 200;
-// const HTTP_STATUS_CREATED = 201;
+const HTTP_STATUS_CREATED = 201;
 
 
 describe('DrawingController', () => {
@@ -26,15 +27,15 @@ describe('DrawingController', () => {
         "tags": [baseTags[1]],
         "name": "Tag 2"
     }];
-    const baseDrawing = [{
-        "data": baseDrawingDatas[0],
-        "image": BASE64_IMG
-    } as Drawing, {
-        "data": baseDrawingDatas[1],
-        "image": BASE64_IMG,
-    }];
+    // const baseDrawing = [{
+    //     "data": baseDrawingDatas[0],
+    //     "image": BASE64_IMG
+    // } as Drawing, {
+    //     "data": baseDrawingDatas[1],
+    //     "image": BASE64_IMG,
+    // }];
 
-    let drawingService: Stubbed<DrawingService>;
+    // let drawingService: Stubbed<DrawingService>;
     let app: Express.Application;
 
     beforeEach(async () => {
@@ -53,11 +54,16 @@ describe('DrawingController', () => {
             deleteDrawingData: sandbox.stub().resolves(),
         });
 
-        drawingService = container.get(TYPES.DrawingService);
+        // drawingService = container.get(TYPES.DrawingService);
         app = container.get<Application>(TYPES.Application).app;
     });
 
     it('should return ', () => {
-        return true;
+        return supertest(app)
+            .get('/drawings/')
+            .expect(HTTP_STATUS_CREATED)
+            .then((response: any) => {
+                expect(response.body).to.deep.equal(baseDrawingDatas);
+            });
     });
 });
