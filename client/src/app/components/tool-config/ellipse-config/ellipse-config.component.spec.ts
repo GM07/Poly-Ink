@@ -9,8 +9,9 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { EllipseMode } from '@app/classes/tool-config/ellipse-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { EllipseMode, EllipseService } from '@app/services/tools/ellipse.service';
+import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EllipseConfigComponent } from './ellipse-config.component';
 
 describe('EllipseConfigComponent', () => {
@@ -95,16 +96,16 @@ describe('EllipseConfigComponent', () => {
 
     it('traceType should be Contour when Contour button is clicked ', async () => {
         buttonToggleLabelElements[0].click(); // Element 0 is Contour button
-        expect(ellipseService.ellipseMode).toEqual(EllipseMode.Contour);
+        expect(ellipseService.config.ellipseMode).toEqual(EllipseMode.Contour);
     });
 
     it('traceType should be Plein when Plein button is clicked ', async () => {
         buttonToggleLabelElements[1].click(); // Element 1 is filled button
-        expect(ellipseService.ellipseMode).toEqual(EllipseMode.Filled);
+        expect(ellipseService.config.ellipseMode).toEqual(EllipseMode.Filled);
     });
 
     it('traceType should be Plein & Contour when Plein & Contour button is clicked ', async () => {
         buttonToggleLabelElements[2].click(); // Element 2 is FilleWithContour button
-        expect(ellipseService.ellipseMode).toEqual(EllipseMode.FilledWithContour);
+        expect(ellipseService.config.ellipseMode).toEqual(EllipseMode.FilledWithContour);
     });
 });
