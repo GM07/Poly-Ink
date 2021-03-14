@@ -99,8 +99,8 @@ export class LineService extends Tool {
     onMouseMove(event: MouseEvent): void {
         if (
             this.points.length === 0 ||
-            event.offsetX === undefined ||
-            event.offsetY === undefined ||
+            event.pageX === undefined ||
+            event.pageY === undefined ||
             !this.isInCanvas(event) ||
             this.colorService.isMenuOpen
         ) {

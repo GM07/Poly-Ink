@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -13,32 +14,29 @@ import { LineService } from './line.service';
 describe('LineService', () => {
     let service: LineService;
     let colorServiceSpy: jasmine.SpyObj<ColorService>;
-
-    const mockContext = ({
-        beginPath: () => {},
-        moveTo: (x: number, y: number) => {},
-        lineTo: (x: number, y: number) => {},
-        stroke: () => {},
-        arc: () => {},
-        fill: () => {},
-        closePath: () => {},
-    } as unknown) as CanvasRenderingContext2D;
-
+    let canvasTestHelper: CanvasTestHelper;
     let pointsTest2: Vec2[];
+    let baseCtxStub: CanvasRenderingContext2D;
+    let previewCtxStub: CanvasRenderingContext2D;
 
     beforeEach(() => {
         const spyDrawing = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
         colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(1, 1, 1, 1)', secondaryRgba: 'rgba(0, 0, 0, 1)' });
         spyDrawing.clearCanvas = () => {};
-        spyDrawing['previewCtx'] = mockContext;
-        spyDrawing['baseCtx'] = mockContext;
         TestBed.configureTestingModule({
             providers: [
                 { provide: DrawingService, useValue: spyDrawing },
                 { provide: ColorService, useValue: colorServiceSpy },
             ],
         });
+        canvasTestHelper = TestBed.inject(CanvasTestHelper);
         service = TestBed.inject(LineService);
+
+        baseCtxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
+        previewCtxStub = canvasTestHelper.drawCanvas.getContext('2d') as CanvasRenderingContext2D;
+        service['drawingService'].previewCtx = previewCtxStub;
+        service['drawingService'].baseCtx = baseCtxStub;
+        service['drawingService'].canvas = canvasTestHelper.canvas;
         service['pointToAdd'] = { x: 0, y: 0 };
         service['mousePosition'] = { x: 0, y: 0 };
         service.showJunctionPoints = false;
@@ -54,7 +52,7 @@ describe('LineService', () => {
     });
 
     it('should add point on mouse position on first mouse left button down', async () => {
-        const mouseEvent = { button: MouseButton.Left, offsetX: 300, offsetY: 400, detail: 1 } as MouseEvent;
+        const mouseEvent = { button: MouseButton.Left, pageX: 300, pageY: 400, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(service['points'].length).toBe(1);
         expect(service['points'][0]).toEqual({ x: 300, y: 400 } as Vec2);
@@ -64,14 +62,14 @@ describe('LineService', () => {
         service['points'] = [{ x: 100, y: 100 }];
         service['pointToAdd'] = { x: 120, y: 120 } as Vec2;
         service['showJunctionPoints'] = true;
-        const mouseEvent = { button: MouseButton.Left, offsetX: 500, offsetY: 283, detail: 1 } as MouseEvent;
+        const mouseEvent = { button: MouseButton.Left, pageX: 500, pageY: 283, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(service['points'].length).toBe(2);
         expect(service['points'][1]).toEqual({ x: 120, y: 120 } as Vec2);
     });
 
     it('should not add point on mouse right button down', () => {
-        const mouseEvent = { button: MouseButton.Right, offsetX: 500, offsetY: 283, detail: 1 } as MouseEvent;
+        const mouseEvent = { button: MouseButton.Right, pageX: 500, pageY: 283, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(service['points'].length).toBe(0);
     });
@@ -99,7 +97,7 @@ describe('LineService', () => {
 
     it('should not do anything on triple click', () => {
         service['points'] = [{ x: 100, y: 800 } as Vec2];
-        const lastEvent = { offsetX: 100, offsetY: 100, detail: 3 } as MouseEvent;
+        const lastEvent = { pageX: 100, pageY: 100, detail: 3 } as MouseEvent;
         const simpleFunc = spyOn<any>(service, 'handleSimpleClick');
         const doubleFunc = spyOn<any>(service, 'handleDoubleClick');
         service.onMouseDown(lastEvent);
@@ -110,19 +108,19 @@ describe('LineService', () => {
     it('should end drawing on double click without closing path', () => {
         service['points'] = [{ x: 100, y: 800 } as Vec2];
         service['SHIFT'].isDown = true;
-        const lastEvent = { offsetX: 100, offsetY: 100, detail: 2 } as MouseEvent;
+        const lastEvent = { pageX: 100, pageY: 100, detail: 2 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath');
         service.onMouseDown(lastEvent);
-        expect(drawLinePath).toHaveBeenCalledWith(mockContext, [{ x: 100, y: 800 }], false);
+        expect(drawLinePath).toHaveBeenCalledWith(previewCtxStub, [{ x: 100, y: 800 }], false);
     });
 
     it('should end drawing on double click with a closed path', async () => {
         service['points'] = [{ x: 500, y: 400 }, { x: 200, y: 300 }, { x: 100, y: 819 } as Vec2];
-        const lastEvent = { offsetX: 500, offsetY: 419, detail: 2 } as MouseEvent;
+        const lastEvent = { pageX: 500, pageY: 419, detail: 2 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath');
         service['handleDoubleClick'](lastEvent);
         expect(drawLinePath).toHaveBeenCalledWith(
-            mockContext,
+            baseCtxStub,
             [
                 { x: 500, y: 400 },
                 { x: 200, y: 300 },
@@ -138,7 +136,7 @@ describe('LineService', () => {
         expect(getPositionFromMouse).not.toHaveBeenCalled();
         service['points'] = [{ x: 100, y: 200 } as Vec2];
         const alignPointFunc = spyOn<any>(service, 'alignPoint').and.callThrough();
-        service.onMouseMove({ offsetX: 120, offsetY: 540 } as MouseEvent);
+        service.onMouseMove({ pageX: 120, pageY: 540 } as MouseEvent);
         expect(alignPointFunc).not.toHaveBeenCalled();
         expect(service['pointToAdd']).toEqual({ x: 120, y: 540 } as Vec2);
     });
@@ -147,7 +145,7 @@ describe('LineService', () => {
         service['points'] = [{ x: 100, y: 200 } as Vec2];
         service['SHIFT'].isDown = true;
         const alignPointFunc = spyOn<any>(service, 'alignPoint').and.returnValue({ x: 40, y: 60 });
-        service.onMouseMove({ offsetX: 120, offsetY: 540 } as MouseEvent);
+        service.onMouseMove({ pageX: 120, pageY: 540 } as MouseEvent);
         expect(alignPointFunc).toHaveBeenCalled();
         expect(service['pointToAdd']).toEqual({ x: 40, y: 60 } as Vec2);
     });
@@ -278,16 +276,16 @@ describe('LineService', () => {
     it('should handle line preview', () => {
         service['points'] = [{ x: 100, y: 100 }];
         service['pointToAdd'] = { x: 200, y: 200 };
-        service['drawingService'].previewCtx = mockContext;
+        service['drawingService'].previewCtx = previewCtxStub;
         const clearCanvasSpy = spyOn(service['drawingService'], 'clearCanvas');
         service['handleLinePreview']();
         expect(clearCanvasSpy).toHaveBeenCalled();
     });
 
     it('should draw line', () => {
-        const moveToSpy = spyOn(mockContext, 'moveTo');
-        const lineToSpy = spyOn(mockContext, 'lineTo');
-        service['drawLine'](mockContext, { x: 100, y: 200 }, { x: 300, y: 400 });
+        const moveToSpy = spyOn(baseCtxStub, 'moveTo');
+        const lineToSpy = spyOn(baseCtxStub, 'lineTo');
+        service['drawLine'](baseCtxStub, { x: 100, y: 200 }, { x: 300, y: 400 });
         expect(moveToSpy).toHaveBeenCalledWith(100, 200);
         expect(lineToSpy).toHaveBeenCalledWith(300, 400);
     });
@@ -295,23 +293,23 @@ describe('LineService', () => {
     it('should draw non closed line path', () => {
         const points = pointsTest2;
         service['points'] = points;
-        const lineToSpy = spyOn(mockContext, 'lineTo');
-        service['drawLinePath'](mockContext, points);
+        const lineToSpy = spyOn(baseCtxStub, 'lineTo');
+        service['drawLinePath'](baseCtxStub, points);
         expect(lineToSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should draw closed line path', () => {
         const points = pointsTest2;
         service['points'] = points;
-        const lineToSpy = spyOn(mockContext, 'lineTo');
-        service['drawLinePath'](mockContext, points, true);
+        const lineToSpy = spyOn(baseCtxStub, 'lineTo');
+        service['drawLinePath'](baseCtxStub, points, true);
         expect(lineToSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should draw junctions', () => {
         service['showJunctionPoints'] = true;
-        const fillFunc = spyOn(mockContext, 'fill');
-        service['drawJunction'](mockContext, { x: 0, y: 0 });
+        const fillFunc = spyOn(baseCtxStub, 'fill');
+        service['drawJunction'](baseCtxStub, { x: 0, y: 0 });
         expect(fillFunc).toHaveBeenCalled();
     });
 
