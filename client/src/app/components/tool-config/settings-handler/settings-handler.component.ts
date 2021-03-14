@@ -6,6 +6,7 @@ import { EllipseSelectionConfigComponent } from '@app/components/tool-config/ell
 import { EraserConfigComponent } from '@app/components/tool-config/eraser-config/eraser-config.component';
 import { LineConfigComponent } from '@app/components/tool-config/line-config/line-config.component';
 import { PencilConfigComponent } from '@app/components/tool-config/pencil-config/pencil-config.component';
+import { PipetteConfigComponent } from '@app/components/tool-config/pipette-config/pipette-config.component';
 import { PolygoneConfigComponent } from '@app/components/tool-config/polygone-config/polygone-config.component';
 import { RectangleConfigComponent } from '@app/components/tool-config/rectangle-config/rectangle-config.component';
 import { RectangleSelectionConfigComponent } from '@app/components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
@@ -16,12 +17,11 @@ import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
 import { LineService } from '@app/services/tools/line.service';
 import { PencilService } from '@app/services/tools/pencil.service';
+import { PipetteService } from '@app/services/tools/pipette.service';
 import { PolygoneService } from '@app/services/tools/polygone.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
-import { PipetteService } from '@app/services/tools/pipette.service';
-import { PipetteConfigComponent } from '@app/components/tool-config/pipette-config/pipette-config.component';
 @Component({
     selector: 'app-settings-handler',
     templateUrl: './settings-handler.component.html',
