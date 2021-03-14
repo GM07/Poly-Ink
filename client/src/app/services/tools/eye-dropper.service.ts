@@ -40,7 +40,7 @@ export class EyeDropperService extends Tool {
 
     onMouseMove(event: MouseEvent): void {
         const size = 10;
-        const data: HTMLCanvasElement = this.getPrevisualisation(this.getPositionFromMouse(event), { x: size, y: size } as Vec2);
+        const data: HTMLCanvasElement = this.getPrevisualisation(this.getPositionFromMouse(event), size);
         if (this.previsualisationCtx !== undefined) {
             if (this.isInCanvas(event)) {
                 this.previsualisationCtx.imageSmoothingEnabled = false;
@@ -77,23 +77,24 @@ export class EyeDropperService extends Tool {
         ctx.setLineDash([]);
     }
 
-    private getPrevisualisation(coords: Vec2, size: Vec2): HTMLCanvasElement {
+    private getPrevisualisation(coords: Vec2, size: number): HTMLCanvasElement {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-        canvas.width = size.x;
-        canvas.height = size.y;
+        canvas.width = size;
+        canvas.height = size;
+        const radius = size / 2
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.beginPath();
         ctx.save();
-        ctx.ellipse(size.x / 2, size.y / 2, size.x / 2, size.y / 2, 0, 0, 2 * Math.PI);
+        ctx.ellipse(radius, radius, radius, radius, 0, 0, 2 * Math.PI);
         ctx.clip();
         ctx.drawImage(
             this.drawingService.canvas,
-            Math.max(0 - size.x / 2, coords.x - size.x / 2),
-            Math.max(0 - size.y / 2, coords.y - size.y / 2),
-            Math.min(size.x, this.drawingService.canvas.width - coords.x - size.x / 2),
-            Math.min(size.y, this.drawingService.canvas.height - coords.y - size.y / 2),
+            Math.max(0 - radius, coords.x - radius),
+            Math.max(0 - radius, coords.y - radius),
+            Math.min(size, this.drawingService.canvas.width - coords.x - radius),
+            Math.min(size, this.drawingService.canvas.height - coords.y - radius),
             0,
             0,
             canvas.width,
