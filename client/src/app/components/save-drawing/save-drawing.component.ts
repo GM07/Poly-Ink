@@ -1,11 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { Filter } from '@app/classes/filters/filter';
-import { FunkyFilter } from '@app/classes/filters/funky-filter';
-import { Monochrome } from '@app/classes/filters/monochrome-filter';
-import { NegativeFilter } from '@app/classes/filters/negative-filter';
-import { SepiaFilter } from '@app/classes/filters/sepia-filter';
-import { SpotlightFilter } from '@app/classes/filters/spotlight-filter';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { SaveDrawingService } from '@app/services/popups/save-drawing.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
@@ -39,14 +33,6 @@ export class SaveDrawingComponent {
         }
     }
 
-    private filterMap: Map<string, Filter> = new Map([
-        ['no', new Filter()],
-        ['negative', new NegativeFilter()],
-        ['funky', new FunkyFilter()],
-        ['spotlight', new SpotlightFilter()],
-        ['sepia', new SepiaFilter()],
-        ['monochrome', new Monochrome()],
-    ]);
 
     private defaultFileNames: string[] = ['Mona Lisa', 'Guenica', 'Le Cri', 'La nuit étoilée', 'Impression, soleil levant'];
 
@@ -87,25 +73,25 @@ export class SaveDrawingComponent {
 
     save(): void {
         if(!this.nameFormControl.errors && !this.tagsFormControl.errors){
+            console.log(this.canvasImage);
             this.saveDrawingService.saveImage(this.canvasImage, this.saveFormat, this.filename);
         } 
     }
 
-    async applyFilter(): Promise<void> {
+    async generatePreviewData(): Promise<void> {
         const exportPreviewCtx = this.exportPreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
         this.imageData = this.baseContext.getImageData(0, 0, this.baseCanvas.width, this.baseCanvas.height);
 
         this.aspectRatio = this.baseCanvas.width / this.baseCanvas.height;
 
-        const filter = this.filterMap.get(this.currentFilter);
-        if (filter !== undefined) {
-            filter.apply(this.imageData);
-        }
-
         await createImageBitmap(this.imageData).then((image) => {
             this.baseContext.drawImage(image, 0, 0);
             exportPreviewCtx.drawImage(image, 0, 0, image.width, image.height, 0, 0, this.getPreviewWidth(), this.getPreviewHeight());
         });
+    }
+
+
+    private generateBase64Image() {
         this.canvasImage = this.baseCanvas.toDataURL('image/' + this.saveFormat);
     }
 
@@ -128,7 +114,8 @@ export class SaveDrawingComponent {
         this.saveDrawingService.showPopup = true;
         this.changeDetectorRef.detectChanges();
         this.backupBaseCanvas();
-        await this.applyFilter();
+        this.generateBase64Image();
+        await this.generatePreviewData();
     }
 
     @HostListener('document:keydown', ['$event'])

@@ -15,6 +15,7 @@ export class SaveDrawingService implements Popup {
     }
 
     saveImage(image: string, format: string, name: string): void {
+        console.log(image);
         const downloadElement = document.createElement('a');
         downloadElement.download = name + '.' + format;
         downloadElement.href = image;
