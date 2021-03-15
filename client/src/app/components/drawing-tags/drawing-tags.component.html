@@ -1,0 +1,28 @@
+<!--Filtrage par étiquette-->
+<mat-form-field class="tag-list">
+    <mat-label style="font-size:larger">Filtrage par étiquettes</mat-label>
+    <mat-chip-list #chipList aria-label="Filtrage par étiquettes">
+        <mat-chip *ngFor="let tag of filterTags" [selectable]="selectable"
+                [removable]="removable" (removed)="remove(tag)">
+            {{tag.name}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="Étiquettes..."
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="addFilter($event)">
+    </mat-chip-list>
+</mat-form-field>
+
+<!--Affichage des étiquettes des dessins-->
+<div *ngFor="let drawing of drawings">
+  <h5>{{drawing.data.name}}</h5>
+  <mat-chip-list class="tag-list">
+    <mat-chip 
+      [disableRipple] = true
+      *ngFor="let tag of drawing.data.tags">
+      {{tag.name}}
+    </mat-chip>
+  </mat-chip-list>
+</div>

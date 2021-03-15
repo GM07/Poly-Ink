@@ -44,7 +44,6 @@ export class DrawingTagsComponent implements OnInit {
         this.drawings = drawings;
         console.log(this.drawings);
       });
-    
   }
 
   addFilter(event: MatChipInputEvent): void {
