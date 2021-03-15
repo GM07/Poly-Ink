@@ -38,6 +38,7 @@ describe('EyeDropperService', () => {
         service['drawingService'].baseCtx = baseCtxStub; // Jasmine doesnt copy properties with underlying data
         service['drawingService'].previewCtx = previewCtxStub;
         service['drawingService'].canvas = canvasTestHelper.canvas;
+        service['drawingService'].previewCanvas = canvasTestHelper.drawCanvas;
     });
 
     it('should be created', () => {
@@ -46,6 +47,7 @@ describe('EyeDropperService', () => {
 
     it('onMouseDown should do nothing if not in canvas', () => {
         spyOn(service, 'isInCanvas').and.returnValue(false);
+        spyOn<any>(service, 'getColor').and.returnValue(new Color(0, 0, 0));
         spyOn(service, 'getPositionFromMouse');
         service.onMouseDown({} as MouseEvent);
         expect(service.getPositionFromMouse).not.toHaveBeenCalled();
@@ -53,6 +55,7 @@ describe('EyeDropperService', () => {
 
     it('onMouseDown should set Primary color on left click', () => {
         spyOn(service, 'isInCanvas').and.returnValue(true);
+        spyOn<any>(service, 'getColor').and.returnValue(new Color(0, 0, 0));
         drawServiceSpy.canvas.width = 10;
         drawServiceSpy.canvas.height = 10;
         drawServiceSpy.baseCtx.fillStyle = 'black';
@@ -64,6 +67,7 @@ describe('EyeDropperService', () => {
 
     it('onMouseDown should set secondary color on right click', () => {
         spyOn(service, 'isInCanvas').and.returnValue(true);
+        spyOn<any>(service, 'getColor').and.returnValue(new Color(0, 0, 0));
         drawServiceSpy.canvas.width = 10;
         drawServiceSpy.canvas.height = 10;
         drawServiceSpy.baseCtx.fillStyle = 'black';
@@ -77,6 +81,7 @@ describe('EyeDropperService', () => {
         service['colorService'].secondaryColor = new Color(25, 25, 25);
         service['colorService'].primaryColor = new Color(25, 25, 25);
         spyOn(service, 'isInCanvas').and.returnValue(true);
+        spyOn<any>(service, 'getColor').and.returnValue(new Color(0, 0, 0));
         drawServiceSpy.canvas.width = 10;
         drawServiceSpy.canvas.height = 10;
         drawServiceSpy.baseCtx.fillStyle = 'black';
@@ -90,6 +95,7 @@ describe('EyeDropperService', () => {
     it('should clear if is not in canvas', () => {
         spyOn(service, 'isInCanvas').and.returnValue(false);
         spyOn(service.previsualisationCtx, 'clearRect');
+        spyOn<any>(service, 'getColor').and.returnValue(new Color(0, 0, 0));
         service.onMouseMove({} as MouseEvent);
         expect(service.previsualisationCtx.clearRect).toHaveBeenCalled();
     });
@@ -99,6 +105,7 @@ describe('EyeDropperService', () => {
         service['previsualisationCtx'] = service['previsualisationCanvas'].getContext('2d') as CanvasRenderingContext2D;
         spyOn(service.previsualisationCtx, 'clearRect');
         spyOn<any>(service, 'getPrevisualisation');
+        spyOn<any>(service, 'getColor').and.returnValue(new Color(0, 0, 0));
         spyOn(service, 'isInCanvas').and.returnValue(false);
         service.onMouseMove({} as MouseEvent);
         expect(service.previsualisationCtx.clearRect).toHaveBeenCalled();
@@ -110,6 +117,9 @@ describe('EyeDropperService', () => {
         spyOn(service.previsualisationCtx, 'drawImage');
         spyOn<any>(service, 'drawSelectedPixelRect');
         spyOn<any>(service, 'getPrevisualisation');
+        spyOn<any>(service, 'drawCircleAroundPreview');
+        spyOn<any>(service, 'drawCircleAroundMouse');
+        spyOn<any>(service, 'getColor').and.returnValue(new Color(0, 0, 0));
         spyOn(service, 'isInCanvas').and.returnValue(true);
         service.onMouseMove({} as MouseEvent);
         expect(service.previsualisationCtx.drawImage).toHaveBeenCalled();
@@ -135,5 +145,24 @@ describe('EyeDropperService', () => {
         const eyeDropper: EyeDropperService = service;
         service.stopDrawing();
         expect(service).toEqual(eyeDropper);
+    });
+
+    it('draw circle around preview should draw a circle around the preview', () => {
+        spyOn(baseCtxStub, 'ellipse');
+        service['drawCircleAroundPreview'](baseCtxStub, 10);
+        expect(baseCtxStub.ellipse).toHaveBeenCalled();
+    });
+
+    it('draw circle around mouse should draw a circle around the mouse', () => {
+        spyOn(baseCtxStub, 'clearRect');
+        spyOn(baseCtxStub, 'ellipse');
+        service['drawCircleAroundMouse'](baseCtxStub, { x: 10, y: 10 } as Vec2, 5);
+        expect(baseCtxStub.ellipse).toHaveBeenCalledWith(10, 10, 5, 5, 0, 0, 2 * Math.PI);
+    });
+
+    it('get color should return the color on the canvas', () => {
+        service['drawingService'].baseCtx.fillStyle = 'white';
+        service['drawingService'].baseCtx.fillRect(0, 0, 10, 10);
+        expect(service['getColor']({ x: 5, y: 5 } as Vec2)).toEqual(new Color(255, 255, 255));
     });
 });

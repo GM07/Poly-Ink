@@ -17,7 +17,7 @@ export class EyeDropperService extends Tool {
     toolID: string;
     previsualisationCanvas: HTMLCanvasElement;
     previsualisationCtx: CanvasRenderingContext2D;
-    updatePrevisualisation: Subject<void> = new Subject();
+    updatePrevisualisation: Subject<string> = new Subject();
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
@@ -35,22 +35,32 @@ export class EyeDropperService extends Tool {
 
     onMouseDown(event: MouseEvent): void {
         if (this.isInCanvas(event)) {
-            const pos: Vec2 = this.getPositionFromMouse(event);
-            const color: Uint8ClampedArray = this.drawingService.baseCtx.getImageData(pos.x, pos.y, 1, 1).data;
             if (event.button === MouseButton.Left) {
-                this.colorService.primaryColor = new Color(color[0], color[1], color[2]);
+                this.colorService.primaryColor = this.getColor(this.getPositionFromMouse(event));
             } else if (event.button === MouseButton.Right) {
-                this.colorService.secondaryColor = new Color(color[0], color[1], color[2]);
+                this.colorService.secondaryColor = this.getColor(this.getPositionFromMouse(event));
             }
         }
     }
 
     onMouseMove(event: MouseEvent): void {
+        let color = '';
         const data: HTMLCanvasElement = this.getPrevisualisation(this.getPositionFromMouse(event), ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH);
-        if (this.isInCanvas(event)) {
+        if (this.isInCanvas(event) && !this.colorService.isMenuOpen) {
             this.previsualisationCtx.imageSmoothingEnabled = false;
             this.previsualisationCtx.clearRect(0, 0, this.previsualisationCanvas.width, this.previsualisationCanvas.height);
             this.previsualisationCtx.beginPath();
+            this.previsualisationCtx.save();
+            this.previsualisationCtx.ellipse(
+                this.previsualisationCanvas.width / 2,
+                this.previsualisationCanvas.height / 2,
+                this.previsualisationCanvas.width / 2,
+                this.previsualisationCanvas.height / 2,
+                0,
+                0,
+                2 * Math.PI,
+            );
+            this.previsualisationCtx.clip();
             this.previsualisationCtx.drawImage(
                 data,
                 0,
@@ -62,11 +72,24 @@ export class EyeDropperService extends Tool {
                 this.previsualisationCanvas.width,
                 this.previsualisationCanvas.height,
             );
+            this.previsualisationCtx.restore();
+
             this.drawSelectedPixelRect(this.previsualisationCtx);
-            this.updatePrevisualisation.next();
+
+            this.drawCircleAroundPreview(this.previsualisationCtx, this.previsualisationCanvas.width / 2);
+
+            this.drawCircleAroundMouse(
+                this.drawingService.previewCtx,
+                { x: event.offsetX, y: event.offsetY } as Vec2,
+                ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH / 2,
+            );
+
+            color = this.getColor(this.getPositionFromMouse(event)).hexString;
         } else {
             this.previsualisationCtx.clearRect(0, 0, this.previsualisationCanvas.width, this.previsualisationCanvas.height);
+            this.drawingService.clearCanvas(this.drawingService.previewCtx);
         }
+        this.updatePrevisualisation.next(color);
     }
 
     private drawSelectedPixelRect(ctx: CanvasRenderingContext2D): void {
@@ -85,19 +108,29 @@ export class EyeDropperService extends Tool {
         ctx.setLineDash([]);
     }
 
+    private drawCircleAroundPreview(ctx: CanvasRenderingContext2D, size: number): void {
+        ctx.strokeStyle = 'black';
+        ctx.ellipse(size, size, size, size, 0, 0, 2 * Math.PI);
+        ctx.stroke();
+    }
+
+    private drawCircleAroundMouse(ctx: CanvasRenderingContext2D, coords: Vec2, radius: number): void {
+        ctx.clearRect(0, 0, this.drawingService.previewCanvas.width, this.drawingService.previewCanvas.height);
+        ctx.beginPath();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = 'black';
+        ctx.ellipse(coords.x, coords.y, radius, radius, 0, 0, 2 * Math.PI);
+        ctx.stroke();
+    }
+
     private getPrevisualisation(coords: Vec2, size: number): HTMLCanvasElement {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
         canvas.width = size;
         canvas.height = size;
-        const radius = size / 2;
-        ctx.imageSmoothingEnabled = false;
+        const radius = Math.floor(size / 2);
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.beginPath();
-        ctx.save();
-        ctx.ellipse(radius, radius, radius, radius, 0, 0, 2 * Math.PI);
-        ctx.clip();
         ctx.drawImage(
             this.drawingService.canvas,
             Math.max(0 - radius, coords.x - radius),
@@ -109,7 +142,11 @@ export class EyeDropperService extends Tool {
             canvas.width,
             canvas.height,
         );
-        ctx.restore();
         return canvas;
+    }
+
+    private getColor(pos: Vec2): Color {
+        const colorData: Uint8ClampedArray = this.drawingService.baseCtx.getImageData(pos.x, pos.y, 1, 1).data;
+        return new Color(colorData[0], colorData[1], colorData[2]);
     }
 }
