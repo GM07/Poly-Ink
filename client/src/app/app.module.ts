@@ -20,7 +20,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { NewDrawingComponent } from './components/canvas-reset/canvas-reset.component';
 import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.component';
-import { DrawingTagsComponent } from './components/drawing-tags/drawing-tags.component';
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { ExportDrawingComponent } from './components/export-drawing/export-drawing.component';
@@ -69,7 +68,6 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         EllipseSelectionComponent,
         SelectionHandlerComponent,
         AerosolConfigComponent,
-        DrawingTagsComponent,
     ],
     imports: [
         AppRoutingModule,
