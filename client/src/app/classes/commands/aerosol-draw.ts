@@ -6,7 +6,7 @@ export class AerosolDraw extends AbstractDraw {
 
     constructor(colorService: ColorService, config: AerosolConfig) {
         super(colorService);
-        this.config = config;
+        this.config = config.clone();
     }
 
     execute(context: CanvasRenderingContext2D): void {

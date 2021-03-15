@@ -12,4 +12,15 @@ export class RectangleConfig {
     startCoords: Vec2;
     endCoords: Vec2;
     shiftDown: boolean = false;
+
+    clone(): RectangleConfig {
+        let config = new RectangleConfig();
+        config.startCoords = { x: this.startCoords.x, y: this.startCoords.y };
+        config.endCoords = { x: this.endCoords.x, y: this.endCoords.y };
+        config.rectangleMode = this.rectangleMode;
+        config.shiftDown = this.shiftDown;
+        config.lineWidth = this.lineWidth;
+
+        return config;
+    }
 }

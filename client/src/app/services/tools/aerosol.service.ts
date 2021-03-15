@@ -74,11 +74,11 @@ export class AerosolService extends Tool {
     }
 
     onMouseUp(event: MouseEvent): void {
-        this.drawingService.clearCanvas(this.drawingService.previewCtx);
         if (this.leftMouseDown) {
             this.draw();
             this.config.droplets = [];
         }
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.leftMouseDown = false;
         window.clearInterval(this.sprayIntervalID);
     }

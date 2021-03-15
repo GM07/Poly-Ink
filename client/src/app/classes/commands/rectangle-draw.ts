@@ -6,7 +6,7 @@ export class RectangleDraw extends AbstractDraw {
 
     constructor(colorService: ColorService, config: RectangleConfig) {
         super(colorService);
-        this.config = config;
+        this.config = config.clone();
     }
 
     // TODO - 1px border is not the right color

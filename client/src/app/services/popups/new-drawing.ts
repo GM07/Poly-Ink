@@ -34,6 +34,7 @@ export class NewDrawing {
 
         this.drawingService.resizeCanvas(width, height);
         this.drawingService.initBackground();
+        this.drawingService.initUndoRedo();
     }
 
     private isNotEmpty(baseCtx: CanvasRenderingContext2D, width: number, height: number): boolean {

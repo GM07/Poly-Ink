@@ -8,7 +8,7 @@ export class PencilDraw extends AbstractDraw {
 
     constructor(colorService: ColorService, pencilConfig: PencilConfig) {
         super(colorService);
-        this.pencilConfig = pencilConfig;
+        this.pencilConfig = pencilConfig.clone();
     }
 
     execute(context: CanvasRenderingContext2D): void {

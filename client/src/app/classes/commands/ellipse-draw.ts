@@ -6,7 +6,7 @@ export class EllipseDraw extends AbstractDraw {
 
     constructor(colorService: ColorService, config: EllipseConfig) {
         super(colorService);
-        this.config = config;
+        this.config = config.clone();
     }
 
     execute(context: CanvasRenderingContext2D): void {

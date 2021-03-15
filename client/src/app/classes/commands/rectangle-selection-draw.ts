@@ -7,7 +7,7 @@ export class RectangleSelectionDraw extends AbstractDraw {
 
     constructor(colorService: ColorService, config: SelectionConfig) {
         super(colorService);
-        this.config = config;
+        this.config = config.clone();
     }
 
     execute(context: CanvasRenderingContext2D): void {

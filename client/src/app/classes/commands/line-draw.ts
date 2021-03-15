@@ -7,7 +7,7 @@ export class LineDraw extends AbstractDraw {
     lineConfig: LineConfig;
     constructor(colorService: ColorService, lineConfig: LineConfig) {
         super(colorService);
-        this.lineConfig = lineConfig;
+        this.lineConfig = lineConfig.clone();
     }
 
     execute(context: CanvasRenderingContext2D): void {

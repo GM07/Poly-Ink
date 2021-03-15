@@ -7,7 +7,7 @@ export class EraserDraw extends AbstractDraw {
 
     constructor(colorService: ColorService, eraserConfig: PencilConfig) {
         super(colorService);
-        this.eraserConfig = eraserConfig;
+        this.eraserConfig = eraserConfig.clone();
     }
 
     execute(context: CanvasRenderingContext2D): void {

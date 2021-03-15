@@ -7,4 +7,17 @@ export class LineConfig {
     diameterJunctions: number = ToolSettingsConst.DEFAULT_LINE_JUNCTION_WIDTH;
     thickness: number = ToolSettingsConst.DEFAULT_LINE_WIDTH;
     points: Vec2[] = [];
+
+    clone(): LineConfig {
+        let config = new LineConfig();
+        config.closedLoop = this.closedLoop;
+        config.diameterJunctions = this.diameterJunctions;
+        config.thickness = this.thickness;
+        config.showJunctionPoints = this.showJunctionPoints;
+        this.points.forEach((point) => {
+            config.points.push({ x: point.x, y: point.y });
+        });
+
+        return config;
+    }
 }

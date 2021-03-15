@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
+import { ResizeDraw } from '@app/classes/commands/resize-draw';
 import { Subject } from 'rxjs';
+import { ResizeConfig } from './../../classes/tool-config/resize-config';
+import { UndoRedoService } from './../undo-redo/undo-redo.service';
 
 @Injectable({
     providedIn: 'root',
@@ -12,6 +15,8 @@ export class DrawingService {
     previewCanvas: HTMLCanvasElement;
 
     changes: Subject<void> = new Subject<void>();
+
+    constructor(private undoRedoService: UndoRedoService) {}
 
     clearCanvas(context: CanvasRenderingContext2D): void {
         context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -30,6 +35,14 @@ export class DrawingService {
             this.drawWhite(memoryCanvas);
         }
         this.changes.next();
+    }
+
+    initUndoRedo() {
+        const config = new ResizeConfig();
+        config.height = this.canvas.height;
+        config.width = this.canvas.width;
+        const initialResize = new ResizeDraw(config, this);
+        this.undoRedoService.init(this.baseCtx, this.previewCtx, initialResize);
     }
 
     private saveCanvas(memoryCanvas: HTMLCanvasElement): void {
@@ -58,7 +71,7 @@ export class DrawingService {
 
     draw(command: AbstractDraw): void {
         command.execute(this.baseCtx);
-        // TODO - handle redo-undo
+        this.undoRedoService.saveCommand(command);
     }
 
     drawPreview(command: AbstractDraw): void {

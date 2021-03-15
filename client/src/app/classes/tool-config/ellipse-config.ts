@@ -14,4 +14,16 @@ export class EllipseConfig {
     shiftDown: boolean = false;
     lineWidth: number = ToolSettingsConst.MIN_WIDTH;
     showPerimeter: boolean = false;
+
+    clone(): EllipseConfig {
+        let config = new EllipseConfig();
+        config.startCoords = { x: this.startCoords.x, y: this.startCoords.y };
+        config.endCoords = { x: this.endCoords.x, y: this.endCoords.y };
+        config.ellipseMode = this.ellipseMode;
+        config.shiftDown = this.shiftDown;
+        config.lineWidth = this.lineWidth;
+        config.showPerimeter = this.showPerimeter;
+
+        return config;
+    }
 }

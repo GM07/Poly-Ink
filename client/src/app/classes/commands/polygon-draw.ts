@@ -8,7 +8,7 @@ export class PolygonDraw extends AbstractDraw {
 
     constructor(colorService: ColorService, config: PolygonConfig) {
         super(colorService);
-        this.config = config;
+        this.config = config.clone();
     }
 
     execute(ctx: CanvasRenderingContext2D): void {

@@ -6,4 +6,15 @@ export class SelectionConfig {
     height: number;
     width: number;
     shiftDown: boolean;
+
+    clone(): SelectionConfig {
+        let config = new SelectionConfig();
+        config.startCoords = { x: this.startCoords.x, y: this.startCoords.y };
+        config.endCoords = { x: this.endCoords.x, y: this.endCoords.y };
+        config.shiftDown = this.shiftDown;
+        config.height = this.height;
+        config.width = this.width;
+
+        return config;
+    }
 }
