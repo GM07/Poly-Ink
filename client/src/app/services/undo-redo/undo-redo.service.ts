@@ -19,7 +19,7 @@ export class UndoRedoService {
 
     constructor() {
         this.shortcutRedo = new ShortcutKey('z', true, true, false);
-        this.shortcutUndo = new ShortcutKey('z', true, false, false);
+        this.shortcutUndo = new ShortcutKey('z', true);
     }
 
     init(context: CanvasRenderingContext2D, preview: CanvasRenderingContext2D, originalResize: ResizeDraw): void {
@@ -41,8 +41,8 @@ export class UndoRedoService {
 
         this.currentAction -= 1;
 
-        this.originalResize.execute(this.context);
-        this.context.putImageData(this.originalImage, 0, 0);
+       this.originalResize.execute(this.context);
+       this.context.putImageData(this.originalImage, 0, 0);
 
         for (let i = 0; i <= this.currentAction; i++) {
             this.commands[i].execute(this.context);
