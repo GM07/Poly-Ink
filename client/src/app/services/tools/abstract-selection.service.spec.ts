@@ -99,9 +99,9 @@ describe('AbstractSelectionService', () => {
     it('is in selection should return true if is in selection', () => {
         // tslint:disable:no-magic-numbers
         service['selectionCtx'] = canvasSelection.getContext('2d');
-        service['selectionCoords'] = { x: 0, y: 0 } as Vec2;
-        service['width'] = 50;
-        service['height'] = 50;
+        service.config.endCoords = { x: 0, y: 0 } as Vec2;
+        service.config.width = 50;
+        service.config.height = 50;
         spyOn<any>(service, 'getPositionFromMouse').and.returnValue({ x: 25, y: 25 } as Vec2);
         spyOn<any>(service, 'isInSelection').and.callThrough();
         expect(service.isInSelection(mouseEvent)).toBeTruthy();

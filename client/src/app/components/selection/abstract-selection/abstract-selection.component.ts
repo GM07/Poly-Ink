@@ -98,8 +98,8 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     private placePoints(): void {
         if (this.selectionService.selectionCtx === null) return;
 
-        const width = Math.abs(this.selectionService.width);
-        const height = Math.abs(this.selectionService.height);
+        const width = Math.abs(this.selectionService.config.width);
+        const height = Math.abs(this.selectionService.config.height);
 
         this.placeControlPoint(this.topLeft, 0 - this.CONTROL_INNER, 0 - this.CONTROL_INNER);
         this.placeControlPoint(this.topMiddle, width / 2 - this.MIDDLE_OFFSET, 0 - this.CONTROL_INNER);
@@ -123,8 +123,8 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     }
 
     private placeControlPoint(element: ElementRef<HTMLElement>, offsetX: number, offsetY: number): void {
-        const x = this.selectionService.selectionCoords.x;
-        const y = this.selectionService.selectionCoords.y;
+        const x = this.selectionService.config.endCoords.x;
+        const y = this.selectionService.config.endCoords.y;
         element.nativeElement.style.left = String(x + offsetX) + 'px';
         element.nativeElement.style.top = String(y + offsetY) + 'px';
     }
