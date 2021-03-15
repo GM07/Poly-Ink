@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+/*import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Drawing } from '@common/communication/drawing';
 import { Observable } from 'rxjs';
@@ -10,9 +10,8 @@ interface Tag {
 @Injectable({
     providedIn: 'root',
 })
-
 export class CarrouselService {
-    public baseURL: string = 'http://localhost:3000/drawings';
+    private baseURL: string = 'http://localhost:3000/drawings';
     
     constructor(private http: HttpClient) {}
     
@@ -35,4 +34,4 @@ export class CarrouselService {
         }
         return this.http.delete<Drawing>(this.baseURL, httpOptions);
     }
-}
+}*.
