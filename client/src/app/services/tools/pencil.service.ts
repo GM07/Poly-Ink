@@ -43,8 +43,8 @@ export class PencilService extends Tool {
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.mouseDown = event.button === MouseButton.Left;
-        if (this.mouseDown) {
+        this.leftMouseDown = event.button === MouseButton.Left;
+        if (this.leftMouseDown) {
             this.clearPath();
 
             this.mouseDownCoord = this.getPositionFromMouse(event);
@@ -53,34 +53,33 @@ export class PencilService extends Tool {
     }
 
     onMouseUp(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             if (this.isInCanvas(event)) {
                 const mousePosition = this.getPositionFromMouse(event);
                 this.pathData[this.pathData.length - 1].push(mousePosition);
             }
             this.drawLine(this.drawingService.baseCtx, this.pathData);
         }
-        this.mouseDown = false;
+        this.leftMouseDown = false;
         this.clearPath();
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             const mousePosition = this.getPositionFromMouse(event);
             this.pathData[this.pathData.length - 1].push(mousePosition);
-
             // Drawing on preview canvas and then clear it with every mouse move
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawLine(this.drawingService.previewCtx, this.pathData);
-        } else {
+        } else if (this.isInCanvas(event) && !this.colorService.isMenuOpen) {
             this.mouseDownCoord = this.getPositionFromMouse(event);
             this.drawBackgroundPoint(this.getPositionFromMouse(event));
         }
     }
 
-    onMouseLeave(event: MouseEvent): void {
-        if (!this.mouseDown) this.drawingService.clearCanvas(this.drawingService.previewCtx);
+    onMouseLeave(): void {
+        if (!this.leftMouseDown) this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
     onMouseEnter(event: MouseEvent): void {
@@ -92,7 +91,7 @@ export class PencilService extends Tool {
         } else if (event.buttons === LeftMouse.Released) {
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawLine(this.drawingService.baseCtx, this.pathData);
-            this.mouseDown = false;
+            this.leftMouseDown = false;
             this.clearPath();
         }
     }

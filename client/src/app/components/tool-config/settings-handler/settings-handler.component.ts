@@ -44,15 +44,15 @@ export class SettingsHandlerComponent {
     }
 
     get activeTab(): ToolConfig {
-        if (this.toolHandler.getTool() === this.lastTool) return this.lastTab;
+        if (this.toolHandler.getCurrentTool() === this.lastTool) return this.lastTab;
         this.applyNewTab();
         return this.lastTab;
     }
 
     applyNewTab(): void {
         for (const [tool, toolConfig] of this.settingsList) {
-            if (this.toolHandler.getTool() instanceof tool) {
-                this.lastTool = this.toolHandler.getTool();
+            if (this.toolHandler.getCurrentTool() instanceof tool) {
+                this.lastTool = this.toolHandler.getCurrentTool();
                 this.lastTab = toolConfig;
                 break;
             }
