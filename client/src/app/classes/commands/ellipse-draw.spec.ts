@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
-import { EllipseConfig, EllipseMode } from '@app/classes/tool-config/ellipse-config';
+import { ShapeConfig, ShapeMode } from '@app/classes/tool-config/shape-config';
 import { Vec2 } from '@app/classes/vec2';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
@@ -18,7 +18,7 @@ describe('EllipseDraw', () => {
 
     beforeEach(() => {
         colorService = { primaryRgba: Colors.RED.rgbString, secondaryRgba: Colors.BLUE.rgbString } as ColorService;
-        ellipseDraw = new EllipseDraw(colorService, new EllipseConfig());
+        ellipseDraw = new EllipseDraw(colorService, new ShapeConfig());
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
 
@@ -32,7 +32,7 @@ describe('EllipseDraw', () => {
     });
 
     it('should allow for contour drawing type', () => {
-        ellipseDraw.config.ellipseMode = EllipseMode.Contour;
+        ellipseDraw.config.shapeMode = ShapeMode.Contour;
         ellipseDraw.execute(ctxStub);
 
         const xMiddlePoint = (ellipseDraw.config.endCoords.x - ellipseDraw.config.startCoords.x) / 2;
@@ -50,7 +50,7 @@ describe('EllipseDraw', () => {
     });
 
     it('should allow for filled drawing type', () => {
-        ellipseDraw.config.ellipseMode = EllipseMode.Filled;
+        ellipseDraw.config.shapeMode = ShapeMode.Filled;
         ellipseDraw.execute(ctxStub);
 
         const xMiddlePoint = (ellipseDraw.config.endCoords.x - ellipseDraw.config.startCoords.x) / 2;
@@ -63,7 +63,7 @@ describe('EllipseDraw', () => {
     });
 
     it('should allow for filled with contour drawing type', () => {
-        ellipseDraw.config.ellipseMode = EllipseMode.FilledWithContour;
+        ellipseDraw.config.shapeMode = ShapeMode.FilledWithContour;
         ellipseDraw.config.lineWidth = 2;
         ellipseDraw.execute(ctxStub);
 
@@ -84,7 +84,7 @@ describe('EllipseDraw', () => {
     });
 
     it('should do nothing with an unknown mode', () => {
-        ellipseDraw.config.ellipseMode = {} as EllipseMode;
+        ellipseDraw.config.shapeMode = {} as ShapeMode;
         ellipseDraw.execute(ctxStub);
 
         const imageData = ctxStub.getImageData(1, 1, 1, 1);
@@ -93,7 +93,7 @@ describe('EllipseDraw', () => {
 
     it('should draw a circle when shift is pressed', () => {
         ellipseDraw.config.shiftDown = true;
-        ellipseDraw.config.ellipseMode = EllipseMode.FilledWithContour;
+        ellipseDraw.config.shapeMode = ShapeMode.FilledWithContour;
 
         ellipseDraw.execute(ctxStub);
 
@@ -123,7 +123,7 @@ describe('EllipseDraw', () => {
     });
 
     it('should draw rectangle perimeter properly with filled type', () => {
-        ellipseDraw.config.ellipseMode = EllipseMode.Filled;
+        ellipseDraw.config.shapeMode = ShapeMode.Filled;
         // tslint:disable-next-line:no-magic-numbers
         ellipseDraw['drawRectanglePerimeter'](ctxStub, 5, 5, 5, 5);
 

@@ -1,8 +1,8 @@
-import { EllipseConfig } from './ellipse-config';
-describe('EllipseConfig', () => {
-    let config: EllipseConfig;
+import { ShapeConfig } from './shape-config';
+describe('ShapeConfig', () => {
+    let config: ShapeConfig;
     beforeEach(() => {
-        config = new EllipseConfig();
+        config = new ShapeConfig();
     });
 
     it('should clone start and end point properly', () => {

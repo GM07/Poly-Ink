@@ -64,20 +64,6 @@ export class EllipseSelectionService extends AbstractSelectionService {
         ctx.setLineDash([]);
 
         ctx.closePath();
-
-        if (this.selectionCtx !== null) this.drawRectanglePerimeter(ctx, position);
-    }
-
-    private drawRectanglePerimeter(ctx: CanvasRenderingContext2D, center: Vec2): void {
-        ctx.lineWidth = this.BORDER_WIDTH;
-        const x = center.x - this.config.width / 2;
-        const y = center.y - this.config.height / 2;
-
-        ctx.strokeStyle = 'blue';
-        ctx.beginPath();
-        ctx.strokeRect(x, y, this.config.width, this.config.height);
-        ctx.stroke();
-        ctx.closePath();
     }
 
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {

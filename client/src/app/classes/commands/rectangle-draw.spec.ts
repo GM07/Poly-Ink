@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
-import { RectangleConfig, RectangleMode } from '@app/classes/tool-config/rectangle-config';
+import { ShapeConfig, ShapeMode } from '@app/classes/tool-config/shape-config';
 import { Vec2 } from '@app/classes/vec2';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { RectangleDraw } from './rectangle-draw';
+
 describe('RectangleDraw', () => {
     let rectangleDraw: RectangleDraw;
     let colorService: ColorService;
@@ -15,7 +16,7 @@ describe('RectangleDraw', () => {
 
     beforeEach(() => {
         colorService = { primaryRgba: Colors.RED.rgbString, secondaryRgba: Colors.BLUE.rgbString } as ColorService;
-        rectangleDraw = new RectangleDraw(colorService, new RectangleConfig());
+        rectangleDraw = new RectangleDraw(colorService, new ShapeConfig());
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
 
@@ -32,7 +33,7 @@ describe('RectangleDraw', () => {
         expect(rectangleDraw).toBeDefined();
         expect(rectangleDraw.primaryRgba).toEqual(Colors.RED.rgbString);
         expect(rectangleDraw.secondaryRgba).toEqual(Colors.BLUE.rgbString);
-        expect(rectangleDraw.config.rectangleMode).toEqual(RectangleMode.FilledWithContour);
+        expect(rectangleDraw.config.shapeMode).toEqual(ShapeMode.FilledWithContour);
         expect(rectangleDraw.config.lineWidth).toEqual(ToolSettingsConst.MIN_WIDTH);
         expect(rectangleDraw.config.shiftDown).toBeFalse();
     });
@@ -58,7 +59,7 @@ describe('RectangleDraw', () => {
     });
 
     it('should do nothing with an unknown mode', () => {
-        rectangleDraw.config.rectangleMode = {} as RectangleMode;
+        rectangleDraw.config.shapeMode = {} as ShapeMode;
 
         rectangleDraw.execute(ctxStub);
 
@@ -68,7 +69,7 @@ describe('RectangleDraw', () => {
     });
 
     it('should allow for contour drawing type', () => {
-        rectangleDraw.config.rectangleMode = RectangleMode.Contour;
+        rectangleDraw.config.shapeMode = ShapeMode.Contour;
 
         rectangleDraw.execute(ctxStub);
 
@@ -86,7 +87,7 @@ describe('RectangleDraw', () => {
     });
 
     it('should allow for filled drawing type', () => {
-        rectangleDraw.config.rectangleMode = RectangleMode.Filled;
+        rectangleDraw.config.shapeMode = ShapeMode.Filled;
         rectangleDraw.execute(ctxStub);
 
         // tslint:disable-next-line:no-magic-numbers
@@ -98,7 +99,7 @@ describe('RectangleDraw', () => {
     });
 
     it('should allow for filled with contour drawing type', () => {
-        rectangleDraw.config.rectangleMode = RectangleMode.FilledWithContour;
+        rectangleDraw.config.shapeMode = ShapeMode.FilledWithContour;
         rectangleDraw.config.lineWidth = 2;
         rectangleDraw.execute(ctxStub);
 

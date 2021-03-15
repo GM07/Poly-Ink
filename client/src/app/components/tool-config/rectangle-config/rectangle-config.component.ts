@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
-import { RectangleMode } from '@app/classes/tool-config/rectangle-config';
+import { ShapeMode } from '@app/classes/tool-config/shape-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { RectangleService } from '@app/services/tools/rectangle.service';
 @Component({
@@ -9,7 +9,7 @@ import { RectangleService } from '@app/services/tools/rectangle.service';
     styleUrls: ['./rectangle-config.component.scss'],
 })
 export class RectangleConfigComponent extends ToolConfig {
-    rectangleModeIn: typeof RectangleMode = RectangleMode;
+    rectangleModeIn: typeof ShapeMode = ShapeMode;
     readonly MIN: number = ToolSettingsConst.MIN_WIDTH;
     readonly MAX: number = ToolSettingsConst.MAX_WIDTH;
 
@@ -17,8 +17,8 @@ export class RectangleConfigComponent extends ToolConfig {
         super();
     }
 
-    toggleTraceType(rectangleMode: RectangleMode): void {
-        this.rectangleService.config.rectangleMode = rectangleMode;
+    toggleTraceType(rectangleMode: ShapeMode): void {
+        this.rectangleService.config.shapeMode = rectangleMode;
     }
 
     colorSliderLabel(value: number): string {

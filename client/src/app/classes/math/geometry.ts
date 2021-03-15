@@ -1,9 +1,7 @@
 import { Vec2 } from '@app/classes/vec2';
+import { ToolMath } from '@app/constants/math';
 
 export class Geometry {
-    static readonly DEGREE_CONVERSION_FACTOR: number = 180;
-    static readonly ZERO_THRESHOLD: number = 10e-5;
-
     static getDistanceBetween(initial: Vec2, final: Vec2): number {
         const dx: number = final.x - initial.x;
         const dy: number = final.y - initial.y;
@@ -18,11 +16,11 @@ export class Geometry {
     }
 
     static toDegrees(radians: number): number {
-        return (radians * Geometry.DEGREE_CONVERSION_FACTOR) / Math.PI;
+        return (radians * ToolMath.DEGREE_CONVERSION_FACTOR) / Math.PI;
     }
 
     static toRadians(degrees: number): number {
-        return (degrees * Math.PI) / Geometry.DEGREE_CONVERSION_FACTOR;
+        return (degrees * Math.PI) / ToolMath.DEGREE_CONVERSION_FACTOR;
     }
 
     static isAPoint(path: Vec2[]): boolean {

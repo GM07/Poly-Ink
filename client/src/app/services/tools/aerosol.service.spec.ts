@@ -48,8 +48,8 @@ describe('AerosolService', () => {
         service['drawingService'].canvas = canvasTestHelper.canvas;
 
         mouseEvent = {
-            offsetX: 25,
-            offsetY: 25,
+            pageX: 25,
+            pageY: 25,
             button: 0,
         } as MouseEvent;
     });
@@ -66,8 +66,8 @@ describe('AerosolService', () => {
 
     it('mouseDown should set mouseDown property to false on right click', () => {
         const mouseEventRClick = {
-            offsetX: 25,
-            offsetY: 25,
+            pageX: 25,
+            pageY: 25,
             button: 1,
         } as MouseEvent;
         service.onMouseDown(mouseEventRClick);
@@ -93,40 +93,56 @@ describe('AerosolService', () => {
 
     it('should not spray between the points where it left and entered the canvas', () => {
         service.areaDiameter = 2;
-        let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
+        let mouseEventLClick: MouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);
         service.onMouseLeave(mouseEventLClick);
-        mouseEventLClick = { offsetX: 0, offsetY: 50, button: 0, buttons: 1 } as MouseEvent;
+        mouseEventLClick = { pageX: 0, pageY: 50, button: 0, buttons: 1 } as MouseEvent;
+        service.onMouseEnter(mouseEventLClick);
+        mouseEventLClick = { pageX: 0, pageY: 50, button: 0 } as MouseEvent;
+        service.onMouseUp(mouseEventLClick);
+        expect(sprayContinuouslySpy).toHaveBeenCalled();
+        expect(drawSpy).toHaveBeenCalled();
+    });
+
+    it('should stop drawing when the mouse is up', () => {
+        let mouseEventLClick: MouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 1 } as MouseEvent;
+        service.areaDiameter = 1;
+        service.onMouseDown(mouseEventLClick);
+        service.onMouseLeave(mouseEventLClick);
+        mouseEventLClick = { pageX: 0, pageY: 2, button: 0, buttons: 0 } as MouseEvent;
+        service.onMouseUp(mouseEventLClick);
         service.onMouseEnter(mouseEventLClick);
         expect(sprayContinuouslySpy).toHaveBeenCalled();
+        expect(drawSpy).toHaveBeenCalled();
+        expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
     it('should call onMousDown when entering the canvas if mouse is down', () => {
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(onMouseDownSpy).toHaveBeenCalled();
     });
 
     it('should do nothing when entering the canvas, with an unsupported mouse state', () => {
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 3 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 3 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(drawPreviewSpy).not.toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 10, buttons: 3 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 10, buttons: 3 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(drawPreviewSpy).not.toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
     });
 
     it('should clear the canvas preview when the mouse leaves the canvas, left click released', () => {
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseLeave(mouseEvent);
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
     it('should only draw nothing on base canvas when moving the mouse, left click released', () => {
         service.leftMouseDown = false;
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         expect(drawPreviewSpy).not.toHaveBeenCalled();
         window.clearInterval(service.sprayIntervalID);
@@ -139,7 +155,7 @@ describe('AerosolService', () => {
 
     it('should draw on mouseup if mouse was down', () => {
         service.leftMouseDown = true;
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawSpy).toHaveBeenCalled();
         window.clearInterval(service.sprayIntervalID);

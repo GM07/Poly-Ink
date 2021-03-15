@@ -17,7 +17,7 @@ describe('RectangleService', () => {
     let previewCtxStub: CanvasRenderingContext2D;
     let drawSpy: jasmine.Spy<any>;
     let drawPreviewSpy: jasmine.Spy<any>;
-    let updateRectangleSpy: jasmine.Spy<any>;
+    let updateShapeSpy: jasmine.Spy<any>;
 
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'drawPreview']);
@@ -37,7 +37,7 @@ describe('RectangleService', () => {
         service = TestBed.inject(RectangleService);
         drawSpy = spyOn<any>(service, 'draw').and.stub();
         drawPreviewSpy = spyOn<any>(service, 'drawPreview').and.stub();
-        updateRectangleSpy = spyOn<any>(service, 'updateRectangle').and.callThrough();
+        updateShapeSpy = spyOn<any>(service, 'updateShape').and.stub();
 
         // tslint:disable:no-string-literal
         service['drawingService'].baseCtx = baseCtxStub; // Jasmine doesnt copy properties with underlying data
@@ -45,8 +45,8 @@ describe('RectangleService', () => {
         service['drawingService'].canvas = canvasTestHelper.canvas;
 
         mouseEvent = {
-            offsetX: 25,
-            offsetY: 25,
+            pageX: 25,
+            pageY: 25,
             button: 0,
         } as MouseEvent;
 
@@ -80,10 +80,10 @@ describe('RectangleService', () => {
     });
 
     it('should start drawing when the mouse is down', () => {
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 3 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 3 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(drawPreviewSpy).not.toHaveBeenCalled();
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(drawPreviewSpy).toHaveBeenCalled();
     });
@@ -92,7 +92,7 @@ describe('RectangleService', () => {
         service.onMouseUp(mouseEvent);
         expect(service.leftMouseDown).toEqual(false);
         service.onMouseDown(mouseEvent);
-        mouseEvent = { x: -1, y: -1, offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { x: -1, y: -1, pageX: 1, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawSpy).toHaveBeenCalled();
     });
@@ -106,18 +106,18 @@ describe('RectangleService', () => {
 
     it('should draw a preview when the mouse is moving with left click pressed', () => {
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         expect(drawPreviewSpy).toHaveBeenCalled();
     });
 
     it('should update the rectangle when the mouse leaves', () => {
         service.onMouseLeave(mouseEvent);
-        expect(updateRectangleSpy).not.toHaveBeenCalled();
+        expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseLeave(mouseEvent);
-        expect(updateRectangleSpy).toHaveBeenCalled();
+        expect(updateShapeSpy).toHaveBeenCalled();
     });
 
     it('should not update rectangle end coordinates to mousePosition when mouseup outside canvas', () => {
@@ -134,32 +134,32 @@ describe('RectangleService', () => {
 
     it('should update the rectangle when the mouse enters', () => {
         service.onMouseEnter(mouseEvent);
-        expect(updateRectangleSpy).not.toHaveBeenCalled();
+        expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
-        expect(updateRectangleSpy).toHaveBeenCalled();
+        expect(updateShapeSpy).toHaveBeenCalled();
     });
 
     it('should update the rectangle to a square with shift pressed', () => {
         service.onKeyDown({} as KeyboardEvent);
-        expect(updateRectangleSpy).not.toHaveBeenCalled();
+        expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         service.onKeyDown(keyboardEvent);
-        expect(updateRectangleSpy).toHaveBeenCalled();
+        expect(updateShapeSpy).toHaveBeenCalled();
     });
 
     it('should update the square to a rectangle with shift released', () => {
         service.onKeyUp({} as KeyboardEvent);
-        expect(updateRectangleSpy).not.toHaveBeenCalled();
+        expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onKeyDown(keyboardEvent);
         service.onKeyUp({ shiftKey: false, key: 'Shift' } as KeyboardEvent);
-        expect(updateRectangleSpy).not.toHaveBeenCalled();
+        expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onKeyDown(keyboardEvent);
         service.onMouseDown(mouseEvent);
         keyboardEvent = { shiftKey: false, key: 'Shift' } as KeyboardEvent;
         service.onKeyUp(keyboardEvent);
-        expect(updateRectangleSpy).toHaveBeenCalled();
+        expect(updateShapeSpy).toHaveBeenCalled();
     });
 
     it('should send command to drawing service to draw on preview', () => {

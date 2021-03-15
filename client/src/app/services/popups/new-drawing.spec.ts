@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
-import { NewDrawing } from './new-drawing';
+import { NewDrawingService } from './new-drawing';
 
 describe('NewDrawing', () => {
-    let service: NewDrawing;
+    let service: NewDrawingService;
     let drawingService: DrawingService;
     let canvas: HTMLCanvasElement;
     let context: CanvasRenderingContext2D;
@@ -14,7 +14,7 @@ describe('NewDrawing', () => {
         TestBed.configureTestingModule({});
         drawingService = TestBed.inject(DrawingService);
         toolHandler = TestBed.inject(ToolHandlerService);
-        service = new NewDrawing(drawingService, toolHandler);
+        service = new NewDrawingService(drawingService, toolHandler);
         canvas = document.createElement('canvas');
         context = canvas.getContext('2d') as CanvasRenderingContext2D;
         drawingService.canvas = canvas;
@@ -46,7 +46,7 @@ describe('NewDrawing', () => {
         const resizeCanvasSpy = spyOn(drawingService, 'resizeCanvas');
         const initBackgroundSpy = spyOn(drawingService, 'initBackground');
         const undoRedoInitSpy = spyOn(drawingService, 'initUndoRedo').and.stub();
-        spyOn(toolHandler.getTool(), 'stopDrawing').and.callFake(() => {
+        spyOn(toolHandler.getCurrentTool(), 'stopDrawing').and.callFake(() => {
             /**/
         });
         service.newCanvas(true);
@@ -59,7 +59,7 @@ describe('NewDrawing', () => {
         // tslint:disable no-any
         const spyFunc = spyOn<any>(service, 'isNotEmpty').and.returnValue(true);
         const spyFunc2 = spyOn(drawingService, 'resizeCanvas');
-        spyOn(toolHandler.getTool(), 'stopDrawing').and.callFake(() => {
+        spyOn(toolHandler.getCurrentTool(), 'stopDrawing').and.callFake(() => {
             /**/
         });
         service.newCanvas(false);
@@ -71,7 +71,7 @@ describe('NewDrawing', () => {
         drawingService.baseCtx = context;
         const spyFunc = spyOn(drawingService, 'resizeCanvas');
         const spyFunc2 = spyOn<any>(service, 'isNotEmpty').and.returnValue(false);
-        spyOn(toolHandler.getTool(), 'stopDrawing').and.callFake(() => {
+        spyOn(toolHandler.getCurrentTool(), 'stopDrawing').and.callFake(() => {
             /**/
         });
         context.fillStyle = 'white';

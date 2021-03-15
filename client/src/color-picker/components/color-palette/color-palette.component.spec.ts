@@ -92,7 +92,7 @@ describe('ColorPaletteComponent', () => {
 
     it('should set mouse down to false on mouse up', () => {
         component.leftMouseDown = true;
-        component.onMouseUp(new MouseEvent('mouseup'));
+        component.onMouseUp();
         expect(component.leftMouseDown).toBeFalse();
     });
 

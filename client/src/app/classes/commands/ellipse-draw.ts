@@ -1,10 +1,10 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
-import { EllipseConfig, EllipseMode } from '@app/classes/tool-config/ellipse-config';
+import { ShapeConfig, ShapeMode } from '@app/classes/tool-config/shape-config';
 import { ColorService } from 'src/color-picker/services/color.service';
 export class EllipseDraw extends AbstractDraw {
-    config: EllipseConfig;
+    config: ShapeConfig;
 
-    constructor(colorService: ColorService, config: EllipseConfig) {
+    constructor(colorService: ColorService, config: ShapeConfig) {
         super(colorService);
         this.config = config.clone();
     }
@@ -37,17 +37,17 @@ export class EllipseDraw extends AbstractDraw {
         context.lineJoin = 'round' as CanvasLineJoin;
 
         context.beginPath();
-        switch (this.config.ellipseMode) {
-            case EllipseMode.Contour:
+        switch (this.config.shapeMode) {
+            case ShapeMode.Contour:
                 context.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
                 context.stroke();
                 break;
-            case EllipseMode.Filled:
+            case ShapeMode.Filled:
                 context.lineWidth = 0;
                 context.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
                 context.fill();
                 break;
-            case EllipseMode.FilledWithContour:
+            case ShapeMode.FilledWithContour:
                 context.ellipse(centerX, centerY, radiusXAbs, radiusYAbs, 0, 0, 2 * Math.PI);
                 context.fill();
                 context.stroke();
@@ -63,7 +63,7 @@ export class EllipseDraw extends AbstractDraw {
         const dashWidth = 1;
         let lineWidth: number = this.config.lineWidth;
 
-        if (this.config.ellipseMode === EllipseMode.Filled) {
+        if (this.config.shapeMode === ShapeMode.Filled) {
             lineWidth = 0;
         }
 

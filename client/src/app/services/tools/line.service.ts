@@ -8,6 +8,8 @@ import { LineConfig } from '@app/classes/tool-config/line-config';
 import { LineToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
+import { ToolMath } from '@app/constants/math';
+import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 
@@ -15,8 +17,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
     providedIn: 'root',
 })
 export class LineService extends Tool {
-    static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
-    static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;
+    private static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
     private readonly SHIFT: ShiftKey = new ShiftKey();
     private readonly ESCAPE: ShortcutKey = new ShortcutKey('escape');
     private readonly BACKSPACE: ShortcutKey = new ShortcutKey('backspace');
@@ -68,7 +69,8 @@ export class LineService extends Tool {
             this.pointToAdd = this.alignPoint(this.getPositionFromMouse(event));
         }
 
-        const closedLoop: boolean = Geometry.getDistanceBetween(this.pointToAdd, this.config.points[0]) <= LineService.MINIMUM_DISTANCE_TO_CLOSE_PATH;
+        const closedLoop: boolean =
+            Geometry.getDistanceBetween(this.pointToAdd, this.config.points[0]) <= ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;
 
         if (closedLoop) {
             this.config.points[this.config.points.length - 1] = this.config.points[0];
@@ -88,7 +90,7 @@ export class LineService extends Tool {
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.config.points.length === 0 || event.offsetX === undefined || event.offsetY === undefined) {
+        if (this.config.points.length === 0 || event.pageX === undefined || event.pageY === undefined) {
             return;
         }
 
@@ -186,7 +188,7 @@ export class LineService extends Tool {
         const distanceY = cursor.y - this.getLastPoint().y;
         let distance = Geometry.getDistanceBetween(this.getLastPoint(), cursor);
 
-        if (Math.abs(Math.cos(finalAngle)) >= Geometry.ZERO_THRESHOLD) {
+        if (Math.abs(Math.cos(finalAngle)) >= ToolMath.ZERO_THRESHOLD) {
             distance = Math.abs(distanceX / Math.cos(finalAngle));
         } else {
             distance = Math.abs(distanceY / Math.sin(finalAngle));

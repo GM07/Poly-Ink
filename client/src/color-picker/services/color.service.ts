@@ -7,29 +7,42 @@ import { Colors } from 'src/color-picker/constants/colors';
     providedIn: 'root',
 })
 export class ColorService {
-    static readonly MAX_NUMBER_PREVIOUS_COLORS: number = 10;
+    private static readonly MAX_NUMBER_PREVIOUS_COLORS: number = 10;
 
-    private primary: Color = Colors.BLACK;
-    private secondary: Color = Colors.WHITE;
+    private primary: Color;
+    private secondary: Color;
 
     private previous: Color[] = [];
 
-    changePrimary: boolean = true;
-    shouldChangeColor: boolean = true;
+    changePrimary: boolean;
+    shouldChangeColor: boolean;
+    isMenuOpen: boolean;
 
-    selectedColor: Color = Colors.BLACK;
-    selectedColorChangeFromHex: Subject<Color> = new Subject<Color>();
+    selectedColor: Color;
+    selectedColorChangeFromHex: Subject<Color>;
 
     selectedAlpha: number = 1;
 
-    selectedHue: Color = Colors.BLACK;
-    hueChangeFromHex: Subject<Color> = new Subject<Color>();
-    hueChangeFromSlider: Subject<Color> = new Subject<Color>();
+    selectedHue: Color;
+    hueChangeFromHex: Subject<Color>;
+    hueChangeFromSlider: Subject<Color>;
 
     primaryColorAlpha: number = 1;
     secondaryColorAlpha: number = 1;
 
     constructor() {
+        this.primary = Colors.BLACK;
+        this.secondary = Colors.WHITE;
+        this.changePrimary = true;
+        this.shouldChangeColor = true;
+        this.isMenuOpen = false;
+        this.selectedColor = Colors.BLACK;
+        this.selectedColorChangeFromHex = new Subject<Color>();
+        this.selectedAlpha = 1;
+        this.selectedHue = Colors.BLACK;
+        this.hueChangeFromHex = new Subject<Color>();
+        this.hueChangeFromSlider = new Subject<Color>();
+
         this.previous.unshift(this.secondary);
         this.previous.unshift(this.primary);
     }

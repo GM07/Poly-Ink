@@ -1,10 +1,10 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
-import { RectangleConfig, RectangleMode } from '@app/classes/tool-config/rectangle-config';
+import { ShapeConfig, ShapeMode } from '@app/classes/tool-config/shape-config';
 import { ColorService } from 'src/color-picker/services/color.service';
 export class RectangleDraw extends AbstractDraw {
-    config: RectangleConfig;
+    config: ShapeConfig;
 
-    constructor(colorService: ColorService, config: RectangleConfig) {
+    constructor(colorService: ColorService, config: ShapeConfig) {
         super(colorService);
         this.config = config.clone();
     }
@@ -24,14 +24,14 @@ export class RectangleDraw extends AbstractDraw {
         context.lineCap = 'square' as CanvasLineCap;
         context.beginPath();
 
-        switch (this.config.rectangleMode) {
-            case RectangleMode.Contour:
+        switch (this.config.shapeMode) {
+            case ShapeMode.Contour:
                 context.strokeRect(this.config.startCoords.x, this.config.startCoords.y, width, height);
                 break;
-            case RectangleMode.Filled:
+            case ShapeMode.Filled:
                 context.fillRect(this.config.startCoords.x, this.config.startCoords.y, width, height);
                 break;
-            case RectangleMode.FilledWithContour:
+            case ShapeMode.FilledWithContour:
                 context.rect(this.config.startCoords.x, this.config.startCoords.y, width, height);
                 context.fill();
                 break;
