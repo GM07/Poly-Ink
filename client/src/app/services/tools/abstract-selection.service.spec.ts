@@ -34,6 +34,8 @@ describe('AbstractSelectionService', () => {
         service['drawingService'].canvas = canvasTestHelper.canvas;
 
         mouseEvent = {
+            x: 25,
+            y: 25,
             offsetX: 25,
             offsetY: 25,
             button: 0,
@@ -143,16 +145,6 @@ describe('AbstractSelectionService', () => {
         expect(service.getPositionFromMouse).not.toHaveBeenCalled();
     });
 
-    it('should change translationOrigin when mouseDown and inSelection', () => {
-        service['translationOrigin'] = { x: 1, y: 1 };
-        const lastTranslation = { x: service['translationOrigin'].x, y: service['translationOrigin'].y } as Vec2;
-        spyOn(service, 'isInSelection').and.returnValue(true);
-        spyOn(service, 'getPositionFromMouse').and.returnValue({ x: 2, y: 2 } as Vec2);
-        service.onMouseDown(mouseEvent);
-        expect(service.getPositionFromMouse).toHaveBeenCalled();
-        expect(service['translationOrigin']).not.toEqual(lastTranslation);
-    });
-
     it('should change update selection on mouseMove', () => {
         service.leftMouseDown = true;
         service.selectionCtx = canvasSelection.getContext('2d');
@@ -160,6 +152,26 @@ describe('AbstractSelectionService', () => {
         spyOn(service, 'getTranslation').and.returnValue({ x: 1, y: 1 } as Vec2);
         service.onMouseMove(mouseEvent);
         expect(updateSpy).toHaveBeenCalled();
+    });
+
+    it('should update the mouseUp coords when outside the canvas', () => {
+        spyOn<any>(service, 'isInCanvas').and.returnValue(false);
+        // tslint:disable:no-magic-numbers
+        const getPositionSpy = spyOn<any>(service, 'getPositionFromMouse').and.returnValue({ x: 1000, y: 1000 } as Vec2);
+        service.leftMouseDown = true;
+        service.selectionCtx = null;
+        service['setMouseUpCoord'](mouseEvent);
+        expect(service.mouseUpCoord).toEqual({ x: canvasTestHelper.canvas.width, y: canvasTestHelper.canvas.height } as Vec2);
+        getPositionSpy.and.returnValue({ x: -1, y: -1 } as Vec2);
+        service['setMouseUpCoord']({ x: -1, y: -1 } as MouseEvent);
+        expect(service.mouseUpCoord).toEqual({ x: 0, y: 0 } as Vec2);
+    });
+
+    it('should update the mouseUp coords when inside the canvas', () => {
+        spyOn<any>(service, 'isInCanvas').and.returnValue(true);
+        const getPosition = spyOn<any>(service, 'getPositionFromMouse');
+        service['setMouseUpCoord'](mouseEvent);
+        expect(getPosition).toHaveBeenCalled();
     });
 
     it('should do nothing on mouseUp if mouse is not down', () => {
@@ -174,24 +186,15 @@ describe('AbstractSelectionService', () => {
         expect(service.getPositionFromMouse).not.toHaveBeenCalled();
     });
 
-    it('Makes sure the selection stays in the canvas when the mouse leaves', () => {
-        const updateSpy = spyOn<any>(service, 'updateDrawingSelection');
+    it('Makes sure the selection updates in the canvas when the mouse moves outside of the canvas', () => {
+        const updateSpy = spyOn<any>(service, 'updateSelection');
+        spyOn<any>(service, 'setMouseUpCoord');
+        service['selectionCtx'] = canvasSelection.getContext('2d');
         service.mouseUpCoord = { x: 10, y: 10 } as Vec2;
-        service.leftMouseDown = false;
-        service.onMouseLeave(mouseEvent);
-        expect(updateSpy).not.toHaveBeenCalled();
-
         service.leftMouseDown = true;
-        mouseEvent = { x: -1, y: -1 } as MouseEvent;
-        service.onMouseLeave(mouseEvent);
-        expect(service.mouseUpCoord).toEqual({ x: 0, y: 0 } as Vec2);
+        mouseEvent = { x: 1000, y: 1000 } as MouseEvent;
+        service.onMouseMove(mouseEvent);
         expect(updateSpy).toHaveBeenCalled();
-
-        const farX = canvasTestHelper.canvas.getBoundingClientRect().right + 1;
-        const farY = canvasTestHelper.canvas.getBoundingClientRect().bottom + 1;
-        mouseEvent = { x: farX, y: farY } as MouseEvent;
-        service.onMouseLeave(mouseEvent);
-        expect(service.mouseUpCoord).toEqual({ x: canvasTestHelper.canvas.width, y: canvasTestHelper.canvas.height } as Vec2);
     });
 
     it('pressing shift should do nothing if selection is not null', () => {

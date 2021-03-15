@@ -28,7 +28,7 @@ export abstract class AbstractSelectionService extends Tool {
 
     updatePoints: Subject<boolean> = new Subject();
     mouseUpCoord: Vec2;
-    protected translationOrigin: Vec2;
+    translationOrigin: Vec2;
     protected firstSelectionCoords: Vec2;
     selectionCoords: Vec2;
 
@@ -59,17 +59,12 @@ export abstract class AbstractSelectionService extends Tool {
 
     onMouseDown(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
-        if (this.leftMouseDown) {
+        if (this.leftMouseDown && !this.isInSelection(event)) {
+            this.endSelection();
             const mousePos = this.getPositionFromMouse(event);
-            console.log(this.isInSelection(event));
-            if (this.isInSelection(event)) {
-                this.translationOrigin = mousePos;
-            } else {
-                this.endSelection();
-                this.mouseDownCoord = mousePos;
-                this.mouseUpCoord = mousePos;
-                this.drawPreviewSelection();
-            }
+            this.mouseDownCoord = mousePos;
+            this.mouseUpCoord = mousePos;
+            this.drawPreviewSelection();
         }
     }
 
@@ -89,10 +84,6 @@ export abstract class AbstractSelectionService extends Tool {
     onMouseMove(event: MouseEvent): void {
         if (this.leftMouseDown) {
             this.setMouseUpCoord(event);
-            // const mousePos = this.getPositionFromMouse(event);
-            // if (this.isInCanvas(event)) {
-            //     this.mouseUpCoord = mousePos;
-            // }
             if (this.selectionCtx !== null) {
                 this.updateSelection(this.getTranslation(this.mouseUpCoord));
             } else {
@@ -100,20 +91,6 @@ export abstract class AbstractSelectionService extends Tool {
                 this.drawingService.clearCanvas(ctx);
                 this.drawPreviewSelection();
             }
-        }
-    }
-
-    setMouseUpCoord(event: MouseEvent): void {
-        if (this.leftMouseDown && this.selectionCtx === null && !this.isInCanvas(event)) {
-            const rect = this.drawingService.canvas.getBoundingClientRect();
-            const mousePos: Vec2 = this.getPositionFromMouse(event);
-            if (event.x >= rect.right) mousePos.x = this.drawingService.canvas.width;
-            if (event.x <= rect.left) mousePos.x = 0;
-            if (event.y <= rect.top) mousePos.y = 0;
-            if (event.y >= rect.bottom) mousePos.y = this.drawingService.canvas.height;
-            this.mouseUpCoord = mousePos;
-        } else {
-            this.mouseUpCoord = this.getPositionFromMouse(event);
         }
     }
 
@@ -214,6 +191,20 @@ export abstract class AbstractSelectionService extends Tool {
 
     getTranslation(mousePos: Vec2): Vec2 {
         return { x: mousePos.x - this.translationOrigin.x, y: mousePos.y - this.translationOrigin.y } as Vec2;
+    }
+
+    private setMouseUpCoord(event: MouseEvent): void {
+        if (this.leftMouseDown && this.selectionCtx === null && !this.isInCanvas(event)) {
+            const rect = this.drawingService.canvas.getBoundingClientRect();
+            const mousePos: Vec2 = this.getPositionFromMouse(event);
+            if (event.x >= rect.right) mousePos.x = this.drawingService.canvas.width;
+            if (event.x <= rect.left) mousePos.x = 0;
+            if (event.y <= rect.top) mousePos.y = 0;
+            if (event.y >= rect.bottom) mousePos.y = this.drawingService.canvas.height;
+            this.mouseUpCoord = mousePos;
+        } else {
+            this.mouseUpCoord = this.getPositionFromMouse(event);
+        }
     }
 
     private setArrowKeyDown(event: KeyboardEvent): void {

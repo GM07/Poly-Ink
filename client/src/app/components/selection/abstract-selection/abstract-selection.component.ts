@@ -26,7 +26,8 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     private readonly DESIRED_ZINDEX: number = 3;
 
     private controlPointList: ElementRef<HTMLElement>[];
-    private lastCursor: string;
+    private lastCanvasCursor: string;
+    private lastDocumentCursor: string;
 
     private isOverSelection: boolean = false;
     private leftMouseDown: boolean = false;
@@ -44,18 +45,22 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     }
 
     ngAfterViewInit(): void {
-        this.lastCursor = this.drawingService.previewCanvas.style.cursor;
+        this.lastDocumentCursor = document.body.style.cursor;
+        this.lastCanvasCursor = this.drawingService.previewCanvas.style.cursor;
     }
 
     ngOnDestroy(): void {
-        this.drawingService.previewCanvas.style.cursor = this.lastCursor;
+        document.body.style.cursor = this.lastDocumentCursor;
+        this.drawingService.previewCanvas.style.cursor = this.lastCanvasCursor;
     }
 
     onMouseDown(event: MouseEvent): void {
-        if (this.selectionService.isInSelection(event)) {
-            this.makeControlsUnselectable();
-        }
         this.leftMouseDown = event.button === MouseButton.Left;
+        if (this.leftMouseDown && this.selectionService.isInSelection(event)) {
+            this.selectionService.onMouseDown(event);
+            this.makeControlsUnselectable();
+            this.selectionService.translationOrigin = this.selectionService.getPositionFromMouse(event);
+        }
         this.updateControlPointDisplay(this.selectionService.selectionCtx !== null);
     }
 
@@ -72,8 +77,10 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
             this.isOverSelection = this.selectionService.isInSelection(event);
             if (this.isOverSelection) {
                 this.drawingService.previewCanvas.style.cursor = 'all-scroll';
+                document.body.style.cursor = 'all-scroll';
             } else {
-                this.drawingService.previewCanvas.style.cursor = this.lastCursor;
+                this.drawingService.previewCanvas.style.cursor = this.lastCanvasCursor;
+                document.body.style.cursor = this.lastDocumentCursor;
             }
         }
     }

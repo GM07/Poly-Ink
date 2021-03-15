@@ -53,6 +53,14 @@ describe('AbstractSelectionComponent', () => {
         expect(controlSaveBoolean).not.toEqual(component.displayControlPoints);
     });
 
+    it('should change translationOrigin when mouseDown and inSelection', () => {
+        spyOn(abstractSelectionService, 'isInSelection').and.returnValue(true);
+        spyOn(abstractSelectionService, 'getPositionFromMouse');
+        spyOn<any>(component, 'makeControlsUnselectable');
+        component.onMouseDown(mouseEvent);
+        expect(abstractSelectionService.getPositionFromMouse).toHaveBeenCalled();
+    });
+
     it('should enable the controls points selection if there are controls points', () => {
         component.displayControlPoints = true;
         const makeControlsSelectable = spyOn<any>(component, 'makeControlsSelectable');
@@ -75,7 +83,7 @@ describe('AbstractSelectionComponent', () => {
 
     it('should reset the cursor when not hovering the selection', () => {
         spyOn(abstractSelectionService, 'isInSelection').and.returnValue(false);
-        component['lastCursor'] = 'pointer';
+        component['lastCanvasCursor'] = 'pointer';
         component.onMouseMove(mouseEvent);
         expect(drawService.previewCanvas.style.cursor).toEqual('pointer');
     });
