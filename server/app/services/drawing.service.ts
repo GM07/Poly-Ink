@@ -44,14 +44,16 @@ export class DrawingService {
         const drawingPath = `${DrawingService.ROOT_DIRECTORY}/${drawingId}.png`;
         if (!fs.existsSync(DrawingService.ROOT_DIRECTORY)) {
             fs.mkdirSync(DrawingService.ROOT_DIRECTORY);
+            fs.writeFileSync(drawingPath, drawing.image, 'base64');
+        } else {
+            fs.writeFileSync(drawingPath, drawing.image, 'base64');
         }
-        fs.writeFileSync(drawingPath, drawing.image, 'base64');
     }
 
     getLocalDrawing(id: string): string {
         const drawingPath = `${DrawingService.ROOT_DIRECTORY}/${id}.png`;
         if (!fs.existsSync(drawingPath)) {
-            throw new FileNotFound(id);
+            throw new FileNotFound(drawingPath);
         }
 
         const buffer: Buffer = fs.readFileSync(drawingPath);
@@ -59,15 +61,12 @@ export class DrawingService {
     }
 
     async getAllDrawingsData(): Promise<DrawingData[]> {
-        return (
-            this.collection
-                .find({})
-                // TODO : .limit(100)
-                .toArray()
-                .then((drawings: DrawingData[]) => {
-                    return drawings;
-                })
-        );
+        return this.collection
+            .find({})
+            .toArray()
+            .then((drawings: DrawingData[]) => {
+                return drawings;
+            });
     }
 
     async getDrawingsDataFromTag(tag: Tag): Promise<DrawingData[]> {
@@ -113,6 +112,9 @@ export class DrawingService {
         return await this.createNewDrawingData(drawing);
     }
 
+    /**
+     * @throws DataNotFound, DataNotDeleted
+     */
     async deleteDrawingDataFromId(id: string): Promise<void> {
         await this.collection
             .findOneAndDelete({ _id: id })
@@ -123,19 +125,6 @@ export class DrawingService {
             })
             .catch(() => {
                 throw new DataNotDeleted(id);
-            });
-    }
-
-    async deleteDrawingData(drawing: DrawingData): Promise<void> {
-        await this.collection
-            .findOneAndDelete(drawing)
-            .then((result: FindAndModifyWriteOpResultObject<DrawingData>) => {
-                if (!result.value) {
-                    throw new DataNotFound(drawing.toString());
-                }
-            })
-            .catch(() => {
-                throw new DataNotDeleted(drawing.toString());
             });
     }
 }

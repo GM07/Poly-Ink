@@ -20,29 +20,32 @@ export class DrawingController {
 
     private configureRouter(): void {
         this.router = Router();
-        // TODO : Remove create
-        this.router.post('/create', async (req: Request, res: Response, next: NextFunction) => {
-            // TODO : Verify body
-            const drawing: Drawing = req.body;
-            if (!this.drawingService.validateTags(drawing.data.tags)) {
-                res.sendStatus(HTTP_BAD_REQUEST);
-                return;
-            }
+        this.router.post('/', async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                const drawing: Drawing = req.body;
+                if (!this.drawingService.validateTags(drawing.data.tags)) {
+                    res.sendStatus(HTTP_BAD_REQUEST);
+                    return;
+                }
 
-            if (!this.drawingService.validateName(drawing.data.name)) {
+                if (!this.drawingService.validateName(drawing.data.name)) {
+                    res.sendStatus(HTTP_BAD_REQUEST);
+                    return;
+                }
+                // Verify drawing has been created
+                const id = await this.drawingService.createNewDrawingData(drawing.data);
+                drawing.data._id = id;
+                this.drawingService.storeDrawing(drawing);
+                res.status(HTTP_STATUS_CREATED).send({
+                    message: 'Success',
+                });
+            } catch {
                 res.sendStatus(HTTP_BAD_REQUEST);
-                return;
             }
-            // Verify drawing has been created
-            const id = await this.drawingService.createNewDrawingData(drawing.data);
-            drawing.data._id = id;
-            this.drawingService.storeDrawing(drawing);
-            res.status(HTTP_STATUS_CREATED).send({
-                message: 'Success',
-            });
         });
         this.router.get('/', async (req: Request, res: Response, next: NextFunction) => {
             const tags: string = req.query.tags;
+            console.log('test');
             let drawingsData: DrawingData[];
             if (tags) {
                 const tagArray: Tag[] = tags.split(',').map((name: string) => new Tag(name));
@@ -51,18 +54,19 @@ export class DrawingController {
                 drawingsData = await this.drawingService.getAllDrawingsData();
             }
 
-            const drawings: (Drawing | null)[] = drawingsData
-                .map((data: DrawingData) => {
-                    try {
-                        const drawing = new Drawing(data);
-                        drawing.image = this.drawingService.getLocalDrawing(drawing.data._id);
-                        return drawing;
-                    } catch (e) {
-                        return null;
-                    }
-                })
-                .filter((e) => e !== null);
-
+            const drawings: (Drawing | null)[] = drawingsData.map((data: DrawingData) => {
+                try {
+                    console.log(data.name);
+                    const drawing = new Drawing(data);
+                    drawing.image = this.drawingService.getLocalDrawing(drawing.data._id);
+                    return drawing;
+                } catch (e) {
+                    console.log(e);
+                    return null;
+                }
+            });
+            //.filter((e) => e !== null);
+            console.log(drawings);
             res.status(HTTP_STATUS_SUCCESS).json(drawings);
         });
 
