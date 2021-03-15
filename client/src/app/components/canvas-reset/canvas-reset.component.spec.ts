@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
+import { NewDrawingService } from '@app/services/popups/new-drawing';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { NewDrawingComponent } from './canvas-reset.component';
 
@@ -28,8 +28,8 @@ describe('NewDrawingComponent', () => {
     });
 
     it('should set showWarning to false', () => {
-        component.removeWarning();
-        expect(newDrawingService.showWarning).toBe(false);
+        component.hidePopup();
+        expect(newDrawingService.showPopup).toBe(false);
     });
 
     it('Should create a new Drawing', () => {
@@ -59,11 +59,22 @@ describe('NewDrawingComponent', () => {
         expect(keySpy).not.toHaveBeenCalled();
     });
 
-    it('should stop propagations if the warning is displayed', () => {
-        newDrawingService.showWarning = true;
-        spyOn(newDrawingService, 'newCanvas');
+    it('should stop block shortcuts if the warning is displayed', () => {
+        shortcutHandler.blockShortcuts = false;
+        newDrawingService.showPopup = false;
+        spyOn(newDrawingService, 'newCanvas').and.callFake(() => {
+            newDrawingService.showPopup = true;
+        });
         const keyEvent = new KeyboardEvent('document:keydown', { ctrlKey: true, key: 'o' });
         component.onKeyDown(keyEvent);
         expect(shortcutHandler.blockShortcuts).toBeTruthy();
+    });
+
+    it('should do nothing if the shortcuts are blocked', () => {
+        shortcutHandler.blockShortcuts = true;
+        spyOn(newDrawingService, 'newCanvas');
+        const keyEvent = new KeyboardEvent('document:keydown', { ctrlKey: true, key: 'o' });
+        component.onKeyDown(keyEvent);
+        expect(newDrawingService.newCanvas).not.toHaveBeenCalled();
     });
 });

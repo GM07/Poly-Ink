@@ -1,14 +1,14 @@
-import { ShortcutKey } from '@app/classes/shortcut-key';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { Vec2 } from './vec2';
 
-// Ceci est justifié vu qu'on a des fonctions qui seront gérés par les classes enfant
+// Justified since there are functions that will be managed by child classes
 // tslint:disable:no-empty
 export abstract class Tool {
     constructor(protected drawingService: DrawingService, protected colorService: ColorService) {}
     mouseDownCoord: Vec2;
-    mouseDown: boolean = false;
+    leftMouseDown: boolean = false;
     shortcutKey: ShortcutKey;
     toolID: string;
 
@@ -41,6 +41,7 @@ export abstract class Tool {
     abstract stopDrawing(): void;
 
     getPositionFromMouse(event: MouseEvent): Vec2 {
-        return { x: event.offsetX, y: event.offsetY };
+        const clientRect = this.drawingService.canvas.getBoundingClientRect();
+        return { x: event.pageX - clientRect.x, y: event.pageY - clientRect.y };
     }
 }

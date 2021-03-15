@@ -54,13 +54,13 @@ describe('ToolHandlerService', () => {
     it('should change tool on keyPress', () => {
         pencilService.onMouseDown(mouseEvent);
         service.onKeyDown(keyboardEvent);
-        expect(service.getTool()).toBeInstanceOf(PencilService);
+        expect(service.getCurrentTool()).toBeInstanceOf(PencilService);
         keyboardEvent = { key: 'FakeKey', ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
         service.onKeyDown(keyboardEvent);
-        expect(service.getTool()).toBeInstanceOf(PencilService);
+        expect(service.getCurrentTool()).toBeInstanceOf(PencilService);
         keyboardEvent = { key: 'l', ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
         service.onKeyDown(keyboardEvent);
-        expect(service.getTool()).toBeInstanceOf(LineService);
+        expect(service.getCurrentTool()).toBeInstanceOf(LineService);
     });
 
     it('should transfer keyUp event', () => {
@@ -73,7 +73,7 @@ describe('ToolHandlerService', () => {
         expect(pencilService.stopDrawing).not.toHaveBeenCalled();
         service.setTool(ToolsConstants.LineToolConstants.TOOL_ID);
         expect(pencilService.stopDrawing).toHaveBeenCalled();
-        expect(service.getTool()).toBeInstanceOf(LineService);
+        expect(service.getCurrentTool()).toBeInstanceOf(LineService);
     });
 
     it('should finalise the previous drawing on a tool change', () => {

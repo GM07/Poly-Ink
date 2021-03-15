@@ -8,7 +8,7 @@ import { DrawingComponent } from './drawing.component';
 
 class ToolStub extends Tool {
     stopDrawing(): void {
-        // Clear
+        /**/
     }
 }
 
@@ -49,7 +49,7 @@ describe('DrawingComponent', () => {
     });
 
     it('should get stubTool', () => {
-        const currentTool = component.toolHandlerService.getTool();
+        const currentTool = component.toolHandlerService.getCurrentTool();
         expect(currentTool).toEqual(toolStub);
     });
 

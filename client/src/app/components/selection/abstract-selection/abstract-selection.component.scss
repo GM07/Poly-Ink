@@ -1,0 +1,25 @@
+.control-point-container {
+    position: relative;
+    z-index: -1;
+}
+
+.control-point-group {
+    overflow: hidden;
+}
+
+.control-point {
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    position: absolute;
+    border: 1px solid blue;
+    z-index: 5;
+}
+
+.resize-border {
+  background-color: rgba(0,0,0,0);
+  position: absolute;
+  border: 1px solid blue;
+  z-index: 5;
+  pointer-events: none !important;
+}

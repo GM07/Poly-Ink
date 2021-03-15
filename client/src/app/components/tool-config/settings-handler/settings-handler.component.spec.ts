@@ -7,10 +7,14 @@ import { LineConfigComponent } from '@app/components/tool-config/line-config/lin
 import { PencilConfigComponent } from '@app/components/tool-config/pencil-config/pencil-config.component';
 import { RectangleConfigComponent } from '@app/components/tool-config/rectangle-config/rectangle-config.component';
 import { SettingsHandlerComponent } from '@app/components/tool-config/settings-handler/settings-handler.component';
+import { AerosolService } from '@app/services/tools/aerosol.service';
+import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.service';
 import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
 import { LineService } from '@app/services/tools/line.service';
 import { PencilService } from '@app/services/tools/pencil.service';
+import { PolygoneService } from '@app/services/tools/polygone.service';
+import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
@@ -22,18 +26,36 @@ class MockToolHandler extends ToolHandlerService {
     constructor(
         pencilService: PencilService,
         lineService: LineService,
+        aerosolService: AerosolService,
         rectangleService: RectangleService,
         eraserService: EraserService,
         ellipseService: EllipseService,
+        ellipseSelectionService: EllipseSelectionService,
+        rectangleSelectionService: RectangleSelectionService,
+        polygoneService: PolygoneService,
     ) {
-        super(pencilService, lineService, rectangleService, ellipseService, eraserService);
+        super(
+            pencilService,
+            lineService,
+            aerosolService,
+            rectangleService,
+            ellipseService,
+            rectangleSelectionService,
+            ellipseSelectionService,
+            eraserService,
+            polygoneService,
+        );
         this.TOOLS_MOCK.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
         this.TOOLS_MOCK.set(ToolsConstants.RectangleToolConstants.TOOL_ID, rectangleService);
+        this.TOOLS_MOCK.set(ToolsConstants.EllipseSelectionToolConstants.TOOL_ID, ellipseSelectionService);
+        this.TOOLS_MOCK.set(ToolsConstants.PolygoneToolConstants.TOOL_ID, polygoneService);
+        this.TOOLS_MOCK.set(ToolsConstants.AerosolToolConstants.TOOL_ID, aerosolService);
+        this.TOOLS_MOCK.set(ToolsConstants.RectangleSelectionToolConstants.TOOL_ID, rectangleSelectionService);
         this.currentToolStub = this.TOOLS_MOCK.values().next().value;
     }
 
-    getTool(): Tool {
+    getCurrentTool(): Tool {
         return this.currentToolStub;
     }
 
@@ -57,9 +79,13 @@ describe('SettingsHandlerComponent', () => {
     let component: SettingsHandlerComponent;
     let pencilService: PencilService;
     let lineService: LineService;
+    let aerosolService: AerosolService;
     let rectangleService: RectangleService;
     let eraserService: EraserService;
     let ellipseService: EllipseService;
+    let polygoneService: PolygoneService;
+    let ellipseSelectionService: EllipseSelectionService;
+    let rectangleSelectionService: RectangleSelectionService;
     let toolHandlerService: MockToolHandler;
 
     beforeEach(() => {
@@ -69,10 +95,24 @@ describe('SettingsHandlerComponent', () => {
         }).compileComponents();
         pencilService = TestBed.inject(PencilService);
         lineService = TestBed.inject(LineService);
+        aerosolService = TestBed.inject(AerosolService);
         rectangleService = TestBed.inject(RectangleService);
         eraserService = TestBed.inject(EraserService);
         ellipseService = TestBed.inject(EllipseService);
-        toolHandlerService = new MockToolHandler(pencilService, lineService, rectangleService, eraserService, ellipseService);
+        polygoneService = TestBed.inject(PolygoneService);
+        ellipseSelectionService = TestBed.inject(EllipseSelectionService);
+        rectangleSelectionService = TestBed.inject(RectangleSelectionService);
+        toolHandlerService = new MockToolHandler(
+            pencilService,
+            lineService,
+            aerosolService,
+            rectangleService,
+            eraserService,
+            ellipseService,
+            ellipseSelectionService,
+            rectangleSelectionService,
+            polygoneService,
+        );
         component = new SettingsHandlerComponent(toolHandlerService);
     });
 
@@ -89,8 +129,8 @@ describe('SettingsHandlerComponent', () => {
     });
 
     it('activeTab should be a the display of the current tool', () => {
-        if (toolHandlerService.getTool() instanceof PencilService) expect(component.activeTab === PencilConfigComponent).toBeTruthy();
-        if (toolHandlerService.getTool() instanceof LineService) expect(component.activeTab === LineConfigComponent).toBeTruthy();
+        if (toolHandlerService.getCurrentTool() instanceof PencilService) expect(component.activeTab === PencilConfigComponent).toBeTruthy();
+        if (toolHandlerService.getCurrentTool() instanceof LineService) expect(component.activeTab === LineConfigComponent).toBeTruthy();
     });
 
     it('should change the return value of activeTab for LineConfigComponent when setTool(LineService) is called', () => {

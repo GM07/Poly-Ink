@@ -13,7 +13,7 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
     canvas: ElementRef<HTMLCanvasElement>;
 
     context: CanvasRenderingContext2D;
-    mouseDown: boolean = false;
+    leftMouseDown: boolean = false;
     selectedPosition: { x: number; y: number } = { x: 0, y: 0 };
 
     selectedColorChangeHexSubscription: Subscription;
@@ -36,7 +36,7 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
         this.draw();
     }
 
-    // Code provenant du tutoriel https://malcoded.com/posts/angular-color-picker/
+    // Code from tutorial https://malcoded.com/posts/angular-color-picker/
     draw(): void {
         const width = this.canvas.nativeElement.width;
         const height = this.canvas.nativeElement.height;
@@ -111,18 +111,18 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
     }
 
     @HostListener('window:mouseup', ['$event'])
-    onMouseUp(event: MouseEvent): void {
-        this.mouseDown = false;
+    onMouseUp(): void {
+        this.leftMouseDown = false;
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.mouseDown = true;
+        this.leftMouseDown = true;
         this.changeSelectedPosition(event.offsetX, event.offsetY);
     }
 
     @HostListener('mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.changeSelectedPosition(event.offsetX, event.offsetY);
         }
     }

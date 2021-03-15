@@ -1,26 +1,29 @@
 import { Injectable } from '@angular/core';
+import { Popup } from '@app/classes/popup';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { CanvasConst } from '@app/constants/canvas';
+import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
-import { BehaviorSubject } from 'rxjs';
-import { DrawingService } from './drawing.service';
 
 @Injectable({
     providedIn: 'root',
 })
-export class NewDrawingService {
-    showWarning: boolean;
+export class NewDrawingService implements Popup {
+    shortcut: ShortcutKey;
+    showPopup: boolean;
 
-    changes: BehaviorSubject<number> = new BehaviorSubject(0);
-
-    constructor(private drawingService: DrawingService, private toolHandler: ToolHandlerService) {}
+    constructor(private drawingService: DrawingService, private toolHandler: ToolHandlerService) {
+        this.shortcut = new ShortcutKey('o', true);
+        this.showPopup = false;
+    }
 
     newCanvas(confirm: boolean = false): void {
         if (!confirm && this.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)) {
-            this.showWarning = true;
+            this.showPopup = true;
             return;
         }
 
-        this.toolHandler.getTool().stopDrawing();
+        this.toolHandler.getCurrentTool().stopDrawing();
 
         const canvasOffset = this.drawingService.canvas.getBoundingClientRect();
         const documentOffset = document.documentElement;
@@ -36,12 +39,10 @@ export class NewDrawingService {
 
         this.drawingService.resizeCanvas(width, height);
         this.drawingService.initBackground();
-
-        this.changes.next(0);
     }
 
-    isNotEmpty(baseCtx: CanvasRenderingContext2D, width: number, height: number): boolean {
-        const whiteColor = 4294967295; // Constante pour la couleur blanche
+    private isNotEmpty(baseCtx: CanvasRenderingContext2D, width: number, height: number): boolean {
+        const whiteColor = 4294967295; // White color constant
         const pixelBuffer = new Uint32Array(baseCtx.getImageData(0, 0, width, height).data.buffer);
         return pixelBuffer.some((color) => color !== whiteColor) && pixelBuffer.some((color) => color !== 0);
     }

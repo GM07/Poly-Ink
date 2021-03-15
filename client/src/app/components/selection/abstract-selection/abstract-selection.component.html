@@ -1,0 +1,22 @@
+<div (document:mousemove)="onMouseMove($event)"></div>
+<div (document:mousedown)="onMouseDown($event)"></div>
+<div (document:mouseup)="onMouseUp()"></div>
+
+<div *ngIf="displayControlPoints">
+    <div class="control-point-container" #controlPointContainer>
+        <div class="control-point-group">
+            <div class="control-point" #topLeft style="cursor: nw-resize"></div>
+            <div class="control-point" #topMiddle style="cursor: n-resize"></div>
+            <div class="control-point" #topRight style="cursor: ne-resize"></div>
+
+            <div class="control-point" #middleLeft style="cursor: w-resize"></div>
+            <div class="control-point" #middleRight style="cursor: e-resize"></div>
+
+            <div class="control-point" #bottomLeft style="cursor: sw-resize"></div>
+            <div class="control-point" #bottomMiddle style="cursor: s-resize"></div>
+            <div class="control-point" #bottomRight style="cursor: se-resize"></div>
+
+            <div class="resize-border" #border></div>
+        </div>
+    </div>
+</div>

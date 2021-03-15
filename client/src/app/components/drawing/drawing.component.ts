@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Vec2 } from '@app/classes/vec2';
-import { CanvasConst } from '@app/constants/canvas.ts';
-import { NewDrawingService } from '@app/services/drawing/canvas-reset.service';
+import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { NewDrawingService } from '@app/services/popups/new-drawing';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
 @Component({
@@ -12,14 +12,20 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 })
 export class DrawingComponent implements AfterViewInit {
     @ViewChild('baseCanvas', { static: false }) baseCanvas: ElementRef<HTMLCanvasElement>;
-    // On utilise ce canvas pour dessiner sans affecter le dessin final
+    // Using this canvas to draw without affecting the final drawing
     @ViewChild('previewCanvas', { static: false }) previewCanvas: ElementRef<HTMLCanvasElement>;
 
     private baseCtx: CanvasRenderingContext2D;
     private previewCtx: CanvasRenderingContext2D;
-    private canvasSize: Vec2 = { x: CanvasConst.DEFAULT_WIDTH, y: CanvasConst.DEFAULT_HEIGHT };
+    private canvasSize: Vec2;
 
-    constructor(private drawingService: DrawingService, readonly toolHandlerService: ToolHandlerService, private newDrawing: NewDrawingService) {}
+    constructor(
+        private drawingService: DrawingService,
+        readonly toolHandlerService: ToolHandlerService,
+        private newDrawingService: NewDrawingService,
+    ) {
+        this.canvasSize = { x: CanvasConst.DEFAULT_WIDTH, y: CanvasConst.DEFAULT_HEIGHT } as Vec2;
+    }
 
     ngAfterViewInit(): void {
         this.baseCtx = this.baseCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
@@ -28,11 +34,12 @@ export class DrawingComponent implements AfterViewInit {
         this.drawingService.previewCtx = this.previewCtx;
         this.drawingService.canvas = this.baseCanvas.nativeElement;
         this.drawingService.previewCanvas = this.previewCanvas.nativeElement;
-        this.newDrawing.newCanvas();
         document.body.style.overflow = 'auto';
+
+        this.newDrawingService.newCanvas();
     }
 
-    @HostListener('mousemove', ['$event'])
+    @HostListener('document:mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
         this.toolHandlerService.onMouseMove(event);
     }

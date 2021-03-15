@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ShortcutKey } from '@app/classes/shortcut-key';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { EraserToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
@@ -20,16 +20,18 @@ export class EraserService extends PencilService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.drawingService.clearCanvas(this.drawingService.previewCtx);
-        this.drawBackgroundPoint(this.getPositionFromMouse(event));
-
-        if (this.mouseDown) {
-            const mousePosition = this.getPositionFromMouse(event);
-            this.pathData[this.pathData.length - 1].push(mousePosition);
-
+        if (this.isInCanvas(event) && !this.colorService.isMenuOpen) {
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
-            this.drawLine(this.drawingService.previewCtx, this.pathData);
             this.drawBackgroundPoint(this.getPositionFromMouse(event));
+
+            if (this.leftMouseDown) {
+                const mousePosition = this.getPositionFromMouse(event);
+                this.pathData[this.pathData.length - 1].push(mousePosition);
+
+                this.drawingService.clearCanvas(this.drawingService.previewCtx);
+                this.drawLine(this.drawingService.previewCtx, this.pathData);
+                this.drawBackgroundPoint(this.getPositionFromMouse(event));
+            }
         }
     }
 
