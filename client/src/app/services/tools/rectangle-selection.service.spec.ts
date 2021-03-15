@@ -24,7 +24,7 @@ describe('RectangleSelectionService', () => {
     } as MouseEvent;
 
     beforeEach(() => {
-        drawServiceSpy = jasmine.createSpyObj('DrawigSnervice', ['clearCanvas']);
+        drawServiceSpy = jasmine.createSpyObj('DrawigSnervice', ['clearCanvas', 'draw']);
         TestBed.configureTestingModule({
             providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
         });
@@ -268,11 +268,9 @@ describe('RectangleSelectionService', () => {
     it('end selection should draw the selection on the base canvas', () => {
         service.selectionCtx = previewCtxStub;
         service.config.endCoords = { x: 0, y: 0 } as Vec2;
-        spyOn(baseCtxStub, 'drawImage');
-        const fillBackground = spyOn<any>(service, 'fillBackground');
+        spyOn(service, 'draw');
         service['endSelection']();
-        expect(baseCtxStub.drawImage).toHaveBeenCalled();
-        expect(fillBackground).toHaveBeenCalled();
+        expect(service.draw).toHaveBeenCalled();
     });
 
     it('fill background should fill a rectangle at the location', () => {
@@ -329,5 +327,10 @@ describe('RectangleSelectionService', () => {
         spyOn(previewCtxStub, 'beginPath');
         service['fillBackground'](previewCtxStub, { x: 0, y: 0 } as Vec2);
         expect(previewCtxStub.beginPath).not.toHaveBeenCalled();
+    });
+
+    it('should send command to drawing service to draw on base', () => {
+        service.draw();
+        expect(drawServiceSpy.draw).toHaveBeenCalled();
     });
 });

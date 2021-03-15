@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { EllipseSelectionDraw } from '@app/classes/commands/ellipse-selection-draw';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { EllipseSelectionToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -108,21 +109,15 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
     protected endSelection(): void {
         if (this.selectionCtx === null) return;
-        const baseCtx = this.drawingService.baseCtx;
-        const centerX = this.config.endCoords.x + Math.abs(this.config.width / 2);
-        const centerY = this.config.endCoords.y + Math.abs(this.config.height / 2);
 
-        this.fillBackground(baseCtx, this.config.endCoords);
-
-        baseCtx.beginPath();
-        baseCtx.save();
-        baseCtx.ellipse(centerX, centerY, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
-        baseCtx.clip();
-        baseCtx.drawImage(this.SELECTION_DATA, this.config.endCoords.x, this.config.endCoords.y);
-        baseCtx.restore();
-        baseCtx.closePath();
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.draw();
         this.selectionCtx = null;
         this.config.endCoords = { x: 0, y: 0 } as Vec2;
+    }
+
+    draw(): void {
+        const command = new EllipseSelectionDraw(this.colorService, this.config);
+        this.drawingService.draw(command);
     }
 }

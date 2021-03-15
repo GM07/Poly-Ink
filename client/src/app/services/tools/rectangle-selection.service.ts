@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { RectangleSelectionDraw } from '@app/classes/commands/rectangle-selection-draw';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { RectangleSelectionToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -18,12 +19,11 @@ export class RectangleSelectionService extends AbstractSelectionService {
 
     protected endSelection(): void {
         if (this.selectionCtx === null) return;
-        const baseCtx = this.drawingService.baseCtx;
 
-        this.fillBackground(baseCtx, this.config.endCoords);
-
-        baseCtx.drawImage(this.SELECTION_DATA, this.config.endCoords.x, this.config.endCoords.y);
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
+
+        this.draw();
+
         this.selectionCtx = null;
 
         this.config.endCoords = { x: 0, y: 0 } as Vec2;
@@ -74,5 +74,10 @@ export class RectangleSelectionService extends AbstractSelectionService {
 
         ctx.lineDashOffset = 0;
         ctx.setLineDash([]);
+    }
+
+    draw(): void {
+        const command = new RectangleSelectionDraw(this.colorService, this.config);
+        this.drawingService.draw(command);
     }
 }

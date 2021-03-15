@@ -15,7 +15,7 @@ describe('EllipseSelectionService', () => {
     let baseCtxStub: CanvasRenderingContext2D;
     let previewCtxStub: CanvasRenderingContext2D;
     beforeEach(() => {
-        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
+        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw']);
         TestBed.configureTestingModule({
             providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
         });
@@ -110,15 +110,9 @@ describe('EllipseSelectionService', () => {
         service.selectionCtx = previewCtxStub;
         service.config.endCoords = { x: 0, y: 0 } as Vec2;
         service['radiusAbs'] = { x: 0, y: 0 } as Vec2;
-        spyOn(baseCtxStub, 'ellipse');
-        spyOn(baseCtxStub, 'clip');
-        spyOn(baseCtxStub, 'drawImage');
-        const fillBackground = spyOn<any>(service, 'fillBackground');
+        spyOn(service, 'draw').and.stub();
         service['endSelection']();
-        expect(baseCtxStub.ellipse).toHaveBeenCalled();
-        expect(baseCtxStub.clip).toHaveBeenCalled();
-        expect(baseCtxStub.drawImage).toHaveBeenCalled();
-        expect(fillBackground).toHaveBeenCalled();
+        expect(service.draw).toHaveBeenCalled();
     });
 
     it('draw selection should draw the rectangle perimeter if there is a selection', () => {
@@ -134,5 +128,10 @@ describe('EllipseSelectionService', () => {
         spyOn(previewCtxStub, 'beginPath');
         service['fillBackground'](previewCtxStub, { x: 0, y: 0 } as Vec2);
         expect(previewCtxStub.beginPath).not.toHaveBeenCalled();
+    });
+
+    it('should send command to drawing service to draw on base', () => {
+        service.draw();
+        expect(drawServiceSpy.draw).toHaveBeenCalled();
     });
 });
