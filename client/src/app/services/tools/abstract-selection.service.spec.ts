@@ -154,7 +154,7 @@ describe('AbstractSelectionService', () => {
     });
 
     it('should change update selection on mouseMove', () => {
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         service.selectionCtx = canvasSelection.getContext('2d');
         const updateSpy = spyOn<any>(service, 'updateSelection');
         spyOn(service, 'getTranslation').and.returnValue({ x: 1, y: 1 } as Vec2);
@@ -177,11 +177,11 @@ describe('AbstractSelectionService', () => {
     it('Makes sure the selection stays in the canvas when the mouse leaves', () => {
         const updateSpy = spyOn<any>(service, 'updateDrawingSelection');
         service.mouseUpCoord = { x: 10, y: 10 } as Vec2;
-        service.mouseDown = false;
+        service.leftMouseDown = false;
         service.onMouseLeave(mouseEvent);
         expect(updateSpy).not.toHaveBeenCalled();
 
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         mouseEvent = { x: -1, y: -1 } as MouseEvent;
         service.onMouseLeave(mouseEvent);
         expect(service.mouseUpCoord).toEqual({ x: 0, y: 0 } as Vec2);
@@ -195,7 +195,7 @@ describe('AbstractSelectionService', () => {
     });
 
     it('pressing shift should do nothing if selection is not null', () => {
-        service['mouseDown'] = true;
+        service['leftMouseDown'] = true;
         const keyboardEventDown = new KeyboardEvent('keydown', { shiftKey: true });
         const keyboardEventUp = new KeyboardEvent('keydown', { shiftKey: false });
         spyOn<any>(service, 'updateDrawingSelection');

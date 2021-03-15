@@ -38,8 +38,8 @@ describe('EraserService', () => {
         service['drawingService'].canvas = canvasTestHelper.canvas;
 
         mouseEvent = {
-            offsetX: 25,
-            offsetY: 25,
+            pageX: 25,
+            pageY: 25,
             button: 0,
         } as MouseEvent;
         baseCtxStub.fillStyle = 'black';
@@ -58,29 +58,29 @@ describe('EraserService', () => {
 
     it(' mouseDown should set mouseDown property to true on left click', () => {
         service.onMouseDown(mouseEvent);
-        expect(service.mouseDown).toEqual(true);
+        expect(service.leftMouseDown).toEqual(true);
     });
 
     it(' mouseDown should set mouseDown property to false on right click', () => {
         const mouseEventRClick = {
-            offsetX: 25,
-            offsetY: 25,
+            pageX: 25,
+            pageY: 25,
             button: 1,
         } as MouseEvent;
         service.onMouseDown(mouseEventRClick);
-        expect(service.mouseDown).toEqual(false);
+        expect(service.leftMouseDown).toEqual(false);
     });
 
     it(' onMouseUp should call drawLine if mouse was already down', () => {
         service.mouseDownCoord = { x: 0, y: 0 };
-        service.mouseDown = true;
+        service.leftMouseDown = true;
 
         service.onMouseUp(mouseEvent);
         expect(drawLineSpy).toHaveBeenCalled();
     });
 
     it(' onMouseUp should not call drawLine if mouse was not already down', () => {
-        service.mouseDown = false;
+        service.leftMouseDown = false;
         service.mouseDownCoord = { x: 0, y: 0 };
 
         service.onMouseUp(mouseEvent);
@@ -89,7 +89,7 @@ describe('EraserService', () => {
 
     it(' onMouseMove should call drawLine if mouse was already down', () => {
         service.mouseDownCoord = { x: 0, y: 0 };
-        service.mouseDown = true;
+        service.leftMouseDown = true;
 
         service.onMouseMove(mouseEvent);
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
@@ -98,13 +98,13 @@ describe('EraserService', () => {
 
     it('should not erase a line between the points where it left and entered the canvas', () => {
         service.lineWidth = MIN_WIDTH;
-        let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
+        let mouseEventLClick: MouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);
-        service.onMouseLeave(mouseEventLClick);
-        mouseEventLClick = { offsetX: 0, offsetY: 50, button: 0, buttons: 1 } as MouseEvent;
+        service.onMouseLeave();
+        mouseEventLClick = { pageX: 0, pageY: 50, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
         expect(drawLineSpy).toHaveBeenCalled();
-        mouseEventLClick = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+        mouseEventLClick = { pageX: 0, pageY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
         // tslint:disable-next-line:no-magic-numbers
@@ -124,18 +124,18 @@ describe('EraserService', () => {
     });
 
     it('should stop erasing when the mouse is up', () => {
-        let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
+        let mouseEventLClick: MouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.lineWidth = 1;
         service.onMouseDown(mouseEventLClick);
-        service.onMouseLeave(mouseEventLClick);
-        mouseEventLClick = { offsetX: 0, offsetY: 2, button: 0, buttons: 0 } as MouseEvent;
+        service.onMouseLeave();
+        mouseEventLClick = { pageX: 0, pageY: 2, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
         expect(drawLineSpy).toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
         const imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
         expect(imageData.data[0]).toEqual(0); // A, nothing should be drawn where mouse entered
 
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         mouseEventLClick = { x: 1000, y: 1000, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseUp(mouseEventLClick);
         expect(drawLineSpy).toHaveBeenCalled();
@@ -143,25 +143,25 @@ describe('EraserService', () => {
     });
 
     it('should do nothing when entering the canvas, with an unsupported mouse state', () => {
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 3 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 3 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(drawLineSpy).not.toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 10, buttons: 3 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 10, buttons: 3 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(drawLineSpy).not.toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
     });
 
     it('should clear the canvas preview when the mouse leaves the canvas, left click released', () => {
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
-        service.onMouseLeave(mouseEvent);
+        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 0 } as MouseEvent;
+        service.onMouseLeave();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
     it('Should only erase nothing on base canvas when moving the mouse, left click released', () => {
-        service.mouseDown = false;
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
+        service.leftMouseDown = false;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[0]).toEqual(0);
@@ -169,9 +169,9 @@ describe('EraserService', () => {
 
     it('Should erase if the user clicked once with the smallest size, without moving', () => {
         service.lineWidth = MIN_WIDTH;
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { x: 0, y: 0, offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+        mouseEvent = { x: 0, y: 0, pageX: 0, pageY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
         // First pixel only
@@ -189,9 +189,9 @@ describe('EraserService', () => {
 
     // Useful integration test example
     it(' should change the pixel of the canvas ', () => {
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 5, pageY: 5, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 0, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 6, pageY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
         // First pixel only
@@ -200,5 +200,12 @@ describe('EraserService', () => {
         expect(imageData.data[1]).toEqual(WHITE); // G
         expect(imageData.data[2]).toEqual(WHITE); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
+    });
+
+    it('preview should not appear if outside of canvas', () => {
+        spyOn(service, 'getPositionFromMouse');
+        spyOn(service, 'isInCanvas').and.returnValue(false);
+        service.onMouseMove({} as MouseEvent);
+        expect(service.getPositionFromMouse).not.toHaveBeenCalled();
     });
 });

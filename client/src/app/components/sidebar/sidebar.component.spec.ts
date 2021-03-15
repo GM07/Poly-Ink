@@ -80,9 +80,9 @@ describe('SidebarComponent', () => {
         lineServiceSpy.stopDrawing.and.returnValue();
 
         // Default Tool should be Pencil
-        expect(toolHandlerService.getTool().toolID).toEqual(PencilToolConstants.TOOL_ID);
+        expect(toolHandlerService.getCurrentTool().toolID).toEqual(PencilToolConstants.TOOL_ID);
         component.toolIconClicked(new LineSettings());
-        expect(toolHandlerService.getTool().toolID).toEqual(LineToolConstants.TOOL_ID);
+        expect(toolHandlerService.getCurrentTool().toolID).toEqual(LineToolConstants.TOOL_ID);
     });
 
     it('should go back to menu', () => {

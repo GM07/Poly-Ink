@@ -52,13 +52,13 @@ export class PolygoneService extends Tool {
     }
 
     stopDrawing(): void {
-        this.mouseDown = false;
+        this.leftMouseDown = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.mouseDown = event.button === MouseButton.Left;
-        if (this.mouseDown) {
+        this.leftMouseDown = event.button === MouseButton.Left;
+        if (this.leftMouseDown) {
             this.mouseDownCoord = this.getPositionFromMouse(event);
             this.mouseUpCoord = this.mouseDownCoord;
             const ctx = this.drawingService.previewCtx;
@@ -67,32 +67,32 @@ export class PolygoneService extends Tool {
     }
 
     onMouseUp(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             if (this.isInCanvas(event)) {
                 this.mouseUpCoord = this.getPositionFromMouse(event);
             }
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawPolygone(this.drawingService.baseCtx);
         }
-        this.mouseDown = false;
+        this.leftMouseDown = false;
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
             this.updatePolygone();
         }
     }
 
     onMouseLeave(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
             this.updatePolygone();
         }
     }
 
     onMouseEnter(event: MouseEvent): void {
-        if (this.mouseDown) {
+        if (this.leftMouseDown) {
             this.mouseUpCoord = this.getPositionFromMouse(event);
             this.updatePolygone();
         }

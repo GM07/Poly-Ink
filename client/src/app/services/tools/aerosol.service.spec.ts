@@ -47,8 +47,8 @@ describe('AerosolService', () => {
         service['drawingService'].canvas = canvasTestHelper.canvas;
 
         mouseEvent = {
-            offsetX: 25,
-            offsetY: 25,
+            pageX: 25,
+            pageY: 25,
             button: 0,
         } as MouseEvent;
     });
@@ -59,23 +59,23 @@ describe('AerosolService', () => {
 
     it('mouseDown should set mouseDown property to true on left click', () => {
         service.onMouseDown(mouseEvent);
-        expect(service.mouseDown).toEqual(true);
+        expect(service.leftMouseDown).toEqual(true);
         window.clearInterval(service.sprayIntervalID);
     });
 
     it('mouseDown should set mouseDown property to false on right click', () => {
         const mouseEventRClick = {
-            offsetX: 25,
-            offsetY: 25,
+            pageX: 25,
+            pageY: 25,
             button: 1,
         } as MouseEvent;
         service.onMouseDown(mouseEventRClick);
-        expect(service.mouseDown).toEqual(false);
+        expect(service.leftMouseDown).toEqual(false);
         window.clearInterval(service.sprayIntervalID);
     });
 
     it('onMouseUp should not call drawSpray if mouse was not already down', () => {
-        service.mouseDown = false;
+        service.leftMouseDown = false;
         service.mouseDownCoord = { x: 0, y: 0 };
 
         service.onMouseUp(mouseEvent);
@@ -84,7 +84,7 @@ describe('AerosolService', () => {
 
     it('onMouseMove should call sprayContinuouslySpy if mouse was already down', () => {
         const expectedResult: Vec2 = { x: 25, y: 25 };
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         service.onMouseMove(mouseEvent);
         expect(service.mousePosition).toEqual(expectedResult);
         window.clearInterval(service.sprayIntervalID);
@@ -92,13 +92,13 @@ describe('AerosolService', () => {
 
     it('should not spray between the points where it left and entered the canvas', () => {
         service.areaDiameter = 2;
-        let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
+        let mouseEventLClick: MouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);
         service.onMouseLeave(mouseEventLClick);
-        mouseEventLClick = { offsetX: 0, offsetY: 50, button: 0, buttons: 1 } as MouseEvent;
+        mouseEventLClick = { pageX: 0, pageY: 50, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
         expect(sprayContinuouslySpy).toHaveBeenCalled();
-        mouseEventLClick = { offsetX: 0, offsetY: 50, button: 0 } as MouseEvent;
+        mouseEventLClick = { pageX: 0, pageY: 50, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEventLClick);
 
         // tslint:disable-next-line:no-magic-numbers
@@ -107,11 +107,11 @@ describe('AerosolService', () => {
     });
 
     it('should stop drawing when the mouse is up', () => {
-        let mouseEventLClick: MouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
+        let mouseEventLClick: MouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.areaDiameter = 1;
         service.onMouseDown(mouseEventLClick);
         service.onMouseLeave(mouseEventLClick);
-        mouseEventLClick = { offsetX: 0, offsetY: 2, button: 0, buttons: 0 } as MouseEvent;
+        mouseEventLClick = { pageX: 0, pageY: 2, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseUp(mouseEventLClick);
         service.onMouseEnter(mouseEventLClick);
         expect(sprayContinuouslySpy).toHaveBeenCalled();
@@ -119,7 +119,7 @@ describe('AerosolService', () => {
         const imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
         expect(imageData.data[ALPHA]).toEqual(0); // A, rien ne doit être dessiné où on est entré
 
-        service.mouseDown = true;
+        service.leftMouseDown = true;
         mouseEventLClick = { x: 1000, y: 1000, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseUp(mouseEventLClick);
         expect(sprayContinuouslySpy).toHaveBeenCalled();
@@ -127,31 +127,31 @@ describe('AerosolService', () => {
     });
 
     it('should call onMousDown when entering the canvas if mouse is down', () => {
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 1 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(onMouseDownSpy).toHaveBeenCalled();
     });
 
     it('should do nothing when entering the canvas, with an unsupported mouse state', () => {
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 3 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 3 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(drawSpraySpy).not.toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 10, buttons: 3 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 10, buttons: 3 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(drawSpraySpy).not.toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
     });
 
     it('should clear the canvas preview when the mouse leaves the canvas, left click released', () => {
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseLeave(mouseEvent);
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
     it('should only draw nothing on base canvas when moving the mouse, left click released', () => {
-        service.mouseDown = false;
-        mouseEvent = { offsetX: 0, offsetY: 0, button: 0, buttons: 0 } as MouseEvent;
+        service.leftMouseDown = false;
+        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[ALPHA]).toEqual(0);

@@ -6,6 +6,8 @@ import { Tool } from '@app/classes/tool';
 import { LineToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
+import { ToolMath } from '@app/constants/math';
+import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 
@@ -13,8 +15,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
     providedIn: 'root',
 })
 export class LineService extends Tool {
-    static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
-    static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;
+    private static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...
     private readonly SHIFT: ShiftKey = new ShiftKey();
     private readonly ESCAPE: ShortcutKey = new ShortcutKey('escape');
     private readonly BACKSPACE: ShortcutKey = new ShortcutKey('backspace');
@@ -60,8 +61,8 @@ export class LineService extends Tool {
     }
 
     private handleSimpleClick(event: MouseEvent): void {
-        this.mouseDown = event.button === MouseButton.Left;
-        if (this.mouseDown) {
+        this.leftMouseDown = event.button === MouseButton.Left;
+        if (this.leftMouseDown) {
             if (this.points.length === 0 || this.pointToAdd === undefined) {
                 this.pointToAdd = this.getPositionFromMouse(event);
             }
@@ -77,7 +78,7 @@ export class LineService extends Tool {
             this.pointToAdd = this.alignPoint(this.getPositionFromMouse(event));
         }
 
-        const closedLoop: boolean = Geometry.getDistanceBetween(this.pointToAdd, this.points[0]) <= LineService.MINIMUM_DISTANCE_TO_CLOSE_PATH;
+        const closedLoop: boolean = Geometry.getDistanceBetween(this.pointToAdd, this.points[0]) <= ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;
 
         if (closedLoop) {
             this.points[this.points.length - 1] = this.points[0];
@@ -91,12 +92,12 @@ export class LineService extends Tool {
 
     onMouseUp(event: MouseEvent): void {
         if (event.button === MouseButton.Left) {
-            this.mouseDown = false;
+            this.leftMouseDown = false;
         }
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.points.length === 0 || event.offsetX === undefined || event.offsetY === undefined) {
+        if (this.points.length === 0 || event.pageX === undefined || event.pageY === undefined) {
             return;
         }
 
@@ -155,7 +156,7 @@ export class LineService extends Tool {
     }
 
     private handleShiftKey(): void {
-        if (this.mouseDown) return;
+        if (this.leftMouseDown) return;
 
         if (this.SHIFT.isDown) {
             this.pointToAdd = this.alignPoint(this.mousePosition);
@@ -193,7 +194,7 @@ export class LineService extends Tool {
         const distanceY = cursor.y - this.getLastPoint().y;
         let distance = Geometry.getDistanceBetween(this.getLastPoint(), cursor);
 
-        if (Math.abs(Math.cos(finalAngle)) >= Geometry.ZERO_THRESHOLD) {
+        if (Math.abs(Math.cos(finalAngle)) >= ToolMath.ZERO_THRESHOLD) {
             distance = Math.abs(distanceX / Math.cos(finalAngle));
         } else {
             distance = Math.abs(distanceY / Math.sin(finalAngle));

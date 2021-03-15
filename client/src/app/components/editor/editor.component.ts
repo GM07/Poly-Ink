@@ -1,6 +1,7 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
-import { NewDrawingConstants } from '@app/classes/tool_ui_settings/tools.constants';
+import { ExportFileToolConstants, NewDrawingConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
+import { ExportDrawingComponent } from '@app/components/export-drawing/export-drawing.component';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 @Component({
@@ -10,9 +11,17 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
 })
 export class EditorComponent {
     @ViewChild('newCanvasMenu') newDrawingMenu: NewDrawingComponent;
+    @ViewChild('exportDrawing') exportDrawing: ExportDrawingComponent;
 
-    resetDrawing(toolID: string): void {
-        if (toolID === NewDrawingConstants.TOOL_ID) this.newDrawingMenu.createNewDrawing(false);
+    async receiveSidebarButtonEvent(toolID: string): Promise<void> {
+        switch (toolID) {
+            case NewDrawingConstants.TOOL_ID:
+                this.newDrawingMenu.createNewDrawing(false);
+                break;
+            case ExportFileToolConstants.TOOL_ID:
+                await this.exportDrawing.show();
+                break;
+        }
     }
 
     constructor(public shortcutHandler: ShortcutHandlerService) {}
