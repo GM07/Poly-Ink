@@ -87,18 +87,6 @@ describe('Drawing service', () => {
         expect(await drawingService.getAllDrawingsData()).not.to.deep.contain(drawing2);
     });
 
-    it('should delete drawing with drawing object', async () => {
-        await drawingService.deleteDrawingData(drawing);
-        expect(await drawingService.getAllDrawingsData()).not.to.deep.contain(drawing);
-        expect(await drawingService.getAllDrawingsData()).to.deep.contain(drawing2);
-    });
-
-    it("should throw error on delete drawing with object that doesn't exist", async () => {
-        drawingService.deleteDrawingData({ name: 'test' } as DrawingData).catch((e) => {
-            expect(e.type).to.eq('DataNotFound');
-        });
-    });
-
     it("should throw error on delete drawing with id that doesn't exist", async () => {
         drawingService.deleteDrawingDataFromId('testid').catch((e) => {
             expect(e.type).to.eq('DataNotFound');

@@ -50,6 +50,9 @@ export class DrawingService {
         }
     }
 
+    /**
+     * @throws FileNotFound
+     */
     getLocalDrawing(id: string): string {
         const drawingPath = `${DrawingService.ROOT_DIRECTORY}/${id}.png`;
         if (!fs.existsSync(drawingPath)) {
@@ -58,6 +61,18 @@ export class DrawingService {
 
         const buffer: Buffer = fs.readFileSync(drawingPath);
         return Buffer.from(buffer).toString('base64');
+    }
+
+    /**
+     * @throws FileNotFound
+     */
+    deleteLocalDrawing(id: string): void {
+        const drawingPath = `${DrawingService.ROOT_DIRECTORY}/${id}.png`;
+        if (!fs.existsSync(drawingPath)) {
+            throw new FileNotFound(drawingPath);
+        }
+
+        fs.unlinkSync(drawingPath);
     }
 
     async getAllDrawingsData(): Promise<DrawingData[]> {
@@ -116,14 +131,16 @@ export class DrawingService {
      * @throws DataNotFound, DataNotDeleted
      */
     async deleteDrawingDataFromId(id: string): Promise<void> {
+        const ObjectId = require('mongodb').ObjectID;
         await this.collection
-            .findOneAndDelete({ _id: id })
+            .findOneAndDelete({ _id: ObjectId(id) })
             .then((result: FindAndModifyWriteOpResultObject<DrawingData>) => {
                 if (!result.value) {
                     throw new DataNotFound(id);
                 }
             })
-            .catch(() => {
+            .catch((e) => {
+                console.log(e);
                 throw new DataNotDeleted(id);
             });
     }
