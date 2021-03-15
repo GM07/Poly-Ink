@@ -6,12 +6,14 @@
                 <mat-form-field appearance="legacy">
                     <mat-label class="gray">Nom</mat-label>
                     <input matInput [(ngModel)]="filename" [formControl]="nameFormControl" name="filename" maxlength="100" />
-                    <span matSuffix>{{ '.' + exportFormat }} &nbsp;</span>
+                    <span matSuffix>{{ '.' + saveFormat }} &nbsp;</span>
                     <mat-error *ngIf="nameFormControl.hasError('required')"> Le nom est <strong>requis</strong> </mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="legacy">
+                    <mat-hint class="gray">[A-Z][a-z][0-9][-]</mat-hint>
                     <mat-label class="gray">Tags (séprarées par des virgules)</mat-label>
-                    <input matInput [(ngModel)]="tagsStr" name="tagsStr" maxlength="100" />
+                    <input matInput [(ngModel)]="tagsStr" [formControl]="tagsFormControl" name="tagsStr" maxlength="100" />
+                    <mat-error *ngIf="tagsFormControl.hasError('pattern')"> Les tags sont <strong>invalides</strong></mat-error>
                 </mat-form-field>
             </form>
             <canvas #exportPreview id="exportPreview" [attr.width]="this.getPreviewWidth()" [attr.height]="this.getPreviewHeight()"></canvas>

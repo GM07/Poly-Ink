@@ -25,7 +25,8 @@ export class SaveDrawingComponent {
     private imageData: ImageData;
 
     nameFormControl: FormControl;
-    exportFormat: string;
+    tagsFormControl: FormControl;
+    saveFormat: string;
     filename: string;
     tagsStr: string;
     currentFilter: string;
@@ -60,7 +61,8 @@ export class SaveDrawingComponent {
 
     initValues(): void {
         this.nameFormControl = new FormControl('', Validators.required);
-        this.exportFormat = 'png';
+        this.tagsFormControl = new FormControl('', Validators.pattern('^([0-9A-Za-z -]+)(,[0-9A-Za-z -]+)*$'));
+        this.saveFormat = 'png';
         this.aspectRatio = 1;
         this.filename = this.defaultFileNames[Math.floor(Math.random() * this.defaultFileNames.length)];
     }
@@ -84,8 +86,8 @@ export class SaveDrawingComponent {
     }
 
     save(): void {
-        if(!this.nameFormControl.errors){
-            this.saveDrawingService.saveImage(this.canvasImage, this.exportFormat, this.filename);
+        if(!this.nameFormControl.errors && !this.tagsFormControl.errors){
+            this.saveDrawingService.saveImage(this.canvasImage, this.saveFormat, this.filename);
         } 
     }
 
@@ -104,7 +106,7 @@ export class SaveDrawingComponent {
             this.baseContext.drawImage(image, 0, 0);
             exportPreviewCtx.drawImage(image, 0, 0, image.width, image.height, 0, 0, this.getPreviewWidth(), this.getPreviewHeight());
         });
-        this.canvasImage = this.baseCanvas.toDataURL('image/' + this.exportFormat);
+        this.canvasImage = this.baseCanvas.toDataURL('image/' + this.saveFormat);
     }
 
 
