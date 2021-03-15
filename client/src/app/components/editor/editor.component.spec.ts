@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ExportFileToolConstants, NewDrawingConstants } from '@app/classes/tool_ui_settings/tools.constants';
+import { ExportFileToolConstants, NewDrawingConstants, RedoConstants, UndoConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resize.component';
 import { DrawingComponent } from '@app/components/drawing/drawing.component';
@@ -12,6 +12,8 @@ import { ExportDrawingComponent } from '@app/components/export-drawing/export-dr
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
 import { SelectionHandlerComponent } from '@app/components/selection/selection-handler/selection-handler.component';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
+
+// tslint:disable:no-string-literal
 
 @Component({ selector: 'app-sidebar', template: '' })
 class StubSidebarComponent {}
@@ -80,5 +82,17 @@ describe('EditorComponent', () => {
     it('Transfer KeyDown events to the handler', () => {
         component.onKeyDown({} as KeyboardEvent);
         expect(shortcutHandlerServiceSpy).toHaveBeenCalled();
+    });
+
+    it('should call undo on button click', () => {
+        spyOn(component['undoRedoService'], 'undo').and.stub();
+        component.receiveSidebarButtonEvent(UndoConstants.TOOL_ID);
+        expect(component['undoRedoService'].undo).toHaveBeenCalled();
+    });
+
+    it('should call redo on button click', () => {
+        spyOn(component['undoRedoService'], 'redo').and.stub();
+        component.receiveSidebarButtonEvent(RedoConstants.TOOL_ID);
+        expect(component['undoRedoService'].redo).toHaveBeenCalled();
     });
 });

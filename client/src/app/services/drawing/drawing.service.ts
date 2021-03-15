@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { ResizeDraw } from '@app/classes/commands/resize-draw';
+import { ResizeConfig } from '@app/classes/tool-config/resize-config';
+import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 import { Subject } from 'rxjs';
-import { ResizeConfig } from './../../classes/tool-config/resize-config';
-import { UndoRedoService } from './../undo-redo/undo-redo.service';
 
 @Injectable({
     providedIn: 'root',
@@ -37,7 +37,7 @@ export class DrawingService {
         this.changes.next();
     }
 
-    initUndoRedo() {
+    initUndoRedo(): void {
         const config = new ResizeConfig();
         config.height = this.canvas.height;
         config.width = this.canvas.width;

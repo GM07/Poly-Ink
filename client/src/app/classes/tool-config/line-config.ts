@@ -9,7 +9,7 @@ export class LineConfig {
     points: Vec2[] = [];
 
     clone(): LineConfig {
-        let config = new LineConfig();
+        const config = new LineConfig();
         config.closedLoop = this.closedLoop;
         config.diameterJunctions = this.diameterJunctions;
         config.thickness = this.thickness;

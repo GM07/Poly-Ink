@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { PencilConfig } from '@app/classes/tool-config/pencil-config';
 import { Vec2 } from '@app/classes/vec2';
-import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { EraserDraw } from './eraser-draw';
@@ -20,14 +19,6 @@ describe('EraserDraw', () => {
         eraserDraw = new EraserDraw(colorService, new PencilConfig());
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
-    });
-
-    it('should construct properly', () => {
-        expect(eraserDraw).toBeDefined();
-        expect(eraserDraw.primaryRgba).toEqual(Colors.BLACK.rgbString);
-        expect(eraserDraw.secondaryRgba).toEqual(Colors.BLUE.rgbString);
-        expect(eraserDraw.eraserConfig.lineWidth).toEqual(ToolSettingsConst.DEFAULT_PENCIL_WIDTH);
-        expect(eraserDraw.eraserConfig.pathData).toEqual([[]]);
     });
 
     it('Should draw a single pixel if the smallest size was selected', () => {

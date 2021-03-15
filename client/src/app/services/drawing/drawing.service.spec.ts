@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { PencilDraw } from '@app/classes/commands/pencil-draw';
-import { PencilConfig } from '@app/classes/tool-config/pencil-config';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { DrawingService } from './drawing.service';
 
@@ -17,7 +16,8 @@ describe('DrawingService', () => {
         service.canvas = canvasTestHelper.canvas;
         service.baseCtx = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
         service.previewCtx = canvasTestHelper.drawCanvas.getContext('2d') as CanvasRenderingContext2D;
-        command = new PencilDraw({} as ColorService, {} as PencilConfig);
+        const pencilConfigSpy = jasmine.createSpyObj('PencilConfig', ['clone']);
+        command = new PencilDraw({} as ColorService, pencilConfigSpy);
     });
 
     it('should be created', () => {

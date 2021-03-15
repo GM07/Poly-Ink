@@ -11,7 +11,6 @@ export class RectangleSelectionDraw extends AbstractDraw {
     }
 
     execute(context: CanvasRenderingContext2D): void {
-        // TODO - startCoord is alway top left??
         const selectionCanvas = this.saveSelectionToCanvas(context);
 
         this.fillBackground(context);

@@ -19,7 +19,8 @@ describe('AbstractSelectionComponent', () => {
     } as MouseEvent;
 
     beforeEach(async(() => {
-        drawService = new DrawingService();
+        const undoRedoServiceSpy = jasmine.createSpyObj('UndoRedoService', ['init', 'saveCommand', 'undo', 'redo', 'isPreviewEmpty', 'onKeyDown']);
+        drawService = new DrawingService(undoRedoServiceSpy);
         TestBed.configureTestingModule({
             declarations: [AbstractSelectionComponent],
             providers: [AbstractSelectionService, { provide: DrawingService, useValue: drawService }],

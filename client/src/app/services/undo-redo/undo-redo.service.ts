@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
-import { ResizeDraw } from './../../classes/commands/resize-draw';
+import { ResizeDraw } from '@app/classes/commands/resize-draw';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 
 @Injectable({
     providedIn: 'root',
@@ -8,29 +9,36 @@ import { ResizeDraw } from './../../classes/commands/resize-draw';
 export class UndoRedoService {
     context: CanvasRenderingContext2D;
     preview: CanvasRenderingContext2D;
+    shortcutUndo: ShortcutKey;
+    shortcutRedo: ShortcutKey;
     originalResize: ResizeDraw;
     originalImage: ImageData;
 
     commands: AbstractDraw[] = [];
     currentAction: number = -1;
 
-    init(context: CanvasRenderingContext2D, preview: CanvasRenderingContext2D, originalResize: ResizeDraw) {
+    constructor() {
+        this.shortcutRedo = new ShortcutKey('z', true, true, false);
+        this.shortcutUndo = new ShortcutKey('z', true, false, false);
+    }
+
+    init(context: CanvasRenderingContext2D, preview: CanvasRenderingContext2D, originalResize: ResizeDraw): void {
         this.originalResize = originalResize;
         this.preview = preview;
         this.context = context;
         this.originalImage = this.context.getImageData(0, 0, this.context.canvas.width, this.context.canvas.height);
     }
 
-    saveCommand(command: AbstractDraw) {
+    saveCommand(command: AbstractDraw): void {
         if (this.currentAction >= 0) this.commands.splice(this.currentAction + 1);
 
         this.commands.push(command);
         this.currentAction += 1;
     }
 
-    undo() {
-        if (!this.isPreviewEmpty) return;
+    undo(): void {
         if (this.currentAction < 0) return;
+        if (!this.isPreviewEmpty()) return;
 
         this.currentAction -= 1;
 
@@ -42,9 +50,9 @@ export class UndoRedoService {
         }
     }
 
-    redo() {
-        if (!this.isPreviewEmpty) return;
+    redo(): void {
         if (this.currentAction >= this.commands.length - 1) return;
+        if (!this.isPreviewEmpty()) return;
 
         this.currentAction += 1;
 
@@ -52,8 +60,15 @@ export class UndoRedoService {
     }
 
     isPreviewEmpty(): boolean {
-        const whiteColor = 4294967295; // White color constant
         const pixelBuffer = new Uint32Array(this.preview.getImageData(0, 0, this.preview.canvas.width, this.preview.canvas.height).data.buffer);
-        return pixelBuffer.some((color) => color !== whiteColor) && pixelBuffer.some((color) => color !== 0);
+        return !pixelBuffer.some((pixel) => {
+            return pixel !== 0;
+        });
     }
+
+    // TODO - how to integrate shortcuts
+    // onKeyDown(event: KeyboardEvent): void {
+    //     if (this.shortcutRedo.equals(event)) this.redo();
+    //     else if (this.shortcutUndo.equals(event)) this.undo();
+    // }
 }

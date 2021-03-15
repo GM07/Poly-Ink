@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { PencilConfig } from '@app/classes/tool-config/pencil-config';
 import { Vec2 } from '@app/classes/vec2';
-import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { PencilDraw } from './pencil-draw';
@@ -18,14 +17,6 @@ describe('PencilDraw', () => {
         pencilDraw = new PencilDraw(colorService, new PencilConfig());
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
-    });
-
-    it('should construct properly', () => {
-        expect(pencilDraw).toBeDefined();
-        expect(pencilDraw.primaryRgba).toEqual(Colors.BLACK.rgbString);
-        expect(pencilDraw.secondaryRgba).toEqual(Colors.BLUE.rgbString);
-        expect(pencilDraw.pencilConfig.lineWidth).toEqual(ToolSettingsConst.DEFAULT_PENCIL_WIDTH);
-        expect(pencilDraw.pencilConfig.pathData).toEqual([[]]);
     });
 
     it('Should draw a single pixel if the smallest size was selected', () => {

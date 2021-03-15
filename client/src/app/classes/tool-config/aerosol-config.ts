@@ -7,7 +7,7 @@ export class AerosolConfig {
     droplets: Vec2[][] = [];
 
     clone(): AerosolConfig {
-        let config = new AerosolConfig();
+        const config = new AerosolConfig();
 
         this.droplets.forEach((points, index) => {
             config.droplets.push([]);

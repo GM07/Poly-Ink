@@ -1,10 +1,9 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
-import { ExportFileToolConstants, NewDrawingConstants } from '@app/classes/tool_ui_settings/tools.constants';
+import { ExportFileToolConstants, NewDrawingConstants, RedoConstants, UndoConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 import { ExportDrawingComponent } from '@app/components/export-drawing/export-drawing.component';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
-import { RedoConstants, UndoConstants } from './../../classes/tool_ui_settings/tools.constants';
-import { UndoRedoService } from './../../services/undo-redo/undo-redo.service';
+import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 
 @Component({
     selector: 'app-editor',

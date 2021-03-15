@@ -9,12 +9,12 @@ export enum RectangleMode {
 export class RectangleConfig {
     lineWidth: number = ToolSettingsConst.MIN_WIDTH;
     rectangleMode: RectangleMode = RectangleMode.FilledWithContour;
-    startCoords: Vec2;
-    endCoords: Vec2;
+    startCoords: Vec2 = { x: 0, y: 0 };
+    endCoords: Vec2 = { x: 0, y: 0 };
     shiftDown: boolean = false;
 
     clone(): RectangleConfig {
-        let config = new RectangleConfig();
+        const config = new RectangleConfig();
         config.startCoords = { x: this.startCoords.x, y: this.startCoords.y };
         config.endCoords = { x: this.endCoords.x, y: this.endCoords.y };
         config.rectangleMode = this.rectangleMode;

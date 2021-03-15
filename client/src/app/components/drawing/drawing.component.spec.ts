@@ -20,7 +20,8 @@ describe('DrawingComponent', () => {
 
     beforeEach(async(() => {
         toolStub = new ToolStub({} as DrawingService, {} as ColorService);
-        drawingStub = new DrawingService();
+        const undoRedoServiceSpy = jasmine.createSpyObj('UndoRedoService', ['init', 'saveCommand', 'undo', 'redo', 'isPreviewEmpty', 'onKeyDown']);
+        drawingStub = new DrawingService(undoRedoServiceSpy);
 
         TestBed.configureTestingModule({
             declarations: [DrawingComponent],
