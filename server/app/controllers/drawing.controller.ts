@@ -20,8 +20,9 @@ export class DrawingController {
 
     private configureRouter(): void {
         this.router = Router();
-
+        // TODO : Remove create
         this.router.post('/create', async (req: Request, res: Response, next: NextFunction) => {
+            // TODO : Verify body
             const drawing: Drawing = req.body;
             if (!this.drawingService.validateTags(drawing.data.tags)) {
                 res.sendStatus(HTTP_BAD_REQUEST);
@@ -32,6 +33,7 @@ export class DrawingController {
                 res.sendStatus(HTTP_BAD_REQUEST);
                 return;
             }
+            // Verify drawing has been created
             const id = await this.drawingService.createNewDrawingData(drawing.data);
             drawing.data._id = id;
             this.drawingService.storeDrawing(drawing);
@@ -39,7 +41,6 @@ export class DrawingController {
                 message: 'Success',
             });
         });
-
         this.router.get('/', async (req: Request, res: Response, next: NextFunction) => {
             const tags: string = req.query.tags;
             let drawingsData: DrawingData[];

@@ -59,12 +59,15 @@ export class DrawingService {
     }
 
     async getAllDrawingsData(): Promise<DrawingData[]> {
-        return this.collection
-            .find({})
-            .toArray()
-            .then((drawings: DrawingData[]) => {
-                return drawings;
-            });
+        return (
+            this.collection
+                .find({})
+                // TODO : .limit(100)
+                .toArray()
+                .then((drawings: DrawingData[]) => {
+                    return drawings;
+                })
+        );
     }
 
     async getDrawingsDataFromTag(tag: Tag): Promise<DrawingData[]> {
@@ -94,6 +97,9 @@ export class DrawingService {
             });
     }
 
+    /**
+     * @throws DataNotCreated
+     */
     async createNewDrawingData(drawing: DrawingData): Promise<string> {
         try {
             return await (await this.collection.insertOne(drawing)).insertedId;
