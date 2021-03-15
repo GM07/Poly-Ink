@@ -82,9 +82,8 @@ describe('Drawing service', () => {
     });
 
     it.only('should delete drawing with id', async () => {
-        let drawings = await drawingService.getAllDrawingsData();
         await drawingService.deleteDrawingDataFromId('123456789012');
-        drawings = await drawingService.getAllDrawingsData();
+        const drawings = await drawingService.getAllDrawingsData();
         expect(drawings).to.deep.contain(drawing);
         expect(drawings).not.to.deep.contain(drawing2);
     });

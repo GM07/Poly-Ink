@@ -1,4 +1,4 @@
-import { DataNotCreated, DataNotDeleted, DataNotFound, FileNotFound } from '@app/classes/errors';
+import { DataNotCreated, DataNotDeleted, FileNotFound } from '@app/classes/errors';
 import { DatabaseService } from '@app/services/database.service';
 import { TYPES } from '@app/types';
 import { Drawing } from '@common/communication/drawing';
@@ -128,21 +128,15 @@ export class DrawingService {
     }
 
     /**
-     * @throws DataNotFound
      * @throws DataNotDeleted
      */
     async deleteDrawingDataFromId(id: string): Promise<void> {
         const ObjectId = require('mongodb').ObjectID;
-        await this.collection
-            .findOneAndDelete({ _id: ObjectId(id) })
-            .then((result: FindAndModifyWriteOpResultObject<DrawingData>) => {
-                if (!result.value) {
-                    throw new DataNotFound(id);
-                }
-            })
-            .catch((e) => {
-                console.log(e);
+        await this.collection.findOneAndDelete({ _id: ObjectId(id) }).then((result: FindAndModifyWriteOpResultObject<DrawingData>) => {
+            console.log(ObjectId(id), result);
+            if (!result.value) {
                 throw new DataNotDeleted(id);
-            });
+            }
+        });
     }
 }
