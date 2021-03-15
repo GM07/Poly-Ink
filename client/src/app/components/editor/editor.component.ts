@@ -35,6 +35,8 @@ export class EditorComponent {
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
+        
         this.shortcutHandler.onKeyDown(event);
+        this.undoRedoService.onKeyDown(event);
     }
 }

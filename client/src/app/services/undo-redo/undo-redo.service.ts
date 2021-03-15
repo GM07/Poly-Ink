@@ -38,7 +38,6 @@ export class UndoRedoService {
 
     undo(): void {
         if (this.currentAction < 0) return;
-        if (!this.isPreviewEmpty()) return;
 
         this.currentAction -= 1;
 
@@ -52,23 +51,14 @@ export class UndoRedoService {
 
     redo(): void {
         if (this.currentAction >= this.commands.length - 1) return;
-        if (!this.isPreviewEmpty()) return;
 
         this.currentAction += 1;
 
         this.commands[this.currentAction].execute(this.context);
     }
 
-    isPreviewEmpty(): boolean {
-        const pixelBuffer = new Uint32Array(this.preview.getImageData(0, 0, this.preview.canvas.width, this.preview.canvas.height).data.buffer);
-        return !pixelBuffer.some((pixel) => {
-            return pixel !== 0;
-        });
+    onKeyDown(event: KeyboardEvent): void {
+        if (this.shortcutRedo.equals(event)) this.redo();
+        else if (this.shortcutUndo.equals(event)) this.undo();
     }
-
-    // TODO - how to integrate shortcuts
-    // onKeyDown(event: KeyboardEvent): void {
-    //     if (this.shortcutRedo.equals(event)) this.redo();
-    //     else if (this.shortcutUndo.equals(event)) this.undo();
-    // }
 }
