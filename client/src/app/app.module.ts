@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDividerModule } from '@angular/material/divider';
@@ -22,6 +22,7 @@ import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { ExportDrawingComponent } from './components/export-drawing/export-drawing.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { SaveDrawingComponent } from './components/save-drawing/save-drawing.component';
 import { AbstractSelectionComponent } from './components/selection/abstract-selection/abstract-selection.component';
 import { EllipseSelectionComponent } from './components/selection/ellipse-selection/ellipse-selection.component';
 import { RectangleSelectionComponent } from './components/selection/rectangle-selection/rectangle-selection.component';
@@ -66,6 +67,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         EllipseSelectionComponent,
         SelectionHandlerComponent,
         AerosolConfigComponent,
+        SaveDrawingComponent,
     ],
     imports: [
         AppRoutingModule,
@@ -86,6 +88,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         MatSliderModule,
         MatIconModule,
         FormsModule,
+        ReactiveFormsModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

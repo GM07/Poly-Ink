@@ -1,0 +1,24 @@
+<div *ngIf="this.canShowPopup()" id="background">
+    <div id="main">
+        <div id="content">
+            <h1 class="white" id="title">Sauvegarder dessin</h1>
+            <form>
+                <mat-form-field appearance="legacy">
+                    <mat-label class="gray">Nom</mat-label>
+                    <input matInput [(ngModel)]="filename" [formControl]="nameFormControl" name="filename" maxlength="100" />
+                    <span matSuffix>{{ '.' + exportFormat }} &nbsp;</span>
+                    <mat-error *ngIf="nameFormControl.hasError('required')"> Le nom est <strong>requis</strong> </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="legacy">
+                    <mat-label class="gray">Tags (séprarées par des virgules)</mat-label>
+                    <input matInput [(ngModel)]="tagsStr" name="tagsStr" maxlength="100" />
+                </mat-form-field>
+            </form>
+            <canvas #exportPreview id="exportPreview" [attr.width]="this.getPreviewWidth()" [attr.height]="this.getPreviewHeight()"></canvas>
+            <div class="options">
+                <button class="button green white" mat-raised-button (click)="save()">Confirmer</button>
+                <button class="button red white" mat-raised-button (click)="hidePopup()">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
