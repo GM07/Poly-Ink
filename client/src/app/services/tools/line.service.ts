@@ -97,7 +97,7 @@ export class LineService extends Tool {
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.points.length === 0 || event.offsetX === undefined || event.offsetY === undefined) {
+        if (this.points.length === 0 || event.pageX === undefined || event.pageY === undefined) {
             return;
         }
 
