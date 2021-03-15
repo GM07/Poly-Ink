@@ -61,6 +61,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.leftMouseDown = event.button === MouseButton.Left;
         if (this.leftMouseDown) {
             const mousePos = this.getPositionFromMouse(event);
+            console.log(this.isInSelection(event));
             if (this.isInSelection(event)) {
                 this.translationOrigin = mousePos;
             } else {
@@ -74,9 +75,7 @@ export abstract class AbstractSelectionService extends Tool {
 
     onMouseUp(event: MouseEvent): void {
         if (this.leftMouseDown) {
-            if (this.isInCanvas(event)) {
-                this.mouseUpCoord = this.getPositionFromMouse(event);
-            }
+            this.setMouseUpCoord(event);
             if (this.selectionCtx === null) {
                 this.drawingService.clearCanvas(this.drawingService.previewCtx);
                 this.startSelection();
@@ -89,10 +88,11 @@ export abstract class AbstractSelectionService extends Tool {
 
     onMouseMove(event: MouseEvent): void {
         if (this.leftMouseDown) {
-            const mousePos = this.getPositionFromMouse(event);
-            if (this.isInCanvas(event)) {
-                this.mouseUpCoord = mousePos;
-            }
+            this.setMouseUpCoord(event);
+            // const mousePos = this.getPositionFromMouse(event);
+            // if (this.isInCanvas(event)) {
+            //     this.mouseUpCoord = mousePos;
+            // }
             if (this.selectionCtx !== null) {
                 this.updateSelection(this.getTranslation(this.mouseUpCoord));
             } else {
@@ -103,16 +103,17 @@ export abstract class AbstractSelectionService extends Tool {
         }
     }
 
-    onMouseLeave(event: MouseEvent): void {
-        if (this.leftMouseDown && this.selectionCtx === null) {
+    setMouseUpCoord(event: MouseEvent): void {
+        if (this.leftMouseDown && this.selectionCtx === null && !this.isInCanvas(event)) {
             const rect = this.drawingService.canvas.getBoundingClientRect();
-            const mousePos: Vec2 = this.mouseUpCoord;
+            const mousePos: Vec2 = this.getPositionFromMouse(event);
             if (event.x >= rect.right) mousePos.x = this.drawingService.canvas.width;
             if (event.x <= rect.left) mousePos.x = 0;
             if (event.y <= rect.top) mousePos.y = 0;
             if (event.y >= rect.bottom) mousePos.y = this.drawingService.canvas.height;
             this.mouseUpCoord = mousePos;
-            this.updateDrawingSelection();
+        } else {
+            this.mouseUpCoord = this.getPositionFromMouse(event);
         }
     }
 
