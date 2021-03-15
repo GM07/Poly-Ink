@@ -72,13 +72,14 @@ export class DrawingController {
                 idArray.forEach(async (id: string) => {
                     await this.drawingService.deleteDrawingDataFromId(id);
                 });
+                res.status(HTTP_STATUS_SUCCESS).send({
+                    message: 'Success',
+                });
             } else {
-                const drawing: Drawing = req.body;
-                this.drawingService.deleteDrawingData(drawing.data);
+                res.status(HTTP_BAD_REQUEST).send({
+                    message: 'Provide the ids to delete!',
+                });
             }
-            res.status(HTTP_STATUS_SUCCESS).send({
-                message: 'Success',
-            });
         });
     }
 }

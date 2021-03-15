@@ -119,13 +119,13 @@ describe('DrawingController', () => {
             });
     });
 
-    it('should call the delete function without ids on valid request', () => {
+    it('should return bad request function without ids', () => {
         return supertest(app)
             .delete('/drawings')
-            .expect(HTTP_STATUS_OK)
+            .expect(HTTP_BAD_REQUEST)
             .then((response: any) => {
-                expect(drawingService.deleteDrawingData.called).to.be.true;
-                expect(response.body.message).to.equal('Success');
+                expect(drawingService.deleteDrawingDataFromId.called).to.be.false;
+                expect(response.body.message).to.equal('Provide the ids to delete!');
             });
     });
 
