@@ -1,3 +1,5 @@
+// tslint:disable:max-classes-per-file
+// To not create multiple files with 6 lines each, we disable lint
 export class DataNotFound extends Error {
     constructor(message: string) {
         super(message);
@@ -23,5 +25,12 @@ export class HttpException extends Error {
     constructor(code: number, message: string) {
         super(message);
         this.name = 'HttpException (' + code + ')';
+    }
+}
+
+export class FileNotFound extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'FileNotFound';
     }
 }

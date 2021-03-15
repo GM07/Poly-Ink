@@ -1,14 +1,11 @@
 import { expect } from 'chai';
-import { DataNotCreated, DataNotDeleted, DataNotFound, HttpException } from './errors';
+import { DataNotCreated, DataNotDeleted, DataNotFound, FileNotFound, HttpException } from './errors';
 
 describe('Errors', () => {
-    let message: 'This is a message';
-
-    beforeEach(async () => {});
+    const message = 'This is a message';
 
     it('should create DataNotFound error', () => {
         const error = new DataNotFound(message);
-        console.log('test');
         expect(error.name).to.equal('DataNotFound');
         expect(error.message).to.equal(message);
     });
@@ -28,10 +25,17 @@ describe('Errors', () => {
     });
 
     it('should create HttpException error', () => {
-        //tslint-disable:no-magic-numbers
+        //tslint:disable:no-magic-numbers
         const error = new HttpException(200, message);
 
-        expect(error.name).to.equal('HttpException(200)');
+        expect(error.name).to.equal('HttpException (200)');
+        expect(error.message).to.equal(message);
+    });
+
+    it('should create FileNotFound error', () => {
+        const error = new FileNotFound(message);
+
+        expect(error.name).to.equal('FileNotFound');
         expect(error.message).to.equal(message);
     });
 });

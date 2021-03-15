@@ -1,16 +1,15 @@
 mat-drawer-container {
-    height: 100%;
-    min-height: 100vh;
+    height: 950px;
     border: 1px solid black;
     background: white;
     z-index: 5;
-    overflow: visible;
+    overflow: hidden;
 }
 
 mat-drawer-content {
     display: flex;
     justify-content: center;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .top-sidebar {

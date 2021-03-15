@@ -1,4 +1,4 @@
-import { DataNotCreated, DataNotDeleted, DataNotFound } from '@app/classes/errors';
+import { DataNotCreated, DataNotDeleted, DataNotFound, FileNotFound } from '@app/classes/errors';
 import { DatabaseService } from '@app/services/database.service';
 import { TYPES } from '@app/types';
 import { Drawing } from '@common/communication/drawing';
@@ -8,11 +8,10 @@ import * as fs from 'fs';
 import { inject, injectable } from 'inversify';
 import { Collection, FindAndModifyWriteOpResultObject } from 'mongodb';
 
-const ROOT_DIRECTORY = 'drawings';
-
 @injectable()
 export class DrawingService {
-    private static readonly COLLECTION = 'drawings';
+    private static ROOT_DIRECTORY: string = 'drawings';
+    private static readonly COLLECTION: string = 'drawings';
 
     constructor(@inject(TYPES.DatabaseService) private databaseService: DatabaseService) {
         databaseService.start();
@@ -23,34 +22,38 @@ export class DrawingService {
     }
 
     validateName(name: string): boolean {
-        if (name) {
-            return true;
-        } else {
-            return false;
-        }
+        return name !== undefined && name !== '';
     }
 
-    // TODO: Tag Validation
-    validateTags(tags: Tag[]) {
-        return true;
+    validateTags(tags: Tag[]): boolean {
+        let valid = true;
+        tags.forEach((tag) => {
+            if (!this.validateTag(tag)) {
+                valid = false;
+            }
+        });
+        return valid;
+    }
+
+    validateTag(tag: Tag): boolean {
+        return tag !== undefined && tag.name !== undefined && tag.name !== '';
     }
 
     async storeDrawing(drawing: Drawing): Promise<void> {
-        const drawingId = drawing.data._id ?? 'image';
-        const drawingPath = `${ROOT_DIRECTORY}/${drawingId}.png`;
-        if (!fs.existsSync(ROOT_DIRECTORY)) {
-            fs.mkdirSync(ROOT_DIRECTORY);
+        const drawingId = drawing.data._id;
+        const drawingPath = `${DrawingService.ROOT_DIRECTORY}/${drawingId}.png`;
+        if (!fs.existsSync(DrawingService.ROOT_DIRECTORY)) {
+            fs.mkdirSync(DrawingService.ROOT_DIRECTORY);
+            fs.writeFileSync(drawingPath, drawing.image, 'base64');
+        } else {
+            fs.writeFileSync(drawingPath, drawing.image, 'base64');
         }
-        fs.writeFile(drawingPath, drawing.image, 'base64', function (err) {
-            console.log(err);
-        });
     }
 
     getLocalDrawing(id: string): string {
-        const drawingPath = `${ROOT_DIRECTORY}/${id}.png`;
-        console.log(drawingPath);
+        const drawingPath = `${DrawingService.ROOT_DIRECTORY}/${id}.png`;
         if (!fs.existsSync(drawingPath)) {
-            throw Error("Dessin n'existe pas");
+            throw new FileNotFound(drawingPath);
         }
 
         const buffer: Buffer = fs.readFileSync(drawingPath);
@@ -93,6 +96,9 @@ export class DrawingService {
             });
     }
 
+    /**
+     * @throws DataNotCreated
+     */
     async createNewDrawingData(drawing: DrawingData): Promise<string> {
         try {
             return await (await this.collection.insertOne(drawing)).insertedId;
@@ -106,6 +112,9 @@ export class DrawingService {
         return await this.createNewDrawingData(drawing);
     }
 
+    /**
+     * @throws DataNotFound, DataNotDeleted
+     */
     async deleteDrawingDataFromId(id: string): Promise<void> {
         await this.collection
             .findOneAndDelete({ _id: id })
@@ -116,19 +125,6 @@ export class DrawingService {
             })
             .catch(() => {
                 throw new DataNotDeleted(id);
-            });
-    }
-
-    async deleteDrawingData(drawing: DrawingData): Promise<void> {
-        await this.collection
-            .findOneAndDelete(drawing)
-            .then((result: FindAndModifyWriteOpResultObject<DrawingData>) => {
-                if (!result.value) {
-                    throw new DataNotFound(drawing.toString());
-                }
-            })
-            .catch(() => {
-                throw new DataNotDeleted(drawing.toString());
             });
     }
 }

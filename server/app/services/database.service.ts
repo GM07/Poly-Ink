@@ -3,22 +3,22 @@ import { Db, MongoClient, MongoClientOptions } from 'mongodb';
 
 @injectable()
 export class DatabaseService {
-    private static readonly DATABASE_URL =
+    private static DATABASE_URL: string =
         'mongodb+srv://admin:ugbOOh4owMDAoNOQ@polyink.moize.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 
-    private static readonly DATABASE_NAME = 'carrousel';
+    protected static DATABASE_NAME: string = 'carrousel';
 
-    public db: Db;
-    private client: MongoClient;
+    db: Db;
+    protected client: MongoClient;
 
-    private options: MongoClientOptions = {
+    protected options: MongoClientOptions = {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     };
 
     async start(url: string = DatabaseService.DATABASE_URL): Promise<MongoClient | null> {
         try {
-            let client = await MongoClient.connect(url, this.options);
+            const client = await MongoClient.connect(url, this.options);
             this.client = client;
             this.db = client.db(DatabaseService.DATABASE_NAME);
         } catch {

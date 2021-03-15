@@ -1,26 +1,29 @@
 import { Injectable } from '@angular/core';
+import { Popup } from '@app/classes/popup';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { CanvasConst } from '@app/constants/canvas';
-import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
+import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
-
-import { DrawingService } from './drawing.service';
 
 @Injectable({
     providedIn: 'root',
 })
-export class NewDrawingService {
-    showWarning: boolean;
+export class NewDrawingService implements Popup {
+    shortcut: ShortcutKey;
+    showPopup: boolean;
 
-    constructor(private drawingService: DrawingService, private toolHandler: ToolHandlerService, private shortcutHandler: ShortcutHandlerService) {}
+    constructor(private drawingService: DrawingService, private toolHandler: ToolHandlerService) {
+        this.shortcut = new ShortcutKey('o', true);
+        this.showPopup = false;
+    }
 
     newCanvas(confirm: boolean = false): void {
         if (!confirm && this.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)) {
-            this.shortcutHandler.blockShortcuts = true;
-            this.showWarning = true;
+            this.showPopup = true;
             return;
         }
 
-        this.toolHandler.getTool().stopDrawing();
+        this.toolHandler.getCurrentTool().stopDrawing();
 
         const canvasOffset = this.drawingService.canvas.getBoundingClientRect();
         const documentOffset = document.documentElement;

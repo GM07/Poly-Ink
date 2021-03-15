@@ -8,7 +8,7 @@ import { Vec2 } from './vec2';
 export abstract class Tool {
     constructor(protected drawingService: DrawingService, protected colorService: ColorService) {}
     mouseDownCoord: Vec2;
-    mouseDown: boolean = false;
+    leftMouseDown: boolean = false;
     shortcutKey: ShortcutKey;
     toolID: string;
 
@@ -41,6 +41,7 @@ export abstract class Tool {
     abstract stopDrawing(): void;
 
     getPositionFromMouse(event: MouseEvent): Vec2 {
-        return { x: event.offsetX, y: event.offsetY };
+        const clientRect = this.drawingService.canvas.getBoundingClientRect();
+        return { x: event.pageX - clientRect.x, y: event.pageY - clientRect.y };
     }
 }

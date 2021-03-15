@@ -35,7 +35,7 @@ describe('SelectionHandlerComponent', () => {
         ellipseSelectionService = TestBed.inject(EllipseSelectionService);
 
         // tslint:disable:no-any
-        getToolSpy = spyOn<any>(toolHandlerService, 'getTool').and.returnValue(pencilService);
+        getToolSpy = spyOn<any>(toolHandlerService, 'getCurrentTool').and.returnValue(pencilService);
     });
 
     it('should create', () => {

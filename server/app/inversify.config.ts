@@ -1,4 +1,5 @@
 import { Container } from 'inversify';
+import 'reflect-metadata';
 import { Application } from './app';
 import { DrawingController } from './controllers/drawing.controller';
 import { Server } from './server';
