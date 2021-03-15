@@ -46,8 +46,8 @@ describe('RectangleService', () => {
         service['drawingService'].canvas = canvasTestHelper.canvas;
 
         mouseEvent = {
-            offsetX: 25,
-            offsetY: 25,
+            pageX: 25,
+            pageY: 25,
             button: 0,
         } as MouseEvent;
 
@@ -81,10 +81,10 @@ describe('RectangleService', () => {
     });
 
     it('should start drawing when the mouse is down', () => {
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 3 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 3 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(drawShapeSpy).not.toHaveBeenCalled();
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(drawShapeSpy).toHaveBeenCalled();
     });
@@ -93,7 +93,7 @@ describe('RectangleService', () => {
         service.onMouseUp(mouseEvent);
         expect(service.leftMouseDown).toEqual(false);
         service.onMouseDown(mouseEvent);
-        mouseEvent = { x: -1, y: -1, offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { x: -1, y: -1, pageX: 1, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawShapeSpy).toHaveBeenCalled();
     });
@@ -107,7 +107,7 @@ describe('RectangleService', () => {
 
     it('should draw a preview when the mouse is moving with left click pressed', () => {
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         expect(drawShapeSpy).toHaveBeenCalled();
     });
@@ -116,7 +116,7 @@ describe('RectangleService', () => {
         service.onMouseLeave(mouseEvent);
         expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseLeave(mouseEvent);
         expect(updateShapeSpy).toHaveBeenCalled();
     });
@@ -125,7 +125,7 @@ describe('RectangleService', () => {
         service.onMouseEnter(mouseEvent);
         expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(updateShapeSpy).toHaveBeenCalled();
     });
@@ -155,7 +155,7 @@ describe('RectangleService', () => {
         service.shapeMode = ShapeMode.Contour;
         service.contourWidth = 1;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawShapeSpy).toHaveBeenCalled();
 
@@ -175,7 +175,7 @@ describe('RectangleService', () => {
     it('should allow for filled drawing type', () => {
         service.shapeMode = ShapeMode.Filled;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawShapeSpy).toHaveBeenCalled();
 
@@ -191,7 +191,7 @@ describe('RectangleService', () => {
         service.shapeMode = ShapeMode.FilledWithContour;
         service.contourWidth = 2;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawShapeSpy).toHaveBeenCalled();
 
@@ -214,7 +214,7 @@ describe('RectangleService', () => {
     it('should do nothing with an unknown mode', () => {
         service.shapeMode = {} as ShapeMode;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { offsetX: 1, offsetY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
         // tslint:disable-next-line:no-magic-numbers
@@ -227,7 +227,7 @@ describe('RectangleService', () => {
         service.shapeMode = ShapeMode.Filled;
         service.onMouseDown(mouseEvent);
         // tslint:disable-next-line:no-magic-numbers
-        mouseEvent = { offsetX: 20, offsetY: 5, button: 0 } as MouseEvent;
+        mouseEvent = { pageX: 20, pageY: 5, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
         // tslint:disable-next-line:no-magic-numbers

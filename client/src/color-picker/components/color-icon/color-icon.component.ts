@@ -41,14 +41,17 @@ export class ColorIconComponent {
 
     openColorPicker(): void {
         this.colorService.shouldChangeColor = true;
+        this.colorService.isMenuOpen = true;
         this.colorMenuTrigger.openMenu();
     }
 
     closeMenu(): void {
+        this.colorService.isMenuOpen = false;
         this.colorMenuTrigger.closeMenu();
     }
 
     menuClosed(): void {
+        this.colorService.isMenuOpen = false;
         this.colorService.choseColor();
     }
 }

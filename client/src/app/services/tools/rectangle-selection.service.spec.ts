@@ -33,6 +33,7 @@ describe('RectangleSelectionService', () => {
         baseCtxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
         previewCtxStub = canvasTestHelper.drawCanvas.getContext('2d') as CanvasRenderingContext2D;
         canvasSelection = document.createElement('canvas');
+        service['drawingService'].canvas = canvasTestHelper.canvas;
         service['drawingService'].baseCtx = baseCtxStub;
         service['drawingService'].previewCtx = previewCtxStub;
     });
