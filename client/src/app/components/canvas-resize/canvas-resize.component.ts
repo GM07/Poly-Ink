@@ -1,4 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { ResizeDraw } from '@app/classes/commands/resize-draw';
+import { ResizeConfig } from '@app/classes/tool-config/resize-config';
 import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
@@ -78,10 +80,12 @@ export class CanvasResizeComponent implements AfterViewInit {
     }
 
     resizeCanvas(xModifier: number, yModifier: number): void {
-        this.drawingService.resizeCanvas(
-            xModifier < CanvasConst.MIN_WIDTH ? CanvasConst.MIN_WIDTH : xModifier,
-            yModifier < CanvasConst.MIN_HEIGHT ? CanvasConst.MIN_HEIGHT : yModifier,
-        );
+        const config = new ResizeConfig();
+        config.width = xModifier < CanvasConst.MIN_WIDTH ? CanvasConst.MIN_WIDTH : xModifier;
+        config.height = yModifier < CanvasConst.MIN_HEIGHT ? CanvasConst.MIN_HEIGHT : yModifier;
+
+        const command = new ResizeDraw(config, this.drawingService);
+        this.drawingService.draw(command);
     }
 
     private resetCanvas(): void {
