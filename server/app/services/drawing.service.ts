@@ -128,7 +128,8 @@ export class DrawingService {
     }
 
     /**
-     * @throws DataNotFound, DataNotDeleted
+     * @throws DataNotFound
+     * @throws DataNotDeleted
      */
     async deleteDrawingDataFromId(id: string): Promise<void> {
         const ObjectId = require('mongodb').ObjectID;

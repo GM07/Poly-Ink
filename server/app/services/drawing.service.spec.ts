@@ -31,7 +31,7 @@ describe('Drawing service', () => {
         } as DrawingData;
 
         drawing2 = {
-            _id: '2',
+            _id: '123456789012',
             name: 'Pretty drawing',
             tags: [new Tag('tag3'), new Tag('tag4')],
         } as DrawingData;
@@ -81,10 +81,12 @@ describe('Drawing service', () => {
         expect(drawings.length).to.eq(3);
     });
 
-    it('should delete drawing with id', async () => {
-        await drawingService.deleteDrawingDataFromId('2');
-        expect(await drawingService.getAllDrawingsData()).to.deep.contain(drawing);
-        expect(await drawingService.getAllDrawingsData()).not.to.deep.contain(drawing2);
+    it.only('should delete drawing with id', async () => {
+        let drawings = await drawingService.getAllDrawingsData();
+        await drawingService.deleteDrawingDataFromId('123456789012');
+        drawings = await drawingService.getAllDrawingsData();
+        expect(drawings).to.deep.contain(drawing);
+        expect(drawings).not.to.deep.contain(drawing2);
     });
 
     it("should throw error on delete drawing with id that doesn't exist", async () => {

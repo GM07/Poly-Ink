@@ -56,6 +56,7 @@ describe('DrawingController', () => {
             validateTags: sandbox.stub().resolves(true),
             storeDrawing: sandbox.stub().resolves(),
             getLocalDrawing: sandbox.stub().returns(BASE64_IMG),
+            deleteLocalDrawing: sandbox.stub(),
             getAllDrawingsData: sandbox.stub().resolves([baseDrawingDatas[0], baseDrawingDatas[1]]),
             getDrawingsDataFromTags: sandbox.stub().resolves([baseDrawingDatas[0]]),
             getDrawingDataFromName: sandbox.stub().resolves([baseDrawingDatas[1]]),
@@ -114,7 +115,8 @@ describe('DrawingController', () => {
             .send(baseDrawings[0])
             .expect(HTTP_STATUS.CREATED)
             .then((response: any) => {
-                expect(response.body.message).to.equal(ResponseMessage.SuccessfullyCreated);
+                console.log(ResponseMessage.SuccessfullyCreated.message);
+                expect(response.body).to.deep.equal(ResponseMessage.SuccessfullyCreated);
             });
     });
 
@@ -124,7 +126,7 @@ describe('DrawingController', () => {
             .expect(HTTP_STATUS.BAD_REQUEST)
             .then((response: any) => {
                 expect(drawingService.deleteDrawingDataFromId.called).to.be.false;
-                expect(response.body.message).to.equal(ResponseMessage.IdsNotValid);
+                expect(response.body).to.deep.equal(ResponseMessage.IdsNotValid);
             });
     });
 
@@ -134,7 +136,7 @@ describe('DrawingController', () => {
             .expect(HTTP_STATUS.SUCCESS)
             .then((response: any) => {
                 expect(drawingService.deleteDrawingDataFromId.called).to.be.true;
-                expect(response.body.message).to.equal(ResponseMessage.SuccessfullyDeleted);
+                expect(response.body).to.deep.equal(ResponseMessage.SuccessfullyDeleted);
             });
     });
 });
