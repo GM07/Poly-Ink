@@ -3,8 +3,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -89,6 +91,8 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         MatIconModule,
         FormsModule,
         ReactiveFormsModule,
+        MatChipsModule,
+        MatFormFieldModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

@@ -1,8 +1,10 @@
-export interface Drawing {
-    name: string;
-    drawing64Str: string;
-    tags: string[];
-    id?: string;
-}
+import { DrawingData } from './drawing-data';
 
-export const ROOT_DIRECTORY:string = 'drawings';
+export class Drawing {
+    image: string;
+    data: DrawingData;
+
+    constructor(data: DrawingData) {
+        this.data = data;
+    }
+}
