@@ -2,12 +2,17 @@ import { expect } from 'chai';
 import * as fs from 'fs';
 import { describe } from 'mocha';
 import 'reflect-metadata';
+import { stub } from 'sinon';
 import { Drawing } from '../../../common/communication/drawing';
 import { DrawingData } from '../../../common/communication/drawing-data';
 import { Tag } from '../../../common/communication/tag';
 import { BASE64_IMG } from '../classes/drawings.const';
 import { DatabaseServiceMock } from './database.service.mock';
 import { DrawingService } from './drawing.service';
+
+async function getAllDrawings(ds: DrawingService): Promise<DrawingData[]> {
+    return await ds.collection.find({}).toArray();
+}
 
 describe('Drawing service', () => {
     let databaseService: DatabaseServiceMock;
@@ -31,7 +36,7 @@ describe('Drawing service', () => {
         } as DrawingData;
 
         drawing2 = {
-            _id: '123456789012',
+            _id: '12345678901q',
             name: 'Pretty drawing',
             tags: [new Tag('tag3'), new Tag('tag4')],
         } as DrawingData;
@@ -71,27 +76,32 @@ describe('Drawing service', () => {
     });
 
     it('should create new drawing', async () => {
-        const drawings = await drawingService.getAllDrawingsData();
+        const drawings = await getAllDrawings(drawingService);
         expect(drawings.length).to.eq(2);
     });
 
     it('should create new drawing from name', async () => {
         await drawingService.createNewDrawingDataFromName('bob');
-        const drawings = await drawingService.getAllDrawingsData();
+        const drawings = await getAllDrawings(drawingService);
         expect(drawings.length).to.eq(3);
     });
 
-    it.only('should delete drawing with id', async () => {
-        await drawingService.deleteDrawingDataFromId('123456789012');
-        const drawings = await drawingService.getAllDrawingsData();
+    it('should delete drawing with id', async () => {
+        await drawingService.deleteDrawingDataFromId('12345678901q', false);
+        const drawings = await getAllDrawings(drawingService);
         expect(drawings).to.deep.contain(drawing);
         expect(drawings).not.to.deep.contain(drawing2);
     });
 
     it("should throw error on delete drawing with id that doesn't exist", async () => {
-        drawingService.deleteDrawingDataFromId('testid').catch((e) => {
-            expect(e.type).to.eq('DataNotFound');
-        });
+        try {
+            await drawingService.deleteDrawingDataFromId('123456789012').catch((e) => {
+                expect(e).to.eq('DataNotDeleted: 123456789012');
+            });
+        } catch {
+            const drawings = await getAllDrawings(drawingService);
+            expect(drawings.length).to.eq(2);
+        }
     });
 
     it('should not accept undefined name', () => {
@@ -116,17 +126,32 @@ describe('Drawing service', () => {
         expect(drawingService.validateTags(tags)).to.eq(false);
     });
 
-    it("should throw error when drawing can't be created", async () => {
-        drawingService['collection'].insertOne = (a: any): Promise<any> => {
-            throw new Error('test');
-        };
-        drawingService.createNewDrawingDataFromName('test').catch((e) => {
-            expect(e.type).to.eq('DataNotCreated');
-        });
+    it("should throw error when drawing from name can't be created", async () => {
+        stub(databaseService.db.collection(DrawingService['COLLECTION']), 'insertOne').throws('Error');
 
-        drawingService.createNewDrawingData({} as DrawingData).catch((e) => {
-            expect(e.type).to.eq('DataNotCreated');
-        });
+        try {
+            await drawingService.createNewDrawingDataFromName('test');
+        } catch (e) {
+            console.log(e);
+            expect(e).to.eq('DataNotCreated: test');
+            return;
+        }
+
+        //expect(true).to.eq(false);
+    });
+
+    it.only("should throw error when drawing can't be created", async () => {
+        stub(databaseService.db.collection(DrawingService['COLLECTION']), 'insertOne').throws('Error');
+
+        try {
+            await drawingService.createNewDrawingData(new DrawingData('test2', []));
+        } catch (e) {
+            console.log('teaaaa', e);
+            expect(e).to.eq('DataNotCreated: test2');
+            return;
+        }
+
+        //expect(true).to.eq(false);
     });
 
     it('should store drawing and create directory if it does not exist', async () => {
@@ -179,6 +204,29 @@ describe('Drawing service', () => {
         drawing.image = BASE64_IMG;
         try {
             drawingService.getLocalDrawing('2');
+        } catch (e) {
+            expect(e.name).to.eq('FileNotFound');
+        }
+    });
+
+    it('should delete local drawing if file exists', async () => {
+        const drawing: Drawing = new Drawing(new DrawingData('test', [], '2'));
+        drawing.image = BASE64_IMG;
+        const path = DrawingService['ROOT_DIRECTORY'] + '/' + '2.png';
+        fs.mkdirSync(DrawingService['ROOT_DIRECTORY']);
+        fs.writeFileSync(path, drawing.image, 'base64');
+
+        drawingService.deleteLocalDrawing(drawing.data._id);
+        expect(fs.existsSync(path)).to.eq(false);
+
+        fs.rmdirSync(DrawingService['ROOT_DIRECTORY']);
+    });
+
+    it("should throw error on delete local drawing if file doesn't exist", async () => {
+        const drawing: Drawing = new Drawing(new DrawingData('test', [], '2'));
+
+        try {
+            drawingService.deleteLocalDrawing(drawing.data._id);
         } catch (e) {
             expect(e.name).to.eq('FileNotFound');
         }

@@ -8,6 +8,8 @@ import * as fs from 'fs';
 import { inject, injectable } from 'inversify';
 import { Collection, FindAndModifyWriteOpResultObject } from 'mongodb';
 
+const ObjectId = require('mongodb').ObjectID;
+
 @injectable()
 export class DrawingService {
     private static ROOT_DIRECTORY: string = 'drawings';
@@ -116,7 +118,7 @@ export class DrawingService {
      */
     async createNewDrawingData(drawing: DrawingData): Promise<string> {
         try {
-            return await (await this.collection.insertOne(drawing)).insertedId;
+            return (await this.collection.insertOne(drawing)).insertedId;
         } catch (e) {
             throw new DataNotCreated(drawing.toString());
         }
@@ -130,13 +132,16 @@ export class DrawingService {
     /**
      * @throws DataNotDeleted
      */
-    async deleteDrawingDataFromId(id: string): Promise<void> {
-        const ObjectId = require('mongodb').ObjectID;
-        await this.collection.findOneAndDelete({ _id: ObjectId(id) }).then((result: FindAndModifyWriteOpResultObject<DrawingData>) => {
-            console.log(ObjectId(id), result);
-            if (!result.value) {
+    async deleteDrawingDataFromId(id: string, convertToObjectId: boolean = true): Promise<void> {
+        await this.collection
+            .findOneAndDelete({ _id: convertToObjectId ? ObjectId(id) : id })
+            .then((result: FindAndModifyWriteOpResultObject<DrawingData>) => {
+                if (!result.value) {
+                    throw new DataNotDeleted(id);
+                }
+            })
+            .catch(() => {
                 throw new DataNotDeleted(id);
-            }
-        });
+            });
     }
 }

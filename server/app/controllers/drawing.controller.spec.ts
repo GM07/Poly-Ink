@@ -51,6 +51,7 @@ describe('DrawingController', () => {
 
     beforeEach(async () => {
         const [container, sandbox] = await testingContainer();
+
         container.rebind(TYPES.DrawingService).toConstantValue({
             validateName: sandbox.stub().resolves(true),
             validateTags: sandbox.stub().resolves(true),
@@ -88,6 +89,11 @@ describe('DrawingController', () => {
             });
     });
 
+    it('should return bad request if the body is not valid', () => {
+        const badBody = ({ title: 'test' } as unknown) as Drawing;
+        return supertest(app).post('/drawings/').set('content-type', 'application/json').send(badBody).expect(HTTP_STATUS.BAD_REQUEST);
+    });
+
     it('should return bad request if the name is not valid', () => {
         drawingService.validateTags.returns(false);
         return supertest(app).post('/drawings/').set('content-type', 'application/json').send(baseDrawings[0]).expect(HTTP_STATUS.BAD_REQUEST);
@@ -115,8 +121,19 @@ describe('DrawingController', () => {
             .send(baseDrawings[0])
             .expect(HTTP_STATUS.CREATED)
             .then((response: any) => {
-                console.log(ResponseMessage.SuccessfullyCreated.message);
                 expect(response.body).to.deep.equal(ResponseMessage.SuccessfullyCreated);
+            });
+    });
+
+    it('should return service unavailable when error with database', () => {
+        drawingService.createNewDrawingData.throws('Error');
+        return supertest(app)
+            .post('/drawings/')
+            .set('content-type', 'application/json')
+            .send(baseDrawings[0])
+            .expect(HTTP_STATUS.SERVICE_UNAVAILABLE)
+            .then((response: any) => {
+                expect(response.body).to.deep.equal(ResponseMessage.CouldNotWriteOnDatabase);
             });
     });
 
@@ -137,6 +154,26 @@ describe('DrawingController', () => {
             .then((response: any) => {
                 expect(drawingService.deleteDrawingDataFromId.called).to.be.true;
                 expect(response.body).to.deep.equal(ResponseMessage.SuccessfullyDeleted);
+            });
+    });
+
+    it('should return not found when deleting an invalid id', () => {
+        drawingService.deleteDrawingDataFromId.throws('Test');
+        return supertest(app)
+            .delete('/drawings?ids=1')
+            .expect(HTTP_STATUS.NOT_FOUND)
+            .then((response: any) => {
+                expect(response.body).to.deep.equal(ResponseMessage.CouldNotDeleteOnDatabase);
+            });
+    });
+
+    it('should return not found when deleting a non existant local drawing', () => {
+        drawingService.deleteLocalDrawing.throws('Error');
+        return supertest(app)
+            .delete('/drawings?ids=id1')
+            .expect(HTTP_STATUS.NOT_FOUND)
+            .then((response: any) => {
+                expect(response.body).to.deep.equal(ResponseMessage.CouldNotDeleteOnServer);
             });
     });
 });

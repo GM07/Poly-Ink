@@ -85,27 +85,33 @@ export class DrawingController {
 
         this.router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
             const ids: string = req.query.ids;
+            let status = HTTP_STATUS.SUCCESS;
+            let response = ResponseMessage.SuccessfullyDeleted;
             if (ids) {
                 const idArray: string[] = ids.split(',');
-                idArray.forEach(async (id: string) => {
-                    this.drawingService
-                        .deleteDrawingDataFromId(id)
-                        .then()
-                        .catch(() => {
-                            res.status(HTTP_STATUS.NOT_FOUND).send(ResponseMessage.CouldNotDeleteOnDatabase);
-                        });
+
+                for (const id in idArray) {
+                    try {
+                        await this.drawingService.deleteDrawingDataFromId(id);
+                    } catch {
+                        status = HTTP_STATUS.NOT_FOUND;
+                        response = ResponseMessage.CouldNotDeleteOnDatabase;
+                        break;
+                    }
 
                     try {
                         this.drawingService.deleteLocalDrawing(id);
                     } catch {
-                        res.status(HTTP_STATUS.NOT_FOUND).send(ResponseMessage.CouldNotDeleteOnServer);
+                        status = HTTP_STATUS.NOT_FOUND;
+                        response = ResponseMessage.CouldNotDeleteOnServer;
+                        break;
                     }
-                });
-
-                res.status(HTTP_STATUS.SUCCESS).send(ResponseMessage.SuccessfullyDeleted);
+                }
             } else {
-                res.status(HTTP_STATUS.BAD_REQUEST).send(ResponseMessage.IdsNotValid);
+                status = HTTP_STATUS.BAD_REQUEST;
+                response = ResponseMessage.IdsNotValid;
             }
+            res.status(status).send(response);
         });
     }
 }
