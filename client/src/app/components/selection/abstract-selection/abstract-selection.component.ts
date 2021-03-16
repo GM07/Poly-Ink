@@ -3,6 +3,7 @@ import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { SelectionEventsService } from '@app/services/selection/selection-events.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-abstract-selection',
@@ -31,10 +32,11 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     private lastCanvasCursor: string;
     private lastDocumentCursor: string;
 
-    private isOverSelection: boolean = false;
-    private isInSidebar: boolean = false;
-    private leftMouseDown: boolean = false;
-    displayControlPoints: boolean = false;
+    private isOverSelection: boolean;
+    private isInSidebar: boolean;
+    private leftMouseDown: boolean;
+    displayControlPoints: boolean;
+    private updateSubscription: Subscription;
 
     constructor(
         protected selectionService: AbstractSelectionService,
@@ -44,8 +46,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     ) {}
 
     ngOnInit(): void {
-        this.selectionService.updatePoints.subscribe((display: boolean) => {
-            console.log(display);
+        this.updateSubscription = this.selectionService.updatePoints.subscribe((display: boolean) => {
             if (display && this.displayControlPoints) {
                 this.placePoints();
             }
@@ -54,6 +55,10 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
 
         this.selectionEvents.onMouseEnterEvent.subscribe(() => (this.isInSidebar = true));
         this.selectionEvents.onMouseLeaveEvent.subscribe(() => (this.isInSidebar = false));
+        this.isOverSelection = false;
+        this.isInSidebar = false;
+        this.leftMouseDown = false;
+        this.displayControlPoints = false;
     }
 
     ngAfterViewInit(): void {
@@ -64,6 +69,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     ngOnDestroy(): void {
         document.body.style.cursor = this.lastDocumentCursor;
         this.drawingService.previewCanvas.style.cursor = this.lastCanvasCursor;
+        this.updateSubscription.unsubscribe();
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -84,8 +90,8 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         if (this.displayControlPoints) {
             this.makeControlsSelectable();
         }
-        this.leftMouseDown = false;
         this.updateControlPointDisplay(this.selectionService.selectionCtx !== null);
+        this.leftMouseDown = false;
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -120,6 +126,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
             this.bottomLeft,
             this.bottomMiddle,
             this.bottomRight,
+            this.border,
         ];
 
         this.placePoints();
