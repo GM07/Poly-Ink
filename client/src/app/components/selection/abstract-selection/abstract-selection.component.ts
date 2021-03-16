@@ -20,6 +20,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     @ViewChild('bottomMiddle', { static: false }) bottomMiddle: ElementRef<HTMLElement>;
     @ViewChild('bottomRight', { static: false }) bottomRight: ElementRef<HTMLElement>;
     @ViewChild('border', { static: false }) border: ElementRef<HTMLElement>;
+    @ViewChild('selectionBackground', { static: false }) selectionBackground: ElementRef<HTMLElement>;
 
     private readonly CONTROL_INNER: number = 8;
     private readonly BORDER: number = 2;
@@ -31,7 +32,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     private lastDocumentCursor: string;
 
     private isOverSelection: boolean = false;
-    private isInDrawing: boolean = true;
+    private isInSidebar: boolean = false;
     private leftMouseDown: boolean = false;
     displayControlPoints: boolean = false;
 
@@ -50,8 +51,8 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
             this.updateControlPointDisplay(display);
         });
 
-        this.selectionEvents.onMouseEnterEvent.subscribe(() => (this.isInDrawing = true));
-        this.selectionEvents.onMouseLeaveEvent.subscribe(() => (this.isInDrawing = false));
+        this.selectionEvents.onMouseEnterEvent.subscribe(() => (this.isInSidebar = true));
+        this.selectionEvents.onMouseLeaveEvent.subscribe(() => (this.isInSidebar = false));
     }
 
     ngAfterViewInit(): void {
@@ -66,7 +67,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
 
     onMouseDown(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
-        if (this.isInDrawing) {
+        if (!this.isInSidebar) {
             if (this.leftMouseDown && this.selectionService.isInSelection(event)) {
                 this.selectionService.onMouseDown(event);
                 this.makeControlsUnselectable();
@@ -89,7 +90,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     onMouseMove(event: MouseEvent): void {
         if (!this.leftMouseDown) {
             this.isOverSelection = this.selectionService.isInSelection(event);
-            if (this.isOverSelection && this.isInDrawing) {
+            if (this.isOverSelection && !this.isInSidebar) {
                 this.drawingService.previewCanvas.style.cursor = 'all-scroll';
                 document.body.style.cursor = 'all-scroll';
             } else {
@@ -118,7 +119,6 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
             this.bottomLeft,
             this.bottomMiddle,
             this.bottomRight,
-            this.border,
         ];
 
         this.placePoints();
@@ -140,7 +140,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         this.placeControlPoint(this.bottomLeft, 0 - this.CONTROL_INNER, height + this.BORDER);
         this.placeControlPoint(this.bottomMiddle, width / 2 - this.MIDDLE_OFFSET, height + this.BORDER);
         this.placeControlPoint(this.bottomRight, width + this.BORDER, height + this.BORDER);
-        this.placeBorder(this.border, width + this.BORDER, height + this.BORDER);
+        this.placeSelectionBorder(width + this.BORDER, height + this.BORDER);
     }
 
     private placeControlPoint(element: ElementRef<HTMLElement>, offsetX: number, offsetY: number): void {
@@ -150,13 +150,18 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         element.nativeElement.style.top = String(y + offsetY) + 'px';
     }
 
-    private placeBorder(element: ElementRef<HTMLElement>, sizeX: number, sizeY: number): void {
+    private placeSelectionBorder(sizeX: number, sizeY: number): void {
         const x = this.selectionService.selectionCoords.x;
         const y = this.selectionService.selectionCoords.y;
-        element.nativeElement.style.left = String(x) + 'px';
-        element.nativeElement.style.top = String(y) + 'px';
-        element.nativeElement.style.width = sizeX + 'px';
-        element.nativeElement.style.height = sizeY + 'px';
+        this.border.nativeElement.style.left = String(x) + 'px';
+        this.border.nativeElement.style.top = String(y) + 'px';
+        this.border.nativeElement.style.width = sizeX + 'px';
+        this.border.nativeElement.style.height = sizeY + 'px';
+
+        this.selectionBackground.nativeElement.style.left = String(x) + 'px';
+        this.selectionBackground.nativeElement.style.top = String(y) + 'px';
+        this.selectionBackground.nativeElement.style.width = sizeX + this.BORDER + 'px';
+        this.selectionBackground.nativeElement.style.height = sizeY + this.BORDER + 'px';
     }
 
     private makeControlsUnselectable(): void {

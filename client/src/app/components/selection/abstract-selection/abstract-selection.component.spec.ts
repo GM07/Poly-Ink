@@ -45,11 +45,11 @@ describe('AbstractSelectionComponent', () => {
     });
 
     it('should subscribe on init', () => {
-        component['isInDrawing'] = false;
+        component['isInSidebar'] = false;
         selectionEventsService.onMouseEnterEvent.next();
-        expect(component['isInDrawing']).toBeTruthy();
+        expect(component['isInSidebar']).toBeTruthy();
         selectionEventsService.onMouseLeaveEvent.next();
-        expect(component['isInDrawing']).toBeFalsy();
+        expect(component['isInSidebar']).toBeFalsy();
     });
 
     it('it should disable control if in selection on mouse down', () => {
@@ -75,7 +75,7 @@ describe('AbstractSelectionComponent', () => {
 
     it('should stop drawing if the user clicked outside of the drawing container', () => {
         spyOn(abstractSelectionService, 'stopDrawing');
-        component['isInDrawing'] = false;
+        component['isInSidebar'] = false;
         component['selectionService'].selectionCtx = null;
         component.onMouseDown(mouseEvent);
         expect(abstractSelectionService.stopDrawing).not.toHaveBeenCalled();
@@ -100,14 +100,14 @@ describe('AbstractSelectionComponent', () => {
 
     it('should update the cursor when hovering the selection', () => {
         spyOn(abstractSelectionService, 'isInSelection').and.returnValue(true);
-        component['isInDrawing'] = true;
+        component['isInSidebar'] = true;
         component.onMouseMove(mouseEvent);
         expect(drawService.previewCanvas.style.cursor).toEqual('all-scroll');
     });
 
     it('should reset the cursor when not hovering the selection', () => {
         spyOn(abstractSelectionService, 'isInSelection').and.returnValue(false);
-        component['isInDrawing'] = false;
+        component['isInSidebar'] = false;
         component['lastCanvasCursor'] = 'pointer';
         component.onMouseMove(mouseEvent);
         expect(drawService.previewCanvas.style.cursor).toEqual('pointer');
