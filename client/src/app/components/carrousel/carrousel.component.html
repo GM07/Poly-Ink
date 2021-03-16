@@ -9,7 +9,9 @@
                 class="white"
                 style="text-align: center"
                 [innerHTML]="
-                    'Le canvas actuel n\'est pas vide. Voulez-vous abandonner vos changements et charger ' + drawingsList[currentIndex].data.name + ' ?'
+                    'Le canvas actuel n\'est pas vide. Voulez-vous abandonner vos changements et charger ' +
+                    drawingsList[currentIndex].data.name +
+                    ' ?'
                 "
             ></h1>
             <div class="options">
@@ -39,71 +41,71 @@
                             (@translationState.done)="translationDone()"
                         >
                             <div class="drawingContents">
-                                <p class="name">{{ overflowLeftElement.name }}</p>
+                                <p class="name">{{ overflowLeftElement.data.name }}</p>
                                 <div class="squareImage">
-                                    <img #overflowLeftPreview />
+                                    <img #overflowLeftPreview alt />
                                 </div>
                                 <p class="white">Étiquettes</p>
                                 <div class="chipList">
                                     <mat-chip-list>
-                                        <mat-chip *ngFor="let tag of overflowLeftElement.tags">
-                                            {{ tag }}
+                                        <mat-chip *ngFor="let tag of overflowLeftElement.data.tags">
+                                            {{ tag.name }}
                                         </mat-chip>
                                     </mat-chip-list>
                                 </div>
                             </div>
                             <div class="drawingContents">
-                                <p class="name">{{ leftElement.name }}</p>
+                                <p class="name">{{ leftElement.data.name }}</p>
                                 <div class="squareImage">
-                                    <img #leftPreview (click)="loadDrawing(-1)" />
+                                    <img #leftPreview (click)="loadDrawing(-1)" alt />
                                 </div>
                                 <p class="white">Étiquettes</p>
                                 <div class="chipList">
                                     <mat-chip-list>
-                                        <mat-chip *ngFor="let tag of leftElement.tags">
-                                            {{ tag }}
+                                        <mat-chip *ngFor="let tag of leftElement.data.tags">
+                                            {{ tag.name }}
                                         </mat-chip>
                                     </mat-chip-list>
                                 </div>
                             </div>
                             <div class="drawingContents">
-                                <p class="name">{{ middleElement.name }}</p>
+                                <p class="name">{{ middleElement.data.name }}</p>
                                 <div class="squareImage">
-                                    <img #middlePreview (click)="loadDrawing(0)" />
+                                    <img #middlePreview (click)="loadDrawing(0)" alt />
                                 </div>
                                 <p class="white">Étiquettes</p>
                                 <div class="chipList">
                                     <mat-chip-list class="chipList">
-                                        <mat-chip *ngFor="let tag of middleElement.tags">
-                                            {{ tag }}
+                                        <mat-chip *ngFor="let tag of middleElement.data.tags">
+                                            {{ tag.name }}
                                         </mat-chip>
                                     </mat-chip-list>
                                 </div>
                             </div>
                             <div class="drawingContents">
-                                <p class="name">{{ rightElement.name }}</p>
+                                <p class="name">{{ rightElement.data.name }}</p>
                                 <div class="squareImage">
-                                    <img #rightPreview (click)="loadDrawing(1)" />
+                                    <img #rightPreview (click)="loadDrawing(1)" alt />
                                 </div>
                                 <p class="white">Étiquettes</p>
                                 <div class="chipList">
                                     <mat-chip-list>
-                                        <mat-chip *ngFor="let tag of rightElement.tags">
-                                            {{ tag }}
+                                        <mat-chip *ngFor="let tag of rightElement.data.tags">
+                                            {{ tag.name }}
                                         </mat-chip>
                                     </mat-chip-list>
                                 </div>
                             </div>
                             <div class="drawingContents">
-                                <p class="name">{{ overflowRightElement.name }}</p>
+                                <p class="name">{{ overflowRightElement.data.name }}</p>
                                 <div class="squareImage">
-                                    <img #overflowRightPreview />
+                                    <img #overflowRightPreview alt />
                                 </div>
                                 <p class="white">Étiquettes</p>
                                 <div class="chipList">
                                     <mat-chip-list>
-                                        <mat-chip *ngFor="let tag of overflowRightElement.tags">
-                                            {{ tag }}
+                                        <mat-chip *ngFor="let tag of overflowRightElement.data.tags">
+                                            {{ tag.name }}
                                         </mat-chip>
                                     </mat-chip-list>
                                 </div>
@@ -145,7 +147,6 @@
         <mat-spinner [diameter]="44"></mat-spinner>
     </div>
 </ng-template>
-
 
 <ng-template #optionsBlock>
     <div class="options">

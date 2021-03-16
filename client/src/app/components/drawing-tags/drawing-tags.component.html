@@ -1,23 +1,22 @@
 <!--Filtrage par étiquette-->
 <mat-form-field class="tag-list">
-  <mat-label style="font-size:larger">Filtrage par étiquettes</mat-label>
-  <mat-chip-list #chipList aria-label="Filtrage par étiquettes">
-    <mat-chip *ngFor="let tag of filterTags" [selectable]="selectable"
-    [removable]="removable" (removed)="remove(tag)">
-    {{tag.name}}
-    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-  </mat-chip>
-  <input placeholder="Étiquettes..."
-  [matChipInputFor]="chipList"
-  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-  [matChipInputAddOnBlur]="addOnBlur"
-  (matChipInputTokenEnd)="addFilter($event)"
-  style="-webkit-text-fill-color: white">
-</mat-chip-list>
+    <mat-label style="font-size: larger">Filtrage par étiquettes</mat-label>
+    <mat-chip-list #chipList aria-label="Filtrage par étiquettes">
+        <mat-chip *ngFor="let tag of filterTags" [selectable]="selectable" [removable]="removable" (removed)="remove(tag)">
+            {{ tag.name }}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input
+            placeholder="Étiquettes..."
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="addFilter($event)"
+            style="-webkit-text-fill-color: white"
+        />
+    </mat-chip-list>
 </mat-form-field>
-<div *ngIf="noMatchingTags" style="color:white; margin: auto;">
-  Aucun dessin ne possède cet étiquette.
-</div>
+<div *ngIf="noMatchingTags" style="color: white; margin: auto">Aucun dessin ne possède cet étiquette.</div>
 
 <!--Affichage des étiquettes des dessins-->
 <!--
