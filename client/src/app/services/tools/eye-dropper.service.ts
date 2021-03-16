@@ -128,7 +128,8 @@ export class EyeDropperService extends Tool {
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
         canvas.width = size;
         canvas.height = size;
-        const radius = Math.floor(size / 2);
+        const radius = size / 2;
+        ctx.imageSmoothingEnabled = false;
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(
