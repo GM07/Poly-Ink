@@ -16,13 +16,16 @@ export class EyeDropperConfigComponent extends ToolConfig implements AfterViewIn
 
     constructor(public eyeDropperService: EyeDropperService) {
         super();
+        this.hexColor = '';
     }
 
     ngAfterViewInit(): void {
         this.eyeDropperService.updatePrevisualisation.subscribe((color: string) => {
-            const ctx = this.previewEyeDropper.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-            ctx.drawImage(this.eyeDropperService.previsualisationCanvas, 0, 0);
             this.hexColor = color;
+            if (this.hexColor.length > 0 && this.previewEyeDropper !== undefined) {
+                const ctx = this.previewEyeDropper.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+                ctx.drawImage(this.eyeDropperService.previsualisationCanvas, 0, 0);
+            }
         });
     }
 }
