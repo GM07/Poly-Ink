@@ -90,7 +90,6 @@ export abstract class AbstractSelectionService extends Tool {
             if (this.selectionCtx !== null) {
                 this.updateSelection(this.getTranslation(this.mouseUpCoord));
                 document.body.style.width = event.pageX + this.width + 'px';
-                console.log(event.pageY + this.height);
                 document.body.style.height = event.pageY + this.height + 'px';
             } else {
                 const ctx = this.drawingService.previewCtx;
