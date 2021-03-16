@@ -73,7 +73,6 @@ export class PencilService extends Tool {
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawLine(this.drawingService.previewCtx, this.pathData);
         } else if (this.isInCanvas(event) && !this.colorService.isMenuOpen) {
-            this.mouseDownCoord = this.getPositionFromMouse(event);
             this.drawBackgroundPoint(this.getPositionFromMouse(event));
         }
     }
