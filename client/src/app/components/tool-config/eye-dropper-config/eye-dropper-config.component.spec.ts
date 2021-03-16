@@ -6,7 +6,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { EyeDropperService } from '@app/services/tools/eye-dropper.service';
 import { EyeDropperConfigComponent } from './eye-dropper-config.component';
 
-describe('PipetteConfigComponent', () => {
+describe('EyeDropperConfigComponent', () => {
     let component: EyeDropperConfigComponent;
     let fixture: ComponentFixture<EyeDropperConfigComponent>;
 
@@ -27,9 +27,19 @@ describe('PipetteConfigComponent', () => {
     });
 
     // tslint:disable:no-any
-    it('it should draw on the canvas when the previsualisation sends an update notification', () => {
+    it('should draw on the canvas when the previsualisation sends an update notification', () => {
+        component.hexColor = 'FFFFFF';
+        fixture.detectChanges();
         const getContextSpy = spyOn<any>(component.previewEyeDropper.nativeElement, 'getContext').and.callThrough();
-        component.eyeDropperService.updatePrevisualisation.next();
+        component.eyeDropperService.updatePrevisualisation.next('ABABAB');
         expect(getContextSpy).toHaveBeenCalled();
+    });
+
+    it('should do nothing if outside of the canvas', () => {
+        component.hexColor = 'FFFFFF';
+        fixture.detectChanges();
+        const getContextSpy = spyOn<any>(component.previewEyeDropper.nativeElement, 'getContext').and.callThrough();
+        component.eyeDropperService.updatePrevisualisation.next('');
+        expect(getContextSpy).not.toHaveBeenCalled();
     });
 });

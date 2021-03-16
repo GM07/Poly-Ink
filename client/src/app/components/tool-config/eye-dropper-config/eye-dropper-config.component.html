@@ -1,4 +1,5 @@
 <div class="tab">
+    <div *ngIf="hexColor.length > 0" class="attributs">
     <h5 class="textFormat">Prévisualisation</h5>
     <div class="textFormatForSlider">
         <canvas [attr.width]="CANVAS_SIZE" [attr.height]="CANVAS_SIZE" #previewPipette> </canvas>
@@ -8,4 +9,5 @@
     <div class="textFormatForSlider">
       <h3>{{hexColor}}</h3>
     </div>
+  </div>
 </div>
