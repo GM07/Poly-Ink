@@ -23,8 +23,6 @@ describe('Drawing service', () => {
 
     beforeEach(async () => {
         databaseService = new DatabaseServiceMock();
-        // TODO : Change to test
-        databaseService = new DatabaseServiceMock();
         drawingService = new DrawingService(databaseService);
         await databaseService.start();
 
