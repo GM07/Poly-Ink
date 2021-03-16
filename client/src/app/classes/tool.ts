@@ -42,6 +42,6 @@ export abstract class Tool {
 
     getPositionFromMouse(event: MouseEvent): Vec2 {
         const clientRect = this.drawingService.canvas.getBoundingClientRect();
-        return { x: event.pageX - clientRect.x, y: event.pageY - clientRect.y };
+        return { x: event.clientX - clientRect.x, y: event.clientY - clientRect.y };
     }
 }
