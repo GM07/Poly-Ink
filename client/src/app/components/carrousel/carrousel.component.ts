@@ -2,9 +2,12 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { CarrouselService } from '@app/services/carrousel/carrousel.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { NewDrawingService } from '@app/services/popups/new-drawing';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
+import { Drawing } from '@common/communication/drawing';
+import { DrawingData } from '@common/communication/drawing-data';
 
 export interface DrawingContent {
     drawingID: string;
@@ -55,11 +58,18 @@ export class CarrouselComponent implements OnInit {
     readonly CARROUSEL_URL: string = 'carrousel';
     readonly CANVAS_PREVIEW_SIZE: number = 200;
 
+    readonly overflowLeftElement: DrawingData = {} as DrawingData;
+    readonly leftElement: DrawingData = {} as DrawingData;
+    readonly middleElement: DrawingData = {} as DrawingData;
+    readonly rightElement: DrawingData = {} as DrawingData;
+    readonly overflowRightElement: DrawingData = {} as DrawingData;
+    /*
     readonly overflowLeftElement: DrawingContent = {} as DrawingContent;
     readonly leftElement: DrawingContent = {} as DrawingContent;
     readonly middleElement: DrawingContent = {} as DrawingContent;
     readonly rightElement: DrawingContent = {} as DrawingContent;
     readonly overflowRightElement: DrawingContent = {} as DrawingContent;
+    */
 
     currentURL: string;
     deletionErrorMessage: string;
@@ -69,7 +79,8 @@ export class CarrouselComponent implements OnInit {
     showLoadingWarning: boolean;
     isLoadingCarrousel: boolean;
     translationState: string | null;
-    drawingsList: DrawingContent[];
+    //drawingsList: DrawingContent[];
+    drawingsList: Drawing[];
     currentIndex: number;
 
     animationIsDone: boolean;
@@ -77,6 +88,7 @@ export class CarrouselComponent implements OnInit {
     constructor(
         private shortcutHandler: ShortcutHandlerService,
         private drawingService: DrawingService,
+        private carrouselService: CarrouselService,
         private router: Router,
         private cd: ChangeDetectorRef,
         activatedRoute: ActivatedRoute,
@@ -142,7 +154,7 @@ export class CarrouselComponent implements OnInit {
     deleteDrawing(): void {
         if (!this.animationIsDone || this.drawingsList.length === 0) return;
 
-        const currentDrawingName = this.drawingsList[this.currentIndex].name;
+        const currentDrawingName = this.drawingsList[this.currentIndex].data.name;
         this.drawingsList.splice(this.currentIndex, 1);
         if (this.currentIndex === this.drawingsList.length && this.drawingsList.length !== 0) --this.currentIndex;
         this.updateDrawingContent();
@@ -153,6 +165,15 @@ export class CarrouselComponent implements OnInit {
         if (deletionError) this.deletionErrorMessage = 'Erreur lors de la suppression du dessin ' + currentDrawingName;
 
         // TODO: Supprimer un dessin
+        /*
+    this.carrouselService.deleteDrawing(this.drawing)
+    .subscribe(() => {
+      console.log("deleted!");
+      const indexDrawing = this.drawings.indexOf(this.drawing);
+      if (indexDrawing > -1) {
+        this.drawings.splice(indexDrawing, 1);
+      }
+    })*/
     }
 
     loadDrawing(indexOffset: number): void {
@@ -222,18 +243,18 @@ export class CarrouselComponent implements OnInit {
         this.updateSingleDrawingContent(this.overflowRightPreview, 2, this.overflowRightElement);
     }
 
-    private updateSingleDrawingContent(imageRef: ElementRef<HTMLImageElement>, indexOffset: number, drawingContent: DrawingContent): void {
+    private updateSingleDrawingContent(imageRef: ElementRef<HTMLImageElement>, indexOffset: number, drawingContent: DrawingData): void {
         const index = (this.currentIndex + indexOffset + 2 * this.drawingsList.length) % this.drawingsList.length;
         const drawingData = this.getDrawingFromServer(index);
 
         if (this.drawingsList.length === 0) {
-            drawingContent.drawingID = '';
+            drawingContent._id = '';
             drawingContent.name = '';
             drawingContent.tags = [];
         } else {
-            drawingContent.drawingID = this.drawingsList[index].drawingID;
-            drawingContent.name = this.drawingsList[index].name;
-            drawingContent.tags = this.drawingsList[index].tags;
+            drawingContent._id = this.drawingsList[index].data._id;
+            drawingContent.name = this.drawingsList[index].data.name;
+            drawingContent.tags = this.drawingsList[index].data.tags;
         }
 
         imageRef.nativeElement.src = drawingData === undefined ? '' : drawingData;
@@ -257,9 +278,20 @@ export class CarrouselComponent implements OnInit {
 
     private getDrawingFromServer(index: number): string | undefined {
         if (this.drawingsList.length === 0) return undefined;
-        return this.idAndBase64Drawing.get(this.drawingsList[index].drawingID);
+        return this.idAndBase64Drawing.get(this.drawingsList[index].data._id);
     }
 
+    public loadFilteredCarrousel(filteredDrawings: Drawing[]): void {
+        this.isLoadingCarrousel = true;
+        this.cd.detectChanges(); // Must detect changes before loading
+
+        this.drawingsList = filteredDrawings;
+
+        this.isLoadingCarrousel = false;
+        this.cd.detectChanges(); // Must detect changes when finished loading
+        this.updateDrawingContent(); // ****Fait que mes tags sont enleves
+    }
+    
     // TODO: This is for testing purposes only
     private idAndBase64Drawing = new Map<string, string>();
 
@@ -326,6 +358,17 @@ export class CarrouselComponent implements OnInit {
         this.idAndBase64Drawing.set('c4id', c4.toDataURL());
         this.idAndBase64Drawing.set('c5id', c5.toDataURL());
 
+        this.carrouselService.getAllDrawings()
+            .subscribe((drawings: Drawing[]) => {
+                this.drawingsList = drawings;
+                this.isLoadingCarrousel = false;
+                this.cd.detectChanges(); // Must detect changes when finished loading
+                this.updateDrawingContent();
+            });
+    }
+}
+
+        /*
         this.drawingsList = [
             {
                 drawingID: 'c1id',
@@ -550,10 +593,4 @@ export class CarrouselComponent implements OnInit {
                 name: 'c5',
                 tags: ['tagc5'],
             } as DrawingContent,
-        ];
-
-        this.isLoadingCarrousel = false;
-        this.cd.detectChanges(); // Must detect changes when finished loading
-        this.updateDrawingContent();
-    }
-}
+        ];*/

@@ -9,7 +9,7 @@
                 class="white"
                 style="text-align: center"
                 [innerHTML]="
-                    'Le canvas actuel n\'est pas vide. Voulez-vous abandonner vos changements et charger ' + drawingsList[currentIndex].name + ' ?'
+                    'Le canvas actuel n\'est pas vide. Voulez-vous abandonner vos changements et charger ' + drawingsList[currentIndex].data.name + ' ?'
                 "
             ></h1>
             <div class="options">
@@ -114,11 +114,11 @@
                         <mat-icon class="white">keyboard_arrow_right</mat-icon>
                     </button>
                 </div>
-
+                <app-drawing-tags (filteredDrawings)="loadFilteredCarrousel($event)"></app-drawing-tags>
                 <div *ngIf="showLoadingError" style="text-align: center">
                     <h3
                         class="white"
-                        [innerHTML]="'Le dessin ' + drawingsList[currentIndex].name + ' ne peut pas être chargé. Veuillez en choisir un autre'"
+                        [innerHTML]="'Le dessin ' + drawingsList[currentIndex].data.name + ' ne peut pas être chargé. Veuillez en choisir un autre'"
                     ></h3>
                 </div>
 
@@ -145,6 +145,7 @@
         <mat-spinner [diameter]="44"></mat-spinner>
     </div>
 </ng-template>
+
 
 <ng-template #optionsBlock>
     <div class="options">

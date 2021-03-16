@@ -1,5 +1,5 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { CarrouselService } from '@app/services/carrousel/carrousel.service';
 import { Drawing } from '@common/communication/drawing';
@@ -32,6 +32,8 @@ export class DrawingTagsComponent implements OnInit {
   filterTags: Tag[] = [];
   noMatchingTags: boolean;
 
+  @Output() filteredDrawings = new EventEmitter<Drawing[]>();
+
   getAllDrawings(): void {
     this.carrouselService.getAllDrawings()
       .subscribe((drawings: Drawing[]) => {
@@ -46,6 +48,7 @@ export class DrawingTagsComponent implements OnInit {
       .subscribe((drawings: Drawing[]) => {
         this.drawings = drawings;
         drawings.length ? this.noMatchingTags = false : this.noMatchingTags = true;
+        this.filteredDrawings.emit(this.drawings);
       });
   }
 
@@ -71,13 +74,3 @@ export class DrawingTagsComponent implements OnInit {
     }
   }
 }
-
-/*
-    this.carrouselService.deleteDrawing(this.drawing)
-    .subscribe(() => {
-      console.log("deleted!");
-      const indexDrawing = this.drawings.indexOf(this.drawing);
-      if (indexDrawing > -1) {
-        this.drawings.splice(indexDrawing, 1);
-      }
-    })*/
