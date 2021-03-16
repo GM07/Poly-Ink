@@ -37,6 +37,7 @@ export class DrawingComponent implements AfterViewInit {
         document.body.style.overflow = 'auto';
 
         this.newDrawingService.newCanvas();
+        this.drawingService.loadDrawing();
     }
 
     @HostListener('document:mousemove', ['$event'])

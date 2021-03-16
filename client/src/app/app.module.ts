@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -20,6 +21,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { NewDrawingComponent } from './components/canvas-reset/canvas-reset.component';
 import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.component';
+import { CarrouselComponent } from './components/carrousel/carrousel.component';
 import { DrawingTagsComponent } from './components/drawing-tags/drawing-tags.component';
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
@@ -70,6 +72,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         SelectionHandlerComponent,
         AerosolConfigComponent,
         DrawingTagsComponent,
+        CarrouselComponent,
     ],
     imports: [
         AppRoutingModule,
@@ -86,12 +89,14 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         MatInputModule,
         MatExpansionModule,
         ColorPickerModule,
+        MatChipsModule,
         MatDividerModule,
         MatSliderModule,
         MatIconModule,
         FormsModule,
         MatChipsModule,
         MatFormFieldModule,
+        MatProgressSpinnerModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
