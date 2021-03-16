@@ -6,7 +6,7 @@ import { Tag } from '../../../common/communication/tag';
 import { Stubbed, testingContainer } from '../../test/test-utils';
 import { Application } from '../app';
 import { BASE64_IMG } from '../classes/drawings.const';
-import { HTTP_STATUS } from '../classes/http-codes';
+import { HttpStatus } from '../classes/http-codes';
 import { ResponseMessage } from '../classes/response-message';
 import { DrawingService } from '../services/drawing.service';
 import { TYPES } from '../types';
@@ -74,7 +74,7 @@ describe('DrawingController', () => {
     it('should return all the drawings on valid request', () => {
         return supertest(app)
             .get('/drawings/')
-            .expect(HTTP_STATUS.SUCCESS)
+            .expect(HttpStatus.SUCCESS)
             .then((response: any) => {
                 expect(response.body).to.deep.equal(baseDrawings);
             });
@@ -83,7 +83,7 @@ describe('DrawingController', () => {
     it('should return all the drawings with tag1 on valid request', () => {
         return supertest(app)
             .get('/drawings?tags=tag1')
-            .expect(HTTP_STATUS.SUCCESS)
+            .expect(HttpStatus.SUCCESS)
             .then((response: any) => {
                 expect(response.body).to.deep.equal([baseDrawings[0]]);
             });
@@ -91,24 +91,24 @@ describe('DrawingController', () => {
 
     it('should return bad request if the body is not valid', () => {
         const badBody = ({ title: 'test' } as unknown) as Drawing;
-        return supertest(app).post('/drawings/').set('content-type', 'application/json').send(badBody).expect(HTTP_STATUS.BAD_REQUEST);
+        return supertest(app).post('/drawings/').set('content-type', 'application/json').send(badBody).expect(HttpStatus.BAD_REQUEST);
     });
 
     it('should return bad request if the name is not valid', () => {
         drawingService.validateTags.returns(false);
-        return supertest(app).post('/drawings/').set('content-type', 'application/json').send(baseDrawings[0]).expect(HTTP_STATUS.BAD_REQUEST);
+        return supertest(app).post('/drawings/').set('content-type', 'application/json').send(baseDrawings[0]).expect(HttpStatus.BAD_REQUEST);
     });
 
     it('should return bad request if the name is not valid', () => {
         drawingService.validateName.returns(false);
-        return supertest(app).post('/drawings/').set('content-type', 'application/json').send(baseDrawings[0]).expect(HTTP_STATUS.BAD_REQUEST);
+        return supertest(app).post('/drawings/').set('content-type', 'application/json').send(baseDrawings[0]).expect(HttpStatus.BAD_REQUEST);
     });
 
     it('should not return drawings if they were not found on the server', () => {
         drawingService.getLocalDrawing.throws(new Error());
         return supertest(app)
             .get('/drawings/')
-            .expect(HTTP_STATUS.SUCCESS)
+            .expect(HttpStatus.SUCCESS)
             .then((response: any) => {
                 expect(response.body).to.be.empty;
             });
@@ -119,7 +119,7 @@ describe('DrawingController', () => {
             .post('/drawings/')
             .set('content-type', 'application/json')
             .send(baseDrawings[0])
-            .expect(HTTP_STATUS.CREATED)
+            .expect(HttpStatus.CREATED)
             .then((response: any) => {
                 expect(response.body).to.deep.equal(ResponseMessage.SuccessfullyCreated);
             });
@@ -131,7 +131,7 @@ describe('DrawingController', () => {
             .post('/drawings/')
             .set('content-type', 'application/json')
             .send(baseDrawings[0])
-            .expect(HTTP_STATUS.SERVICE_UNAVAILABLE)
+            .expect(HttpStatus.SERVICE_UNAVAILABLE)
             .then((response: any) => {
                 expect(response.body).to.deep.equal(ResponseMessage.CouldNotWriteOnDatabase);
             });
@@ -140,7 +140,7 @@ describe('DrawingController', () => {
     it('should return bad request function without ids', () => {
         return supertest(app)
             .delete('/drawings')
-            .expect(HTTP_STATUS.BAD_REQUEST)
+            .expect(HttpStatus.BAD_REQUEST)
             .then((response: any) => {
                 expect(drawingService.deleteDrawingDataFromId.called).to.be.false;
                 expect(response.body).to.deep.equal(ResponseMessage.IdsNotValid);
@@ -150,7 +150,7 @@ describe('DrawingController', () => {
     it('should call the delete function with ids on valid request', () => {
         return supertest(app)
             .delete('/drawings?ids=id1')
-            .expect(HTTP_STATUS.SUCCESS)
+            .expect(HttpStatus.SUCCESS)
             .then((response: any) => {
                 expect(drawingService.deleteDrawingDataFromId.called).to.be.true;
                 expect(response.body).to.deep.equal(ResponseMessage.SuccessfullyDeleted);
@@ -161,7 +161,7 @@ describe('DrawingController', () => {
         drawingService.deleteDrawingDataFromId.throws('Test');
         return supertest(app)
             .delete('/drawings?ids=1')
-            .expect(HTTP_STATUS.NOT_FOUND)
+            .expect(HttpStatus.NOT_FOUND)
             .then((response: any) => {
                 expect(response.body).to.deep.equal(ResponseMessage.CouldNotDeleteOnDatabase);
             });
@@ -171,7 +171,7 @@ describe('DrawingController', () => {
         drawingService.deleteLocalDrawing.throws('Error');
         return supertest(app)
             .delete('/drawings?ids=id1')
-            .expect(HTTP_STATUS.NOT_FOUND)
+            .expect(HttpStatus.NOT_FOUND)
             .then((response: any) => {
                 expect(response.body).to.deep.equal(ResponseMessage.CouldNotDeleteOnServer);
             });

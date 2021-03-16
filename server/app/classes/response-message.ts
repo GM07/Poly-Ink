@@ -1,5 +1,5 @@
 export class ResponseMessage {
-    public message: string;
+    message: string;
 
     constructor(message: string) {
         this.message = message;

@@ -8,7 +8,11 @@ import * as fs from 'fs';
 import { inject, injectable } from 'inversify';
 import { Collection, FindAndModifyWriteOpResultObject } from 'mongodb';
 
-const ObjectId = require('mongodb').ObjectID;
+/* tslint:disable:no-var-requires */
+/* tslint:disable:no-require-imports */
+const objectId = require('mongodb').ObjectID;
+/* tslint:enable:no-var-requires */
+/* tslint:enable:no-require-imports */
 
 @injectable()
 export class DrawingService {
@@ -120,13 +124,8 @@ export class DrawingService {
         try {
             return (await this.collection.insertOne(drawing)).insertedId;
         } catch (e) {
-            throw new DataNotCreated(drawing.toString());
+            throw new DataNotCreated(drawing._id);
         }
-    }
-
-    async createNewDrawingDataFromName(name: string): Promise<string> {
-        const drawing = new DrawingData(name);
-        return await this.createNewDrawingData(drawing);
     }
 
     /**
@@ -134,7 +133,7 @@ export class DrawingService {
      */
     async deleteDrawingDataFromId(id: string, convertToObjectId: boolean = true): Promise<void> {
         await this.collection
-            .findOneAndDelete({ _id: convertToObjectId ? ObjectId(id) : id })
+            .findOneAndDelete({ _id: convertToObjectId ? objectId(id) : id })
             .then((result: FindAndModifyWriteOpResultObject<DrawingData>) => {
                 if (!result.value) {
                     throw new DataNotDeleted(id);

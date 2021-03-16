@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import * as fs from 'fs';
 import { describe } from 'mocha';
 import 'reflect-metadata';
-import { stub } from 'sinon';
 import { Drawing } from '../../../common/communication/drawing';
 import { DrawingData } from '../../../common/communication/drawing-data';
 import { Tag } from '../../../common/communication/tag';
@@ -80,12 +79,6 @@ describe('Drawing service', () => {
         expect(drawings.length).to.eq(2);
     });
 
-    it('should create new drawing from name', async () => {
-        await drawingService.createNewDrawingDataFromName('bob');
-        const drawings = await getAllDrawings(drawingService);
-        expect(drawings.length).to.eq(3);
-    });
-
     it('should delete drawing with id', async () => {
         await drawingService.deleteDrawingDataFromId('12345678901q', false);
         const drawings = await getAllDrawings(drawingService);
@@ -126,32 +119,15 @@ describe('Drawing service', () => {
         expect(drawingService.validateTags(tags)).to.eq(false);
     });
 
-    it("should throw error when drawing from name can't be created", async () => {
-        stub(databaseService.db.collection(DrawingService['COLLECTION']), 'insertOne').throws('Error');
-
+    it("should throw error when drawing can't be created", async () => {
         try {
-            await drawingService.createNewDrawingDataFromName('test');
+            await drawingService.createNewDrawingData(new DrawingData('test2', [], '1'));
         } catch (e) {
-            console.log(e);
-            expect(e).to.eq('DataNotCreated: test');
+            expect(e.toString()).to.deep.eq('DataNotCreated: 1');
             return;
         }
 
-        //expect(true).to.eq(false);
-    });
-
-    it.only("should throw error when drawing can't be created", async () => {
-        stub(databaseService.db.collection(DrawingService['COLLECTION']), 'insertOne').throws('Error');
-
-        try {
-            await drawingService.createNewDrawingData(new DrawingData('test2', []));
-        } catch (e) {
-            console.log('teaaaa', e);
-            expect(e).to.eq('DataNotCreated: test2');
-            return;
-        }
-
-        //expect(true).to.eq(false);
+        expect(true).to.eq(false);
     });
 
     it('should store drawing and create directory if it does not exist', async () => {
