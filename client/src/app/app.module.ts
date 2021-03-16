@@ -32,6 +32,7 @@ import { AerosolConfigComponent } from './components/tool-config/aerosol-config/
 import { EllipseConfigComponent } from './components/tool-config/ellipse-config/ellipse-config.component';
 import { EllipseSelectionConfigComponent } from './components/tool-config/ellipse-selection-config/ellipse-selection-config.component';
 import { EraserConfigComponent } from './components/tool-config/eraser-config/eraser-config.component';
+import { EyeDropperConfigComponent } from './components/tool-config/eye-dropper-config/eye-dropper-config.component';
 import { LineConfigComponent } from './components/tool-config/line-config/line-config.component';
 import { PencilConfigComponent } from './components/tool-config/pencil-config/pencil-config.component';
 import { PolygoneConfigComponent } from './components/tool-config/polygone-config/polygone-config.component';
@@ -53,6 +54,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         EraserConfigComponent,
         LineConfigComponent,
         PencilConfigComponent,
+        EyeDropperConfigComponent,
         SettingsHandlerComponent,
         CanvasResizeComponent,
         SidebarComponent,

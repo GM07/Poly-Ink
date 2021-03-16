@@ -11,6 +11,7 @@ import { AerosolService } from '@app/services/tools/aerosol.service';
 import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.service';
 import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
+import { EyeDropperService } from '@app/services/tools/eye-dropper.service';
 import { LineService } from '@app/services/tools/line.service';
 import { PencilService } from '@app/services/tools/pencil.service';
 import { PolygoneService } from '@app/services/tools/polygone.service';
@@ -33,6 +34,7 @@ class MockToolHandler extends ToolHandlerService {
         ellipseSelectionService: EllipseSelectionService,
         rectangleSelectionService: RectangleSelectionService,
         polygoneService: PolygoneService,
+        eyeDropperService: EyeDropperService,
     ) {
         super(
             pencilService,
@@ -44,6 +46,7 @@ class MockToolHandler extends ToolHandlerService {
             ellipseSelectionService,
             eraserService,
             polygoneService,
+            eyeDropperService,
         );
         this.TOOLS_MOCK.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
@@ -52,6 +55,7 @@ class MockToolHandler extends ToolHandlerService {
         this.TOOLS_MOCK.set(ToolsConstants.PolygoneToolConstants.TOOL_ID, polygoneService);
         this.TOOLS_MOCK.set(ToolsConstants.AerosolToolConstants.TOOL_ID, aerosolService);
         this.TOOLS_MOCK.set(ToolsConstants.RectangleSelectionToolConstants.TOOL_ID, rectangleSelectionService);
+        this.TOOLS_MOCK.set(ToolsConstants.EyeDropperToolConstants.TOOL_ID, eyeDropperService);
         this.currentToolStub = this.TOOLS_MOCK.values().next().value;
     }
 
@@ -86,6 +90,7 @@ describe('SettingsHandlerComponent', () => {
     let polygoneService: PolygoneService;
     let ellipseSelectionService: EllipseSelectionService;
     let rectangleSelectionService: RectangleSelectionService;
+    let eyeDropperService: EyeDropperService;
     let toolHandlerService: MockToolHandler;
 
     beforeEach(() => {
@@ -102,6 +107,7 @@ describe('SettingsHandlerComponent', () => {
         polygoneService = TestBed.inject(PolygoneService);
         ellipseSelectionService = TestBed.inject(EllipseSelectionService);
         rectangleSelectionService = TestBed.inject(RectangleSelectionService);
+        eyeDropperService = TestBed.inject(EyeDropperService);
         toolHandlerService = new MockToolHandler(
             pencilService,
             lineService,
@@ -112,6 +118,7 @@ describe('SettingsHandlerComponent', () => {
             ellipseSelectionService,
             rectangleSelectionService,
             polygoneService,
+            eyeDropperService,
         );
         component = new SettingsHandlerComponent(toolHandlerService);
     });
