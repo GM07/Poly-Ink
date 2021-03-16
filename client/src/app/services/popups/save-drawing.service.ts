@@ -13,14 +13,4 @@ export class SaveDrawingService implements Popup {
         this.shortcut = new ShortcutKey('s', true);
         this.showPopup = false;
     }
-
-    saveImage(image: string, format: string, name: string): void {
-        console.log(image);
-        const downloadElement = document.createElement('a');
-        downloadElement.download = name + '.' + format;
-        downloadElement.href = image;
-        document.body.appendChild(downloadElement);
-        downloadElement.click();
-        document.body.removeChild(downloadElement);
-    }
 }

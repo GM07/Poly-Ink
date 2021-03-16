@@ -17,8 +17,10 @@
                 </mat-form-field>
             </form>
             <canvas #exportPreview id="exportPreview" [attr.width]="this.getPreviewWidth()" [attr.height]="this.getPreviewHeight()"></canvas>
+            <h3 *ngIf="noServerConnection" class="error">Aucune connection internet!</h3>
+            <h3 *ngIf="unavailableServer" class="error">Le service n'est pas dispobile!</h3>
             <div class="options">
-                <button class="button green white" mat-raised-button (click)="save()">Confirmer</button>
+                <button class="button green white" mat-raised-button [disabled]="!enableAcceptButton" (click)="save()">Confirmer</button>
                 <button class="button red white" mat-raised-button (click)="hidePopup()">Annuler</button>
             </div>
         </div>

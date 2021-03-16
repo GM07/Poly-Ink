@@ -35,4 +35,13 @@ export class CarrouselService {
         }
         return this.http.delete<Drawing>(this.baseURL, httpOptions);
     }
+
+    createDrawing(drawing: Drawing): Observable<{}> {
+        let drawingData: any = {...drawing};
+        delete drawingData.data._id;
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'}),
+        };
+        return this.http.post<Drawing>(this.baseURL + '/create', JSON.stringify(drawingData), httpOptions);
+    }
 }

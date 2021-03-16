@@ -45,7 +45,8 @@ export class DrawingService {
         if (!fs.existsSync(DrawingService.ROOT_DIRECTORY)) {
             fs.mkdirSync(DrawingService.ROOT_DIRECTORY);
         }
-        fs.writeFileSync(drawingPath, drawing.image, 'base64');
+        const base64Str: string = drawing.image.replace('data:image/png;base64,', '');
+        fs.writeFileSync(drawingPath, base64Str, 'base64');
     }
 
     getLocalDrawing(id: string): string {
@@ -98,6 +99,7 @@ export class DrawingService {
         try {
             return await (await this.collection.insertOne(drawing)).insertedId;
         } catch (e) {
+            console.log(e);
             throw new DataNotCreated(drawing.toString());
         }
     }
