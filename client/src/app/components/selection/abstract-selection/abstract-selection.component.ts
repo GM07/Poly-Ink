@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { SelectionEventsService } from '@app/services/selection/selection-events.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
 
 @Component({
@@ -30,10 +31,16 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     private lastDocumentCursor: string;
 
     private isOverSelection: boolean = false;
+    private isInDrawing: boolean = true;
     private leftMouseDown: boolean = false;
     displayControlPoints: boolean = false;
 
-    constructor(protected selectionService: AbstractSelectionService, protected drawingService: DrawingService, private cd: ChangeDetectorRef) {}
+    constructor(
+        protected selectionService: AbstractSelectionService,
+        protected drawingService: DrawingService,
+        private cd: ChangeDetectorRef,
+        private selectionEvents: SelectionEventsService,
+    ) {}
 
     ngOnInit(): void {
         this.selectionService.updatePoints.subscribe((display: boolean) => {
@@ -42,6 +49,9 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
             }
             this.updateControlPointDisplay(display);
         });
+
+        this.selectionEvents.onMouseEnterEvent.subscribe(() => (this.isInDrawing = true));
+        this.selectionEvents.onMouseLeaveEvent.subscribe(() => (this.isInDrawing = false));
     }
 
     ngAfterViewInit(): void {
@@ -57,9 +67,13 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     onMouseDown(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
         if (this.leftMouseDown && this.selectionService.isInSelection(event)) {
-            this.selectionService.onMouseDown(event);
-            this.makeControlsUnselectable();
-            this.selectionService.translationOrigin = this.selectionService.getPositionFromMouse(event);
+            if (this.isInDrawing) {
+                this.selectionService.onMouseDown(event);
+                this.makeControlsUnselectable();
+                this.selectionService.translationOrigin = this.selectionService.getPositionFromMouse(event);
+            } else {
+                this.selectionService.stopDrawing();
+            }
         }
         this.updateControlPointDisplay(this.selectionService.selectionCtx !== null);
     }
@@ -75,7 +89,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     onMouseMove(event: MouseEvent): void {
         if (!this.leftMouseDown) {
             this.isOverSelection = this.selectionService.isInSelection(event);
-            if (this.isOverSelection) {
+            if (this.isOverSelection && this.isInDrawing) {
                 this.drawingService.previewCanvas.style.cursor = 'all-scroll';
                 document.body.style.cursor = 'all-scroll';
             } else {

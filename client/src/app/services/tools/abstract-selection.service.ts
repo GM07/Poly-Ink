@@ -262,6 +262,7 @@ export abstract class AbstractSelectionService extends Tool {
         previewCtx.drawImage(this.SELECTION_DATA, x, y);
 
         this.drawPreviewSelection();
+        this.updatePoints.next(true);
     }
 
     private updateSelection(translation: Vec2): void {
