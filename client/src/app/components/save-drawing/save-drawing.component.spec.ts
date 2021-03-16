@@ -136,17 +136,15 @@ fdescribe('SaveDrawingComponent', () => {
         expect(spy).not.toHaveBeenCalled();
     });
 
-    
+    // TODO: Make to expect after the then 
     fit('should hide the popup on a successful request', () => {
         const hidePopUpSpy = spyOn(component, 'hidePopup').and.callFake(() => {});
-        spyOn(carrouselService, 'createDrawing').and.callFake((drawing: Drawing) => {
-            return of(Promise.resolve(Promise.resolve(new HttpResponse({status: 200}))).then( () => {
-                expect(hidePopUpSpy).toHaveBeenCalled();
-                expect(component.enableAcceptButton).toBeTruthy();
-            }
-            ));
+        const spy = spyOn(carrouselService, 'createDrawing').and.callFake((drawing: Drawing) => {
+            return of(Promise.resolve(new HttpResponse({status: 200})))
         });
         component.save();
+        expect(hidePopUpSpy).toHaveBeenCalled();
+        expect(component.enableAcceptButton).toBeTruthy();
     });
 
 

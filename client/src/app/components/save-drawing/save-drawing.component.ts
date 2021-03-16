@@ -97,7 +97,6 @@ export class SaveDrawingComponent {
             }
             const newDrawing: Drawing = new Drawing(new DrawingData(this.filename, tags ? tags : undefined));
             newDrawing.image = this.canvasImage;
-            this.carrouselService.createDrawing(newDrawing).toPromise();
             this.carrouselService.createDrawing(newDrawing).toPromise().then((res) => {
                 console.log('Then');
                 this.enableAcceptButton = true;
