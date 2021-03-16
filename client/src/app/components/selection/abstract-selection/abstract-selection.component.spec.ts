@@ -79,6 +79,9 @@ describe('AbstractSelectionComponent', () => {
         component['selectionService'].selectionCtx = null;
         component.onMouseDown(mouseEvent);
         expect(abstractSelectionService.stopDrawing).not.toHaveBeenCalled();
+        component['isInSidebar'] = true;
+        component.onMouseDown(mouseEvent);
+        expect(abstractSelectionService.stopDrawing).not.toHaveBeenCalled();
         component['selectionService'].selectionCtx = drawService.previewCtx;
         component.onMouseDown(mouseEvent);
         expect(abstractSelectionService.stopDrawing).toHaveBeenCalled();
@@ -100,7 +103,7 @@ describe('AbstractSelectionComponent', () => {
 
     it('should update the cursor when hovering the selection', () => {
         spyOn(abstractSelectionService, 'isInSelection').and.returnValue(true);
-        component['isInSidebar'] = true;
+        component['isInSidebar'] = false;
         component.onMouseMove(mouseEvent);
         expect(drawService.previewCanvas.style.cursor).toEqual('all-scroll');
     });

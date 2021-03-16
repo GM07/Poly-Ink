@@ -20,7 +20,6 @@ describe('SidebarDirective', () => {
     });
 
     it('should transfer the mouseenter event', () => {
-        console.log(selectionEventsService);
         const nextSpy = spyOn(selectionEventsService.onMouseEnterEvent, 'next');
         directive.onMouseEnter();
         expect(nextSpy).toHaveBeenCalled();
