@@ -74,9 +74,12 @@ describe('AbstractSelectionComponent', () => {
     });
 
     it('should stop drawing if the user clicked outside of the drawing container', () => {
-        spyOn(abstractSelectionService, 'isInSelection').and.returnValue(true);
         spyOn(abstractSelectionService, 'stopDrawing');
         component['isInDrawing'] = false;
+        component['selectionService'].selectionCtx = null;
+        component.onMouseDown(mouseEvent);
+        expect(abstractSelectionService.stopDrawing).not.toHaveBeenCalled();
+        component['selectionService'].selectionCtx = drawService.previewCtx;
         component.onMouseDown(mouseEvent);
         expect(abstractSelectionService.stopDrawing).toHaveBeenCalled();
     });
