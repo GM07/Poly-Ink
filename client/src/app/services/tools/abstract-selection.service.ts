@@ -45,6 +45,9 @@ export abstract class AbstractSelectionService extends Tool {
         this.selectionCoords = { x: 0, y: 0 } as Vec2;
         this.translationOrigin = { x: 0, y: 0 } as Vec2;
         this.moveId = this.DEFAULT_MOVE_ID;
+        this.drawingService.changes.subscribe(() => {
+            this.updateSelection({ x: 0, y: 0 } as Vec2);
+        });
     }
 
     protected abstract endSelection(): void;
@@ -86,6 +89,8 @@ export abstract class AbstractSelectionService extends Tool {
             this.setMouseUpCoord(event);
             if (this.selectionCtx !== null) {
                 this.updateSelection(this.getTranslation(this.mouseUpCoord));
+                document.body.style.width = event.pageX + this.width + 'px';
+                document.body.style.height = event.pageY + this.height + 'px';
             } else {
                 const ctx = this.drawingService.previewCtx;
                 this.drawingService.clearCanvas(ctx);
