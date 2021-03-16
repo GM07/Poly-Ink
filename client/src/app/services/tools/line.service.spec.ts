@@ -52,7 +52,7 @@ describe('LineService', () => {
     });
 
     it('should add point on mouse position on first mouse left button down', async () => {
-        const mouseEvent = { button: MouseButton.Left, pageX: 300, pageY: 400, detail: 1 } as MouseEvent;
+        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(service['points'].length).toBe(1);
         expect(service['points'][0]).toEqual({ x: 300, y: 400 } as Vec2);
@@ -62,14 +62,14 @@ describe('LineService', () => {
         service['points'] = [{ x: 100, y: 100 }];
         service['pointToAdd'] = { x: 120, y: 120 } as Vec2;
         service['showJunctionPoints'] = true;
-        const mouseEvent = { button: MouseButton.Left, pageX: 500, pageY: 283, detail: 1 } as MouseEvent;
+        const mouseEvent = { button: MouseButton.Left, clientX: 500, clientY: 283, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(service['points'].length).toBe(2);
         expect(service['points'][1]).toEqual({ x: 120, y: 120 } as Vec2);
     });
 
     it('should not add point on mouse right button down', () => {
-        const mouseEvent = { button: MouseButton.Right, pageX: 500, pageY: 283, detail: 1 } as MouseEvent;
+        const mouseEvent = { button: MouseButton.Right, clientX: 500, clientY: 283, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(service['points'].length).toBe(0);
     });
@@ -97,7 +97,7 @@ describe('LineService', () => {
 
     it('should not do anything on triple click', () => {
         service['points'] = [{ x: 100, y: 800 } as Vec2];
-        const lastEvent = { pageX: 100, pageY: 100, detail: 3 } as MouseEvent;
+        const lastEvent = { clientX: 100, clientY: 100, detail: 3 } as MouseEvent;
         const simpleFunc = spyOn<any>(service, 'handleSimpleClick');
         const doubleFunc = spyOn<any>(service, 'handleDoubleClick');
         service.onMouseDown(lastEvent);
@@ -108,7 +108,7 @@ describe('LineService', () => {
     it('should end drawing on double click without closing path', () => {
         service['points'] = [{ x: 100, y: 800 } as Vec2];
         service['SHIFT'].isDown = true;
-        const lastEvent = { pageX: 100, pageY: 100, detail: 2 } as MouseEvent;
+        const lastEvent = { clientX: 100, clientY: 100, detail: 2 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath');
         service.onMouseDown(lastEvent);
         expect(drawLinePath).toHaveBeenCalledWith(previewCtxStub, [{ x: 100, y: 800 }], false);
@@ -116,7 +116,7 @@ describe('LineService', () => {
 
     it('should end drawing on double click with a closed path', async () => {
         service['points'] = [{ x: 500, y: 400 }, { x: 200, y: 300 }, { x: 100, y: 819 } as Vec2];
-        const lastEvent = { pageX: 500, pageY: 419, detail: 2 } as MouseEvent;
+        const lastEvent = { clientX: 500, clientY: 419, detail: 2 } as MouseEvent;
         const drawLinePath: any = spyOn<any>(service, 'drawLinePath');
         service['handleDoubleClick'](lastEvent);
         expect(drawLinePath).toHaveBeenCalledWith(
@@ -136,7 +136,7 @@ describe('LineService', () => {
         expect(getPositionFromMouse).not.toHaveBeenCalled();
         service['points'] = [{ x: 100, y: 200 } as Vec2];
         const alignPointFunc = spyOn<any>(service, 'alignPoint').and.callThrough();
-        service.onMouseMove({ pageX: 120, pageY: 540 } as MouseEvent);
+        service.onMouseMove({ clientX: 120, clientY: 540 } as MouseEvent);
         expect(alignPointFunc).not.toHaveBeenCalled();
         expect(service['pointToAdd']).toEqual({ x: 120, y: 540 } as Vec2);
     });
@@ -145,7 +145,7 @@ describe('LineService', () => {
         service['points'] = [{ x: 100, y: 200 } as Vec2];
         service['SHIFT'].isDown = true;
         const alignPointFunc = spyOn<any>(service, 'alignPoint').and.returnValue({ x: 40, y: 60 });
-        service.onMouseMove({ pageX: 120, pageY: 540 } as MouseEvent);
+        service.onMouseMove({ clientX: 120, clientY: 540 } as MouseEvent);
         expect(alignPointFunc).toHaveBeenCalled();
         expect(service['pointToAdd']).toEqual({ x: 40, y: 60 } as Vec2);
     });
