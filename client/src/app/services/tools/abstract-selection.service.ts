@@ -32,14 +32,13 @@ export abstract class AbstractSelectionService extends Tool {
     protected firstSelectionCoords: Vec2;
     selectionCoords: Vec2;
 
-
     width: number;
     height: number;
     selectionCtx: CanvasRenderingContext2D | null;
 
     private moveId: number;
-    private bodyWidth : string;
-    private bodyHeight : string;
+    private bodyWidth: string;
+    private bodyHeight: string;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
@@ -198,7 +197,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.DOWN_ARROW.isDown = false;
         window.clearInterval(this.moveId);
         this.moveId = this.DEFAULT_MOVE_ID;
-        this.updatePoints.next(true);
+        this.updatePoints.next(false);
     }
 
     getTranslation(mousePos: Vec2): Vec2 {
@@ -285,7 +284,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.translationOrigin.x += translation.x;
         this.translationOrigin.y += translation.y;
         this.updateSelectionRequired();
-        this.updatePoints.next(false);
+        this.updatePoints.next(true);
     }
 
     private drawPreviewSelection(): void {
