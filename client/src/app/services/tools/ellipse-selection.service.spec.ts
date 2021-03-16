@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { EllipseSelectionService } from './ellipse-selection.service';
 import { Subject } from 'rxjs';
+import { EllipseSelectionService } from './ellipse-selection.service';
 
 // tslint:disable:no-any
 // tslint:disable:no-magic-numbers
