@@ -3,6 +3,7 @@ import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { RectangleSelectionService } from './rectangle-selection.service';
+import { Subject } from 'rxjs';
 
 // tslint:disable:no-any
 // tslint:disable:no-magic-numbers
@@ -24,7 +25,7 @@ describe('RectangleSelectionService', () => {
     } as MouseEvent;
 
     beforeEach(() => {
-        drawServiceSpy = jasmine.createSpyObj('DrawigSnervice', ['clearCanvas']);
+        drawServiceSpy = jasmine.createSpyObj('DrawigSnervice', ['clearCanvas'], { changes: new Subject<void>() });
         TestBed.configureTestingModule({
             providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
         });

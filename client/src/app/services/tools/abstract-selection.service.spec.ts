@@ -3,6 +3,7 @@ import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractSelectionService } from './abstract-selection.service';
+import { Subject } from 'rxjs';
 
 // tslint:disable:no-any
 // tslint:disable:no-string-literal
@@ -18,7 +19,7 @@ describe('AbstractSelectionService', () => {
     let mouseEvent: MouseEvent;
 
     beforeEach(() => {
-        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
+        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas'], { changes: new Subject<void>() });
         TestBed.configureTestingModule({
             providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
         });
