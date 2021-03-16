@@ -1,4 +1,7 @@
 <!--Filtrage par étiquette-->
+<div *ngIf="noMatchingTags">
+  Aucun dessin ne possède cet étiquette.
+</div>
 <mat-form-field class="tag-list">
     <mat-label style="font-size:larger">Filtrage par étiquettes</mat-label>
     <mat-chip-list #chipList aria-label="Filtrage par étiquettes">

@@ -15,7 +15,9 @@ interface Tag {
 })
 export class DrawingTagsComponent implements OnInit {
 
-  constructor(private carrouselService: CarrouselService) { }
+  constructor(private carrouselService: CarrouselService) {
+    this.noMatchingTags = false;
+  }
 
   ngOnInit(): void {
     this.getAllDrawings();
@@ -28,6 +30,7 @@ export class DrawingTagsComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   drawings: Drawing[] = [];
   filterTags: Tag[] = [];
+  noMatchingTags: boolean;
 
   getAllDrawings(): void {
     this.carrouselService.getAllDrawings()
@@ -42,7 +45,7 @@ export class DrawingTagsComponent implements OnInit {
     this.carrouselService.getFilteredDrawings(this.filterTags)
       .subscribe((drawings: Drawing[]) => {
         this.drawings = drawings;
-        console.log(this.drawings);
+        drawings.length ? this.noMatchingTags = false : this.noMatchingTags = true;
       });
   }
 
