@@ -32,11 +32,14 @@ export abstract class AbstractSelectionService extends Tool {
     protected firstSelectionCoords: Vec2;
     selectionCoords: Vec2;
 
+
     width: number;
     height: number;
     selectionCtx: CanvasRenderingContext2D | null;
 
     private moveId: number;
+    private bodyWidth : string;
+    private bodyHeight : string;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
@@ -48,6 +51,8 @@ export abstract class AbstractSelectionService extends Tool {
         this.drawingService.changes.subscribe(() => {
             this.updateSelection({ x: 0, y: 0 } as Vec2);
         });
+        this.bodyWidth = document.body.style.width;
+        this.bodyHeight = document.body.style.height;
     }
 
     protected abstract endSelection(): void;
@@ -63,6 +68,8 @@ export abstract class AbstractSelectionService extends Tool {
     onMouseDown(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
         if (this.leftMouseDown && !this.isInSelection(event)) {
+            document.body.style.width = this.bodyWidth;
+            document.body.style.height = this.bodyHeight;
             this.endSelection();
             const mousePos = this.getPositionFromMouse(event);
             this.mouseDownCoord = mousePos;
@@ -164,6 +171,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.height = height;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.startSelection();
+        console.log("selectAll");
         this.updatePoints.next(true);
     }
 
@@ -191,7 +199,8 @@ export abstract class AbstractSelectionService extends Tool {
         this.DOWN_ARROW.isDown = false;
         window.clearInterval(this.moveId);
         this.moveId = this.DEFAULT_MOVE_ID;
-        this.updatePoints.next(false);
+        console.log("stopDrawing");
+        this.updatePoints.next(true);
     }
 
     getTranslation(mousePos: Vec2): Vec2 {
@@ -267,6 +276,7 @@ export abstract class AbstractSelectionService extends Tool {
         previewCtx.drawImage(this.SELECTION_DATA, x, y);
 
         this.drawPreviewSelection();
+        console.log("start Selection")
         this.updatePoints.next(true);
     }
 
@@ -278,7 +288,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.translationOrigin.x += translation.x;
         this.translationOrigin.y += translation.y;
         this.updateSelectionRequired();
-
+        console.log("updateSelection")
         this.updatePoints.next(true);
     }
 

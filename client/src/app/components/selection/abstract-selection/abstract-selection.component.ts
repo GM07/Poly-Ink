@@ -45,6 +45,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
 
     ngOnInit(): void {
         this.selectionService.updatePoints.subscribe((display: boolean) => {
+            console.log(display);
             if (display && this.displayControlPoints) {
                 this.placePoints();
             }
@@ -144,10 +145,10 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     }
 
     private placeControlPoint(element: ElementRef<HTMLElement>, offsetX: number, offsetY: number): void {
-        const x = this.selectionService.selectionCoords.x;
-        const y = this.selectionService.selectionCoords.y;
-        element.nativeElement.style.left = String(x + offsetX) + 'px';
-        element.nativeElement.style.top = String(y + offsetY) + 'px';
+          const x = this.selectionService.selectionCoords.x;
+          const y = this.selectionService.selectionCoords.y;
+          element.nativeElement.style.left = String(x + offsetX) + 'px';
+          element.nativeElement.style.top = String(y + offsetY) + 'px';
     }
 
     private placeSelectionBorder(sizeX: number, sizeY: number): void {
