@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { SelectionEventsService } from '@app/services/selection/selection-events.service';
-import { DrawingContainerDirective } from './drawing-container.directive';
+import { SidebarDirective } from './sidebar.directive';
 
-describe('DrawingContainerDirective', () => {
+describe('SidebarDirective', () => {
     let selectionEventsService: SelectionEventsService;
-    let directive: DrawingContainerDirective;
+    let directive: SidebarDirective;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -12,7 +12,7 @@ describe('DrawingContainerDirective', () => {
         });
 
         selectionEventsService = TestBed.inject(SelectionEventsService);
-        directive = new DrawingContainerDirective(selectionEventsService);
+        directive = new SidebarDirective(selectionEventsService);
     });
 
     it('should create an instance', () => {
@@ -20,6 +20,7 @@ describe('DrawingContainerDirective', () => {
     });
 
     it('should transfer the mouseenter event', () => {
+        console.log(selectionEventsService);
         const nextSpy = spyOn(selectionEventsService.onMouseEnterEvent, 'next');
         directive.onMouseEnter();
         expect(nextSpy).toHaveBeenCalled();
