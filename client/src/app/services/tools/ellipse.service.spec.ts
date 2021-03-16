@@ -46,8 +46,8 @@ describe('EllipseService', () => {
         service['drawingService'].canvas = canvasTestHelper.canvas;
 
         mouseEvent = {
-            pageX: 25,
-            pageY: 25,
+            clientX: 25,
+            clientY: 25,
             button: 0,
         } as MouseEvent;
 
@@ -81,10 +81,10 @@ describe('EllipseService', () => {
     });
 
     it('should start drawing when the mouse is down', () => {
-        mouseEvent = { pageX: 1, pageY: 1, button: 3 } as MouseEvent;
+        mouseEvent = { clientX: 1, clientY: 1, button: 3 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(drawShapeSpy).not.toHaveBeenCalled();
-        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { clientX: 1, clientY: 1, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(drawShapeSpy).toHaveBeenCalled();
     });
@@ -93,7 +93,7 @@ describe('EllipseService', () => {
         service.onMouseUp(mouseEvent);
         expect(service.leftMouseDown).toEqual(false);
         service.onMouseDown(mouseEvent);
-        mouseEvent = { x: -1, y: -1, pageX: 1, pageY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { x: -1, y: -1, clientX: 1, clientY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawShapeSpy).toHaveBeenCalled();
     });
@@ -107,7 +107,7 @@ describe('EllipseService', () => {
 
     it('should draw a preview when the mouse is moving with left click pressed', () => {
         service.onMouseDown(mouseEvent);
-        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { clientX: 1, clientY: 1, button: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         expect(drawShapeSpy).toHaveBeenCalled();
     });
@@ -116,7 +116,7 @@ describe('EllipseService', () => {
         service.onMouseLeave(mouseEvent);
         expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
-        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { clientX: 1, clientY: 1, button: 0 } as MouseEvent;
         service.onMouseLeave(mouseEvent);
         expect(updateShapeSpy).toHaveBeenCalled();
     });
@@ -125,7 +125,7 @@ describe('EllipseService', () => {
         service.onMouseEnter(mouseEvent);
         expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
-        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { clientX: 1, clientY: 1, button: 0 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(updateShapeSpy).toHaveBeenCalled();
     });
@@ -155,7 +155,7 @@ describe('EllipseService', () => {
         service.shapeMode = ShapeMode.Contour;
         service.contourWidth = 1;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { pageX: 0, pageY: 0, button: 0 } as MouseEvent;
+        mouseEvent = { clientX: 0, clientY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawShapeSpy).toHaveBeenCalled();
 
@@ -183,7 +183,7 @@ describe('EllipseService', () => {
     it('should allow for filled drawing type', () => {
         service.shapeMode = ShapeMode.Filled;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { pageX: 0, pageY: 0, button: 0 } as MouseEvent;
+        mouseEvent = { clientX: 0, clientY: 0, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawShapeSpy).toHaveBeenCalled();
 
@@ -203,7 +203,7 @@ describe('EllipseService', () => {
         service.shapeMode = ShapeMode.FilledWithContour;
         service.contourWidth = 1;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { clientX: 1, clientY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawShapeSpy).toHaveBeenCalled();
 
@@ -234,7 +234,7 @@ describe('EllipseService', () => {
     it('should do nothing with an unknown mode', () => {
         service.shapeMode = {} as ShapeMode;
         service.onMouseDown(mouseEvent);
-        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { clientX: 1, clientY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
         // tslint:disable-next-line:no-magic-numbers
@@ -248,7 +248,7 @@ describe('EllipseService', () => {
         service.contourWidth = 1;
         service.onMouseDown(mouseEvent);
         // tslint:disable-next-line:no-magic-numbers
-        mouseEvent = { pageX: 0, pageY: 5, button: 0 } as MouseEvent;
+        mouseEvent = { clientX: 0, clientY: 5, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
 
         // tslint:disable-next-line:no-magic-numbers
