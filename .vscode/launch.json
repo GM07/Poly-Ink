@@ -5,18 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Chrome",
-            "request": "launch",
-            "type": "pwa-chrome",
-            "url": "http://localhost:4200",
-            "webRoot": "${workspaceFolder}/src",
-            "sourceMaps": true,
-            "sourceMapPathOverrides": {
-                "webpack:///./": "${workspaceRoot}/src"
-            }
-        },
-
-        {
             "name": "Debug server (Attach)",
             "port": 9229,
             "request": "attach",

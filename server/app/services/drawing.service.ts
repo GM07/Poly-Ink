@@ -1,4 +1,4 @@
-import { DataNotCreated, DataNotDeleted, DataNotFound, FileNotFound } from '@app/classes/errors';
+import { DataNotCreated, DataNotDeleted, FileNotFound } from '@app/classes/errors';
 import { DatabaseService } from '@app/services/database.service';
 import { TYPES } from '@app/types';
 import { Drawing } from '@common/communication/drawing';
@@ -8,9 +8,15 @@ import * as fs from 'fs';
 import { inject, injectable } from 'inversify';
 import { Collection, FindAndModifyWriteOpResultObject } from 'mongodb';
 
+/* tslint:disable:no-var-requires */
+/* tslint:disable:no-require-imports */
+const objectId = require('mongodb').ObjectID;
+/* tslint:enable:no-var-requires */
+/* tslint:enable:no-require-imports */
+
 @injectable()
 export class DrawingService {
-    private static ROOT_DIRECTORY: string = 'drawings';
+    private static readonly ROOT_DIRECTORY: string = 'drawings';
     private static readonly COLLECTION: string = 'drawings';
 
     constructor(@inject(TYPES.DatabaseService) private databaseService: DatabaseService) {
@@ -116,31 +122,24 @@ export class DrawingService {
      */
     async createNewDrawingData(drawing: DrawingData): Promise<string> {
         try {
-            return await (await this.collection.insertOne(drawing)).insertedId;
+            return (await this.collection.insertOne(drawing)).insertedId;
         } catch (e) {
-            throw new DataNotCreated(drawing.toString());
+            throw new DataNotCreated(drawing._id);
         }
     }
 
-    async createNewDrawingDataFromName(name: string): Promise<string> {
-        const drawing = new DrawingData(name);
-        return await this.createNewDrawingData(drawing);
-    }
-
     /**
-     * @throws DataNotFound, DataNotDeleted
+     * @throws DataNotDeleted
      */
-    async deleteDrawingDataFromId(id: string): Promise<void> {
-        const ObjectId = require('mongodb').ObjectID;
+    async deleteDrawingDataFromId(id: string, convertToObjectId: boolean = true): Promise<void> {
         await this.collection
-            .findOneAndDelete({ _id: ObjectId(id) })
+            .findOneAndDelete({ _id: convertToObjectId ? objectId(id) : id })
             .then((result: FindAndModifyWriteOpResultObject<DrawingData>) => {
                 if (!result.value) {
-                    throw new DataNotFound(id);
+                    throw new DataNotDeleted(id);
                 }
             })
-            .catch((e) => {
-                console.log(e);
+            .catch(() => {
                 throw new DataNotDeleted(id);
             });
     }
