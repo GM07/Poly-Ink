@@ -44,4 +44,8 @@ export class ResponseMessage {
     static get SuccessfullyDeleted(): ResponseMessage {
         return new ResponseMessage('Successfully deleted');
     }
+
+    static get DatabaseNotValid(): ResponseMessage {
+        return new ResponseMessage('Database not valid');
+    }
 }
