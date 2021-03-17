@@ -22,6 +22,16 @@ export class DrawingController {
 
     private configureRouter(): void {
         this.router = Router();
+
+        this.router.all('/', (req: Request, res: Response, next: NextFunction) => {
+            if (!this.drawingService.valid) {
+                res.status(HttpStatus.SERVICE_UNAVAILABLE).send(ResponseMessage.DatabaseNotValid);
+                return;
+            }
+
+            next();
+        });
+
         this.router.post('/', async (req: Request, res: Response, next: NextFunction) => {
             const drawing: Drawing = req.body;
 
