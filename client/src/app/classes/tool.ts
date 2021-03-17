@@ -42,6 +42,12 @@ export abstract class Tool {
 
     getPositionFromMouse(event: MouseEvent): Vec2 {
         const clientRect = this.drawingService.canvas.getBoundingClientRect();
-        return { x: event.pageX - clientRect.x, y: event.pageY - clientRect.y };
+        const borderLeftValue: string = window.getComputedStyle(this.drawingService.canvas).getPropertyValue('border-left-width');
+        const borderTopValue: string = window.getComputedStyle(this.drawingService.canvas).getPropertyValue('border-top-width');
+
+        const borderLeft: number = Number(borderLeftValue.substring(0, borderLeftValue.length - 2));
+        const borderTop: number = Number(borderTopValue.substring(0, borderTopValue.length - 2));
+
+        return { x: event.clientX - clientRect.x - borderLeft, y: event.clientY - clientRect.y - borderTop };
     }
 }

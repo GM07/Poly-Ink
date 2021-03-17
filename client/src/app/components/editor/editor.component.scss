@@ -1,12 +1,14 @@
 .container {
     display: flex;
     background-color: lightgray;
+    height: 100%;
 }
 
 .drawing-container {
     overflow: visible;
     flex: 1 1 auto;
     z-index: 1;
+    height: 100%;
 }
 
 .drawing {

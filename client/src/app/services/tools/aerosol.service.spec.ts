@@ -40,15 +40,15 @@ describe('AerosolService', () => {
         sprayContinuouslySpy = spyOn<any>(service, 'sprayContinuously').and.callThrough();
         onMouseDownSpy = spyOn<any>(service, 'onMouseDown').and.callThrough();
 
-        // Configuration du spy du service
+        // service's spy configuration
         // tslint:disable:no-string-literal
         service['drawingService'].baseCtx = baseCtxStub; // Jasmine doesnt copy properties with underlying data
         service['drawingService'].previewCtx = previewCtxStub;
         service['drawingService'].canvas = canvasTestHelper.canvas;
 
         mouseEvent = {
-            pageX: 25,
-            pageY: 25,
+            clientX: 25,
+            clientY: 25,
             button: 0,
         } as MouseEvent;
     });
@@ -65,8 +65,8 @@ describe('AerosolService', () => {
 
     it('mouseDown should set mouseDown property to false on right click', () => {
         const mouseEventRClick = {
-            pageX: 25,
-            pageY: 25,
+            clientX: 25,
+            clientY: 25,
             button: 1,
         } as MouseEvent;
         service.onMouseDown(mouseEventRClick);
@@ -92,13 +92,13 @@ describe('AerosolService', () => {
 
     it('should not spray between the points where it left and entered the canvas', () => {
         service.areaDiameter = 2;
-        let mouseEventLClick: MouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 1 } as MouseEvent;
+        let mouseEventLClick: MouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);
         service.onMouseLeave(mouseEventLClick);
-        mouseEventLClick = { pageX: 0, pageY: 50, button: 0, buttons: 1 } as MouseEvent;
+        mouseEventLClick = { clientX: 0, clientY: 50, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
         expect(sprayContinuouslySpy).toHaveBeenCalled();
-        mouseEventLClick = { pageX: 0, pageY: 50, button: 0 } as MouseEvent;
+        mouseEventLClick = { clientX: 0, clientY: 50, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEventLClick);
 
         // tslint:disable-next-line:no-magic-numbers
@@ -107,11 +107,11 @@ describe('AerosolService', () => {
     });
 
     it('should stop drawing when the mouse is up', () => {
-        let mouseEventLClick: MouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 1 } as MouseEvent;
+        let mouseEventLClick: MouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.areaDiameter = 1;
         service.onMouseDown(mouseEventLClick);
         service.onMouseLeave(mouseEventLClick);
-        mouseEventLClick = { pageX: 0, pageY: 2, button: 0, buttons: 0 } as MouseEvent;
+        mouseEventLClick = { clientX: 0, clientY: 2, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseUp(mouseEventLClick);
         service.onMouseEnter(mouseEventLClick);
         expect(sprayContinuouslySpy).toHaveBeenCalled();
@@ -127,31 +127,31 @@ describe('AerosolService', () => {
     });
 
     it('should call onMousDown when entering the canvas if mouse is down', () => {
-        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 1 } as MouseEvent;
+        mouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(onMouseDownSpy).toHaveBeenCalled();
     });
 
     it('should do nothing when entering the canvas, with an unsupported mouse state', () => {
-        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 3 } as MouseEvent;
+        mouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 3 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(drawSpraySpy).not.toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
-        mouseEvent = { pageX: 0, pageY: 0, button: 10, buttons: 3 } as MouseEvent;
+        mouseEvent = { clientX: 0, clientY: 0, button: 10, buttons: 3 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(drawSpraySpy).not.toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
     });
 
     it('should clear the canvas preview when the mouse leaves the canvas, left click released', () => {
-        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 0 } as MouseEvent;
+        mouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseLeave(mouseEvent);
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
     it('should only draw nothing on base canvas when moving the mouse, left click released', () => {
         service.leftMouseDown = false;
-        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 0 } as MouseEvent;
+        mouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[ALPHA]).toEqual(0);
