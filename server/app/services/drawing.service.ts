@@ -18,12 +18,19 @@ const objectId = require('mongodb').ObjectID;
 export class DrawingService {
     private static readonly ROOT_DIRECTORY: string = 'drawings';
     private static readonly COLLECTION: string = 'drawings';
-    valid = true;
+    databaseValid = true;
 
     constructor(@inject(TYPES.DatabaseService) private databaseService: DatabaseService) {
-        databaseService.start().catch((e) => {
-            this.valid = false;
-        });
+        this.tryConnection();
+    }
+
+    async tryConnection(): Promise<void> {
+        try {
+            await this.databaseService.start();
+            this.databaseValid = true;
+        } catch {
+            this.databaseValid = false;
+        }
     }
 
     get collection(): Collection<DrawingData> {
