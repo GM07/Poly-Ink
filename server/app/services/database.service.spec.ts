@@ -29,7 +29,7 @@ describe('Database service', () => {
     });
 
     it('should connect to database on start with default url when none is provided', async () => {
-        DatabaseService['DATABASE_URL'] = await mongoServer.getUri();
+        Object.defineProperty(DatabaseService, 'DATABASE_URL', { value: await mongoServer.getUri() });
         await databaseService.start();
 
         expect(databaseService['client']).to.not.be.undefined;

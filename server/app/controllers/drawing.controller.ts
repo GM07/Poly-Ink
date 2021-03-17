@@ -1,3 +1,5 @@
+import { HttpStatus } from '@app/classes/http-codes';
+import { ResponseMessage } from '@app/classes/response-message';
 import { DrawingService } from '@app/services/drawing.service';
 import { TYPES } from '@app/types';
 import { Drawing } from '@common/communication/drawing';
@@ -5,10 +7,6 @@ import { DrawingData } from '@common/communication/drawing-data';
 import { Tag } from '@common/communication/tag';
 import { NextFunction, Request, Response, Router } from 'express';
 import { inject, injectable } from 'inversify';
-
-const HTTP_STATUS_CREATED = 201;
-const HTTP_STATUS_SUCCESS = 200;
-const HTTP_BAD_REQUEST = 400;
 
 @injectable()
 export class DrawingController {
@@ -18,26 +16,43 @@ export class DrawingController {
         this.configureRouter();
     }
 
+    private validateBody(body: Drawing): boolean {
+        return (
+            body.hasOwnProperty('image') &&
+            body.hasOwnProperty('data') &&
+            body.data.hasOwnProperty('_id') &&
+            body.data.hasOwnProperty('name') &&
+            body.data.hasOwnProperty('tags')
+        );
+    }
+
     private configureRouter(): void {
         this.router = Router();
-
-        this.router.post('/create', async (req: Request, res: Response, next: NextFunction) => {
+        this.router.post('/', async (req: Request, res: Response, next: NextFunction) => {
             const drawing: Drawing = req.body;
+
+            if (!this.validateBody(drawing)) {
+                res.status(HttpStatus.BAD_REQUEST).send(ResponseMessage.BodyBadlyFormated);
+                return;
+            }
+
             if (!this.drawingService.validateTags(drawing.data.tags)) {
-                res.sendStatus(HTTP_BAD_REQUEST);
+                res.status(HttpStatus.BAD_REQUEST).send(ResponseMessage.TagsNotValid);
                 return;
             }
 
             if (!this.drawingService.validateName(drawing.data.name)) {
-                res.sendStatus(HTTP_BAD_REQUEST);
+                res.status(HttpStatus.BAD_REQUEST).send(ResponseMessage.NameNotValid);
                 return;
             }
-            const id = await this.drawingService.createNewDrawingData(drawing.data);
-            drawing.data._id = id;
-            this.drawingService.storeDrawing(drawing);
-            res.status(HTTP_STATUS_CREATED).send({
-                message: 'Success',
-            });
+
+            try {
+                drawing.data._id = await this.drawingService.createNewDrawingData(drawing.data);
+                this.drawingService.storeDrawing(drawing);
+                res.status(HttpStatus.CREATED).send(ResponseMessage.SuccessfullyCreated);
+            } catch {
+                res.status(HttpStatus.SERVICE_UNAVAILABLE).send(ResponseMessage.CouldNotWriteOnDatabase);
+            }
         });
 
         this.router.get('/', async (req: Request, res: Response, next: NextFunction) => {
@@ -61,25 +76,37 @@ export class DrawingController {
                     }
                 })
                 .filter((e) => e !== null);
-
-            res.status(HTTP_STATUS_SUCCESS).json(drawings);
+            res.status(HttpStatus.SUCCESS).json(drawings);
         });
 
         this.router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
             const ids: string = req.query.ids;
+            let status = HttpStatus.SUCCESS;
+            let response = ResponseMessage.SuccessfullyDeleted;
             if (ids) {
                 const idArray: string[] = ids.split(',');
-                idArray.forEach(async (id: string) => {
-                    await this.drawingService.deleteDrawingDataFromId(id);
-                });
-                res.status(HTTP_STATUS_SUCCESS).send({
-                    message: 'Success',
-                });
+                for (const id of idArray) {
+                    try {
+                        await this.drawingService.deleteDrawingDataFromId(id);
+                    } catch {
+                        status = HttpStatus.NOT_FOUND;
+                        response = ResponseMessage.CouldNotDeleteOnDatabase;
+                        break;
+                    }
+
+                    try {
+                        this.drawingService.deleteLocalDrawing(id);
+                    } catch {
+                        status = HttpStatus.NOT_FOUND;
+                        response = ResponseMessage.CouldNotDeleteOnServer;
+                        break;
+                    }
+                }
             } else {
-                res.status(HTTP_BAD_REQUEST).send({
-                    message: 'Provide the ids to delete!',
-                });
+                status = HttpStatus.BAD_REQUEST;
+                response = ResponseMessage.IdsNotValid;
             }
+            res.status(status).send(response);
         });
     }
 }
