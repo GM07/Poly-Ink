@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSelectionComponent } from '@app/components/selection/abstract-selection/abstract-selection.component';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { SelectionEventsService } from '@app/services/selection/selection-events.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 
 @Component({
@@ -9,7 +10,12 @@ import { RectangleSelectionService } from '@app/services/tools/rectangle-selecti
     styleUrls: ['./../abstract-selection/abstract-selection.component.scss'],
 })
 export class RectangleSelectionComponent extends AbstractSelectionComponent {
-    constructor(rectangleSelectionService: RectangleSelectionService, drawingService: DrawingService, cd: ChangeDetectorRef) {
-        super(rectangleSelectionService, drawingService, cd);
+    constructor(
+        rectangleSelectionService: RectangleSelectionService,
+        drawingService: DrawingService,
+        cd: ChangeDetectorRef,
+        selectionEvents: SelectionEventsService,
+    ) {
+        super(rectangleSelectionService, drawingService, cd, selectionEvents);
     }
 }

@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { SelectionEventsService } from '@app/services/selection/selection-events.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
 import { AbstractSelectionComponent } from './abstract-selection.component';
 
@@ -11,6 +12,8 @@ describe('AbstractSelectionComponent', () => {
     let fixture: ComponentFixture<AbstractSelectionComponent>;
     let drawService: DrawingService;
     let abstractSelectionService: AbstractSelectionService;
+    let selectionEventsService: SelectionEventsService;
+
     const mouseEvent = {
         offsetX: 25,
         offsetY: 25,
@@ -21,12 +24,13 @@ describe('AbstractSelectionComponent', () => {
         drawService = new DrawingService();
         TestBed.configureTestingModule({
             declarations: [AbstractSelectionComponent],
-            providers: [AbstractSelectionService, { provide: DrawingService, useValue: drawService }],
+            providers: [AbstractSelectionService, { provide: DrawingService, useValue: drawService }, SelectionEventsService],
         }).compileComponents();
     }));
 
     beforeEach(() => {
         abstractSelectionService = TestBed.inject(AbstractSelectionService);
+        selectionEventsService = TestBed.inject(SelectionEventsService);
         drawService.canvas = document.createElement('canvas');
         drawService.previewCanvas = document.createElement('canvas');
         drawService.baseCtx = drawService.canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -40,6 +44,14 @@ describe('AbstractSelectionComponent', () => {
         expect(component).toBeTruthy();
     });
 
+    it('should subscribe on init', () => {
+        component['isInSidebar'] = false;
+        selectionEventsService.onMouseEnterEvent.next();
+        expect(component['isInSidebar']).toBeTruthy();
+        selectionEventsService.onMouseLeaveEvent.next();
+        expect(component['isInSidebar']).toBeFalsy();
+    });
+
     it('it should disable control if in selection on mouse down', () => {
         spyOn(abstractSelectionService, 'isInSelection').and.returnValue(true);
         const makeControlsUnselectable = spyOn<any>(component, 'makeControlsUnselectable');
@@ -51,6 +63,28 @@ describe('AbstractSelectionComponent', () => {
         const controlSaveBoolean = (component.displayControlPoints = true);
         component.onMouseDown(mouseEvent);
         expect(controlSaveBoolean).not.toEqual(component.displayControlPoints);
+    });
+
+    it('should change translationOrigin when mouseDown and inSelection', () => {
+        spyOn(abstractSelectionService, 'isInSelection').and.returnValue(true);
+        spyOn(abstractSelectionService, 'getPositionFromMouse');
+        spyOn<any>(component, 'makeControlsUnselectable');
+        component.onMouseDown(mouseEvent);
+        expect(abstractSelectionService.getPositionFromMouse).toHaveBeenCalled();
+    });
+
+    it('should stop drawing if the user clicked outside of the drawing container', () => {
+        spyOn(abstractSelectionService, 'stopDrawing');
+        component['isInSidebar'] = false;
+        component['selectionService'].selectionCtx = null;
+        component.onMouseDown(mouseEvent);
+        expect(abstractSelectionService.stopDrawing).not.toHaveBeenCalled();
+        component['isInSidebar'] = true;
+        component.onMouseDown(mouseEvent);
+        expect(abstractSelectionService.stopDrawing).not.toHaveBeenCalled();
+        component['selectionService'].selectionCtx = drawService.previewCtx;
+        component.onMouseDown(mouseEvent);
+        expect(abstractSelectionService.stopDrawing).toHaveBeenCalled();
     });
 
     it('should enable the controls points selection if there are controls points', () => {
@@ -69,13 +103,15 @@ describe('AbstractSelectionComponent', () => {
 
     it('should update the cursor when hovering the selection', () => {
         spyOn(abstractSelectionService, 'isInSelection').and.returnValue(true);
+        component['isInSidebar'] = false;
         component.onMouseMove(mouseEvent);
         expect(drawService.previewCanvas.style.cursor).toEqual('all-scroll');
     });
 
     it('should reset the cursor when not hovering the selection', () => {
         spyOn(abstractSelectionService, 'isInSelection').and.returnValue(false);
-        component['lastCursor'] = 'pointer';
+        component['isInSidebar'] = false;
+        component['lastCanvasCursor'] = 'pointer';
         component.onMouseMove(mouseEvent);
         expect(drawService.previewCanvas.style.cursor).toEqual('pointer');
     });

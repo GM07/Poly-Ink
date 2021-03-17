@@ -17,9 +17,14 @@
 }
 
 .resize-border {
-  background-color: rgba(0,0,0,0);
-  position: absolute;
-  border: 1px solid blue;
-  z-index: 5;
-  pointer-events: none !important;
+    background-color: rgba(0, 0, 0, 0);
+    position: absolute;
+    border: 1px solid blue;
+    z-index: 5;
+    pointer-events: none !important;
+}
+
+.selection-background {
+    background-color: lightgray;
+    position: absolute;
 }

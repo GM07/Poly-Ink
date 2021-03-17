@@ -39,6 +39,7 @@ import { PolygoneConfigComponent } from './components/tool-config/polygone-confi
 import { RectangleConfigComponent } from './components/tool-config/rectangle-config/rectangle-config.component';
 import { RectangleSelectionConfigComponent } from './components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
 import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
+import { SidebarDirective } from './directives/sidebar.directive';
 
 @NgModule({
     declarations: [
@@ -68,6 +69,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         EllipseSelectionComponent,
         SelectionHandlerComponent,
         AerosolConfigComponent,
+        SidebarDirective,
     ],
     imports: [
         AppRoutingModule,
