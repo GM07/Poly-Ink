@@ -59,7 +59,7 @@ export class SaveDrawingComponent {
         this.aspectRatio = 1;
         this.filename = this.defaultFileNames[Math.floor(Math.random() * this.defaultFileNames.length)];
         this.nameFormControl = new FormControl(this.filename, Validators.required);
-        this.tagsFormControl = new FormControl('', Validators.pattern('^([0-9A-Za-z -]+)(,[0-9A-Za-z -]+)*$'));
+        this.tagsFormControl = new FormControl('', Validators.pattern('^([ ]*[0-9A-Za-z-]+[ ]*)(,[ ]*[0-9A-Za-z-]+[ ]*)*$'));
     }
 
     backupBaseCanvas(): void {
