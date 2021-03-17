@@ -18,7 +18,7 @@ const objectId = require('mongodb').ObjectID;
 export class DrawingService {
     private static readonly ROOT_DIRECTORY: string = 'drawings';
     private static readonly COLLECTION: string = 'drawings';
-    databaseValid = true;
+    databaseValid: boolean;
 
     constructor(@inject(TYPES.DatabaseService) private databaseService: DatabaseService) {
         this.tryConnection();
