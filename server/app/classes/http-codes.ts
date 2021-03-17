@@ -1,7 +1,7 @@
 export class HttpStatus {
-    static SUCCESS: number = 200;
-    static CREATED: number = 201;
-    static BAD_REQUEST: number = 400;
-    static NOT_FOUND: number = 404;
-    static SERVICE_UNAVAILABLE: number = 503;
+    static readonly SUCCESS: number = 200;
+    static readonly CREATED: number = 201;
+    static readonly BAD_REQUEST: number = 400;
+    static readonly NOT_FOUND: number = 404;
+    static readonly SERVICE_UNAVAILABLE: number = 503;
 }

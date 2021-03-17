@@ -46,17 +46,13 @@ export class DrawingController {
                 return;
             }
 
-            let id = '';
             try {
-                id = await this.drawingService.createNewDrawingData(drawing.data);
+                drawing.data._id = await this.drawingService.createNewDrawingData(drawing.data);
+                this.drawingService.storeDrawing(drawing);
+                res.status(HttpStatus.CREATED).send(ResponseMessage.SuccessfullyCreated);
             } catch {
                 res.status(HttpStatus.SERVICE_UNAVAILABLE).send(ResponseMessage.CouldNotWriteOnDatabase);
-                return;
             }
-
-            drawing.data._id = id;
-            this.drawingService.storeDrawing(drawing);
-            res.status(HttpStatus.CREATED).send(ResponseMessage.SuccessfullyCreated);
         });
 
         this.router.get('/', async (req: Request, res: Response, next: NextFunction) => {

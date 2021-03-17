@@ -45,7 +45,6 @@ export class Application {
     }
 
     bindRoutes(): void {
-        // Notre application utilise le routeur de notre API `Index`
         this.app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(this.swaggerOptions)));
         this.app.use('/drawings', this.drawingController.router);
         this.errorHandling();

@@ -16,7 +16,7 @@ const objectId = require('mongodb').ObjectID;
 
 @injectable()
 export class DrawingService {
-    private static ROOT_DIRECTORY: string = 'drawings';
+    private static readonly ROOT_DIRECTORY: string = 'drawings';
     private static readonly COLLECTION: string = 'drawings';
 
     constructor(@inject(TYPES.DatabaseService) private databaseService: DatabaseService) {

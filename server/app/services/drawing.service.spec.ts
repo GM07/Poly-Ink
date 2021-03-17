@@ -41,7 +41,7 @@ describe('Drawing service', () => {
         await drawingService.createNewDrawingData(drawing);
         await drawingService.createNewDrawingData(drawing2);
 
-        DrawingService['ROOT_DIRECTORY'] = 'drawings_test';
+        Object.defineProperty(DrawingService, 'ROOT_DIRECTORY', { value: 'drawings_test' });
     });
 
     afterEach(async () => {
@@ -72,9 +72,11 @@ describe('Drawing service', () => {
         expect(drawings).to.deep.contain(drawing);
     });
 
-    it('should create new drawing', async () => {
-        const drawings = await getAllDrawings(drawingService);
-        expect(drawings.length).to.eq(2);
+    it('should create new drawing', (done) => {
+        getAllDrawings(drawingService).then((drawings: DrawingData[]) => {
+            expect(drawings.length).to.eq(2);
+            done();
+        });
     });
 
     it('should delete drawing with id', async () => {
