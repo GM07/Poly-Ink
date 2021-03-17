@@ -1,5 +1,4 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
@@ -67,6 +66,7 @@ export class CarrouselComponent implements OnInit {
     showLoadingWarning: boolean;
     serverConnexionError: boolean;
     isLoadingCarrousel: boolean;
+    isOnline: boolean;
     translationState: string | null;
     drawingsList: Drawing[];
     currentIndex: number;
@@ -94,7 +94,10 @@ export class CarrouselComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        if (this.showCarrousel) this.loadCarrousel();
+        this.carrouselService.testConnection().subscribe(isOnline => this.isOnline = isOnline)
+        if (this.isOnline) {
+            if (this.showCarrousel) this.loadCarrousel();
+        }
     }
 
     translationDone(): void {
@@ -144,7 +147,7 @@ export class CarrouselComponent implements OnInit {
         if (!this.animationIsDone || this.drawingsList.length === 0) return;
 
         // TODO : À vérifier si ça fonctionne!!!
-        this.carrouselService.deleteDrawingDataFromId(this.drawingsList[this.currentIndex])
+        this.carrouselService.deleteDrawing(this.drawingsList[this.currentIndex])
         .subscribe(() => {
             const currentDrawingName = this.drawingsList[this.currentIndex].data.name;
             this.drawingsList.splice(this.currentIndex, 1);
@@ -283,12 +286,8 @@ export class CarrouselComponent implements OnInit {
             },
             (error) => {
                 this.isLoadingCarrousel = false;
-                this.errorHandler(error);
+                this.serverConnexionError = true;
             }
         );
-    }
-
-    errorHandler(error: HttpErrorResponse) {
-        this.serverConnexionError = true;
     }
 }

@@ -27,7 +27,8 @@
     <div id="main">
         <div id="content">
             <div *ngIf="serverConnexionError; then serverConnexionErrorBlock"></div>
-            <div *ngIf="!serverConnexionError">
+            <div *ngIf="!isOnline; then isOfflineBlock"></div>
+            <div *ngIf="!serverConnexionError && isOnline">
             <h1 class="white" style="text-align: center">Dessins sauvegardés sur le serveur</h1>
                 <div *ngIf="isLoadingCarrousel; then loadingBlock; else displayBlock"></div>
                 <ng-template #displayBlock>
@@ -161,6 +162,13 @@
 
 <ng-template #serverConnexionErrorBlock>
     <h1 class="white" style="text-align: center">Erreur de connexion au serveur, impossible de charger les dessins.</h1>
+    <div class="options">
+        <button class="button red white" mat-raised-button (click)="closeCarrousel()">Annuler</button>
+    </div>
+</ng-template>
+
+<ng-template #isOfflineBlock>
+    <h1 class="white" style="text-align: center">Vous semblez ne pas être connecté à Internet, il est impossible de récupérer les dessins</h1>
     <div class="options">
         <button class="button red white" mat-raised-button (click)="closeCarrousel()">Annuler</button>
     </div>

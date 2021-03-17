@@ -3,10 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { CarrouselService } from '@app/services/carrousel/carrousel.service';
 import { Drawing } from '@common/communication/drawing';
-
-interface Tag {
-  name: string;
-}
+import { Tag } from '@common/communication/tag';
 
 @Component({
   selector: 'app-drawing-tags',
