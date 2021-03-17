@@ -11,6 +11,7 @@ import { PolygoneService } from '@app/services/tools/polygone.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
 import { Subject } from 'rxjs';
+import { EyeDropperService } from './eye-dropper.service';
 
 @Injectable({
     providedIn: 'root',
@@ -31,6 +32,7 @@ export class ToolHandlerService {
         ellipseSelectionService: EllipseSelectionService,
         eraserService: EraserService,
         polygoneService: PolygoneService,
+        eyeDropperService: EyeDropperService,
     ) {
         this.TOOLS.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
@@ -38,7 +40,7 @@ export class ToolHandlerService {
         this.TOOLS.set(ToolsConstants.AerosolToolConstants.TOOL_ID, aerosolService);
         this.TOOLS.set(ToolsConstants.EllipseToolConstants.TOOL_ID, ellipseService);
         this.TOOLS.set(ToolsConstants.EraserToolConstants.TOOL_ID, eraserService);
-        // this.TOOLS.set(ToolsConstants.EyeDropperToolConstants.TOOL_ID, pencilService);
+        this.TOOLS.set(ToolsConstants.EyeDropperToolConstants.TOOL_ID, eyeDropperService);
         // this.TOOLS.set(ToolsConstants.FillToolConstants.TOOL_ID, pencilService);
         // this.TOOLS.set(ToolsConstants.LassoToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.PolygoneToolConstants.TOOL_ID, polygoneService);
