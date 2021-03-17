@@ -1,4 +1,6 @@
 import { expect } from 'chai';
+import { Container } from 'inversify';
+import { SinonSandbox } from 'sinon';
 import * as supertest from 'supertest';
 import { Drawing } from '../../../common/communication/drawing';
 import { DrawingData } from '../../../common/communication/drawing-data';
@@ -48,27 +50,45 @@ describe('DrawingController', () => {
 
     let drawingService: Stubbed<DrawingService>;
     let app: Express.Application;
+    let container: Container;
+    let sandbox: SinonSandbox;
 
     beforeEach(async () => {
-        const [container, sandbox] = await testingContainer();
+        const [cont, sand] = await testingContainer();
 
-        container.rebind(TYPES.DrawingService).toConstantValue({
-            validateName: sandbox.stub().resolves(true),
-            validateTags: sandbox.stub().resolves(true),
-            storeDrawing: sandbox.stub().resolves(),
-            getLocalDrawing: sandbox.stub().returns(BASE64_IMG),
-            deleteLocalDrawing: sandbox.stub(),
-            getAllDrawingsData: sandbox.stub().resolves([baseDrawingDatas[0], baseDrawingDatas[1]]),
-            getDrawingsDataFromTags: sandbox.stub().resolves([baseDrawingDatas[0]]),
-            getDrawingDataFromName: sandbox.stub().resolves([baseDrawingDatas[1]]),
-            createNewDrawingData: sandbox.stub().resolves('id1'),
-            createNewDrawingDataFromName: sandbox.stub().resolves('id2'),
-            deleteDrawingDataFromId: sandbox.stub().resolves(),
-            deleteDrawingData: sandbox.stub().resolves(),
+        cont.rebind(TYPES.DrawingService).toConstantValue({
+            databaseValid: true,
+            tryConnection: sand.stub().resolves(),
+            validateName: sand.stub().resolves(true),
+            validateTags: sand.stub().resolves(true),
+            storeDrawing: sand.stub().resolves(),
+            getLocalDrawing: sand.stub().returns(BASE64_IMG),
+            deleteLocalDrawing: sand.stub(),
+            getAllDrawingsData: sand.stub().resolves([baseDrawingDatas[0], baseDrawingDatas[1]]),
+            getDrawingsDataFromTags: sand.stub().resolves([baseDrawingDatas[0]]),
+            getDrawingDataFromName: sand.stub().resolves([baseDrawingDatas[1]]),
+            createNewDrawingData: sand.stub().resolves('id1'),
+            createNewDrawingDataFromName: sand.stub().resolves('id2'),
+            deleteDrawingDataFromId: sand.stub().resolves(),
+            deleteDrawingData: sand.stub().resolves(),
         });
+
+        container = cont;
+        sandbox = sand;
 
         drawingService = container.get(TYPES.DrawingService);
         app = container.get<Application>(TYPES.Application).app;
+    });
+
+    it("should return unavailable connection if database doesn't connect", () => {
+        sandbox.stub(drawingService, 'databaseValid').value(false);
+
+        return supertest(app)
+            .get('/drawings/')
+            .expect(HttpStatus.SERVICE_UNAVAILABLE)
+            .then((response: any) => {
+                expect(response.body).to.deep.equal(ResponseMessage.DatabaseNotValid);
+            });
     });
 
     it('should return all the drawings on valid request', () => {

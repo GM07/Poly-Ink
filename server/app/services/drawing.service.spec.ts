@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import * as fs from 'fs';
 import { describe } from 'mocha';
 import 'reflect-metadata';
+import { stub } from 'sinon';
 import { Drawing } from '../../../common/communication/drawing';
 import { DrawingData } from '../../../common/communication/drawing-data';
 import { Tag } from '../../../common/communication/tag';
@@ -46,6 +47,15 @@ describe('Drawing service', () => {
 
     afterEach(async () => {
         await databaseService.closeConnection();
+    });
+
+    it('should set to not valid if connection fails', async () => {
+        stub(databaseService, 'start').callsFake(() => {
+            throw new Error('test');
+        });
+
+        await drawingService.tryConnection();
+        expect(drawingService.databaseValid).to.eq(false);
     });
 
     it('should get all drawings', async () => {
