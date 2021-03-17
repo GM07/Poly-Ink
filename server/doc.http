@@ -27,9 +27,4 @@ GET http://127.0.0.1:3000/drawings?tags=tag2,tag3 HTTP/1.1
 ### Client: Send an drawing (JPG) to a server 
 ### Server: Save the image locally with a unique identifier
 
-<<<<<<< HEAD
-DELETE http://127.0.0.1:3000/drawings?ids=1,2 HTTP/1.1
-Content-Type: application/json
-=======
 DELETE http://127.0.0.1:3000/drawings?ids=604f872a0084450cbffbacd2 HTTP/1.1
->>>>>>> feature/backend
