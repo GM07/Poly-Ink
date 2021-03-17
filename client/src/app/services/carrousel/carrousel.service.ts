@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Drawing } from '@common/communication/drawing';
 import { Tag } from '@common/communication/tag';
-import { Observable } from 'rxjs'; //, throwError 
-//import { catchError  } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs'; //, throwError 
+import { catchError, retry } from 'rxjs/operators';
 
 /*
 const drawing: Drawing = {
@@ -27,7 +27,11 @@ export class CarrouselService {
     }
     
     getAllDrawings(): Observable<Drawing[]> {
-        return this.http.get<Drawing[]>(this.baseURL);
+        return this.http.get<Drawing[]>(this.baseURL)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
     }
     
     getFilteredDrawings(tags: Tag[]): Observable<Drawing[]> {
@@ -43,16 +47,6 @@ export class CarrouselService {
         return this.http.delete<Drawing>(url);
     }
 
-    /*
-    deleteDrawing(drawing: Drawing): Observable<{}> {
-        let drawingData: any = {...drawing};
-        delete drawingData.data._id;
-        const httpOptions = {
-            headers: new HttpHeaders({'Content-Type': 'application/json'}), body: JSON.stringify(drawingData)
-        }
-        return this.http.delete<Drawing>(this.baseURL, httpOptions);
-    }*/
-/*
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
           // A client-side or network error occurred. Handle it accordingly.
@@ -67,5 +61,15 @@ export class CarrouselService {
         // Return an observable with a user-facing error message.
         return throwError(
           'Something bad happened; please try again later.');
-      }*/
+    }
+
+    /*
+    deleteDrawing(drawing: Drawing): Observable<{}> {
+        let drawingData: any = {...drawing};
+        delete drawingData.data._id;
+        const httpOptions = {
+            headers: new HttpHeaders({'Content-Type': 'application/json'}), body: JSON.stringify(drawingData)
+        }
+        return this.http.delete<Drawing>(this.baseURL, httpOptions);
+    }*/
 }
