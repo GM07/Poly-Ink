@@ -17,13 +17,7 @@ export class DrawingController {
     }
 
     private validateBody(body: Drawing): boolean {
-        return (
-            body.hasOwnProperty('image') &&
-            body.hasOwnProperty('data') &&
-            body.data.hasOwnProperty('_id') &&
-            body.data.hasOwnProperty('name') &&
-            body.data.hasOwnProperty('tags')
-        );
+        return body.hasOwnProperty('image') && body.hasOwnProperty('data') && body.data.hasOwnProperty('name') && body.data.hasOwnProperty('tags');
     }
 
     private configureRouter(): void {
