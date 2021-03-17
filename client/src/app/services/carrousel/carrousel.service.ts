@@ -42,6 +42,6 @@ export class CarrouselService {
         const httpOptions = {
             headers: new HttpHeaders({'Content-Type': 'application/json'}),
         };
-        return this.http.post<Drawing>(this.baseURL + '/create', JSON.stringify(drawingData), httpOptions);
+        return this.http.post<Drawing>(this.baseURL, JSON.stringify(drawingData), httpOptions);
     }
 }
