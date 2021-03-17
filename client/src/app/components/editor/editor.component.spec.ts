@@ -11,9 +11,9 @@ import { DrawingComponent } from '@app/components/drawing/drawing.component';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { ExportDrawingComponent } from '@app/components/export-drawing/export-drawing.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
+import { SaveDrawingComponent } from '@app/components/save-drawing/save-drawing.component';
 import { SelectionHandlerComponent } from '@app/components/selection/selection-handler/selection-handler.component';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
-import { SaveDrawingComponent } from '../save-drawing/save-drawing.component';
 
 @Component({ selector: 'app-sidebar', template: '' })
 class StubSidebarComponent {}
@@ -59,7 +59,7 @@ describe('EditorComponent', () => {
         shortcutHandlerServiceSpy = spyOn(shortCut, 'onKeyDown');
         newDrawingComponent = jasmine.createSpyObj('NewDrawingComponent', ['createNewDrawing']);
         exportDrawingComponent = jasmine.createSpyObj('ExportDrawingComponent', ['show']);
-        saveDrawingComponent = jasmine.createSpyObj('SaveDrawingComponent', ['show'])
+        saveDrawingComponent = jasmine.createSpyObj('SaveDrawingComponent', ['show']);
     });
 
     it('should create', () => {

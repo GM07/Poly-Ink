@@ -20,29 +20,28 @@ import { SaveDrawingComponent } from './save-drawing.component';
 /* tslint:disable:no-magic-numbers */
 /* tslint:disable:no-string-literal */
 /* tslint:disable:no-empty */
-fdescribe('SaveDrawingComponent', () => {
+describe('SaveDrawingComponent', () => {
     let component: SaveDrawingComponent;
     let fixture: ComponentFixture<SaveDrawingComponent>;
-    
+
     let saveDrawingService: SaveDrawingService;
     let shortcutService: ShortcutHandlerService;
     let toolHandlerService: ToolHandlerService;
     let carrouselService: CarrouselService;
 
     let drawingService: DrawingService;
-    let drawServiceSpy: jasmine.SpyObj<DrawingService>
+    let drawServiceSpy: jasmine.SpyObj<DrawingService>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-        declarations: [ SaveDrawingComponent],
-        imports: [HttpClientTestingModule, NoopAnimationsModule, MatButtonToggleModule, MatInputModule, FormsModule, ReactiveFormsModule ],
-        })
-        .compileComponents();
-        
+            declarations: [SaveDrawingComponent],
+            imports: [HttpClientTestingModule, NoopAnimationsModule, MatButtonToggleModule, MatInputModule, FormsModule, ReactiveFormsModule],
+        }).compileComponents();
+
         toolHandlerService = TestBed.inject(ToolHandlerService);
         spyOn(toolHandlerService.getCurrentTool(), 'stopDrawing').and.callFake(() => {});
         shortcutService = TestBed.inject(ShortcutHandlerService);
-        carrouselService = TestBed.inject(CarrouselService); 
+        carrouselService = TestBed.inject(CarrouselService);
         drawingService = TestBed.inject(DrawingService);
         drawServiceSpy = spyOnAllFunctions(drawingService);
         drawServiceSpy.canvas = document.createElement('canvas');
@@ -63,14 +62,15 @@ fdescribe('SaveDrawingComponent', () => {
         component['baseCanvas'].height = 300;
         component['baseContext'] = component['baseCanvas'].getContext('2d') as CanvasRenderingContext2D;
         component['exportPreview'] = new ElementRef(component['baseCanvas']);
-        component['canvasImage'] = dummyDrawing.image; });
+        component['canvasImage'] = dummyDrawing.image;
+    });
 
     it('should create', () => {
         expect(component).toBeTruthy();
     });
 
     it('should init values', () => {
-        const randomValue =  0.4;
+        const randomValue = 0.4;
         const randomStub = spyOn(Math, 'random').and.returnValue(randomValue);
 
         component.saveFormat = 'jpg';
@@ -86,13 +86,13 @@ fdescribe('SaveDrawingComponent', () => {
         expect(component.nameFormControl.validator).toBeTruthy();
         expect(component.tagsFormControl.validator).toBeTruthy();
         expect(randomStub).toHaveBeenCalled();
-    });    
-
-    it('should backup base canvas', () => {
-        component.backupBaseCanvas(); expect(component['baseCanvas'].width).toBe(drawServiceSpy.canvas.width);
-        expect(component['baseCanvas'].height).toBe(drawServiceSpy.canvas.height);
     });
 
+    it('should backup base canvas', () => {
+        component.backupBaseCanvas();
+        expect(component['baseCanvas'].width).toBe(drawServiceSpy.canvas.width);
+        expect(component['baseCanvas'].height).toBe(drawServiceSpy.canvas.height);
+    });
 
     it('should hide popup', () => {
         const initSpy = spyOn(component, 'initValues').and.callThrough();
@@ -111,51 +111,67 @@ fdescribe('SaveDrawingComponent', () => {
         expect(component.canShowPopup()).toBeFalsy();
     });
 
-   it('should save image with valid file name and empty tags', () => {
+    it('should save image with valid file name and empty tags', async () => {
         const spy = spyOn(carrouselService, 'createDrawing').and.returnValue(new Observable());
-        component.save();
-        let mockDrawing: Drawing = new Drawing(new DrawingData(component.filename)); 
+        const mockDrawing: Drawing = new Drawing(new DrawingData(component.filename));
         mockDrawing.image = component['canvasImage'];
-        expect(spy).toHaveBeenCalledWith(mockDrawing);
-    })
-
-    it('should save the image with valid file name and tags', () => {
-        const spy = spyOn(carrouselService, 'createDrawing').and.returnValue(new Observable());
-        component.tagsStr = 'tag1, tag2';
         component.save();
-        let mockDrawing: Drawing = new Drawing(new DrawingData(component.filename)); 
-        mockDrawing.image = component['canvasImage'];
-        expect(spy).toHaveBeenCalledWith(mockDrawing);
+        expect(spy).toHaveBeenCalled();
     });
 
-
-    it('should not save the image when name is empty and validators have errors', () => {
+    it('should save the image with valid file name and tags', async () => {
         const spy = spyOn(carrouselService, 'createDrawing').and.returnValue(new Observable());
-        component.nameFormControl.setErrors({required: true});
+        component.tagsStr = 'tag1, tag2';
+        const mockDrawing: Drawing = new Drawing(new DrawingData(component.filename));
+        mockDrawing.image = component['canvasImage'];
+        component.save();
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should not save the image when name is empty and validators have errors', async () => {
+        const spy = spyOn(carrouselService, 'createDrawing').and.returnValue(new Observable());
+        component.nameFormControl.setErrors({ required: true });
         component.save();
         expect(spy).not.toHaveBeenCalled();
     });
 
-    // TODO: Make to expect after the then 
-    fit('should hide the popup on a successful request', () => {
-        const hidePopUpSpy = spyOn(component, 'hidePopup').and.callFake(() => {});
-        const spy = spyOn(carrouselService, 'createDrawing').and.callFake((drawing: Drawing) => {
-            return of(Promise.resolve(new HttpResponse({status: 200})))
+    it('should hide the popup on a successful request', async () => {
+        spyOn(component, 'hidePopup').and.callFake(() => {});
+        spyOn(carrouselService, 'createDrawing').and.callFake((drawing: Drawing) => {
+            return of(Promise.resolve(new HttpResponse({ status: 200 })));
         });
-        component.save();
-        expect(hidePopUpSpy).toHaveBeenCalled();
-        expect(component.enableAcceptButton).toBeTruthy();
+        await component.save();
+        expect(component.hidePopup).toHaveBeenCalled();
     });
 
-
-    it('should not hide the popup on a bad request', () => {
-        const hidePopUpSpy = spyOn(component, 'hidePopup').and.callFake(() => {});
-        const spy = spyOn(carrouselService, 'createDrawing').and.callFake((drawing: Drawing) => {
-            return of(new HttpErrorResponse({status: 400}));
+    it('should not hide the popup on a bad request and should enable noServerConnection boolean on component', async () => {
+        spyOn(component, 'hidePopup').and.callFake(() => {});
+        spyOn(carrouselService, 'createDrawing').and.callFake((drawing: Drawing) => {
+            return of(Promise.reject(new HttpErrorResponse({ status: 400 })));
         });
-        spy.call(new Drawing(new DrawingData('test_drawing')));
-        expect(hidePopUpSpy).not.toHaveBeenCalled();
-        expect(component.enableAcceptButton).toBeTruthy();
+        await component.save();
+        expect(component.hidePopup).not.toHaveBeenCalled();
+        expect(component.noServerConnection).toBeTruthy();
+    });
+
+    it('should not hide the popup on a bad request and should enable noServerConnection boolean on component', async () => {
+        spyOn(component, 'hidePopup').and.callFake(() => {});
+        spyOn(carrouselService, 'createDrawing').and.callFake((drawing: Drawing) => {
+            return of(Promise.reject(new HttpErrorResponse({ status: 401 })));
+        });
+        await component.save();
+        expect(component.hidePopup).not.toHaveBeenCalled();
+        expect(component.noServerConnection).toBeTruthy();
+    });
+
+    it('should not hide the popup on a bad request and should enable unavailableServer error boolean on component', async () => {
+        spyOn(component, 'hidePopup').and.callFake(() => {});
+        spyOn(carrouselService, 'createDrawing').and.callFake((drawing: Drawing) => {
+            return of(Promise.reject(new HttpErrorResponse({ status: 503 })));
+        });
+        await component.save();
+        expect(component.hidePopup).not.toHaveBeenCalled();
+        expect(component.unavailableServer).toBeTruthy();
     });
 
     it('should return preview height based on aspect ratio', () => {
@@ -175,8 +191,8 @@ fdescribe('SaveDrawingComponent', () => {
         await component.onKeyDown(event);
 
         expect(showSpy).toHaveBeenCalled();
-    })  
-    
+    });
+
     it('should not open save popup', async () => {
         const showSpy = spyOn(component, 'show').and.callFake(async () => {});
 
@@ -184,7 +200,7 @@ fdescribe('SaveDrawingComponent', () => {
         await component.onKeyDown(event);
 
         expect(showSpy).not.toHaveBeenCalled();
-    })
+    });
 
     it('should ignore ctrl events', async () => {
         const event = {
@@ -213,5 +229,4 @@ fdescribe('SaveDrawingComponent', () => {
         const returnValue = component.getPreviewWidth();
         expect(returnValue).toBe(SaveDrawingComponent['EXPORT_PREVIEW_MAX_SIZE']);
     });
-
 });

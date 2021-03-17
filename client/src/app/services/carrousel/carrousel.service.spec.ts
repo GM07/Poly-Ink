@@ -5,63 +5,61 @@ import { Tag } from '@common/communication/tag';
 import { dummyDrawing } from './carrousel.const';
 import { CarrouselService } from './carrousel.service';
 
-const dummyDrawings: Drawing[] = [dummyDrawing]
+const dummyDrawings: Drawing[] = [dummyDrawing];
 
 describe('CarrouselService', () => {
-  let httpMock : HttpTestingController;
-  let service: CarrouselService;
-  
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [CarrouselService]
-    });
-    service = TestBed.inject(CarrouselService);
-    httpMock = TestBed.inject(HttpTestingController);
-  });
+    let httpMock: HttpTestingController;
+    let service: CarrouselService;
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-
-  it('should return an Observable<>', () => {
-    service.getAllDrawings().subscribe(drawings => {
-      expect(drawings.length).toBe(1);
-      expect(drawings).toEqual(dummyDrawings);
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule],
+            providers: [CarrouselService],
+        });
+        service = TestBed.inject(CarrouselService);
+        httpMock = TestBed.inject(HttpTestingController);
     });
 
-    const req = httpMock.expectOne(`${service.baseURL}`);
-    expect(req.request.method).toBe("GET");
-    req.flush(dummyDrawings);
-  });
+    it('should be created', () => {
+        expect(service).toBeTruthy();
+    });
 
-  //TODO should verify if no drawings match the tag!
-  it('should return an Observable<>', () => {
-    const dummyTags: Tag[] = [{name: "tag1"}];
-    service.getFilteredDrawings(dummyTags)
-      .subscribe(filteredDrawings => {
-        expect(filteredDrawings.length).toBe(1);
-      });
+    it('should return an Observable<>', () => {
+        service.getAllDrawings().subscribe((drawings) => {
+            expect(drawings.length).toBe(1);
+            expect(drawings).toEqual(dummyDrawings);
+        });
 
-    const req = httpMock.expectOne(`${service.baseURL}?tags=tag1`);
-    expect(req.request.url).toBe(`${service.baseURL}?tags=tag1`);
-    expect(req.request.method).toBe("GET");
-  })
+        const req = httpMock.expectOne(`${service.baseURL}`);
+        expect(req.request.method).toBe('GET');
+        req.flush(dummyDrawings);
+    });
 
-  it('should send a request DELETE', () => {
-    service.deleteDrawing(dummyDrawing).subscribe();
+    // TODO should verify if no drawings match the tag!
+    it('should return an Observable<>', () => {
+        const dummyTags: Tag[] = [{ name: 'tag1' }];
+        service.getFilteredDrawings(dummyTags).subscribe((filteredDrawings) => {
+            expect(filteredDrawings.length).toBe(1);
+        });
 
-    const req = httpMock.expectOne(`${service.baseURL}`);
-    expect(req.request.method).toBe("DELETE");
-    req.flush(dummyDrawings);
-  });
+        const req = httpMock.expectOne(`${service.baseURL}?tags=tag1`);
+        expect(req.request.url).toBe(`${service.baseURL}?tags=tag1`);
+        expect(req.request.method).toBe('GET');
+    });
 
-  it('should send a request POST', () => {
-    service.createDrawing(dummyDrawing).subscribe();
+    it('should send a request DELETE', () => {
+        service.deleteDrawing(dummyDrawing).subscribe();
 
-    const req = httpMock.expectOne(`${service.baseURL}/create`)
-    expect(req.request.method).toBe('POST');
-    req.flush(dummyDrawings);
-  });
+        const req = httpMock.expectOne(`${service.baseURL}`);
+        expect(req.request.method).toBe('DELETE');
+        req.flush(dummyDrawings);
+    });
 
+    it('should send a request POST', () => {
+        service.createDrawing(dummyDrawing).subscribe();
+
+        const req = httpMock.expectOne(`${service.baseURL}`);
+        expect(req.request.method).toBe('POST');
+        req.flush(dummyDrawings);
+    });
 });

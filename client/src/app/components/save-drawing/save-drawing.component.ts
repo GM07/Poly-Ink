@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { CarrouselService } from '@app/services/carrousel/carrousel.service';
@@ -9,12 +8,10 @@ import { Drawing } from '@common/communication/drawing';
 import { DrawingData } from '@common/communication/drawing-data';
 import { Tag } from '@common/communication/tag';
 
-
-
 @Component({
-  selector: 'app-save-drawing',
-  templateUrl: './save-drawing.component.html',
-  styleUrls: ['./save-drawing.component.scss']
+    selector: 'app-save-drawing',
+    templateUrl: './save-drawing.component.html',
+    styleUrls: ['./save-drawing.component.scss'],
 })
 export class SaveDrawingComponent {
     static readonly EXPORT_PREVIEW_MAX_SIZE: number = 300;
@@ -41,7 +38,6 @@ export class SaveDrawingComponent {
             this.exportPreview = element;
         }
     }
-
 
     private defaultFileNames: string[] = ['Mona Lisa', 'Guenica', 'Le Cri', 'La nuit étoilée', 'Impression, soleil levant'];
 
@@ -84,36 +80,35 @@ export class SaveDrawingComponent {
         return this.saveDrawingService.showPopup;
     }
 
-    save(): void {
-        if(!this.nameFormControl.errors && !this.tagsFormControl.errors){
+    async save(): Promise<void> {
+        if (!this.nameFormControl.errors && !this.tagsFormControl.errors) {
             this.enableAcceptButton = false;
             this.noServerConnection = false;
             this.unavailableServer = false;
-            var tags: Tag[] = [];
+            let tags: Tag[] = [];
             if (this.tagsStr) {
                 tags = this.tagsStr.split(',').map((tagStr: string) => {
-                                return new Tag(tagStr);
-                            });
+                    return new Tag(tagStr);
+                });
             }
-            const newDrawing: Drawing = new Drawing(new DrawingData(this.filename, tags ? tags : undefined));
+            const newDrawing: Drawing = new Drawing(new DrawingData(this.filename, tags));
             newDrawing.image = this.canvasImage;
-            this.carrouselService.createDrawing(newDrawing).toPromise().then((res) => {
-                console.log('Then');
-                this.enableAcceptButton = true;
+            this.enableAcceptButton = false;
+
+            try {
+                await this.carrouselService.createDrawing(newDrawing).toPromise();
                 this.hidePopup();
-            }
-            ).catch((reason: HttpErrorResponse) => {
-                if(reason.status === SaveDrawingComponent.BAD_REQUEST_STATUS) {
+            } catch (reason) {
+                if (reason.status === SaveDrawingComponent.BAD_REQUEST_STATUS) {
                     this.noServerConnection = true;
-                } else if(reason.status === SaveDrawingComponent.UNAIVAILABLE_SERVER_STATUS) {
+                } else if (reason.status === SaveDrawingComponent.UNAIVAILABLE_SERVER_STATUS) {
                     this.unavailableServer = true;
                 } else {
                     this.noServerConnection = true;
                 }
-                this.enableAcceptButton = true;
-            });
-            console.log('End');
-        } 
+            }
+            this.enableAcceptButton = true;
+        }
     }
 
     async generatePreviewData(): Promise<void> {
@@ -128,11 +123,9 @@ export class SaveDrawingComponent {
         });
     }
 
-
-    private generateBase64Image() {
+    private generateBase64Image(): void {
         this.canvasImage = this.baseCanvas.toDataURL('image/' + this.saveFormat);
     }
-
 
     getPreviewHeight(): number {
         if (this.aspectRatio < 1) return SaveDrawingComponent.EXPORT_PREVIEW_MAX_SIZE;

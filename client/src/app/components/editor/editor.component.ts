@@ -2,8 +2,8 @@ import { Component, HostListener, ViewChild } from '@angular/core';
 import { ExportFileToolConstants, NewDrawingConstants, SaveFileToolConsants } from '@app/classes/tool_ui_settings/tools.constants';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 import { ExportDrawingComponent } from '@app/components/export-drawing/export-drawing.component';
+import { SaveDrawingComponent } from '@app/components/save-drawing/save-drawing.component';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
-import { SaveDrawingComponent } from '../save-drawing/save-drawing.component';
 
 @Component({
     selector: 'app-editor',

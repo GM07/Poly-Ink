@@ -3,7 +3,7 @@ import { Popup } from '@app/classes/popup';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class SaveDrawingService implements Popup {
     shortcut: ShortcutKey;
