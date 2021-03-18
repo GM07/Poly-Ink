@@ -41,4 +41,8 @@ describe('Response message', () => {
     it('should create SuccessfullyDeleted respons', () => {
         expect(ResponseMessage.SuccessfullyDeleted.message).to.eq('Successfully deleted');
     });
+
+    it('should create DatabaseNotValid response', () => {
+        expect(ResponseMessage.DatabaseNotValid.message).to.eq('Database not valid');
+    });
 });
