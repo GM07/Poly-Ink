@@ -53,7 +53,7 @@ describe('LineService', () => {
     });
 
     it('should add point on mouse position on first mouse left button down', async () => {
-        const mouseEvent = { button: MouseButton.Left, pageX: 300, pageY: 400, detail: 1 } as MouseEvent;
+        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(service.config.points.length).toBe(1);
         expect(service.config.points[0]).toEqual({ x: 300, y: 400 } as Vec2);
@@ -63,14 +63,14 @@ describe('LineService', () => {
         service.config.points = [{ x: 100, y: 100 }];
         service['pointToAdd'] = { x: 120, y: 120 } as Vec2;
         service.config.showJunctionPoints = true;
-        const mouseEvent = { button: MouseButton.Left, pageX: 500, pageY: 283, detail: 1 } as MouseEvent;
+        const mouseEvent = { button: MouseButton.Left, x: 500, y: 283, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(service.config.points.length).toBe(2);
         expect(service.config.points[1]).toEqual({ x: 120, y: 120 } as Vec2);
     });
 
     it('should not add point on mouse right button down', () => {
-        const mouseEvent = { button: MouseButton.Right, pageX: 500, pageY: 283, detail: 1 } as MouseEvent;
+        const mouseEvent = { button: MouseButton.Right, clientX: 500, clientY: 283, detail: 1 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(service.config.points.length).toBe(0);
     });
@@ -98,7 +98,7 @@ describe('LineService', () => {
 
     it('should not do anything on triple click', () => {
         service.config.points = [{ x: 100, y: 800 } as Vec2];
-        const lastEvent = { pageX: 100, pageY: 100, detail: 3 } as MouseEvent;
+        const lastEvent = { x: 100, y: 100, detail: 3 } as MouseEvent;
         const simpleFunc = spyOn<any>(service, 'handleSimpleClick');
         const doubleFunc = spyOn<any>(service, 'handleDoubleClick');
 
@@ -111,7 +111,7 @@ describe('LineService', () => {
         const points = [{ x: 100, y: 800 } as Vec2];
         service.config.points = points;
         service['SHIFT'].isDown = true;
-        const lastEvent = { pageX: 100, pageY: 100, detail: 2 } as MouseEvent;
+        const lastEvent = { x: 100, y: 100, detail: 2 } as MouseEvent;
         spyOn(service, 'draw').and.stub();
         service.onMouseDown(lastEvent);
         expect(service.draw).toHaveBeenCalled();
@@ -120,7 +120,7 @@ describe('LineService', () => {
 
     it('should end drawing on double click with a closed path', async () => {
         service.config.points = [{ x: 500, y: 400 }, { x: 200, y: 300 }, { x: 100, y: 819 } as Vec2];
-        const lastEvent = { pageX: 500, pageY: 419, detail: 2 } as MouseEvent;
+        const lastEvent = { clientX: 500, clientY: 419, detail: 2 } as MouseEvent;
         spyOn(service, 'draw').and.stub();
         spyOn(service, 'initService').and.stub();
         service.onMouseDown(lastEvent);
@@ -134,7 +134,7 @@ describe('LineService', () => {
         expect(getPositionFromMouse).not.toHaveBeenCalled();
         service.config.points = [{ x: 100, y: 200 } as Vec2];
         const alignPointFunc = spyOn<any>(service, 'alignPoint').and.callThrough();
-        service.onMouseMove({ pageX: 120, pageY: 540 } as MouseEvent);
+        service.onMouseMove({ clientX: 120, clientY: 540 } as MouseEvent);
         expect(alignPointFunc).not.toHaveBeenCalled();
         expect(service['pointToAdd']).toEqual({ x: 120, y: 540 } as Vec2);
     });
@@ -143,7 +143,7 @@ describe('LineService', () => {
         service.config.points = [{ x: 100, y: 200 } as Vec2];
         service['SHIFT'].isDown = true;
         const alignPointFunc = spyOn<any>(service, 'alignPoint').and.returnValue({ x: 40, y: 60 });
-        service.onMouseMove({ pageX: 120, pageY: 540 } as MouseEvent);
+        service.onMouseMove({ clientX: 120, clientY: 540 } as MouseEvent);
         expect(alignPointFunc).toHaveBeenCalled();
         expect(service['pointToAdd']).toEqual({ x: 40, y: 60 } as Vec2);
     });

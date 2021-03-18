@@ -43,8 +43,8 @@ describe('RectangleService', () => {
         service['drawingService'].canvas = canvasTestHelper.canvas;
 
         mouseEvent = {
-            pageX: 25,
-            pageY: 25,
+            clientX: 25,
+            clientY: 25,
             button: 0,
         } as MouseEvent;
 
@@ -78,10 +78,10 @@ describe('RectangleService', () => {
     });
 
     it('should start drawing when the mouse is down', () => {
-        mouseEvent = { pageX: 1, pageY: 1, button: 3 } as MouseEvent;
+        mouseEvent = { clientX: 1, clientY: 1, button: 3 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(drawPreviewSpy).not.toHaveBeenCalled();
-        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { x: 1, y: 1, button: 0 } as MouseEvent;
         service.onMouseDown(mouseEvent);
         expect(drawPreviewSpy).toHaveBeenCalled();
     });
@@ -90,7 +90,7 @@ describe('RectangleService', () => {
         service.onMouseUp(mouseEvent);
         expect(service.leftMouseDown).toEqual(false);
         service.onMouseDown(mouseEvent);
-        mouseEvent = { x: -1, y: -1, pageX: 1, pageY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { x: -1, y: -1, clientX: 1, clientY: 1, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawSpy).toHaveBeenCalled();
     });
@@ -104,7 +104,7 @@ describe('RectangleService', () => {
 
     it('should draw a preview when the mouse is moving with left click pressed', () => {
         service.onMouseDown(mouseEvent);
-        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { clientX: 1, clientY: 1, button: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         expect(drawPreviewSpy).toHaveBeenCalled();
     });
@@ -113,7 +113,7 @@ describe('RectangleService', () => {
         service.onMouseLeave(mouseEvent);
         expect(drawPreviewSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
-        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { clientX: 1, clientY: 1, button: 0 } as MouseEvent;
         service.onMouseLeave(mouseEvent);
         expect(drawPreviewSpy).toHaveBeenCalled();
     });
@@ -134,7 +134,7 @@ describe('RectangleService', () => {
         service.onMouseEnter(mouseEvent);
         expect(drawPreviewSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
-        mouseEvent = { pageX: 1, pageY: 1, button: 0 } as MouseEvent;
+        mouseEvent = { clientX: 1, clientY: 1, button: 0 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(drawPreviewSpy).toHaveBeenCalled();
     });

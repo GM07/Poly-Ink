@@ -45,8 +45,8 @@ describe('PencilService', () => {
         service['drawingService'].canvas = canvasTestHelper.canvas;
 
         mouseEvent = {
-            pageX: 25,
-            pageY: 25,
+            clientX: 25,
+            clientY: 25,
             button: 0,
         } as MouseEvent;
     });
@@ -68,8 +68,8 @@ describe('PencilService', () => {
 
     it(' mouseDown should set mouseDown property to false on right click', () => {
         const mouseEventRClick = {
-            pageX: 25,
-            pageY: 25,
+            clientX: 25,
+            clientY: 25,
             button: 1,
         } as MouseEvent;
         service.onMouseDown(mouseEventRClick);
@@ -105,10 +105,10 @@ describe('PencilService', () => {
         const firstClickOffset: Vec2 = { x: 0, y: 0 };
         const lastClickOffset: Vec2 = { x: 0, y: 50 };
         service.lineWidth = 2;
-        let mouseEventLClick: MouseEvent = { pageX: firstClickOffset.x, pageY: firstClickOffset.y, button: 0, buttons: 1 } as MouseEvent;
+        let mouseEventLClick: MouseEvent = { clientX: firstClickOffset.x, clientY: firstClickOffset.y, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);
         service.onMouseLeave();
-        mouseEventLClick = { pageX: lastClickOffset.x, pageY: lastClickOffset.y, button: 0, buttons: 1 } as MouseEvent;
+        mouseEventLClick = { clientX: lastClickOffset.x, clientY: lastClickOffset.y, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
         expect(drawPreviewSpy).toHaveBeenCalled();
         expect(service.config.pathData[0][0]).toEqual(firstClickOffset);
@@ -116,11 +116,11 @@ describe('PencilService', () => {
     });
 
     it('should stop drawing when the mouse is up', () => {
-        let mouseEventLClick: MouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 1 } as MouseEvent;
+        let mouseEventLClick: MouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.lineWidth = 1;
         service.onMouseDown(mouseEventLClick);
         service.onMouseLeave();
-        mouseEventLClick = { pageX: 0, pageY: 2, button: 0, buttons: 0 } as MouseEvent;
+        mouseEventLClick = { clientX: 0, clientY: 2, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
         const imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
@@ -134,25 +134,25 @@ describe('PencilService', () => {
     });
 
     it('should do nothing when entering the canvas, with an unsupported mouse state', () => {
-        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 3 } as MouseEvent;
+        mouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 3 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(drawPreviewSpy).not.toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
-        mouseEvent = { pageX: 0, pageY: 0, button: 10, buttons: 3 } as MouseEvent;
+        mouseEvent = { clientX: 0, clientY: 0, button: 10, buttons: 3 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(drawPreviewSpy).not.toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
     });
 
     it('should clear the canvas preview when the mouse leaves the canvas, left click released', () => {
-        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 0 } as MouseEvent;
+        mouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseLeave();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
     it('Should only draw nothing on base canvas when moving the mouse, left click released', () => {
         service.leftMouseDown = false;
-        mouseEvent = { pageX: 0, pageY: 0, button: 0, buttons: 0 } as MouseEvent;
+        mouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         expect(drawSpy).not.toHaveBeenCalled();
     });

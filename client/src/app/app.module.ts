@@ -3,8 +3,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -32,12 +34,14 @@ import { AerosolConfigComponent } from './components/tool-config/aerosol-config/
 import { EllipseConfigComponent } from './components/tool-config/ellipse-config/ellipse-config.component';
 import { EllipseSelectionConfigComponent } from './components/tool-config/ellipse-selection-config/ellipse-selection-config.component';
 import { EraserConfigComponent } from './components/tool-config/eraser-config/eraser-config.component';
+import { EyeDropperConfigComponent } from './components/tool-config/eye-dropper-config/eye-dropper-config.component';
 import { LineConfigComponent } from './components/tool-config/line-config/line-config.component';
 import { PencilConfigComponent } from './components/tool-config/pencil-config/pencil-config.component';
 import { PolygoneConfigComponent } from './components/tool-config/polygone-config/polygone-config.component';
 import { RectangleConfigComponent } from './components/tool-config/rectangle-config/rectangle-config.component';
 import { RectangleSelectionConfigComponent } from './components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
 import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
+import { SidebarDirective } from './directives/sidebar.directive';
 
 @NgModule({
     declarations: [
@@ -53,6 +57,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         EraserConfigComponent,
         LineConfigComponent,
         PencilConfigComponent,
+        EyeDropperConfigComponent,
         SettingsHandlerComponent,
         CanvasResizeComponent,
         SidebarComponent,
@@ -66,6 +71,7 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         EllipseSelectionComponent,
         SelectionHandlerComponent,
         AerosolConfigComponent,
+        SidebarDirective,
     ],
     imports: [
         AppRoutingModule,
@@ -86,6 +92,8 @@ import { SettingsHandlerComponent } from './components/tool-config/settings-hand
         MatSliderModule,
         MatIconModule,
         FormsModule,
+        MatChipsModule,
+        MatFormFieldModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

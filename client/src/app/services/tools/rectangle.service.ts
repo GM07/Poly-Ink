@@ -14,6 +14,7 @@ export class RectangleService extends AbstractShape {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(RectangleToolConstants.SHORTCUT_KEY);
+        this.toolID = RectangleToolConstants.TOOL_ID;
     }
 
     draw(): void {
