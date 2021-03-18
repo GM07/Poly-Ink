@@ -46,6 +46,7 @@ export class CanvasResizeComponent implements AfterViewInit {
     }
 
     mouseDown(right: boolean, bottom: boolean): void {
+        this.drawingService.blockUndoRedo();
         this.previewResizeView = true;
         this.isDown = true;
         this.moveRight = right;

@@ -65,7 +65,8 @@ export abstract class AbstractSelectionService extends Tool {
                 this.endSelection();
                 this.mouseDownCoord = mousePos;
                 this.mouseUpCoord = mousePos;
-                this.drawPreviewSelection();
+                this.config.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
+                this.config.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
             }
         }
     }
@@ -283,6 +284,8 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     private drawPreviewSelection(): void {
+        this.drawingService.blockUndoRedo();
+
         this.config.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
         this.config.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
 

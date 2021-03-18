@@ -16,10 +16,6 @@ export class RectangleService extends AbstractShape {
         this.shortcutKey = new ShortcutKey(RectangleToolConstants.SHORTCUT_KEY);
     }
 
-    protected updateShape(): void {
-        this.drawPreview();
-    }
-
     draw(): void {
         const command = new RectangleDraw(this.colorService, this.config);
         this.drawingService.draw(command);

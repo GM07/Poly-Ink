@@ -122,7 +122,6 @@ describe('PencilService', () => {
         service.onMouseLeave();
         mouseEventLClick = { pageX: 0, pageY: 2, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
-        expect(drawPreviewSpy).toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
         const imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
         expect(imageData.data[ALPHA]).toEqual(0); // A, nothing should be drawn where mouse entered

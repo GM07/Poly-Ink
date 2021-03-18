@@ -17,6 +17,7 @@ describe('UndoRedoService', () => {
         service = TestBed.inject(UndoRedoService);
         resizeDraw = jasmine.createSpyObj('ResizeDraw', ['execute']);
         service.init(baseCtxStub, previewCtxStub, resizeDraw);
+        service.blockUndoRedo = false;
     });
 
     it('should init properly', () => {
@@ -45,30 +46,40 @@ describe('UndoRedoService', () => {
 
     it('should make appropriate calls on undo', () => {
         const nbCommands = 4;
-        spyOn(baseCtxStub, 'putImageData').and.stub();
+        spyOn(baseCtxStub, 'drawImage').and.stub();
         for (let i = 0; i < nbCommands; i++) service.saveCommand(resizeDraw);
 
         service.undo();
 
-        expect(baseCtxStub.putImageData).toHaveBeenCalled();
+        expect(baseCtxStub.drawImage).toHaveBeenCalled();
         expect(resizeDraw.execute).toHaveBeenCalledTimes(nbCommands);
     });
 
     it('should not undo if there is nothing to undo', () => {
         const invalidActionNumber = -1;
-        spyOn(baseCtxStub, 'putImageData').and.stub();
+        spyOn(baseCtxStub, 'drawImage').and.stub();
 
         service.currentAction = invalidActionNumber;
 
         service.undo();
 
-        expect(baseCtxStub.putImageData).not.toHaveBeenCalled();
+        expect(baseCtxStub.drawImage).not.toHaveBeenCalled();
+        expect(resizeDraw.execute).not.toHaveBeenCalled();
+    });
+
+    it('should not undo if undoRedo is blocked', () => {
+        spyOn(baseCtxStub, 'drawImage').and.stub();
+
+        service.blockUndoRedo = true;
+
+        service.undo();
+
+        expect(baseCtxStub.drawImage).not.toHaveBeenCalled();
         expect(resizeDraw.execute).not.toHaveBeenCalled();
     });
 
     it('should make appropriate calls on redo', () => {
         const nbCommands = 4;
-        spyOn(baseCtxStub, 'putImageData').and.stub();
         for (let i = 0; i < nbCommands; i++) service.saveCommand(resizeDraw);
 
         service.currentAction = 0;
@@ -78,8 +89,35 @@ describe('UndoRedoService', () => {
     });
 
     it('should not redo if there is nothing to redo', () => {
+        const nbCommands = 4;
+        for (let i = 0; i < nbCommands; i++) service.saveCommand(resizeDraw);
+
         service.currentAction = service.commands.length - 1;
         service.redo();
         expect(resizeDraw.execute).not.toHaveBeenCalled();
+    });
+
+    it('should not redo if redo is blocked', () => {
+        const nbCommands = 4;
+        for (let i = 0; i < nbCommands; i++) service.saveCommand(resizeDraw);
+
+        service.currentAction = 0;
+        service.blockUndoRedo = true;
+        service.redo();
+        expect(resizeDraw.execute).not.toHaveBeenCalled();
+    });
+
+    it('should call undo on CTRL-Z', () => {
+        const event = { key: 'z', ctrlKey: true, shiftKey: false, altKey: false } as KeyboardEvent;
+        spyOn(service, 'undo').and.stub();
+        service.onKeyDown(event);
+        expect(service.undo).toHaveBeenCalled();
+    });
+
+    it('should call undo on CTRL-SHIFT-Z', () => {
+        const event = { key: 'z', ctrlKey: true, shiftKey: true, altKey: false } as KeyboardEvent;
+        spyOn(service, 'redo').and.stub();
+        service.onKeyDown(event);
+        expect(service.redo).toHaveBeenCalled();
     });
 });

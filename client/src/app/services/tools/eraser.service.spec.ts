@@ -116,10 +116,7 @@ describe('EraserService', () => {
         service.onMouseLeave();
         mouseEventLClick = { pageX: 0, pageY: 2, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
-        expect(drawPreviewSpy).toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
-        const imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
-        expect(imageData.data[0]).toEqual(0); // A, nothing should be drawn where mouse entered
 
         service.leftMouseDown = true;
         mouseEventLClick = { x: 1000, y: 1000, button: 0, buttons: 0 } as MouseEvent;

@@ -17,10 +17,6 @@ export class EllipseService extends AbstractShape {
         this.shortcutKey = new ShortcutKey(EllipseToolConstants.SHORTCUT_KEY);
     }
 
-    protected updateShape(): void {
-        this.drawPreview();
-    }
-
     draw(): void {
         this.config.showPerimeter = false;
         const command = new EllipseDraw(this.colorService, this.config);

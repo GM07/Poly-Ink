@@ -24,7 +24,7 @@ describe('RectangleSelectionService', () => {
     } as MouseEvent;
 
     beforeEach(() => {
-        drawServiceSpy = jasmine.createSpyObj('DrawigSnervice', ['clearCanvas', 'draw']);
+        drawServiceSpy = jasmine.createSpyObj('DrawigSnervice', ['clearCanvas', 'draw', 'blockUndoRedo']);
         TestBed.configureTestingModule({
             providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
         });

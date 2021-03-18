@@ -64,17 +64,23 @@ export class DrawingService {
         this.baseCtx.fillStyle = color;
     }
 
+    blockUndoRedo(): void {
+        this.undoRedoService.blockUndoRedo = true;
+    }
+
     initBackground(): void {
         this.baseCtx.fillStyle = 'white';
         this.baseCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     draw(command: AbstractDraw): void {
+        this.undoRedoService.blockUndoRedo = false;
         command.execute(this.baseCtx);
         this.undoRedoService.saveCommand(command);
     }
 
     drawPreview(command: AbstractDraw): void {
+        this.blockUndoRedo();
         this.clearCanvas(this.previewCtx);
         command.execute(this.previewCtx);
     }

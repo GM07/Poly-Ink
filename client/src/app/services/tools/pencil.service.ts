@@ -43,16 +43,17 @@ export class PencilService extends Tool {
     }
 
     onMouseUp(event: MouseEvent): void {
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
         if (this.leftMouseDown) {
             if (this.isInCanvas(event)) {
                 const mousePosition = this.getPositionFromMouse(event);
                 this.config.pathData[this.config.pathData.length - 1].push(mousePosition);
+                this.drawBackgroundPoint(mousePosition);
             }
             this.draw();
         }
         this.leftMouseDown = false;
         this.clearPath();
-        this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -81,7 +82,6 @@ export class PencilService extends Tool {
             this.onMouseMove(event);
         } else if (event.buttons === LeftMouse.Released) {
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
-            this.drawPreview();
             this.leftMouseDown = false;
             this.clearPath();
         }
@@ -95,8 +95,12 @@ export class PencilService extends Tool {
     protected drawBackgroundPoint(point: Vec2): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
-        this.config.pathData = [[point]];
-        this.drawPreview();
+
+        const backgroundPointConfig = this.config.clone();
+        backgroundPointConfig.pathData = [[point]];
+
+        const command = new PencilDraw(this.colorService, backgroundPointConfig);
+        command.execute(this.drawingService.previewCtx);
     }
 
     drawPreview(): void {

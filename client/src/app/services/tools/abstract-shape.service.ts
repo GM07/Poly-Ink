@@ -17,7 +17,6 @@ export abstract class AbstractShape extends Tool {
 
     protected abstract draw(): void;
     protected abstract drawPreview(): void;
-    protected abstract updateShape(): void;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
@@ -68,13 +67,13 @@ export abstract class AbstractShape extends Tool {
 
     onMouseLeave(event: MouseEvent): void {
         if (this.leftMouseDown) {
-            this.updateShape();
+            this.drawPreview();
         }
     }
 
     onMouseEnter(event: MouseEvent): void {
         if (this.leftMouseDown) {
-            this.updateShape();
+            this.drawPreview();
         }
     }
 
@@ -82,7 +81,7 @@ export abstract class AbstractShape extends Tool {
         if (this.SHIFT.equals(event)) {
             this.config.shiftDown = true;
             if (this.leftMouseDown) {
-                this.updateShape();
+                this.drawPreview();
             }
         }
     }
@@ -91,7 +90,7 @@ export abstract class AbstractShape extends Tool {
         if (this.SHIFT.equals(event)) {
             this.config.shiftDown = false;
             if (this.leftMouseDown) {
-                this.updateShape();
+                this.drawPreview();
             }
         }
     }
