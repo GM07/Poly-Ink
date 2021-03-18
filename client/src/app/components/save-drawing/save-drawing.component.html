@@ -11,14 +11,15 @@
                 </mat-form-field>
                 <mat-form-field appearance="legacy">
                     <mat-hint class="gray">[A-Z][a-z][0-9][-]</mat-hint>
-                    <mat-label class="gray">Tags (séprarées par des virgules)</mat-label>
+                    <mat-label class="gray">Tags (séprarés par des virgules)</mat-label>
                     <input matInput [(ngModel)]="tagsStr" [formControl]="tagsFormControl" name="tagsStr" maxlength="100" />
                     <mat-error *ngIf="tagsFormControl.hasError('pattern')"> Les tags sont <strong>invalides</strong></mat-error>
                 </mat-form-field>
             </form>
-            <canvas #exportPreview id="exportPreview" [attr.width]="this.getPreviewWidth()" [attr.height]="this.getPreviewHeight()"></canvas>
-            <h3 *ngIf="noServerConnection" class="error">Aucune connection internet!</h3>
-            <h3 *ngIf="unavailableServer" class="error">Le service n'est pas dispobile!</h3>
+            <canvas #savePreview id="savePreview" [attr.width]="this.getPreviewWidth()" [attr.height]="this.getPreviewHeight()"></canvas>
+            <h3 *ngIf="noServerConnection" class="error">Aucune connexion internet!</h3>
+            <h3 *ngIf="unavailableServer" class="error">Le service n'est pas disponible!</h3>
+            <h3 *ngIf="dataLimitReached" class="error">L'image est trop grande!</h3>
             <div class="options">
                 <button class="button green white" mat-raised-button [disabled]="!enableAcceptButton" (click)="save()">Confirmer</button>
                 <button class="button red white" mat-raised-button (click)="hidePopup()">Annuler</button>

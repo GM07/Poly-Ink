@@ -13,12 +13,12 @@ interface Tag {
     providedIn: 'root',
 })
 export class CarrouselService {
-    baseURL: string = 'http://localhost:3000/drawings';
+    static readonly baseURL: string = 'http://localhost:3000/drawings';
 
     constructor(private http: HttpClient) {}
 
     getAllDrawings(): Observable<Drawing[]> {
-        return this.http.get<Drawing[]>(this.baseURL);
+        return this.http.get<Drawing[]>(CarrouselService.baseURL);
     }
 
     getFilteredDrawings(tags: Tag[]): Observable<Drawing[]> {
@@ -27,7 +27,7 @@ export class CarrouselService {
             tagNames.push(tag.name);
         });
         const tagStr: string = tagNames.join();
-        return this.http.get<Drawing[]>(this.baseURL + '?tags=' + tagStr);
+        return this.http.get<Drawing[]>(CarrouselService.baseURL + '?tags=' + tagStr);
     }
 
     deleteDrawing(drawing: Drawing): Observable<{}> {
@@ -37,7 +37,7 @@ export class CarrouselService {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
             body: JSON.stringify(drawingData),
         };
-        return this.http.delete<Drawing>(this.baseURL, httpOptions);
+        return this.http.delete<Drawing>(CarrouselService.baseURL, httpOptions);
     }
 
     createDrawing(drawing: Drawing): Observable<{}> {
@@ -46,6 +46,6 @@ export class CarrouselService {
         const httpOptions = {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
         };
-        return this.http.post<ResponseMessage>(this.baseURL, JSON.stringify(drawingData), httpOptions);
+        return this.http.post<ResponseMessage>(CarrouselService.baseURL, JSON.stringify(drawingData), httpOptions);
     }
 }

@@ -35,7 +35,14 @@ describe('SaveDrawingComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [SaveDrawingComponent],
-            imports: [HttpClientTestingModule, NoopAnimationsModule, MatButtonToggleModule, MatInputModule, FormsModule, ReactiveFormsModule],
+            imports: [
+                HttpClientTestingModule,
+                NoopAnimationsModule,
+                MatButtonToggleModule,
+                MatInputModule,
+                FormsModule,
+                ReactiveFormsModule.withConfig({ warnOnNgModelWithFormControl: 'never' }),
+            ],
         }).compileComponents();
 
         toolHandlerService = TestBed.inject(ToolHandlerService);
@@ -61,7 +68,7 @@ describe('SaveDrawingComponent', () => {
         component['baseCanvas'].width = 300;
         component['baseCanvas'].height = 300;
         component['baseContext'] = component['baseCanvas'].getContext('2d') as CanvasRenderingContext2D;
-        component['exportPreview'] = new ElementRef(component['baseCanvas']);
+        component['savePreview'] = new ElementRef(component['baseCanvas']);
         component['canvasImage'] = dummyDrawing.image;
     });
 
@@ -174,6 +181,16 @@ describe('SaveDrawingComponent', () => {
         expect(component.unavailableServer).toBeTruthy();
     });
 
+    it('should not hide the popup on a bad request and should enable dataLimitReached error boolean on component', async () => {
+        spyOn(component, 'hidePopup').and.callFake(() => {});
+        spyOn(carrouselService, 'createDrawing').and.callFake((drawing: Drawing) => {
+            return of(Promise.reject(new HttpErrorResponse({ status: 413 })));
+        });
+        await component.save();
+        expect(component.hidePopup).not.toHaveBeenCalled();
+        expect(component.dataLimitReached).toBeTruthy();
+    });
+
     it('should return preview height based on aspect ratio', () => {
         component.aspectRatio = 2;
         const height = component.getPreviewHeight();
@@ -193,7 +210,7 @@ describe('SaveDrawingComponent', () => {
         expect(showSpy).toHaveBeenCalled();
     });
 
-    it('should not open save popup', async () => {
+    it('should not open save popup on a different key', async () => {
         const showSpy = spyOn(component, 'show').and.callFake(async () => {});
 
         const event = { key: 'a', ctrlKey: true, shiftKey: false, altKey: false, preventDefault: () => {} } as KeyboardEvent;

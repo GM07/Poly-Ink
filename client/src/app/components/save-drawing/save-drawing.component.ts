@@ -16,30 +16,25 @@ import { Tag } from '@common/communication/tag';
 export class SaveDrawingComponent {
     static readonly EXPORT_PREVIEW_MAX_SIZE: number = 300;
     static readonly BAD_REQUEST_STATUS: number = 400;
-    static readonly UNAIVAILABLE_SERVER_STATUS: number = 503;
+    static readonly UNAVAILABLE_SERVER_STATUS: number = 503;
+    static readonly DATA_LIMIT_REACHED: number = 413;
     private baseCanvas: HTMLCanvasElement;
     private baseContext: CanvasRenderingContext2D;
     private canvasImage: string;
     private imageData: ImageData;
+    private savePreview: ElementRef<HTMLCanvasElement>;
+    private defaultFileNames: string[] = ['Mona Lisa', 'Guenica', 'Le Cri', 'La nuit étoilée', 'Impression, soleil levant'];
 
     enableAcceptButton: boolean;
     noServerConnection: boolean;
+    dataLimitReached: boolean;
     nameFormControl: FormControl;
     tagsFormControl: FormControl;
     saveFormat: string;
     filename: string;
     tagsStr: string;
-    currentFilter: string;
     aspectRatio: number;
     unavailableServer: boolean;
-    private exportPreview: ElementRef<HTMLCanvasElement>;
-    @ViewChild('exportPreview', { static: false }) set content(element: ElementRef) {
-        if (element) {
-            this.exportPreview = element;
-        }
-    }
-
-    private defaultFileNames: string[] = ['Mona Lisa', 'Guenica', 'Le Cri', 'La nuit étoilée', 'Impression, soleil levant'];
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -49,6 +44,12 @@ export class SaveDrawingComponent {
         private carrouselService: CarrouselService,
     ) {
         this.initValues();
+    }
+
+    @ViewChild('savePreview', { static: false }) set content(element: ElementRef) {
+        if (element) {
+            this.savePreview = element;
+        }
     }
 
     initValues(): void {
@@ -73,6 +74,7 @@ export class SaveDrawingComponent {
     hidePopup(): void {
         this.saveDrawingService.showPopup = false;
         this.shortcutHandler.blockShortcuts = false;
+        this.tagsStr = '';
         this.initValues();
     }
 
@@ -85,6 +87,7 @@ export class SaveDrawingComponent {
             this.enableAcceptButton = false;
             this.noServerConnection = false;
             this.unavailableServer = false;
+            this.dataLimitReached = false;
             let tags: Tag[] = [];
             if (this.tagsStr) {
                 tags = this.tagsStr.split(',').map((tagStr: string) => {
@@ -99,10 +102,10 @@ export class SaveDrawingComponent {
                 await this.carrouselService.createDrawing(newDrawing).toPromise();
                 this.hidePopup();
             } catch (reason) {
-                if (reason.status === SaveDrawingComponent.BAD_REQUEST_STATUS) {
-                    this.noServerConnection = true;
-                } else if (reason.status === SaveDrawingComponent.UNAIVAILABLE_SERVER_STATUS) {
+                if (reason.status === SaveDrawingComponent.UNAVAILABLE_SERVER_STATUS) {
                     this.unavailableServer = true;
+                } else if (reason.status === SaveDrawingComponent.DATA_LIMIT_REACHED) {
+                    this.dataLimitReached = true;
                 } else {
                     this.noServerConnection = true;
                 }
@@ -112,7 +115,7 @@ export class SaveDrawingComponent {
     }
 
     async generatePreviewData(): Promise<void> {
-        const exportPreviewCtx = this.exportPreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+        const exportPreviewCtx = this.savePreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
         this.imageData = this.baseContext.getImageData(0, 0, this.baseCanvas.width, this.baseCanvas.height);
 
         this.aspectRatio = this.baseCanvas.width / this.baseCanvas.height;
