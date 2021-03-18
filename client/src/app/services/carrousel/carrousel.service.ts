@@ -22,11 +22,7 @@ export class CarrouselService {
     }
 
     getFilteredDrawings(tags: Tag[]): Observable<Drawing[]> {
-        const tagNames: string[] = [];
-        tags.forEach((tag: Tag) => {
-            tagNames.push(tag.name);
-        });
-        const tagStr: string = tagNames.join();
+        const tagStr = tags.map((tag: Tag) => { return tag.name} ).join(); 
         return this.http.get<Drawing[]>(CarrouselService.baseURL + '?tags=' + tagStr);
     }
 
