@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 })
 export class ShortcutHandlerService {
     private blockShortcutsIn: boolean;
+    private lastMouseMoveEvent: MouseEvent;
     blockShortcutsEvent: Subject<boolean>;
 
     constructor(private toolHandlerService: ToolHandlerService) {
@@ -19,6 +20,10 @@ export class ShortcutHandlerService {
     }
 
     set blockShortcuts(block: boolean) {
+        if (this.lastMouseMoveEvent !== undefined && block) {
+            this.toolHandlerService.onMouseUp(this.lastMouseMoveEvent);
+        }
+
         this.blockShortcutsIn = block;
         this.blockShortcutsEvent.next(block);
     }
@@ -28,6 +33,10 @@ export class ShortcutHandlerService {
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (!this.blockShortcutsIn) this.toolHandlerService.onMouseMove(event);
+        this.lastMouseMoveEvent = event;
+        if (!this.blockShortcutsIn) {
+            this.toolHandlerService.onMouseMove(event);
+            this.lastMouseMoveEvent = event;
+        }
     }
 }
