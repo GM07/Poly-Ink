@@ -55,6 +55,10 @@ describe('AbstractSelectionComponent', () => {
     it('it should disable control if in selection on mouse down', () => {
         spyOn(abstractSelectionService, 'isInSelection').and.returnValue(true);
         const makeControlsUnselectable = spyOn<any>(component, 'makeControlsUnselectable');
+        component['shortcutHandlerService'].blockShortcuts = true;
+        component.onMouseDown(mouseEvent);
+        expect(makeControlsUnselectable).not.toHaveBeenCalled();
+        component['shortcutHandlerService'].blockShortcuts = false;
         component.onMouseDown(mouseEvent);
         expect(makeControlsUnselectable).toHaveBeenCalled();
     });
@@ -90,6 +94,10 @@ describe('AbstractSelectionComponent', () => {
     it('should enable the controls points selection if there are controls points', () => {
         component.displayControlPoints = true;
         const makeControlsSelectable = spyOn<any>(component, 'makeControlsSelectable');
+        component['shortcutHandlerService'].blockShortcuts = true;
+        component.onMouseUp();
+        expect(makeControlsSelectable).not.toHaveBeenCalled();
+        component['shortcutHandlerService'].blockShortcuts = false;
         component.onMouseUp();
         expect(makeControlsSelectable).toHaveBeenCalled();
     });
@@ -104,6 +112,10 @@ describe('AbstractSelectionComponent', () => {
     it('should update the cursor when hovering the selection', () => {
         spyOn(abstractSelectionService, 'isInSelection').and.returnValue(true);
         component['isInSidebar'] = false;
+        component['shortcutHandlerService'].blockShortcuts = true;
+        component.onMouseMove(mouseEvent);
+        expect(drawService.previewCanvas.style.cursor).not.toEqual('all-scroll');
+        component['shortcutHandlerService'].blockShortcuts = false;
         component.onMouseMove(mouseEvent);
         expect(drawService.previewCanvas.style.cursor).toEqual('all-scroll');
     });
@@ -201,5 +213,13 @@ describe('AbstractSelectionComponent', () => {
         const placePoints = spyOn<any>(component, 'placePoints');
         abstractSelectionService.updatePoints.next(false);
         expect(placePoints).not.toHaveBeenCalled();
+    });
+
+    it('should reset the cursor when the shortcuts are blocked', () => {
+        const resetCursorSpy = spyOn<any>(component, 'resetCursor').and.callThrough();
+        component['shortcutHandlerService'].blockShortcutsEvent.next(false);
+        expect(resetCursorSpy).not.toHaveBeenCalled();
+        component['shortcutHandlerService'].blockShortcutsEvent.next(true);
+        expect(resetCursorSpy).toHaveBeenCalled();
     });
 });
