@@ -51,10 +51,10 @@ describe('RectangleDraw', () => {
         expect(imageData.data[ALPHA]).toEqual(0); // A
 
         // tslint:disable-next-line:no-magic-numbers
-        imageData = ctxStub.getImageData(10, 10, 1, 1);
-        expect(imageData.data[0]).toEqual(Colors.BLUE.r); // R
-        expect(imageData.data[1]).toEqual(Colors.BLUE.g); // G
-        expect(imageData.data[2]).toEqual(Colors.BLUE.b); // B
+        imageData = ctxStub.getImageData(5, 5, 1, 1);
+        expect(imageData.data[0]).toEqual(Colors.RED.r); // R
+        expect(imageData.data[1]).toEqual(Colors.RED.g); // G
+        expect(imageData.data[2]).toEqual(Colors.RED.b); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
