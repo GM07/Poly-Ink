@@ -13,6 +13,7 @@ export class EllipseService extends AbstractShape {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(EllipseToolConstants.SHORTCUT_KEY);
+        this.toolID = EllipseToolConstants.TOOL_ID;
     }
 
     protected updateShape(): void {
