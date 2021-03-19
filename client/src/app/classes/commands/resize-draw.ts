@@ -13,7 +13,6 @@ export class ResizeDraw extends AbstractDraw {
         this.drawingService = drawingService;
     }
 
-    // TODO - remove unused param
     execute(context: CanvasRenderingContext2D): void {
         this.drawingService.resizeCanvas(this.config.width, this.config.height);
     }

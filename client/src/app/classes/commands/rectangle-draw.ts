@@ -9,7 +9,6 @@ export class RectangleDraw extends AbstractDraw {
         this.config = config.clone();
     }
 
-    // TODO - 1px border is not the right color
     execute(context: CanvasRenderingContext2D): void {
         let width: number = this.config.endCoords.x - this.config.startCoords.x;
         let height: number = this.config.endCoords.y - this.config.startCoords.y;
