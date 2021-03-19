@@ -6,6 +6,8 @@ import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { EraserDraw } from './eraser-draw';
 
+// tslint:disable:no-string-literal
+
 describe('EraserDraw', () => {
     let eraserDraw: EraserDraw;
     let colorService: ColorService;

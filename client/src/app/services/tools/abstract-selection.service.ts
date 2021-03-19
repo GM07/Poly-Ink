@@ -67,17 +67,12 @@ export abstract class AbstractSelectionService extends Tool {
         if (this.leftMouseDown && !this.isInSelection(event)) {
             document.body.style.width = this.bodyWidth;
             document.body.style.height = this.bodyHeight;
-            this.endSelection();
             const mousePos = this.getPositionFromMouse(event);
-            if (this.isInSelection(event)) {
-                this.translationOrigin = mousePos;
-            } else {
-                this.endSelection();
-                this.mouseDownCoord = mousePos;
-                this.mouseUpCoord = mousePos;
-                this.config.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
-                this.config.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
-            }
+            this.endSelection();
+            this.mouseDownCoord = mousePos;
+            this.mouseUpCoord = mousePos;
+            this.config.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
+            this.config.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
         }
     }
 

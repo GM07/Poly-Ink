@@ -4,6 +4,9 @@ import { AerosolConfig } from '@app/classes/tool-config/aerosol-config';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { AerosolDraw } from './aerosol-draw';
+
+// tslint:disable:no-string-literal
+
 describe('AerosolDraw', () => {
     let aerosolDraw: AerosolDraw;
     let colorService: ColorService;

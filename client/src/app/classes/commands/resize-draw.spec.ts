@@ -3,6 +3,9 @@ import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { ResizeConfig } from '@app/classes/tool-config/resize-config';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ResizeDraw } from './resize-draw';
+
+// tslint:disable:no-string-literal
+
 describe('ResizeDraw', () => {
     let resizeDraw: ResizeDraw;
     let drawServiceSpy: jasmine.SpyObj<DrawingService>;
