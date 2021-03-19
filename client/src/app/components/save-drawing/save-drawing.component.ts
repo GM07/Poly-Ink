@@ -13,7 +13,7 @@ import { Tag } from '@common/communication/tag';
     templateUrl: './save-drawing.component.html',
     styleUrls: ['./save-drawing.component.scss'],
 })
-export class SaveDrawingComponent implements OnInit{
+export class SaveDrawingComponent implements OnInit {
     static readonly EXPORT_PREVIEW_MAX_SIZE: number = 300;
     static readonly BAD_REQUEST_STATUS: number = 400;
     static readonly UNAVAILABLE_SERVER_STATUS: number = 503;
@@ -45,15 +45,12 @@ export class SaveDrawingComponent implements OnInit{
         this.initValues();
     }
 
- 
-   ngOnInit(): void {
+    ngOnInit(): void {
         this.saveForm = new FormGroup({
             nameFormControl: new FormControl(this.filename, [Validators.required]),
             tagsFormControl: new FormControl(this.tagsStr, [Validators.pattern('^([ ]*[0-9A-Za-z-]+[ ]*)(,[ ]*[0-9A-Za-z-]+[ ]*)*$')]),
         });
-
     }
-
 
     @ViewChild('savePreview', { static: false }) set content(element: ElementRef) {
         if (element) {
