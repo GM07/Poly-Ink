@@ -13,7 +13,6 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
     @ViewChild('canvas')
     canvas: ElementRef<HTMLCanvasElement>;
 
-    // TODO - move constant to other file
     readonly RED_START: number = 0;
     readonly YELLOW_START: number = 0.17;
     readonly GREEN_START: number = 0.34;

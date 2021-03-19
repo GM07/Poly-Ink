@@ -20,6 +20,6 @@ export class LineConfigComponent extends ToolConfig {
     }
 
     toggleLineType(lineType: boolean): void {
-        this.lineService.showJunctionPoints = lineType;
+        this.lineService.config.showJunctionPoints = lineType;
     }
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
+import { ShapeMode } from '@app/classes/tool-config/shape-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { ShapeMode } from '@app/services/tools/abstract-shape.service';
 import { EllipseService } from '@app/services/tools/ellipse.service';
 @Component({
     selector: 'app-ellipse-config',
@@ -19,7 +19,7 @@ export class EllipseConfigComponent extends ToolConfig {
     }
 
     toggleTraceType(traceType: ShapeMode): void {
-        this.ellipseService.shapeMode = traceType;
+        this.ellipseService.config.shapeMode = traceType;
     }
 
     colorSliderLabel(value: number): string {

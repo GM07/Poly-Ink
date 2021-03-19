@@ -21,7 +21,8 @@ export class NewDrawingComponent {
 
     createNewDrawing(confirm: boolean): void {
         this.newDrawing.newCanvas(confirm);
-        if (this.newDrawing.showPopup) this.shortcutHandler.blockShortcuts = true;
+        if (confirm) this.hidePopup();
+        else if (this.newDrawing.showPopup) this.shortcutHandler.blockShortcuts = true;
     }
 
     @HostListener('document:keydown', ['$event'])

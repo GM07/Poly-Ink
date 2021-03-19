@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { LineDraw } from '@app/classes/commands/line-draw';
 import { Geometry } from '@app/classes/math/geometry';
 import { ShiftKey } from '@app/classes/shortcut/shift-key';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
+import { LineConfig } from '@app/classes/tool-config/line-config';
 import { LineToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
@@ -20,41 +22,26 @@ export class LineService extends Tool {
     private readonly ESCAPE: ShortcutKey = new ShortcutKey('escape');
     private readonly BACKSPACE: ShortcutKey = new ShortcutKey('backspace');
     private readonly SHORTCUT_LIST: ShortcutKey[] = [this.ESCAPE, this.BACKSPACE, this.SHIFT];
-    private points: Vec2[];
-    private pointToAdd: Vec2;
     private mousePosition: Vec2;
+    private pointToAdd: Vec2;
 
-    showJunctionPoints: boolean;
-    diameterJunctions: number;
-    thickness: number;
-    color: string;
+    config: LineConfig;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(LineToolConstants.SHORTCUT_KEY);
         this.toolID = LineToolConstants.TOOL_ID;
-        this.points = [];
-        this.showJunctionPoints = true;
-        this.diameterJunctions = ToolSettingsConst.LINE_DEFAULT_DIAMETER_JUNCTION;
-        this.thickness = ToolSettingsConst.LINE_DEFAULT_WIDTH;
-        this.color = 'black';
+        this.config = new LineConfig();
     }
 
     initService(): void {
         this.SHIFT.isDown = false;
         this.ESCAPE.isDown = false;
         this.BACKSPACE.isDown = false;
-        this.points = [];
+        this.config.closedLoop = false;
+        this.config.points = [];
         this.pointToAdd = {} as Vec2;
         this.mousePosition = {} as Vec2;
-    }
-
-    private applyAttributes(ctx: CanvasRenderingContext2D): void {
-        ctx.fillStyle = this.colorService.primaryRgba;
-        ctx.strokeStyle = this.colorService.primaryRgba;
-        ctx.lineWidth = this.thickness;
-        ctx.lineCap = 'round' as CanvasLineCap;
-        ctx.lineJoin = 'round' as CanvasLineJoin;
     }
 
     onMouseDown(event: MouseEvent): void {
@@ -68,11 +55,11 @@ export class LineService extends Tool {
     private handleSimpleClick(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
         if (this.leftMouseDown) {
-            if (this.points.length === 0 || this.pointToAdd === undefined) {
+            if (this.config.points.length === 0 || this.pointToAdd === undefined) {
                 this.pointToAdd = this.getPositionFromMouse(event);
             }
 
-            this.points.push(this.pointToAdd);
+            this.config.points.push(this.pointToAdd);
         }
     }
 
@@ -83,14 +70,16 @@ export class LineService extends Tool {
             this.pointToAdd = this.alignPoint(this.getPositionFromMouse(event));
         }
 
-        const closedLoop: boolean = Geometry.getDistanceBetween(this.pointToAdd, this.points[0]) <= ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;
+        const closedLoop: boolean =
+            Geometry.getDistanceBetween(this.pointToAdd, this.config.points[0]) <= ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;
 
         if (closedLoop) {
-            this.points[this.points.length - 1] = this.points[0];
+            this.config.points[this.config.points.length - 1] = this.config.points[0];
         }
+        this.config.closedLoop = closedLoop;
 
-        this.applyAttributes(this.drawingService.baseCtx);
-        this.drawLinePath(this.drawingService.baseCtx, this.points, closedLoop);
+        this.draw();
+
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.initService();
     }
@@ -102,7 +91,7 @@ export class LineService extends Tool {
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.points.length === 0 || event.clientX === undefined || event.clientY === undefined) {
+        if (this.config.points.length === 0 || event.clientX === undefined || event.clientY === undefined) {
             return;
         }
 
@@ -134,7 +123,7 @@ export class LineService extends Tool {
     }
 
     private handleKeys(shortcutKey: ShortcutKey): void {
-        if (this.points.length === 0) {
+        if (this.config.points.length === 0) {
             return;
         }
 
@@ -153,8 +142,8 @@ export class LineService extends Tool {
 
     private handleBackspaceKey(): void {
         if (this.BACKSPACE.isDown) {
-            if (this.points.length >= 2) {
-                this.points.pop();
+            if (this.config.points.length >= 2) {
+                this.config.points.pop();
                 this.handleLinePreview();
             }
         }
@@ -173,7 +162,7 @@ export class LineService extends Tool {
 
     private handleEscapeKey(): void {
         if (this.ESCAPE.isDown) {
-            this.points = [];
+            this.config.points = [];
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
         }
     }
@@ -185,10 +174,11 @@ export class LineService extends Tool {
 
     private handleLinePreview(): void {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
-        this.applyAttributes(this.drawingService.previewCtx);
-        this.drawLinePath(this.drawingService.previewCtx);
-        const lastPoint: Vec2 = this.getLastPoint();
-        this.drawLine(this.drawingService.previewCtx, lastPoint, this.pointToAdd);
+        this.config.points.push(this.pointToAdd);
+
+        this.drawPreview();
+
+        this.config.points.pop();
     }
 
     private alignPoint(cursor: Vec2): Vec2 {
@@ -211,47 +201,17 @@ export class LineService extends Tool {
         return { x: Math.round(dx), y: Math.round(dy) };
     }
 
-    private drawLine(ctx: CanvasRenderingContext2D, initial: Vec2, final: Vec2): void {
-        this.drawJunction(ctx, initial);
-        ctx.beginPath();
-        ctx.moveTo(initial.x, initial.y);
-        ctx.lineTo(final.x, final.y);
-        ctx.stroke();
-        this.drawJunction(ctx, final);
-    }
-
-    private drawJunction(ctx: CanvasRenderingContext2D, point: Vec2): void {
-        if (this.showJunctionPoints) {
-            ctx.beginPath();
-            ctx.arc(point.x, point.y, this.diameterJunctions / 2, 0, 2 * Math.PI);
-            ctx.fill();
-        }
-    }
-
-    private drawLinePath(ctx: CanvasRenderingContext2D, points: Vec2[] = this.points, closed: boolean = false): void {
-        if (points.length < 2) {
-            return;
-        }
-
-        this.drawJunction(ctx, points[0]);
-
-        ctx.beginPath();
-        ctx.moveTo(points[0].x, points[0].y);
-        for (let index = 1; index < points.length; index++) {
-            const point = points[index];
-            ctx.lineTo(point.x, point.y);
-        }
-        ctx.stroke();
-        ctx.closePath();
-
-        for (let index = 1; index < (closed ? points.length - 1 : points.length); index++) {
-            const point = points[index];
-
-            this.drawJunction(ctx, point);
-        }
-    }
-
     private getLastPoint(): Vec2 {
-        return this.points[this.points.length - 1];
+        return this.config.points[this.config.points.length - 1];
+    }
+
+    draw(): void {
+        const command = new LineDraw(this.colorService, this.config);
+        this.drawingService.draw(command);
+    }
+
+    drawPreview(): void {
+        const command = new LineDraw(this.colorService, this.config);
+        this.drawingService.drawPreview(command);
     }
 }
