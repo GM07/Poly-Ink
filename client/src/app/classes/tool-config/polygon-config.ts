@@ -8,12 +8,21 @@ export enum PolygonMode {
 }
 
 export class PolygonConfig {
-    lineWidth: number = ToolSettingsConst.MIN_WIDTH;
-    polygonMode: PolygonMode = PolygonMode.FilledWithContour;
-    startCoords: Vec2 = { x: 0, y: 0 };
-    endCoords: Vec2 = { x: 0, y: 0 };
-    numEdges: number = ToolSettingsConst.MIN_NUM_EDGES;
-    showPerimeter: boolean = false;
+    lineWidth: number;
+    polygonMode: PolygonMode;
+    startCoords: Vec2;
+    endCoords: Vec2;
+    numEdges: number;
+    showPerimeter: boolean;
+
+    constructor() {
+      this.lineWidth = ToolSettingsConst.MIN_WIDTH;
+      this.polygonMode = PolygonMode.FilledWithContour;
+      this.startCoords = { x: 0, y: 0 };
+      this.endCoords = { x: 0, y: 0 };
+      this.numEdges = ToolSettingsConst.MIN_NUM_EDGES;
+      this.showPerimeter = false;
+    }
 
     clone(): PolygonConfig {
         const config = new PolygonConfig();

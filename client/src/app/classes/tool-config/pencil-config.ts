@@ -1,8 +1,13 @@
 import { Vec2 } from '@app/classes/vec2';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 export class PencilConfig {
-    pathData: Vec2[][] = [[]];
-    lineWidth: number = ToolSettingsConst.DEFAULT_PENCIL_WIDTH;
+    pathData: Vec2[][];
+    lineWidth: number;
+
+    constructor() {
+      this.pathData = [[]];
+      this.lineWidth = ToolSettingsConst.DEFAULT_PENCIL_WIDTH;
+    }
 
     clone(): PencilConfig {
         const config = new PencilConfig();

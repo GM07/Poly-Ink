@@ -1,11 +1,19 @@
 import { Vec2 } from '@app/classes/vec2';
 
 export class SelectionConfig {
-    startCoords: Vec2 = { x: 0, y: 0 };
-    endCoords: Vec2 = { x: 0, y: 0 };
-    height: number = 0;
-    width: number = 0;
-    shiftDown: boolean = false;
+    startCoords: Vec2;
+    endCoords: Vec2;
+    height: number;
+    width: number;
+    shiftDown: boolean;
+
+    constructor() {
+        this.startCoords = { x: 0, y: 0 };
+        this.endCoords = { x: 0, y: 0 };
+        this.height = 0;
+        this.width = 0;
+        this.shiftDown = false;
+    }
 
     clone(): SelectionConfig {
         const config = new SelectionConfig();
