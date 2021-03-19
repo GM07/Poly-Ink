@@ -22,10 +22,10 @@ describe('EllipseDraw', () => {
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
 
-        ellipseSelectionDraw.config.startCoords = { x: 0, y: 0 };
-        ellipseSelectionDraw.config.endCoords = { x: 15, y: 15 };
-        ellipseSelectionDraw.config.height = 10;
-        ellipseSelectionDraw.config.width = 10;
+        ellipseSelectionDraw['config'].startCoords = { x: 0, y: 0 };
+        ellipseSelectionDraw['config'].endCoords = { x: 15, y: 15 };
+        ellipseSelectionDraw['config'].height = 10;
+        ellipseSelectionDraw['config'].width = 10;
 
         ctxStub.canvas.width = 100;
         ctxStub.canvas.height = 100;
@@ -41,7 +41,7 @@ describe('EllipseDraw', () => {
         expect(imageData.data[2]).toEqual(0);
         expect(imageData.data[ALPHA]).not.toEqual(0);
 
-        imageData = ctxStub.getImageData(ellipseSelectionDraw.config.width / 2, ellipseSelectionDraw.config.height / 2, 1, 1);
+        imageData = ctxStub.getImageData(ellipseSelectionDraw['config'].width / 2, ellipseSelectionDraw['config'].height / 2, 1, 1);
         expect(imageData.data[0]).toEqual(Colors.WHITE.r);
         expect(imageData.data[1]).toEqual(Colors.WHITE.g);
         expect(imageData.data[2]).toEqual(Colors.WHITE.b);
@@ -49,10 +49,10 @@ describe('EllipseDraw', () => {
     });
 
     it('should move selection properly', () => {
-        const middleX = ellipseSelectionDraw.config.width / 2;
-        const middleY = ellipseSelectionDraw.config.height / 2;
-        const posX = ellipseSelectionDraw.config.endCoords.x + middleX;
-        const posY = ellipseSelectionDraw.config.endCoords.x + middleY;
+        const middleX = ellipseSelectionDraw['config'].width / 2;
+        const middleY = ellipseSelectionDraw['config'].height / 2;
+        const posX = ellipseSelectionDraw['config'].endCoords.x + middleX;
+        const posY = ellipseSelectionDraw['config'].endCoords.x + middleY;
 
         ellipseSelectionDraw.execute(ctxStub);
 

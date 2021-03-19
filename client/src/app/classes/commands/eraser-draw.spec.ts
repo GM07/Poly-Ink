@@ -22,10 +22,10 @@ describe('EraserDraw', () => {
     });
 
     it('Should draw a single pixel if the smallest size was selected', () => {
-        eraserDraw.eraserConfig.lineWidth = 1;
+        eraserDraw['config'].lineWidth = 1;
 
         const point: Vec2 = { x: 0, y: 0 };
-        eraserDraw.eraserConfig.pathData[0].push(point);
+        eraserDraw['config'].pathData[0].push(point);
         eraserDraw.execute(ctxStub);
 
         // First pixel only
@@ -40,9 +40,9 @@ describe('EraserDraw', () => {
     it(' should change the pixel of the canvas ', () => {
         const point1: Vec2 = { x: 0, y: 0 };
         const point2: Vec2 = { x: 5, y: 5 };
-        eraserDraw.eraserConfig.pathData[0].push(point1);
-        eraserDraw.eraserConfig.pathData[0].push(point2);
-        eraserDraw.eraserConfig.pathData.push([]);
+        eraserDraw['config'].pathData[0].push(point1);
+        eraserDraw['config'].pathData[0].push(point2);
+        eraserDraw['config'].pathData.push([]);
         eraserDraw.execute(ctxStub);
 
         // First pixel only

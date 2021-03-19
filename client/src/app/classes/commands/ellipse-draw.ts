@@ -2,7 +2,7 @@ import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { ShapeConfig, ShapeMode } from '@app/classes/tool-config/shape-config';
 import { ColorService } from 'src/color-picker/services/color.service';
 export class EllipseDraw extends AbstractDraw {
-    config: ShapeConfig;
+    private config: ShapeConfig;
 
     constructor(colorService: ColorService, config: ShapeConfig) {
         super(colorService);

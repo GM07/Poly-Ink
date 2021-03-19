@@ -22,21 +22,21 @@ describe('EllipseDraw', () => {
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
 
-        ellipseDraw.config.lineWidth = 1;
+        ellipseDraw['config'].lineWidth = 1;
 
         const startPoint: Vec2 = { x: 0, y: 0 };
         const endPoint: Vec2 = { x: 10, y: 20 };
 
-        ellipseDraw.config.startCoords = startPoint;
-        ellipseDraw.config.endCoords = endPoint;
+        ellipseDraw['config'].startCoords = startPoint;
+        ellipseDraw['config'].endCoords = endPoint;
     });
 
     it('should allow for contour drawing type', () => {
-        ellipseDraw.config.shapeMode = ShapeMode.Contour;
+        ellipseDraw['config'].shapeMode = ShapeMode.Contour;
         ellipseDraw.execute(ctxStub);
 
-        const xMiddlePoint = (ellipseDraw.config.endCoords.x - ellipseDraw.config.startCoords.x) / 2;
-        const yMiddlePoint = (ellipseDraw.config.endCoords.y - ellipseDraw.config.startCoords.y) / 2;
+        const xMiddlePoint = (ellipseDraw['config'].endCoords.x - ellipseDraw['config'].startCoords.x) / 2;
+        const yMiddlePoint = (ellipseDraw['config'].endCoords.y - ellipseDraw['config'].startCoords.y) / 2;
 
         let imageData: ImageData = ctxStub.getImageData(xMiddlePoint, 0, 1, 1);
 
@@ -50,10 +50,10 @@ describe('EllipseDraw', () => {
     });
 
     it('should allow for filled drawing type', () => {
-        ellipseDraw.config.shapeMode = ShapeMode.Filled;
+        ellipseDraw['config'].shapeMode = ShapeMode.Filled;
         ellipseDraw.execute(ctxStub);
 
-        const xMiddlePoint = (ellipseDraw.config.endCoords.x - ellipseDraw.config.startCoords.x) / 2;
+        const xMiddlePoint = (ellipseDraw['config'].endCoords.x - ellipseDraw['config'].startCoords.x) / 2;
 
         const imageData: ImageData = ctxStub.getImageData(xMiddlePoint, 0, 1, 1);
         expect(imageData.data[0]).toEqual(Colors.RED.r); // R
@@ -63,12 +63,12 @@ describe('EllipseDraw', () => {
     });
 
     it('should allow for filled with contour drawing type', () => {
-        ellipseDraw.config.shapeMode = ShapeMode.FilledWithContour;
-        ellipseDraw.config.lineWidth = 2;
+        ellipseDraw['config'].shapeMode = ShapeMode.FilledWithContour;
+        ellipseDraw['config'].lineWidth = 2;
         ellipseDraw.execute(ctxStub);
 
-        const xMiddlePoint = (ellipseDraw.config.endCoords.x - ellipseDraw.config.startCoords.x) / 2;
-        const yMiddlePoint = (ellipseDraw.config.endCoords.y - ellipseDraw.config.startCoords.y) / 2;
+        const xMiddlePoint = (ellipseDraw['config'].endCoords.x - ellipseDraw['config'].startCoords.x) / 2;
+        const yMiddlePoint = (ellipseDraw['config'].endCoords.y - ellipseDraw['config'].startCoords.y) / 2;
 
         let imageData: ImageData = ctxStub.getImageData(xMiddlePoint, 0, 1, 1);
         expect(imageData.data[0]).toEqual(Colors.BLUE.r); // R
@@ -84,7 +84,7 @@ describe('EllipseDraw', () => {
     });
 
     it('should do nothing with an unknown mode', () => {
-        ellipseDraw.config.shapeMode = {} as ShapeMode;
+        ellipseDraw['config'].shapeMode = {} as ShapeMode;
         ellipseDraw.execute(ctxStub);
 
         const imageData = ctxStub.getImageData(1, 1, 1, 1);
@@ -92,24 +92,24 @@ describe('EllipseDraw', () => {
     });
 
     it('should draw a circle when shift is pressed', () => {
-        ellipseDraw.config.shiftDown = true;
-        ellipseDraw.config.shapeMode = ShapeMode.FilledWithContour;
+        ellipseDraw['config'].shiftDown = true;
+        ellipseDraw['config'].shapeMode = ShapeMode.FilledWithContour;
 
         ellipseDraw.execute(ctxStub);
 
-        const xMiddlePoint = (ellipseDraw.config.endCoords.x - ellipseDraw.config.startCoords.x) / 2;
-        const yMiddlePoint = (ellipseDraw.config.endCoords.y - ellipseDraw.config.startCoords.y) / 2;
+        const xMiddlePoint = (ellipseDraw['config'].endCoords.x - ellipseDraw['config'].startCoords.x) / 2;
+        const yMiddlePoint = (ellipseDraw['config'].endCoords.y - ellipseDraw['config'].startCoords.y) / 2;
 
-        let imageData: ImageData = ctxStub.getImageData(ellipseDraw.config.endCoords.x, yMiddlePoint, 1, 1);
+        let imageData: ImageData = ctxStub.getImageData(ellipseDraw['config'].endCoords.x, yMiddlePoint, 1, 1);
         expect(imageData.data[ALPHA]).toEqual(0); // A
 
-        imageData = ctxStub.getImageData(ellipseDraw.config.endCoords.x, xMiddlePoint, 1, 1);
+        imageData = ctxStub.getImageData(ellipseDraw['config'].endCoords.x, xMiddlePoint, 1, 1);
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
     it('should call drawRectanglePerimeter when showPerimeter is set', () => {
         spyOn<any>(ellipseDraw, 'drawRectanglePerimeter').and.stub();
-        ellipseDraw.config.showPerimeter = true;
+        ellipseDraw['config'].showPerimeter = true;
         ellipseDraw.execute(ctxStub);
         expect(ellipseDraw['drawRectanglePerimeter']).toHaveBeenCalled();
     });
@@ -123,7 +123,7 @@ describe('EllipseDraw', () => {
     });
 
     it('should draw rectangle perimeter properly with filled type', () => {
-        ellipseDraw.config.shapeMode = ShapeMode.Filled;
+        ellipseDraw['config'].shapeMode = ShapeMode.Filled;
         // tslint:disable-next-line:no-magic-numbers
         ellipseDraw['drawRectanglePerimeter'](ctxStub, 5, 5, 5, 5);
 

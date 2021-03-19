@@ -15,8 +15,8 @@ describe('ResizeDraw', () => {
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
 
-        resizeDraw.config.height = 0;
-        resizeDraw.config.width = 0;
+        resizeDraw['config'].height = 0;
+        resizeDraw['config'].width = 0;
     });
 
     it('should call resize on execute', () => {

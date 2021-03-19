@@ -2,7 +2,7 @@ import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { AerosolConfig } from '@app/classes/tool-config/aerosol-config';
 import { ColorService } from 'src/color-picker/services/color.service';
 export class AerosolDraw extends AbstractDraw {
-    config: AerosolConfig;
+    private config: AerosolConfig;
 
     constructor(colorService: ColorService, config: AerosolConfig) {
         super(colorService);

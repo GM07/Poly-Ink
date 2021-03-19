@@ -18,7 +18,7 @@ describe('AerosolDraw', () => {
     });
 
     it('should draw droplets in the right positions', () => {
-        aerosolDraw.config.droplets = [
+        aerosolDraw['config'].droplets = [
             [
                 { x: 0, y: 0 },
                 { x: 1, y: 1 },

@@ -26,16 +26,16 @@ describe('PolygonDraw', () => {
         const startPoint: Vec2 = { x: 0, y: 0 };
         const endPoint: Vec2 = { x: 15, y: 15 };
 
-        polygonDraw.config.startCoords = startPoint;
-        polygonDraw.config.endCoords = endPoint;
+        polygonDraw['config'].startCoords = startPoint;
+        polygonDraw['config'].endCoords = endPoint;
     });
 
     it('should draw preview circle', () => {
-        polygonDraw.config.polygonMode = PolygonMode.Contour;
-        polygonDraw.config.showPerimeter = true;
+        polygonDraw['config'].polygonMode = PolygonMode.Contour;
+        polygonDraw['config'].showPerimeter = true;
 
-        const middleX: number = (polygonDraw.config.endCoords.x - polygonDraw.config.startCoords.x) / 2;
-        const middleY: number = (polygonDraw.config.endCoords.y - polygonDraw.config.startCoords.y) / 2;
+        const middleX: number = (polygonDraw['config'].endCoords.x - polygonDraw['config'].startCoords.x) / 2;
+        const middleY: number = (polygonDraw['config'].endCoords.y - polygonDraw['config'].startCoords.y) / 2;
 
         polygonDraw['drawCirclePerimeter'](ctxStub, { x: middleX, y: middleY }, middleX);
 
@@ -47,12 +47,12 @@ describe('PolygonDraw', () => {
     });
 
     it('should allow for contour drawing type', () => {
-        polygonDraw.config.polygonMode = PolygonMode.Contour;
+        polygonDraw['config'].polygonMode = PolygonMode.Contour;
 
         polygonDraw.execute(ctxStub);
 
-        const middleX: number = (polygonDraw.config.endCoords.x - polygonDraw.config.startCoords.x) / 2;
-        const middleY: number = (polygonDraw.config.endCoords.y - polygonDraw.config.startCoords.y) / 2;
+        const middleX: number = (polygonDraw['config'].endCoords.x - polygonDraw['config'].startCoords.x) / 2;
+        const middleY: number = (polygonDraw['config'].endCoords.y - polygonDraw['config'].startCoords.y) / 2;
 
         let imageData: ImageData = ctxStub.getImageData(middleX, 0, 1, 1);
 
@@ -66,11 +66,11 @@ describe('PolygonDraw', () => {
     });
 
     it('should allow for filled drawing type', () => {
-        polygonDraw.config.polygonMode = PolygonMode.Filled;
+        polygonDraw['config'].polygonMode = PolygonMode.Filled;
 
         polygonDraw.execute(ctxStub);
 
-        const middleX: number = (polygonDraw.config.endCoords.x - polygonDraw.config.startCoords.x) / 2;
+        const middleX: number = (polygonDraw['config'].endCoords.x - polygonDraw['config'].startCoords.x) / 2;
 
         const imageData: ImageData = ctxStub.getImageData(middleX, 0, 1, 1);
         expect(imageData.data[0]).toEqual(Colors.RED.r); // R
@@ -80,13 +80,13 @@ describe('PolygonDraw', () => {
     });
 
     it('should allow for filled and contour drawing type for a triangle', () => {
-        polygonDraw.config.polygonMode = PolygonMode.FilledWithContour;
-        polygonDraw.config.lineWidth = 2;
+        polygonDraw['config'].polygonMode = PolygonMode.FilledWithContour;
+        polygonDraw['config'].lineWidth = 2;
 
         polygonDraw.execute(ctxStub);
 
-        const middleX: number = (polygonDraw.config.endCoords.x - polygonDraw.config.startCoords.x) / 2;
-        const middleY: number = (polygonDraw.config.endCoords.y - polygonDraw.config.startCoords.y) / 2;
+        const middleX: number = (polygonDraw['config'].endCoords.x - polygonDraw['config'].startCoords.x) / 2;
+        const middleY: number = (polygonDraw['config'].endCoords.y - polygonDraw['config'].startCoords.y) / 2;
 
         let imageData: ImageData = ctxStub.getImageData(middleX, 0, 1, 1);
         expect(imageData.data[0]).toEqual(Colors.BLUE.r); // R
@@ -105,17 +105,17 @@ describe('PolygonDraw', () => {
     });
 
     it('should allow for filled and contour drawing type for a square', () => {
-        polygonDraw.config.polygonMode = PolygonMode.FilledWithContour;
+        polygonDraw['config'].polygonMode = PolygonMode.FilledWithContour;
 
         // tslint:disable-next-line:no-magic-numbers
-        polygonDraw.config.numEdges = 4;
+        polygonDraw['config'].numEdges = 4;
         // tslint:disable-next-line:no-magic-numbers
-        polygonDraw.config.lineWidth = 4;
+        polygonDraw['config'].lineWidth = 4;
 
         polygonDraw.execute(ctxStub);
 
-        const middleX: number = (polygonDraw.config.endCoords.x - polygonDraw.config.startCoords.x) / 2;
-        const middleY: number = (polygonDraw.config.endCoords.y - polygonDraw.config.startCoords.y) / 2;
+        const middleX: number = (polygonDraw['config'].endCoords.x - polygonDraw['config'].startCoords.x) / 2;
+        const middleY: number = (polygonDraw['config'].endCoords.y - polygonDraw['config'].startCoords.y) / 2;
 
         let imageData: ImageData = ctxStub.getImageData(middleX, 2, 1, 1);
         expect(imageData.data[0]).toEqual(Colors.BLUE.r); // R
@@ -138,29 +138,29 @@ describe('PolygonDraw', () => {
 
     it('should call drawRectanglePerimeter when showPerimeter is set', () => {
         spyOn<any>(polygonDraw, 'drawCirclePerimeter').and.stub();
-        polygonDraw.config.showPerimeter = true;
+        polygonDraw['config'].showPerimeter = true;
         polygonDraw.execute(ctxStub);
         expect(polygonDraw['drawCirclePerimeter']).toHaveBeenCalled();
     });
 
     it('should draw polygon left properly', () => {
-        polygonDraw.config.polygonMode = PolygonMode.Filled;
-        polygonDraw.config.startCoords = { x: 15, y: 15 };
-        polygonDraw.config.endCoords = { x: 0, y: 0 };
+        polygonDraw['config'].polygonMode = PolygonMode.Filled;
+        polygonDraw['config'].startCoords = { x: 15, y: 15 };
+        polygonDraw['config'].endCoords = { x: 0, y: 0 };
 
         polygonDraw.execute(ctxStub);
 
-        const middleX: number = (polygonDraw.config.startCoords.x - polygonDraw.config.endCoords.x) / 2;
-        const middleY: number = (polygonDraw.config.startCoords.y - polygonDraw.config.endCoords.y) / 2;
+        const middleX: number = (polygonDraw['config'].startCoords.x - polygonDraw['config'].endCoords.x) / 2;
+        const middleY: number = (polygonDraw['config'].startCoords.y - polygonDraw['config'].endCoords.y) / 2;
 
         const imageData: ImageData = ctxStub.getImageData(middleX, middleY, 1, 1);
         expect(imageData.data[ALPHA]).not.toEqual(0);
     });
 
     it('should reduce border size if to big to show fully', () => {
-        polygonDraw.config.lineWidth = ToolSettingsConst.MAX_WIDTH;
+        polygonDraw['config'].lineWidth = ToolSettingsConst.MAX_WIDTH;
         polygonDraw.execute(ctxStub);
 
-        expect(ctxStub.lineWidth).toBeLessThan(polygonDraw.config.lineWidth);
+        expect(ctxStub.lineWidth).toBeLessThan(polygonDraw['config'].lineWidth);
     });
 });

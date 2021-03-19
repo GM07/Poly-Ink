@@ -20,10 +20,10 @@ describe('PencilDraw', () => {
     });
 
     it('Should draw a single pixel if the smallest size was selected', () => {
-        pencilDraw.pencilConfig.lineWidth = 1;
+        pencilDraw['config'].lineWidth = 1;
 
         const point: Vec2 = { x: 0, y: 0 };
-        pencilDraw.pencilConfig.pathData[0].push(point);
+        pencilDraw['config'].pathData[0].push(point);
         pencilDraw.execute(ctxStub);
 
         // First pixel only
@@ -38,8 +38,8 @@ describe('PencilDraw', () => {
     it(' should change the pixel of the canvas ', () => {
         const point1: Vec2 = { x: 0, y: 0 };
         const point2: Vec2 = { x: 3, y: 3 };
-        pencilDraw.pencilConfig.pathData[0].push(point1);
-        pencilDraw.pencilConfig.pathData[0].push(point2);
+        pencilDraw['config'].pathData[0].push(point1);
+        pencilDraw['config'].pathData[0].push(point2);
         pencilDraw.execute(ctxStub);
 
         // First pixel only

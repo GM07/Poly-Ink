@@ -3,7 +3,7 @@ import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { ColorService } from 'src/color-picker/services/color.service';
 
 export class EllipseSelectionDraw extends AbstractDraw {
-    config: SelectionConfig;
+    private config: SelectionConfig;
 
     constructor(colorService: ColorService, config: SelectionConfig) {
         super(colorService);

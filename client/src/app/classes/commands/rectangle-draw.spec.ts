@@ -20,26 +20,26 @@ describe('RectangleDraw', () => {
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
 
-        rectangleDraw.config.lineWidth = 1;
+        rectangleDraw['config'].lineWidth = 1;
 
         const startPoint: Vec2 = { x: 0, y: 0 };
         const endPoint: Vec2 = { x: 10, y: 20 };
 
-        rectangleDraw.config.startCoords = startPoint;
-        rectangleDraw.config.endCoords = endPoint;
+        rectangleDraw['config'].startCoords = startPoint;
+        rectangleDraw['config'].endCoords = endPoint;
     });
 
     it('should construct properly', () => {
         expect(rectangleDraw).toBeDefined();
-        expect(rectangleDraw.primaryRgba).toEqual(Colors.RED.rgbString);
-        expect(rectangleDraw.secondaryRgba).toEqual(Colors.BLUE.rgbString);
-        expect(rectangleDraw.config.shapeMode).toEqual(ShapeMode.FilledWithContour);
-        expect(rectangleDraw.config.lineWidth).toEqual(ToolSettingsConst.MIN_WIDTH);
-        expect(rectangleDraw.config.shiftDown).toBeFalse();
+        expect(rectangleDraw['primaryRgba']).toEqual(Colors.RED.rgbString);
+        expect(rectangleDraw['secondaryRgba']).toEqual(Colors.BLUE.rgbString);
+        expect(rectangleDraw['config'].shapeMode).toEqual(ShapeMode.FilledWithContour);
+        expect(rectangleDraw['config'].lineWidth).toEqual(ToolSettingsConst.MIN_WIDTH);
+        expect(rectangleDraw['config'].shiftDown).toBeFalse();
     });
 
     it('should draw a square when shift is pressed', () => {
-        rectangleDraw.config.shiftDown = true;
+        rectangleDraw['config'].shiftDown = true;
 
         rectangleDraw.execute(ctxStub);
 
@@ -59,7 +59,7 @@ describe('RectangleDraw', () => {
     });
 
     it('should do nothing with an unknown mode', () => {
-        rectangleDraw.config.shapeMode = {} as ShapeMode;
+        rectangleDraw['config'].shapeMode = {} as ShapeMode;
 
         rectangleDraw.execute(ctxStub);
 
@@ -69,7 +69,7 @@ describe('RectangleDraw', () => {
     });
 
     it('should allow for contour drawing type', () => {
-        rectangleDraw.config.shapeMode = ShapeMode.Contour;
+        rectangleDraw['config'].shapeMode = ShapeMode.Contour;
 
         rectangleDraw.execute(ctxStub);
 
@@ -87,7 +87,7 @@ describe('RectangleDraw', () => {
     });
 
     it('should allow for filled drawing type', () => {
-        rectangleDraw.config.shapeMode = ShapeMode.Filled;
+        rectangleDraw['config'].shapeMode = ShapeMode.Filled;
         rectangleDraw.execute(ctxStub);
 
         // tslint:disable-next-line:no-magic-numbers
@@ -99,8 +99,8 @@ describe('RectangleDraw', () => {
     });
 
     it('should allow for filled with contour drawing type', () => {
-        rectangleDraw.config.shapeMode = ShapeMode.FilledWithContour;
-        rectangleDraw.config.lineWidth = 2;
+        rectangleDraw['config'].shapeMode = ShapeMode.FilledWithContour;
+        rectangleDraw['config'].lineWidth = 2;
         rectangleDraw.execute(ctxStub);
 
         // Border is present

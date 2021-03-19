@@ -4,7 +4,7 @@ import { Vec2 } from '@app/classes/vec2';
 import { ColorService } from 'src/color-picker/services/color.service';
 
 export class PolygonDraw extends AbstractDraw {
-    config: PolygonConfig;
+    private config: PolygonConfig;
 
     constructor(colorService: ColorService, config: PolygonConfig) {
         super(colorService);

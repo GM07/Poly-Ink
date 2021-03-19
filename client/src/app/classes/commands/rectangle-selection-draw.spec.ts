@@ -22,10 +22,10 @@ describe('RectangleDraw', () => {
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
 
-        rectangleSelectionDraw.config.startCoords = { x: 0, y: 0 };
-        rectangleSelectionDraw.config.endCoords = { x: 15, y: 15 };
-        rectangleSelectionDraw.config.height = 10;
-        rectangleSelectionDraw.config.width = 10;
+        rectangleSelectionDraw['config'].startCoords = { x: 0, y: 0 };
+        rectangleSelectionDraw['config'].endCoords = { x: 15, y: 15 };
+        rectangleSelectionDraw['config'].height = 10;
+        rectangleSelectionDraw['config'].width = 10;
 
         ctxStub.canvas.width = 100;
         ctxStub.canvas.height = 100;
@@ -41,7 +41,7 @@ describe('RectangleDraw', () => {
         expect(imageData.data[2]).toEqual(Colors.WHITE.b);
         expect(imageData.data[ALPHA]).not.toEqual(0);
 
-        imageData = ctxStub.getImageData(rectangleSelectionDraw.config.width / 2, rectangleSelectionDraw.config.height / 2, 1, 1);
+        imageData = ctxStub.getImageData(rectangleSelectionDraw['config'].width / 2, rectangleSelectionDraw['config'].height / 2, 1, 1);
         expect(imageData.data[0]).toEqual(Colors.WHITE.r);
         expect(imageData.data[1]).toEqual(Colors.WHITE.g);
         expect(imageData.data[2]).toEqual(Colors.WHITE.b);
@@ -49,10 +49,10 @@ describe('RectangleDraw', () => {
     });
 
     it('should move selection properly', () => {
-        const middleX = rectangleSelectionDraw.config.width / 2;
-        const middleY = rectangleSelectionDraw.config.height / 2;
-        const posX = rectangleSelectionDraw.config.endCoords.x + middleX;
-        const posY = rectangleSelectionDraw.config.endCoords.x + middleY;
+        const middleX = rectangleSelectionDraw['config'].width / 2;
+        const middleY = rectangleSelectionDraw['config'].height / 2;
+        const posX = rectangleSelectionDraw['config'].endCoords.x + middleX;
+        const posY = rectangleSelectionDraw['config'].endCoords.x + middleY;
 
         rectangleSelectionDraw.execute(ctxStub);
 

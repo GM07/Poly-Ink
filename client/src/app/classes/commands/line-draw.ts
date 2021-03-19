@@ -4,10 +4,10 @@ import { ColorService } from 'src/color-picker/services/color.service';
 import { AbstractDraw } from './abstract-draw';
 
 export class LineDraw extends AbstractDraw {
-    lineConfig: LineConfig;
+    private config: LineConfig;
     constructor(colorService: ColorService, lineConfig: LineConfig) {
         super(colorService);
-        this.lineConfig = lineConfig.clone();
+        this.config = lineConfig.clone();
     }
 
     execute(context: CanvasRenderingContext2D): void {
@@ -18,33 +18,33 @@ export class LineDraw extends AbstractDraw {
     private applyAttributes(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = this.primaryRgba;
         ctx.strokeStyle = this.primaryRgba;
-        ctx.lineWidth = this.lineConfig.thickness;
+        ctx.lineWidth = this.config.thickness;
         ctx.lineCap = 'round' as CanvasLineCap;
         ctx.lineJoin = 'round' as CanvasLineJoin;
     }
 
     private drawJunction(ctx: CanvasRenderingContext2D, point: Vec2): void {
-        if (this.lineConfig.showJunctionPoints) {
+        if (this.config.showJunctionPoints) {
             ctx.beginPath();
-            ctx.arc(point.x, point.y, this.lineConfig.diameterJunctions / 2, 0, 2 * Math.PI);
+            ctx.arc(point.x, point.y, this.config.diameterJunctions / 2, 0, 2 * Math.PI);
             ctx.fill();
         }
     }
 
     private drawLinePath(ctx: CanvasRenderingContext2D): void {
-        this.drawJunction(ctx, this.lineConfig.points[0]);
+        this.drawJunction(ctx, this.config.points[0]);
 
         ctx.beginPath();
-        ctx.moveTo(this.lineConfig.points[0].x, this.lineConfig.points[0].y);
-        for (let index = 1; index < this.lineConfig.points.length; index++) {
-            const point = this.lineConfig.points[index];
+        ctx.moveTo(this.config.points[0].x, this.config.points[0].y);
+        for (let index = 1; index < this.config.points.length; index++) {
+            const point = this.config.points[index];
             ctx.lineTo(point.x, point.y);
         }
         ctx.stroke();
         ctx.closePath();
 
-        for (let index = 1; index < (this.lineConfig.closedLoop ? this.lineConfig.points.length - 1 : this.lineConfig.points.length); index++) {
-            const point = this.lineConfig.points[index];
+        for (let index = 1; index < (this.config.closedLoop ? this.config.points.length - 1 : this.config.points.length); index++) {
+            const point = this.config.points[index];
 
             this.drawJunction(ctx, point);
         }

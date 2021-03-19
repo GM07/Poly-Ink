@@ -27,13 +27,13 @@ describe('LineDraw', () => {
 
     it('should construct properly', () => {
         expect(lineDraw).toBeDefined();
-        expect(lineDraw.primaryRgba).toEqual(Colors.BLACK.rgbString);
-        expect(lineDraw.secondaryRgba).toEqual(Colors.BLUE.rgbString);
-        expect(lineDraw.lineConfig.showJunctionPoints).toBeTrue();
-        expect(lineDraw.lineConfig.points).toEqual([]);
-        expect(lineDraw.lineConfig.closedLoop).toBeFalse();
-        expect(lineDraw.lineConfig.thickness).toEqual(ToolSettingsConst.DEFAULT_LINE_WIDTH);
-        expect(lineDraw.lineConfig.diameterJunctions).toEqual(ToolSettingsConst.DEFAULT_LINE_JUNCTION_WIDTH);
+        expect(lineDraw['primaryRgba']).toEqual(Colors.BLACK.rgbString);
+        expect(lineDraw['secondaryRgba']).toEqual(Colors.BLUE.rgbString);
+        expect(lineDraw['config'].showJunctionPoints).toBeTrue();
+        expect(lineDraw['config'].points).toEqual([]);
+        expect(lineDraw['config'].closedLoop).toBeFalse();
+        expect(lineDraw['config'].thickness).toEqual(ToolSettingsConst.DEFAULT_LINE_WIDTH);
+        expect(lineDraw['config'].diameterJunctions).toEqual(ToolSettingsConst.DEFAULT_LINE_JUNCTION_WIDTH);
     });
 
     it('should make proper calls on execute', () => {
@@ -49,12 +49,12 @@ describe('LineDraw', () => {
         lineDraw['applyAttributes'](ctxStub);
         expect(ctxStub.fillStyle).toEqual(hexBlack);
         expect(ctxStub.strokeStyle).toEqual(hexBlack);
-        expect(ctxStub.lineWidth).toEqual(lineDraw.lineConfig.thickness);
+        expect(ctxStub.lineWidth).toEqual(lineDraw['config'].thickness);
     });
 
     it('should not draw junction if disabled', () => {
         const point: Vec2 = { x: 1, y: 1 };
-        lineDraw.lineConfig.showJunctionPoints = false;
+        lineDraw['config'].showJunctionPoints = false;
         lineDraw['drawJunction'](ctxStub, point);
 
         // Canvas should all be 0 as nothing is drawn
@@ -67,7 +67,7 @@ describe('LineDraw', () => {
 
     it('should draw junction if enabled', () => {
         const point: Vec2 = { x: 1, y: 1 };
-        lineDraw.lineConfig.showJunctionPoints = true;
+        lineDraw['config'].showJunctionPoints = true;
         lineDraw['drawJunction'](ctxStub, point);
 
         // Canvas should be black at that position
@@ -83,7 +83,7 @@ describe('LineDraw', () => {
             { x: 0, y: 0 },
             { x: 2, y: 2 },
         ];
-        lineDraw.lineConfig.points = points;
+        lineDraw['config'].points = points;
         spyOn<any>(lineDraw, 'drawJunction').and.stub();
         lineDraw['drawLinePath'](ctxStub);
         expect(lineDraw['drawJunction']).toHaveBeenCalled();
@@ -96,9 +96,9 @@ describe('LineDraw', () => {
             { x: 1, y: 2 },
             { x: 0, y: 1 },
         ];
-        lineDraw.lineConfig.points = points;
-        lineDraw.lineConfig.showJunctionPoints = false;
-        lineDraw.lineConfig.closedLoop = true;
+        lineDraw['config'].points = points;
+        lineDraw['config'].showJunctionPoints = false;
+        lineDraw['config'].closedLoop = true;
         lineDraw['drawLinePath'](ctxStub);
 
         const imageData: ImageData = ctxStub.getImageData(1, 1, 1, 1);

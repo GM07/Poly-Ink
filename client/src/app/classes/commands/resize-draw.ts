@@ -3,7 +3,7 @@ import { ResizeConfig } from '@app/classes/tool-config/resize-config';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 export class ResizeDraw extends AbstractDraw {
-    config: ResizeConfig;
+    private config: ResizeConfig;
     drawingService: DrawingService;
 
     constructor(config: ResizeConfig, drawingService: DrawingService) {
