@@ -64,6 +64,8 @@ export class DrawingService {
         } else {
             fs.writeFileSync(drawingPath, drawing.image, 'base64');
         }
+        const base64Str: string = drawing.image.replace('data:image/png;base64,', '');
+        fs.writeFileSync(drawingPath, base64Str, 'base64');
     }
 
     /**

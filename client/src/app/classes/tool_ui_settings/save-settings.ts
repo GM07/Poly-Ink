@@ -1,9 +1,9 @@
 import { ToolSettings } from './tool-settings';
-import { SaveFileToolConsants } from './tools.constants';
+import { SaveFileToolConstants } from './tools.constants';
 
 export class SaveSettings implements ToolSettings {
-    readonly toolId: string = SaveFileToolConsants.TOOL_ID;
-    readonly toolTitle: string = SaveFileToolConsants.TOOL_TITLE;
-    readonly infoBubble: string = SaveFileToolConsants.INFO_BUBBLE;
-    readonly iconName: string = SaveFileToolConsants.ICON_NAME;
+    readonly toolId: string = SaveFileToolConstants.TOOL_ID;
+    readonly toolTitle: string = SaveFileToolConstants.TOOL_TITLE;
+    readonly infoBubble: string = SaveFileToolConstants.INFO_BUBBLE;
+    readonly iconName: string = SaveFileToolConstants.ICON_NAME;
 }

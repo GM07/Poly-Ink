@@ -107,7 +107,7 @@ export enum LassoToolConstants {
     SHORTCUT_KEY = 'v',
 }
 
-export enum SaveFileToolConsants {
+export enum SaveFileToolConstants {
     TOOL_ID = 'SAVE_FILE',
     TOOL_TITLE = 'Sauvegarder',
     INFO_BUBBLE = 'Sauvegarder (Ctrl-S)',
@@ -158,7 +158,7 @@ export const TOP_TOOLS_CONSTANTS = [
     LassoToolConstants,
 ];
 export const HIGHLIGHTED_COLOR = 'rgba(148, 152, 153, 0.342)';
-export const BOTTOM_TOOLS_CONSTANTS = [SaveFileToolConsants, ExportFileToolConstants];
+export const BOTTOM_TOOLS_CONSTANTS = [SaveFileToolConstants, ExportFileToolConstants];
 
 // Source: www.flaticon.com
 export const ICONS_PATHS = [
