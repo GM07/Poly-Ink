@@ -321,7 +321,7 @@ describe('RectangleSelectionService', () => {
     it('draw selection should draw a rectangle and a border around the selection', () => {
         spyOn(baseCtxStub, 'strokeRect');
         spyOn(baseCtxStub, 'setLineDash');
-        service['drawSelection'](baseCtxStub, { x: 10, y: 25 } as Vec2, 0, 0);
+        service['drawSelection'](baseCtxStub, { x: 10, y: 25 } as Vec2, { x: 0, y: 0 } as Vec2);
         expect(baseCtxStub.strokeRect).toHaveBeenCalledTimes(2);
         expect(baseCtxStub.setLineDash).toHaveBeenCalledTimes(2);
     });

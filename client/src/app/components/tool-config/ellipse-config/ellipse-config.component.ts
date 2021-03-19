@@ -9,12 +9,13 @@ import { EllipseService } from '@app/services/tools/ellipse.service';
     styleUrls: ['./ellipse-config.component.scss'],
 })
 export class EllipseConfigComponent extends ToolConfig {
-    ellipseModeIn: typeof ShapeMode = ShapeMode;
+    ellipseModeIn: typeof ShapeMode;
     readonly MIN: number = ToolSettingsConst.MIN_WIDTH;
     readonly MAX: number = ToolSettingsConst.MAX_WIDTH;
 
     constructor(public ellipseService: EllipseService) {
         super();
+        this.ellipseModeIn = ShapeMode;
     }
 
     toggleTraceType(traceType: ShapeMode): void {

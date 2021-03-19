@@ -20,19 +20,24 @@ export class LineService extends Tool {
     private readonly ESCAPE: ShortcutKey = new ShortcutKey('escape');
     private readonly BACKSPACE: ShortcutKey = new ShortcutKey('backspace');
     private readonly SHORTCUT_LIST: ShortcutKey[] = [this.ESCAPE, this.BACKSPACE, this.SHIFT];
-    readonly toolID: string = LineToolConstants.TOOL_ID;
-    private points: Vec2[] = [];
+    private points: Vec2[];
     private pointToAdd: Vec2;
     private mousePosition: Vec2;
 
-    showJunctionPoints: boolean = true;
-    diameterJunctions: number = 10;
-    thickness: number = 6;
-    color: string = 'black';
+    showJunctionPoints: boolean;
+    diameterJunctions: number;
+    thickness: number;
+    color: string;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(LineToolConstants.SHORTCUT_KEY);
+        this.toolID = LineToolConstants.TOOL_ID;
+        this.points = [];
+        this.showJunctionPoints = true;
+        this.diameterJunctions = ToolSettingsConst.LINE_DEFAULT_DIAMETER_JUNCTION;
+        this.thickness = ToolSettingsConst.LINE_DEFAULT_WIDTH;
+        this.color = 'black';
     }
 
     initService(): void {

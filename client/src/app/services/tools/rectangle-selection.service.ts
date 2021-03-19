@@ -47,7 +47,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
 
         const rectangleCoords = { x: this.selectionCoords.x, y: this.selectionCoords.y } as Vec2;
         ctx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
-        this.drawSelection(ctx, rectangleCoords, Math.abs(this.width), Math.abs(this.height));
+        this.drawSelection(ctx, rectangleCoords, { x: Math.abs(this.width), y: Math.abs(this.height) } as Vec2);
     }
 
     protected drawPreviewSelectionRequired(): void {
@@ -56,20 +56,20 @@ export class RectangleSelectionService extends AbstractSelectionService {
             this.height = Math.sign(this.height) * Math.min(Math.abs(this.width), Math.abs(this.height));
             this.width = Math.sign(this.width) * Math.abs(this.height);
         }
-        this.drawSelection(ctx, this.mouseDownCoord, this.width, this.height);
+        this.drawSelection(ctx, this.mouseDownCoord, { x: this.width, y: this.height } as Vec2);
     }
 
-    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, width: number, height: number): void {
+    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void {
         ctx.lineWidth = this.BORDER_WIDTH;
         ctx.setLineDash([this.LINE_DASH, this.LINE_DASH]);
         ctx.strokeStyle = 'black';
         ctx.lineJoin = 'miter' as CanvasLineJoin;
         ctx.lineCap = 'square' as CanvasLineCap;
 
-        ctx.strokeRect(position.x, position.y, width, height);
+        ctx.strokeRect(position.x, position.y, size.x, size.y);
         ctx.lineDashOffset = this.LINE_DASH;
         ctx.strokeStyle = 'white';
-        ctx.strokeRect(position.x, position.y, width, height);
+        ctx.strokeRect(position.x, position.y, size.x, size.y);
 
         ctx.lineDashOffset = 0;
         ctx.setLineDash([]);

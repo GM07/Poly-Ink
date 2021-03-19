@@ -58,10 +58,9 @@ describe('EllipseSelectionService', () => {
     });
 
     it('draw selection should draw an ellipse and a border around the selection', () => {
-        service['radiusAbs'] = { x: 0, y: 0 } as Vec2;
         spyOn(baseCtxStub, 'ellipse');
         spyOn(baseCtxStub, 'setLineDash');
-        service['drawSelection'](baseCtxStub, { x: 10, y: 25 } as Vec2);
+        service['drawSelection'](baseCtxStub, { x: 10, y: 25 } as Vec2, { x: 0, y: 0 } as Vec2);
         expect(baseCtxStub.ellipse).toHaveBeenCalledTimes(2);
         expect(baseCtxStub.setLineDash).toHaveBeenCalledTimes(2);
     });

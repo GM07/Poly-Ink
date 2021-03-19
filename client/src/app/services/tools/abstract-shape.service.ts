@@ -77,13 +77,13 @@ export abstract class AbstractShape extends Tool {
         }
     }
 
-    onMouseLeave(event: MouseEvent): void {
+    onMouseLeave(): void {
         if (this.leftMouseDown) {
             this.updateShape();
         }
     }
 
-    onMouseEnter(event: MouseEvent): void {
+    onMouseEnter(): void {
         if (this.leftMouseDown) {
             this.updateShape();
         }

@@ -19,13 +19,13 @@ export enum LeftMouse {
 export class PencilService extends Tool {
     protected pathData: Vec2[][];
     protected lineWidthIn: number;
-    toolID: string = PencilToolConstants.TOOL_ID;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.clearPath();
 
         this.shortcutKey = new ShortcutKey(PencilToolConstants.SHORTCUT_KEY);
+        this.toolID = PencilToolConstants.TOOL_ID;
         this.lineWidthIn = ToolSettingsConst.DEFAULT_PENCIL_WIDTH;
     }
 

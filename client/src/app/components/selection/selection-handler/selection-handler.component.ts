@@ -29,7 +29,7 @@ export class SelectionHandlerComponent {
         return this.lastTab;
     }
 
-    applyNewTab(): void {
+    private applyNewTab(): void {
         for (const [tool, selectionComponent] of this.settingsList) {
             if (this.toolHandler.getCurrentTool() instanceof tool) {
                 this.lastTool = this.toolHandler.getCurrentTool();

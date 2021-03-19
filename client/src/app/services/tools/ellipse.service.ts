@@ -38,9 +38,8 @@ export class EllipseService extends AbstractShape {
         const radiusXAbs = Math.abs(radiusX);
         const radiusYAbs = Math.abs(radiusY);
 
-        if (ctx === this.drawingService.previewCtx) {
+        if (ctx === this.drawingService.previewCtx)
             this.drawRectanglePerimeter(ctx, { x: centerX, y: centerY } as Vec2, { x: radiusXAbs, y: radiusYAbs } as Vec2);
-        }
 
         ctx.strokeStyle = this.colorService.secondaryRgba;
         ctx.lineCap = 'round' as CanvasLineCap;

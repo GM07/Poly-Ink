@@ -2,8 +2,8 @@ import { ToolSettings } from './tool-settings';
 import { LassoToolConstants } from './tools.constants';
 
 export class LassoSettings implements ToolSettings {
-    toolId: string = LassoToolConstants.TOOL_ID;
-    toolTitle: string = LassoToolConstants.TOOL_TITLE;
-    infoBubble: string = LassoToolConstants.INFO_BUBBLE;
-    iconName: string = LassoToolConstants.ICON_NAME;
+    readonly toolId: string = LassoToolConstants.TOOL_ID;
+    readonly toolTitle: string = LassoToolConstants.TOOL_TITLE;
+    readonly infoBubble: string = LassoToolConstants.INFO_BUBBLE;
+    readonly iconName: string = LassoToolConstants.ICON_NAME;
 }

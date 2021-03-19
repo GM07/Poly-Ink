@@ -36,10 +36,10 @@ export class EllipseSelectionService extends AbstractSelectionService {
         this.width = 2 * this.radiusAbs.x * Math.sign(this.width);
         this.height = 2 * this.radiusAbs.y * Math.sign(this.height);
 
-        this.drawSelection(ctx, this.center);
+        this.drawSelection(ctx, this.center, this.radiusAbs);
     }
 
-    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2): void {
+    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void {
         ctx.beginPath();
 
         ctx.lineWidth = this.BORDER_WIDTH;
@@ -48,7 +48,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         ctx.lineJoin = 'round' as CanvasLineJoin;
 
         ctx.strokeStyle = 'black';
-        ctx.ellipse(position.x, position.y, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
+        ctx.ellipse(position.x, position.y, size.x, size.y, 0, 0, 2 * Math.PI);
         ctx.stroke();
 
         ctx.closePath();
@@ -56,7 +56,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
         ctx.lineDashOffset = this.LINE_DASH;
         ctx.strokeStyle = 'white';
-        ctx.ellipse(position.x, position.y, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
+        ctx.ellipse(position.x, position.y, size.x, size.y, 0, 0, 2 * Math.PI);
         ctx.stroke();
 
         ctx.lineDashOffset = 0;
@@ -89,7 +89,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         ctx.clip();
         ctx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
         ctx.restore();
-        this.drawSelection(ctx, { x: centerX, y: centerY } as Vec2);
+        this.drawSelection(ctx, { x: centerX, y: centerY } as Vec2, this.radiusAbs);
     }
 
     protected endSelection(): void {

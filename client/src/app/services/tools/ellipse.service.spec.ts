@@ -113,20 +113,20 @@ describe('EllipseService', () => {
     });
 
     it('should update the rectangle when the mouse leaves', () => {
-        service.onMouseLeave(mouseEvent);
+        service.onMouseLeave();
         expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         mouseEvent = { clientX: 1, clientY: 1, button: 0 } as MouseEvent;
-        service.onMouseLeave(mouseEvent);
+        service.onMouseLeave();
         expect(updateShapeSpy).toHaveBeenCalled();
     });
 
     it('should update the rectangle when the mouse enters', () => {
-        service.onMouseEnter(mouseEvent);
+        service.onMouseEnter();
         expect(updateShapeSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         mouseEvent = { clientX: 1, clientY: 1, button: 0 } as MouseEvent;
-        service.onMouseEnter(mouseEvent);
+        service.onMouseEnter();
         expect(updateShapeSpy).toHaveBeenCalled();
     });
 

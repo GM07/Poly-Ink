@@ -44,8 +44,6 @@ export class ToolHandlerService {
         // this.TOOLS.set(ToolsConstants.FillToolConstants.TOOL_ID, pencilService);
         // this.TOOLS.set(ToolsConstants.LassoToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.PolygoneToolConstants.TOOL_ID, polygoneService);
-        // this.TOOLS.set(ToolsConstants.RectangleSelectionToolConstants.TOOL_ID, pencilService);
-        // this.TOOLS.set(ToolsConstants.PolygoneToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.RectangleSelectionToolConstants.TOOL_ID, rectangleSelectionService);
         this.TOOLS.set(ToolsConstants.RectangleToolConstants.TOOL_ID, rectangleService);
         // this.TOOLS.set(ToolsConstants.StampToolConstants.TOOL_ID, pencilService);

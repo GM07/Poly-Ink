@@ -18,7 +18,6 @@ export enum PolygoneMode {
     providedIn: 'root',
 })
 export class PolygoneService extends Tool {
-    toolID: string;
     private lineWidthIn: number;
     polygoneMode: PolygoneMode;
     private numEdgesIn: number;
@@ -139,7 +138,6 @@ export class PolygoneService extends Tool {
         const centerX: number = center.x;
         const centerY: number = center.y;
 
-        // tslint:disable-next-line:no-magic-numbers
         const startingAngle = -Math.PI / 2 + (this.numEdgesIn % 2 !== 0 ? 0 : Math.PI / this.numEdgesIn);
         ctx.lineWidth = this.polygoneMode === PolygoneMode.Filled ? 0 : this.lineWidthIn;
 

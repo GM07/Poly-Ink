@@ -7,6 +7,7 @@ import { EyeDropperService } from '@app/services/tools/eye-dropper.service';
 import { EyeDropperConfigComponent } from './eye-dropper-config.component';
 
 describe('EyeDropperConfigComponent', () => {
+    // tslint:disable:no-string-literal
     let component: EyeDropperConfigComponent;
     let fixture: ComponentFixture<EyeDropperConfigComponent>;
 
@@ -18,7 +19,7 @@ describe('EyeDropperConfigComponent', () => {
         }).compileComponents();
         fixture = TestBed.createComponent(EyeDropperConfigComponent);
         component = fixture.componentInstance;
-        component.eyeDropperService = TestBed.inject(EyeDropperService);
+        component['eyeDropperService'] = TestBed.inject(EyeDropperService);
         fixture.detectChanges();
     }));
 
@@ -31,7 +32,7 @@ describe('EyeDropperConfigComponent', () => {
         component.hexColor = 'FFFFFF';
         fixture.detectChanges();
         const getContextSpy = spyOn<any>(component.previewEyeDropper.nativeElement, 'getContext').and.callThrough();
-        component.eyeDropperService.updatePrevisualisation.next('ABABAB');
+        component['eyeDropperService'].updatePrevisualisation.next('ABABAB');
         expect(getContextSpy).toHaveBeenCalled();
     });
 
@@ -39,7 +40,7 @@ describe('EyeDropperConfigComponent', () => {
         component.hexColor = 'FFFFFF';
         fixture.detectChanges();
         const getContextSpy = spyOn<any>(component.previewEyeDropper.nativeElement, 'getContext').and.callThrough();
-        component.eyeDropperService.updatePrevisualisation.next('');
+        component['eyeDropperService'].updatePrevisualisation.next('');
         expect(getContextSpy).not.toHaveBeenCalled();
     });
 });

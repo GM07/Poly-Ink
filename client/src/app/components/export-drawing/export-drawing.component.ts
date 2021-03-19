@@ -35,7 +35,7 @@ export class ExportDrawingComponent {
     }
 
     private filterMap: Map<string, Filter> = new Map([
-        ['no', new Filter()],
+        ['default', new Filter()],
         ['negative', new NegativeFilter()],
         ['funky', new FunkyFilter()],
         ['spotlight', new SpotlightFilter()],
@@ -56,7 +56,7 @@ export class ExportDrawingComponent {
 
     initValues(): void {
         this.exportFormat = 'png';
-        this.currentFilter = 'no';
+        this.currentFilter = 'default';
         this.aspectRatio = 1;
         this.filename = this.defaultFileNames[Math.floor(Math.random() * this.defaultFileNames.length)];
     }
@@ -83,7 +83,7 @@ export class ExportDrawingComponent {
         this.exportDrawingService.exportImage(this.canvasImage, this.exportFormat, this.filename === '' ? 'image' : this.filename);
     }
 
-    async applyFilter(): Promise<void> {
+    private async applyFilter(): Promise<void> {
         const exportPreviewCtx = this.exportPreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
         this.imageData = this.baseContext.getImageData(0, 0, this.baseCanvas.width, this.baseCanvas.height);
 

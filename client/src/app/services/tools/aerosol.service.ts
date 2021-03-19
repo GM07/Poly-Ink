@@ -18,13 +18,11 @@ const MS_PER_SECOND = 1000;
     providedIn: 'root',
 })
 export class AerosolService extends Tool {
-    toolID: string = AerosolToolConstants.TOOL_ID;
-
     private dropletDiameterIn: number;
     private areaDiameterIn: number;
-    sprayIntervalID: number;
     private nDropletsPerSpray: number;
     private emissionsPerSecondIn: number;
+    sprayIntervalID: number;
     mousePosition: Vec2;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
@@ -34,10 +32,11 @@ export class AerosolService extends Tool {
         this.dropletDiameterIn = ToolSettingsConst.MIN_DROPLETS_WIDTH;
         this.areaDiameterIn = ToolSettingsConst.DEFAULT_AEROSOL_AREA_DIAMETER;
         this.emissionsPerSecondIn = ToolSettingsConst.DEFAULT_AEROSOL_EMISSIONS_PER_SECOND;
+        this.toolID = AerosolToolConstants.TOOL_ID;
     }
 
     stopDrawing(): void {
-        this.onMouseUp({} as MouseEvent);
+        this.onMouseUp();
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
@@ -77,7 +76,7 @@ export class AerosolService extends Tool {
         }
     }
 
-    onMouseUp(event: MouseEvent): void {
+    onMouseUp(): void {
         if (this.leftMouseDown) {
             this.drawingService.baseCtx.drawImage(this.drawingService.previewCtx.canvas, 0, 0);
         }
@@ -92,7 +91,7 @@ export class AerosolService extends Tool {
         }
     }
 
-    onMouseLeave(event: MouseEvent): void {
+    onMouseLeave(): void {
         window.clearInterval(this.sprayIntervalID);
         if (!this.leftMouseDown) this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
@@ -107,7 +106,7 @@ export class AerosolService extends Tool {
 
     private sprayContinuously(ctx: CanvasRenderingContext2D): void {
         this.sprayIntervalID = window.setInterval(() => {
-            this.drawSpray(this.drawingService.previewCtx);
+            this.drawSpray(ctx);
         }, MS_PER_SECOND / this.emissionsPerSecondIn);
     }
 
