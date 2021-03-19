@@ -43,14 +43,16 @@ describe('NewDrawing', () => {
     });
 
     it('should reset if confirm is true', () => {
-        const spyFunc = spyOn(drawingService, 'resizeCanvas');
-        const spyFunc2 = spyOn(drawingService, 'initBackground');
+        const resizeCanvasSpy = spyOn(drawingService, 'resizeCanvas');
+        const initBackgroundSpy = spyOn(drawingService, 'initBackground');
+        const undoRedoInitSpy = spyOn(drawingService, 'initUndoRedo').and.stub();
         spyOn(toolHandler.getCurrentTool(), 'stopDrawing').and.callFake(() => {
             /**/
         });
         service.newCanvas(true);
-        expect(spyFunc).toHaveBeenCalled();
-        expect(spyFunc2).toHaveBeenCalled();
+        expect(resizeCanvasSpy).toHaveBeenCalled();
+        expect(initBackgroundSpy).toHaveBeenCalled();
+        expect(undoRedoInitSpy).toHaveBeenCalled();
     });
 
     it('should not reset if confirm is false and not empty', () => {

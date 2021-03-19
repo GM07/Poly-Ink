@@ -9,8 +9,9 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { PolygonMode } from '@app/classes/tool-config/polygon-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { PolygoneMode, PolygoneService } from '@app/services/tools/polygone.service';
+import { PolygoneService } from '@app/services/tools/polygone.service';
 import { PolygoneConfigComponent } from './polygone-config.component';
 
 describe('PolygoneConfigComponent', () => {
@@ -50,8 +51,8 @@ describe('PolygoneConfigComponent', () => {
     });
 
     it('should toggle the traceType', () => {
-        component.toggleTraceType(PolygoneMode.FilledWithContour);
-        expect(polygoneService.polygoneMode).toBe(PolygoneMode.FilledWithContour);
+        component.toggleTraceType(PolygonMode.FilledWithContour);
+        expect(polygoneService.config.polygonMode).toBe(PolygonMode.FilledWithContour);
     });
 
     it('should return the value and px string', () => {
@@ -139,18 +140,18 @@ describe('PolygoneConfigComponent', () => {
     it('should set the traceType to Contour when Contour toggle button is clicked', async () => {
         buttonToggleLabelElements[0].click();
         fixture.detectChanges();
-        expect(polygoneService.polygoneMode).toEqual(PolygoneMode.Contour);
+        expect(polygoneService.config.polygonMode).toEqual(PolygonMode.Contour);
     });
 
     it('should set the traceType to Plein when Plein toggle button is clicked', async () => {
         buttonToggleLabelElements[1].click();
         fixture.detectChanges();
-        expect(polygoneService.polygoneMode).toEqual(PolygoneMode.Filled);
+        expect(polygoneService.config.polygonMode).toEqual(PolygonMode.Filled);
     });
 
     it('should set the traceType to Plein & Contour when Plein & Contour toggle button is clicked', async () => {
         buttonToggleLabelElements[2].click();
         fixture.detectChanges();
-        expect(polygoneService.polygoneMode).toEqual(PolygoneMode.FilledWithContour);
+        expect(polygoneService.config.polygonMode).toEqual(PolygonMode.FilledWithContour);
     });
 });

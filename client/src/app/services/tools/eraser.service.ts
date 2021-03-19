@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { EraserDraw } from '@app/classes/commands/eraser-draw';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { EraserToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -13,26 +14,32 @@ import { ColorService } from 'src/color-picker/services/color.service';
 export class EraserService extends PencilService {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
-        this.clearPath();
         this.shortcutKey = new ShortcutKey(EraserToolConstants.SHORTCUT_KEY);
         this.toolID = EraserToolConstants.TOOL_ID;
-        super.lineWidthIn = ToolSettingsConst.DEFAULT_ERASER_WIDTH;
+        super.lineWidth = ToolSettingsConst.DEFAULT_ERASER_WIDTH;
     }
 
     onMouseMove(event: MouseEvent): void {
         if (this.isInCanvas(event) && !this.colorService.isMenuOpen) {
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
-            this.drawBackgroundPoint(this.getPositionFromMouse(event));
-
             if (this.leftMouseDown) {
                 const mousePosition = this.getPositionFromMouse(event);
-                this.pathData[this.pathData.length - 1].push(mousePosition);
+                this.config.pathData[this.config.pathData.length - 1].push(mousePosition);
 
-                this.drawingService.clearCanvas(this.drawingService.previewCtx);
-                this.drawLine(this.drawingService.previewCtx, this.pathData);
-                this.drawBackgroundPoint(this.getPositionFromMouse(event));
+                this.drawPreview();
             }
+            this.drawBackgroundPoint(this.getPositionFromMouse(event));
         }
+    }
+
+    draw(): void {
+        const command = new EraserDraw(this.colorService, this.config);
+        this.drawingService.draw(command);
+    }
+
+    drawPreview(): void {
+        const command = new EraserDraw(this.colorService, this.config);
+        this.drawingService.drawPreview(command);
     }
 
     protected drawBackgroundPoint(point: Vec2): void {
@@ -41,27 +48,8 @@ export class EraserService extends PencilService {
         ctx.strokeStyle = 'black';
         ctx.fillStyle = 'white';
         ctx.beginPath();
-        ctx.fillRect(point.x - this.lineWidthIn / 2, point.y - this.lineWidthIn / 2, this.lineWidthIn, this.lineWidthIn);
-        ctx.rect(point.x - this.lineWidthIn / 2, point.y - this.lineWidthIn / 2, this.lineWidthIn, this.lineWidthIn);
-        ctx.stroke();
-    }
-
-    protected drawLine(ctx: CanvasRenderingContext2D, pathData: Vec2[][]): void {
-        ctx.beginPath();
-        ctx.fillStyle = 'white';
-        ctx.strokeStyle = 'white';
-        ctx.lineWidth = this.lineWidth;
-        ctx.lineCap = 'butt' as CanvasLineCap;
-        ctx.lineJoin = 'bevel' as CanvasLineJoin;
-        for (const paths of pathData) {
-            if (paths.length >= 1)
-                ctx.fillRect(paths[0].x - this.lineWidthIn / 2, paths[0].y - this.lineWidthIn / 2, this.lineWidthIn, this.lineWidthIn);
-            for (const point of paths) {
-                ctx.lineTo(point.x, point.y);
-            }
-            ctx.stroke();
-            ctx.beginPath();
-        }
+        ctx.fillRect(point.x - this.config.lineWidth / 2, point.y - this.config.lineWidth / 2, this.config.lineWidth, this.config.lineWidth);
+        ctx.rect(point.x - this.config.lineWidth / 2, point.y - this.config.lineWidth / 2, this.config.lineWidth, this.config.lineWidth);
         ctx.stroke();
     }
 }

@@ -16,7 +16,7 @@ describe('EllipseSelectionService', () => {
     let baseCtxStub: CanvasRenderingContext2D;
     let previewCtxStub: CanvasRenderingContext2D;
     beforeEach(() => {
-        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas'], { changes: new Subject<void>() });
+        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw'], { changes: new Subject<void>() });
         TestBed.configureTestingModule({
             providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
         });
@@ -36,24 +36,24 @@ describe('EllipseSelectionService', () => {
 
     it('drawSelection should call drawPreview and not change size if shift hasnt changed', () => {
         const drawSelection = spyOn<any>(service, 'drawSelection');
-        const saveWidth = (service.width = 5);
-        const saveHeight = (service.height = 25);
+        const saveWidth = (service.config.width = 5);
+        const saveHeight = (service.config.height = 25);
         service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
         service['drawPreviewSelectionRequired']();
-        expect(saveWidth).toEqual(service.width);
-        expect(saveHeight).toEqual(service.height);
+        expect(saveWidth).toEqual(service.config.width);
+        expect(saveHeight).toEqual(service.config.height);
         expect(drawSelection).toHaveBeenCalled();
     });
 
     it('drawSelection should call drawPreview and change size if shift has changed', () => {
         const drawSelection = spyOn<any>(service, 'drawSelection');
-        const saveWidth = (service.width = 5);
-        const saveHeight = (service.height = 25);
-        service['SHIFT'].isDown = true;
+        const saveWidth = (service.config.width = 5);
+        const saveHeight = (service.config.height = 25);
+        service.config.shiftDown = true;
         service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
         service['drawPreviewSelectionRequired']();
-        expect(saveWidth).toEqual(service.width);
-        expect(saveHeight).not.toEqual(service.height);
+        expect(saveWidth).toEqual(service.config.width);
+        expect(saveHeight).not.toEqual(service.config.height);
         expect(drawSelection).toHaveBeenCalled();
     });
 
@@ -69,7 +69,7 @@ describe('EllipseSelectionService', () => {
     it('fill background should fill an ellipse at the location', () => {
         service['center'] = { x: 0, y: 0 } as Vec2;
         service['radiusAbs'] = { x: 0, y: 0 } as Vec2;
-        service['firstSelectionCoords'] = { x: 0, y: 0 } as Vec2;
+        service.config.startCoords = { x: 0, y: 0 } as Vec2;
         spyOn(previewCtxStub, 'ellipse');
         spyOn(previewCtxStub, 'fill');
         service['fillBackground'](previewCtxStub, { x: 10, y: 25 } as Vec2);
@@ -79,7 +79,7 @@ describe('EllipseSelectionService', () => {
 
     it('update selection required should clip the image, draw it, update it and update the background', () => {
         service['radiusAbs'] = { x: 0, y: 0 } as Vec2;
-        service.selectionCoords = { x: 0, y: 0 } as Vec2;
+        service.config.endCoords = { x: 0, y: 0 } as Vec2;
         spyOn(previewCtxStub, 'ellipse');
         spyOn(previewCtxStub, 'clip');
         spyOn(previewCtxStub, 'drawImage');
@@ -101,23 +101,22 @@ describe('EllipseSelectionService', () => {
 
     it('end selection should draw the selection on the base canvas', () => {
         service.selectionCtx = previewCtxStub;
-        service.selectionCoords = { x: 0, y: 0 } as Vec2;
+        service.config.endCoords = { x: 0, y: 0 } as Vec2;
         service['radiusAbs'] = { x: 0, y: 0 } as Vec2;
-        spyOn(baseCtxStub, 'ellipse');
-        spyOn(baseCtxStub, 'clip');
-        spyOn(baseCtxStub, 'drawImage');
-        const fillBackground = spyOn<any>(service, 'fillBackground');
+        spyOn(service, 'draw').and.stub();
         service['endSelection']();
-        expect(baseCtxStub.ellipse).toHaveBeenCalled();
-        expect(baseCtxStub.clip).toHaveBeenCalled();
-        expect(baseCtxStub.drawImage).toHaveBeenCalled();
-        expect(fillBackground).toHaveBeenCalled();
+        expect(service.draw).toHaveBeenCalled();
     });
 
     it("fill background should do nothing if the mouse hasn't move", () => {
-        service['firstSelectionCoords'] = { x: 0, y: 0 };
+        service.config.startCoords = { x: 0, y: 0 };
         spyOn(previewCtxStub, 'beginPath');
         service['fillBackground'](previewCtxStub, { x: 0, y: 0 } as Vec2);
         expect(previewCtxStub.beginPath).not.toHaveBeenCalled();
+    });
+
+    it('should send command to drawing service to draw on base', () => {
+        service.draw();
+        expect(drawServiceSpy.draw).toHaveBeenCalled();
     });
 });

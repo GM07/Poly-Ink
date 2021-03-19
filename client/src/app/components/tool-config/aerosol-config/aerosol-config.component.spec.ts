@@ -86,7 +86,7 @@ describe('AerosolConfigComponent', () => {
     });
 
     it('should be able to set value of emissions slider', async () => {
-        const setValue = 1000;
+        const setValue = 200;
         const slider = await loader.getAllHarnesses(MatSliderHarness);
         expect(await slider[2].getValue()).toBe(ToolSettingsConst.DEFAULT_AEROSOL_EMISSIONS_PER_SECOND);
 

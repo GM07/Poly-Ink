@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 import { ShortcutHandlerService } from './shortcut-handler.service';
 
 describe('ShortcutHandlerService', () => {
@@ -11,6 +12,8 @@ describe('ShortcutHandlerService', () => {
         TestBed.configureTestingModule({});
         toolHandlerService = TestBed.inject(ToolHandlerService);
         service = TestBed.inject(ShortcutHandlerService);
+        const undoRedo = TestBed.inject(UndoRedoService);
+        spyOn(undoRedo, 'onKeyDown');
         keyboardEvent = new KeyboardEvent('document:keydown', {});
     });
 

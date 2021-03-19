@@ -10,7 +10,8 @@ describe('EllipseSelectionComponent', () => {
     let service: DrawingService;
 
     beforeEach(async(() => {
-        service = new DrawingService();
+        const undoRedoServiceSpy = jasmine.createSpyObj('UndoRedoService', ['init', 'saveCommand', 'undo', 'redo', 'isPreviewEmpty', 'onKeyDown']);
+        service = new DrawingService(undoRedoServiceSpy);
         TestBed.configureTestingModule({
             declarations: [EllipseSelectionComponent],
             providers: [{ provide: DrawingService, useValue: service }],

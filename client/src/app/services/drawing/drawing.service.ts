@@ -1,4 +1,8 @@
 import { Injectable } from '@angular/core';
+import { AbstractDraw } from '@app/classes/commands/abstract-draw';
+import { ResizeDraw } from '@app/classes/commands/resize-draw';
+import { ResizeConfig } from '@app/classes/tool-config/resize-config';
+import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -11,6 +15,8 @@ export class DrawingService {
     previewCanvas: HTMLCanvasElement;
 
     changes: Subject<void> = new Subject<void>();
+
+    constructor(private undoRedoService: UndoRedoService) {}
 
     clearCanvas(context: CanvasRenderingContext2D): void {
         context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -29,6 +35,14 @@ export class DrawingService {
             this.drawWhite(memoryCanvas);
         }
         this.changes.next();
+    }
+
+    initUndoRedo(): void {
+        const config = new ResizeConfig();
+        config.height = this.canvas.height;
+        config.width = this.canvas.width;
+        const initialResize = new ResizeDraw(config, this);
+        this.undoRedoService.init(this.baseCtx, this.previewCtx, initialResize);
     }
 
     private saveCanvas(memoryCanvas: HTMLCanvasElement): void {
@@ -50,8 +64,24 @@ export class DrawingService {
         this.baseCtx.fillStyle = color;
     }
 
+    blockUndoRedo(): void {
+        this.undoRedoService.blockUndoRedo = true;
+    }
+
     initBackground(): void {
         this.baseCtx.fillStyle = 'white';
         this.baseCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    draw(command: AbstractDraw): void {
+        this.undoRedoService.blockUndoRedo = false;
+        command.execute(this.baseCtx);
+        this.undoRedoService.saveCommand(command);
+    }
+
+    drawPreview(command: AbstractDraw): void {
+        this.blockUndoRedo();
+        this.clearCanvas(this.previewCtx);
+        command.execute(this.previewCtx);
     }
 }

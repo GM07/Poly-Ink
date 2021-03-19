@@ -15,14 +15,13 @@ describe('AerosolService', () => {
 
     let baseCtxStub: CanvasRenderingContext2D;
     let previewCtxStub: CanvasRenderingContext2D;
-    let drawSpraySpy: jasmine.Spy<any>;
+    let drawSpy: jasmine.Spy<any>;
+    let drawPreviewSpy: jasmine.Spy<any>;
     let sprayContinuouslySpy: jasmine.Spy<any>;
     let onMouseDownSpy: jasmine.Spy<any>;
 
-    const ALPHA = 3;
-
     beforeEach(() => {
-        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas']);
+        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'drawPreview']);
         colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(0, 0, 0, 1)' });
 
         TestBed.configureTestingModule({
@@ -36,7 +35,9 @@ describe('AerosolService', () => {
         previewCtxStub = canvasTestHelper.drawCanvas.getContext('2d') as CanvasRenderingContext2D;
 
         service = TestBed.inject(AerosolService);
-        drawSpraySpy = spyOn<any>(service, 'drawSpray').and.callThrough();
+        drawSpy = spyOn<any>(service, 'draw').and.stub();
+        drawPreviewSpy = spyOn<any>(service, 'drawPreview').and.stub();
+
         sprayContinuouslySpy = spyOn<any>(service, 'sprayContinuously').and.callThrough();
         onMouseDownSpy = spyOn<any>(service, 'onMouseDown').and.callThrough();
 
@@ -79,14 +80,14 @@ describe('AerosolService', () => {
         service.mouseDownCoord = { x: 0, y: 0 };
 
         service.onMouseUp(mouseEvent);
-        expect(drawSpraySpy).not.toHaveBeenCalled();
+        expect(drawSpy).not.toHaveBeenCalled();
     });
 
     it('onMouseMove should call sprayContinuouslySpy if mouse was already down', () => {
         const expectedResult: Vec2 = { x: 25, y: 25 };
         service.leftMouseDown = true;
         service.onMouseMove(mouseEvent);
-        expect(service.mousePosition).toEqual(expectedResult);
+        expect(service.mouseDownCoord).toEqual(expectedResult);
         window.clearInterval(service.sprayIntervalID);
     });
 
@@ -97,13 +98,10 @@ describe('AerosolService', () => {
         service.onMouseLeave(mouseEventLClick);
         mouseEventLClick = { clientX: 0, clientY: 50, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
-        expect(sprayContinuouslySpy).toHaveBeenCalled();
-        mouseEventLClick = { clientX: 0, clientY: 50, button: 0 } as MouseEvent;
+        mouseEventLClick = { x: 0, y: 50, button: 0 } as MouseEvent;
         service.onMouseUp(mouseEventLClick);
-
-        // tslint:disable-next-line:no-magic-numbers
-        const imageData: ImageData = previewCtxStub.getImageData(2, 2, 25, 25);
-        expect(imageData.data[ALPHA]).toEqual(0); // A, rien ne doit être dessiné
+        expect(sprayContinuouslySpy).toHaveBeenCalled();
+        expect(drawSpy).toHaveBeenCalled();
     });
 
     it('should stop drawing when the mouse is up', () => {
@@ -115,14 +113,7 @@ describe('AerosolService', () => {
         service.onMouseUp(mouseEventLClick);
         service.onMouseEnter(mouseEventLClick);
         expect(sprayContinuouslySpy).toHaveBeenCalled();
-        expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
-        const imageData: ImageData = baseCtxStub.getImageData(0, 1, 1, 1);
-        expect(imageData.data[ALPHA]).toEqual(0); // A, rien ne doit être dessiné où on est entré
-
-        service.leftMouseDown = true;
-        mouseEventLClick = { x: 1000, y: 1000, button: 0, buttons: 0 } as MouseEvent;
-        service.onMouseUp(mouseEventLClick);
-        expect(sprayContinuouslySpy).toHaveBeenCalled();
+        expect(drawSpy).toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
@@ -135,11 +126,11 @@ describe('AerosolService', () => {
     it('should do nothing when entering the canvas, with an unsupported mouse state', () => {
         mouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 3 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
-        expect(drawSpraySpy).not.toHaveBeenCalled();
+        expect(drawPreviewSpy).not.toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
         mouseEvent = { clientX: 0, clientY: 0, button: 10, buttons: 3 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
-        expect(drawSpraySpy).not.toHaveBeenCalled();
+        expect(drawPreviewSpy).not.toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).not.toHaveBeenCalled();
     });
 
@@ -153,13 +144,32 @@ describe('AerosolService', () => {
         service.leftMouseDown = false;
         mouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
-        const imageData: ImageData = baseCtxStub.getImageData(0, 0, 1, 1);
-        expect(imageData.data[ALPHA]).toEqual(0);
+        expect(drawPreviewSpy).not.toHaveBeenCalled();
         window.clearInterval(service.sprayIntervalID);
     });
 
     it('should stop drawing when asked to', () => {
         service.stopDrawing();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
+    });
+
+    it('should draw on mouseup if mouse was down', () => {
+        service.leftMouseDown = true;
+        mouseEvent = { x: 0, y: 0, button: 0, buttons: 0 } as MouseEvent;
+        service.onMouseUp(mouseEvent);
+        expect(drawSpy).toHaveBeenCalled();
+        window.clearInterval(service.sprayIntervalID);
+    });
+
+    it('should send command to drawing service to draw on preview', () => {
+        drawPreviewSpy.and.callThrough();
+        service.drawPreview();
+        expect(drawServiceSpy.drawPreview).toHaveBeenCalled();
+    });
+
+    it('should send command to drawing service to draw on base', () => {
+        drawSpy.and.callThrough();
+        service.draw();
+        expect(drawServiceSpy.draw).toHaveBeenCalled();
     });
 });

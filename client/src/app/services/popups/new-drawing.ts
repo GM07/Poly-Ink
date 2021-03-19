@@ -39,6 +39,7 @@ export class NewDrawingService implements Popup {
 
         this.drawingService.resizeCanvas(width, height);
         this.drawingService.initBackground();
+        this.drawingService.initUndoRedo();
     }
 
     private isNotEmpty(baseCtx: CanvasRenderingContext2D, width: number, height: number): boolean {
