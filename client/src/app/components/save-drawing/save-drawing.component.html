@@ -2,20 +2,20 @@
     <div id="main">
         <div id="content">
             <h1 class="white" id="title">Sauvegarder dessin</h1>
-            <form>
+            <div [formGroup]="saveForm">
                 <mat-form-field appearance="legacy">
                     <mat-label class="gray">Nom</mat-label>
-                    <input matInput [(ngModel)]="filename" [formControl]="nameFormControl" name="filename" maxlength="100" />
+                    <input matInput formControlName="nameFormControl" name="filename" maxlength="100" />
                     <span matSuffix>{{ '.' + saveFormat }} &nbsp;</span>
-                    <mat-error *ngIf="nameFormControl.hasError('required')"> Le nom est <strong>requis</strong> </mat-error>
+                    <mat-error *ngIf="nameFormControl.invalid"> Le nom est <strong>requis</strong> </mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="legacy">
                     <mat-hint class="gray">[A-Z][a-z][0-9][-]</mat-hint>
                     <mat-label class="gray">Tags (séprarés par des virgules)</mat-label>
-                    <input matInput [(ngModel)]="tagsStr" [formControl]="tagsFormControl" name="tagsStr" maxlength="100" />
-                    <mat-error *ngIf="tagsFormControl.hasError('pattern')"> Les tags sont <strong>invalides</strong></mat-error>
+                    <input matInput formControlName="tagsFormControl" name="tagsStr" maxlength="100" />
+                    <mat-error *ngIf="true"> Les tags sont <strong>invalides</strong></mat-error>
                 </mat-form-field>
-            </form>
+            </div>
             <canvas #savePreview id="savePreview" [attr.width]="this.getPreviewWidth()" [attr.height]="this.getPreviewHeight()"></canvas>
             <h3 *ngIf="noServerConnection" class="error">Aucune connexion internet!</h3>
             <h3 *ngIf="unavailableServer" class="error">Le service n'est pas disponible!</h3>

@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CarrouselService } from '@app/services/carrousel/carrousel.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { SaveDrawingService } from '@app/services/popups/save-drawing.service';
@@ -13,7 +13,7 @@ import { Tag } from '@common/communication/tag';
     templateUrl: './save-drawing.component.html',
     styleUrls: ['./save-drawing.component.scss'],
 })
-export class SaveDrawingComponent {
+export class SaveDrawingComponent implements OnInit{
     static readonly EXPORT_PREVIEW_MAX_SIZE: number = 300;
     static readonly BAD_REQUEST_STATUS: number = 400;
     static readonly UNAVAILABLE_SERVER_STATUS: number = 503;
@@ -28,13 +28,12 @@ export class SaveDrawingComponent {
     enableAcceptButton: boolean;
     noServerConnection: boolean;
     dataLimitReached: boolean;
-    nameFormControl: FormControl;
-    tagsFormControl: FormControl;
     saveFormat: string;
     filename: string;
     tagsStr: string;
     aspectRatio: number;
     unavailableServer: boolean;
+    saveForm: FormGroup;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -46,10 +45,28 @@ export class SaveDrawingComponent {
         this.initValues();
     }
 
+ 
+   ngOnInit(): void {
+        this.saveForm = new FormGroup({
+            nameFormControl: new FormControl(this.filename, [Validators.required]),
+            tagsFormControl: new FormControl(this.tagsStr, [Validators.pattern('^([ ]*[0-9A-Za-z-]+[ ]*)(,[ ]*[0-9A-Za-z-]+[ ]*)*$')]),
+        });
+
+    }
+
+
     @ViewChild('savePreview', { static: false }) set content(element: ElementRef) {
         if (element) {
             this.savePreview = element;
         }
+    }
+
+    get nameFormControl(): AbstractControl {
+        return this.saveForm.get('nameFormControl') as AbstractControl;
+    }
+
+    get tagsFormControl(): AbstractControl {
+        return this.saveForm.get('tagsFormControl') as AbstractControl;
     }
 
     initValues(): void {
@@ -59,8 +76,6 @@ export class SaveDrawingComponent {
         this.saveFormat = 'png';
         this.aspectRatio = 1;
         this.filename = this.defaultFileNames[Math.floor(Math.random() * this.defaultFileNames.length)];
-        this.nameFormControl = new FormControl(this.filename, Validators.required);
-        this.tagsFormControl = new FormControl('', Validators.pattern('^([ ]*[0-9A-Za-z-]+[ ]*)(,[ ]*[0-9A-Za-z-]+[ ]*)*$'));
     }
 
     backupBaseCanvas(): void {
@@ -88,12 +103,17 @@ export class SaveDrawingComponent {
             this.noServerConnection = false;
             this.unavailableServer = false;
             this.dataLimitReached = false;
-            let tags: Tag[] = [];
+            const tagsSet: Set<string> = new Set();
             if (this.tagsStr) {
-                tags = this.tagsStr.split(',').map((tagStr: string) => {
-                    return new Tag(tagStr);
+                this.tagsStr.split(',').forEach((tagStr: string) => {
+                    tagsSet.add(tagStr.trim());
                 });
             }
+            // Filter tags to keep them unique
+            const tags: Tag[] = [];
+            tagsSet.forEach((uniqueTag: string) => {
+                tags.push(new Tag(uniqueTag));
+            });
             const newDrawing: Drawing = new Drawing(new DrawingData(this.filename, tags));
             newDrawing.image = this.canvasImage;
             this.enableAcceptButton = false;
