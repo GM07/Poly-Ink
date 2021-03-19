@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DrawingConstants } from '@app/constants/drawing';
 import { CarrouselService } from '@app/services/carrousel/carrousel.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { SaveDrawingService } from '@app/services/popups/save-drawing.service';
@@ -7,6 +8,8 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
 import { Drawing } from '@common/communication/drawing';
 import { DrawingData } from '@common/communication/drawing-data';
 import { Tag } from '@common/communication/tag';
+
+
 
 @Component({
     selector: 'app-save-drawing',
@@ -23,7 +26,7 @@ export class SaveDrawingComponent implements OnInit {
     private canvasImage: string;
     private imageData: ImageData;
     private savePreview: ElementRef<HTMLCanvasElement>;
-    private defaultFileNames: string[] = ['Mona Lisa', 'Guenica', 'Le Cri', 'La nuit étoilée', 'Impression, soleil levant'];
+    private defaultFileNames: string[];
 
     enableAcceptButton: boolean;
     noServerConnection: boolean;
@@ -67,6 +70,7 @@ export class SaveDrawingComponent implements OnInit {
     }
 
     initValues(): void {
+        this.defaultFileNames = DrawingConstants.defaultFileNames;
         this.noServerConnection = false;
         this.unavailableServer = false;
         this.enableAcceptButton = true;

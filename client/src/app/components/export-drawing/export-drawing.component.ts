@@ -5,6 +5,7 @@ import { Monochrome } from '@app/classes/filters/monochrome-filter';
 import { NegativeFilter } from '@app/classes/filters/negative-filter';
 import { SepiaFilter } from '@app/classes/filters/sepia-filter';
 import { SpotlightFilter } from '@app/classes/filters/spotlight-filter';
+import { DrawingConstants } from '@app/constants/drawing';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ExportDrawingService } from '@app/services/popups/export-drawing';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
@@ -21,7 +22,7 @@ export class ExportDrawingComponent {
     private baseContext: CanvasRenderingContext2D;
     private canvasImage: string;
     private imageData: ImageData;
-
+    private defaultFileNames: string[];
     exportFormat: string;
     filename: string;
     currentFilter: string;
@@ -43,7 +44,6 @@ export class ExportDrawingComponent {
         ['monochrome', new Monochrome()],
     ]);
 
-    private defaultFileNames: string[] = ['Mona Lisa', 'Guenica', 'Le Cri', 'La nuit étoilée', 'Impression, soleil levant'];
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -55,6 +55,7 @@ export class ExportDrawingComponent {
     }
 
     initValues(): void {
+        this.defaultFileNames = DrawingConstants.defaultFileNames;
         this.exportFormat = 'png';
         this.currentFilter = 'no';
         this.aspectRatio = 1;
