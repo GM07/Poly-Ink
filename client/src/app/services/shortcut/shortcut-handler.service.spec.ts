@@ -3,6 +3,7 @@ import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { ShortcutHandlerService } from './shortcut-handler.service';
 
@@ -24,6 +25,8 @@ describe('ShortcutHandlerService', () => {
         TestBed.configureTestingModule({});
         toolHandlerService = TestBed.inject(ToolHandlerService);
         service = TestBed.inject(ShortcutHandlerService);
+        const undoRedo = TestBed.inject(UndoRedoService);
+        spyOn(undoRedo, 'onKeyDown');
         keyboardEvent = new KeyboardEvent('document:keydown', {});
         mouseEvent = {} as MouseEvent;
         const toolStub = new ToolStub({} as DrawingService, {} as ColorService);

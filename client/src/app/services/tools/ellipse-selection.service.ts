@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { EllipseSelectionDraw } from '@app/classes/commands/ellipse-selection-draw';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { EllipseSelectionToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -21,10 +22,10 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
     protected drawPreviewSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
-        let radiusX: number = this.width / 2;
-        let radiusY: number = this.height / 2;
+        let radiusX: number = this.config.width / 2;
+        let radiusY: number = this.config.height / 2;
         this.center = { x: this.mouseDownCoord.x + radiusX, y: this.mouseDownCoord.y + radiusY };
-        if (this.SHIFT.isDown) {
+        if (this.config.shiftDown) {
             const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
             this.center.x = this.mouseDownCoord.x + Math.sign(radiusX) * minRadius;
             this.center.y = this.mouseDownCoord.y + Math.sign(radiusY) * minRadius;
@@ -33,8 +34,8 @@ export class EllipseSelectionService extends AbstractSelectionService {
         }
 
         this.radiusAbs = { x: Math.abs(radiusX), y: Math.abs(radiusY) };
-        this.width = 2 * this.radiusAbs.x * Math.sign(this.width);
-        this.height = 2 * this.radiusAbs.y * Math.sign(this.height);
+        this.config.width = 2 * this.radiusAbs.x * Math.sign(this.config.width);
+        this.config.height = 2 * this.radiusAbs.y * Math.sign(this.config.height);
 
         this.drawSelection(ctx, this.center);
     }
@@ -66,7 +67,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
     }
 
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {
-        if (this.firstSelectionCoords.x !== currentPos.x || this.firstSelectionCoords.y !== currentPos.y) {
+        if (this.config.startCoords.x !== currentPos.x || this.config.startCoords.y !== currentPos.y) {
             ctx.beginPath();
             ctx.fillStyle = 'white';
             ctx.ellipse(this.center.x, this.center.y, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
@@ -78,37 +79,31 @@ export class EllipseSelectionService extends AbstractSelectionService {
     protected updateSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
-        const centerX = this.selectionCoords.x + Math.abs(this.width / 2);
-        const centerY = this.selectionCoords.y + Math.abs(this.height / 2);
+        const centerX = this.config.endCoords.x + Math.abs(this.config.width / 2);
+        const centerY = this.config.endCoords.y + Math.abs(this.config.height / 2);
 
-        this.fillBackground(ctx, this.selectionCoords);
+        this.fillBackground(ctx, this.config.endCoords);
 
         ctx.beginPath();
         ctx.save();
         ctx.ellipse(centerX, centerY, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
         ctx.clip();
-        ctx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
+        ctx.drawImage(this.SELECTION_DATA, this.config.endCoords.x, this.config.endCoords.y);
         ctx.restore();
         this.drawSelection(ctx, { x: centerX, y: centerY } as Vec2);
     }
 
     protected endSelection(): void {
         if (this.selectionCtx === null) return;
-        const baseCtx = this.drawingService.baseCtx;
-        const centerX = this.selectionCoords.x + Math.abs(this.width / 2);
-        const centerY = this.selectionCoords.y + Math.abs(this.height / 2);
 
-        this.fillBackground(baseCtx, this.selectionCoords);
-
-        baseCtx.beginPath();
-        baseCtx.save();
-        baseCtx.ellipse(centerX, centerY, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
-        baseCtx.clip();
-        baseCtx.drawImage(this.SELECTION_DATA, this.selectionCoords.x, this.selectionCoords.y);
-        baseCtx.restore();
-        baseCtx.closePath();
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.draw();
         this.selectionCtx = null;
-        this.selectionCoords = { x: 0, y: 0 } as Vec2;
+        this.config.endCoords = { x: 0, y: 0 } as Vec2;
+    }
+
+    draw(): void {
+        const command = new EllipseSelectionDraw(this.colorService, this.config);
+        this.drawingService.draw(command);
     }
 }

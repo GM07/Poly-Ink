@@ -90,13 +90,13 @@ describe('LineConfigComponent', () => {
     it('withJunctionPoint should be false when Sans jonction button is clicked ', async () => {
         buttonToggleLabelElements[0].click();
         fixture.detectChanges();
-        expect(lineService.showJunctionPoints).toEqual(false);
+        expect(lineService.config.showJunctionPoints).toEqual(false);
     });
 
     it('withJunctionPoint should be true when Avec point button is clicked ', async () => {
         buttonToggleLabelElements[1].click();
         fixture.detectChanges();
-        expect(lineService.showJunctionPoints).toEqual(true);
+        expect(lineService.config.showJunctionPoints).toEqual(true);
     });
 
     it('should call function toggleLineType() when button clicked', async(() => {

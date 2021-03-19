@@ -16,7 +16,6 @@ Content-Type: application/json
 ### GET /api/drawings
 ### Client: Request all drawings
 ### Server: Send all drawings
-
 GET http://127.0.0.1:3000/drawings/ HTTP/1.1
 
 ### GET /api/drawings

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -10,7 +11,7 @@ export class ShortcutHandlerService {
     private lastMouseMoveEvent: MouseEvent;
     blockShortcutsEvent: Subject<boolean>;
 
-    constructor(private toolHandlerService: ToolHandlerService) {
+    constructor(private toolHandlerService: ToolHandlerService, private undoRedoService: UndoRedoService) {
         this.blockShortcutsIn = false;
         this.blockShortcutsEvent = new Subject<boolean>();
     }
@@ -29,7 +30,10 @@ export class ShortcutHandlerService {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (!this.blockShortcutsIn) this.toolHandlerService.onKeyDown(event);
+        if (!this.blockShortcutsIn) {
+            this.undoRedoService.onKeyDown(event);
+            this.toolHandlerService.onKeyDown(event);
+        }
     }
 
     onMouseMove(event: MouseEvent): void {

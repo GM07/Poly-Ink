@@ -38,6 +38,13 @@ describe('NewDrawingComponent', () => {
         expect(funcSpy).toHaveBeenCalled();
     });
 
+    it('Should not show popup if empty', () => {
+        spyOn(newDrawingService, 'newCanvas').and.stub();
+        spyOn(component, 'hidePopup').and.stub();
+        component.createNewDrawing(true);
+        expect(component.hidePopup).toHaveBeenCalled();
+    });
+
     it('Should create a new drawing with ctrl+o', () => {
         const keyEvent = new KeyboardEvent('document:keydown', { ctrlKey: true, key: 'o' });
         const keySpy = spyOn(newDrawingService, 'newCanvas');

@@ -1,21 +1,28 @@
 <div class="tab">
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
-        <mat-slider id="widthSlider" min="{{ MIN }}" max="{{ MAX }}" [(ngModel)]="lineService.thickness" thumbLabel [displayWith]="colorSliderLabel">
+        <mat-slider
+            id="widthSlider"
+            min="{{ MIN }}"
+            max="{{ MAX }}"
+            [(ngModel)]="lineService.config.thickness"
+            thumbLabel
+            [displayWith]="colorSliderLabel"
+        >
         </mat-slider>
-        {{ lineService.thickness }}px
+        {{ lineService.config.thickness }}px
     </div>
     <mat-divider></mat-divider>
 
     <h5 class="textFormat">Type de jonction</h5>
     <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style">
         <div class="textFormatButton">
-            <mat-button-toggle [checked]="!lineService.showJunctionPoints" text="Normal" class="buttons" (click)="toggleLineType(false)"
+            <mat-button-toggle [checked]="!lineService.config.showJunctionPoints" text="Normal" class="buttons" (click)="toggleLineType(false)"
                 >Sans jonction</mat-button-toggle
             >
         </div>
         <div class="textFormatButton">
-            <mat-button-toggle [checked]="lineService.showJunctionPoints" text="Avec point" class="buttons" (click)="toggleLineType(true)"
+            <mat-button-toggle [checked]="lineService.config.showJunctionPoints" text="Avec point" class="buttons" (click)="toggleLineType(true)"
                 >Avec point</mat-button-toggle
             >
         </div>
@@ -23,12 +30,18 @@
     <br />
     <mat-divider></mat-divider>
 
-    <div *ngIf="lineService.showJunctionPoints">
+    <div *ngIf="lineService.config.showJunctionPoints">
         <h5 class="textFormat">Diamètre points de jonction</h5>
         <div class="textFormatForSlider">
-            <mat-slider thumbLabel [(ngModel)]="lineService.diameterJunctions" [displayWith]="colorSliderLabel" min="{{ MIN }}" max="{{ MAX }}">
+            <mat-slider
+                thumbLabel
+                [(ngModel)]="lineService.config.diameterJunctions"
+                [displayWith]="colorSliderLabel"
+                min="{{ MIN }}"
+                max="{{ MAX }}"
+            >
             </mat-slider>
-            {{ lineService.diameterJunctions }}px
+            {{ lineService.config.diameterJunctions }}px
         </div>
     </div>
 </div>

@@ -3,7 +3,7 @@
     <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style">
         <div class="textFormatButton">
             <mat-button-toggle
-                [checked]="polygoneService.polygoneMode === polygoneModeIn.Contour"
+                [checked]="polygonService.config.polygonMode === polygoneModeIn.Contour"
                 class="buttons"
                 (click)="toggleTraceType(polygoneModeIn.Contour)"
                 >Contour</mat-button-toggle
@@ -11,7 +11,7 @@
         </div>
         <div class="textFormatButton">
             <mat-button-toggle
-                [checked]="polygoneService.polygoneMode === polygoneModeIn.Filled"
+                [checked]="polygonService.config.polygonMode === polygoneModeIn.Filled"
                 class="buttons"
                 (click)="toggleTraceType(polygoneModeIn.Filled)"
                 >Plein</mat-button-toggle
@@ -19,7 +19,7 @@
         </div>
         <div class="textFormatButton">
             <mat-button-toggle
-                [checked]="polygoneService.polygoneMode === polygoneModeIn.FilledWithContour"
+                [checked]="polygonService.config.polygonMode === polygoneModeIn.FilledWithContour"
                 class="buttons"
                 (click)="toggleTraceType(polygoneModeIn.FilledWithContour)"
                 >Plein & Contour</mat-button-toggle
@@ -33,19 +33,19 @@
         <mat-slider
             min="{{ MIN }}"
             max="{{ MAX_WIDTH_POLYGONE }}"
-            [(ngModel)]="polygoneService.contourWidth"
+            [(ngModel)]="polygonService.contourWidth"
             thumbLabel
             [displayWith]="colorSliderLabel"
         >
         </mat-slider>
-        {{ polygoneService.contourWidth }}px
+        {{ polygonService.contourWidth }}px
     </div>
     <mat-divider></mat-divider>
 
     <h5 class="textFormat">Nombre de côtés</h5>
     <div class="textFormatForSlider">
-        <mat-slider id="polygone-edges-slider" min="{{ MIN_NUM_EDGES }}" max="{{ MAX_NUM_EDGES }}" [(ngModel)]="polygoneService.numEdges" thumbLabel>
+        <mat-slider id="polygone-edges-slider" min="{{ MIN_NUM_EDGES }}" max="{{ MAX_NUM_EDGES }}" [(ngModel)]="polygonService.numEdges" thumbLabel>
         </mat-slider>
-        {{ polygoneService.numEdges }}
+        {{ polygonService.numEdges }}
     </div>
 </div>

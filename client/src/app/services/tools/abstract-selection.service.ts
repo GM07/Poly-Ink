@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ShiftKey } from '@app/classes/shortcut/shift-key';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
+import { SelectionConfig } from '@app/classes/tool-config/selection-config.ts';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -29,11 +30,8 @@ export abstract class AbstractSelectionService extends Tool {
     updatePoints: Subject<boolean> = new Subject();
     mouseUpCoord: Vec2;
     translationOrigin: Vec2;
-    protected firstSelectionCoords: Vec2;
-    selectionCoords: Vec2;
+    config: SelectionConfig = new SelectionConfig();
 
-    width: number;
-    height: number;
     selectionCtx: CanvasRenderingContext2D | null;
 
     private moveId: number;
@@ -44,7 +42,7 @@ export abstract class AbstractSelectionService extends Tool {
         super(drawingService, colorService);
         this.SELECTION_DATA = document.createElement('canvas');
         this.selectionCtx = null;
-        this.selectionCoords = { x: 0, y: 0 } as Vec2;
+        this.config.endCoords = { x: 0, y: 0 } as Vec2;
         this.translationOrigin = { x: 0, y: 0 } as Vec2;
         this.moveId = this.DEFAULT_MOVE_ID;
         this.drawingService.changes.subscribe(() => {
@@ -69,11 +67,12 @@ export abstract class AbstractSelectionService extends Tool {
         if (this.leftMouseDown && !this.isInSelection(event)) {
             document.body.style.width = this.bodyWidth;
             document.body.style.height = this.bodyHeight;
-            this.endSelection();
             const mousePos = this.getPositionFromMouse(event);
+            this.endSelection();
             this.mouseDownCoord = mousePos;
             this.mouseUpCoord = mousePos;
-            this.drawPreviewSelection();
+            this.config.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
+            this.config.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
         }
     }
 
@@ -95,8 +94,8 @@ export abstract class AbstractSelectionService extends Tool {
             this.setMouseUpCoord(event);
             if (this.selectionCtx !== null) {
                 this.updateSelection(this.getTranslation(this.mouseUpCoord));
-                document.body.style.width = event.pageX + this.width + 'px';
-                document.body.style.height = event.pageY + this.height + 'px';
+                document.body.style.width = event.pageX + this.config.width + 'px';
+                document.body.style.height = event.pageY + this.config.height + 'px';
             } else {
                 const ctx = this.drawingService.previewCtx;
                 this.drawingService.clearCanvas(ctx);
@@ -112,7 +111,7 @@ export abstract class AbstractSelectionService extends Tool {
             event.preventDefault();
             this.selectAll();
         } else if (this.SHIFT.equals(event)) {
-            this.SHIFT.isDown = true;
+            this.config.shiftDown = true;
             if (this.leftMouseDown && this.selectionCtx === null) {
                 this.updateDrawingSelection();
             }
@@ -148,7 +147,7 @@ export abstract class AbstractSelectionService extends Tool {
 
     onKeyUp(event: KeyboardEvent): void {
         if (this.SHIFT.equals(event)) {
-            this.SHIFT.isDown = false;
+            this.config.shiftDown = false;
             if (this.leftMouseDown && this.selectionCtx === null) {
                 this.updateDrawingSelection();
             }
@@ -161,13 +160,13 @@ export abstract class AbstractSelectionService extends Tool {
 
     selectAll(): void {
         this.endSelection();
-        this.selectionCoords = { x: 0, y: 0 } as Vec2;
+        this.config.endCoords = { x: 0, y: 0 } as Vec2;
         const width = this.drawingService.canvas.width;
         const height = this.drawingService.canvas.height;
         this.mouseDownCoord = { x: 0, y: 0 } as Vec2;
         this.mouseUpCoord = { x: width, y: height } as Vec2;
-        this.width = width;
-        this.height = height;
+        this.config.width = width;
+        this.config.height = height;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.startSelection();
         this.updatePoints.next(true);
@@ -176,10 +175,10 @@ export abstract class AbstractSelectionService extends Tool {
     isInSelection(event: MouseEvent): boolean {
         if (this.selectionCtx === null) return false;
 
-        const left = this.selectionCoords.x;
-        const right = this.selectionCoords.x + Math.abs(this.width);
-        const top = this.selectionCoords.y;
-        const bottom = this.selectionCoords.y + Math.abs(this.height);
+        const left = this.config.endCoords.x;
+        const right = this.config.endCoords.x + Math.abs(this.config.width);
+        const top = this.config.endCoords.y;
+        const bottom = this.config.endCoords.y + Math.abs(this.config.height);
 
         const currentPos = this.getPositionFromMouse(event);
         return currentPos.x >= left && currentPos.x <= right && currentPos.y >= top && currentPos.y <= bottom;
@@ -188,7 +187,7 @@ export abstract class AbstractSelectionService extends Tool {
     stopDrawing(): void {
         this.endSelection();
         this.leftMouseDown = false;
-        this.SHIFT.isDown = false;
+        this.config.shiftDown = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
 
         this.RIGHT_ARROW.isDown = false;
@@ -248,25 +247,25 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     private startSelection(): void {
-        if (this.width === 0 || this.height === 0) return;
-        this.SELECTION_DATA.width = Math.abs(this.width);
-        this.SELECTION_DATA.height = Math.abs(this.height);
+        if (this.config.width === 0 || this.config.height === 0) return;
+        this.SELECTION_DATA.width = Math.abs(this.config.width);
+        this.SELECTION_DATA.height = Math.abs(this.config.height);
         this.selectionCtx = this.SELECTION_DATA.getContext('2d') as CanvasRenderingContext2D;
-        const x = Math.min(this.mouseDownCoord.x, this.mouseDownCoord.x + this.width);
-        const y = Math.min(this.mouseDownCoord.y, this.mouseDownCoord.y + this.height);
-        this.selectionCoords = { x, y } as Vec2;
-        this.firstSelectionCoords = { x, y } as Vec2;
+        const x = Math.min(this.mouseDownCoord.x, this.mouseDownCoord.x + this.config.width);
+        const y = Math.min(this.mouseDownCoord.y, this.mouseDownCoord.y + this.config.height);
+        this.config.endCoords = { x, y } as Vec2;
+        this.config.startCoords = { x, y } as Vec2;
 
         this.selectionCtx.drawImage(
             this.drawingService.canvas,
             x,
             y,
-            Math.abs(this.width),
-            Math.abs(this.height),
+            Math.abs(this.config.width),
+            Math.abs(this.config.height),
             0,
             0,
-            Math.abs(this.width),
-            Math.abs(this.height),
+            Math.abs(this.config.width),
+            Math.abs(this.config.height),
         );
 
         const previewCtx = this.drawingService.previewCtx;
@@ -279,8 +278,8 @@ export abstract class AbstractSelectionService extends Tool {
     private updateSelection(translation: Vec2): void {
         if (this.selectionCtx === null) return;
 
-        this.selectionCoords.x += translation.x;
-        this.selectionCoords.y += translation.y;
+        this.config.endCoords.x += translation.x;
+        this.config.endCoords.y += translation.y;
         this.translationOrigin.x += translation.x;
         this.translationOrigin.y += translation.y;
         this.updateSelectionRequired();
@@ -288,8 +287,10 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     private drawPreviewSelection(): void {
-        this.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
-        this.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
+        this.drawingService.blockUndoRedo();
+
+        this.config.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
+        this.config.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
 
         this.drawPreviewSelectionRequired();
     }
