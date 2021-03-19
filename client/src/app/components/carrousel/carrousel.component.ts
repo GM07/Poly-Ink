@@ -67,9 +67,11 @@ export class CarrouselComponent implements OnInit {
     serverConnexionError: boolean;
     isLoadingCarrousel: boolean;
     isOnline: boolean;
+    hasDrawings: boolean;
     translationState: string | null;
     drawingsList: Drawing[];
     currentIndex: number;
+    private loadedImage: HTMLImageElement;
 
     animationIsDone: boolean;
 
@@ -90,13 +92,14 @@ export class CarrouselComponent implements OnInit {
         this.showLoadingWarning = false;
         this.showDeletionError = false;
         this.serverConnexionError = false;
+        this.hasDrawings = false;
         this.subscribeActivatedRoute(activatedRoute);
     }
 
     ngOnInit(): void {
         this.carrouselService.testConnection().subscribe(isOnline => this.isOnline = isOnline);
-        if (this.isOnline) {
-            if (this.showCarrousel) this.loadCarrousel();
+        if (this.isOnline && this.showCarrousel) {
+            this.loadCarrousel();
         }
     }
 
@@ -144,20 +147,29 @@ export class CarrouselComponent implements OnInit {
     }
 
     deleteDrawing(): void {
-        if (!this.animationIsDone || this.drawingsList.length === 0) return;
-        
+        if (!this.animationIsDone) return;
+        if (this.drawingsList.length === 0) {
+            this.hasDrawings = false;
+            return;
+        }
         this.carrouselService.deleteDrawing(this.drawingsList[this.currentIndex])
         .subscribe(() => {
-            const currentDrawingName = this.drawingsList[this.currentIndex].data.name;
-            this.drawingsList.splice(this.currentIndex, 1);
-            if (this.currentIndex === this.drawingsList.length && this.drawingsList.length !== 0) --this.currentIndex;
-            this.updateDrawingContent();
-    
-            let deletionError = false;
-            this.showDeletionError = deletionError;
-            this.deletionErrorMessage = '';
-            if (deletionError) this.deletionErrorMessage = 'Erreur lors de la suppression du dessin ' + currentDrawingName;
-        })
+            this.deleteAndUpdate();
+        }, (error) => {
+            if(error.status === 404) {
+                this.deleteAndUpdate();
+                return;
+            }
+            this.isLoadingCarrousel = false;
+            this.serverConnexionError = true;
+            }
+        );
+    }
+
+    deleteAndUpdate() {
+        this.drawingsList.splice(this.currentIndex, 1);
+        if (this.currentIndex === this.drawingsList.length && this.drawingsList.length !== 0) --this.currentIndex;
+        this.updateDrawingContent();
     }
 
     loadDrawing(indexOffset: number): void {
@@ -183,11 +195,9 @@ export class CarrouselComponent implements OnInit {
             return;
         }
 
-        const loadedImage = new Image();
-        loadedImage.onload = () => {
-            this.createLoadedCanvas(loadedImage);
-        };
-        loadedImage.src = selectedDrawingSource;
+        this.loadedImage = new Image();
+        this.loadedImage.onload = this.createLoadedCanvas;
+        this.loadedImage.src = selectedDrawingSource;
         this.isLoadingCarrousel = true;
         this.cd.detectChanges();
     }
@@ -246,12 +256,12 @@ export class CarrouselComponent implements OnInit {
         imageRef.nativeElement.src = drawingData === undefined ? 'data:,' : 'data:image/png;base64,' + drawingData;
     }
 
-    private createLoadedCanvas(loadedImage: HTMLImageElement): void {
+    private createLoadedCanvas = () => {
         const canvas = document.createElement('canvas');
         const canvasCTX = canvas.getContext('2d') as CanvasRenderingContext2D;
-        canvas.width = loadedImage.width;
-        canvas.height = loadedImage.height;
-        canvasCTX.drawImage(loadedImage, 0, 0);
+        canvas.width = this.loadedImage.width;
+        canvas.height = this.loadedImage.height;
+        canvasCTX.drawImage(this.loadedImage, 0, 0);
         this.drawingService.loadedCanvas = canvas;
 
         this.closeCarrousel();
@@ -280,6 +290,7 @@ export class CarrouselComponent implements OnInit {
         this.carrouselService.getAllDrawings().subscribe(
             (drawings: Drawing[]) => {
             this.drawingsList = drawings;
+            this.hasDrawings = this.drawingsList.length > 0;
             this.isLoadingCarrousel = false;
             this.cd.detectChanges(); // Must detect changes when finished loading
             this.updateDrawingContent();

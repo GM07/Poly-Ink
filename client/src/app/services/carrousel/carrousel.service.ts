@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Drawing } from '@common/communication/drawing';
 import { Tag } from '@common/communication/tag';
-import { fromEvent, merge, Observable, Observer, throwError } from 'rxjs'; //, throwError 
+import { EMPTY, fromEvent, merge, Observable, Observer, throwError } from 'rxjs'; //, throwError 
 import { catchError, map, retry } from 'rxjs/operators';
 
 @Injectable({
@@ -42,15 +42,18 @@ export class CarrouselService {
     }
     
     deleteDrawing(drawing: Drawing): Observable<{}> {
-        let url: string = `${this.baseURL}?ids=${drawing.data._id}`;
-        console.log(url);
-        return this.http.delete<Drawing>(url);
+        try {
+            let url: string = `${this.baseURL}?ids=${drawing.data._id}`;
+            return this.http.delete<Drawing>(url);
+        } catch(reason) {
+            this.handleError(reason);
+            return EMPTY;
+        }
     }
 
-    private handleError(error: HttpErrorResponse) {
-        if (error.status === 0 || error.error instanceof ProgressEvent) { //error.error instanceof ErrorEvent
-          // A client-side or network error occurred. Handle it accordingly.
-          console.log('Client side error: ', error.error);
+    public handleError(error: HttpErrorResponse) {
+        if (error.status === 0 || error.error instanceof ProgressEvent) { 
+            console.log('Client side error: ', error.error);
         } else {
           console.error(
             `Backend returned code ${error.status}, ` +

@@ -54,11 +54,10 @@ describe('CarrouselService', () => {
 
     const req = httpMock.expectOne(`${service.baseURL}?tags=tag1`);
     expect(req.request.url).toBe(`${service.baseURL}?tags=tag1`);
-    //expect(service.noMatchingTags).toBe(false);
     expect(req.request.method).toBe("GET");
   })
 
-  fit('should testConnection', () => {
+  it('should testConnection', () => {
     let isOnline;
     service.testConnection().subscribe(value => isOnline = value);
     window.dispatchEvent(new Event('offline'));
