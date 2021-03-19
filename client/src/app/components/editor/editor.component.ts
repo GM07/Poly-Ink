@@ -1,7 +1,8 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
-import { ExportFileToolConstants, NewDrawingConstants } from '@app/classes/tool_ui_settings/tools.constants';
+import { ExportFileToolConstants, NewDrawingConstants, SaveFileToolConsants } from '@app/classes/tool_ui_settings/tools.constants';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 import { ExportDrawingComponent } from '@app/components/export-drawing/export-drawing.component';
+import { SaveDrawingComponent } from '@app/components/save-drawing/save-drawing.component';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 @Component({
@@ -12,6 +13,7 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
 export class EditorComponent {
     @ViewChild('newCanvasMenu') newDrawingMenu: NewDrawingComponent;
     @ViewChild('exportDrawing') exportDrawing: ExportDrawingComponent;
+    @ViewChild('saveDrawing') saveDrawing: SaveDrawingComponent;
 
     async receiveSidebarButtonEvent(toolID: string): Promise<void> {
         switch (toolID) {
@@ -21,6 +23,8 @@ export class EditorComponent {
             case ExportFileToolConstants.TOOL_ID:
                 await this.exportDrawing.show();
                 break;
+            case SaveFileToolConsants.TOOL_ID:
+                await this.saveDrawing.show();
         }
     }
 
