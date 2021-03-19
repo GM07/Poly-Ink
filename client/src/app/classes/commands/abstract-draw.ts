@@ -1,8 +1,8 @@
 import { ColorService } from 'src/color-picker/services/color.service';
 
 export abstract class AbstractDraw {
-    primaryRgba: string;
-    secondaryRgba: string;
+    protected primaryRgba: string;
+    protected secondaryRgba: string;
 
     constructor(protected colorService: ColorService) {
         this.primaryRgba = colorService.primaryRgba;
