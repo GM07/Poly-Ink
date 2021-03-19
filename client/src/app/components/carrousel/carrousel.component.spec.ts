@@ -239,17 +239,17 @@ describe('CarrouselComponent', () => {
         expect(component.showLoadingWarning).toBeTruthy();
     });
     
-    fit('should display a loading screen when succesfully loading a drawing', () => {
+    it('should display a loading screen when succesfully loading a drawing', () => {
         spyOn<any>(component, 'updateDrawingContent');
         spyOn(NewDrawingService, 'isNotEmpty').and.returnValue(false);
-        //const spy = spyOn<any>(component, 'createLoadedCanvas');
         component.currentURL = '';
         component['animationIsDone'] = true;
         component.loadDrawing(0);
         expect(component.isLoadingCarrousel).toBeTruthy();
-        setTimeout(() => {
+        /*setTimeout((done) => {
             expect(createLoadedCanvasSpy).toHaveBeenCalled();
-        }, 200);
+            done();
+        }, 200);*/
     });
 
     it('should close the carrousel and navigate by url when succesfully loading a drawing', () => {

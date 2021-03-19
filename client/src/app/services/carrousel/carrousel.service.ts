@@ -16,7 +16,7 @@ export class CarrouselService {
         this.baseURL = 'http://localhost:3000/drawings';
     }
 
-    testConnection() {
+    testConnection(): Observable<boolean> {
         return merge<boolean>(
           fromEvent(window, 'offline').pipe(map(() => false)),
           fromEvent(window, 'online').pipe(map(() => true)),

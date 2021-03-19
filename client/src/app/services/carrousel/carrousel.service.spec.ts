@@ -32,6 +32,7 @@ describe('CarrouselService', () => {
     expect(service).toBeTruthy();
   });
 
+  //Verify if gets all drawings!
   it('should return an Observable<>', () => {
     service.getAllDrawings().subscribe(drawings => {
       expect(drawings.length).toBe(1);
@@ -57,23 +58,18 @@ describe('CarrouselService', () => {
     expect(req.request.method).toBe("GET");
   })
 
-  /*
-  it('should send a request GET and should send tags in query', () => {
-    const dummyTags: Tag[] = [{name: "dummyTag"}];
-    service.getFilteredDrawings(dummyTags)
-      .subscribe(filteredDrawings => {
-        expect(filteredDrawings.length).toBe(1);
-      });
+  fit('should testConnection', () => {
+    let isOnline;
+    service.testConnection().subscribe(value => isOnline = value);
+    window.dispatchEvent(new Event('offline'));
+    expect(isOnline).toBeFalse();
 
-    const req = httpMock.expectOne(`${service.baseURL}?tags=dummyTag`);
-    expect(req.request.url).toBe(`${service.baseURL}?tags=dummyTag`);
-    //expect(service.noMatchingTags).toBe(true);
-    expect(req.request.method).toBe("GET");
-  })*/
+    window.dispatchEvent(new Event('online'));
+    expect(isOnline).toBeTrue();
+  });
 
-  it('should send a request DELETE', () => {
+  it('should send a DELETE request', () => {
     service.deleteDrawing(dummyDrawing).subscribe();
-
     const req = httpMock.expectOne(`${service.baseURL}?ids=604a1a5a1b66eefab31e9206`);
     expect(req.request.method).toBe("DELETE");
     req.flush(dummyDrawings);
