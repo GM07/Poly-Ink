@@ -38,7 +38,7 @@ describe('NewDrawingComponent', () => {
         expect(funcSpy).toHaveBeenCalled();
     });
 
-    it('Should not show popup if emtpy', () => {
+    it('Should not show popup if empty', () => {
         spyOn(newDrawingService, 'newCanvas').and.stub();
         spyOn(component, 'hidePopup').and.stub();
         component.createNewDrawing(true);

@@ -11,8 +11,8 @@ export class AerosolDraw extends AbstractDraw {
 
     execute(context: CanvasRenderingContext2D): void {
         context.beginPath();
-        context.fillStyle = this.colorService.primaryRgba;
-        context.strokeStyle = this.colorService.primaryRgba;
+        context.fillStyle = this.primaryRgba;
+        context.strokeStyle = this.primaryRgba;
         context.lineWidth = this.config.areaDiameter;
         context.lineCap = 'round' as CanvasLineCap;
         context.lineJoin = 'round' as CanvasLineJoin;

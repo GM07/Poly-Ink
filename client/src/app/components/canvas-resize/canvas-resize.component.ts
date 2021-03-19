@@ -82,8 +82,9 @@ export class CanvasResizeComponent implements AfterViewInit {
 
     resizeCanvas(xModifier: number, yModifier: number): void {
         const config = new ResizeConfig();
-        config.width = xModifier < CanvasConst.MIN_WIDTH ? CanvasConst.MIN_WIDTH : xModifier;
-        config.height = yModifier < CanvasConst.MIN_HEIGHT ? CanvasConst.MIN_HEIGHT : yModifier;
+
+        config.width = Math.max(xModifier, CanvasConst.MIN_WIDTH);
+        config.height = Math.max(yModifier, CanvasConst.MIN_HEIGHT);
 
         const command = new ResizeDraw(config, this.drawingService);
         this.drawingService.draw(command);
