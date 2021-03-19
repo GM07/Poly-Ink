@@ -9,8 +9,6 @@ import { Drawing } from '@common/communication/drawing';
 import { DrawingData } from '@common/communication/drawing-data';
 import { Tag } from '@common/communication/tag';
 
-
-
 @Component({
     selector: 'app-save-drawing',
     templateUrl: './save-drawing.component.html',

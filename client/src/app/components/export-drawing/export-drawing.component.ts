@@ -44,7 +44,6 @@ export class ExportDrawingComponent {
         ['monochrome', new Monochrome()],
     ]);
 
-
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private drawingService: DrawingService,
