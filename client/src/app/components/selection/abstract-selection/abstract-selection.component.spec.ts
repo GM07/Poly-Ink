@@ -56,6 +56,7 @@ describe('AbstractSelectionComponent', () => {
         spyOn(abstractSelectionService, 'isInSelection').and.returnValue(true);
         const makeControlsUnselectable = spyOn<any>(component, 'makeControlsUnselectable');
         component['shortcutHandlerService'].blockShortcuts = true;
+        component['isInSidebar'] = false;
         component.onMouseDown(mouseEvent);
         expect(makeControlsUnselectable).not.toHaveBeenCalled();
         component['shortcutHandlerService'].blockShortcuts = false;
@@ -77,18 +78,13 @@ describe('AbstractSelectionComponent', () => {
         expect(abstractSelectionService.getPositionFromMouse).toHaveBeenCalled();
     });
 
-    it('should stop drawing if the user clicked outside of the drawing container', () => {
-        spyOn(abstractSelectionService, 'stopDrawing');
-        component['isInSidebar'] = false;
-        component['selectionService'].selectionCtx = null;
-        component.onMouseDown(mouseEvent);
-        expect(abstractSelectionService.stopDrawing).not.toHaveBeenCalled();
+    it('should not select when in the sidebar', () => {
+        spyOn<any>(component, 'makeControlsUnselectable');
         component['isInSidebar'] = true;
-        component.onMouseDown(mouseEvent);
-        expect(abstractSelectionService.stopDrawing).not.toHaveBeenCalled();
-        component['selectionService'].selectionCtx = drawService.previewCtx;
-        component.onMouseDown(mouseEvent);
-        expect(abstractSelectionService.stopDrawing).toHaveBeenCalled();
+        expect(component['makeControlsUnselectable']).not.toHaveBeenCalled();
+        component['isInSidebar'] = false;
+        component['leftMouseDown'] = false;
+        expect(component['makeControlsUnselectable']).not.toHaveBeenCalled();
     });
 
     it('should enable the controls points selection if there are controls points', () => {
