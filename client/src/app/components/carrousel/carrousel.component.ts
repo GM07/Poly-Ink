@@ -144,9 +144,8 @@ export class CarrouselComponent implements OnInit {
     }
 
     deleteDrawing(): void {
-        //if (!this.animationIsDone || this.drawingsList.length === 0) return;
-        // TODO : test
-        console.log("ICIIII : " + this.drawingsList);
+        if (!this.animationIsDone || this.drawingsList.length === 0) return;
+        
         this.carrouselService.deleteDrawing(this.drawingsList[this.currentIndex])
         .subscribe(() => {
             const currentDrawingName = this.drawingsList[this.currentIndex].data.name;

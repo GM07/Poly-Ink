@@ -15,7 +15,7 @@ import { NewDrawingService } from '@app/services/popups/new-drawing';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { Drawing } from '@common/communication/drawing';
 import { DrawingData } from '@common/communication/drawing-data';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 const dummyDrawing: Drawing = {
     data: {
@@ -274,8 +274,7 @@ describe('CarrouselComponent', () => {
         expect(component.drawingsList).toEqual(filteredDrawings);
     })
 
-    //TODO
-    fit('should delete a drawing', async(() => {
+    it('should delete a drawing', async() => {
         let dummyDrawing1: Drawing = {
             data: {
                 tags: [{name: "tag3"}, {name: "tag5"}],
@@ -294,24 +293,19 @@ describe('CarrouselComponent', () => {
         }
         component.currentIndex = 0;
         component.drawingsList = [dummyDrawing1, dummyDrawing2];
-        let newDrawingList: Drawing[] = component.drawingsList;
-        newDrawingList.splice(component.currentIndex);
-        console.log("Drawing list: " + newDrawingList);
-
         const responseMock = of(true);
-        spyOn(responseMock, 'subscribe');
+        spyOn(responseMock, 'subscribe').and.callThrough();
         spyOn(carrouselService, 'deleteDrawing').and.returnValue(responseMock);
-        spyOn<any>(component, 'updateDrawingContent');
+        const spy = spyOn<any>(component, 'updateDrawingContent');
         component['animationIsDone'] = false;
         component.deleteDrawing();
         fixture.detectChanges();
         component['animationIsDone'] = true;
         component.deleteDrawing();
-        //expect(component.updateDrawingContent).toHaveBeenCalled();
-        expect(component.drawingsList).toEqual(newDrawingList);
-    }));
+        expect(spy).toHaveBeenCalled();
+        expect(component.drawingsList).toEqual([dummyDrawing2]);
+    });
     
-   
     it('should detect the shortcut to display the carrousel', () => {
         const loadSpy = spyOn<any>(component, 'loadCarrousel');
         component.showCarrousel = true;
@@ -324,6 +318,15 @@ describe('CarrouselComponent', () => {
         component.onKeyDown(keyEvent);
         expect(component.showCarrousel).toBeTruthy();
         expect(loadSpy).toHaveBeenCalled();
+    });
+
+    it('should throw error and load server error', async() => {
+        //const error: HttpErrorResponse = new HttpErrorResponse({});
+        //const drawings: Drawing[] = [];
+        spyOn(carrouselService, 'getAllDrawings').and.returnValue(throwError({status:404}));
+        spyOn(of(true), 'subscribe').and.callThrough();
+        component['loadCarrousel'];
+        expect(component.serverConnexionError).toBeTrue();
     });
     
     it('should detect the left arrow key', () => {
