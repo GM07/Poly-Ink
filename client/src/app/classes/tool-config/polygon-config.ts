@@ -16,12 +16,12 @@ export class PolygonConfig {
     showPerimeter: boolean;
 
     constructor() {
-      this.lineWidth = ToolSettingsConst.MIN_WIDTH;
-      this.polygonMode = PolygonMode.FilledWithContour;
-      this.startCoords = { x: 0, y: 0 };
-      this.endCoords = { x: 0, y: 0 };
-      this.numEdges = ToolSettingsConst.MIN_NUM_EDGES;
-      this.showPerimeter = false;
+        this.lineWidth = ToolSettingsConst.MIN_WIDTH;
+        this.polygonMode = PolygonMode.FilledWithContour;
+        this.startCoords = { x: 0, y: 0 };
+        this.endCoords = { x: 0, y: 0 };
+        this.numEdges = ToolSettingsConst.MIN_NUM_EDGES;
+        this.showPerimeter = false;
     }
 
     clone(): PolygonConfig {

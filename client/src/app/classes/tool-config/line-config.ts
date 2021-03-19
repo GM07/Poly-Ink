@@ -9,11 +9,11 @@ export class LineConfig {
     points: Vec2[];
 
     constructor() {
-      this.showJunctionPoints = true;
-      this.closedLoop = false;
-      this.diameterJunctions = ToolSettingsConst.DEFAULT_LINE_JUNCTION_WIDTH;
-      this.thickness = ToolSettingsConst.DEFAULT_LINE_WIDTH;
-      this.points = [];
+        this.showJunctionPoints = true;
+        this.closedLoop = false;
+        this.diameterJunctions = ToolSettingsConst.DEFAULT_LINE_JUNCTION_WIDTH;
+        this.thickness = ToolSettingsConst.DEFAULT_LINE_WIDTH;
+        this.points = [];
     }
 
     clone(): LineConfig {

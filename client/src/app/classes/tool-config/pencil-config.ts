@@ -5,8 +5,8 @@ export class PencilConfig {
     lineWidth: number;
 
     constructor() {
-      this.pathData = [[]];
-      this.lineWidth = ToolSettingsConst.DEFAULT_PENCIL_WIDTH;
+        this.pathData = [[]];
+        this.lineWidth = ToolSettingsConst.DEFAULT_PENCIL_WIDTH;
     }
 
     clone(): PencilConfig {
