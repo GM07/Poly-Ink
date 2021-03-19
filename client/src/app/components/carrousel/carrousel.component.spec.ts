@@ -239,13 +239,17 @@ describe('CarrouselComponent', () => {
         expect(component.showLoadingWarning).toBeTruthy();
     });
     
-    it('should display a loading screen when succesfully loading a drawing', () => {
+    fit('should display a loading screen when succesfully loading a drawing', () => {
         spyOn<any>(component, 'updateDrawingContent');
         spyOn(NewDrawingService, 'isNotEmpty').and.returnValue(false);
+        //const spy = spyOn<any>(component, 'createLoadedCanvas');
         component.currentURL = '';
         component['animationIsDone'] = true;
         component.loadDrawing(0);
         expect(component.isLoadingCarrousel).toBeTruthy();
+        setTimeout(() => {
+            expect(createLoadedCanvasSpy).toHaveBeenCalled();
+        }, 200);
     });
 
     it('should close the carrousel and navigate by url when succesfully loading a drawing', () => {
@@ -321,11 +325,8 @@ describe('CarrouselComponent', () => {
     });
 
     it('should throw error and load server error', async() => {
-        //const error: HttpErrorResponse = new HttpErrorResponse({});
-        //const drawings: Drawing[] = [];
-        spyOn(carrouselService, 'getAllDrawings').and.returnValue(throwError({status:404}));
-        spyOn(of(true), 'subscribe').and.callThrough();
-        component['loadCarrousel'];
+        spyOn(carrouselService, 'getAllDrawings').and.returnValue(throwError('allo'));
+        component['loadCarrousel']();
         expect(component.serverConnexionError).toBeTrue();
     });
     

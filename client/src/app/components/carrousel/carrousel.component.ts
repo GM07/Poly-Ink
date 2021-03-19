@@ -284,7 +284,7 @@ export class CarrouselComponent implements OnInit {
             this.cd.detectChanges(); // Must detect changes when finished loading
             this.updateDrawingContent();
             },
-            (error) => {
+            () => {
                 this.isLoadingCarrousel = false;
                 this.serverConnexionError = true;
             }
