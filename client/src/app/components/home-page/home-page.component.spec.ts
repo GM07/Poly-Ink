@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
+import { CarrouselComponent } from '../carrousel/carrousel.component';
 
 describe('HomePageComponent', () => {
     let component: HomePageComponent;
@@ -18,12 +19,12 @@ describe('HomePageComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [HomePageComponent, EditorComponent],
+            declarations: [HomePageComponent, EditorComponent, CarrouselComponent],
             imports: [
                 RouterTestingModule.withRoutes([
                     { path: 'home', component: HomePageComponent },
                     { path: 'editor', component: EditorComponent },
-                    { path: 'carrousel', component: EditorComponent },
+                    { path: 'carrousel', component: CarrouselComponent },
                 ]),
                 HttpClientModule,
                 NoopAnimationsModule,
@@ -48,7 +49,7 @@ describe('HomePageComponent', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
-    //
+    
     it('should fade out', () => {
         component.fadeOut();
         expect(component.state).toBe('invisible');

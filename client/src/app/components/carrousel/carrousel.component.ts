@@ -94,7 +94,7 @@ export class CarrouselComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.carrouselService.testConnection().subscribe(isOnline => this.isOnline = isOnline)
+        this.carrouselService.testConnection().subscribe(isOnline => this.isOnline = isOnline);
         if (this.isOnline) {
             if (this.showCarrousel) this.loadCarrousel();
         }
@@ -144,9 +144,9 @@ export class CarrouselComponent implements OnInit {
     }
 
     deleteDrawing(): void {
-        if (!this.animationIsDone || this.drawingsList.length === 0) return;
-
-        // TODO : À vérifier si ça fonctionne!!!
+        //if (!this.animationIsDone || this.drawingsList.length === 0) return;
+        // TODO : test
+        console.log("ICIIII : " + this.drawingsList);
         this.carrouselService.deleteDrawing(this.drawingsList[this.currentIndex])
         .subscribe(() => {
             const currentDrawingName = this.drawingsList[this.currentIndex].data.name;
@@ -220,7 +220,7 @@ export class CarrouselComponent implements OnInit {
         });
     }
 
-    private updateDrawingContent(): void {
+    public updateDrawingContent(): void {
         const overFlowLeft = -2;
         const left = -1;
         this.updateSingleDrawingContent(this.overflowLeftPreview, overFlowLeft, this.overflowLeftElement);
@@ -263,6 +263,7 @@ export class CarrouselComponent implements OnInit {
         }
     }
 
+    // Ecq c'est vraiment un bon nom pour cette fonction??
     private getDrawingFromServer(index: number): string | undefined {
         if (this.drawingsList.length === 0) return undefined;
         return this.drawingsList[index].image;

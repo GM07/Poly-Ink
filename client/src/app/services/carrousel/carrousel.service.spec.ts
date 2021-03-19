@@ -72,7 +72,7 @@ describe('CarrouselService', () => {
   })*/
 
   it('should send a request DELETE', () => {
-    service.deleteDrawingDataFromId(dummyDrawing).subscribe();
+    service.deleteDrawing(dummyDrawing).subscribe();
 
     const req = httpMock.expectOne(`${service.baseURL}?ids=604a1a5a1b66eefab31e9206`);
     expect(req.request.method).toBe("DELETE");
