@@ -1,10 +1,17 @@
 import { Vec2 } from '@app/classes/vec2';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 export class AerosolConfig {
-    dropletDiameter: number = ToolSettingsConst.MIN_DROPLETS_WIDTH;
-    areaDiameter: number = ToolSettingsConst.DEFAULT_AEROSOL_AREA_DIAMETER;
-    nDropletsPerSpray: number = ToolSettingsConst.DEFAULT_AEROSOL_AREA_DIAMETER;
-    droplets: Vec2[][] = [];
+    dropletDiameter: number;
+    areaDiameter: number;
+    nDropletsPerSpray: number;
+    droplets: Vec2[][];
+
+    constructor() {
+        this.dropletDiameter = ToolSettingsConst.MIN_DROPLETS_WIDTH;
+        this.areaDiameter = ToolSettingsConst.DEFAULT_AEROSOL_AREA_DIAMETER;
+        this.nDropletsPerSpray = ToolSettingsConst.DEFAULT_AEROSOL_AREA_DIAMETER;
+        this.droplets = [];
+    }
 
     clone(): AerosolConfig {
         const config = new AerosolConfig();

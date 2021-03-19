@@ -34,8 +34,6 @@ export class RectangleDraw extends AbstractDraw {
                 context.rect(this.config.startCoords.x, this.config.startCoords.y, width, height);
                 context.fill();
                 break;
-            default:
-                break;
         }
 
         context.stroke();
