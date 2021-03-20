@@ -248,7 +248,10 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     private startSelection(): void {
-        if (Geometry.roundTowardsZero(this.config.width) === 0 || Geometry.roundTowardsZero(this.config.height) === 0) return;
+        if (Geometry.roundTowardsZero(this.config.width) === 0 || Geometry.roundTowardsZero(this.config.height) === 0) {
+            this.drawingService.unblockUndoRedo();
+            return;
+        }
         this.SELECTION_DATA.width = Math.abs(this.config.width);
         this.SELECTION_DATA.height = Math.abs(this.config.height);
         this.selectionCtx = this.SELECTION_DATA.getContext('2d') as CanvasRenderingContext2D;
