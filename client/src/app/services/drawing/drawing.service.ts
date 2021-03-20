@@ -81,6 +81,7 @@ export class DrawingService {
         const height = this.loadedCanvas.height;
         this.resizeCanvas(width, height);
         this.baseCtx.drawImage(this.loadedCanvas, 0, 0);
+        this.initUndoRedo();
         this.loadedCanvas = undefined;
     }
 
