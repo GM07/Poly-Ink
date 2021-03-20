@@ -35,10 +35,9 @@ export class DrawingTagsComponent implements OnInit {
     this.carrouselService.getAllDrawings()
       .subscribe((drawings: Drawing[]) => {
         this.drawings = drawings;
-        console.log(this.drawings);
       });
   }
-  
+
   getFilteredDrawings(): void {
     this.drawings  = [];
     this.carrouselService.getFilteredDrawings(this.filterTags)

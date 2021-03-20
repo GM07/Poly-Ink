@@ -156,7 +156,6 @@ export class CarrouselComponent implements OnInit {
         .subscribe(() => {
             this.deleteAndUpdate();
         }, (error) => {
-            console.log("YO");
             if(error.status === 404) {
                 this.deleteAndUpdate();
                 return;
