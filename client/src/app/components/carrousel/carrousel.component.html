@@ -74,7 +74,7 @@
                                 </div>
                                 <div class="drawingContents">
                                     <p class="name">{{ middleElement.data.name }}</p>
-                                    <div class="squareImage">
+                                    <div [ngClass]="animationIsDone ? 'selectedSquareImage': 'squareImage'">
                                         <img #middlePreview (click)="loadDrawing(0)" alt />
                                     </div>
                                     <p class="white">Étiquettes</p>

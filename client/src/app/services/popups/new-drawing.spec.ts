@@ -57,7 +57,7 @@ describe('NewDrawing', () => {
 
     it('should not reset if confirm is false and not empty', () => {
         // tslint:disable no-any
-        const spyFunc = spyOn<any>(NewDrawingService, 'isNotEmpty').and.returnValue(true);
+        const spyFunc = spyOn(NewDrawingService, 'isNotEmpty').and.returnValue(true);
         const spyFunc2 = spyOn(drawingService, 'resizeCanvas');
         spyOn(toolHandler.getCurrentTool(), 'stopDrawing').and.callFake(() => {
             /**/
