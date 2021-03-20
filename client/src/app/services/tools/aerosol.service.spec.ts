@@ -7,6 +7,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
 
 // tslint:disable:no-any
 describe('AerosolService', () => {
+    const MS_PER_SECOND = 1000;
     let service: AerosolService;
     let mouseEvent: MouseEvent;
     let canvasTestHelper: CanvasTestHelper;
@@ -38,7 +39,7 @@ describe('AerosolService', () => {
         drawSpy = spyOn<any>(service, 'draw').and.stub();
         drawPreviewSpy = spyOn<any>(service, 'drawPreview').and.stub();
 
-        sprayContinuouslySpy = spyOn<any>(service, 'sprayContinuously').and.callThrough();
+        sprayContinuouslySpy = spyOn<any>(service, 'sprayContinuously');
         onMouseDownSpy = spyOn<any>(service, 'onMouseDown').and.callThrough();
 
         // service's spy configuration
@@ -61,7 +62,6 @@ describe('AerosolService', () => {
     it('mouseDown should set mouseDown property to true on left click', () => {
         service.onMouseDown(mouseEvent);
         expect(service.leftMouseDown).toEqual(true);
-        window.clearInterval(service.sprayIntervalID);
     });
 
     it('mouseDown should set mouseDown property to false on right click', () => {
@@ -72,7 +72,6 @@ describe('AerosolService', () => {
         } as MouseEvent;
         service.onMouseDown(mouseEventRClick);
         expect(service.leftMouseDown).toEqual(false);
-        window.clearInterval(service.sprayIntervalID);
     });
 
     it('onMouseUp should not call drawSpray if mouse was not already down', () => {
@@ -83,12 +82,11 @@ describe('AerosolService', () => {
         expect(drawSpy).not.toHaveBeenCalled();
     });
 
-    it('onMouseMove should call sprayContinuouslySpy if mouse was already down', () => {
-        const expectedResult: Vec2 = { x: 25, y: 25 };
+    it('onMouseMove should set the mouse down coordinates', () => {
+        const expectedResult = { x: 25, y: 25 };
         service.leftMouseDown = true;
         service.onMouseMove(mouseEvent);
         expect(service.mouseDownCoord).toEqual(expectedResult);
-        window.clearInterval(service.sprayIntervalID);
     });
 
     it('should not spray between the points where it left and entered the canvas', () => {
@@ -145,7 +143,6 @@ describe('AerosolService', () => {
         mouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseMove(mouseEvent);
         expect(drawPreviewSpy).not.toHaveBeenCalled();
-        window.clearInterval(service.sprayIntervalID);
     });
 
     it('should stop drawing when asked to', () => {
@@ -158,7 +155,6 @@ describe('AerosolService', () => {
         mouseEvent = { x: 0, y: 0, button: 0, buttons: 0 } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(drawSpy).toHaveBeenCalled();
-        window.clearInterval(service.sprayIntervalID);
     });
 
     it('should send command to drawing service to draw on preview', () => {
@@ -171,5 +167,37 @@ describe('AerosolService', () => {
         drawSpy.and.callThrough();
         service.draw();
         expect(drawServiceSpy.draw).toHaveBeenCalled();
+    });
+
+    it('should spray continuoulsy', () => {
+        jasmine.clock().install();
+        const placeSpy = spyOn<any>(service, 'placeDroplets');
+        sprayContinuouslySpy.and.callThrough();
+        service['sprayContinuously'](previewCtxStub);
+        jasmine.clock().tick((MS_PER_SECOND / service['emissionsPerSecondIn']) * 2);
+        jasmine.clock().uninstall();
+        expect(placeSpy).toHaveBeenCalled();
+        expect(drawPreviewSpy).toHaveBeenCalled();
+        window.clearInterval(service.sprayIntervalID);
+    });
+
+    it('should place the right amount of droplets', () => {
+        spyOn<any>(service, 'randomDroplet').and.returnValue({ x: 0, y: 0 } as Vec2);
+        service.mouseDownCoord = { x: 0, y: 0 };
+        service['config'].droplets = [];
+        service['placeDroplets']();
+        expect(service['config'].droplets[0].length).toEqual(service['config'].nDropletsPerSpray);
+    });
+
+    it('should generate random droplets within a circle', () => {
+        service['config'].areaDiameter = 2;
+        const randomSpy = spyOn(Math, 'random').and.returnValue(1);
+        let randomDropletResult: Vec2 = service['randomDroplet']();
+        expect(randomDropletResult.x).toBeLessThanOrEqual(2);
+        expect(randomDropletResult.y).toBeLessThanOrEqual(2);
+        randomSpy.and.returnValue(0);
+        randomDropletResult = service['randomDroplet']();
+        expect(randomDropletResult.x).toBeLessThanOrEqual(2);
+        expect(randomDropletResult.y).toBeLessThanOrEqual(2);
     });
 });

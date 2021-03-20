@@ -76,8 +76,8 @@ export class AerosolService extends Tool {
     onMouseUp(event: MouseEvent): void {
         if (this.leftMouseDown) {
             this.draw();
-            this.config.droplets = [];
         }
+        this.config.droplets = [];
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.leftMouseDown = false;
         window.clearInterval(this.sprayIntervalID);
@@ -105,15 +105,6 @@ export class AerosolService extends Tool {
         }
     }
 
-    private sprayContinuously(ctx: CanvasRenderingContext2D): void {
-        this.config.droplets = [];
-
-        this.sprayIntervalID = window.setInterval(() => {
-            this.placeDroplets();
-            this.drawPreview();
-        }, MS_PER_SECOND / this.emissionsPerSecondIn);
-    }
-
     draw(): void {
         const command = new AerosolDraw(this.colorService, this.config);
         this.drawingService.draw(command);
@@ -122,6 +113,13 @@ export class AerosolService extends Tool {
     drawPreview(): void {
         const command = new AerosolDraw(this.colorService, this.config);
         this.drawingService.drawPreview(command);
+    }
+
+    private sprayContinuously(ctx: CanvasRenderingContext2D): void {
+        this.sprayIntervalID = window.setInterval(() => {
+            this.placeDroplets();
+            this.drawPreview();
+        }, MS_PER_SECOND / this.emissionsPerSecondIn);
     }
 
     private placeDroplets(): void {

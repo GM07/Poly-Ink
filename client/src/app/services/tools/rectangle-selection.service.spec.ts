@@ -130,6 +130,7 @@ describe('RectangleSelectionService', () => {
         expect(updateSelection).toHaveBeenCalled();
         expect(updateSelection).toHaveBeenCalledTimes(2);
         jasmine.clock().uninstall();
+        window.clearInterval(service['moveId']);
     });
 
     it('should not move the selection multiple times if the key was pressed multiple times', () => {
