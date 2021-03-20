@@ -110,22 +110,36 @@ export enum LassoToolConstants {
 export enum SaveFileToolConsants {
     TOOL_ID = 'SAVE_FILE',
     TOOL_TITLE = 'Sauvegarder',
-    INFO_BUBBLE = 'Sauvegarder (Ctr-S)',
+    INFO_BUBBLE = 'Sauvegarder (Ctrl-S)',
     ICON_NAME = 'save',
 }
 
 export enum ExportFileToolConstants {
     TOOL_ID = 'EXPORT_FILE',
     TOOL_TITLE = 'Exporter',
-    INFO_BUBBLE = 'Exporter (Ctr-E)',
+    INFO_BUBBLE = 'Exporter (Ctrl-E)',
     ICON_NAME = 'export',
 }
 
 export enum NewDrawingConstants {
     TOOL_ID = 'NEW_DRAWING',
     TOOL_TITLE = 'Nouveau Dessin',
-    INFO_BUBBLE = 'Nouveau Dessin (Ctr-O)',
+    INFO_BUBBLE = 'Nouveau Dessin (Ctrl-O)',
     ICON_NAME = 'new',
+}
+
+export enum RedoConstants {
+    TOOL_ID = 'REDO',
+    TOOL_TITLE = 'Refaire',
+    INFO_BUBBLE = 'Refaire (Ctrl-Shift-Z)',
+    ICON_NAME = 'redo',
+}
+
+export enum UndoConstants {
+    TOOL_ID = 'UNDO',
+    TOOL_TITLE = 'Annuler',
+    INFO_BUBBLE = 'Annuler (Ctrl-Z)',
+    ICON_NAME = 'undo',
 }
 
 export const TOP_TOOLS_CONSTANTS = [
@@ -165,4 +179,6 @@ export const ICONS_PATHS = [
     ['text', 'assets/icons/text.svg'],
     ['pencil', 'assets/icons/pencil.svg'],
     ['new', 'assets/icons/new.svg'],
+    ['redo', 'assets/icons/redo.svg'],
+    ['undo', 'assets/icons/undo.svg'],
 ];

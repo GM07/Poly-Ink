@@ -45,5 +45,6 @@ export class NewDrawingService implements Popup {
 
         this.drawingService.resizeCanvas(width, height);
         this.drawingService.initBackground();
+        this.drawingService.initUndoRedo();
     }
 }

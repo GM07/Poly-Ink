@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
+import { PolygonMode } from '@app/classes/tool-config/polygon-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { PolygoneMode, PolygoneService } from '@app/services/tools/polygone.service';
+import { PolygoneService } from '@app/services/tools/polygone.service';
 
 @Component({
     selector: 'app-polygone-config',
@@ -9,19 +10,19 @@ import { PolygoneMode, PolygoneService } from '@app/services/tools/polygone.serv
     styleUrls: ['./polygone-config.component.scss'],
 })
 export class PolygoneConfigComponent extends ToolConfig {
-    polygoneModeIn: typeof PolygoneMode = PolygoneMode;
+    polygoneModeIn: typeof PolygonMode = PolygonMode;
     readonly MIN: number = ToolSettingsConst.MIN_WIDTH;
     readonly MAX: number = ToolSettingsConst.MAX_WIDTH;
     readonly MAX_WIDTH_POLYGONE: number = ToolSettingsConst.MAX_WIDTH;
     readonly MIN_NUM_EDGES: number = ToolSettingsConst.MIN_NUM_EDGES;
     readonly MAX_NUM_EDGES: number = ToolSettingsConst.MAX_NUM_EDGES;
 
-    constructor(public polygoneService: PolygoneService) {
+    constructor(public polygonService: PolygoneService) {
         super();
     }
 
-    toggleTraceType(polygoneMode: PolygoneMode): void {
-        this.polygoneService.polygoneMode = polygoneMode;
+    toggleTraceType(polygonMode: PolygonMode): void {
+        this.polygonService.config.polygonMode = polygonMode;
     }
 
     colorSliderLabel(value: number): string {
