@@ -83,13 +83,11 @@ describe('SaveDrawingComponent', () => {
         component.saveFormat = 'jpg';
         component.enableAcceptButton = false;
         component.aspectRatio = 2;
-        component.filename = 'Mona Lisa';
 
         component.initValues();
         expect(component.enableAcceptButton).toBeTruthy();
         expect(component.saveFormat).toBe('png');
         expect(component.aspectRatio).toBe(1);
-        expect(component.filename).toBe('Le Cri');
         expect(component.nameFormControl.validator).toBeTruthy();
         expect(component.tagsFormControl.validator).toBeTruthy();
         expect(randomStub).toHaveBeenCalled();
@@ -120,7 +118,7 @@ describe('SaveDrawingComponent', () => {
 
     it('should save image with valid file name and empty tags', async () => {
         const spy = spyOn(carrouselService, 'createDrawing').and.returnValue(new Observable());
-        const mockDrawing: Drawing = new Drawing(new DrawingData(component.filename));
+        const mockDrawing: Drawing = new Drawing(new DrawingData(''));
         mockDrawing.image = component['canvasImage'];
         component.save();
         expect(spy).toHaveBeenCalled();
@@ -128,8 +126,8 @@ describe('SaveDrawingComponent', () => {
 
     it('should save the image with valid file name and tags', async () => {
         const spy = spyOn(carrouselService, 'createDrawing').and.returnValue(new Observable());
-        component.tagsStr = 'tag1, tag2';
-        const mockDrawing: Drawing = new Drawing(new DrawingData(component.filename));
+        component.saveForm.controls['tagsFormControl'].setValue('tag1,tag2');
+        const mockDrawing: Drawing = new Drawing(new DrawingData(''));
         mockDrawing.image = component['canvasImage'];
         component.save();
         expect(spy).toHaveBeenCalled();
