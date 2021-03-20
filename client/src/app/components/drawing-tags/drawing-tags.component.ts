@@ -6,64 +6,68 @@ import { Drawing } from '@common/communication/drawing';
 import { Tag } from '@common/communication/tag';
 
 @Component({
-  selector: 'app-drawing-tags',
-  templateUrl: './drawing-tags.component.html',
-  styleUrls: ['./drawing-tags.component.scss']
+    selector: 'app-drawing-tags',
+    templateUrl: './drawing-tags.component.html',
+    styleUrls: ['./drawing-tags.component.scss'],
 })
 export class DrawingTagsComponent implements OnInit {
+    static readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  constructor(private carrouselService: CarrouselService) {
-    this.noMatchingTags = false;
-  }
+    visible: boolean;
+    selectable: boolean;
+    removable: boolean;
+    addOnBlur: boolean;
+    drawings: Drawing[];
+    filterTags: Tag[];
+    noMatchingTags: boolean;
 
-  ngOnInit(): void {
-    this.getAllDrawings();
-  }
+    @Output() filteredDrawings: EventEmitter<Drawing[]>;
 
-  visible = true;
-  selectable = true;
-  removable = true;
-  addOnBlur = true;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  drawings: Drawing[] = [];
-  filterTags: Tag[] = [];
-  noMatchingTags: boolean;
-
-  @Output() filteredDrawings = new EventEmitter<Drawing[]>();
-
-  getAllDrawings(): void {
-    this.carrouselService.getAllDrawings()
-      .subscribe((drawings: Drawing[]) => {
-        this.drawings = drawings;
-      });
-  }
-
-  getFilteredDrawings(): void {
-    this.drawings  = [];
-    this.carrouselService.getFilteredDrawings(this.filterTags)
-      .subscribe((drawings: Drawing[]) => {
-        this.drawings = drawings;
-        drawings.length ? this.noMatchingTags = false : this.noMatchingTags = true;
-        this.filteredDrawings.emit(this.drawings);
-      });
-  }
-
-  addFilter(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    if (value.trim()) {
-      this.filterTags.push({name: value.trim()});
-      this.getFilteredDrawings();
+    constructor(private carrouselService: CarrouselService) {
+        this.noMatchingTags = false;
+        this.visible = true;
+        this.selectable = true;
+        this.removable = true;
+        this.addOnBlur = true;
+        this.drawings = [];
+        this.filterTags = [];
+        this.filteredDrawings = new EventEmitter<Drawing[]>();
     }
-    input.value = '';
-  }
-
-  remove(tag: Tag): void {
-    const tagIndex = this.filterTags.indexOf(tag);
-    if (tagIndex >= 0) {
-      this.filterTags.splice(tagIndex, 1);
-      this.getFilteredDrawings();
+    ngOnInit(): void {
+        this.getAllDrawings();
     }
-  }
+
+    getAllDrawings(): void {
+        this.carrouselService.getAllDrawings().subscribe((drawings: Drawing[]) => {
+            this.drawings = drawings;
+        });
+    }
+
+    getFilteredDrawings(): void {
+        this.drawings = [];
+        this.carrouselService.getFilteredDrawings(this.filterTags).subscribe((drawings: Drawing[]) => {
+            this.drawings = drawings;
+            drawings.length ? (this.noMatchingTags = false) : (this.noMatchingTags = true);
+            this.filteredDrawings.emit(this.drawings);
+        });
+    }
+
+    addFilter(event: MatChipInputEvent): void {
+        const input = event.input;
+        const value = event.value;
+
+        if (value.trim()) {
+            this.filterTags.push({ name: value.trim() });
+            this.getFilteredDrawings();
+        }
+        input.value = '';
+    }
+
+    remove(tag: Tag): void {
+        const tagIndex = this.filterTags.indexOf(tag);
+        if (tagIndex >= 0) {
+            this.filterTags.splice(tagIndex, 1);
+            this.getFilteredDrawings();
+        }
+    }
 }

@@ -24,7 +24,10 @@ export class NewDrawingService implements Popup {
     }
 
     newCanvas(confirm: boolean = false): void {
-        if (!confirm && NewDrawingService.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)) {
+        if (
+            !confirm &&
+            NewDrawingService.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)
+        ) {
             this.showPopup = true;
             return;
         }

@@ -3,37 +3,33 @@ import { Injectable } from '@angular/core';
 import { Drawing } from '@common/communication/drawing';
 import { ResponseMessage } from '@common/communication/response-message';
 import { Tag } from '@common/communication/tag';
-import { fromEvent, merge, Observable, Observer, throwError } from 'rxjs'; //, throwError 
-import { catchError, map, retry } from 'rxjs/operators';
+import { fromEvent, merge, Observable, Observer, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 /* tslint:disable:no-any */
 @Injectable({
     providedIn: 'root',
 })
-
 export class CarrouselService {
     static readonly baseURL: string = 'http://localhost:3000/drawings';
-    
+
     constructor(private http: HttpClient) {}
 
     testConnection(): Observable<boolean> {
         return merge<boolean>(
-          fromEvent(window, 'offline').pipe(map(() => false)),
-          fromEvent(window, 'online').pipe(map(() => true)),
-          new Observable((sub: Observer<boolean>) => {
-            sub.next(navigator.onLine);
-            sub.complete();
-          }));
+            fromEvent(window, 'offline').pipe(map(() => false)),
+            fromEvent(window, 'online').pipe(map(() => true)),
+            new Observable((sub: Observer<boolean>) => {
+                sub.next(navigator.onLine);
+                sub.complete();
+            }),
+        );
     }
 
     getAllDrawings(): Observable<Drawing[]> {
-        return this.http.get<Drawing[]>(CarrouselService.baseURL)
-            .pipe(
-                retry(3)
-            );
+        return this.http.get<Drawing[]>(CarrouselService.baseURL).pipe();
     }
 
-    // A voir
     getFilteredDrawings(tags: Tag[]): Observable<Drawing[]> {
         const tagStr = tags
             .map((tag: Tag) => {
@@ -44,12 +40,12 @@ export class CarrouselService {
     }
 
     deleteDrawing(drawing: Drawing): Observable<{}> {
-        let url: string = `${CarrouselService.baseURL}?ids=${drawing.data._id}`;
-        return this.http.delete<Drawing>(url)
-            .pipe(
-                catchError(err => {
-                    return throwError(err);
-                }))
+        const url = `${CarrouselService.baseURL}?ids=${drawing.data._id}`;
+        return this.http.delete<Drawing>(url).pipe(
+            catchError((err) => {
+                return throwError(err);
+            }),
+        );
     }
 
     createDrawing(drawing: Drawing): Observable<{}> {

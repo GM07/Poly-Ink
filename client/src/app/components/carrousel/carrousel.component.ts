@@ -40,15 +40,36 @@ import { DrawingData } from '@common/communication/drawing-data';
     ],
 })
 export class CarrouselComponent implements OnInit {
+    constructor(
+        private shortcutHandler: ShortcutHandlerService,
+        private drawingService: DrawingService,
+        private carrouselService: CarrouselService,
+        private router: Router,
+        private cd: ChangeDetectorRef,
+        activatedRoute: ActivatedRoute,
+    ) {
+        this.drawingsList = [];
+        this.currentIndex = 0;
+        this.translationState = null;
+        this.animationIsDone = false;
+        this.showCarrousel = false;
+        this.showLoadingError = false;
+        this.showLoadingWarning = false;
+        this.showDeletionError = false;
+        this.serverConnexionError = false;
+        this.hasDrawings = true;
+        this.subscribeActivatedRoute(activatedRoute);
+    }
+
+    private static readonly SHORTCUT: ShortcutKey = new ShortcutKey('g', true);
+    private static readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
+    private static readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
+    private static readonly NOT_FOUND_ERROR: number = 404;
     @ViewChild('overflowLeftPreview', { static: false }) overflowLeftPreview: ElementRef<HTMLImageElement>;
     @ViewChild('leftPreview', { static: false }) leftPreview: ElementRef<HTMLImageElement>;
     @ViewChild('middlePreview', { static: false }) middlePreview: ElementRef<HTMLImageElement>;
     @ViewChild('rightPreview', { static: false }) rightPreview: ElementRef<HTMLImageElement>;
     @ViewChild('overflowRightPreview', { static: false }) overflowRightPreview: ElementRef<HTMLImageElement>;
-
-    private readonly SHORTCUT: ShortcutKey = new ShortcutKey('g', true);
-    private readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
-    private readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
     readonly CARROUSEL_URL: string = 'carrousel';
     readonly CANVAS_PREVIEW_SIZE: number = 200;
 
@@ -75,29 +96,8 @@ export class CarrouselComponent implements OnInit {
 
     animationIsDone: boolean;
 
-    constructor(
-        private shortcutHandler: ShortcutHandlerService,
-        private drawingService: DrawingService,
-        private carrouselService: CarrouselService,
-        private router: Router,
-        private cd: ChangeDetectorRef,
-        activatedRoute: ActivatedRoute,
-    ) {
-        this.drawingsList = [];
-        this.currentIndex = 0;
-        this.translationState = null;
-        this.animationIsDone = false;
-        this.showCarrousel = false;
-        this.showLoadingError = false;
-        this.showLoadingWarning = false;
-        this.showDeletionError = false;
-        this.serverConnexionError = false;
-        this.hasDrawings = true;
-        this.subscribeActivatedRoute(activatedRoute);
-    }
-
     ngOnInit(): void {
-        this.carrouselService.testConnection().subscribe(isOnline => this.isOnline = isOnline);
+        this.carrouselService.testConnection().subscribe((isOnline) => (this.isOnline = isOnline));
         if (this.isOnline && this.showCarrousel) {
             this.loadCarrousel();
         }
@@ -152,21 +152,22 @@ export class CarrouselComponent implements OnInit {
             this.hasDrawings = false;
             return;
         }
-        this.carrouselService.deleteDrawing(this.drawingsList[this.currentIndex])
-        .subscribe(() => {
-            this.deleteAndUpdate();
-        }, (error) => {
-            if(error.status === 404) {
+        this.carrouselService.deleteDrawing(this.drawingsList[this.currentIndex]).subscribe(
+            () => {
                 this.deleteAndUpdate();
-                return;
-            }
-            this.isLoadingCarrousel = false;
-            this.serverConnexionError = true;
-            }
+            },
+            (error) => {
+                if (error.status === CarrouselComponent.NOT_FOUND_ERROR) {
+                    this.deleteAndUpdate();
+                    return;
+                }
+                this.isLoadingCarrousel = false;
+                this.serverConnexionError = true;
+            },
         );
     }
 
-    private deleteAndUpdate() {
+    private deleteAndUpdate(): void {
         this.drawingsList.splice(this.currentIndex, 1);
         if (this.currentIndex === this.drawingsList.length && this.drawingsList.length !== 0) --this.currentIndex;
         this.updateDrawingContent();
@@ -204,7 +205,7 @@ export class CarrouselComponent implements OnInit {
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
-        if (!this.shortcutHandler.blockShortcuts && this.SHORTCUT.equals(event) && !this.showCarrousel) {
+        if (!this.shortcutHandler.blockShortcuts && CarrouselComponent.SHORTCUT.equals(event) && !this.showCarrousel) {
             event.preventDefault();
             this.shortcutHandler.blockShortcuts = true;
             this.showCarrousel = true;
@@ -212,9 +213,9 @@ export class CarrouselComponent implements OnInit {
         }
 
         if (this.showCarrousel && !this.showLoadingWarning) {
-            if (this.LEFT_ARROW.equals(event)) {
+            if (CarrouselComponent.LEFT_ARROW.equals(event)) {
                 this.clickLeft();
-            } else if (this.RIGHT_ARROW.equals(event)) {
+            } else if (CarrouselComponent.RIGHT_ARROW.equals(event)) {
                 this.clickRight();
             }
         }
@@ -229,7 +230,7 @@ export class CarrouselComponent implements OnInit {
         });
     }
 
-    public updateDrawingContent(): void {
+    updateDrawingContent(): void {
         const overFlowLeft = -2;
         const left = -1;
         this.updateSingleDrawingContent(this.overflowLeftPreview, overFlowLeft, this.overflowLeftElement);
@@ -270,7 +271,8 @@ export class CarrouselComponent implements OnInit {
         } else {
             this.drawingService.loadDrawing();
         }
-    }
+        // tslint:disable-next-line:semicolon
+    };
 
     // Ecq c'est vraiment un bon nom pour cette fonction??
     private getDrawingFromServer(index: number): string | undefined {
@@ -278,7 +280,7 @@ export class CarrouselComponent implements OnInit {
         return this.drawingsList[index].image;
     }
 
-    public loadFilteredCarrousel(filteredDrawings: Drawing[]): void {
+    loadFilteredCarrousel(filteredDrawings: Drawing[]): void {
         this.drawingsList = filteredDrawings;
         this.updateDrawingContent();
     }
@@ -289,16 +291,16 @@ export class CarrouselComponent implements OnInit {
 
         this.carrouselService.getAllDrawings().subscribe(
             (drawings: Drawing[]) => {
-            this.drawingsList = drawings;
-            this.hasDrawings = this.drawingsList.length > 0;
-            this.isLoadingCarrousel = false;
-            this.cd.detectChanges(); // Must detect changes when finished loading
-            this.updateDrawingContent();
+                this.drawingsList = drawings;
+                this.hasDrawings = this.drawingsList.length > 0;
+                this.isLoadingCarrousel = false;
+                this.cd.detectChanges(); // Must detect changes when finished loading
+                this.updateDrawingContent();
             },
             () => {
                 this.isLoadingCarrousel = false;
                 this.serverConnexionError = true;
-            }
+            },
         );
     }
 }

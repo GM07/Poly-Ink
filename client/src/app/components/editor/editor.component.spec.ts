@@ -22,6 +22,7 @@ import { SelectionHandlerComponent } from '@app/components/selection/selection-h
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 // tslint:disable:no-string-literal
+// tslint:disable:max-classes-per-file
 
 @Component({ selector: 'app-sidebar', template: '' })
 class StubSidebarComponent {}

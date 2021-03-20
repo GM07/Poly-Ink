@@ -44,7 +44,7 @@ describe('DrawingService', () => {
         service.loadDrawing();
         expect(service.baseCtx.drawImage).toHaveBeenCalled();
     });
-    
+
     it('draw should execute command on base canvas', () => {
         spyOn(command, 'execute').and.stub();
         service.draw(command);

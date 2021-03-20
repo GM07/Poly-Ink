@@ -7,9 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { CarrouselComponent } from '@app/components/carrousel/carrousel.component';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
-import { CarrouselComponent } from '../carrousel/carrousel.component';
 
 describe('HomePageComponent', () => {
     let component: HomePageComponent;
@@ -49,7 +49,7 @@ describe('HomePageComponent', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
-    
+
     it('should fade out', () => {
         component.fadeOut();
         expect(component.state).toBe('invisible');
