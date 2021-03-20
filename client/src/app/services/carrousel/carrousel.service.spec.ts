@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Drawing } from '@common/communication/drawing';
@@ -26,13 +27,13 @@ describe('CarrouselService', () => {
     });
     service = TestBed.inject(CarrouselService);
     httpMock = TestBed.inject(HttpTestingController);
+
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  //Verify if gets all drawings!
   it('should return an Observable<>', () => {
     service.getAllDrawings().subscribe(drawings => {
       expect(drawings.length).toBe(1);
@@ -44,7 +45,6 @@ describe('CarrouselService', () => {
     req.flush(dummyDrawings);
   });
 
-  //TODO should verify if no drawings match the tag!
   it('should send a request GET and should send tags in query', () => {
     const dummyTags: Tag[] = [{name: "tag1"}];
     service.getFilteredDrawings(dummyTags)
@@ -72,5 +72,16 @@ describe('CarrouselService', () => {
     const req = httpMock.expectOne(`${service.baseURL}?ids=604a1a5a1b66eefab31e9206`);
     expect(req.request.method).toBe("DELETE");
     req.flush(dummyDrawings);
+  });
+
+  it('should throw error', () => {
+    service.deleteDrawing(dummyDrawing).subscribe(
+      data => fail(' '), 
+      (error: HttpErrorResponse) => {
+        expect(error.status).toBeDefined();
+      }
+    )
+    const req = httpMock.expectOne(`${service.baseURL}?ids=604a1a5a1b66eefab31e9206`);
+    req.flush('404 error', { status: 404, statusText: 'Not Found' });
   });
 });

@@ -1,8 +1,8 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Drawing } from '@common/communication/drawing';
 import { Tag } from '@common/communication/tag';
-import { EMPTY, fromEvent, merge, Observable, Observer, throwError } from 'rxjs'; //, throwError 
+import { fromEvent, merge, Observable, Observer, throwError } from 'rxjs'; //, throwError 
 import { catchError, map, retry } from 'rxjs/operators';
 
 @Injectable({
@@ -29,8 +29,7 @@ export class CarrouselService {
     getAllDrawings(): Observable<Drawing[]> {
         return this.http.get<Drawing[]>(this.baseURL)
             .pipe(
-                retry(3),
-                catchError(this.handleError)
+                retry(3)
             );
     }
     
@@ -42,25 +41,11 @@ export class CarrouselService {
     }
     
     deleteDrawing(drawing: Drawing): Observable<{}> {
-        try {
-            let url: string = `${this.baseURL}?ids=${drawing.data._id}`;
-            return this.http.delete<Drawing>(url);
-        } catch(reason) {
-            this.handleError(reason);
-            return EMPTY;
-        }
-    }
-
-    public handleError(error: HttpErrorResponse) {
-        if (error.status === 0 || error.error instanceof ProgressEvent) { 
-            console.log('Client side error: ', error.error);
-        } else {
-          console.error(
-            `Backend returned code ${error.status}, ` +
-            `body was: ${error.error}`);
-        }
-        // Return an observable with a user-facing error message.
-        return throwError(
-          'Something bad happened; please try again later.');
+        let url: string = `${this.baseURL}?ids=${drawing.data._id}`;
+        return this.http.delete<Drawing>(url)
+            .pipe(
+                catchError(err => {
+                    return throwError(err);
+                }))
     }
 }

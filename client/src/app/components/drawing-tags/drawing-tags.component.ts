@@ -53,14 +53,11 @@ export class DrawingTagsComponent implements OnInit {
     const input = event.input;
     const value = event.value;
 
-    if ((value || '').trim()) {
+    if (value.trim()) {
       this.filterTags.push({name: value.trim()});
       this.getFilteredDrawings();
     }
-
-    if (input) {
-      input.value = '';
-    }
+    input.value = '';
   }
 
   remove(tag: Tag): void {

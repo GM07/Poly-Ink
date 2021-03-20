@@ -1,11 +1,12 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatChipsModule } from '@angular/material/chips';
+import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
-//import { platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'; //BrowserAnimationsModule
 import { CarrouselService } from '@app/services/carrousel/carrousel.service';
 import { Drawing } from '@common/communication/drawing';
+import { DrawingData } from '@common/communication/drawing-data';
+import { Tag } from '@common/communication/tag';
 import { of } from 'rxjs';
 import { DrawingTagsComponent } from './drawing-tags.component';
 
@@ -13,11 +14,6 @@ describe('DrawingTagsComponent', () => {
   let component: DrawingTagsComponent;
   let fixture: ComponentFixture<DrawingTagsComponent>;
   let carrouselService: CarrouselService;
-  //let loader: HarnessLoader;
-  /*
-  beforeAll(() => {
-    TestBed.initTestEnvironment(BrowserAnimationsModule, platformBrowserDynamicTesting());
-  });*/
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -56,35 +52,38 @@ describe('DrawingTagsComponent', () => {
     expect(component.drawings).toEqual(drawings);
   });
 
-  /*
-  it('should add a filter', async() => {
-    const inChip: HTMLInputElement = new HTMLInputElement();
-    let chip: MatChipInputEvent = {input: inChip, value: 'filter'};
-    component.addFilter(chip);
-    await loader.getHarness(MatChipHarness);
-    expect(component.addFilter).toHaveBeenCalled();
-  });*/
+  it('should add a filter', () => {
+    const inputValue = {value: 'filter'} as HTMLInputElement;
+    const spy = spyOn(component, 'getFilteredDrawings');
+    component.addFilter({input: inputValue, value: 'filter'} as MatChipInputEvent);
+    expect(spy).toHaveBeenCalled();
+  });
 
-  /*
-  it('should be able to trigger chip removal', async() => {
-    //TODO add chips!!!
-    let chipList = fixture.debugElement.query(By.directive(MatChipList))!.componentInstance;
-    //let chipRemoveDebugElements = fixture.debugElement.queryAll(By.directive(MatChipRemove));
-    let chips = chipList.chips;
-    chips.toArray()[2].focus();
+  it('should not add an empty filter', () => {
+    const inputValue = {value: ' '} as HTMLInputElement;
+    component.addFilter({input: inputValue, value: ' '} as MatChipInputEvent);
+    expect(component.filterTags.length).toEqual(0);
+  });
 
-    // Destroy the third focused chip by dispatching a bubbling click event on the
-    // associated chip remove element.
-    let element = document.getElementById('remove');
-    element?.click();
-    //dispatchEvent(chipRemoveDebugElements[2].nativeElement, createMouseEvent('click'));
-    //dispatchMouseEvent(chipRemoveDebugElements[2].nativeElement, 'click');
-    fixture.detectChanges();
+  it('should remove a tag', () => {
+    const inputValue = {value: 'filter'} as HTMLInputElement;
+    component.addFilter({input: inputValue, value: 'filter'} as MatChipInputEvent);
+    expect(component.filterTags.length).toEqual(1);
+    component.remove(component.filterTags[0]);
+    expect(component.filterTags.length).toEqual(0);
+  });
 
-    expect(chips.toArray()[2].value).not.toBe(2, 'Expected the third chip to be removed.');
-    expect(chipList._keyManager.activeItemIndex).toBe(2);
-    //expect(fixture.componentInstance.remove).not.toHaveBeenCalled();
-    //await chip.remove();
-    //expect(fixture.componentInstance.remove).toHaveBeenCalled();
-  });*/
+  it('should not remove a tag', () => {
+    const inputValue = {value: 'filter'} as HTMLInputElement;
+    component.addFilter({input: inputValue, value: 'filter'} as MatChipInputEvent);
+    component.remove({name: 'filter'} as Tag);
+    expect(component.filterTags.length).toEqual(1);
+  });
+
+  it('should get filtered drawings', () => {
+    const drawing = new Drawing(new DrawingData(''));
+    spyOn(carrouselService, 'getFilteredDrawings').and.returnValue(of([drawing]));
+    component.getFilteredDrawings();
+    expect(component.drawings.length).toEqual(1);
+  });
 });

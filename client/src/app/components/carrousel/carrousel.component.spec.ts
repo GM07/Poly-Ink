@@ -176,7 +176,6 @@ describe('CarrouselComponent', () => {
         expect(emptyDrawing.data._id).toEqual('1');
         expect(emptyDrawing.data.name).toEqual('Test');
         expect(emptyDrawing.data.tags).toEqual([{name: "tag3"}, {name: "tag5"}]);
-        //expect(imageRef.nativeElement.src).toEqual(canvasDataURL);
     });
     
     it('should allow to take the element on the left of the carrousel', () => {
@@ -246,10 +245,6 @@ describe('CarrouselComponent', () => {
         component['animationIsDone'] = true;
         component.loadDrawing(0);
         expect(component.isLoadingCarrousel).toBeTruthy();
-        /*setTimeout((done) => {
-            expect(createLoadedCanvasSpy).toHaveBeenCalled();
-            done();
-        }, 200);*/
     });
 
     it('should close the carrousel and navigate by url when succesfully loading a drawing', () => {
@@ -339,31 +334,33 @@ describe('CarrouselComponent', () => {
         expect(component.serverConnexionError).toBeTrue();
     });
 
-    /*
     it('should throw error in delete, not 404', async() => {
-        spyOn(carrouselService, 'deleteDrawing').and.returnValue(throwError('allo'));
+        component.animationIsDone = true;
+        component.drawingsList = [dummyDrawing];
+        const mockCall = spyOn(carrouselService,'deleteDrawing').and.returnValue(throwError({status: 504}));
         component.deleteDrawing();
+        expect(mockCall).toHaveBeenCalled();
         expect(component.isLoadingCarrousel).toBeFalse();
         expect(component.serverConnexionError).toBeTrue();
     });
-    it('should throw error 404 in delete and handle it accordingly', async() => {
-        component.drawingsList = [];
-        spyOn(carrouselService, 'deleteDrawing');
+
+    it('should update carrousel, even when error 404', async() => {
+        component.animationIsDone = true;
+        component.drawingsList = [dummyDrawing];
+        const mockDeleteAndUpdate = spyOn<any>(component, 'deleteAndUpdate');
+        const mockCall = spyOn(carrouselService,'deleteDrawing').and.returnValue(throwError({status: 404}));
         component.deleteDrawing();
-        expect(component.isLoadingCarrousel).toBeFalse();
-        expect(component.serverConnexionError).toBeTrue();
-    });*/
-/*
-    it('should update carrousel when error 404', async() => {
-        const mock404Error = {
-            status: 404
-        }
-        const spy = spyOn(component, 'deleteAndUpdate');
-        spyOn(carrouselService, 'deleteDrawing').and.returnValue(throwError(mock404Error));
-        component.deleteDrawing();
-        expect(spy).toHaveBeenCalled();
-        expect(component.serverConnexionError).toBeFalse();
-    });*/
+        expect(mockCall).toHaveBeenCalled();
+        expect(mockDeleteAndUpdate).toHaveBeenCalled();
+    });
+
+    it('should decrement currentIndex', () => {
+        component.drawingsList = [dummyDrawing, dummyDrawing];
+        component.currentIndex = 1;
+        spyOn(component, 'updateDrawingContent');
+        component['deleteAndUpdate']();
+        expect(component.currentIndex).toEqual(0);
+    })
     
     it('should detect the left arrow key', () => {
         spyOn(component, 'clickLeft');

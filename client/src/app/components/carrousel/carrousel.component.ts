@@ -92,7 +92,7 @@ export class CarrouselComponent implements OnInit {
         this.showLoadingWarning = false;
         this.showDeletionError = false;
         this.serverConnexionError = false;
-        this.hasDrawings = false;
+        this.hasDrawings = true;
         this.subscribeActivatedRoute(activatedRoute);
     }
 
@@ -156,6 +156,7 @@ export class CarrouselComponent implements OnInit {
         .subscribe(() => {
             this.deleteAndUpdate();
         }, (error) => {
+            console.log("YO");
             if(error.status === 404) {
                 this.deleteAndUpdate();
                 return;
@@ -166,7 +167,7 @@ export class CarrouselComponent implements OnInit {
         );
     }
 
-    deleteAndUpdate() {
+    private deleteAndUpdate() {
         this.drawingsList.splice(this.currentIndex, 1);
         if (this.currentIndex === this.drawingsList.length && this.drawingsList.length !== 0) --this.currentIndex;
         this.updateDrawingContent();
