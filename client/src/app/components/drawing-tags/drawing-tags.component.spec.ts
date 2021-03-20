@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations'; // BrowserAnimationsModule
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CarrouselService } from '@app/services/carrousel/carrousel.service';
 import { Drawing } from '@common/communication/drawing';
 import { DrawingData } from '@common/communication/drawing-data';
@@ -27,7 +27,6 @@ describe('DrawingTagsComponent', () => {
         fixture = TestBed.createComponent(DrawingTagsComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
-        // loader = TestbedHarnessEnvironment.loader(fixture);
 
         carrouselService = TestBed.inject(CarrouselService);
 

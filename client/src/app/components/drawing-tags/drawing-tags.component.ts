@@ -11,7 +11,7 @@ import { Tag } from '@common/communication/tag';
     styleUrls: ['./drawing-tags.component.scss'],
 })
 export class DrawingTagsComponent implements OnInit {
-    static readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+    readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
     visible: boolean;
     selectable: boolean;

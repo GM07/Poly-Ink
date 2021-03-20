@@ -274,7 +274,6 @@ export class CarrouselComponent implements OnInit {
         // tslint:disable-next-line:semicolon
     };
 
-    // Ecq c'est vraiment un bon nom pour cette fonction??
     private getDrawingFromServer(index: number): string | undefined {
         if (this.drawingsList.length === 0) return undefined;
         return this.drawingsList[index].image;
