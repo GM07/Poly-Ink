@@ -19,6 +19,7 @@ export class RectangleSelectionDraw extends AbstractDraw {
     }
 
     private fillBackground(context: CanvasRenderingContext2D): void {
+        if (this.config.startCoords.x === this.config.endCoords.x && this.config.startCoords.y === this.config.endCoords.y) return;
         context.beginPath();
         context.fillStyle = 'white';
         context.fillRect(this.config.startCoords.x, this.config.startCoords.y, Math.abs(this.config.width), Math.abs(this.config.height));

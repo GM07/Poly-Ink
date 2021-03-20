@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { Geometry } from '@app/classes/math/geometry';
 import { ShiftKey } from '@app/classes/shortcut/shift-key';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
-import { SelectionConfig } from '@app/classes/tool-config/selection-config.ts';
+import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -247,7 +248,7 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     private startSelection(): void {
-        if (this.config.width === 0 || this.config.height === 0) return;
+        if (Geometry.roundTowardsZero(this.config.width) === 0 || Geometry.roundTowardsZero(this.config.height) === 0) return;
         this.SELECTION_DATA.width = Math.abs(this.config.width);
         this.SELECTION_DATA.height = Math.abs(this.config.height);
         this.selectionCtx = this.SELECTION_DATA.getContext('2d') as CanvasRenderingContext2D;

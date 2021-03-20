@@ -27,4 +27,13 @@ export class Geometry {
         const isPoint = path.length === 1;
         return isPoint || (path.length === 2 && path[0].x === path[1].x && path[0].y === path[1].y);
     }
+
+    /**
+     *  Can return -0
+     *
+     *  -0 === +0 returns true
+     */
+    static roundTowardsZero(value: number): number {
+        return value >= 0 ? Math.floor(value) : Math.ceil(value);
+    }
 }
