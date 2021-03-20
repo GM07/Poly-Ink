@@ -5,6 +5,8 @@ import { PencilDraw } from '@app/classes/commands/pencil-draw';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { DrawingService } from './drawing.service';
 
+// tslint:disable:no-string-literal
+
 describe('DrawingService', () => {
     let service: DrawingService;
     let canvasTestHelper: CanvasTestHelper;
@@ -49,5 +51,15 @@ describe('DrawingService', () => {
         spyOn(service, 'clearCanvas').and.stub();
         service.drawPreview(command);
         expect(command.execute).toHaveBeenCalledWith(service.previewCtx);
+    });
+
+    it('should block undo redo properly', () => {
+        service.blockUndoRedo();
+        expect(service['undoRedoService'].blockUndoRedo).toBeTruthy();
+    });
+
+    it('should block undo redo properly', () => {
+        service.unblockUndoRedo();
+        expect(service['undoRedoService'].blockUndoRedo).toBeFalsy();
     });
 });

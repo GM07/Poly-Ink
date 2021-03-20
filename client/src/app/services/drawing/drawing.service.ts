@@ -68,6 +68,10 @@ export class DrawingService {
         this.undoRedoService.blockUndoRedo = true;
     }
 
+    unblockUndoRedo(): void {
+        this.undoRedoService.blockUndoRedo = false;
+    }
+
     initBackground(): void {
         this.baseCtx.fillStyle = 'white';
         this.baseCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);

@@ -5,6 +5,7 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
+import { Vec2 } from '@app/classes/vec2';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { RectangleSelectionDraw } from './rectangle-selection-draw';
@@ -46,6 +47,14 @@ describe('RectangleDraw', () => {
         expect(imageData.data[1]).toEqual(Colors.WHITE.g);
         expect(imageData.data[2]).toEqual(Colors.WHITE.b);
         expect(imageData.data[ALPHA]).not.toEqual(0);
+    });
+
+    it('should not fill the background if the selection has not moved', () => {
+        const fillSpy = spyOn(ctxStub, 'fill');
+        rectangleSelectionDraw['config'].startCoords = { x: 0, y: 0 } as Vec2;
+        rectangleSelectionDraw['config'].endCoords = { x: 0, y: 0 } as Vec2;
+        rectangleSelectionDraw['fillBackground'](ctxStub);
+        expect(fillSpy).not.toHaveBeenCalled();
     });
 
     it('should move selection properly', () => {

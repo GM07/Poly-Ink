@@ -51,4 +51,13 @@ describe('Geometry', () => {
         ] as Vec2[];
         expect(Geometry.isAPoint(point)).toBeFalsy();
     });
+
+    it('should floor towards 0', () => {
+        let value: number = 0.7;
+        expect(Geometry.roundTowardsZero(value) === 0).toBeTruthy();
+        value = -0.7;
+        expect(Geometry.roundTowardsZero(value) === 0).toBeTruthy();
+        value = -1.1;
+        expect(Geometry.roundTowardsZero(value)).toEqual(-1);
+    });
 });

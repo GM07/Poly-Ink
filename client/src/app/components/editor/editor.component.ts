@@ -47,4 +47,9 @@ export class EditorComponent {
     onKeyDown(event: KeyboardEvent): void {
         this.shortcutHandler.onKeyDown(event);
     }
+
+    @HostListener('document:mousemove', ['$event'])
+    onMouseMove(event: MouseEvent): void {
+        this.shortcutHandler.onMouseMove(event);
+    }
 }
