@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
-import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AerosolService } from '@app/services/tools/aerosol.service';
 import { ColorService } from 'src/color-picker/services/color.service';
@@ -19,7 +18,6 @@ describe('AerosolService', () => {
     let drawSpy: jasmine.Spy<any>;
     let drawPreviewSpy: jasmine.Spy<any>;
     let sprayContinuouslySpy: jasmine.Spy<any>;
-    let onMouseDownSpy: jasmine.Spy<any>;
 
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'drawPreview']);
@@ -40,7 +38,6 @@ describe('AerosolService', () => {
         drawPreviewSpy = spyOn<any>(service, 'drawPreview').and.stub();
 
         sprayContinuouslySpy = spyOn<any>(service, 'sprayContinuously');
-        onMouseDownSpy = spyOn<any>(service, 'onMouseDown').and.callThrough();
 
         // service's spy configuration
         // tslint:disable:no-string-literal
@@ -115,10 +112,10 @@ describe('AerosolService', () => {
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
-    it('should call onMousDown when entering the canvas if mouse is down', () => {
+    it('should call sprayContinuously when entering the canvas if mouse is down', () => {
         mouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
-        expect(onMouseDownSpy).toHaveBeenCalled();
+        expect(sprayContinuouslySpy).toHaveBeenCalled();
     });
 
     it('should do nothing when entering the canvas, with an unsupported mouse state', () => {
@@ -171,9 +168,9 @@ describe('AerosolService', () => {
 
     it('should spray continuoulsy', () => {
         jasmine.clock().install();
-        const placeSpy = spyOn<any>(service, 'placeDroplets');
+        const placeSpy = spyOn<any>(service, 'placePoints');
         sprayContinuouslySpy.and.callThrough();
-        service['sprayContinuously'](previewCtxStub);
+        service['sprayContinuously']();
         jasmine.clock().tick((MS_PER_SECOND / service['emissionsPerSecondIn']) * 2);
         jasmine.clock().uninstall();
         expect(placeSpy).toHaveBeenCalled();
@@ -181,23 +178,10 @@ describe('AerosolService', () => {
         window.clearInterval(service.sprayIntervalID);
     });
 
-    it('should place the right amount of droplets', () => {
-        spyOn<any>(service, 'randomDroplet').and.returnValue({ x: 0, y: 0 } as Vec2);
+    it('should add seeds and mousePosition to config when placing points', () => {
         service.mouseDownCoord = { x: 0, y: 0 };
-        service['config'].droplets = [];
-        service['placeDroplets']();
-        expect(service['config'].droplets[0].length).toEqual(service['config'].nDropletsPerSpray);
-    });
-
-    it('should generate random droplets within a circle', () => {
-        service['config'].areaDiameter = 2;
-        const randomSpy = spyOn(Math, 'random').and.returnValue(1);
-        let randomDropletResult: Vec2 = service['randomDroplet']();
-        expect(randomDropletResult.x).toBeLessThanOrEqual(2);
-        expect(randomDropletResult.y).toBeLessThanOrEqual(2);
-        randomSpy.and.returnValue(0);
-        randomDropletResult = service['randomDroplet']();
-        expect(randomDropletResult.x).toBeLessThanOrEqual(2);
-        expect(randomDropletResult.y).toBeLessThanOrEqual(2);
+        expect(service.config.points.length).toEqual(0);
+        service['placePoints']();
+        expect(service.config.points.length).not.toEqual(0);
     });
 });
