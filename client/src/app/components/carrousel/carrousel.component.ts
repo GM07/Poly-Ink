@@ -281,8 +281,9 @@ export class CarrouselComponent implements OnInit {
     }
 
     loadFilteredCarrousel(filteredDrawings: Drawing[]): void {
+        this.currentIndex = 0;
         this.drawingsList = filteredDrawings;
-        this.updateDrawingContent();
+        if(this.hasDrawings) this.updateDrawingContent();
     }
 
     private loadCarrousel(): void {
