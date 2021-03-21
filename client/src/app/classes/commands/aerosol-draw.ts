@@ -41,9 +41,9 @@ export class AerosolDraw extends AbstractDraw {
     }
 
     private drawDroplet(context: CanvasRenderingContext2D, point: Vec2): void {
-        context.beginPath();
         context.arc(point.x, point.y, this.config.dropletDiameter / 2, 0, 2 * Math.PI);
         context.fill();
+        context.beginPath();
         context.stroke();
         context.closePath();
     }
