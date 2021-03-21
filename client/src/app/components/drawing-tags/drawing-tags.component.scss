@@ -5,10 +5,19 @@
 ::ng-deep.mat-focused .mat-form-field-label {
     color: white !important;
    }
+
+::ng-deep.mat-form-field-label {
+    color: white !important;
+   }
   
 ::ng-deep.mat-form-field-underline {
     background-color: white !important;
 } 
+
+mat-chip {
+    word-break: break-all;
+    height: auto;
+}
   
 ::ng-deep.mat-form-field-ripple {
     background-color: white !important;

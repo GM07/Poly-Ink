@@ -1,4 +1,4 @@
-<div *ngIf="currentURL == CARROUSEL_URL">
+<div *ngIf="currentURL === CARROUSEL_URL">
     <div id="backgroundPage"></div>
 </div>
 
@@ -23,7 +23,7 @@
 </div>
 
 <div *ngIf="showCarrousel">
-    <div *ngIf="currentURL != CARROUSEL_URL" id="background"></div>
+    <div *ngIf="currentURL !== CARROUSEL_URL" id="background"></div>
     <div id="main">
         <div id="content">
             <div *ngIf="serverConnexionError; then serverConnexionErrorBlock"></div>
@@ -33,107 +33,120 @@
             <h1 class="white" style="text-align: center">Dessins sauvegardés sur le serveur</h1>
                 <div *ngIf="isLoadingCarrousel; then loadingBlock; else displayBlock"></div>
                 <ng-template #displayBlock>
+                    <div *ngIf="drawingsList.length !== 0">
                     <div class="previewPresentation">
-                        <button class="arrow" mat-icon-button (click)="clickLeft()">
-                            <mat-icon class="white">keyboard_arrow_left</mat-icon>
-                        </button>
-                        <div class="display">
-                            <div
-                                class="previewDisplay"
-                                #previewDisplay
-                                [@translationState]="translationState"
-                                (@translationState.done)="translationDone()"
-                            >
-                                <div class="drawingContents">
-                                    <p class="name">{{ overflowLeftElement.data.name }}</p>
-                                    <div class="squareImage">
-                                        <img #overflowLeftPreview alt />
+                            <button class="arrow" mat-icon-button (click)="clickLeft()">
+                                <mat-icon class="white">keyboard_arrow_left</mat-icon>
+                            </button>
+                            <div class="display">
+                                <div
+                                    class="previewDisplay"
+                                    #previewDisplay
+                                    [@translationState]="translationState"
+                                    (@translationState.done)="translationDone()"
+                                >
+                                    <div class="drawingContents">
+                                        <p class="name">{{ overflowLeftElement.data.name }}</p>
+                                        <div class="squareImage">
+                                            <img #overflowLeftPreview alt />
+                                        </div>
+                                        <p class="white">Étiquettes</p>
+                                        <div class="chipList">
+                                            <mat-chip-list>
+                                                <mat-chip *ngFor="let tag of overflowLeftElement.data.tags">
+                                                    {{ tag.name }}
+                                                </mat-chip>
+                                            </mat-chip-list>
+                                        </div>
                                     </div>
-                                    <p class="white">Étiquettes</p>
-                                    <div class="chipList">
-                                        <mat-chip-list>
-                                            <mat-chip *ngFor="let tag of overflowLeftElement.data.tags">
-                                                {{ tag.name }}
-                                            </mat-chip>
-                                        </mat-chip-list>
+                                    <div class="drawingContents">
+                                        <p class="name">{{ leftElement.data.name }}</p>
+                                        <div class="squareImage">
+                                            <img #leftPreview (click)="loadDrawing(-1)" alt />
+                                        </div>
+                                        <p class="white">Étiquettes</p>
+                                        <div class="chipList">
+                                            <mat-chip-list>
+                                                <mat-chip *ngFor="let tag of leftElement.data.tags">
+                                                    {{ tag.name }}
+                                                </mat-chip>
+                                            </mat-chip-list>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="drawingContents">
-                                    <p class="name">{{ leftElement.data.name }}</p>
-                                    <div class="squareImage">
-                                        <img #leftPreview (click)="loadDrawing(-1)" alt />
+                                    <div class="drawingContents">
+                                        <p class="name">{{ middleElement.data.name }}</p>
+                                        <div [ngClass]="animationIsDone ? 'selectedSquareImage': 'squareImage'">
+                                            <img #middlePreview (click)="loadDrawing(0)" alt />
+                                        </div>
+                                        <p class="white">Étiquettes</p>
+                                        <div class="chipList">
+                                            <mat-chip-list class="chipList">
+                                                <mat-chip *ngFor="let tag of middleElement.data.tags">
+                                                    {{ tag.name }}
+                                                </mat-chip>
+                                            </mat-chip-list>
+                                        </div>
                                     </div>
-                                    <p class="white">Étiquettes</p>
-                                    <div class="chipList">
-                                        <mat-chip-list>
-                                            <mat-chip *ngFor="let tag of leftElement.data.tags">
-                                                {{ tag.name }}
-                                            </mat-chip>
-                                        </mat-chip-list>
+                                    <div class="drawingContents">
+                                        <p class="name">{{ rightElement.data.name }}</p>
+                                        <div class="squareImage">
+                                            <img #rightPreview (click)="loadDrawing(1)" alt />
+                                        </div>
+                                        <p class="white">Étiquettes</p>
+                                        <div class="chipList">
+                                            <mat-chip-list>
+                                                <mat-chip *ngFor="let tag of rightElement.data.tags">
+                                                    {{ tag.name }}
+                                                </mat-chip>
+                                            </mat-chip-list>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="drawingContents">
-                                    <p class="name">{{ middleElement.data.name }}</p>
-                                    <div [ngClass]="animationIsDone ? 'selectedSquareImage': 'squareImage'">
-                                        <img #middlePreview (click)="loadDrawing(0)" alt />
-                                    </div>
-                                    <p class="white">Étiquettes</p>
-                                    <div class="chipList">
-                                        <mat-chip-list class="chipList">
-                                            <mat-chip *ngFor="let tag of middleElement.data.tags">
-                                                {{ tag.name }}
-                                            </mat-chip>
-                                        </mat-chip-list>
-                                    </div>
-                                </div>
-                                <div class="drawingContents">
-                                    <p class="name">{{ rightElement.data.name }}</p>
-                                    <div class="squareImage">
-                                        <img #rightPreview (click)="loadDrawing(1)" alt />
-                                    </div>
-                                    <p class="white">Étiquettes</p>
-                                    <div class="chipList">
-                                        <mat-chip-list>
-                                            <mat-chip *ngFor="let tag of rightElement.data.tags">
-                                                {{ tag.name }}
-                                            </mat-chip>
-                                        </mat-chip-list>
-                                    </div>
-                                </div>
-                                <div class="drawingContents">
-                                    <p class="name">{{ overflowRightElement.data.name }}</p>
-                                    <div class="squareImage">
-                                        <img #overflowRightPreview alt />
-                                    </div>
-                                    <p class="white">Étiquettes</p>
-                                    <div class="chipList">
-                                        <mat-chip-list>
-                                            <mat-chip *ngFor="let tag of overflowRightElement.data.tags">
-                                                {{ tag.name }}
-                                            </mat-chip>
-                                        </mat-chip-list>
+                                    <div class="drawingContents">
+                                        <p class="name">{{ overflowRightElement.data.name }}</p>
+                                        <div class="squareImage">
+                                            <img #overflowRightPreview alt />
+                                        </div>
+                                        <p class="white">Étiquettes</p>
+                                        <div class="chipList">
+                                            <mat-chip-list>
+                                                <mat-chip *ngFor="let tag of overflowRightElement.data.tags">
+                                                    {{ tag.name }}
+                                                </mat-chip>
+                                            </mat-chip-list>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <button class="arrow" mat-icon-button (click)="clickRight()">
+                                <mat-icon class="white">keyboard_arrow_right</mat-icon>
+                            </button>
                         </div>
-                        <button class="arrow" mat-icon-button (click)="clickRight()">
-                            <mat-icon class="white">keyboard_arrow_right</mat-icon>
-                        </button>
-                    </div>
+                        </div>
+                        <div *ngIf="drawingsList.length === 0 then noFilteredDrawingsBlock"></div>
                     <app-drawing-tags (serverError)="serverConnexionIn($event)" (filteredDrawings)="loadFilteredCarrousel($event)"></app-drawing-tags>
                     <div *ngIf="serverConnexionError; then serverConnexionErrorBlock"></div>
-                    <div *ngIf="showLoadingError" style="text-align: center">
-                        <h3
-                            class="white"
-                            [innerHTML]="'Le dessin ' + drawingsList[currentIndex].data.name + ' ne peut pas être chargé. Veuillez en choisir un autre'"
-                        ></h3>
-                    </div>
+                    <div *ngIf="showLoadingError then showLoadingErrorBlock" ></div>
                     <div *ngIf="!animationIsDone; then loadingAnimationBlock; else optionsBlock"></div>
                 </ng-template>
             </div>
         </div>
     </div>
 </div>
+
+<ng-template #noFilteredDrawingsBlock>
+    <div style="flex: 1">
+        <h2 class="white" style="text-align: center">Aucun dessin ne possède cette étiquette</h2>
+    </div>
+</ng-template>
+
+<ng-template #showLoadingErrorBlock>
+    <div style="text-align: center">
+        <h3
+        class="white"
+        [innerHTML]="'Le dessin ' + drawingsList[currentIndex].data.name + ' ne peut pas être chargé. Veuillez en choisir un autre'"
+        ></h3>
+    </div>
+</ng-template>
 
 <ng-template #loadingBlock>
     <h1 class="white" style="text-align: center">Chargement en cours...</h1>
@@ -151,7 +164,7 @@
 
 <ng-template #optionsBlock>
     <div class="options">
-        <button class="button green white" mat-raised-button (click)="loadDrawing(0)" [disabled]="!animationIsDone">Charger</button>
+        <button *ngIf="drawingsList.length !== 0" class="button green white" mat-raised-button (click)="loadDrawing(0)" [disabled]="!animationIsDone">Charger</button>
         <button *ngIf="drawingsList.length !== 0" class="button red white" mat-raised-button (click)="deleteDrawing()" [disabled]="!animationIsDone">Supprimer</button>
         <button class="button red white" mat-raised-button (click)="closeCarrousel()" [disabled]="!animationIsDone">Annuler</button> 
     </div>
