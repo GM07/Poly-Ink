@@ -14,6 +14,7 @@ import { ExportDrawingComponent } from './export-drawing.component';
 /* tslint:disable:no-magic-numbers */
 /* tslint:disable:no-string-literal */
 /* tslint:disable:no-empty */
+/* tslint:disable:no-any */
 
 describe('ExportDrawingComponent', () => {
     let component: ExportDrawingComponent;
@@ -73,7 +74,7 @@ describe('ExportDrawingComponent', () => {
 
         component.initValues();
         expect(component.exportFormat).toBe('png');
-        expect(component.currentFilter).toBe('no');
+        expect(component.currentFilter).toBe('default');
         expect(component.aspectRatio).toBe(1);
         expect(randomStub).toHaveBeenCalled();
         expect(component.filename).toBe('Le Cri');
@@ -121,7 +122,7 @@ describe('ExportDrawingComponent', () => {
         const context = component['exportPreview'].nativeElement.getContext('2d') as CanvasRenderingContext2D;
         context.fillStyle = 'red';
         context.fillRect(0, 0, 1, 1);
-        await component.applyFilter();
+        await component['applyFilter']();
         const imageData = context.getImageData(0, 0, 1, 1);
         expect(imageData.data[0]).toBe(0);
         expect(imageData.data[1]).toBe(255);
@@ -133,7 +134,7 @@ describe('ExportDrawingComponent', () => {
         const context = component['exportPreview'].nativeElement.getContext('2d') as CanvasRenderingContext2D;
         context.fillStyle = Colors.WHITE.rgbString;
         context.fillRect(0, 0, 1, 1);
-        await component.applyFilter();
+        await component['applyFilter']();
         const imageData = context.getImageData(0, 0, 1, 1);
         expect(imageData.data[0]).toBe(255);
         expect(imageData.data[1]).toBe(255);
@@ -146,7 +147,7 @@ describe('ExportDrawingComponent', () => {
     });
 
     it('should change filter', () => {
-        const applySpy = spyOn(component, 'applyFilter').and.callFake(async () => {});
+        const applySpy = spyOn<any>(component, 'applyFilter').and.callFake(async () => {});
         const backupSpy = spyOn(component, 'backupBaseCanvas').and.callFake(async () => {});
 
         component.changeFilter('funky');
@@ -184,7 +185,7 @@ describe('ExportDrawingComponent', () => {
     });
 
     it('should apply filter when showing', async () => {
-        const spyApply = spyOn(component, 'applyFilter').and.callFake(async () => {});
+        const spyApply = spyOn<any>(component, 'applyFilter').and.callFake(async () => {});
 
         await component.show();
         expect(spyApply).toHaveBeenCalled();

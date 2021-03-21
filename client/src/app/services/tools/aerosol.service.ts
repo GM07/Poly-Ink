@@ -19,16 +19,17 @@ const MS_PER_SECOND = 1000;
     providedIn: 'root',
 })
 export class AerosolService extends Tool {
-    toolID: string = AerosolToolConstants.TOOL_ID;
     sprayIntervalID: number;
 
-    config: AerosolConfig = new AerosolConfig();
+    config: AerosolConfig;
     private emissionsPerSecondIn: number;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(AerosolToolConstants.SHORTCUT_KEY);
         this.emissionsPerSecondIn = ToolSettingsConst.DEFAULT_AEROSOL_EMISSIONS_PER_SECOND;
+        this.toolID = AerosolToolConstants.TOOL_ID;
+        this.config = new AerosolConfig();
     }
 
     stopDrawing(): void {

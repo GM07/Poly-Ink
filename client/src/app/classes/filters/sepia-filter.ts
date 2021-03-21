@@ -1,7 +1,7 @@
 import { Filter } from './filter';
 
 /**
- * Les valeurs trouvées pour ce filtre sont basées sur l'algorithme Sepia
+ * Values found for this filter are based on the Sepia algorithm
  * http://leware.net/photo/blogSepia.html
  */
 

@@ -11,7 +11,7 @@ describe('ResizeDraw', () => {
     let drawServiceSpy: jasmine.SpyObj<DrawingService>;
     let canvasTestHelper: CanvasTestHelper;
     let ctxStub: CanvasRenderingContext2D;
-
+    // tslint:disable:no-string-literal
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['resizeCanvas']);
         resizeDraw = new ResizeDraw(new ResizeConfig(), drawServiceSpy);

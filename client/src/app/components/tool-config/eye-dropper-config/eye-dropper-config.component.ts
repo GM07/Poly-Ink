@@ -14,7 +14,7 @@ export class EyeDropperConfigComponent extends ToolConfig implements AfterViewIn
 
     readonly CANVAS_SIZE: number = ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH ** 2;
 
-    constructor(public eyeDropperService: EyeDropperService) {
+    constructor(private eyeDropperService: EyeDropperService) {
         super();
         this.hexColor = '';
     }

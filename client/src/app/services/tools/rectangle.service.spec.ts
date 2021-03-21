@@ -110,11 +110,11 @@ describe('RectangleService', () => {
     });
 
     it('should update the rectangle when the mouse leaves', () => {
-        service.onMouseLeave(mouseEvent);
+        service.onMouseLeave();
         expect(drawPreviewSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         mouseEvent = { clientX: 1, clientY: 1, button: 0 } as MouseEvent;
-        service.onMouseLeave(mouseEvent);
+        service.onMouseLeave();
         expect(drawPreviewSpy).toHaveBeenCalled();
     });
 
@@ -131,11 +131,11 @@ describe('RectangleService', () => {
     });
 
     it('should update the rectangle when the mouse enters', () => {
-        service.onMouseEnter(mouseEvent);
+        service.onMouseEnter();
         expect(drawPreviewSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         mouseEvent = { clientX: 1, clientY: 1, button: 0 } as MouseEvent;
-        service.onMouseEnter(mouseEvent);
+        service.onMouseEnter();
         expect(drawPreviewSpy).toHaveBeenCalled();
     });
 

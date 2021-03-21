@@ -109,17 +109,6 @@ describe('CanvasResizeComponent', () => {
         expect(mouseEventSpy).toHaveBeenCalledWith(moveEvent);
     });
 
-    it('should handle null error', () => {
-        spyOn(window, 'alert');
-        const elem = {
-            getContext(contextId: '2d', options?: CanvasRenderingContext2DSettings | undefined): CanvasRenderingContext2D | null {
-                return null;
-            },
-        } as HTMLCanvasElement;
-        // tslint:disable:no-string-literal
-        service['saveCanvas'](elem);
-        expect(window.alert).toHaveBeenCalledWith('Error when resizing');
-    });
     it('mouseDownShould should set previewResizeView to true', () => {
         component.mouseDown(true, false);
         expect(component.previewResizeView).toBe(true);

@@ -13,10 +13,12 @@ export class DrawingService {
     previewCtx: CanvasRenderingContext2D;
     canvas: HTMLCanvasElement;
     previewCanvas: HTMLCanvasElement;
+
+    changes: Subject<void>;
     loadedCanvas: HTMLCanvasElement | undefined;
-    changes: Subject<void> = new Subject<void>();
 
     constructor(private undoRedoService: UndoRedoService) {
+        this.changes = new Subject();
         this.loadedCanvas = undefined;
     }
 
@@ -48,14 +50,10 @@ export class DrawingService {
     }
 
     private saveCanvas(memoryCanvas: HTMLCanvasElement): void {
-        const memoryCtx = memoryCanvas.getContext('2d');
+        const memoryCtx = memoryCanvas.getContext('2d') as CanvasRenderingContext2D;
         memoryCanvas.width = this.canvas.width;
         memoryCanvas.height = this.canvas.height; // Saving canvas
-        if (memoryCtx != null) {
-            memoryCtx.drawImage(this.canvas, 0, 0); // Should never be null
-        } else {
-            alert('Error when resizing');
-        }
+        memoryCtx.drawImage(this.canvas, 0, 0);
     }
 
     private drawWhite(memoryCanvas: HTMLCanvasElement): void {

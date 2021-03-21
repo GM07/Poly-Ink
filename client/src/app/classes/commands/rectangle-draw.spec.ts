@@ -17,6 +17,7 @@ describe('RectangleDraw', () => {
     const ALPHA = 3;
 
     beforeEach(() => {
+        // tslint:disable:no-string-literal
         colorService = { primaryRgba: Colors.RED.rgbString, secondaryRgba: Colors.BLUE.rgbString } as ColorService;
         rectangleDraw = new RectangleDraw(colorService, new ShapeConfig());
         canvasTestHelper = TestBed.inject(CanvasTestHelper);

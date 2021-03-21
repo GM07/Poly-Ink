@@ -20,4 +20,6 @@ export abstract class ToolSettingsConst {
     static readonly MAX_AEROSOL_SPRAY_INTERVAL: number = 20;
     static readonly MINIMUM_DISTANCE_TO_CLOSE_PATH: number = 20;
     static readonly EYE_DROPPER_PREVIEW_WIDTH: number = 11;
+    static readonly LINE_DEFAULT_DIAMETER_JUNCTION: number = 10;
+    static readonly LINE_DEFAULT_WIDTH: number = 6;
 }

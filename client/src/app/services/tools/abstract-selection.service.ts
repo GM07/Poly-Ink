@@ -28,7 +28,7 @@ export abstract class AbstractSelectionService extends Tool {
     protected readonly SHIFT: ShortcutKey = new ShiftKey();
     protected SELECTION_DATA: HTMLCanvasElement;
 
-    updatePoints: Subject<boolean> = new Subject();
+    updatePoints: Subject<boolean>;
     mouseUpCoord: Vec2;
     translationOrigin: Vec2;
     config: SelectionConfig = new SelectionConfig();
@@ -51,6 +51,7 @@ export abstract class AbstractSelectionService extends Tool {
         });
         this.bodyWidth = document.body.style.width;
         this.bodyHeight = document.body.style.height;
+        this.updatePoints = new Subject<boolean>();
     }
 
     protected abstract endSelection(): void;
@@ -61,7 +62,7 @@ export abstract class AbstractSelectionService extends Tool {
 
     protected abstract drawPreviewSelectionRequired(): void;
 
-    protected abstract drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, width: number, height: number): void;
+    protected abstract drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void;
 
     onMouseDown(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
@@ -303,14 +304,5 @@ export abstract class AbstractSelectionService extends Tool {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
         this.drawPreviewSelection();
-    }
-
-    isInCanvas(event: MouseEvent): boolean {
-        const clientRect = this.drawingService.canvas.getBoundingClientRect();
-        const left = clientRect.x + this.BORDER_WIDTH - 1;
-        const right = clientRect.x + clientRect.width - this.BORDER_WIDTH;
-        const top = clientRect.y + this.BORDER_WIDTH - 1;
-        const bottom = clientRect.y + clientRect.height - this.BORDER_WIDTH;
-        return event.x > left && event.x < right && event.y > top && event.y < bottom;
     }
 }
