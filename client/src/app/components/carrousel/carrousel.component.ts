@@ -297,7 +297,6 @@ export class CarrouselComponent implements OnInit {
                 this.hasDrawings = this.drawingsList.length > 0;
                 this.isLoadingCarrousel = false;
                 this.cd.detectChanges(); // Must detect changes when finished loading
-                // if(this.hasDrawings)
                 this.updateDrawingContent();
             },
             () => {
