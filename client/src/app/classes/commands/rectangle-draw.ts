@@ -9,7 +9,6 @@ export class RectangleDraw extends AbstractDraw {
         this.config = config.clone();
     }
 
-    // TODO - 1px border is not the right color
     execute(context: CanvasRenderingContext2D): void {
         let width: number = this.config.endCoords.x - this.config.startCoords.x;
         let height: number = this.config.endCoords.y - this.config.startCoords.y;
@@ -34,8 +33,6 @@ export class RectangleDraw extends AbstractDraw {
             case ShapeMode.FilledWithContour:
                 context.rect(this.config.startCoords.x, this.config.startCoords.y, width, height);
                 context.fill();
-                break;
-            default:
                 break;
         }
 

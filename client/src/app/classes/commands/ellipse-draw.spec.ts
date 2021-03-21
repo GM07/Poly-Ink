@@ -116,7 +116,7 @@ describe('EllipseDraw', () => {
 
     it('should draw rectangle perimeter properly', () => {
         // tslint:disable-next-line:no-magic-numbers
-        ellipseDraw['drawRectanglePerimeter'](ctxStub, 6, 6, 5, 5);
+        ellipseDraw['drawRectanglePerimeter'](ctxStub, { x: 6, y: 6 }, { x: 5, y: 5 });
 
         const imageData: ImageData = ctxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[ALPHA]).not.toEqual(0);
@@ -125,7 +125,7 @@ describe('EllipseDraw', () => {
     it('should draw rectangle perimeter properly with filled type', () => {
         ellipseDraw['config'].shapeMode = ShapeMode.Filled;
         // tslint:disable-next-line:no-magic-numbers
-        ellipseDraw['drawRectanglePerimeter'](ctxStub, 5, 5, 5, 5);
+        ellipseDraw['drawRectanglePerimeter'](ctxStub, { x: 5, y: 5 }, { x: 5, y: 5 });
 
         const imageData: ImageData = ctxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[ALPHA]).not.toEqual(0);

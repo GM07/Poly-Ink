@@ -120,4 +120,13 @@ describe('UndoRedoService', () => {
         service.onKeyDown(event);
         expect(service.redo).toHaveBeenCalled();
     });
+
+    it('should not call anything if wrong shortcut', () => {
+        const event = { key: 's', ctrlKey: true, shiftKey: true, altKey: false } as KeyboardEvent;
+        spyOn(service, 'redo').and.stub();
+        spyOn(service, 'undo').and.stub();
+        service.onKeyDown(event);
+        expect(service.undo).not.toHaveBeenCalled();
+        expect(service.redo).not.toHaveBeenCalled();
+    });
 });

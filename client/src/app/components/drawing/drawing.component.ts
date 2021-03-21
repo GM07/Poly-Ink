@@ -39,11 +39,6 @@ export class DrawingComponent implements AfterViewInit {
         this.newDrawingService.newCanvas();
     }
 
-    @HostListener('document:mousemove', ['$event'])
-    onMouseMove(event: MouseEvent): void {
-        this.toolHandlerService.onMouseMove(event);
-    }
-
     @HostListener('mousedown', ['$event'])
     onMouseDown(event: MouseEvent): void {
         this.toolHandlerService.onMouseDown(event);

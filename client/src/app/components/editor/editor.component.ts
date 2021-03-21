@@ -46,6 +46,10 @@ export class EditorComponent {
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
         this.shortcutHandler.onKeyDown(event);
-        this.undoRedoService.onKeyDown(event);
+    }
+
+    @HostListener('document:mousemove', ['$event'])
+    onMouseMove(event: MouseEvent): void {
+        this.shortcutHandler.onMouseMove(event);
     }
 }

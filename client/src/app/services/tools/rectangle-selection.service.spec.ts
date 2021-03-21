@@ -25,7 +25,7 @@ describe('RectangleSelectionService', () => {
     } as MouseEvent;
 
     beforeEach(() => {
-        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'drawPreview', 'blockUndoRedo'], {
+        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'drawPreview', 'blockUndoRedo', 'unblockUndoRedo'], {
             changes: new Subject<void>(),
         });
         TestBed.configureTestingModule({
@@ -130,6 +130,7 @@ describe('RectangleSelectionService', () => {
         expect(updateSelection).toHaveBeenCalled();
         expect(updateSelection).toHaveBeenCalledTimes(2);
         jasmine.clock().uninstall();
+        window.clearInterval(service['moveId']);
     });
 
     it('should not move the selection multiple times if the key was pressed multiple times', () => {
@@ -202,6 +203,7 @@ describe('RectangleSelectionService', () => {
         service.config.width = 0;
         const drawPreviewSelection = spyOn<any>(service, 'drawPreviewSelection');
         service['startSelection']();
+        expect(drawServiceSpy.unblockUndoRedo).toHaveBeenCalled();
         expect(drawPreviewSelection).not.toHaveBeenCalled();
     });
 

@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnI
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { SelectionEventsService } from '@app/services/selection/selection-events.service';
+import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
 import { Subscription } from 'rxjs';
 
@@ -37,12 +38,14 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     private leftMouseDown: boolean;
     displayControlPoints: boolean;
     private updateSubscription: Subscription;
+    private shortcutSubscription: Subscription;
 
     constructor(
         protected selectionService: AbstractSelectionService,
         protected drawingService: DrawingService,
         private cd: ChangeDetectorRef,
         private selectionEvents: SelectionEventsService,
+        private shortcutHandlerService: ShortcutHandlerService,
     ) {}
 
     ngOnInit(): void {
@@ -64,29 +67,33 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     ngAfterViewInit(): void {
         this.lastDocumentCursor = document.body.style.cursor;
         this.lastCanvasCursor = this.drawingService.previewCanvas.style.cursor;
+
+        this.shortcutSubscription = this.shortcutHandlerService.blockShortcutsEvent.subscribe((block: boolean) => {
+            if (block) this.resetCursor();
+        });
     }
 
     ngOnDestroy(): void {
-        document.body.style.cursor = this.lastDocumentCursor;
-        this.drawingService.previewCanvas.style.cursor = this.lastCanvasCursor;
+        this.resetCursor();
         this.updateSubscription.unsubscribe();
+        this.shortcutSubscription.unsubscribe();
     }
 
     onMouseDown(event: MouseEvent): void {
+        if (this.shortcutHandlerService.blockShortcuts) return;
+
         this.leftMouseDown = event.button === MouseButton.Left;
-        if (!this.isInSidebar) {
-            if (this.leftMouseDown && this.selectionService.isInSelection(event)) {
-                this.selectionService.onMouseDown(event);
-                this.makeControlsUnselectable();
-                this.selectionService.translationOrigin = this.selectionService.getPositionFromMouse(event);
-            }
-        } else if (this.selectionService.selectionCtx !== null) {
-            this.selectionService.stopDrawing();
+        if (!this.isInSidebar && this.leftMouseDown && this.selectionService.isInSelection(event)) {
+            this.selectionService.onMouseDown(event);
+            this.makeControlsUnselectable();
+            this.selectionService.translationOrigin = this.selectionService.getPositionFromMouse(event);
         }
         this.updateControlPointDisplay(this.selectionService.selectionCtx !== null);
     }
 
     onMouseUp(): void {
+        if (this.shortcutHandlerService.blockShortcuts) return;
+
         if (this.displayControlPoints) {
             this.makeControlsSelectable();
         }
@@ -95,14 +102,15 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     }
 
     onMouseMove(event: MouseEvent): void {
+        if (this.shortcutHandlerService.blockShortcuts) return;
+
         if (!this.leftMouseDown) {
             this.isOverSelection = this.selectionService.isInSelection(event);
             if (this.isOverSelection && !this.isInSidebar) {
                 this.drawingService.previewCanvas.style.cursor = 'all-scroll';
                 document.body.style.cursor = 'all-scroll';
             } else {
-                this.drawingService.previewCanvas.style.cursor = this.lastCanvasCursor;
-                document.body.style.cursor = this.lastDocumentCursor;
+                this.resetCursor();
             }
         }
     }
@@ -182,5 +190,10 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         for (const elementRef of this.controlPointList) {
             elementRef.nativeElement.style.pointerEvents = 'auto';
         }
+    }
+
+    private resetCursor(): void {
+        this.drawingService.previewCanvas.style.cursor = this.lastCanvasCursor;
+        document.body.style.cursor = this.lastDocumentCursor;
     }
 }

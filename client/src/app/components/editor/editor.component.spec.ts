@@ -27,7 +27,7 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
 class StubSidebarComponent {}
 
 describe('EditorComponent', () => {
-    let shortcutHandlerServiceSpy: jasmine.Spy<(event: KeyboardEvent) => void>;
+    let shortcutServiceSpy: jasmine.SpyObj<ShortcutHandlerService>;
     let component: EditorComponent;
     let fixture: ComponentFixture<EditorComponent>;
     let newDrawingComponent: jasmine.SpyObj<NewDrawingComponent>;
@@ -35,6 +35,8 @@ describe('EditorComponent', () => {
     let saveDrawingComponent: jasmine.SpyObj<SaveDrawingComponent>;
 
     beforeEach(async(() => {
+        shortcutServiceSpy = jasmine.createSpyObj('ShortcutHandlerService', ['onKeyDown', 'onMouseMove']);
+
         TestBed.configureTestingModule({
             declarations: [
                 HomePageComponent,
@@ -56,6 +58,7 @@ describe('EditorComponent', () => {
                 MatIconModule,
                 HttpClientTestingModule,
             ],
+            providers: [{ provide: ShortcutHandlerService, useValue: shortcutServiceSpy }],
         }).compileComponents();
     }));
 
@@ -63,8 +66,6 @@ describe('EditorComponent', () => {
         fixture = TestBed.createComponent(EditorComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
-        const shortCut = TestBed.inject(ShortcutHandlerService);
-        shortcutHandlerServiceSpy = spyOn(shortCut, 'onKeyDown');
         newDrawingComponent = jasmine.createSpyObj('NewDrawingComponent', ['createNewDrawing']);
         exportDrawingComponent = jasmine.createSpyObj('ExportDrawingComponent', ['show']);
         saveDrawingComponent = jasmine.createSpyObj('SaveDrawingComponent', ['show']);
@@ -97,9 +98,14 @@ describe('EditorComponent', () => {
         expect(newDrawingComponent.createNewDrawing).not.toHaveBeenCalled();
     });
 
-    it('Transfer KeyDown events to the handler', () => {
+    it('Transfer KeyDown events to the shortcut handler', () => {
         component.onKeyDown({} as KeyboardEvent);
-        expect(shortcutHandlerServiceSpy).toHaveBeenCalled();
+        expect(shortcutServiceSpy.onKeyDown).toHaveBeenCalled();
+    });
+
+    it('Transfer mouse move events to the shortcut handler', () => {
+        component.onMouseMove({} as MouseEvent);
+        expect(shortcutServiceSpy.onMouseMove).toHaveBeenCalled();
     });
 
     it('should call undo on button click', () => {

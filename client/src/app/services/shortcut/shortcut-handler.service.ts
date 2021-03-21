@@ -1,17 +1,46 @@
 import { Injectable } from '@angular/core';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ShortcutHandlerService {
-    blockShortcuts: boolean;
+    private blockShortcutsIn: boolean;
+    private lastMouseMoveEvent: MouseEvent;
+    blockShortcutsEvent: Subject<boolean>;
 
-    constructor(private toolHandlerService: ToolHandlerService) {
-        this.blockShortcuts = false;
+    constructor(private toolHandlerService: ToolHandlerService, private undoRedoService: UndoRedoService) {
+        this.blockShortcutsIn = false;
+        this.blockShortcutsEvent = new Subject<boolean>();
+    }
+
+    get blockShortcuts(): boolean {
+        return this.blockShortcutsIn;
+    }
+
+    set blockShortcuts(block: boolean) {
+        if (this.lastMouseMoveEvent !== undefined && block) {
+            this.toolHandlerService.onMouseUp(this.lastMouseMoveEvent);
+        }
+
+        this.blockShortcutsIn = block;
+        this.blockShortcutsEvent.next(block);
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (!this.blockShortcuts) this.toolHandlerService.onKeyDown(event);
+        if (!this.blockShortcutsIn) {
+            this.undoRedoService.onKeyDown(event);
+            this.toolHandlerService.onKeyDown(event);
+        }
+    }
+
+    onMouseMove(event: MouseEvent): void {
+        this.lastMouseMoveEvent = event;
+        if (!this.blockShortcutsIn) {
+            this.toolHandlerService.onMouseMove(event);
+            this.lastMouseMoveEvent = event;
+        }
     }
 }

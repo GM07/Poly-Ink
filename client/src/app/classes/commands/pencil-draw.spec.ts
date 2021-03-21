@@ -5,6 +5,9 @@ import { Vec2 } from '@app/classes/vec2';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { PencilDraw } from './pencil-draw';
+
+// tslint:disable:no-string-literal
+
 describe('PencilDraw', () => {
     let pencilDraw: PencilDraw;
     let colorService: ColorService;
