@@ -19,12 +19,12 @@ export class DrawingTagsComponent implements OnInit {
     addOnBlur: boolean;
     drawings: Drawing[];
     filterTags: Tag[];
-    noMatchingTags: boolean;
+    // noMatchingTags: boolean;
     @Output() filteredDrawings: EventEmitter<Drawing[]>;
     @Output() serverError: EventEmitter<boolean>;
 
     constructor(private carrouselService: CarrouselService) {
-        this.noMatchingTags = false;
+        // this.noMatchingTags = false;
         this.visible = true;
         this.selectable = true;
         this.removable = true;
@@ -49,7 +49,7 @@ export class DrawingTagsComponent implements OnInit {
         this.carrouselService.getFilteredDrawings(this.filterTags).subscribe(
             (drawings: Drawing[]) => {
                 this.drawings = drawings;
-                drawings.length ? (this.noMatchingTags = false) : (this.noMatchingTags = true);
+                // drawings.length ? (this.noMatchingTags = false) : (this.noMatchingTags = true);
                 this.serverError.emit(false);
                 this.filteredDrawings.emit(this.drawings);
             },

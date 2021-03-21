@@ -144,14 +144,11 @@ describe('CarrouselComponent', () => {
         component.drawingsList = [];
         component['updateSingleDrawingContent'](imageRef, 1, emptyDrawing);
         expect(emptyDrawing.data._id).toEqual('');
-        expect(emptyDrawing.data.name).toEqual('');
-        expect(emptyDrawing.data.tags).toEqual([]);
         expect(imageRef.nativeElement.src).not.toEqual(canvasDataURL);
         component.drawingsList = [dummyDrawing1];
         component['updateSingleDrawingContent'](imageRef, 0, emptyDrawing);
         expect(emptyDrawing.data._id).toEqual('1');
-        expect(emptyDrawing.data.name).toEqual('Test');
-        expect(emptyDrawing.data.tags).toEqual([{ name: 'tag3' }, { name: 'tag5' }]);
+        component['updateSingleDrawingContent']((undefined as unknown) as ElementRef<HTMLImageElement>, 0, dummyDrawing1);
     });
 
     it('should allow to take the element on the left of the carrousel', () => {

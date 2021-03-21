@@ -250,8 +250,7 @@ export class CarrouselComponent implements OnInit {
             drawingContent.data.name = this.drawingsList[index].data.name;
             drawingContent.data.tags = this.drawingsList[index].data.tags;
         }
-
-        imageRef.nativeElement.src = drawingData === undefined ? 'data:,' : 'data:image/png;base64,' + drawingData;
+        if (imageRef) imageRef.nativeElement.src = drawingData === undefined ? 'data:,' : 'data:image/png;base64,' + drawingData;
     }
 
     private createLoadedCanvas = () => {
@@ -283,7 +282,8 @@ export class CarrouselComponent implements OnInit {
     loadFilteredCarrousel(filteredDrawings: Drawing[]): void {
         this.currentIndex = 0;
         this.drawingsList = filteredDrawings;
-        if(this.hasDrawings) this.updateDrawingContent();
+        this.cd.detectChanges();
+        this.updateDrawingContent();
     }
 
     private loadCarrousel(): void {
@@ -297,6 +297,7 @@ export class CarrouselComponent implements OnInit {
                 this.hasDrawings = this.drawingsList.length > 0;
                 this.isLoadingCarrousel = false;
                 this.cd.detectChanges(); // Must detect changes when finished loading
+                // if(this.hasDrawings)
                 this.updateDrawingContent();
             },
             () => {
