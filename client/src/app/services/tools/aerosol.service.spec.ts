@@ -18,7 +18,6 @@ describe('AerosolService', () => {
     let drawSpy: jasmine.Spy<any>;
     let drawPreviewSpy: jasmine.Spy<any>;
     let sprayContinuouslySpy: jasmine.Spy<any>;
-    let onMouseDownSpy: jasmine.Spy<any>;
 
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'drawPreview']);
@@ -39,7 +38,6 @@ describe('AerosolService', () => {
         drawPreviewSpy = spyOn<any>(service, 'drawPreview').and.stub();
 
         sprayContinuouslySpy = spyOn<any>(service, 'sprayContinuously');
-        onMouseDownSpy = spyOn<any>(service, 'onMouseDown').and.callThrough();
 
         // service's spy configuration
         // tslint:disable:no-string-literal
@@ -77,7 +75,7 @@ describe('AerosolService', () => {
         service.leftMouseDown = false;
         service.mouseDownCoord = { x: 0, y: 0 };
 
-        service.onMouseUp(mouseEvent);
+        service.onMouseUp();
         expect(drawSpy).not.toHaveBeenCalled();
     });
 
@@ -92,11 +90,11 @@ describe('AerosolService', () => {
         service.areaDiameter = 2;
         let mouseEventLClick: MouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);
-        service.onMouseLeave(mouseEventLClick);
+        service.onMouseLeave();
         mouseEventLClick = { clientX: 0, clientY: 50, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEventLClick);
         mouseEventLClick = { x: 0, y: 50, button: 0 } as MouseEvent;
-        service.onMouseUp(mouseEventLClick);
+        service.onMouseUp();
         expect(sprayContinuouslySpy).toHaveBeenCalled();
         expect(drawSpy).toHaveBeenCalled();
     });
@@ -105,19 +103,19 @@ describe('AerosolService', () => {
         let mouseEventLClick: MouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.areaDiameter = 1;
         service.onMouseDown(mouseEventLClick);
-        service.onMouseLeave(mouseEventLClick);
+        service.onMouseLeave();
         mouseEventLClick = { clientX: 0, clientY: 2, button: 0, buttons: 0 } as MouseEvent;
-        service.onMouseUp(mouseEventLClick);
+        service.onMouseUp();
         service.onMouseEnter(mouseEventLClick);
         expect(sprayContinuouslySpy).toHaveBeenCalled();
         expect(drawSpy).toHaveBeenCalled();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
-    it('should call onMousDown when entering the canvas if mouse is down', () => {
+    it('should call sprayContinuously when entering the canvas if mouse is down', () => {
         mouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
-        expect(onMouseDownSpy).toHaveBeenCalled();
+        expect(sprayContinuouslySpy).toHaveBeenCalled();
     });
 
     it('should do nothing when entering the canvas, with an unsupported mouse state', () => {
@@ -133,7 +131,7 @@ describe('AerosolService', () => {
 
     it('should clear the canvas preview when the mouse leaves the canvas, left click released', () => {
         mouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 0 } as MouseEvent;
-        service.onMouseLeave(mouseEvent);
+        service.onMouseLeave();
         expect(drawServiceSpy.clearCanvas).toHaveBeenCalled();
     });
 
@@ -152,7 +150,7 @@ describe('AerosolService', () => {
     it('should draw on mouseup if mouse was down', () => {
         service.leftMouseDown = true;
         mouseEvent = { x: 0, y: 0, button: 0, buttons: 0 } as MouseEvent;
-        service.onMouseUp(mouseEvent);
+        service.onMouseUp();
         expect(drawSpy).toHaveBeenCalled();
     });
 
@@ -172,7 +170,7 @@ describe('AerosolService', () => {
         jasmine.clock().install();
         const placeSpy = spyOn<any>(service, 'placePoints');
         sprayContinuouslySpy.and.callThrough();
-        service['sprayContinuously'](previewCtxStub);
+        service['sprayContinuously']();
         jasmine.clock().tick((MS_PER_SECOND / service['emissionsPerSecondIn']) * 2);
         jasmine.clock().uninstall();
         expect(placeSpy).toHaveBeenCalled();
