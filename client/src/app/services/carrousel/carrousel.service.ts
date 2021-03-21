@@ -2,11 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Drawing } from '@common/communication/drawing';
 import { ResponseMessage } from '@common/communication/response-message';
-import { Observable } from 'rxjs';
-
-interface Tag {
-    name: string;
-}
+import { Tag } from '@common/communication/tag';
+import { fromEvent, merge, Observable, Observer, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 /* tslint:disable:no-any */
 @Injectable({
@@ -17,8 +15,19 @@ export class CarrouselService {
 
     constructor(private http: HttpClient) {}
 
+    testConnection(): Observable<boolean> {
+        return merge<boolean>(
+            fromEvent(window, 'offline').pipe(map(() => false)),
+            fromEvent(window, 'online').pipe(map(() => true)),
+            new Observable((sub: Observer<boolean>) => {
+                sub.next(navigator.onLine);
+                sub.complete();
+            }),
+        );
+    }
+
     getAllDrawings(): Observable<Drawing[]> {
-        return this.http.get<Drawing[]>(CarrouselService.baseURL);
+        return this.http.get<Drawing[]>(CarrouselService.baseURL).pipe();
     }
 
     getFilteredDrawings(tags: Tag[]): Observable<Drawing[]> {
@@ -31,13 +40,12 @@ export class CarrouselService {
     }
 
     deleteDrawing(drawing: Drawing): Observable<{}> {
-        const drawingData: any = { ...drawing };
-        delete drawingData.data._id;
-        const httpOptions = {
-            headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-            body: JSON.stringify(drawingData),
-        };
-        return this.http.delete<Drawing>(CarrouselService.baseURL, httpOptions);
+        const url = `${CarrouselService.baseURL}?ids=${drawing.data._id}`;
+        return this.http.delete<Drawing>(url).pipe(
+            catchError((err) => {
+                return throwError(err);
+            }),
+        );
     }
 
     createDrawing(drawing: Drawing): Observable<{}> {
