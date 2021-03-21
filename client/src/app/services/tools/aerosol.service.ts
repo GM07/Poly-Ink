@@ -4,7 +4,6 @@ import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { AerosolConfig } from '@app/classes/tool-config/aerosol-config';
 import { AerosolToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
-import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -33,7 +32,7 @@ export class AerosolService extends Tool {
     }
 
     stopDrawing(): void {
-        this.onMouseUp({} as MouseEvent);
+        this.onMouseUp();
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
@@ -68,16 +67,17 @@ export class AerosolService extends Tool {
     onMouseDown(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
         if (this.leftMouseDown) {
+            this.config.seed = Math.random().toString();
             this.mouseDownCoord = this.getPositionFromMouse(event);
-            this.sprayContinuously(this.drawingService.previewCtx);
+            this.sprayContinuously();
         }
     }
 
-    onMouseUp(event: MouseEvent): void {
+    onMouseUp(): void {
         if (this.leftMouseDown) {
             this.draw();
         }
-        this.config.droplets = [];
+        this.config.points = [];
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.leftMouseDown = false;
         window.clearInterval(this.sprayIntervalID);
@@ -89,10 +89,10 @@ export class AerosolService extends Tool {
         }
     }
 
-    onMouseLeave(event: MouseEvent): void {
+    onMouseLeave(): void {
         window.clearInterval(this.sprayIntervalID);
         if (!this.leftMouseDown) {
-            this.config.droplets = [];
+            this.config.points = [];
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
         }
     }
@@ -101,7 +101,8 @@ export class AerosolService extends Tool {
         if (event.button !== MouseButton.Left) return;
 
         if (event.buttons === LeftMouse.Pressed) {
-            this.onMouseDown(event);
+            this.mouseDownCoord = this.getPositionFromMouse(event);
+            this.sprayContinuously();
         }
     }
 
@@ -115,32 +116,14 @@ export class AerosolService extends Tool {
         this.drawingService.drawPreview(command);
     }
 
-    private sprayContinuously(ctx: CanvasRenderingContext2D): void {
+    private sprayContinuously(): void {
         this.sprayIntervalID = window.setInterval(() => {
-            this.placeDroplets();
+            this.placePoints();
             this.drawPreview();
         }, MS_PER_SECOND / this.emissionsPerSecondIn);
     }
 
-    private placeDroplets(): void {
-        this.config.droplets.push([]);
-        for (let i = 0; i < this.config.nDropletsPerSpray; i++) {
-            const randOffset: Vec2 = this.randomDroplet();
-
-            const randX: number = this.mouseDownCoord.x + randOffset.x;
-            const randY: number = this.mouseDownCoord.y + randOffset.y;
-            this.config.droplets[this.config.droplets.length - 1].push({ x: randX, y: randY });
-        }
-    }
-
-    private randomDroplet(): Vec2 {
-        const areaRadius = this.config.areaDiameter / 2;
-        const angle = Math.PI * Math.random() * this.config.areaDiameter;
-        const randomDistFromCenter = Math.random() * areaRadius + Math.random() * areaRadius;
-        const randomRadius = randomDistFromCenter > areaRadius ? this.config.areaDiameter - randomDistFromCenter : randomDistFromCenter;
-        return {
-            x: Math.cos(angle) * randomRadius,
-            y: Math.sin(angle) * randomRadius,
-        };
+    private placePoints(): void {
+        this.config.points.push({ x: this.mouseDownCoord.x, y: this.mouseDownCoord.y });
     }
 }
