@@ -1,4 +1,4 @@
-<div *ngIf="currentURL == CARROUSEL_URL">
+<div *ngIf="currentURL === CARROUSEL_URL">
     <div id="backgroundPage"></div>
 </div>
 
@@ -122,23 +122,31 @@
                             </button>
                         </div>
                         </div>
-                        <div *ngIf="drawingsList.length == 0" style="flex: 1">
-                            <h2 class="white" style="text-align: center">Aucun dessin ne possède cette étiquette</h2>
-                        </div>
+                        <div *ngIf="drawingsList.length === 0 then noFilteredDrawingsBlock"></div>
                     <app-drawing-tags (serverError)="serverConnexionIn($event)" (filteredDrawings)="loadFilteredCarrousel($event)"></app-drawing-tags>
                     <div *ngIf="serverConnexionError; then serverConnexionErrorBlock"></div>
-                    <div *ngIf="showLoadingError" style="text-align: center">
-                        <h3
-                            class="white"
-                            [innerHTML]="'Le dessin ' + drawingsList[currentIndex].data.name + ' ne peut pas être chargé. Veuillez en choisir un autre'"
-                        ></h3>
-                    </div>
+                    <div *ngIf="showLoadingError then showLoadingErrorBlock" ></div>
                     <div *ngIf="!animationIsDone; then loadingAnimationBlock; else optionsBlock"></div>
                 </ng-template>
             </div>
         </div>
     </div>
 </div>
+
+<ng-template #noFilteredDrawingsBlock>
+    <div style="flex: 1">
+        <h2 class="white" style="text-align: center">Aucun dessin ne possède cette étiquette</h2>
+    </div>
+</ng-template>
+
+<ng-template #showLoadingErrorBlock>
+    <div style="text-align: center">
+        <h3
+        class="white"
+        [innerHTML]="'Le dessin ' + drawingsList[currentIndex].data.name + ' ne peut pas être chargé. Veuillez en choisir un autre'"
+        ></h3>
+    </div>
+</ng-template>
 
 <ng-template #loadingBlock>
     <h1 class="white" style="text-align: center">Chargement en cours...</h1>
@@ -156,7 +164,7 @@
 
 <ng-template #optionsBlock>
     <div class="options">
-        <button class="button green white" mat-raised-button (click)="loadDrawing(0)" [disabled]="!animationIsDone">Charger</button>
+        <button *ngIf="drawingsList.length != 0" class="button green white" mat-raised-button (click)="loadDrawing(0)" [disabled]="!animationIsDone">Charger</button>
         <button *ngIf="drawingsList.length !== 0" class="button red white" mat-raised-button (click)="deleteDrawing()" [disabled]="!animationIsDone">Supprimer</button>
         <button class="button red white" mat-raised-button (click)="closeCarrousel()" [disabled]="!animationIsDone">Annuler</button> 
     </div>
