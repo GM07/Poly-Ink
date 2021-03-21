@@ -61,14 +61,13 @@ export class DrawingTagsComponent implements OnInit {
     }
 
     addFilter(event: MatChipInputEvent): void {
-        const input = event.input;
         const value = event.value;
 
         if (value.trim()) {
             this.filterTags.push({ name: value.trim() });
             this.getFilteredDrawings();
         }
-        input.value = '';
+        event.input.value = '';
     }
 
     remove(tag: Tag): void {

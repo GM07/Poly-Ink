@@ -76,7 +76,7 @@ describe('CarrouselComponent', () => {
         component.middlePreview = imageRef;
         carrouselService = TestBed.inject(CarrouselService);
 
-        getDrawingFromServerSpy = spyOn<any>(component, 'getImageFromList').and.callFake((index: number) => {
+        getDrawingFromServerSpy = spyOn<any>(component, 'getImageAtIndex').and.callFake((index: number) => {
             if (index === 0) return canvasDataURL;
             else return undefined;
         });
@@ -342,8 +342,8 @@ describe('CarrouselComponent', () => {
 
     it('should get a drawing from the server', () => {
         getDrawingFromServerSpy.and.callThrough();
-        component['getImageFromList'](0);
+        component['getImageAtIndex'](0);
         component.drawingsList = [];
-        expect(component['getImageFromList'](0)).toBeUndefined();
+        expect(component['getImageAtIndex'](0)).toBeUndefined();
     });
 });
