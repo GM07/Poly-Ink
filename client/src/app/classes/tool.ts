@@ -14,12 +14,19 @@ export abstract class Tool {
 
     isInCanvas(event: MouseEvent): boolean {
         const clientRect = this.drawingService.canvas.getBoundingClientRect();
+
+        const border: number = this.getBorder();
         const left = clientRect.x;
         const right = clientRect.x + clientRect.width;
         const top = clientRect.y;
         const bottom = clientRect.y + clientRect.height;
-        if (event.x <= left || event.x >= right || event.y <= top || event.y >= bottom) return false;
+        if (event.x < left + border || event.x >= right - border || event.y <= top + border / 2 || event.y >= bottom - border) return false;
         return true;
+    }
+
+    private getBorder(): number {
+        const borderValue: string = window.getComputedStyle(this.drawingService.canvas).getPropertyValue('border-left-width');
+        return Number(borderValue.substring(0, borderValue.length - 2));
     }
 
     onMouseDown(event: MouseEvent): void {}
@@ -42,12 +49,7 @@ export abstract class Tool {
 
     getPositionFromMouse(event: MouseEvent): Vec2 {
         const clientRect = this.drawingService.canvas.getBoundingClientRect();
-        const borderLeftValue: string = window.getComputedStyle(this.drawingService.canvas).getPropertyValue('border-left-width');
-        const borderTopValue: string = window.getComputedStyle(this.drawingService.canvas).getPropertyValue('border-top-width');
-
-        const borderLeft: number = Number(borderLeftValue.substring(0, borderLeftValue.length - 2));
-        const borderTop: number = Number(borderTopValue.substring(0, borderTopValue.length - 2));
-
-        return { x: event.clientX - clientRect.x - borderLeft, y: event.clientY - clientRect.y - borderTop };
+        const border: number = this.getBorder();
+        return { x: event.clientX - clientRect.x - border, y: event.clientY - clientRect.y - border };
     }
 }
