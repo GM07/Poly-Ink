@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DrawingConstants } from '@app/constants/drawing';
 import { CarrouselService } from '@app/services/carrousel/carrousel.service';
@@ -14,7 +14,7 @@ import { Tag } from '@common/communication/tag';
     templateUrl: './save-drawing.component.html',
     styleUrls: ['./save-drawing.component.scss'],
 })
-export class SaveDrawingComponent implements OnInit {
+export class SaveDrawingComponent {
     static readonly EXPORT_PREVIEW_MAX_SIZE: number = 300;
     static readonly BAD_REQUEST_STATUS: number = 400;
     static readonly UNAVAILABLE_SERVER_STATUS: number = 503;
@@ -24,14 +24,11 @@ export class SaveDrawingComponent implements OnInit {
     private canvasImage: string;
     private imageData: ImageData;
     private savePreview: ElementRef<HTMLCanvasElement>;
-    private defaultFileNames: string[];
 
     enableAcceptButton: boolean;
     noServerConnection: boolean;
     dataLimitReached: boolean;
     saveFormat: string;
-    filename: string;
-    tagsStr: string;
     aspectRatio: number;
     unavailableServer: boolean;
     saveForm: FormGroup;
@@ -44,13 +41,6 @@ export class SaveDrawingComponent implements OnInit {
         private carrouselService: CarrouselService,
     ) {
         this.initValues();
-    }
-
-    ngOnInit(): void {
-        this.saveForm = new FormGroup({
-            nameFormControl: new FormControl(this.filename, [Validators.required]),
-            tagsFormControl: new FormControl(this.tagsStr, [Validators.pattern('^([ ]*[0-9A-Za-z-]+[ ]*)(,[ ]*[0-9A-Za-z-]+[ ]*)*$')]),
-        });
     }
 
     @ViewChild('savePreview', { static: false }) set content(element: ElementRef) {
@@ -68,13 +58,18 @@ export class SaveDrawingComponent implements OnInit {
     }
 
     initValues(): void {
-        this.defaultFileNames = DrawingConstants.defaultFileNames;
         this.noServerConnection = false;
         this.unavailableServer = false;
         this.enableAcceptButton = true;
         this.saveFormat = 'png';
         this.aspectRatio = 1;
-        this.filename = this.defaultFileNames[Math.floor(Math.random() * this.defaultFileNames.length)];
+        this.saveForm = new FormGroup({
+            nameFormControl: new FormControl(
+                DrawingConstants.defaultFileNames[Math.floor(Math.random() * DrawingConstants.defaultFileNames.length)],
+                [Validators.required],
+            ),
+            tagsFormControl: new FormControl('', [Validators.pattern('^([ ]*[0-9A-Za-z-]+[ ]*)(,[ ]*[0-9A-Za-z-]+[ ]*)*$')]),
+        });
     }
 
     backupBaseCanvas(): void {
@@ -88,7 +83,6 @@ export class SaveDrawingComponent implements OnInit {
     hidePopup(): void {
         this.saveDrawingService.showPopup = false;
         this.shortcutHandler.blockShortcuts = false;
-        this.tagsStr = '';
         this.initValues();
     }
 
@@ -103,8 +97,8 @@ export class SaveDrawingComponent implements OnInit {
             this.unavailableServer = false;
             this.dataLimitReached = false;
             const tagsSet: Set<string> = new Set();
-            if (this.tagsStr) {
-                this.tagsStr.split(',').forEach((tagStr: string) => {
+            if (this.tagsFormControl.value) {
+                (this.tagsFormControl.value as string).split(',').forEach((tagStr: string) => {
                     tagsSet.add(tagStr.trim());
                 });
             }
@@ -113,7 +107,7 @@ export class SaveDrawingComponent implements OnInit {
             tagsSet.forEach((uniqueTag: string) => {
                 tags.push(new Tag(uniqueTag));
             });
-            const newDrawing: Drawing = new Drawing(new DrawingData(this.filename, tags));
+            const newDrawing: Drawing = new Drawing(new DrawingData(this.nameFormControl.value as string, tags));
             newDrawing.image = this.canvasImage;
             this.enableAcceptButton = false;
 
