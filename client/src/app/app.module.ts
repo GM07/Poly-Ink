@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -20,6 +21,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { NewDrawingComponent } from './components/canvas-reset/canvas-reset.component';
 import { CanvasResizeComponent } from './components/canvas-resize/canvas-resize.component';
+import { CarrouselComponent } from './components/carrousel/carrousel.component';
+import { DrawingTagsComponent } from './components/drawing-tags/drawing-tags.component';
 import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { ExportDrawingComponent } from './components/export-drawing/export-drawing.component';
@@ -72,6 +75,8 @@ import { SidebarDirective } from './directives/sidebar.directive';
         EllipseSelectionComponent,
         SelectionHandlerComponent,
         AerosolConfigComponent,
+        DrawingTagsComponent,
+        CarrouselComponent,
         SaveDrawingComponent,
         SidebarDirective,
     ],
@@ -90,6 +95,7 @@ import { SidebarDirective } from './directives/sidebar.directive';
         MatInputModule,
         MatExpansionModule,
         ColorPickerModule,
+        MatChipsModule,
         MatDividerModule,
         MatSliderModule,
         MatIconModule,
@@ -97,6 +103,7 @@ import { SidebarDirective } from './directives/sidebar.directive';
         ReactiveFormsModule,
         MatChipsModule,
         MatFormFieldModule,
+        MatProgressSpinnerModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

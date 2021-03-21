@@ -6,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { dummyDrawing } from '@app/services/carrousel/carrousel.const';
 import { CarrouselService } from '@app/services/carrousel/carrousel.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { SaveDrawingService } from '@app/services/popups/save-drawing.service';
@@ -69,7 +68,7 @@ describe('SaveDrawingComponent', () => {
         component['baseCanvas'].height = 300;
         component['baseContext'] = component['baseCanvas'].getContext('2d') as CanvasRenderingContext2D;
         component['savePreview'] = new ElementRef(component['baseCanvas']);
-        component['canvasImage'] = dummyDrawing.image;
+        component['canvasImage'] = '';
     });
 
     it('should create', () => {
