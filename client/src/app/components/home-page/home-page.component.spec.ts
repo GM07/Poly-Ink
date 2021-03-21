@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { CarrouselComponent } from '@app/components/carrousel/carrousel.component';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
 
@@ -18,11 +19,12 @@ describe('HomePageComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [HomePageComponent, EditorComponent],
+            declarations: [HomePageComponent, EditorComponent, CarrouselComponent],
             imports: [
                 RouterTestingModule.withRoutes([
                     { path: 'home', component: HomePageComponent },
                     { path: 'editor', component: EditorComponent },
+                    { path: 'carrousel', component: CarrouselComponent },
                 ]),
                 HttpClientModule,
                 NoopAnimationsModule,
@@ -47,7 +49,7 @@ describe('HomePageComponent', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
-    //
+
     it('should fade out', () => {
         component.fadeOut();
         expect(component.state).toBe('invisible');
@@ -77,6 +79,11 @@ describe('HomePageComponent', () => {
 
     it('should create new drawing', () => {
         component.createNewDrawing();
+        expect(component.state).toBe('invisible');
+    });
+
+    it('should open the carrousel', () => {
+        component.openCarrousel();
         expect(component.state).toBe('invisible');
     });
 

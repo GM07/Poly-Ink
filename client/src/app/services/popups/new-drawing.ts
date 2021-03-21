@@ -12,13 +12,22 @@ export class NewDrawingService implements Popup {
     shortcut: ShortcutKey;
     showPopup: boolean;
 
+    static isNotEmpty(baseCtx: CanvasRenderingContext2D, width: number, height: number): boolean {
+        const whiteColor = 4294967295; // White color constant
+        const pixelBuffer = new Uint32Array(baseCtx.getImageData(0, 0, width, height).data.buffer);
+        return pixelBuffer.some((color) => color !== whiteColor) && pixelBuffer.some((color) => color !== 0);
+    }
+
     constructor(private drawingService: DrawingService, private toolHandler: ToolHandlerService) {
         this.shortcut = new ShortcutKey('o', true);
         this.showPopup = false;
     }
 
     newCanvas(confirm: boolean = false): void {
-        if (!confirm && this.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)) {
+        if (
+            !confirm &&
+            NewDrawingService.isNotEmpty(this.drawingService.baseCtx, this.drawingService.canvas.width, this.drawingService.canvas.height)
+        ) {
             this.showPopup = true;
             return;
         }
@@ -40,11 +49,5 @@ export class NewDrawingService implements Popup {
         this.drawingService.resizeCanvas(width, height);
         this.drawingService.initBackground();
         this.drawingService.initUndoRedo();
-    }
-
-    private isNotEmpty(baseCtx: CanvasRenderingContext2D, width: number, height: number): boolean {
-        const whiteColor = 4294967295; // White color constant
-        const pixelBuffer = new Uint32Array(baseCtx.getImageData(0, 0, width, height).data.buffer);
-        return pixelBuffer.some((color) => color !== whiteColor) && pixelBuffer.some((color) => color !== 0);
     }
 }

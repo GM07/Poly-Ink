@@ -22,9 +22,13 @@ import { SelectionHandlerComponent } from '@app/components/selection/selection-h
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 // tslint:disable:no-string-literal
+// tslint:disable:max-classes-per-file
 
 @Component({ selector: 'app-sidebar', template: '' })
 class StubSidebarComponent {}
+
+@Component({ selector: 'app-carrousel', template: '' })
+class StubCarrouselComponent {}
 
 describe('EditorComponent', () => {
     let shortcutServiceSpy: jasmine.SpyObj<ShortcutHandlerService>;
@@ -40,6 +44,7 @@ describe('EditorComponent', () => {
         TestBed.configureTestingModule({
             declarations: [
                 HomePageComponent,
+                StubCarrouselComponent,
                 EditorComponent,
                 DrawingComponent,
                 CanvasResizeComponent,

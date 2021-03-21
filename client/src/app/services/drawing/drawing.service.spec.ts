@@ -33,6 +33,20 @@ describe('DrawingService', () => {
         expect(hasColoredPixels).toEqual(false);
     });
 
+    it('should not load and undefined drawing', () => {
+        spyOn(service.baseCtx, 'drawImage');
+        service.loadDrawing();
+        expect(service.baseCtx.drawImage).not.toHaveBeenCalled();
+    });
+
+    it('should load a defined drawing', () => {
+        spyOn(service.baseCtx, 'drawImage');
+        spyOn(service, 'resizeCanvas');
+        service.loadedCanvas = service.canvas;
+        service.loadDrawing();
+        expect(service.baseCtx.drawImage).toHaveBeenCalled();
+    });
+
     it('draw should execute command on base canvas', () => {
         spyOn(command, 'execute').and.stub();
         service.draw(command);

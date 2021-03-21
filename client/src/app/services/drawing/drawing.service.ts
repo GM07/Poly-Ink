@@ -13,10 +13,12 @@ export class DrawingService {
     previewCtx: CanvasRenderingContext2D;
     canvas: HTMLCanvasElement;
     previewCanvas: HTMLCanvasElement;
-
+    loadedCanvas: HTMLCanvasElement | undefined;
     changes: Subject<void> = new Subject<void>();
 
-    constructor(private undoRedoService: UndoRedoService) {}
+    constructor(private undoRedoService: UndoRedoService) {
+        this.loadedCanvas = undefined;
+    }
 
     clearCanvas(context: CanvasRenderingContext2D): void {
         context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -75,6 +77,16 @@ export class DrawingService {
     initBackground(): void {
         this.baseCtx.fillStyle = 'white';
         this.baseCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    loadDrawing(): void {
+        if (this.loadedCanvas === undefined) return;
+        const width = this.loadedCanvas.width;
+        const height = this.loadedCanvas.height;
+        this.resizeCanvas(width, height);
+        this.baseCtx.drawImage(this.loadedCanvas, 0, 0);
+        this.initUndoRedo();
+        this.loadedCanvas = undefined;
     }
 
     draw(command: AbstractDraw): void {

@@ -30,6 +30,11 @@ export class HomePageComponent {
         this.zone.run(() => this.router.navigateByUrl('editor'));
     }
 
+    openCarrousel(): void {
+        this.fadeOut();
+        this.zone.run(() => this.router.navigateByUrl('carrousel'));
+    }
+
     backToMenu(): void {
         this.fadeIn();
     }

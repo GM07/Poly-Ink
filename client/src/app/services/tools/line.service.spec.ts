@@ -22,7 +22,7 @@ describe('LineService', () => {
     let previewCtxStub: CanvasRenderingContext2D;
 
     beforeEach(() => {
-        spyDrawing = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'drawPreview', 'draw']);
+        spyDrawing = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'drawPreview', 'draw', 'unblockUndoRedo']);
         colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(1, 1, 1, 1)', secondaryRgba: 'rgba(0, 0, 0, 1)' });
         TestBed.configureTestingModule({
             providers: [
@@ -262,6 +262,7 @@ describe('LineService', () => {
         service.config.points = pointsTest2;
         service['ESCAPE'].isDown = true;
         service['handleEscapeKey']();
+        expect(spyDrawing.unblockUndoRedo).toHaveBeenCalled();
         expect(service.config.points.length).toBe(0);
     });
 
