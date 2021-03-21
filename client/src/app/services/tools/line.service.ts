@@ -163,6 +163,7 @@ export class LineService extends Tool {
         if (this.ESCAPE.isDown) {
             this.config.points = [];
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
+            this.drawingService.unblockUndoRedo();
         }
     }
 
