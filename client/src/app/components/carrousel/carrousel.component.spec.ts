@@ -70,22 +70,18 @@ describe('CarrouselComponent', () => {
         component = fixture.componentInstance;
         component.drawingsList = [dummyDrawing1];
         canvasDataURL = canvas.toDataURL();
-
         const image = new Image();
         image.src = canvasDataURL;
         imageRef = new ElementRef<HTMLImageElement>(image);
         component.middlePreview = imageRef;
-
         carrouselService = TestBed.inject(CarrouselService);
 
         getDrawingFromServerSpy = spyOn<any>(component, 'getImageFromList').and.callFake((index: number) => {
             if (index === 0) return canvasDataURL;
             else return undefined;
         });
-
         createLoadedCanvasSpy = spyOn<any>(component, 'createLoadedCanvas');
         component['drawingService'].canvas = document.createElement('canvas');
-
         fixture.detectChanges();
     });
 
@@ -255,6 +251,11 @@ describe('CarrouselComponent', () => {
         expect(component.drawingsList).toEqual(filteredDrawings);
     });
 
+    it('should set serverConnexionError', () => {
+        component.serverConnexionIn(true);
+        expect(component.serverConnexionError).toEqual(true);
+    });
+
     it('should delete a drawing', async () => {
         component.currentIndex = 0;
         component.drawingsList = [dummyDrawing1, dummyDrawing1];
@@ -302,7 +303,6 @@ describe('CarrouselComponent', () => {
         const mockCall = spyOn(carrouselService, 'deleteDrawing').and.returnValue(throwError({ status: 504 }));
         component.deleteDrawing();
         expect(mockCall).toHaveBeenCalled();
-        expect(component.isLoadingCarrousel).toBeFalse();
         expect(component.serverConnexionError).toBeTrue();
     });
 

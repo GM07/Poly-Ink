@@ -55,6 +55,7 @@ export class CarrouselComponent implements OnInit {
         this.showCarrousel = false;
         this.showLoadingError = false;
         this.showLoadingWarning = false;
+        this.showDeletionError = false;
         this.serverConnexionError = false;
         this.hasDrawings = true;
         this.subscribeActivatedRoute(activatedRoute);
@@ -80,6 +81,7 @@ export class CarrouselComponent implements OnInit {
 
     currentURL: string;
     deletionErrorMessage: string;
+    showDeletionError: boolean;
     showCarrousel: boolean;
     showLoadingError: boolean;
     showLoadingWarning: boolean;
@@ -132,6 +134,7 @@ export class CarrouselComponent implements OnInit {
     }
 
     closeCarrousel(): void {
+        this.showDeletionError = false;
         this.isLoadingCarrousel = false;
         this.showLoadingWarning = false;
         this.showLoadingError = false;
@@ -276,6 +279,10 @@ export class CarrouselComponent implements OnInit {
         return this.drawingsList[index].image;
     }
 
+    serverConnexionIn(serverError: boolean): void {
+        this.serverConnexionError = serverError;
+    }
+
     loadFilteredCarrousel(filteredDrawings: Drawing[]): void {
         this.drawingsList = filteredDrawings;
         this.updateDrawingContent();
@@ -283,6 +290,7 @@ export class CarrouselComponent implements OnInit {
 
     private loadCarrousel(): void {
         this.isLoadingCarrousel = true;
+        this.serverConnexionError = false;
         this.cd.detectChanges(); // Must detect changes before loading
 
         this.carrouselService.getAllDrawings().subscribe(

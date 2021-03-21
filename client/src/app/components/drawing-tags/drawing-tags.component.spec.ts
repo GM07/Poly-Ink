@@ -7,7 +7,7 @@ import { CarrouselService } from '@app/services/carrousel/carrousel.service';
 import { Drawing } from '@common/communication/drawing';
 import { DrawingData } from '@common/communication/drawing-data';
 import { Tag } from '@common/communication/tag';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { DrawingTagsComponent } from './drawing-tags.component';
 
 describe('DrawingTagsComponent', () => {
@@ -62,6 +62,15 @@ describe('DrawingTagsComponent', () => {
         const inputValue = { value: ' ' } as HTMLInputElement;
         component.addFilter({ input: inputValue, value: ' ' } as MatChipInputEvent);
         expect(component.filterTags.length).toEqual(0);
+    });
+
+    it('should send connexion error when trying to add filter but no connexion to server', async () => {
+        spyOn(carrouselService, 'getFilteredDrawings').and.returnValue(throwError('error'));
+        spyOn(component.serverError, 'emit');
+        spyOn(component.filteredDrawings, 'emit');
+        component.getFilteredDrawings();
+        expect(component.serverError.emit).toHaveBeenCalledWith(true);
+        expect(component.filteredDrawings.emit).toHaveBeenCalledWith(component.drawings);
     });
 
     it('should remove a tag', () => {

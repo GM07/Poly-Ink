@@ -20,8 +20,8 @@ export class DrawingTagsComponent implements OnInit {
     drawings: Drawing[];
     filterTags: Tag[];
     noMatchingTags: boolean;
-
     @Output() filteredDrawings: EventEmitter<Drawing[]>;
+    @Output() serverError: EventEmitter<boolean>;
 
     constructor(private carrouselService: CarrouselService) {
         this.noMatchingTags = false;
@@ -32,6 +32,7 @@ export class DrawingTagsComponent implements OnInit {
         this.drawings = [];
         this.filterTags = [];
         this.filteredDrawings = new EventEmitter<Drawing[]>();
+        this.serverError = new EventEmitter<boolean>();
     }
     ngOnInit(): void {
         this.getAllDrawings();
@@ -45,11 +46,18 @@ export class DrawingTagsComponent implements OnInit {
 
     getFilteredDrawings(): void {
         this.drawings = [];
-        this.carrouselService.getFilteredDrawings(this.filterTags).subscribe((drawings: Drawing[]) => {
-            this.drawings = drawings;
-            drawings.length ? (this.noMatchingTags = false) : (this.noMatchingTags = true);
-            this.filteredDrawings.emit(this.drawings);
-        });
+        this.carrouselService.getFilteredDrawings(this.filterTags).subscribe(
+            (drawings: Drawing[]) => {
+                this.drawings = drawings;
+                drawings.length ? (this.noMatchingTags = false) : (this.noMatchingTags = true);
+                this.serverError.emit(false);
+                this.filteredDrawings.emit(this.drawings);
+            },
+            () => {
+                this.serverError.emit(true);
+                this.filteredDrawings.emit(this.drawings);
+            },
+        );
     }
 
     addFilter(event: MatChipInputEvent): void {
