@@ -304,13 +304,4 @@ export abstract class AbstractSelectionService extends Tool {
         this.drawingService.clearCanvas(ctx);
         this.drawPreviewSelection();
     }
-
-    isInCanvas(event: MouseEvent): boolean {
-        const clientRect = this.drawingService.canvas.getBoundingClientRect();
-        const left = clientRect.x + this.BORDER_WIDTH - 1;
-        const right = clientRect.x + clientRect.width - this.BORDER_WIDTH;
-        const top = clientRect.y + this.BORDER_WIDTH - 1;
-        const bottom = clientRect.y + clientRect.height - this.BORDER_WIDTH;
-        return event.x > left && event.x < right && event.y > top && event.y < bottom;
-    }
 }
