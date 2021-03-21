@@ -127,11 +127,6 @@
                             [innerHTML]="'Le dessin ' + drawingsList[currentIndex].data.name + ' ne peut pas être chargé. Veuillez en choisir un autre'"
                         ></h3>
                     </div>
-
-                    <div *ngIf="showDeletionError" style="text-align: center">
-                        <h3 class="white" [innerHTML]="deletionErrorMessage"></h3>
-                    </div>
-
                     <div *ngIf="!animationIsDone; then loadingAnimationBlock; else optionsBlock"></div>
                 </ng-template>
             </div>

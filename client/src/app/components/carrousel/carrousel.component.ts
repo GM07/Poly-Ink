@@ -55,7 +55,6 @@ export class CarrouselComponent implements OnInit {
         this.showCarrousel = false;
         this.showLoadingError = false;
         this.showLoadingWarning = false;
-        this.showDeletionError = false;
         this.serverConnexionError = false;
         this.hasDrawings = true;
         this.subscribeActivatedRoute(activatedRoute);
@@ -81,7 +80,6 @@ export class CarrouselComponent implements OnInit {
 
     currentURL: string;
     deletionErrorMessage: string;
-    showDeletionError: boolean;
     showCarrousel: boolean;
     showLoadingError: boolean;
     showLoadingWarning: boolean;
@@ -134,7 +132,6 @@ export class CarrouselComponent implements OnInit {
     }
 
     closeCarrousel(): void {
-        this.showDeletionError = false;
         this.isLoadingCarrousel = false;
         this.showLoadingWarning = false;
         this.showLoadingError = false;
@@ -179,7 +176,7 @@ export class CarrouselComponent implements OnInit {
         this.currentIndex = index;
         this.updateDrawingContent();
 
-        let selectedDrawingSource: string | undefined = this.getDrawingFromServer(index);
+        let selectedDrawingSource: string | undefined = this.getImageFromList(index);
         if (selectedDrawingSource === undefined) {
             this.showLoadingError = true;
             return;
@@ -242,7 +239,7 @@ export class CarrouselComponent implements OnInit {
 
     private updateSingleDrawingContent(imageRef: ElementRef<HTMLImageElement>, indexOffset: number, drawingContent: Drawing): void {
         const index = (this.currentIndex + indexOffset + 2 * this.drawingsList.length) % this.drawingsList.length;
-        const drawingData = this.getDrawingFromServer(index);
+        const drawingData = this.getImageFromList(index);
 
         if (this.drawingsList.length === 0) {
             drawingContent.data._id = '';
@@ -274,7 +271,7 @@ export class CarrouselComponent implements OnInit {
         // tslint:disable-next-line:semicolon
     };
 
-    private getDrawingFromServer(index: number): string | undefined {
+    private getImageFromList(index: number): string | undefined {
         if (this.drawingsList.length === 0) return undefined;
         return this.drawingsList[index].image;
     }
