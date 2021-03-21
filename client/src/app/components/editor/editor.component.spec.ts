@@ -8,7 +8,7 @@ import {
     ExportFileToolConstants,
     NewDrawingConstants,
     RedoConstants,
-    SaveFileToolConsants,
+    SaveFileToolConstants,
     UndoConstants,
 } from '@app/classes/tool_ui_settings/tools.constants';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
@@ -93,7 +93,7 @@ describe('EditorComponent', () => {
 
     it('should create a new drawing when calling reset drawing', () => {
         component.saveDrawing = saveDrawingComponent;
-        component.receiveSidebarButtonEvent(SaveFileToolConsants.TOOL_ID);
+        component.receiveSidebarButtonEvent(SaveFileToolConstants.TOOL_ID);
         expect(saveDrawingComponent.show).toHaveBeenCalled();
     });
 

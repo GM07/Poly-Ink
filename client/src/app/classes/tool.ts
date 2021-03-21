@@ -38,7 +38,7 @@ export abstract class Tool {
 
     onKeyUp(event: KeyboardEvent): void {}
 
-    abstract stopDrawing(): void;
+    stopDrawing(): void {}
 
     getPositionFromMouse(event: MouseEvent): Vec2 {
         const clientRect = this.drawingService.canvas.getBoundingClientRect();

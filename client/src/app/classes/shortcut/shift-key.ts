@@ -5,7 +5,7 @@ export class ShiftKey extends ShortcutKey {
         super('shift');
     }
 
-    equals(event: KeyboardEvent, ignoreOtherKeys: boolean = true): boolean {
+    equals(event: KeyboardEvent): boolean {
         return super.equals(event, true);
     }
 }

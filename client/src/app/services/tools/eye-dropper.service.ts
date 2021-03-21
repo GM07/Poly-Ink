@@ -17,7 +17,7 @@ export class EyeDropperService extends Tool {
     toolID: string;
     previsualisationCanvas: HTMLCanvasElement;
     previsualisationCtx: CanvasRenderingContext2D;
-    updatePrevisualisation: Subject<string> = new Subject();
+    updatePrevisualisation: Subject<string>;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
@@ -27,10 +27,7 @@ export class EyeDropperService extends Tool {
         this.previsualisationCanvas.width = ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH ** 2;
         this.previsualisationCanvas.height = ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH ** 2;
         this.previsualisationCtx = this.previsualisationCanvas.getContext('2d') as CanvasRenderingContext2D;
-    }
-
-    stopDrawing(): void {
-        // Since stopDrawing is an abstract method we must implement it in every child class
+        this.updatePrevisualisation = new Subject();
     }
 
     onMouseDown(event: MouseEvent): void {

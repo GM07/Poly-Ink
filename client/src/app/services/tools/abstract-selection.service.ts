@@ -28,7 +28,7 @@ export abstract class AbstractSelectionService extends Tool {
     protected readonly SHIFT: ShortcutKey = new ShiftKey();
     protected SELECTION_DATA: HTMLCanvasElement;
 
-    updatePoints: Subject<boolean> = new Subject();
+    updatePoints: Subject<boolean>;
     mouseUpCoord: Vec2;
     translationOrigin: Vec2;
     config: SelectionConfig = new SelectionConfig();
@@ -51,6 +51,7 @@ export abstract class AbstractSelectionService extends Tool {
         });
         this.bodyWidth = document.body.style.width;
         this.bodyHeight = document.body.style.height;
+        this.updatePoints = new Subject<boolean>();
     }
 
     protected abstract endSelection(): void;
@@ -61,7 +62,7 @@ export abstract class AbstractSelectionService extends Tool {
 
     protected abstract drawPreviewSelectionRequired(): void;
 
-    protected abstract drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, width: number, height: number): void;
+    protected abstract drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void;
 
     onMouseDown(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;

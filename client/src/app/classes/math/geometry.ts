@@ -8,7 +8,7 @@ export class Geometry {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    // Retourne l'angle du vecteur pointant de [initial] vers [final] en radians
+    // Returns vector's angle pointing from [initial] to final in radians
     static getAngle(initial: Vec2, final: Vec2): number {
         const dx: number = initial.x - final.x;
         const dy: number = initial.y - final.y;

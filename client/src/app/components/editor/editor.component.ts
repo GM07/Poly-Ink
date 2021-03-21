@@ -3,7 +3,7 @@ import {
     ExportFileToolConstants,
     NewDrawingConstants,
     RedoConstants,
-    SaveFileToolConsants,
+    SaveFileToolConstants,
     UndoConstants,
 } from '@app/classes/tool_ui_settings/tools.constants';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
@@ -36,7 +36,7 @@ export class EditorComponent {
             case ExportFileToolConstants.TOOL_ID:
                 await this.exportDrawing.show();
                 break;
-            case SaveFileToolConsants.TOOL_ID:
+            case SaveFileToolConstants.TOOL_ID:
                 await this.saveDrawing.show();
         }
     }

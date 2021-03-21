@@ -15,7 +15,7 @@ describe('EraserDraw', () => {
     let ctxStub: CanvasRenderingContext2D;
     const WHITE = 255;
     const ALPHA = 3;
-
+    // tslint:disable:no-string-literal
     beforeEach(() => {
         colorService = { primaryRgba: Colors.BLACK.rgbString, secondaryRgba: Colors.BLUE.rgbString } as ColorService;
         eraserDraw = new EraserDraw(colorService, new PencilConfig());

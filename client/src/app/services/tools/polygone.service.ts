@@ -14,12 +14,13 @@ import { ColorService } from 'src/color-picker/services/color.service';
 })
 export class PolygoneService extends Tool {
     toolID: string;
-    config: PolygonConfig = new PolygonConfig();
+    config: PolygonConfig;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(PolygoneToolConstants.SHORTCUT_KEY);
         this.toolID = PolygoneToolConstants.TOOL_ID;
+        this.config = new PolygonConfig();
     }
 
     set contourWidth(width: number) {

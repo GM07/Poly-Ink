@@ -20,12 +20,12 @@ export enum LeftMouse {
 })
 export class PencilService extends Tool {
     config: PencilConfig = new PencilConfig();
-    toolID: string = PencilToolConstants.TOOL_ID;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
 
         this.shortcutKey = new ShortcutKey(PencilToolConstants.SHORTCUT_KEY);
+        this.toolID = PencilToolConstants.TOOL_ID;
     }
 
     set lineWidth(width: number) {

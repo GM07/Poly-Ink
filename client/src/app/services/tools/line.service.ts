@@ -22,15 +22,16 @@ export class LineService extends Tool {
     private readonly ESCAPE: ShortcutKey = new ShortcutKey('escape');
     private readonly BACKSPACE: ShortcutKey = new ShortcutKey('backspace');
     private readonly SHORTCUT_LIST: ShortcutKey[] = [this.ESCAPE, this.BACKSPACE, this.SHIFT];
-    readonly toolID: string = LineToolConstants.TOOL_ID;
     private mousePosition: Vec2;
     private pointToAdd: Vec2;
 
-    config: LineConfig = new LineConfig();
+    config: LineConfig;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(LineToolConstants.SHORTCUT_KEY);
+        this.toolID = LineToolConstants.TOOL_ID;
+        this.config = new LineConfig();
     }
 
     initService(): void {
