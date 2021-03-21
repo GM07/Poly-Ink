@@ -18,14 +18,14 @@ export class AerosolDraw extends AbstractDraw {
         context.lineWidth = this.config.areaDiameter;
         context.lineCap = 'round' as CanvasLineCap;
         context.lineJoin = 'round' as CanvasLineJoin;
+        const prng: Prng = seedrandom(this.config.seed);
 
-        for (let i = 0; i < this.config.seeds.length; i++) {
-            const prng: Prng = seedrandom(this.config.seeds[i]);
+        this.config.points.forEach((point) => {
             for (let nDroplets = 0; nDroplets < this.config.nDropletsPerSpray; nDroplets++) {
-                const point: Vec2 = this.getRandomPoint(prng, this.config.points[i]);
-                this.drawDroplet(context, point);
+                const position: Vec2 = this.getRandomPoint(prng, point);
+                this.drawDroplet(context, position);
             }
-        }
+        });
     }
 
     private getRandomPoint(prng: Prng, point: Vec2): Vec2 {

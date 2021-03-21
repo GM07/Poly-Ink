@@ -182,10 +182,8 @@ describe('AerosolService', () => {
 
     it('should add seeds and mousePosition to config when placing points', () => {
         service.mouseDownCoord = { x: 0, y: 0 };
-        expect(service.config.seeds.length).toEqual(0);
         expect(service.config.points.length).toEqual(0);
         service['placePoints']();
-        expect(service.config.seeds.length).not.toEqual(0);
         expect(service.config.points.length).not.toEqual(0);
     });
 });

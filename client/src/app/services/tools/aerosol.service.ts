@@ -67,6 +67,7 @@ export class AerosolService extends Tool {
     onMouseDown(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
         if (this.leftMouseDown) {
+            this.config.seed = Math.random().toString();
             this.mouseDownCoord = this.getPositionFromMouse(event);
             this.sprayContinuously(this.drawingService.previewCtx);
         }
@@ -77,7 +78,6 @@ export class AerosolService extends Tool {
             this.draw();
         }
         this.config.points = [];
-        this.config.seeds = [];
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.leftMouseDown = false;
         window.clearInterval(this.sprayIntervalID);
@@ -93,7 +93,6 @@ export class AerosolService extends Tool {
         window.clearInterval(this.sprayIntervalID);
         if (!this.leftMouseDown) {
             this.config.points = [];
-            this.config.seeds = [];
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
         }
     }
@@ -124,7 +123,6 @@ export class AerosolService extends Tool {
     }
 
     private placePoints(): void {
-        this.config.seeds.push(Math.random().toString());
         this.config.points.push({ x: this.mouseDownCoord.x, y: this.mouseDownCoord.y });
     }
 }

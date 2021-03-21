@@ -5,14 +5,14 @@ export class AerosolConfig {
     areaDiameter: number;
     nDropletsPerSpray: number;
     points: Vec2[];
-    seeds: string[];
+    seed: string;
 
     constructor() {
         this.dropletDiameter = ToolSettingsConst.MIN_DROPLETS_WIDTH;
         this.areaDiameter = ToolSettingsConst.DEFAULT_AEROSOL_AREA_DIAMETER;
         this.nDropletsPerSpray = ToolSettingsConst.DEFAULT_AEROSOL_AREA_DIAMETER;
         this.points = [];
-        this.seeds = [];
+        this.seed = '';
     }
 
     clone(): AerosolConfig {
@@ -22,10 +22,7 @@ export class AerosolConfig {
             config.points.push({ x: oldPoints.x, y: oldPoints.y });
         });
 
-        this.seeds.forEach((value) => {
-            config.seeds.push(value);
-        });
-
+        config.seed = this.seed;
         config.areaDiameter = this.areaDiameter;
         config.dropletDiameter = this.dropletDiameter;
         config.nDropletsPerSpray = this.nDropletsPerSpray;
