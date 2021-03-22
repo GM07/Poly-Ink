@@ -3,6 +3,7 @@
 .nyc_output/
 node_modules/
 false/
+drawings/
 
 # Exclusion des fichiers Javascripts
 out/

@@ -3,7 +3,7 @@
     <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style">
         <div class="textFormatButton">
             <mat-button-toggle
-                [checked]="polygonService.config.polygonMode === polygoneModeIn.Contour"
+                [checked]="polygonService.config.shapeMode === polygoneModeIn.Contour"
                 class="buttons"
                 (click)="toggleTraceType(polygoneModeIn.Contour)"
                 >Contour</mat-button-toggle
@@ -11,7 +11,7 @@
         </div>
         <div class="textFormatButton">
             <mat-button-toggle
-                [checked]="polygonService.config.polygonMode === polygoneModeIn.Filled"
+                [checked]="polygonService.config.shapeMode === polygoneModeIn.Filled"
                 class="buttons"
                 (click)="toggleTraceType(polygoneModeIn.Filled)"
                 >Plein</mat-button-toggle
@@ -19,7 +19,7 @@
         </div>
         <div class="textFormatButton">
             <mat-button-toggle
-                [checked]="polygonService.config.polygonMode === polygoneModeIn.FilledWithContour"
+                [checked]="polygonService.config.shapeMode === polygoneModeIn.FilledWithContour"
                 class="buttons"
                 (click)="toggleTraceType(polygoneModeIn.FilledWithContour)"
                 >Plein & Contour</mat-button-toggle

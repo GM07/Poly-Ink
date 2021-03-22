@@ -129,6 +129,26 @@ describe('Drawing service', () => {
         expect(drawingService.validateTags(tags)).to.eq(false);
     });
 
+    it('should not accept invalid tags (with a space)', () => {
+        const tags: Tag[] = [{ name: 'inv alid' } as Tag];
+        expect(drawingService.validateTags(tags)).to.eq(false);
+    });
+
+    it('should not accept invalid tags (with a *)', () => {
+        const tags: Tag[] = [{ name: 'inv*alid' } as Tag];
+        expect(drawingService.validateTags(tags)).to.eq(false);
+    });
+
+    it('should accept valid tags with a dash', () => {
+        const tags: Tag[] = [{ name: 'valid-tag' } as Tag];
+        expect(drawingService.validateTags(tags)).to.eq(true);
+    });
+
+    it('should accept valid tags with alphanumeric characters', () => {
+        const tags: Tag[] = [{ name: 'validtag1' } as Tag];
+        expect(drawingService.validateTags(tags)).to.eq(true);
+    });
+
     it("should throw error when drawing can't be created", async () => {
         try {
             await drawingService.createNewDrawingData(new DrawingData('test2', [], '1'));

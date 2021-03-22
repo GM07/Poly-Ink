@@ -65,14 +65,16 @@ export abstract class AbstractShape extends Tool {
         }
     }
 
-    onMouseLeave(): void {
+    onMouseLeave(event: MouseEvent): void {
         if (this.leftMouseDown) {
+            this.config.endCoords = this.getPositionFromMouse(event);
             this.drawPreview();
         }
     }
 
-    onMouseEnter(): void {
+    onMouseEnter(event: MouseEvent): void {
         if (this.leftMouseDown) {
+            this.config.endCoords = this.getPositionFromMouse(event);
             this.drawPreview();
         }
     }
