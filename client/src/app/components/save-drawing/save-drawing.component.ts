@@ -32,7 +32,6 @@ export class SaveDrawingComponent {
     selectable: boolean;
     removable: boolean;
     addOnBlur: boolean
-    filterTags: Tag[];
     enableAcceptButton: boolean;
     noServerConnection: boolean;
     dataLimitReached: boolean;
@@ -40,6 +39,7 @@ export class SaveDrawingComponent {
     aspectRatio: number;
     unavailableServer: boolean;
     saveForm: FormGroup;
+    saveTags: Tag[];
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -74,13 +74,13 @@ export class SaveDrawingComponent {
         this.enableAcceptButton = true;
         this.saveFormat = 'png';
         this.aspectRatio = 1;
-        this.filterTags = [];
+        this.saveTags = [];
         this.saveForm = new FormGroup({
             nameFormControl: new FormControl(
                 DrawingConstants.defaultFileNames[Math.floor(Math.random() * DrawingConstants.defaultFileNames.length)],
                 [Validators.required],
             ),
-            tagsFormControl: new FormControl('', [Validators.pattern('^([ ]*[0-9A-Za-z-]+[ ]*)(,[ ]*[0-9A-Za-z-]+[ ]*)*$')]),
+            tagsFormControl: new FormControl([], Validators.pattern('^([ ]*[0-9A-Za-z-]+[ ]*)(,[ ]*[0-9A-Za-z-]+[ ]*)*$')),
         });
     }
 
@@ -110,8 +110,8 @@ export class SaveDrawingComponent {
             this.dataLimitReached = false;
             const tagsSet: Set<string> = new Set();
             if (this.tagsFormControl.value) {
-                (this.tagsFormControl.value as string).split(',').forEach((tagStr: string) => {
-                    tagsSet.add(tagStr.trim());
+                this.saveTags.forEach((tag: Tag) => {
+                    tagsSet.add(tag.name);
                 });
             }
             // Filter tags to keep them unique
@@ -169,20 +169,20 @@ export class SaveDrawingComponent {
     }
 
     removeTag(tag: Tag): void {
-        const tagIndex = this.filterTags.indexOf(tag);
+        const tagIndex = this.saveTags.indexOf(tag);
         if (tagIndex >= 0) {
-            this.filterTags.splice(tagIndex, 1);
+            this.tagsFormControl.value.splice(tagIndex, 1);
+            this.saveTags.splice(tagIndex, 1);
             this.tagsFormControl.updateValueAndValidity();
         }
     }
     
-    addTagFilter(event: MatChipInputEvent): void {
+    addTag(event: MatChipInputEvent): void {
         const value = event.value;
-
         if (value.trim()) {
-            this.filterTags.push({ name: value.trim() });
+            this.tagsFormControl.value.push(value.trim());
             this.tagsFormControl.updateValueAndValidity();
-            console.log(this.tagsFormControl)
+            this.saveTags.push(new Tag(value.trim()));
         }
         event.input.value = '';
     }
@@ -195,6 +195,7 @@ export class SaveDrawingComponent {
         this.generateBase64Image();
         await this.generatePreviewData();
     }
+
 
     @HostListener('document:keydown', ['$event'])
     async onKeyDown(event: KeyboardEvent): Promise<void> {

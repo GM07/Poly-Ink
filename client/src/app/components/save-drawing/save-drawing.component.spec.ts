@@ -207,7 +207,7 @@ describe('SaveDrawingComponent', () => {
         expect(showSpy).toHaveBeenCalled();
     });
 
-    it('should not open save popup on a different key', async () => {
+    fit('should not open save popup on a different key', async () => {
         const showSpy = spyOn(component, 'show').and.callFake(async () => {});
 
         const event = { key: 'a', ctrlKey: true, shiftKey: false, altKey: false, preventDefault: () => {} } as KeyboardEvent;
@@ -217,6 +217,7 @@ describe('SaveDrawingComponent', () => {
     });
 
     it('should ignore ctrl events', async () => {
+        const toolSpy = spyOn(toolHandlerService, 'onKeyDown').and.returnValue();
         const event = {
             key: 's',
             ctrlKey: true,
@@ -225,10 +226,12 @@ describe('SaveDrawingComponent', () => {
             preventDefault: () => {},
             stopImmediatePropagation: () => {},
         } as KeyboardEvent;
-        await component.onKeyDown(event);
-
-        const toolSpy = spyOn(toolHandlerService, 'onKeyDown').and.callThrough();
-        await shortcutService.onKeyDown(event);
+        try {
+            await component.onKeyDown(event);
+            await shortcutService.onKeyDown(event);
+        } catch(e) {
+            console.log(e.stack);
+        }
         expect(toolSpy).not.toHaveBeenCalled();
     });
 
