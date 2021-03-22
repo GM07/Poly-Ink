@@ -1,6 +1,6 @@
 import { ElementRef } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -30,7 +30,14 @@ describe('ExportDrawingComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [ExportDrawingComponent],
-            imports: [NoopAnimationsModule, MatButtonToggleModule, MatInputModule, FormsModule],
+            imports: [
+                NoopAnimationsModule,
+                MatButtonToggleModule,
+                MatInputModule,
+                FormsModule,
+                FormsModule,
+                ReactiveFormsModule.withConfig({ warnOnNgModelWithFormControl: 'never' }),
+            ],
         }).compileComponents();
 
         toolHandlerService = TestBed.inject(ToolHandlerService);
@@ -103,18 +110,13 @@ describe('ExportDrawingComponent', () => {
         expect(component.canShowPopup()).toBeFalsy();
     });
 
-    it('should export image with valid filename', () => {
-        component['filename'] = 'test';
+    it('should export image while changing filename from form', () => {
+        Object.defineProperty(component.nameFormControl, 'valid', { value: true });
+        Object.defineProperty(component.nameFormControl, 'value', { value: 'test' });
+
         const spy = spyOn(exportDrawingService, 'exportImage').and.callFake(() => {});
         component.export();
         expect(spy).toHaveBeenCalledWith(component['canvasImage'], 'png', 'test');
-    });
-
-    it('should should change filename with invalid filename during export', () => {
-        component['filename'] = '';
-        const spy = spyOn(exportDrawingService, 'exportImage').and.callFake(() => {});
-        component.export();
-        expect(spy).toHaveBeenCalledWith(component['canvasImage'], 'png', 'image');
     });
 
     it('should apply filter', async () => {
@@ -217,5 +219,21 @@ describe('ExportDrawingComponent', () => {
         component.aspectRatio = 2;
         const returnValue = component.getPreviewWidth();
         expect(returnValue).toBe(ExportDrawingComponent['EXPORT_PREVIEW_MAX_SIZE']);
+    });
+
+    it('should not export if name is invalid', () => {
+        Object.defineProperty(component.nameFormControl, 'valid', { value: false });
+        component.export();
+
+        const spy = spyOn(exportDrawingService, 'exportImage').and.callThrough();
+        expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should export if name is valid', () => {
+        Object.defineProperty(component.nameFormControl, 'valid', { value: true });
+        component.export();
+
+        const spy = spyOn(exportDrawingService, 'exportImage').and.callFake(() => {});
+        expect(spy).not.toHaveBeenCalled();
     });
 });
