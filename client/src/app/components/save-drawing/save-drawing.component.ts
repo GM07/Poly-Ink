@@ -1,6 +1,6 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { DrawingConstants } from '@app/constants/drawing';
 import { CarrouselService } from '@app/services/carrousel/carrousel.service';
@@ -31,7 +31,7 @@ export class SaveDrawingComponent {
     visible: boolean;
     selectable: boolean;
     removable: boolean;
-    addOnBlur: boolean
+    addOnBlur: boolean;
     filterTags: Tag[];
     enableAcceptButton: boolean;
     noServerConnection: boolean;
@@ -78,10 +78,14 @@ export class SaveDrawingComponent {
         this.saveForm = new FormGroup({
             nameFormControl: new FormControl(
                 DrawingConstants.defaultFileNames[Math.floor(Math.random() * DrawingConstants.defaultFileNames.length)],
-                [Validators.required],
+                [Validators.required, this.whitespaceValidator],
             ),
             tagsFormControl: new FormControl('', [Validators.pattern('^([ ]*[0-9A-Za-z-]+[ ]*)(,[ ]*[0-9A-Za-z-]+[ ]*)*$')]),
         });
+    }
+
+    private whitespaceValidator(control: FormControl): ValidationErrors | null {
+        return (control.value as string).trim().length === 0 ? ({ onlyWhitespace: true } as ValidationErrors) : null;
     }
 
     backupBaseCanvas(): void {
@@ -175,14 +179,13 @@ export class SaveDrawingComponent {
             this.tagsFormControl.updateValueAndValidity();
         }
     }
-    
+
     addTagFilter(event: MatChipInputEvent): void {
         const value = event.value;
 
         if (value.trim()) {
             this.filterTags.push({ name: value.trim() });
             this.tagsFormControl.updateValueAndValidity();
-            console.log(this.tagsFormControl)
         }
         event.input.value = '';
     }
