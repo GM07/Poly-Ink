@@ -139,13 +139,13 @@ describe('Drawing service', () => {
         expect(drawingService.validateTags(tags)).to.eq(false);
     });
 
-    it('should accept valid tags', () => {
+    it('should accept valid tags with a dash', () => {
         const tags: Tag[] = [{ name: 'valid-tag' } as Tag];
         expect(drawingService.validateTags(tags)).to.eq(true);
     });
 
-    it('should accept valid tags', () => {
-        const tags: Tag[] = [{ name: 'validtag' } as Tag];
+    it('should accept valid tags with alphanumeric characters', () => {
+        const tags: Tag[] = [{ name: 'validtag1' } as Tag];
         expect(drawingService.validateTags(tags)).to.eq(true);
     });
 
