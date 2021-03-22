@@ -60,8 +60,9 @@ export class DrawingTagsComponent implements OnInit {
 
     addFilter(event: MatChipInputEvent): void {
         const value = event.value;
-        if (value.trim() && this.filterTags.length < DrawingConstants.maxTags) {
-            this.filterTags.push({ name: value.trim() });
+        var regex = new RegExp("^[a-zA-Z]+$");
+        if (regex.test(value) && value.trim() && this.filterTags.length < DrawingConstants.maxTags) {
+            this.filterTags.push({ name: value });
             this.getFilteredDrawings();
         }
         event.input.value = '';
