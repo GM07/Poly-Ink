@@ -11,7 +11,7 @@ export class ResizeDraw extends AbstractDraw {
         this.config = config;
     }
 
-    execute(context: CanvasRenderingContext2D): void {
+    execute(): void {
         this.drawingService.resizeCanvas(this.config.width, this.config.height);
     }
 }

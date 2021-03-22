@@ -14,5 +14,9 @@
             "path": "./tsconfig.spec.json"
         }
     ],
-    "baseUrl": "src"
+    "compilerOptions": {
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
+    },
+    "baseUrl": "src",
 }
