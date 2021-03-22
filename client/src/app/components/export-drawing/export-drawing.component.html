@@ -17,7 +17,7 @@
             </form>
             <div class="options">
                 <mat-button-toggle-group [value]="currentFilter">
-                    <mat-button-toggle id="corner-left" value="no" (change)="changeFilter($event.value)">AUCUN</mat-button-toggle>
+                    <mat-button-toggle id="corner-left" value="default" (change)="changeFilter($event.value)">AUCUN</mat-button-toggle>
                     <mat-button-toggle value="funky" (change)="changeFilter($event.value)">FUNKY</mat-button-toggle>
                     <mat-button-toggle value="spotlight" (change)="changeFilter($event.value)">SPOTLIGHT</mat-button-toggle>
                     <mat-button-toggle value="sepia" (change)="changeFilter($event.value)">SEPIA</mat-button-toggle>
