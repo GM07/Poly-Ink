@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DrawingConstants } from '@app/constants/drawing';
-import { CarrouselService } from '@app/services/carrousel/carrousel.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { SaveDrawingService } from '@app/services/popups/save-drawing.service';
+import { ServerCommunicationService } from '@app/services/server-communication/server-communication.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { Drawing } from '@common/communication/drawing';
 import { DrawingData } from '@common/communication/drawing-data';
@@ -38,7 +38,7 @@ export class SaveDrawingComponent {
         private drawingService: DrawingService,
         private shortcutHandler: ShortcutHandlerService,
         private saveDrawingService: SaveDrawingService,
-        private carrouselService: CarrouselService,
+        private serverCommunicationService: ServerCommunicationService,
     ) {
         this.initValues();
     }
@@ -112,7 +112,7 @@ export class SaveDrawingComponent {
             this.enableAcceptButton = false;
 
             try {
-                await this.carrouselService.createDrawing(newDrawing).toPromise();
+                await this.serverCommunicationService.createDrawing(newDrawing).toPromise();
                 this.hidePopup();
             } catch (reason) {
                 if (reason.status === SaveDrawingComponent.UNAVAILABLE_SERVER_STATUS) {

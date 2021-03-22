@@ -3,21 +3,21 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { Drawing } from '@common/communication/drawing';
 import { Tag } from '@common/communication/tag';
-import { CarrouselService } from './carrousel.service';
+import { ServerCommunicationService } from './server-communication.service';
 
 let dummyDrawing: Drawing;
 let dummyDrawings: Drawing[];
 
 describe('CarrouselService', () => {
     let httpMock: HttpTestingController;
-    let service: CarrouselService;
+    let service: ServerCommunicationService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
-            providers: [CarrouselService],
+            providers: [ServerCommunicationService],
         });
-        service = TestBed.inject(CarrouselService);
+        service = TestBed.inject(ServerCommunicationService);
         httpMock = TestBed.inject(HttpTestingController);
         dummyDrawing = {
             data: {
@@ -40,7 +40,7 @@ describe('CarrouselService', () => {
             expect(drawings).toEqual(dummyDrawings);
         });
 
-        const req = httpMock.expectOne(`${CarrouselService.baseURL}`);
+        const req = httpMock.expectOne(`${ServerCommunicationService.baseURL}`);
         expect(req.request.method).toBe('GET');
         req.flush(dummyDrawings);
     });
@@ -51,8 +51,8 @@ describe('CarrouselService', () => {
             expect(filteredDrawings.length).toBe(1);
         });
 
-        const req = httpMock.expectOne(`${CarrouselService.baseURL}?tags=tag1`);
-        expect(req.request.url).toBe(`${CarrouselService.baseURL}?tags=tag1`);
+        const req = httpMock.expectOne(`${ServerCommunicationService.baseURL}?tags=tag1`);
+        expect(req.request.url).toBe(`${ServerCommunicationService.baseURL}?tags=tag1`);
         expect(req.request.method).toBe('GET');
     });
 
@@ -62,8 +62,8 @@ describe('CarrouselService', () => {
             expect(filteredDrawings.length).toBe(1);
         });
 
-        const req = httpMock.expectOne(`${CarrouselService.baseURL}?tags=tag1`);
-        expect(req.request.url).toBe(`${CarrouselService.baseURL}?tags=tag1`);
+        const req = httpMock.expectOne(`${ServerCommunicationService.baseURL}?tags=tag1`);
+        expect(req.request.url).toBe(`${ServerCommunicationService.baseURL}?tags=tag1`);
         expect(req.request.method).toBe('GET');
     });
 
@@ -79,7 +79,7 @@ describe('CarrouselService', () => {
 
     it('should send a DELETE request', () => {
         service.deleteDrawing(dummyDrawing).subscribe();
-        const req = httpMock.expectOne(`${CarrouselService.baseURL}?ids=604a1a5a1b66eefab31e9206`);
+        const req = httpMock.expectOne(`${ServerCommunicationService.baseURL}?ids=604a1a5a1b66eefab31e9206`);
         expect(req.request.method).toBe('DELETE');
         req.flush(dummyDrawings);
     });
@@ -91,14 +91,14 @@ describe('CarrouselService', () => {
                 expect(error.status).toBeDefined();
             },
         );
-        const req = httpMock.expectOne(`${CarrouselService.baseURL}?ids=604a1a5a1b66eefab31e9206`);
+        const req = httpMock.expectOne(`${ServerCommunicationService.baseURL}?ids=604a1a5a1b66eefab31e9206`);
         req.flush('404 error', { status: 404, statusText: 'Not Found' });
     });
 
     it('should send a request POST', () => {
         service.createDrawing(dummyDrawing).subscribe();
 
-        const req = httpMock.expectOne(`${CarrouselService.baseURL}`);
+        const req = httpMock.expectOne(`${ServerCommunicationService.baseURL}`);
         expect(req.request.method).toBe('POST');
         req.flush(dummyDrawings);
     });
