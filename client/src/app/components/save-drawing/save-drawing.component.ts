@@ -17,7 +17,6 @@ import { Tag } from '@common/communication/tag';
     styleUrls: ['./save-drawing.component.scss'],
 })
 export class SaveDrawingComponent {
-    static readonly MAX_NUM_TAGS: number = 10;
     static readonly EXPORT_PREVIEW_MAX_SIZE: number = 300;
     static readonly BAD_REQUEST_STATUS: number = 400;
     static readonly UNAVAILABLE_SERVER_STATUS: number = 503;
