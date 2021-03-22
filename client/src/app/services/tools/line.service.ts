@@ -170,6 +170,7 @@ export class LineService extends Tool {
 
     stopDrawing(): void {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.drawingService.unblockUndoRedo();
         this.initService();
     }
 
