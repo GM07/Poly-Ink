@@ -22,6 +22,7 @@ export class DrawingTagsComponent implements OnInit {
     filterTags: Tag[];
     @Output() filteredDrawings: EventEmitter<Drawing[]>;
     @Output() serverError: EventEmitter<boolean>;
+    @Output() isFocused: EventEmitter<boolean>;
 
     constructor(private serverCommunicationService: ServerCommunicationService) {
         this.visible = true;
@@ -32,6 +33,7 @@ export class DrawingTagsComponent implements OnInit {
         this.filterTags = [];
         this.filteredDrawings = new EventEmitter<Drawing[]>();
         this.serverError = new EventEmitter<boolean>();
+        this.isFocused = new EventEmitter<boolean>();
     }
     ngOnInit(): void {
         this.getAllDrawings();
@@ -60,7 +62,7 @@ export class DrawingTagsComponent implements OnInit {
 
     addFilter(event: MatChipInputEvent): void {
         const value = event.value;
-        const regex = new RegExp("^[a-zA-Z-0-9]+$");
+        const regex = new RegExp('^[a-zA-Z-0-9]+$');
         if (regex.test(value) && value.trim() && this.filterTags.length < DrawingConstants.maxTags) {
             this.filterTags.push({ name: value });
             this.getFilteredDrawings();

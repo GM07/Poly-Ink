@@ -11,6 +11,8 @@
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
             [matChipInputAddOnBlur]="addOnBlur"
             (matChipInputTokenEnd)="addFilter($event)"
+            (focus)="isFocused.emit(true)"
+            (blur)="isFocused.emit(false)"
             maxlength="40"
             style="-webkit-text-fill-color: white"
         />

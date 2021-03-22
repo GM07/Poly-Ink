@@ -56,6 +56,7 @@ export class CarrouselComponent implements OnInit {
         this.showLoadingError = false;
         this.showLoadingWarning = false;
         this.serverConnexionError = false;
+        this.tagsFocused = false;
         this.hasDrawings = true;
         this.subscribeActivatedRoute(activatedRoute);
     }
@@ -87,6 +88,7 @@ export class CarrouselComponent implements OnInit {
     isLoadingCarrousel: boolean;
     isOnline: boolean;
     hasDrawings: boolean;
+    tagsFocused: boolean;
     translationState: string | null;
     drawingsList: Drawing[];
     currentIndex: number;
@@ -210,7 +212,7 @@ export class CarrouselComponent implements OnInit {
             this.loadCarrousel();
         }
 
-        if (this.showCarrousel && !this.showLoadingWarning) {
+        if (this.showCarrousel && !this.showLoadingWarning && !this.tagsFocused) {
             if (CarrouselComponent.LEFT_ARROW.equals(event)) {
                 this.clickLeft();
             } else if (CarrouselComponent.RIGHT_ARROW.equals(event)) {
