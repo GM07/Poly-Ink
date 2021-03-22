@@ -1,5 +1,7 @@
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { DrawingConstants } from '@app/constants/drawing';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { SaveDrawingService } from '@app/services/popups/save-drawing.service';
@@ -19,12 +21,17 @@ export class SaveDrawingComponent {
     static readonly BAD_REQUEST_STATUS: number = 400;
     static readonly UNAVAILABLE_SERVER_STATUS: number = 503;
     static readonly DATA_LIMIT_REACHED: number = 413;
+    readonly separatorKeysCodes: number[] = [ENTER, COMMA];
     private baseCanvas: HTMLCanvasElement;
     private baseContext: CanvasRenderingContext2D;
     private canvasImage: string;
     private imageData: ImageData;
     private savePreview: ElementRef<HTMLCanvasElement>;
 
+    visible: boolean;
+    selectable: boolean;
+    removable: boolean;
+    addOnBlur: boolean;
     enableAcceptButton: boolean;
     noServerConnection: boolean;
     dataLimitReached: boolean;
@@ -32,6 +39,7 @@ export class SaveDrawingComponent {
     aspectRatio: number;
     unavailableServer: boolean;
     saveForm: FormGroup;
+    saveTags: Tag[];
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -58,17 +66,21 @@ export class SaveDrawingComponent {
     }
 
     initValues(): void {
+        this.visible = true;
+        this.removable = true;
+        this.selectable = true;
         this.noServerConnection = false;
         this.unavailableServer = false;
         this.enableAcceptButton = true;
         this.saveFormat = 'png';
         this.aspectRatio = 1;
+        this.saveTags = [];
         this.saveForm = new FormGroup({
             nameFormControl: new FormControl(
                 DrawingConstants.defaultFileNames[Math.floor(Math.random() * DrawingConstants.defaultFileNames.length)],
-                [Validators.required],
+                [Validators.required, Validators.pattern('(?! )[a-zA-Z0-9\u00C0-\u017F, ]*(?<! )')],
             ),
-            tagsFormControl: new FormControl('', [Validators.pattern('^([ ]*[0-9A-Za-z-]+[ ]*)(,[ ]*[0-9A-Za-z-]+[ ]*)*$')]),
+            tagsFormControl: new FormControl([], Validators.pattern('^([ ]*[0-9A-Za-z-]+[ ]*)(,[ ]*[0-9A-Za-z-]+[ ]*)*$')),
         });
     }
 
@@ -98,8 +110,8 @@ export class SaveDrawingComponent {
             this.dataLimitReached = false;
             const tagsSet: Set<string> = new Set();
             if (this.tagsFormControl.value) {
-                (this.tagsFormControl.value as string).split(',').forEach((tagStr: string) => {
-                    tagsSet.add(tagStr.trim());
+                this.saveTags.forEach((tag: Tag) => {
+                    tagsSet.add(tag.name);
                 });
             }
             // Filter tags to keep them unique
@@ -154,6 +166,25 @@ export class SaveDrawingComponent {
         if (this.aspectRatio > 1) return SaveDrawingComponent.EXPORT_PREVIEW_MAX_SIZE;
 
         return SaveDrawingComponent.EXPORT_PREVIEW_MAX_SIZE * this.aspectRatio;
+    }
+
+    removeTag(tag: Tag): void {
+        const tagIndex = this.tagsFormControl.value.indexOf(tag.name);
+        if (tagIndex >= 0) {
+            this.tagsFormControl.value.splice(tagIndex, 1);
+            this.saveTags.splice(tagIndex, 1);
+            this.tagsFormControl.updateValueAndValidity();
+        }
+    }
+
+    addTag(event: MatChipInputEvent): void {
+        const value = event.value;
+        if (value.trim()) {
+            this.tagsFormControl.value.push(value.trim());
+            this.tagsFormControl.updateValueAndValidity();
+            this.saveTags.push(new Tag(value.trim()));
+        }
+        event.input.value = '';
     }
 
     async show(): Promise<void> {
