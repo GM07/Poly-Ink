@@ -1,6 +1,6 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { DrawingConstants } from '@app/constants/drawing';
 import { CarrouselService } from '@app/services/carrousel/carrousel.service';
@@ -31,7 +31,7 @@ export class SaveDrawingComponent {
     visible: boolean;
     selectable: boolean;
     removable: boolean;
-    addOnBlur: boolean
+    addOnBlur: boolean;
     enableAcceptButton: boolean;
     noServerConnection: boolean;
     dataLimitReached: boolean;
@@ -78,14 +78,10 @@ export class SaveDrawingComponent {
         this.saveForm = new FormGroup({
             nameFormControl: new FormControl(
                 DrawingConstants.defaultFileNames[Math.floor(Math.random() * DrawingConstants.defaultFileNames.length)],
-                [Validators.required, this.whitespaceValidator],
+                [Validators.required, Validators.pattern('(?! )[a-zA-Z0-9\u00C0-\u017F, ]*(?<! )')],
             ),
             tagsFormControl: new FormControl([], Validators.pattern('^([ ]*[0-9A-Za-z-]+[ ]*)(,[ ]*[0-9A-Za-z-]+[ ]*)*$')),
         });
-    }
-
-    private whitespaceValidator(control: FormControl): ValidationErrors | null {
-        return (control.value as string).trim().length === 0 ? ({ onlyWhitespace: true } as ValidationErrors) : null;
     }
 
     backupBaseCanvas(): void {
@@ -173,14 +169,14 @@ export class SaveDrawingComponent {
     }
 
     removeTag(tag: Tag): void {
-        const tagIndex = this.saveTags.indexOf(tag);
+        const tagIndex = this.tagsFormControl.value.indexOf(tag.name);
         if (tagIndex >= 0) {
             this.tagsFormControl.value.splice(tagIndex, 1);
             this.saveTags.splice(tagIndex, 1);
             this.tagsFormControl.updateValueAndValidity();
         }
     }
-    
+
     addTag(event: MatChipInputEvent): void {
         const value = event.value;
         if (value.trim()) {
@@ -199,7 +195,6 @@ export class SaveDrawingComponent {
         this.generateBase64Image();
         await this.generatePreviewData();
     }
-
 
     @HostListener('document:keydown', ['$event'])
     async onKeyDown(event: KeyboardEvent): Promise<void> {

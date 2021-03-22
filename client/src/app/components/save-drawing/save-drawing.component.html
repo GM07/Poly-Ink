@@ -7,7 +7,7 @@
                     <mat-label class="gray">Nom</mat-label>
                     <input matInput formControlName="nameFormControl" name="filename" maxlength="100" />
                     <span matSuffix>{{ '.' + saveFormat }} &nbsp;</span>
-                    <mat-error *ngIf="nameFormControl.invalid"> Le nom est <strong>requis</strong> </mat-error>
+                    <mat-error *ngIf="nameFormControl.invalid"> Le nom est <strong>invalide!</strong> </mat-error>
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label class="gray">Étiquette (confirmer avec Enter)</mat-label>

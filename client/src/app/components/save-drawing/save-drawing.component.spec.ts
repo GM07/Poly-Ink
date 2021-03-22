@@ -4,6 +4,8 @@ import { ElementRef } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CarrouselService } from '@app/services/carrousel/carrousel.service';
@@ -13,6 +15,7 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { Drawing } from '@common/communication/drawing';
 import { DrawingData } from '@common/communication/drawing-data';
+import { Tag } from '@common/communication/tag';
 import { Observable, of } from 'rxjs';
 import { SaveDrawingComponent } from './save-drawing.component';
 
@@ -41,6 +44,8 @@ describe('SaveDrawingComponent', () => {
                 MatInputModule,
                 FormsModule,
                 ReactiveFormsModule.withConfig({ warnOnNgModelWithFormControl: 'never' }),
+                MatChipsModule,
+                MatFormFieldModule,
             ],
         }).compileComponents();
 
@@ -125,11 +130,43 @@ describe('SaveDrawingComponent', () => {
 
     it('should save the image with valid file name and tags', async () => {
         const spy = spyOn(carrouselService, 'createDrawing').and.returnValue(new Observable());
-        component.saveForm.controls['tagsFormControl'].setValue('tag1,tag2');
+        component.saveForm.controls['tagsFormControl'].setValue(['tag1', 'tag2']);
+        component.saveTags.push(new Tag('tag1'), new Tag('tag2'));
         const mockDrawing: Drawing = new Drawing(new DrawingData(''));
         mockDrawing.image = component['canvasImage'];
         component.save();
         expect(spy).toHaveBeenCalled();
+    });
+
+    it('should add a tags and update the tagsFormControl with valid tag', () => {
+        const inputValue = { value: 'tag1' } as HTMLInputElement;
+        component.addTag({ input: inputValue, value: 'tag1' } as MatChipInputEvent);
+        component.addTag({ input: inputValue, value: 'tag2' } as MatChipInputEvent);
+        component.saveForm.controls['tagsFormControl'].updateValueAndValidity();
+        expect(component.saveTags.length).toBe(2);
+        expect(component.saveForm.controls['tagsFormControl'].valid).toBeTruthy();
+    });
+
+    it('should add tags and update the tagsFormControl with invalid tag', () => {
+        const inputValue = { value: 'tag1' } as HTMLInputElement;
+        component.addTag({ input: inputValue, value: 'ta g1' } as MatChipInputEvent);
+        component.addTag({ input: inputValue, value: 'ta*g2' } as MatChipInputEvent);
+        expect(component.saveTags.length).toBe(2);
+        expect(component.saveForm.controls['tagsFormControl'].valid).toBeFalsy();
+    });
+
+    it('should add a tag and update the tagsFormControl with valid tag', () => {
+        const inputValue = { value: 'tag1' } as HTMLInputElement;
+        component.addTag({ input: inputValue, value: 'tag1' } as MatChipInputEvent);
+        component.addTag({ input: inputValue, value: 'tag2' } as MatChipInputEvent);
+        expect(component.saveTags.length).toBe(2);
+    });
+
+    it('should remove a tag and update the tagsFormControl', () => {
+        const inputValue = { value: 'tag1' } as HTMLInputElement;
+        component.addTag({ input: inputValue, value: 'tag1' } as MatChipInputEvent);
+        component.removeTag(new Tag('tag1'));
+        expect(component.saveTags.length).toBe(0);
     });
 
     it('should not save the image when name is empty and validators have errors', async () => {
@@ -207,7 +244,7 @@ describe('SaveDrawingComponent', () => {
         expect(showSpy).toHaveBeenCalled();
     });
 
-    fit('should not open save popup on a different key', async () => {
+    it('should not open save popup on a different key', async () => {
         const showSpy = spyOn(component, 'show').and.callFake(async () => {});
 
         const event = { key: 'a', ctrlKey: true, shiftKey: false, altKey: false, preventDefault: () => {} } as KeyboardEvent;
@@ -217,7 +254,6 @@ describe('SaveDrawingComponent', () => {
     });
 
     it('should ignore ctrl events', async () => {
-        const toolSpy = spyOn(toolHandlerService, 'onKeyDown').and.returnValue();
         const event = {
             key: 's',
             ctrlKey: true,
@@ -226,12 +262,10 @@ describe('SaveDrawingComponent', () => {
             preventDefault: () => {},
             stopImmediatePropagation: () => {},
         } as KeyboardEvent;
-        try {
-            await component.onKeyDown(event);
-            await shortcutService.onKeyDown(event);
-        } catch(e) {
-            console.log(e.stack);
-        }
+        await component.onKeyDown(event);
+
+        const toolSpy = spyOn(toolHandlerService, 'onKeyDown').and.returnValue();
+        await shortcutService.onKeyDown(event);
         expect(toolSpy).not.toHaveBeenCalled();
     });
 
