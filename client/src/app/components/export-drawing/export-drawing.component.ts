@@ -25,7 +25,7 @@ export class ExportDrawingComponent {
     private defaultFileNames: string[];
     exportFormat: string;
     filename: string;
-    currentFilter: string;
+    currentFilter: string = 'default';
     aspectRatio: number;
 
     private exportPreview: ElementRef<HTMLCanvasElement>;
