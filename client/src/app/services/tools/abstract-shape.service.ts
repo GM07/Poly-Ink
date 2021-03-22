@@ -35,6 +35,7 @@ export abstract class AbstractShape extends Tool {
     stopDrawing(): void {
         this.leftMouseDown = false;
         this.config.shiftDown = false;
+        this.drawingService.unblockUndoRedo();
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 

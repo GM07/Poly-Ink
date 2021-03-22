@@ -187,6 +187,7 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     stopDrawing(): void {
+        this.drawingService.unblockUndoRedo();
         this.endSelection();
         this.leftMouseDown = false;
         this.config.shiftDown = false;
