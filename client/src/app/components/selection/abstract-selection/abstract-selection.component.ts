@@ -84,6 +84,8 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     onMouseDown(event: MouseEvent): void {
         if (this.shortcutHandlerService.blockShortcuts || this.resizeSelected) return;
 
+        console.log('in');
+
         this.leftMouseDown = event.button === MouseButton.Left;
         if (!this.isInSidebar && this.leftMouseDown) {
             if (this.selectionService.isInSelection(event)) {
