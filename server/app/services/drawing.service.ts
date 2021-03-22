@@ -52,7 +52,8 @@ export class DrawingService {
     }
 
     validateTag(tag: Tag): boolean {
-        return tag !== undefined && tag.name !== undefined && tag.name !== '';
+        const regexExp: RegExp = /^[A-Za-z0-9-]+$/;
+        return tag ? regexExp.test(tag.name) : false;
     }
 
     async storeDrawing(drawing: Drawing): Promise<void> {

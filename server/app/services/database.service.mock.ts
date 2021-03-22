@@ -6,7 +6,7 @@ export class DatabaseServiceMock extends DatabaseService {
     db: Db;
     private server: MongoMemoryServer;
 
-    async start(url?: string): Promise<MongoClient | null> {
+    async start(_?: string): Promise<MongoClient | null> {
         if (!this.client) {
             this.server = new MongoMemoryServer();
             this.client = await MongoClient.connect(await this.server.getUri(), this.options);

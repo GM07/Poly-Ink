@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Filter } from '@app/classes/filters/filter';
 import { FunkyFilter } from '@app/classes/filters/funky-filter';
 import { Monochrome } from '@app/classes/filters/monochrome-filter';
@@ -27,6 +28,7 @@ export class ExportDrawingComponent {
     filename: string;
     currentFilter: string;
     aspectRatio: number;
+    exportForm: FormGroup;
 
     private exportPreview: ElementRef<HTMLCanvasElement>;
     @ViewChild('exportPreview', { static: false }) set content(element: ElementRef) {
@@ -53,12 +55,19 @@ export class ExportDrawingComponent {
         this.initValues();
     }
 
+    get nameFormControl(): AbstractControl {
+        return this.exportForm.get('nameFormControl') as AbstractControl;
+    }
+
     initValues(): void {
         this.defaultFileNames = DrawingConstants.defaultFileNames;
         this.exportFormat = 'png';
         this.currentFilter = 'default';
         this.aspectRatio = 1;
         this.filename = this.defaultFileNames[Math.floor(Math.random() * this.defaultFileNames.length)];
+        this.exportForm = new FormGroup({
+            nameFormControl: new FormControl(this.filename, [Validators.pattern('(?! )[a-zA-Z0-9\u00C0-\u017F, ]*(?<! )'), Validators.required]),
+        });
     }
 
     backupBaseCanvas(): void {
@@ -80,7 +89,10 @@ export class ExportDrawingComponent {
     }
 
     export(): void {
-        this.exportDrawingService.exportImage(this.canvasImage, this.exportFormat, this.filename === '' ? 'image' : this.filename);
+        if (this.nameFormControl.valid) {
+            this.filename = this.nameFormControl.value;
+            this.exportDrawingService.exportImage(this.canvasImage, this.exportFormat, this.filename);
+        }
     }
 
     private async applyFilter(): Promise<void> {

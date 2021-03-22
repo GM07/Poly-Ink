@@ -31,8 +31,8 @@
                 </mat-form-field>
             </form>
             <canvas #savePreview id="savePreview" [attr.width]="this.getPreviewWidth()" [attr.height]="this.getPreviewHeight()"></canvas>
-            <h3 *ngIf="noServerConnection" class="error">Aucune connexion internet!</h3>
-            <h3 *ngIf="unavailableServer" class="error">Le service n'est pas disponible!</h3>
+            <h3 *ngIf="noServerConnection" class="error">Aucune connexion au serveur!</h3>
+            <h3 *ngIf="unavailableServer" class="error">La base de données n'est pas disponible!</h3>
             <h3 *ngIf="dataLimitReached" class="error">L'image est trop grande!</h3>
             <div class="options">
                 <button class="button green white" type="submit" mat-raised-button [disabled]="!enableAcceptButton" form="saveForm">Confirmer</button>

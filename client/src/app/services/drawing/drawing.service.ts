@@ -27,17 +27,21 @@ export class DrawingService {
     }
 
     resizeCanvas(width: number, height: number): void {
-        const memoryCanvas = document.createElement('canvas'); // Temporary canvas
-        this.saveCanvas(memoryCanvas);
+        const memoryBaseCanvas = document.createElement('canvas'); // Temporary canvas
+        const memoryPreviewCanvas = document.createElement('canvas'); // Temporary canvas
+        this.saveCanvas(memoryBaseCanvas, this.canvas);
+        this.saveCanvas(memoryPreviewCanvas, this.previewCanvas);
+
         this.canvas.width = width;
         this.canvas.height = height;
         this.previewCanvas.width = width; // Canvas resize
         this.previewCanvas.height = height;
-        this.baseCtx.drawImage(memoryCanvas, 0, 0);
 
-        if (memoryCanvas.width < this.canvas.width || memoryCanvas.height < this.canvas.height) {
-            this.drawWhite(memoryCanvas);
-        }
+        this.initBackground();
+
+        this.baseCtx.drawImage(memoryBaseCanvas, 0, 0);
+        this.previewCtx.drawImage(memoryPreviewCanvas, 0, 0);
+
         this.changes.next();
     }
 
@@ -49,19 +53,11 @@ export class DrawingService {
         this.undoRedoService.init(this.baseCtx, this.previewCtx, initialResize);
     }
 
-    private saveCanvas(memoryCanvas: HTMLCanvasElement): void {
+    private saveCanvas(memoryCanvas: HTMLCanvasElement, canvas: HTMLCanvasElement): void {
         const memoryCtx = memoryCanvas.getContext('2d') as CanvasRenderingContext2D;
-        memoryCanvas.width = this.canvas.width;
-        memoryCanvas.height = this.canvas.height; // Saving canvas
-        memoryCtx.drawImage(this.canvas, 0, 0);
-    }
-
-    private drawWhite(memoryCanvas: HTMLCanvasElement): void {
-        const color = this.baseCtx.fillStyle;
-        this.baseCtx.fillStyle = 'white';
-        this.baseCtx.fillRect(memoryCanvas.width, 0, this.canvas.width - memoryCanvas.width, this.canvas.height);
-        this.baseCtx.fillRect(0, memoryCanvas.height, this.canvas.width, this.canvas.height - memoryCanvas.height);
-        this.baseCtx.fillStyle = color;
+        memoryCanvas.width = canvas.width;
+        memoryCanvas.height = canvas.height; // Saving canvas
+        memoryCtx.drawImage(canvas, 0, 0);
     }
 
     blockUndoRedo(): void {

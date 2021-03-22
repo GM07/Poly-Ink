@@ -144,4 +144,12 @@ describe('CanvasResizeComponent', () => {
         expect(component.previewResizeStyle.width).toBeDefined();
         expect(component.workZoneStyle.width).toBeDefined();
     });
+
+    it('should not reset the blocked shortcuts', () => {
+        const upEvent = new MouseEvent('document:mouseUp', { clientX: 1, clientY: 1 });
+        component['isDown'] = false;
+        component['shortcutHandler'].blockShortcuts = true;
+        component.onMouseUp(upEvent);
+        expect(component['shortcutHandler'].blockShortcuts).toBeTruthy();
+    });
 });
