@@ -37,13 +37,11 @@ export class DrawingService {
         this.previewCanvas.width = width; // Canvas resize
         this.previewCanvas.height = height;
 
+        this.initBackground();
+
         this.baseCtx.drawImage(memoryBaseCanvas, 0, 0);
         this.previewCtx.drawImage(memoryPreviewCanvas, 0, 0);
 
-        if (memoryBaseCanvas.width < this.canvas.width || memoryBaseCanvas.height < this.canvas.height) {
-            this.drawWhite(memoryBaseCanvas);
-            this.drawWhite(memoryPreviewCanvas);
-        }
         this.changes.next();
     }
 
@@ -60,14 +58,6 @@ export class DrawingService {
         memoryCanvas.width = canvas.width;
         memoryCanvas.height = canvas.height; // Saving canvas
         memoryCtx.drawImage(canvas, 0, 0);
-    }
-
-    private drawWhite(memoryCanvas: HTMLCanvasElement): void {
-        const color = this.baseCtx.fillStyle;
-        this.baseCtx.fillStyle = 'white';
-        this.baseCtx.fillRect(memoryCanvas.width, 0, this.canvas.width - memoryCanvas.width, this.canvas.height);
-        this.baseCtx.fillRect(0, memoryCanvas.height, this.canvas.width, this.canvas.height - memoryCanvas.height);
-        this.baseCtx.fillStyle = color;
     }
 
     blockUndoRedo(): void {
