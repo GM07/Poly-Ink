@@ -10,7 +10,7 @@ import { catchError, map } from 'rxjs/operators';
 @Injectable({
     providedIn: 'root',
 })
-export class CarrouselService {
+export class ServerCommunicationService {
     static readonly baseURL: string = 'http://localhost:3000/drawings';
 
     constructor(private http: HttpClient) {}
@@ -27,7 +27,7 @@ export class CarrouselService {
     }
 
     getAllDrawings(): Observable<Drawing[]> {
-        return this.http.get<Drawing[]>(CarrouselService.baseURL).pipe();
+        return this.http.get<Drawing[]>(ServerCommunicationService.baseURL).pipe();
     }
 
     getFilteredDrawings(tags: Tag[]): Observable<Drawing[]> {
@@ -36,11 +36,11 @@ export class CarrouselService {
                 return tag.name;
             })
             .join();
-        return this.http.get<Drawing[]>(CarrouselService.baseURL + '?tags=' + tagStr);
+        return this.http.get<Drawing[]>(ServerCommunicationService.baseURL + '?tags=' + tagStr);
     }
 
     deleteDrawing(drawing: Drawing): Observable<{}> {
-        const url = `${CarrouselService.baseURL}?ids=${drawing.data._id}`;
+        const url = `${ServerCommunicationService.baseURL}?ids=${drawing.data._id}`;
         return this.http.delete<Drawing>(url).pipe(
             catchError((err) => {
                 return throwError(err);
@@ -54,6 +54,6 @@ export class CarrouselService {
         const httpOptions = {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
         };
-        return this.http.post<ResponseMessage>(CarrouselService.baseURL, JSON.stringify(drawingData), httpOptions);
+        return this.http.post<ResponseMessage>(ServerCommunicationService.baseURL, JSON.stringify(drawingData), httpOptions);
     }
 }

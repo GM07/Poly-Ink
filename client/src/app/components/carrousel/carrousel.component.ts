@@ -2,9 +2,9 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
-import { CarrouselService } from '@app/services/carrousel/carrousel.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { NewDrawingService } from '@app/services/popups/new-drawing';
+import { ServerCommunicationService } from '@app/services/server-communication/server-communication.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { Drawing } from '@common/communication/drawing';
 import { DrawingData } from '@common/communication/drawing-data';
@@ -43,7 +43,7 @@ export class CarrouselComponent implements OnInit {
     constructor(
         private shortcutHandler: ShortcutHandlerService,
         private drawingService: DrawingService,
-        private carrouselService: CarrouselService,
+        private serverCommunicationService: ServerCommunicationService,
         private router: Router,
         private cd: ChangeDetectorRef,
         activatedRoute: ActivatedRoute,
@@ -95,7 +95,7 @@ export class CarrouselComponent implements OnInit {
     animationIsDone: boolean;
 
     ngOnInit(): void {
-        this.carrouselService.testConnection().subscribe((isOnline) => (this.isOnline = isOnline));
+        this.serverCommunicationService.testConnection().subscribe((isOnline) => (this.isOnline = isOnline));
         if (this.isOnline && this.showCarrousel) {
             this.loadCarrousel();
         }
@@ -149,7 +149,7 @@ export class CarrouselComponent implements OnInit {
             this.hasDrawings = false;
             return;
         }
-        this.carrouselService.deleteDrawing(this.drawingsList[this.currentIndex]).subscribe(
+        this.serverCommunicationService.deleteDrawing(this.drawingsList[this.currentIndex]).subscribe(
             () => {
                 this.deleteAndUpdate();
             },
@@ -167,6 +167,7 @@ export class CarrouselComponent implements OnInit {
     private deleteAndUpdate(): void {
         this.drawingsList.splice(this.currentIndex, 1);
         if (this.currentIndex === this.drawingsList.length && this.drawingsList.length !== 0) --this.currentIndex;
+        if (this.drawingsList.length === 0) this.hasDrawings = false;
         this.updateDrawingContent();
     }
 
@@ -291,7 +292,7 @@ export class CarrouselComponent implements OnInit {
         this.serverConnexionError = false;
         this.cd.detectChanges(); // Must detect changes before loading
 
-        this.carrouselService.getAllDrawings().subscribe(
+        this.serverCommunicationService.getAllDrawings().subscribe(
             (drawings: Drawing[]) => {
                 this.drawingsList = drawings;
                 this.hasDrawings = this.drawingsList.length > 0;

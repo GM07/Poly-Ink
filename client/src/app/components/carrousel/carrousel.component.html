@@ -122,10 +122,10 @@
                             </button>
                         </div>
                         </div>
-                        <div *ngIf="drawingsList.length === 0 then noFilteredDrawingsBlock"></div>
+                        <div *ngIf="(drawingsList.length === 0 && hasDrawings); then noFilteredDrawingsBlock"></div>
                     <app-drawing-tags (serverError)="serverConnexionIn($event)" (filteredDrawings)="loadFilteredCarrousel($event)"></app-drawing-tags>
                     <div *ngIf="serverConnexionError; then serverConnexionErrorBlock"></div>
-                    <div *ngIf="showLoadingError then showLoadingErrorBlock" ></div>
+                    <div *ngIf="showLoadingError; then showLoadingErrorBlock" ></div>
                     <div *ngIf="!animationIsDone; then loadingAnimationBlock; else optionsBlock"></div>
                 </ng-template>
             </div>

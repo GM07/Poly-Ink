@@ -1,7 +1,8 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { CarrouselService } from '@app/services/carrousel/carrousel.service';
+import { DrawingConstants } from '@app/constants/drawing';
+import { ServerCommunicationService } from '@app/services/server-communication/server-communication.service';
 import { Drawing } from '@common/communication/drawing';
 import { Tag } from '@common/communication/tag';
 
@@ -22,7 +23,7 @@ export class DrawingTagsComponent implements OnInit {
     @Output() filteredDrawings: EventEmitter<Drawing[]>;
     @Output() serverError: EventEmitter<boolean>;
 
-    constructor(private carrouselService: CarrouselService) {
+    constructor(private serverCommunicationService: ServerCommunicationService) {
         this.visible = true;
         this.selectable = true;
         this.removable = true;
@@ -37,14 +38,14 @@ export class DrawingTagsComponent implements OnInit {
     }
 
     getAllDrawings(): void {
-        this.carrouselService.getAllDrawings().subscribe((drawings: Drawing[]) => {
+        this.serverCommunicationService.getAllDrawings().subscribe((drawings: Drawing[]) => {
             this.drawings = drawings;
         });
     }
 
     getFilteredDrawings(): void {
         this.drawings = [];
-        this.carrouselService.getFilteredDrawings(this.filterTags).subscribe(
+        this.serverCommunicationService.getFilteredDrawings(this.filterTags).subscribe(
             (drawings: Drawing[]) => {
                 this.drawings = drawings;
                 this.serverError.emit(false);
@@ -59,8 +60,7 @@ export class DrawingTagsComponent implements OnInit {
 
     addFilter(event: MatChipInputEvent): void {
         const value = event.value;
-
-        if (value.trim()) {
+        if (value.trim() && this.filterTags.length < DrawingConstants.maxTags) {
             this.filterTags.push({ name: value.trim() });
             this.getFilteredDrawings();
         }
