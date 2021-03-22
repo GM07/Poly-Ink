@@ -113,6 +113,7 @@ describe('AerosolService', () => {
     });
 
     it('should call sprayContinuously when entering the canvas if mouse is down', () => {
+        service.leftMouseDown = true;
         mouseEvent = { clientX: 0, clientY: 0, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseEnter(mouseEvent);
         expect(sprayContinuouslySpy).toHaveBeenCalled();
