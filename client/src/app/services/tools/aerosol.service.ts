@@ -101,7 +101,7 @@ export class AerosolService extends Tool {
     onMouseEnter(event: MouseEvent): void {
         if (event.button !== MouseButton.Left) return;
 
-        if (event.buttons === LeftMouse.Pressed) {
+        if (event.buttons === LeftMouse.Pressed && this.leftMouseDown) {
             this.mouseDownCoord = this.getPositionFromMouse(event);
             this.sprayContinuously();
         }
