@@ -66,7 +66,7 @@ export class ExportDrawingComponent {
         this.aspectRatio = 1;
         this.filename = this.defaultFileNames[Math.floor(Math.random() * this.defaultFileNames.length)];
         this.exportForm = new FormGroup({
-            nameFormControl: new FormControl(this.filename, [Validators.pattern('(?! )[a-zA-Z0-9\u00C0-\u017F, ]*(?<! )')]),
+            nameFormControl: new FormControl(this.filename, [Validators.pattern('(?! )[a-zA-Z0-9\u00C0-\u017F, ]*(?<! )'), Validators.required]),
         });
     }
 
