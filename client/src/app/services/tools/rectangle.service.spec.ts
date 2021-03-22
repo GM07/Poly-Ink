@@ -19,7 +19,7 @@ describe('RectangleService', () => {
     let drawPreviewSpy: jasmine.Spy<any>;
 
     beforeEach(() => {
-        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'drawPreview', 'blockUndoRedo']);
+        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'drawPreview', 'blockUndoRedo', 'unblockUndoRedo']);
         colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(1, 1, 1, 1)', secondaryRgba: 'rgba(0, 0, 0, 1)' });
 
         TestBed.configureTestingModule({
@@ -110,11 +110,11 @@ describe('RectangleService', () => {
     });
 
     it('should update the rectangle when the mouse leaves', () => {
-        service.onMouseLeave();
+        service.onMouseLeave({} as MouseEvent);
         expect(drawPreviewSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         mouseEvent = { clientX: 1, clientY: 1, button: 0 } as MouseEvent;
-        service.onMouseLeave();
+        service.onMouseLeave({} as MouseEvent);
         expect(drawPreviewSpy).toHaveBeenCalled();
     });
 
@@ -131,11 +131,11 @@ describe('RectangleService', () => {
     });
 
     it('should update the rectangle when the mouse enters', () => {
-        service.onMouseEnter();
+        service.onMouseEnter({} as MouseEvent);
         expect(drawPreviewSpy).not.toHaveBeenCalled();
         service.onMouseDown(mouseEvent);
         mouseEvent = { clientX: 1, clientY: 1, button: 0 } as MouseEvent;
-        service.onMouseEnter();
+        service.onMouseEnter({} as MouseEvent);
         expect(drawPreviewSpy).toHaveBeenCalled();
     });
 

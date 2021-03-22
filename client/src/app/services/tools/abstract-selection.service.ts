@@ -71,6 +71,7 @@ export abstract class AbstractSelectionService extends Tool {
             document.body.style.height = this.bodyHeight;
             const mousePos = this.getPositionFromMouse(event);
             this.endSelection();
+            this.updatePoints.next(false);
             this.mouseDownCoord = mousePos;
             this.mouseUpCoord = mousePos;
             this.config.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
@@ -187,6 +188,7 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     stopDrawing(): void {
+        this.drawingService.unblockUndoRedo();
         this.endSelection();
         this.leftMouseDown = false;
         this.config.shiftDown = false;

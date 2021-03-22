@@ -23,7 +23,7 @@ describe('PolygoneService', () => {
     const INIT_OFFSET_Y = 25;
 
     beforeEach(() => {
-        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'drawPreview']);
+        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'drawPreview', 'unblockUndoRedo']);
 
         colorServiceSpy = jasmine.createSpyObj('ColorService', [], {
             primaryRgba: new Color(1, 1, 1).toRgbaString(1),
