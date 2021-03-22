@@ -8,9 +8,9 @@ import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { CarrouselService } from '@app/services/carrousel/carrousel.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { SaveDrawingService } from '@app/services/popups/save-drawing.service';
+import { ServerCommunicationService } from '@app/services/server-communication/server-communication.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { Drawing } from '@common/communication/drawing';
@@ -29,7 +29,7 @@ describe('SaveDrawingComponent', () => {
     let saveDrawingService: SaveDrawingService;
     let shortcutService: ShortcutHandlerService;
     let toolHandlerService: ToolHandlerService;
-    let carrouselService: CarrouselService;
+    let serverCommunicationService: ServerCommunicationService;
 
     let drawingService: DrawingService;
     let drawServiceSpy: jasmine.SpyObj<DrawingService>;
@@ -52,7 +52,7 @@ describe('SaveDrawingComponent', () => {
         toolHandlerService = TestBed.inject(ToolHandlerService);
         spyOn(toolHandlerService.getCurrentTool(), 'stopDrawing').and.callFake(() => {});
         shortcutService = TestBed.inject(ShortcutHandlerService);
-        carrouselService = TestBed.inject(CarrouselService);
+        serverCommunicationService = TestBed.inject(ServerCommunicationService);
         drawingService = TestBed.inject(DrawingService);
         drawServiceSpy = spyOnAllFunctions(drawingService);
         drawServiceSpy.canvas = document.createElement('canvas');
@@ -121,7 +121,7 @@ describe('SaveDrawingComponent', () => {
     });
 
     it('should save image with valid file name and empty tags', async () => {
-        const spy = spyOn(carrouselService, 'createDrawing').and.returnValue(new Observable());
+        const spy = spyOn(serverCommunicationService, 'createDrawing').and.returnValue(new Observable());
         const mockDrawing: Drawing = new Drawing(new DrawingData(''));
         mockDrawing.image = component['canvasImage'];
         component.save();
@@ -129,7 +129,7 @@ describe('SaveDrawingComponent', () => {
     });
 
     it('should save the image with valid file name and tags', async () => {
-        const spy = spyOn(carrouselService, 'createDrawing').and.returnValue(new Observable());
+        const spy = spyOn(serverCommunicationService, 'createDrawing').and.returnValue(new Observable());
         component.saveForm.controls['tagsFormControl'].setValue(['tag1', 'tag2']);
         component.saveTags.push(new Tag('tag1'), new Tag('tag2'));
         const mockDrawing: Drawing = new Drawing(new DrawingData(''));
@@ -170,7 +170,7 @@ describe('SaveDrawingComponent', () => {
     });
 
     it('should not save the image when name is empty and validators have errors', async () => {
-        const spy = spyOn(carrouselService, 'createDrawing').and.returnValue(new Observable());
+        const spy = spyOn(serverCommunicationService, 'createDrawing').and.returnValue(new Observable());
         component.nameFormControl.setErrors({ required: true });
         component.save();
         expect(spy).not.toHaveBeenCalled();
@@ -178,7 +178,7 @@ describe('SaveDrawingComponent', () => {
 
     it('should hide the popup on a successful request', async () => {
         spyOn(component, 'hidePopup').and.callFake(() => {});
-        spyOn(carrouselService, 'createDrawing').and.callFake((drawing: Drawing) => {
+        spyOn(serverCommunicationService, 'createDrawing').and.callFake((drawing: Drawing) => {
             return of(Promise.resolve(new HttpResponse({ status: 200 })));
         });
         await component.save();
@@ -187,7 +187,7 @@ describe('SaveDrawingComponent', () => {
 
     it('should not hide the popup on a bad request and should enable noServerConnection boolean on component', async () => {
         spyOn(component, 'hidePopup').and.callFake(() => {});
-        spyOn(carrouselService, 'createDrawing').and.callFake((drawing: Drawing) => {
+        spyOn(serverCommunicationService, 'createDrawing').and.callFake((drawing: Drawing) => {
             return of(Promise.reject(new HttpErrorResponse({ status: 400 })));
         });
         await component.save();
@@ -197,7 +197,7 @@ describe('SaveDrawingComponent', () => {
 
     it('should not hide the popup on a bad request and should enable noServerConnection boolean on component', async () => {
         spyOn(component, 'hidePopup').and.callFake(() => {});
-        spyOn(carrouselService, 'createDrawing').and.callFake((drawing: Drawing) => {
+        spyOn(serverCommunicationService, 'createDrawing').and.callFake((drawing: Drawing) => {
             return of(Promise.reject(new HttpErrorResponse({ status: 401 })));
         });
         await component.save();
@@ -207,7 +207,7 @@ describe('SaveDrawingComponent', () => {
 
     it('should not hide the popup on a bad request and should enable unavailableServer error boolean on component', async () => {
         spyOn(component, 'hidePopup').and.callFake(() => {});
-        spyOn(carrouselService, 'createDrawing').and.callFake((drawing: Drawing) => {
+        spyOn(serverCommunicationService, 'createDrawing').and.callFake((drawing: Drawing) => {
             return of(Promise.reject(new HttpErrorResponse({ status: 503 })));
         });
         await component.save();
@@ -217,7 +217,7 @@ describe('SaveDrawingComponent', () => {
 
     it('should not hide the popup on a bad request and should enable dataLimitReached error boolean on component', async () => {
         spyOn(component, 'hidePopup').and.callFake(() => {});
-        spyOn(carrouselService, 'createDrawing').and.callFake((drawing: Drawing) => {
+        spyOn(serverCommunicationService, 'createDrawing').and.callFake((drawing: Drawing) => {
             return of(Promise.reject(new HttpErrorResponse({ status: 413 })));
         });
         await component.save();

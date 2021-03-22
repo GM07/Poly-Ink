@@ -9,9 +9,9 @@ import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CarrouselComponent } from '@app/components/carrousel/carrousel.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
-import { CarrouselService } from '@app/services/carrousel/carrousel.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { NewDrawingService } from '@app/services/popups/new-drawing';
+import { ServerCommunicationService } from '@app/services/server-communication/server-communication.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { Drawing } from '@common/communication/drawing';
 import { DrawingData } from '@common/communication/drawing-data';
@@ -28,7 +28,7 @@ describe('CarrouselComponent', () => {
     let imageRef: ElementRef<HTMLImageElement>;
     let createLoadedCanvasSpy: jasmine.Spy<any>;
     let getDrawingFromServerSpy: jasmine.Spy<any>;
-    let carrouselService: CarrouselService;
+    let serverCommunicationService: ServerCommunicationService;
     let drawServiceSpy: DrawingService;
     let shortcutServiceSpy: ShortcutHandlerService;
 
@@ -52,7 +52,7 @@ describe('CarrouselComponent', () => {
             providers: [
                 { provide: DrawingService, useValue: drawServiceSpy },
                 { provide: ShortcutHandlerService, useValue: shortcutServiceSpy },
-                CarrouselService,
+                ServerCommunicationService,
                 HttpTestingController,
             ],
         }).compileComponents();
@@ -74,7 +74,7 @@ describe('CarrouselComponent', () => {
         image.src = canvasDataURL;
         imageRef = new ElementRef<HTMLImageElement>(image);
         component.middlePreview = imageRef;
-        carrouselService = TestBed.inject(CarrouselService);
+        serverCommunicationService = TestBed.inject(ServerCommunicationService);
 
         getDrawingFromServerSpy = spyOn<any>(component, 'getImageAtIndex').and.callFake((index: number) => {
             if (index === 0) return canvasDataURL;
@@ -110,7 +110,7 @@ describe('CarrouselComponent', () => {
     });
 
     it('should load the carrousel', async(() => {
-        spyOn(carrouselService, 'getAllDrawings').and.returnValue(of([]));
+        spyOn(serverCommunicationService, 'getAllDrawings').and.returnValue(of([]));
         spyOn<any>(component, 'updateDrawingContent');
         const changeSpy = spyOn<any>(component['cd'], 'detectChanges');
         component['loadCarrousel']();
@@ -255,16 +255,17 @@ describe('CarrouselComponent', () => {
 
     it('should delete a drawing', async () => {
         component.currentIndex = 0;
-        component.drawingsList = [dummyDrawing1, dummyDrawing1];
+        component.drawingsList = [dummyDrawing1];
         spyOn(of(true), 'subscribe').and.callThrough();
-        spyOn(carrouselService, 'deleteDrawing').and.returnValue(of(true));
+        spyOn(serverCommunicationService, 'deleteDrawing').and.returnValue(of(true));
         const spy = spyOn<any>(component, 'updateDrawingContent');
         component['animationIsDone'] = false;
         component.deleteDrawing();
         component['animationIsDone'] = true;
         component.deleteDrawing();
         expect(spy).toHaveBeenCalled();
-        expect(component.drawingsList).toEqual([dummyDrawing1]);
+        expect(component.drawingsList).toEqual([]);
+        expect(component.hasDrawings).toBeFalse();
     });
 
     it('should send error no drawings', () => {
@@ -289,7 +290,7 @@ describe('CarrouselComponent', () => {
     });
 
     it('should throw error and load server error', async () => {
-        spyOn(carrouselService, 'getAllDrawings').and.returnValue(throwError('allo'));
+        spyOn(serverCommunicationService, 'getAllDrawings').and.returnValue(throwError('allo'));
         component['loadCarrousel']();
         expect(component.serverConnexionError).toBeTrue();
     });
@@ -297,7 +298,7 @@ describe('CarrouselComponent', () => {
     it('should throw error in delete, not 404', async () => {
         component.animationIsDone = true;
         component.drawingsList = [dummyDrawing1];
-        const mockCall = spyOn(carrouselService, 'deleteDrawing').and.returnValue(throwError({ status: 504 }));
+        const mockCall = spyOn(serverCommunicationService, 'deleteDrawing').and.returnValue(throwError({ status: 504 }));
         component.deleteDrawing();
         expect(mockCall).toHaveBeenCalled();
         expect(component.serverConnexionError).toBeTrue();
@@ -307,7 +308,7 @@ describe('CarrouselComponent', () => {
         component.animationIsDone = true;
         component.drawingsList = [dummyDrawing1];
         const mockDeleteAndUpdate = spyOn<any>(component, 'deleteAndUpdate');
-        const mockCall = spyOn(carrouselService, 'deleteDrawing').and.returnValue(throwError({ status: 404 }));
+        const mockCall = spyOn(serverCommunicationService, 'deleteDrawing').and.returnValue(throwError({ status: 404 }));
         component.deleteDrawing();
         expect(mockCall).toHaveBeenCalled();
         expect(mockDeleteAndUpdate).toHaveBeenCalled();

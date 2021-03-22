@@ -28,6 +28,32 @@
 
         <mat-action-list class="bottom-sidebar">
             <button
+                (click)="emitClickEvent(undoToolSettings)"
+                class="sidebar-item icon-button"
+                matTooltip="{{ undoToolSettings.infoBubble }}"
+                mat-icon-button
+                matTooltipPosition="right"
+                [@.disabled]="true"
+                [disabled]="undoRedoService.blockUndoRedo || undoRedoService.currentAction < 0"
+                [style.background]="undoToolSettings.toolId === selectedTool.toolID ? HIGHLIGHTED_COLOR : 'white'"
+            >
+                <mat-icon svgIcon="{{ undoToolSettings.iconName }}"></mat-icon>
+            </button>
+
+            <button
+                (click)="emitClickEvent(redoToolSettings)"
+                class="sidebar-item icon-button"
+                matTooltip="{{ redoToolSettings.infoBubble }}"
+                mat-icon-button
+                matTooltipPosition="right"
+                [@.disabled]="true"
+                [disabled]="undoRedoService.blockUndoRedo || undoRedoService.currentAction >= undoRedoService.commands.length - 1"
+                [style.background]="redoToolSettings.toolId === selectedTool.toolID ? HIGHLIGHTED_COLOR : 'white'"
+            >
+                <mat-icon svgIcon="{{ redoToolSettings.iconName }}"></mat-icon>
+            </button>
+
+            <button
                 (click)="emitClickEvent(tool)"
                 *ngFor="let tool of bottomToolsSettings"
                 class="sidebar-item icon-button"

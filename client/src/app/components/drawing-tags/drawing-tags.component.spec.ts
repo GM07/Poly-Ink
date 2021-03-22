@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { CarrouselService } from '@app/services/carrousel/carrousel.service';
+import { ServerCommunicationService } from '@app/services/server-communication/server-communication.service';
 import { Drawing } from '@common/communication/drawing';
 import { DrawingData } from '@common/communication/drawing-data';
 import { Tag } from '@common/communication/tag';
@@ -13,13 +13,13 @@ import { DrawingTagsComponent } from './drawing-tags.component';
 describe('DrawingTagsComponent', () => {
     let component: DrawingTagsComponent;
     let fixture: ComponentFixture<DrawingTagsComponent>;
-    let carrouselService: CarrouselService;
+    let serverCommunicationService: ServerCommunicationService;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [MatChipsModule, NoopAnimationsModule, HttpClientTestingModule, MatFormFieldModule],
             declarations: [DrawingTagsComponent],
-            providers: [CarrouselService, HttpTestingController],
+            providers: [ServerCommunicationService, HttpTestingController],
         }).compileComponents();
     }));
 
@@ -28,7 +28,7 @@ describe('DrawingTagsComponent', () => {
         component = fixture.componentInstance;
         fixture.detectChanges();
 
-        carrouselService = TestBed.inject(CarrouselService);
+        serverCommunicationService = TestBed.inject(ServerCommunicationService);
 
         fixture.detectChanges();
     });
@@ -39,14 +39,14 @@ describe('DrawingTagsComponent', () => {
 
     it('should get all drawings', async(() => {
         const drawings: Drawing[] = [];
-        spyOn(carrouselService, 'getAllDrawings').and.returnValue(of(drawings));
+        spyOn(serverCommunicationService, 'getAllDrawings').and.returnValue(of(drawings));
         component.getAllDrawings();
         expect(component.drawings).toEqual(drawings);
     }));
 
     it('should get filtered drawings', async () => {
         const drawings: Drawing[] = [];
-        spyOn(carrouselService, 'getFilteredDrawings').and.returnValue(of(drawings));
+        spyOn(serverCommunicationService, 'getFilteredDrawings').and.returnValue(of(drawings));
         component.getFilteredDrawings();
         expect(component.drawings).toEqual(drawings);
     });
@@ -65,7 +65,7 @@ describe('DrawingTagsComponent', () => {
     });
 
     it('should send connexion error when trying to add filter but no connexion to server', async () => {
-        spyOn(carrouselService, 'getFilteredDrawings').and.returnValue(throwError('error'));
+        spyOn(serverCommunicationService, 'getFilteredDrawings').and.returnValue(throwError('error'));
         spyOn(component.serverError, 'emit');
         spyOn(component.filteredDrawings, 'emit');
         component.getFilteredDrawings();
@@ -90,7 +90,7 @@ describe('DrawingTagsComponent', () => {
 
     it('should get filtered drawings', () => {
         const drawing = new Drawing(new DrawingData(''));
-        spyOn(carrouselService, 'getFilteredDrawings').and.returnValue(of([drawing]));
+        spyOn(serverCommunicationService, 'getFilteredDrawings').and.returnValue(of([drawing]));
         component.getFilteredDrawings();
         expect(component.drawings.length).toEqual(1);
     });

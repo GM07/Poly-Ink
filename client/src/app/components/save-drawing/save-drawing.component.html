@@ -10,7 +10,7 @@
                     <mat-error *ngIf="nameFormControl.invalid"> Le nom est <strong>invalide!</strong> </mat-error>
                 </mat-form-field>
                 <mat-form-field>
-                    <mat-label class="gray">Étiquette (confirmer avec Enter)</mat-label>
+                    <mat-label class="gray">Étiquette (confirmer avec Entrée)</mat-label>
                     <mat-chip-list #chipList aria-label="Filtrage par étiquettes" formControlName="tagsFormControl">
                         <mat-chip *ngFor="let tag of saveTags" [selectable]="selectable" [removable]="removable" (removed)="removeTag(tag)">
                             {{ tag.name }}
