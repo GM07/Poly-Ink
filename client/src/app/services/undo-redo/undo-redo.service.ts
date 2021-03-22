@@ -55,7 +55,7 @@ export class UndoRedoService {
 
         this.currentAction -= 1;
 
-        this.originalResize.execute(this.context);
+        this.originalResize.execute();
         this.context.drawImage(this.originalCanvas, 0, 0);
 
         for (let i = 0; i <= this.currentAction; i++) {

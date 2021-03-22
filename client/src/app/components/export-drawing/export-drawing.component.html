@@ -9,10 +9,11 @@
                     <mat-button-toggle id="corner-right" value="jpeg" (change)="changeExportFormat($event.value)">JPEG</mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
-            <form>
-                <mat-form-field>
-                    <input matInput [(ngModel)]="filename" name="filename" maxlength="100" />
+            <form [formGroup]="exportForm" (ngSubmit)="export()" id="exportForm">
+                <mat-form-field appearance="legacy">
+                    <input matInput formControlName="nameFormControl" name="filename" maxlength="100" />
                     <span matSuffix>{{ '.' + exportFormat }} &nbsp;</span>
+                    <mat-error *ngIf="nameFormControl.invalid"> Le nom n'est pas <strong>valide</strong> </mat-error>
                 </mat-form-field>
             </form>
             <div class="options">
@@ -27,7 +28,7 @@
             </div>
             <canvas #exportPreview id="exportPreview" [attr.width]="this.getPreviewWidth()" [attr.height]="this.getPreviewHeight()"></canvas>
             <div class="options">
-                <button class="button green white" mat-raised-button (click)="export()">Confirmer</button>
+                <button class="button green white" type="submit" mat-raised-button form="exportForm">Confirmer</button>
                 <button class="button red white" mat-raised-button (click)="hidePopup()">Annuler</button>
             </div>
         </div>

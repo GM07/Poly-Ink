@@ -98,13 +98,14 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     }
 
     onMouseUp(): void {
+        this.leftMouseDown = false;
+        this.resizeSelected = false;
         if (this.shortcutHandlerService.blockShortcuts) return;
 
         if (this.displayControlPoints) {
             this.makeControlsSelectable();
         }
         this.updateControlPointDisplay(this.selectionService.selectionCtx !== null);
-        this.leftMouseDown = false;
     }
 
     onMouseMove(event: MouseEvent): void {
