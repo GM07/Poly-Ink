@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
-import { PolygonConfig, PolygonMode } from '@app/classes/tool-config/polygon-config';
+import { PolygonDraw } from '@app/classes/commands/polygon-draw';
+import { ShapeConfig, ShapeMode } from '@app/classes/tool-config/shape-config';
 import { Vec2 } from '@app/classes/vec2';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { PolygonDraw } from './polygon-draw';
 
 // tslint:disable:no-string-literal
 // tslint:disable:no-any
@@ -19,7 +19,7 @@ describe('PolygonDraw', () => {
 
     beforeEach(() => {
         colorService = { primaryRgba: Colors.RED.rgbString, secondaryRgba: Colors.BLUE.rgbString } as ColorService;
-        polygonDraw = new PolygonDraw(colorService, new PolygonConfig());
+        polygonDraw = new PolygonDraw(colorService, new ShapeConfig());
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
 
@@ -31,7 +31,7 @@ describe('PolygonDraw', () => {
     });
 
     it('should draw preview circle', () => {
-        polygonDraw['config'].polygonMode = PolygonMode.Contour;
+        polygonDraw['config'].shapeMode = ShapeMode.Contour;
         polygonDraw['config'].showPerimeter = true;
 
         const middleX: number = (polygonDraw['config'].endCoords.x - polygonDraw['config'].startCoords.x) / 2;
@@ -47,7 +47,7 @@ describe('PolygonDraw', () => {
     });
 
     it('should allow for contour drawing type', () => {
-        polygonDraw['config'].polygonMode = PolygonMode.Contour;
+        polygonDraw['config'].shapeMode = ShapeMode.Contour;
 
         polygonDraw.execute(ctxStub);
 
@@ -66,7 +66,7 @@ describe('PolygonDraw', () => {
     });
 
     it('should allow for filled drawing type', () => {
-        polygonDraw['config'].polygonMode = PolygonMode.Filled;
+        polygonDraw['config'].shapeMode = ShapeMode.Filled;
 
         polygonDraw.execute(ctxStub);
 
@@ -80,7 +80,7 @@ describe('PolygonDraw', () => {
     });
 
     it('should allow for filled and contour drawing type for a triangle', () => {
-        polygonDraw['config'].polygonMode = PolygonMode.FilledWithContour;
+        polygonDraw['config'].shapeMode = ShapeMode.FilledWithContour;
         polygonDraw['config'].lineWidth = 2;
 
         polygonDraw.execute(ctxStub);
@@ -105,7 +105,7 @@ describe('PolygonDraw', () => {
     });
 
     it('should allow for filled and contour drawing type for a square', () => {
-        polygonDraw['config'].polygonMode = PolygonMode.FilledWithContour;
+        polygonDraw['config'].shapeMode = ShapeMode.FilledWithContour;
 
         // tslint:disable-next-line:no-magic-numbers
         polygonDraw['config'].numEdges = 4;
@@ -144,7 +144,7 @@ describe('PolygonDraw', () => {
     });
 
     it('should draw polygon left properly', () => {
-        polygonDraw['config'].polygonMode = PolygonMode.Filled;
+        polygonDraw['config'].shapeMode = ShapeMode.Filled;
         polygonDraw['config'].startCoords = { x: 15, y: 15 };
         polygonDraw['config'].endCoords = { x: 0, y: 0 };
 

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
-import { PolygonMode } from '@app/classes/tool-config/polygon-config';
+import { ShapeMode } from '@app/classes/tool-config/shape-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { PolygoneService } from '@app/services/tools/polygone.service';
 
@@ -10,7 +10,7 @@ import { PolygoneService } from '@app/services/tools/polygone.service';
     styleUrls: ['./polygone-config.component.scss'],
 })
 export class PolygoneConfigComponent extends ToolConfig {
-    polygoneModeIn: typeof PolygonMode = PolygonMode;
+    polygoneModeIn: typeof ShapeMode = ShapeMode;
     readonly MIN: number = ToolSettingsConst.MIN_WIDTH;
     readonly MAX: number = ToolSettingsConst.MAX_WIDTH;
     readonly MAX_WIDTH_POLYGONE: number = ToolSettingsConst.MAX_WIDTH;
@@ -21,8 +21,8 @@ export class PolygoneConfigComponent extends ToolConfig {
         super();
     }
 
-    toggleTraceType(polygonMode: PolygonMode): void {
-        this.polygonService.config.polygonMode = polygonMode;
+    toggleTraceType(polygonMode: ShapeMode): void {
+        this.polygonService.config.shapeMode = polygonMode;
     }
 
     colorSliderLabel(value: number): string {

@@ -14,6 +14,7 @@ export class ShapeConfig {
     shiftDown: boolean;
     lineWidth: number;
     showPerimeter: boolean;
+    numEdges: number;
 
     constructor() {
         this.startCoords = { x: 0, y: 0 };
@@ -22,6 +23,7 @@ export class ShapeConfig {
         this.shiftDown = false;
         this.lineWidth = ToolSettingsConst.MIN_WIDTH;
         this.showPerimeter = false;
+        this.numEdges = ToolSettingsConst.MIN_NUM_EDGES;
     }
 
     clone(): ShapeConfig {
@@ -32,6 +34,7 @@ export class ShapeConfig {
         config.shiftDown = this.shiftDown;
         config.lineWidth = this.lineWidth;
         config.showPerimeter = this.showPerimeter;
+        config.numEdges = this.numEdges;
 
         return config;
     }

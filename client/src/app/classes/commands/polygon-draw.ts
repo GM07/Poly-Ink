@@ -1,12 +1,12 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
-import { PolygonConfig, PolygonMode } from '@app/classes/tool-config/polygon-config';
+import { ShapeConfig, ShapeMode } from '@app/classes/tool-config/shape-config';
 import { Vec2 } from '@app/classes/vec2';
 import { ColorService } from 'src/color-picker/services/color.service';
 
 export class PolygonDraw extends AbstractDraw {
-    private config: PolygonConfig;
+    private config: ShapeConfig;
 
-    constructor(colorService: ColorService, config: PolygonConfig) {
+    constructor(colorService: ColorService, config: ShapeConfig) {
         super(colorService);
         this.config = config.clone();
     }
@@ -48,7 +48,7 @@ export class PolygonDraw extends AbstractDraw {
 
         // tslint:disable-next-line:no-magic-numbers
         const startingAngle = -Math.PI / 2 + (this.config.numEdges % 2 !== 0 ? 0 : Math.PI / this.config.numEdges);
-        ctx.lineWidth = this.config.polygonMode === PolygonMode.Filled ? 0 : this.config.lineWidth;
+        ctx.lineWidth = this.config.shapeMode === ShapeMode.Filled ? 0 : this.config.lineWidth;
 
         if (ctx.lineWidth > radiusAbs) ctx.lineWidth = Math.max(1, radiusAbs);
 
@@ -64,10 +64,10 @@ export class PolygonDraw extends AbstractDraw {
 
         ctx.strokeStyle = this.secondaryRgba;
         ctx.fillStyle = this.primaryRgba;
-        if (this.config.polygonMode !== PolygonMode.Contour) {
+        if (this.config.shapeMode !== ShapeMode.Contour) {
             ctx.fill();
         }
-        if (this.config.polygonMode !== PolygonMode.Filled) {
+        if (this.config.shapeMode !== ShapeMode.Filled) {
             ctx.stroke();
         }
     }
