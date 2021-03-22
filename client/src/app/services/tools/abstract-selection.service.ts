@@ -67,16 +67,15 @@ export abstract class AbstractSelectionService extends Tool {
     onMouseDown(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
         if (this.leftMouseDown && !this.isInSelection(event)) {
-            console.log('mdown');
             document.body.style.width = this.bodyWidth;
             document.body.style.height = this.bodyHeight;
             const mousePos = this.getPositionFromMouse(event);
             this.endSelection();
+            this.updatePoints.next(false);
             this.mouseDownCoord = mousePos;
             this.mouseUpCoord = mousePos;
             this.config.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
             this.config.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
-            this.updatePoints.next(false);
         }
     }
 
@@ -105,7 +104,6 @@ export abstract class AbstractSelectionService extends Tool {
                 this.drawingService.clearCanvas(ctx);
                 this.drawPreviewSelection();
             }
-            console.log(this.translationOrigin, this.mouseUpCoord, this.mouseDownCoord);
         }
     }
 
