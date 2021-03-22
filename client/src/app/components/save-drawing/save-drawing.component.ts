@@ -1,5 +1,7 @@
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { DrawingConstants } from '@app/constants/drawing';
 import { CarrouselService } from '@app/services/carrousel/carrousel.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -19,12 +21,18 @@ export class SaveDrawingComponent {
     static readonly BAD_REQUEST_STATUS: number = 400;
     static readonly UNAVAILABLE_SERVER_STATUS: number = 503;
     static readonly DATA_LIMIT_REACHED: number = 413;
+    readonly separatorKeysCodes: number[] = [ENTER, COMMA];
     private baseCanvas: HTMLCanvasElement;
     private baseContext: CanvasRenderingContext2D;
     private canvasImage: string;
     private imageData: ImageData;
     private savePreview: ElementRef<HTMLCanvasElement>;
 
+    visible: boolean;
+    selectable: boolean;
+    removable: boolean;
+    addOnBlur: boolean
+    filterTags: Tag[];
     enableAcceptButton: boolean;
     noServerConnection: boolean;
     dataLimitReached: boolean;
@@ -58,11 +66,15 @@ export class SaveDrawingComponent {
     }
 
     initValues(): void {
+        this.visible = true;
+        this.removable = true;
+        this.selectable = true;
         this.noServerConnection = false;
         this.unavailableServer = false;
         this.enableAcceptButton = true;
         this.saveFormat = 'png';
         this.aspectRatio = 1;
+        this.filterTags = [];
         this.saveForm = new FormGroup({
             nameFormControl: new FormControl(
                 DrawingConstants.defaultFileNames[Math.floor(Math.random() * DrawingConstants.defaultFileNames.length)],
@@ -154,6 +166,25 @@ export class SaveDrawingComponent {
         if (this.aspectRatio > 1) return SaveDrawingComponent.EXPORT_PREVIEW_MAX_SIZE;
 
         return SaveDrawingComponent.EXPORT_PREVIEW_MAX_SIZE * this.aspectRatio;
+    }
+
+    removeTag(tag: Tag): void {
+        const tagIndex = this.filterTags.indexOf(tag);
+        if (tagIndex >= 0) {
+            this.filterTags.splice(tagIndex, 1);
+            this.tagsFormControl.updateValueAndValidity();
+        }
+    }
+    
+    addTagFilter(event: MatChipInputEvent): void {
+        const value = event.value;
+
+        if (value.trim()) {
+            this.filterTags.push({ name: value.trim() });
+            this.tagsFormControl.updateValueAndValidity();
+            console.log(this.tagsFormControl)
+        }
+        event.input.value = '';
     }
 
     async show(): Promise<void> {

@@ -9,10 +9,24 @@
                     <span matSuffix>{{ '.' + saveFormat }} &nbsp;</span>
                     <mat-error *ngIf="nameFormControl.invalid"> Le nom est <strong>requis</strong> </mat-error>
                 </mat-form-field>
-                <mat-form-field appearance="legacy">
+                <mat-form-field>
+                    <mat-label class="gray">Étiquette (confirmer avec Enter)</mat-label>
+                    <mat-chip-list #chipList aria-label="Filtrage par étiquettes" formControlName="tagsFormControl">
+                        <mat-chip *ngFor="let tag of filterTags" [selectable]="selectable" [removable]="removable" (removed)="removeTag(tag)">
+                            {{ tag.name }}
+                            <mat-icon matChipRemove *ngIf="removable" id="remove">cancel</mat-icon>
+                        </mat-chip>
+                        <input
+                            matInput
+                            class="gray"
+                            [matChipInputFor]="chipList"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                            [matChipInputAddOnBlur]="addOnBlur"
+                            (matChipInputTokenEnd)="addTagFilter($event)"
+                            style="-webkit-text-fill-color: white"
+                        />
+                    </mat-chip-list>
                     <mat-hint class="gray">[A-Z][a-z][0-9][-]</mat-hint>
-                    <mat-label class="gray">Tags (séprarés par des virgules)</mat-label>
-                    <input matInput formControlName="tagsFormControl" name="tagsStr" maxlength="100" />
                     <mat-error *ngIf="true"> Les tags sont <strong>invalides</strong></mat-error>
                 </mat-form-field>
             </form>
