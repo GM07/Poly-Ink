@@ -3,6 +3,7 @@ import { ResizeDraw } from '@app/classes/commands/resize-draw';
 import { ResizeConfig } from '@app/classes/tool-config/resize-config';
 import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 @Component({
     selector: 'app-canvas-resize',
@@ -28,7 +29,7 @@ export class CanvasResizeComponent implements AfterViewInit {
     previewResizeStyle: { [key: string]: string };
     @ViewChild('previewResize', { static: false }) previewResize: ElementRef<HTMLDivElement>;
 
-    constructor(private drawingService: DrawingService, private cd: ChangeDetectorRef) {
+    constructor(private drawingService: DrawingService, private cd: ChangeDetectorRef, private shortcutHandler: ShortcutHandlerService) {
         this.previewResizeView = false;
         this.previewResizeStyle = {
             'margin-left': '0',
@@ -51,6 +52,7 @@ export class CanvasResizeComponent implements AfterViewInit {
         this.isDown = true;
         this.moveRight = right;
         this.moveBottom = bottom;
+        this.shortcutHandler.blockShortcuts = true;
     }
 
     @HostListener('document:mousemove', ['$event'])
@@ -78,6 +80,7 @@ export class CanvasResizeComponent implements AfterViewInit {
         this.moveRight = this.moveBottom = false;
 
         this.previewResizeView = false;
+        this.shortcutHandler.blockShortcuts = false;
     }
 
     resizeCanvas(xModifier: number, yModifier: number): void {
