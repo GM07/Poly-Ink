@@ -68,7 +68,7 @@ describe('RectangleSelectionService', () => {
         spyOn(service, 'isInCanvas').and.returnValue(false);
         spyOn<any>(service, 'getTranslation').and.returnValue({ x: 0, y: 0 } as Vec2);
         const updateSelection = spyOn<any>(service, 'updateSelection');
-        service.selectionCtx = canvasSelection.getContext('2d');
+        service['config'].selectionCtx = canvasSelection.getContext('2d');
         service.onMouseUp(mouseEvent);
         expect(updateSelection).toHaveBeenCalled();
     });
@@ -85,7 +85,7 @@ describe('RectangleSelectionService', () => {
 
     it('should update the selection on mouse move if the selection is not null', () => {
         service.leftMouseDown = true;
-        service.selectionCtx = canvasSelection.getContext('2d');
+        service['config'].selectionCtx = canvasSelection.getContext('2d');
         const updateSelection = spyOn<any>(service, 'updateSelection');
         spyOn<any>(service, 'getTranslation');
         spyOn(service, 'isInCanvas').and.returnValue(false);
@@ -122,25 +122,25 @@ describe('RectangleSelectionService', () => {
         jasmine.clock().install();
         const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowdown' });
         const updateSelection = spyOn<any>(service, 'updateSelection');
-        spyOn<any>(service, 'HorizontalTranslationModifier').and.returnValue(1);
-        spyOn<any>(service, 'VerticalTranslationModifier').and.returnValue(1);
-        service.selectionCtx = canvasSelection.getContext('2d');
+        spyOn<any>(service['selectionTranslation'], 'HorizontalTranslationModifier').and.returnValue(1);
+        spyOn<any>(service['selectionTranslation'], 'VerticalTranslationModifier').and.returnValue(1);
+        service['config'].selectionCtx = canvasSelection.getContext('2d');
         service.onKeyDown(keyboardEvent);
         jasmine.clock().tick(600);
         expect(updateSelection).toHaveBeenCalled();
         expect(updateSelection).toHaveBeenCalledTimes(2);
         jasmine.clock().uninstall();
-        window.clearInterval(service['moveId']);
+        window.clearInterval(service['selectionTranslation']['moveId']);
     });
 
     it('should not move the selection multiple times if the key was pressed multiple times', () => {
         jasmine.clock().install();
         const updateSelection = spyOn<any>(service, 'updateSelection');
         const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowdown' });
-        service.selectionCtx = canvasSelection.getContext('2d');
+        service['config'].selectionCtx = canvasSelection.getContext('2d');
         service.onKeyDown(keyboardEvent);
         jasmine.clock().tick(200);
-        service['moveId'] = 1;
+        service['selectionTranslation']['moveId'] = 1;
         jasmine.clock().tick(350);
         expect(updateSelection).toHaveBeenCalledTimes(1);
         jasmine.clock().uninstall();
@@ -150,8 +150,8 @@ describe('RectangleSelectionService', () => {
         jasmine.clock().install();
         const updateSelection = spyOn<any>(service, 'updateSelection');
         const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowdown' });
-        service.selectionCtx = canvasSelection.getContext('2d');
-        service['moveId'] = 1;
+        service['config'].selectionCtx = canvasSelection.getContext('2d');
+        service['selectionTranslation']['moveId'] = 1;
         service.onKeyDown(keyboardEvent);
         jasmine.clock().tick(500);
         expect(updateSelection).toHaveBeenCalledTimes(1);
@@ -172,9 +172,9 @@ describe('RectangleSelectionService', () => {
 
     it('should update arrowkey on key up', () => {
         const keyboardEvent = { ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
-        spyOn<any>(service, 'setArrowKeyUp');
+        spyOn<any>(service['selectionTranslation'], 'setArrowKeyUp');
         spyOn(window, 'clearInterval');
-        service.selectionCtx = canvasSelection.getContext('2d');
+        service['config'].selectionCtx = canvasSelection.getContext('2d');
         service.onKeyUp(keyboardEvent);
         expect(window.clearInterval).toHaveBeenCalled();
     });
@@ -211,7 +211,7 @@ describe('RectangleSelectionService', () => {
         service.config.width = 100;
         service.config.height = 100;
         service.mouseDownCoord = { x: 25, y: 25 } as Vec2;
-        service.selectionCtx = canvasSelection.getContext('2d');
+        service['config'].selectionCtx = canvasSelection.getContext('2d');
         canvasSelection.width = 250;
         canvasSelection.height = 250;
         drawServiceSpy.previewCanvas = document.createElement('canvas');
@@ -219,7 +219,7 @@ describe('RectangleSelectionService', () => {
         service['SELECTION_DATA'] = canvasSelection;
         const drawPreviewSelection = spyOn<any>(service, 'drawPreviewSelection');
         spyOn(drawServiceSpy.previewCtx, 'drawImage');
-        spyOn<any>(service.selectionCtx, 'drawImage');
+        spyOn<any>(service['config'].selectionCtx, 'drawImage');
         service['startSelection']();
         expect(drawServiceSpy.previewCtx.drawImage).toHaveBeenCalled();
         expect(drawPreviewSelection).toHaveBeenCalled();
@@ -244,7 +244,7 @@ describe('RectangleSelectionService', () => {
         const updateSelectionRequired = spyOn<any>(service, 'updateSelectionRequired');
         service.config.endCoords = { x: 0, y: 0 } as Vec2;
         service['translationOrigin'] = { x: 0, y: 0 } as Vec2;
-        service.selectionCtx = canvasSelection.getContext('2d');
+        service['config'].selectionCtx = canvasSelection.getContext('2d');
         service['updateSelection'](translation);
         expect(updateSelectionRequired).toHaveBeenCalled();
     });
@@ -272,7 +272,7 @@ describe('RectangleSelectionService', () => {
     });
 
     it('end selection should draw the selection on the base canvas', () => {
-        service.selectionCtx = previewCtxStub;
+        service['config'].selectionCtx = previewCtxStub;
         service.config.endCoords = { x: 0, y: 0 } as Vec2;
         spyOn(service, 'draw');
         service['endSelection']();

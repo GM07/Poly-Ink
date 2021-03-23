@@ -58,7 +58,7 @@ describe('AbstractSelectionComponent', () => {
         const makeControlsUnselectable = spyOn<any>(component, 'makeControlsUnselectable');
         component['shortcutHandlerService'].blockShortcuts = true;
         component['isInSidebar'] = false;
-        component['selectionService'].selectionCtx = null;
+        component['selectionService']['config'].selectionCtx = null;
         component.onMouseDown(mouseEvent);
         expect(makeControlsUnselectable).not.toHaveBeenCalled();
         component['shortcutHandlerService'].blockShortcuts = false;
@@ -78,7 +78,7 @@ describe('AbstractSelectionComponent', () => {
         component.onMouseDown(mouseEvent);
         expect(stopDrawingSpy).not.toHaveBeenCalled();
         component['isInSidebar'] = false;
-        component['selectionService'].selectionCtx = drawService.previewCtx;
+        component['selectionService']['config'].selectionCtx = drawService.previewCtx;
         component.onMouseDown(mouseEvent);
         expect(stopDrawingSpy).toHaveBeenCalled();
     });
@@ -113,7 +113,7 @@ describe('AbstractSelectionComponent', () => {
 
     it('should update control points on mouse up', () => {
         const controlSaveBoolean = (component.displayControlPoints = false);
-        abstractSelectionService.selectionCtx = drawService.previewCtx;
+        abstractSelectionService['config'].selectionCtx = drawService.previewCtx;
         component.onMouseUp();
         expect(controlSaveBoolean).not.toEqual(component.displayControlPoints);
     });
@@ -167,7 +167,7 @@ describe('AbstractSelectionComponent', () => {
     });
 
     it('place points should set all 8 points', () => {
-        abstractSelectionService.selectionCtx = drawService.previewCtx;
+        abstractSelectionService['config'].selectionCtx = drawService.previewCtx;
         const numberOfPoints = 8;
         const placeControlPoint = spyOn<any>(component, 'placeControlPoint');
         component.displayControlPoints = true;
@@ -178,7 +178,7 @@ describe('AbstractSelectionComponent', () => {
     });
 
     it('elements in canvas should be visible', () => {
-        abstractSelectionService.selectionCtx = drawService.previewCtx;
+        abstractSelectionService['config'].selectionCtx = drawService.previewCtx;
         spyOn<any>(component, 'placeControlPoint');
         component.displayControlPoints = true;
         fixture.detectChanges();

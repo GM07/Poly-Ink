@@ -36,7 +36,6 @@ export class SelectionTranslation {
     onKeyDown(event: KeyboardEvent, leftMouseDown: boolean): void {
         if (this.config.selectionCtx !== null) {
             if (this.isArrowKeyDown(event, leftMouseDown)) {
-                console.log(event);
                 event.preventDefault();
                 if (event.repeat) return;
 

@@ -99,7 +99,7 @@ describe('EllipseSelectionService', () => {
     });
 
     it('end selection should draw the selection on the base canvas', () => {
-        service.selectionCtx = previewCtxStub;
+        service['config'].selectionCtx = previewCtxStub;
         service.config.endCoords = { x: 0, y: 0 } as Vec2;
         service['radiusAbs'] = { x: 0, y: 0 } as Vec2;
         spyOn(service, 'draw').and.stub();

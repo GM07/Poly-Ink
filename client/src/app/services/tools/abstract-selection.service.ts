@@ -19,13 +19,6 @@ export abstract class AbstractSelectionService extends Tool {
     protected readonly BORDER_WIDTH: number = 2;
     private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
     private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
-    // private readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
-    // private readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
-    // private readonly DOWN_ARROW: ShortcutKey = new ShortcutKey('arrowdown');
-    // private readonly UP_ARROW: ShortcutKey = new ShortcutKey('arrowup');
-    // private readonly DEFAULT_MOVE_ID: number = -1;
-    // private readonly FIRST_MOVE_TIMEOUT: number = 500;
-    // private readonly NEXT_MOVES_TIMEOUT: number = 100;
     protected readonly SHIFT: ShortcutKey = new ShiftKey();
     protected SELECTION_DATA: HTMLCanvasElement;
     protected selectionTranslation: SelectionTranslation;
@@ -35,9 +28,6 @@ export abstract class AbstractSelectionService extends Tool {
     translationOrigin: Vec2;
     config: SelectionConfig;
 
-    // selectionCtx: CanvasRenderingContext2D | null;
-
-    // private moveId: number;
     private bodyWidth: string;
     private bodyHeight: string;
 
@@ -48,7 +38,6 @@ export abstract class AbstractSelectionService extends Tool {
         this.SELECTION_DATA = document.createElement('canvas');
         this.config.endCoords = { x: 0, y: 0 } as Vec2;
         this.translationOrigin = { x: 0, y: 0 } as Vec2;
-        // this.moveId = this.DEFAULT_MOVE_ID;
         this.bodyWidth = document.body.style.width;
         this.bodyHeight = document.body.style.height;
         this.initSubscriptions();
@@ -119,33 +108,6 @@ export abstract class AbstractSelectionService extends Tool {
             if (this.leftMouseDown && this.config.selectionCtx === null) {
                 this.updateDrawingSelection();
             }
-            // } else if (this.config.selectionCtx !== null) {
-            //     const PIXELS = 3;
-            //     if (
-            //         !this.leftMouseDown &&
-            //         (this.RIGHT_ARROW.equals(event, true) ||
-            //             this.LEFT_ARROW.equals(event, true) ||
-            //             this.UP_ARROW.equals(event, true) ||
-            //             this.DOWN_ARROW.equals(event, true))
-            //     ) {
-            //         event.preventDefault();
-            //         if (event.repeat) return;
-            //         this.setArrowKeyDown(event);
-            //         this.updateSelection({ x: PIXELS * this.HorizontalTranslationModifier(), y: PIXELS * this.VerticalTranslationModifier() } as Vec2);
-
-            //         if (this.moveId === this.DEFAULT_MOVE_ID) {
-            //             setTimeout(() => {
-            //                 if (this.moveId === this.DEFAULT_MOVE_ID && this.config.selectionCtx !== null)
-            //                     this.moveId = window.setInterval(() => {
-            //                         this.clearArrowKeys();
-            //                         this.updateSelection({
-            //                             x: PIXELS * this.HorizontalTranslationModifier(),
-            //                             y: PIXELS * this.VerticalTranslationModifier(),
-            //                         } as Vec2);
-            //                     }, this.NEXT_MOVES_TIMEOUT);
-            //             }, this.FIRST_MOVE_TIMEOUT);
-            //         }
-            //     }
         }
         this.selectionTranslation.onKeyDown(event, this.leftMouseDown);
     }
@@ -158,10 +120,6 @@ export abstract class AbstractSelectionService extends Tool {
             }
         }
         this.selectionTranslation.onKeyUp(event);
-        // if (this.config.selectionCtx !== null) {
-        //     this.setArrowKeyUp(event);
-        //     this.clearArrowKeys();
-        // }
     }
 
     selectAll(): void {
@@ -198,14 +156,6 @@ export abstract class AbstractSelectionService extends Tool {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
 
         this.selectionTranslation.stopDrawing();
-
-        // this.RIGHT_ARROW.isDown = false;
-        // this.LEFT_ARROW.isDown = false;
-        // this.UP_ARROW.isDown = false;
-        // this.DOWN_ARROW.isDown = false;
-        // window.clearInterval(this.moveId);
-        // this.moveId = this.DEFAULT_MOVE_ID;
-        // this.updatePoints.next(false);
     }
 
     getTranslation(mousePos: Vec2): Vec2 {
@@ -225,35 +175,6 @@ export abstract class AbstractSelectionService extends Tool {
             this.mouseUpCoord = this.getPositionFromMouse(event);
         }
     }
-
-    // private setArrowKeyDown(event: KeyboardEvent): void {
-    //     if (this.RIGHT_ARROW.equals(event, true)) this.RIGHT_ARROW.isDown = true;
-    //     if (this.LEFT_ARROW.equals(event, true)) this.LEFT_ARROW.isDown = true;
-    //     if (this.UP_ARROW.equals(event, true)) this.UP_ARROW.isDown = true;
-    //     if (this.DOWN_ARROW.equals(event, true)) this.DOWN_ARROW.isDown = true;
-    // }
-
-    // private setArrowKeyUp(event: KeyboardEvent): void {
-    //     if (this.RIGHT_ARROW.equals(event, true)) this.RIGHT_ARROW.isDown = false;
-    //     if (this.LEFT_ARROW.equals(event, true)) this.LEFT_ARROW.isDown = false;
-    //     if (this.UP_ARROW.equals(event, true)) this.UP_ARROW.isDown = false;
-    //     if (this.DOWN_ARROW.equals(event, true)) this.DOWN_ARROW.isDown = false;
-    // }
-
-    // private clearArrowKeys(): void {
-    //     if (!this.RIGHT_ARROW.isDown && !this.LEFT_ARROW.isDown && !this.UP_ARROW.isDown && !this.DOWN_ARROW.isDown) {
-    //         window.clearInterval(this.moveId);
-    //         this.moveId = this.DEFAULT_MOVE_ID;
-    //     }
-    // }
-
-    // private HorizontalTranslationModifier(): number {
-    //     return +this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown;
-    // }
-
-    // private VerticalTranslationModifier(): number {
-    //     return +this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown;
-    // }
 
     private initSubscriptions(): void {
         this.drawingService.changes.subscribe(() => {

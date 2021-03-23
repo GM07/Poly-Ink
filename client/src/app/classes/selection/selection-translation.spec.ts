@@ -1,0 +1,121 @@
+import { TestBed } from '@angular/core/testing';
+import { SelectionConfig } from '../tool-config/selection-config';
+import { SelectionTranslation } from './selection-translation';
+
+describe('SelectionTranslation', () => {
+    let selectionTranslation: SelectionTranslation;
+    let selectionConfig: SelectionConfig;
+    let canvasSelection: HTMLCanvasElement;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+        canvasSelection = document.createElement('canvas');
+        selectionConfig = new SelectionConfig();
+        selectionTranslation = new SelectionTranslation(selectionConfig);
+    });
+
+    it('set ArrowKeyUp should update the keys when down', () => {
+        const keyboardEventLeft = new KeyboardEvent('keydown', { key: 'arrowleft' });
+        const keyboardEventRight = new KeyboardEvent('keydown', { key: 'arrowright' });
+        const keyboardEventDown = new KeyboardEvent('keydown', { key: 'arrowdown' });
+        const keyboardEventUp = new KeyboardEvent('keydown', { key: 'arrowup' });
+        selectionTranslation['setArrowKeyDown'](keyboardEventLeft);
+        selectionTranslation['setArrowKeyDown'](keyboardEventRight);
+        selectionTranslation['setArrowKeyDown'](keyboardEventUp);
+        selectionTranslation['setArrowKeyDown'](keyboardEventDown);
+        expect(selectionTranslation['LEFT_ARROW'].isDown).toBeTruthy();
+        expect(selectionTranslation['RIGHT_ARROW'].isDown).toBeTruthy();
+        expect(selectionTranslation['DOWN_ARROW'].isDown).toBeTruthy();
+        expect(selectionTranslation['UP_ARROW'].isDown).toBeTruthy();
+    });
+
+    it('set ArrowKeyUp should update the keys when not down', () => {
+        const keyboardEventLeft = new KeyboardEvent('keydown', { key: 'randomKey' });
+        selectionTranslation['setArrowKeyDown'](keyboardEventLeft);
+        expect(selectionTranslation['LEFT_ARROW'].isDown).toBeFalsy();
+        expect(selectionTranslation['RIGHT_ARROW'].isDown).toBeFalsy();
+        expect(selectionTranslation['DOWN_ARROW'].isDown).toBeFalsy();
+        expect(selectionTranslation['UP_ARROW'].isDown).toBeFalsy();
+    });
+
+    it('set arrowKeyDown should update the keys when up', () => {
+        selectionTranslation['LEFT_ARROW'].isDown = true;
+        selectionTranslation['RIGHT_ARROW'].isDown = true;
+        selectionTranslation['DOWN_ARROW'].isDown = true;
+        selectionTranslation['UP_ARROW'].isDown = true;
+        const keyboardEventLeft = new KeyboardEvent('keyup', { key: 'arrowleft' });
+        const keyboardEventRight = new KeyboardEvent('keyup', { key: 'arrowright' });
+        const keyboardEventDown = new KeyboardEvent('keyup', { key: 'arrowdown' });
+        const keyboardEventUp = new KeyboardEvent('keyup', { key: 'arrowup' });
+        selectionTranslation['setArrowKeyUp'](keyboardEventLeft);
+        selectionTranslation['setArrowKeyUp'](keyboardEventRight);
+        selectionTranslation['setArrowKeyUp'](keyboardEventUp);
+        selectionTranslation['setArrowKeyUp'](keyboardEventDown);
+        expect(selectionTranslation['LEFT_ARROW'].isDown).toBeFalsy();
+        expect(selectionTranslation['RIGHT_ARROW'].isDown).toBeFalsy();
+        expect(selectionTranslation['DOWN_ARROW'].isDown).toBeFalsy();
+        expect(selectionTranslation['UP_ARROW'].isDown).toBeFalsy();
+    });
+
+    it('set ArrowKeyDown should update the keys when not up', () => {
+        const keyboardEventLeft = new KeyboardEvent('keydown', { key: 'randomKey' });
+        selectionTranslation['setArrowKeyUp'](keyboardEventLeft);
+        expect(selectionTranslation['LEFT_ARROW'].isDown).toBeFalsy();
+        expect(selectionTranslation['RIGHT_ARROW'].isDown).toBeFalsy();
+        expect(selectionTranslation['DOWN_ARROW'].isDown).toBeFalsy();
+        expect(selectionTranslation['UP_ARROW'].isDown).toBeFalsy();
+    });
+
+    it('HorizontalTranslationModifier should return 1 if right Arrow is down', () => {
+        selectionTranslation['RIGHT_ARROW'].isDown = true;
+        expect(selectionTranslation['HorizontalTranslationModifier']()).toEqual(1);
+    });
+
+    it('HorizontalTranslationModifier should return -1 if left Arrow is down', () => {
+        // tslint:disable:no-magic-numbers
+        selectionTranslation['RIGHT_ARROW'].isDown = false;
+        selectionTranslation['LEFT_ARROW'].isDown = true;
+        expect(selectionTranslation['HorizontalTranslationModifier']()).toEqual(-1);
+    });
+
+    it('VerticalTranslationModifier should return 1 if down Arrow is down', () => {
+        selectionTranslation['DOWN_ARROW'].isDown = true;
+        expect(selectionTranslation['VerticalTranslationModifier']()).toEqual(1);
+    });
+
+    it('VerticalTranslationModifier should return -1 if up Arrow is down', () => {
+        // tslint:disable:no-magic-numbers
+        selectionTranslation['UP_ARROW'].isDown = true;
+        expect(selectionTranslation['VerticalTranslationModifier']()).toEqual(-1);
+    });
+
+    it('selection should not move with different keys than arrow', () => {
+        spyOn<any>(selectionTranslation, 'updateSelectionRequest');
+        const keyboardEvent = new KeyboardEvent('keydown', { key: 'invalid' });
+        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
+        selectionTranslation.onKeyDown(keyboardEvent, false);
+        expect(selectionTranslation['updateSelectionRequest']).not.toHaveBeenCalled();
+    });
+
+    it('should do nothing on event repeat', () => {
+        const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowleft', repeat: true });
+        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
+        spyOn<any>(selectionTranslation, 'updateSelectionRequest');
+        selectionTranslation.onKeyDown(keyboardEvent, false);
+        expect(selectionTranslation['updateSelectionRequest']).not.toHaveBeenCalled();
+    });
+
+    it('should not stop moving the selection if we release a different key than an arrow', () => {
+        selectionTranslation['LEFT_ARROW'].isDown = true;
+        const keyboardEventUp = new KeyboardEvent('keydown', { shiftKey: false });
+        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
+        spyOn(window, 'clearInterval');
+        selectionTranslation.onKeyUp(keyboardEventUp);
+        expect(window.clearInterval).not.toHaveBeenCalled();
+    });
+
+    it('should clear the translation interval for the arrow keys', () => {
+        selectionTranslation['clearArrowKeys']();
+        expect(selectionTranslation['moveId']).toEqual(selectionTranslation['DEFAULT_MOVE_ID']);
+    });
+});
