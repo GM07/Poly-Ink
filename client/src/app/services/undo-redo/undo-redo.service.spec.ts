@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { ResizeDraw } from '@app/classes/commands/resize-draw';
 import { UndoRedoService } from './undo-redo.service';
+
 describe('UndoRedoService', () => {
     let service: UndoRedoService;
     let canvasTestHelper: CanvasTestHelper;
@@ -128,5 +129,13 @@ describe('UndoRedoService', () => {
         service.onKeyDown(event);
         expect(service.undo).not.toHaveBeenCalled();
         expect(service.redo).not.toHaveBeenCalled();
+    });
+
+    it('should reset', () => {
+        service.reset();
+        expect(service.blockUndoRedo).toBeTrue();
+        expect(service.commands.length).toEqual(0);
+        // tslint:disable-next-line:no-string-literal
+        expect(service.currentAction).toEqual(service['initialActionPosition']);
     });
 });
