@@ -40,6 +40,7 @@ export class SidebarComponent implements OnInit {
     }
 
     backToMenu(): void {
+        this.undoRedoService.reset();
         this.zone.run(() => this.router.navigateByUrl('home'));
     }
 
