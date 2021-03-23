@@ -176,6 +176,7 @@ export abstract class AbstractSelectionService extends Tool {
         }
     }
 
+    // TODO: tester
     private initSubscriptions(): void {
         this.drawingService.changes.subscribe(() => {
             this.updateSelection({ x: 0, y: 0 } as Vec2);

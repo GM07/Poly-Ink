@@ -24,15 +24,6 @@ export class SelectionTranslation {
         this.updateSelectionRequest = new Subject<Vec2>();
     }
 
-    stopDrawing() {
-        this.RIGHT_ARROW.isDown = false;
-        this.LEFT_ARROW.isDown = false;
-        this.UP_ARROW.isDown = false;
-        this.DOWN_ARROW.isDown = false;
-        window.clearInterval(this.moveId);
-        this.moveId = this.DEFAULT_MOVE_ID;
-    }
-
     onKeyDown(event: KeyboardEvent, leftMouseDown: boolean): void {
         if (this.config.selectionCtx !== null) {
             if (this.isArrowKeyDown(event, leftMouseDown)) {
@@ -57,6 +48,21 @@ export class SelectionTranslation {
         }
     }
 
+    stopDrawing() {
+        this.RIGHT_ARROW.isDown = false;
+        this.LEFT_ARROW.isDown = false;
+        this.UP_ARROW.isDown = false;
+        this.DOWN_ARROW.isDown = false;
+        window.clearInterval(this.moveId);
+        this.moveId = this.DEFAULT_MOVE_ID;
+    }
+
+    startMouseTranslation(event: MouseEvent){
+
+    }
+
+
+    // TODO: tester
     private isArrowKeyDown(event: KeyboardEvent, leftMouseDown: boolean): boolean {
         return (
             !leftMouseDown &&
