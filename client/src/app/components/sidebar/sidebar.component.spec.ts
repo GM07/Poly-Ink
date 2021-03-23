@@ -86,9 +86,11 @@ describe('SidebarComponent', () => {
     });
 
     it('should go back to menu', () => {
+        spyOn(component.undoRedoService, 'reset');
         const funct = spyOn(router, 'navigateByUrl');
         component.backToMenu();
         expect(funct).toHaveBeenCalledWith('home');
+        expect(component.undoRedoService.reset).toHaveBeenCalled();
     });
 
     it('should emit event when newDrawing is clicked', () => {
