@@ -24,8 +24,8 @@ describe('Drawing service', () => {
 
     beforeEach(async () => {
         databaseService = new DatabaseServiceMock();
-        drawingService = new DrawingService(databaseService);
         await databaseService.start();
+        drawingService = new DrawingService(databaseService);
 
         drawing = {
             _id: '1',
