@@ -285,6 +285,7 @@ export abstract class AbstractSelectionService extends Tool {
     private updateSelection(translation: Vec2): void {
         if (this.selectionCtx === null) return;
 
+        this.drawingService.blockUndoRedo();
         this.config.endCoords.x += translation.x;
         this.config.endCoords.y += translation.y;
         this.translationOrigin.x += translation.x;
