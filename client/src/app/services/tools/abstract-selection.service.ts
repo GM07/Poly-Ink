@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Geometry } from '@app/classes/math/geometry';
+import { SelectionTranslation } from '@app/classes/selection/selection-translation';
 import { ShiftKey } from '@app/classes/shortcut/shift-key';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
@@ -18,15 +19,16 @@ export abstract class AbstractSelectionService extends Tool {
     protected readonly BORDER_WIDTH: number = 2;
     private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
     private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
-    private readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
-    private readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
-    private readonly DOWN_ARROW: ShortcutKey = new ShortcutKey('arrowdown');
-    private readonly UP_ARROW: ShortcutKey = new ShortcutKey('arrowup');
-    private readonly DEFAULT_MOVE_ID: number = -1;
-    private readonly FIRST_MOVE_TIMEOUT: number = 500;
-    private readonly NEXT_MOVES_TIMEOUT: number = 100;
+    // private readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
+    // private readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
+    // private readonly DOWN_ARROW: ShortcutKey = new ShortcutKey('arrowdown');
+    // private readonly UP_ARROW: ShortcutKey = new ShortcutKey('arrowup');
+    // private readonly DEFAULT_MOVE_ID: number = -1;
+    // private readonly FIRST_MOVE_TIMEOUT: number = 500;
+    // private readonly NEXT_MOVES_TIMEOUT: number = 100;
     protected readonly SHIFT: ShortcutKey = new ShiftKey();
     protected SELECTION_DATA: HTMLCanvasElement;
+    protected selectionTranslation: SelectionTranslation;
 
     updatePoints: Subject<boolean>;
     mouseUpCoord: Vec2;
@@ -35,22 +37,21 @@ export abstract class AbstractSelectionService extends Tool {
 
     // selectionCtx: CanvasRenderingContext2D | null;
 
-    private moveId: number;
+    // private moveId: number;
     private bodyWidth: string;
     private bodyHeight: string;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.config = new SelectionConfig();
+        this.selectionTranslation = new SelectionTranslation(this.config);
         this.SELECTION_DATA = document.createElement('canvas');
         this.config.endCoords = { x: 0, y: 0 } as Vec2;
         this.translationOrigin = { x: 0, y: 0 } as Vec2;
-        this.moveId = this.DEFAULT_MOVE_ID;
-        this.drawingService.changes.subscribe(() => {
-            this.updateSelection({ x: 0, y: 0 } as Vec2);
-        });
+        // this.moveId = this.DEFAULT_MOVE_ID;
         this.bodyWidth = document.body.style.width;
         this.bodyHeight = document.body.style.height;
+        this.initSubscriptions();
         this.updatePoints = new Subject<boolean>();
     }
 
@@ -118,34 +119,35 @@ export abstract class AbstractSelectionService extends Tool {
             if (this.leftMouseDown && this.config.selectionCtx === null) {
                 this.updateDrawingSelection();
             }
-        } else if (this.config.selectionCtx !== null) {
-            const PIXELS = 3;
-            if (
-                !this.leftMouseDown &&
-                (this.RIGHT_ARROW.equals(event, true) ||
-                    this.LEFT_ARROW.equals(event, true) ||
-                    this.UP_ARROW.equals(event, true) ||
-                    this.DOWN_ARROW.equals(event, true))
-            ) {
-                event.preventDefault();
-                if (event.repeat) return;
-                this.setArrowKeyDown(event);
-                this.updateSelection({ x: PIXELS * this.HorizontalTranslationModifier(), y: PIXELS * this.VerticalTranslationModifier() } as Vec2);
+            // } else if (this.config.selectionCtx !== null) {
+            //     const PIXELS = 3;
+            //     if (
+            //         !this.leftMouseDown &&
+            //         (this.RIGHT_ARROW.equals(event, true) ||
+            //             this.LEFT_ARROW.equals(event, true) ||
+            //             this.UP_ARROW.equals(event, true) ||
+            //             this.DOWN_ARROW.equals(event, true))
+            //     ) {
+            //         event.preventDefault();
+            //         if (event.repeat) return;
+            //         this.setArrowKeyDown(event);
+            //         this.updateSelection({ x: PIXELS * this.HorizontalTranslationModifier(), y: PIXELS * this.VerticalTranslationModifier() } as Vec2);
 
-                if (this.moveId === this.DEFAULT_MOVE_ID) {
-                    setTimeout(() => {
-                        if (this.moveId === this.DEFAULT_MOVE_ID && this.config.selectionCtx !== null)
-                            this.moveId = window.setInterval(() => {
-                                this.clearArrowKeys();
-                                this.updateSelection({
-                                    x: PIXELS * this.HorizontalTranslationModifier(),
-                                    y: PIXELS * this.VerticalTranslationModifier(),
-                                } as Vec2);
-                            }, this.NEXT_MOVES_TIMEOUT);
-                    }, this.FIRST_MOVE_TIMEOUT);
-                }
-            }
+            //         if (this.moveId === this.DEFAULT_MOVE_ID) {
+            //             setTimeout(() => {
+            //                 if (this.moveId === this.DEFAULT_MOVE_ID && this.config.selectionCtx !== null)
+            //                     this.moveId = window.setInterval(() => {
+            //                         this.clearArrowKeys();
+            //                         this.updateSelection({
+            //                             x: PIXELS * this.HorizontalTranslationModifier(),
+            //                             y: PIXELS * this.VerticalTranslationModifier(),
+            //                         } as Vec2);
+            //                     }, this.NEXT_MOVES_TIMEOUT);
+            //             }, this.FIRST_MOVE_TIMEOUT);
+            //         }
+            //     }
         }
+        this.selectionTranslation.onKeyDown(event, this.leftMouseDown);
     }
 
     onKeyUp(event: KeyboardEvent): void {
@@ -155,10 +157,11 @@ export abstract class AbstractSelectionService extends Tool {
                 this.updateDrawingSelection();
             }
         }
-        if (this.config.selectionCtx !== null) {
-            this.setArrowKeyUp(event);
-            this.clearArrowKeys();
-        }
+        this.selectionTranslation.onKeyUp(event);
+        // if (this.config.selectionCtx !== null) {
+        //     this.setArrowKeyUp(event);
+        //     this.clearArrowKeys();
+        // }
     }
 
     selectAll(): void {
@@ -194,13 +197,15 @@ export abstract class AbstractSelectionService extends Tool {
         this.config.shiftDown = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
 
-        this.RIGHT_ARROW.isDown = false;
-        this.LEFT_ARROW.isDown = false;
-        this.UP_ARROW.isDown = false;
-        this.DOWN_ARROW.isDown = false;
-        window.clearInterval(this.moveId);
-        this.moveId = this.DEFAULT_MOVE_ID;
-        this.updatePoints.next(false);
+        this.selectionTranslation.stopDrawing();
+
+        // this.RIGHT_ARROW.isDown = false;
+        // this.LEFT_ARROW.isDown = false;
+        // this.UP_ARROW.isDown = false;
+        // this.DOWN_ARROW.isDown = false;
+        // window.clearInterval(this.moveId);
+        // this.moveId = this.DEFAULT_MOVE_ID;
+        // this.updatePoints.next(false);
     }
 
     getTranslation(mousePos: Vec2): Vec2 {
@@ -221,33 +226,42 @@ export abstract class AbstractSelectionService extends Tool {
         }
     }
 
-    private setArrowKeyDown(event: KeyboardEvent): void {
-        if (this.RIGHT_ARROW.equals(event, true)) this.RIGHT_ARROW.isDown = true;
-        if (this.LEFT_ARROW.equals(event, true)) this.LEFT_ARROW.isDown = true;
-        if (this.UP_ARROW.equals(event, true)) this.UP_ARROW.isDown = true;
-        if (this.DOWN_ARROW.equals(event, true)) this.DOWN_ARROW.isDown = true;
-    }
+    // private setArrowKeyDown(event: KeyboardEvent): void {
+    //     if (this.RIGHT_ARROW.equals(event, true)) this.RIGHT_ARROW.isDown = true;
+    //     if (this.LEFT_ARROW.equals(event, true)) this.LEFT_ARROW.isDown = true;
+    //     if (this.UP_ARROW.equals(event, true)) this.UP_ARROW.isDown = true;
+    //     if (this.DOWN_ARROW.equals(event, true)) this.DOWN_ARROW.isDown = true;
+    // }
 
-    private setArrowKeyUp(event: KeyboardEvent): void {
-        if (this.RIGHT_ARROW.equals(event, true)) this.RIGHT_ARROW.isDown = false;
-        if (this.LEFT_ARROW.equals(event, true)) this.LEFT_ARROW.isDown = false;
-        if (this.UP_ARROW.equals(event, true)) this.UP_ARROW.isDown = false;
-        if (this.DOWN_ARROW.equals(event, true)) this.DOWN_ARROW.isDown = false;
-    }
+    // private setArrowKeyUp(event: KeyboardEvent): void {
+    //     if (this.RIGHT_ARROW.equals(event, true)) this.RIGHT_ARROW.isDown = false;
+    //     if (this.LEFT_ARROW.equals(event, true)) this.LEFT_ARROW.isDown = false;
+    //     if (this.UP_ARROW.equals(event, true)) this.UP_ARROW.isDown = false;
+    //     if (this.DOWN_ARROW.equals(event, true)) this.DOWN_ARROW.isDown = false;
+    // }
 
-    private clearArrowKeys(): void {
-        if (!this.RIGHT_ARROW.isDown && !this.LEFT_ARROW.isDown && !this.UP_ARROW.isDown && !this.DOWN_ARROW.isDown) {
-            window.clearInterval(this.moveId);
-            this.moveId = this.DEFAULT_MOVE_ID;
-        }
-    }
+    // private clearArrowKeys(): void {
+    //     if (!this.RIGHT_ARROW.isDown && !this.LEFT_ARROW.isDown && !this.UP_ARROW.isDown && !this.DOWN_ARROW.isDown) {
+    //         window.clearInterval(this.moveId);
+    //         this.moveId = this.DEFAULT_MOVE_ID;
+    //     }
+    // }
 
-    private HorizontalTranslationModifier(): number {
-        return +this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown;
-    }
+    // private HorizontalTranslationModifier(): number {
+    //     return +this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown;
+    // }
 
-    private VerticalTranslationModifier(): number {
-        return +this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown;
+    // private VerticalTranslationModifier(): number {
+    //     return +this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown;
+    // }
+
+    private initSubscriptions(): void {
+        this.drawingService.changes.subscribe(() => {
+            this.updateSelection({ x: 0, y: 0 } as Vec2);
+        });
+        this.selectionTranslation.updateSelectionRequest.subscribe((translation: Vec2) => {
+            this.updateSelection(translation);
+        });
     }
 
     private startSelection(): void {
