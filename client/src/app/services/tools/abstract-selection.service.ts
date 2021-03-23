@@ -70,6 +70,7 @@ export abstract class AbstractSelectionService extends Tool {
             document.body.style.width = this.bodyWidth;
             document.body.style.height = this.bodyHeight;
             const mousePos = this.getPositionFromMouse(event);
+            this.resetArrowKeys();
             this.endSelection();
             this.updatePoints.next(false);
             this.mouseDownCoord = mousePos;
@@ -110,7 +111,7 @@ export abstract class AbstractSelectionService extends Tool {
     onKeyDown(event: KeyboardEvent): void {
         if (this.CANCEL_SELECTION.equals(event)) {
             this.stopDrawing();
-        } else if (this.SELECT_ALL.equals(event)) {
+        } else if (this.SELECT_ALL.equals(event) && !this.leftMouseDown) {
             event.preventDefault();
             this.selectAll();
         } else if (this.SHIFT.equals(event)) {
@@ -162,6 +163,7 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     selectAll(): void {
+        this.resetArrowKeys();
         this.endSelection();
         this.config.endCoords = { x: 0, y: 0 } as Vec2;
         const width = this.drawingService.canvas.width;
@@ -194,12 +196,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.config.shiftDown = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
 
-        this.RIGHT_ARROW.isDown = false;
-        this.LEFT_ARROW.isDown = false;
-        this.UP_ARROW.isDown = false;
-        this.DOWN_ARROW.isDown = false;
-        window.clearInterval(this.moveId);
-        this.moveId = this.DEFAULT_MOVE_ID;
+        this.resetArrowKeys();
         this.updatePoints.next(false);
     }
 
@@ -233,6 +230,14 @@ export abstract class AbstractSelectionService extends Tool {
         if (this.LEFT_ARROW.equals(event, true)) this.LEFT_ARROW.isDown = false;
         if (this.UP_ARROW.equals(event, true)) this.UP_ARROW.isDown = false;
         if (this.DOWN_ARROW.equals(event, true)) this.DOWN_ARROW.isDown = false;
+    }
+
+    private resetArrowKeys(): void {
+        this.RIGHT_ARROW.isDown = false;
+        this.LEFT_ARROW.isDown = false;
+        this.UP_ARROW.isDown = false;
+        this.DOWN_ARROW.isDown = false;
+        this.clearArrowKeys();
     }
 
     private clearArrowKeys(): void {
