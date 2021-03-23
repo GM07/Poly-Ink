@@ -10,9 +10,8 @@ import { PencilSettings } from './pencil-settings';
 import { PolygoneSettings } from './polygone-settings';
 import { RectangleSelectionSettings } from './rectangle-selection-settings';
 import { RectangleSettings } from './rectangle-settings';
+import { StampSettings } from './stamp-settings';
 import { ToolSettings } from './tool-settings';
-
-// import { StampSettings } from './stamp-settings';
 // import { TextSettings } from './text-settings';
 
 export const TOP_TOOLS: ToolSettings[] = [
@@ -26,4 +25,5 @@ export const TOP_TOOLS: ToolSettings[] = [
     new EllipseSelectionSettings(),
     new AerosolSettings(),
     new EyeDropperSettings(),
+    new StampSettings(),
 ];

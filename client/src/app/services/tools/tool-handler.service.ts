@@ -10,6 +10,7 @@ import { PencilService } from '@app/services/tools/pencil.service';
 import { PolygoneService } from '@app/services/tools/polygone.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
+import { StampService } from '@app/services/tools/stamp.service';
 import { Subject } from 'rxjs';
 import { EyeDropperService } from './eye-dropper.service';
 
@@ -33,6 +34,7 @@ export class ToolHandlerService {
         eraserService: EraserService,
         polygoneService: PolygoneService,
         eyeDropperService: EyeDropperService,
+        stampService: StampService,
     ) {
         this.TOOLS.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
@@ -46,7 +48,7 @@ export class ToolHandlerService {
         this.TOOLS.set(ToolsConstants.PolygoneToolConstants.TOOL_ID, polygoneService);
         this.TOOLS.set(ToolsConstants.RectangleSelectionToolConstants.TOOL_ID, rectangleSelectionService);
         this.TOOLS.set(ToolsConstants.RectangleToolConstants.TOOL_ID, rectangleService);
-        // this.TOOLS.set(ToolsConstants.StampToolConstants.TOOL_ID, pencilService);
+        this.TOOLS.set(ToolsConstants.StampToolConstants.TOOL_ID, stampService);
         // this.TOOLS.set(ToolsConstants.TextToolConstants.TOOL_ID, pencilService);
         this.currentTool = this.TOOLS.values().next().value;
         this.currentToolSubject.next(this.currentTool);

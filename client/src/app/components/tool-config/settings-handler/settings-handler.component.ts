@@ -10,6 +10,7 @@ import { PencilConfigComponent } from '@app/components/tool-config/pencil-config
 import { PolygoneConfigComponent } from '@app/components/tool-config/polygone-config/polygone-config.component';
 import { RectangleConfigComponent } from '@app/components/tool-config/rectangle-config/rectangle-config.component';
 import { RectangleSelectionConfigComponent } from '@app/components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
+import { StampConfigComponent } from '@app/components/tool-config/stamp-config/stamp-config.component';
 import { ToolConfig } from '@app/components/tool-config/tool-config';
 import { AerosolService } from '@app/services/tools/aerosol.service';
 import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.service';
@@ -21,6 +22,7 @@ import { PencilService } from '@app/services/tools/pencil.service';
 import { PolygoneService } from '@app/services/tools/polygone.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
+import { StampService } from '@app/services/tools/stamp.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 @Component({
     selector: 'app-settings-handler',
@@ -43,6 +45,7 @@ export class SettingsHandlerComponent {
         this.settingsList.set(EllipseSelectionService, EllipseSelectionConfigComponent);
         this.settingsList.set(AerosolService, AerosolConfigComponent);
         this.settingsList.set(EyeDropperService, EyeDropperConfigComponent);
+        this.settingsList.set(StampService, StampConfigComponent);
         this.applyNewTab();
     }
 
