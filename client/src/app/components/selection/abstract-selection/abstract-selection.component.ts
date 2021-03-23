@@ -91,7 +91,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
                 this.makeControlsUnselectable();
                 this.selectionService.translationOrigin = this.selectionService.getPositionFromMouse(event);
             } else if (this.selectionService.config.selectionCtx !== null) {
-                this.selectionService.onMouseDown(event);
+                this.selectionService.stopDrawing();
             }
         }
         this.updateControlPointDisplay(this.selectionService.config.selectionCtx !== null);

@@ -73,14 +73,14 @@ describe('AbstractSelectionComponent', () => {
     });
 
     it('should confirm selection on mouse down outside of the selection', () => {
-        const selectionMouseDownSpy = spyOn(component['selectionService'], 'onMouseDown');
+        const stopDrawingSpy = spyOn(component['selectionService'], 'stopDrawing');
         component['isInSidebar'] = true;
         component.onMouseDown(mouseEvent);
-        expect(selectionMouseDownSpy).not.toHaveBeenCalled();
+        expect(stopDrawingSpy).not.toHaveBeenCalled();
         component['isInSidebar'] = false;
         component['selectionService'].selectionCtx = drawService.previewCtx;
         component.onMouseDown(mouseEvent);
-        expect(selectionMouseDownSpy).toHaveBeenCalled();
+        expect(stopDrawingSpy).toHaveBeenCalled();
     });
 
     it('should change translationOrigin when mouseDown and inSelection', () => {

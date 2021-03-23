@@ -15,7 +15,7 @@ export class RectangleSelectionDraw extends AbstractDraw {
 
         this.fillBackground(context);
 
-        context.drawImage(selectionCanvas, this.config.endCoords.x, this.config.endCoords.y);
+        context.drawImage(selectionCanvas, Math.floor(this.config.endCoords.x), Math.floor(this.config.endCoords.y));
     }
 
     private fillBackground(context: CanvasRenderingContext2D): void {
