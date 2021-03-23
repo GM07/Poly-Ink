@@ -1,0 +1,15 @@
+<div class="tab">
+  <h5 class="textFormat">Dimensions des carreaux</h5>
+  <div class="textFormatForSlider">
+      <mat-slider min="{{ MIN_SIZE }}" max="{{ MAX_SIZE }}" (input)="sizeChange($event)" [(ngModel)]="gridService.sizeValue" thumbLabel [displayWith]="colorSliderLabel">
+      </mat-slider>
+      {{ gridService.sizeValue }}px
+  </div>
+
+  <h5 class="textFormat">Transparence de la grille</h5>
+  <div class="textFormatForSlider">
+      <mat-slider min="{{ MIN_OPACITY }}" max="{{ MAX_OPACITY }}" step="0.1" (input)="opacityChange($event)" [(ngModel)]="gridService.opacityValue" thumbLabel [displayWith]="colorSliderLabel">
+      </mat-slider>
+      {{ gridService.opacity }}
+  </div>
+</div>

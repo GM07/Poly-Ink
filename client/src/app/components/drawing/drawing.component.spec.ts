@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Tool } from '@app/classes/tool';
 import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { GridService } from '@app/services/drawing/grid.service';
 import { PencilService } from '@app/services/tools/pencil.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { DrawingComponent } from './drawing.component';
@@ -17,17 +18,20 @@ describe('DrawingComponent', () => {
     let fixture: ComponentFixture<DrawingComponent>;
     let toolStub: ToolStub;
     let drawingStub: DrawingService;
+    let gridService: GridService;
 
     beforeEach(async(() => {
         toolStub = new ToolStub({} as DrawingService, {} as ColorService);
+        gridService = new GridService();
         const undoRedoServiceSpy = jasmine.createSpyObj('UndoRedoService', ['init', 'saveCommand', 'undo', 'redo', 'isPreviewEmpty', 'onKeyDown']);
-        drawingStub = new DrawingService(undoRedoServiceSpy);
+        drawingStub = new DrawingService(undoRedoServiceSpy, gridService);
 
         TestBed.configureTestingModule({
             declarations: [DrawingComponent],
             providers: [
                 { provide: PencilService, useValue: toolStub },
                 { provide: DrawingService, useValue: drawingStub },
+                { provide: GridService, useValue: gridService },
             ],
         }).compileComponents();
     }));
@@ -36,6 +40,9 @@ describe('DrawingComponent', () => {
         fixture = TestBed.createComponent(DrawingComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
+        spyOn(gridService, 'updateGrid');
+        spyOn(gridService, 'upsizeGrid');
+        spyOn(gridService, 'downsizeGrid');
     });
 
     it('should create', () => {
@@ -108,5 +115,36 @@ describe('DrawingComponent', () => {
         component.onKeyUp(event);
         expect(keyboardSpy).toHaveBeenCalled();
         expect(keyboardSpy).toHaveBeenCalledWith(event);
+    });
+
+    it('should toggle the grid on key down with g', () => {
+        const event = { key: 'g', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
+        const gridVisibility = component.gridVisibility;
+        component.onKeyDown(event);
+        expect(component.gridVisibility).not.toEqual(gridVisibility);
+        component.onKeyDown(event);
+        expect(component.gridVisibility).toEqual(gridVisibility);
+    });
+
+    it('should upsize the grid on key down with =', () => {
+        const event = { key: '=', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
+        component.onKeyDown(event);
+        expect(gridService.updateGrid).toHaveBeenCalled();
+        expect(gridService.upsizeGrid).toHaveBeenCalled();
+    });
+
+    it('should downsize the grid on key down with -', () => {
+        const event = { key: '-', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
+        component.onKeyDown(event);
+        expect(gridService.updateGrid).toHaveBeenCalled();
+        expect(gridService.downsizeGrid).toHaveBeenCalled();
+    });
+
+    it('should do nothing on other key', () => {
+        const event = { key: '_', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
+        component.onKeyDown(event);
+        expect(gridService.updateGrid).not.toHaveBeenCalled();
+        expect(gridService.downsizeGrid).not.toHaveBeenCalled();
+        expect(gridService.upsizeGrid).not.toHaveBeenCalled();
     });
 });

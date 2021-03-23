@@ -22,4 +22,10 @@ export abstract class ToolSettingsConst {
     static readonly EYE_DROPPER_PREVIEW_WIDTH: number = 11;
     static readonly LINE_DEFAULT_DIAMETER_JUNCTION: number = 10;
     static readonly LINE_DEFAULT_WIDTH: number = 6;
+    static readonly GRID_MIN_SIZE: number = 25;
+    static readonly GRID_MAX_SIZE: number = 75;
+    static readonly GRID_DEFAULT_OPACITY: number = 0.5;
+    static readonly GRID_MIN_OPACITY: number = 0.4;
+    static readonly GRID_MAX_OPACITY: number = 1.0;
+    static readonly GRID_STEP: number = 5;
 }

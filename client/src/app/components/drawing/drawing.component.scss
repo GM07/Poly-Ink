@@ -10,6 +10,11 @@ canvas {
     z-index: 1;
 }
 
+#grid{
+  z-index: 3;
+  visibility: hidden;
+}
+
 #previewLayer {
     z-index: 2;
 }
