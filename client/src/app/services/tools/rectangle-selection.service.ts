@@ -18,13 +18,13 @@ export class RectangleSelectionService extends AbstractSelectionService {
     }
 
     protected endSelection(): void {
-        if (this.selectionCtx === null) return;
+        if (this.config.selectionCtx === null) return;
 
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
 
         this.draw();
 
-        this.selectionCtx = null;
+        this.config.selectionCtx = null;
 
         this.config.endCoords = { x: 0, y: 0 } as Vec2;
         this.translationOrigin = { x: 0, y: 0 } as Vec2;

@@ -6,6 +6,7 @@ export class SelectionConfig {
     height: number;
     width: number;
     shiftDown: boolean;
+    selectionCtx: CanvasRenderingContext2D | null;
 
     constructor() {
         this.startCoords = { x: 0, y: 0 };
@@ -13,6 +14,7 @@ export class SelectionConfig {
         this.height = 0;
         this.width = 0;
         this.shiftDown = false;
+        this.selectionCtx = null;
     }
 
     clone(): SelectionConfig {

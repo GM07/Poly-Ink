@@ -90,11 +90,11 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
                 this.selectionService.onMouseDown(event);
                 this.makeControlsUnselectable();
                 this.selectionService.translationOrigin = this.selectionService.getPositionFromMouse(event);
-            } else if (this.selectionService.selectionCtx !== null) {
+            } else if (this.selectionService.config.selectionCtx !== null) {
                 this.selectionService.onMouseDown(event);
             }
         }
-        this.updateControlPointDisplay(this.selectionService.selectionCtx !== null);
+        this.updateControlPointDisplay(this.selectionService.config.selectionCtx !== null);
     }
 
     onMouseUp(): void {
@@ -105,7 +105,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         if (this.displayControlPoints) {
             this.makeControlsSelectable();
         }
-        this.updateControlPointDisplay(this.selectionService.selectionCtx !== null);
+        this.updateControlPointDisplay(this.selectionService.config.selectionCtx !== null);
     }
 
     onMouseMove(event: MouseEvent): void {
@@ -162,7 +162,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     }
 
     private placePoints(): void {
-        if (this.selectionService.selectionCtx === null) return;
+        if (this.selectionService.config.selectionCtx === null) return;
 
         const width = Math.abs(this.selectionService.config.width);
         const height = Math.abs(this.selectionService.config.height);
