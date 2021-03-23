@@ -169,6 +169,19 @@ describe('SaveDrawingComponent', () => {
         expect(component.saveTags.length).toBe(0);
     });
 
+    it('should not remove a tag when the tag is not found', () => {
+        const inputValue = { value: 'tag1' } as HTMLInputElement;
+        component.addTag({ input: inputValue, value: 'tag1' } as MatChipInputEvent);
+        component.removeTag(new Tag('not_found_tag'));
+        expect(component.saveTags.length).toBe(1);
+    });
+
+    it('should not add a tag if tag is only white spaces', () => {
+        const inputValue = { value: ' ' } as HTMLInputElement;
+        component.addTag({ input: inputValue, value: ' ' } as MatChipInputEvent);
+        expect(component.saveTags.length).toBe(0);
+    });
+
     it('should not save the image when name is empty and validators have errors', async () => {
         const spy = spyOn(serverCommunicationService, 'createDrawing').and.returnValue(new Observable());
         component.nameFormControl.setErrors({ required: true });

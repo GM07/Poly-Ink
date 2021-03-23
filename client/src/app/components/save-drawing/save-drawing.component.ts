@@ -109,11 +109,9 @@ export class SaveDrawingComponent {
             this.unavailableServer = false;
             this.dataLimitReached = false;
             const tagsSet: Set<string> = new Set();
-            if (this.tagsFormControl.value) {
-                this.saveTags.forEach((tag: Tag) => {
-                    tagsSet.add(tag.name);
-                });
-            }
+            this.saveTags.forEach((tag: Tag) => {
+                tagsSet.add(tag.name);
+            });
             // Filter tags to keep them unique
             const tags: Tag[] = [];
             tagsSet.forEach((uniqueTag: string) => {
