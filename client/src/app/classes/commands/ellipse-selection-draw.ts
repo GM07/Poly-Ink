@@ -25,7 +25,7 @@ export class EllipseSelectionDraw extends AbstractDraw {
         context.save();
         context.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
         context.clip();
-        context.drawImage(selectionCanvas, this.config.endCoords.x, this.config.endCoords.y);
+        context.drawImage(selectionCanvas, Math.floor(this.config.endCoords.x), Math.floor(this.config.endCoords.y));
         context.restore();
         context.closePath();
     }
