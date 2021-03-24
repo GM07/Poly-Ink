@@ -1,21 +1,20 @@
-import { Vec2 } from '../vec2';
+import { Vec2 } from '@app/classes/vec2';
 import { StampConfig } from './stamp-config';
 
 describe('StampConfig', () => {
     let config: StampConfig;
     beforeEach(() => {
-      config = new StampConfig();
-      config.position = {x: 0, y: 0} as Vec2;
+        config = new StampConfig();
+        config.position = { x: 0, y: 0 } as Vec2;
     });
-
 
     it('should create an instance', () => {
         expect(new StampConfig()).toBeTruthy();
     });
 
     it('should clone properly', () => {
-      const newConfig = config.clone();
-      expect(newConfig.etampeImg).not.toBe(config.etampeImg);
-      expect(newConfig.position).not.toBe(config.position);
-  });
+        const newConfig = config.clone();
+        expect(newConfig.etampeImg).not.toBe(config.etampeImg);
+        expect(newConfig.position).not.toBe(config.position);
+    });
 });

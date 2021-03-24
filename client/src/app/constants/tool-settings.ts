@@ -22,4 +22,9 @@ export abstract class ToolSettingsConst {
     static readonly EYE_DROPPER_PREVIEW_WIDTH: number = 11;
     static readonly LINE_DEFAULT_DIAMETER_JUNCTION: number = 10;
     static readonly LINE_DEFAULT_WIDTH: number = 6;
+    static readonly STAMP_MIN_VALUE: number = 0.1;
+    static readonly STAMP_MAX_VALUE: number = 5;
+    static readonly STAMP_MIN_ANGLE: number = 0;
+    static readonly STAMP_MAX_ANGLE: number = 2 * Math.PI;
+    static readonly STAMP_DEFAULT_SIZE: number = 50;
 }

@@ -68,11 +68,11 @@ describe('DrawingService', () => {
     });
 
     it('passdrawPreview should execute command on preview', () => {
-      spyOn(command, 'execute').and.stub();
-      spyOn(service, 'clearCanvas').and.stub();
-      service.passDrawPreview(command);
-      expect(command.execute).toHaveBeenCalledWith(service.previewCtx);
-  });
+        spyOn(command, 'execute').and.stub();
+        spyOn(service, 'clearCanvas').and.stub();
+        service.passDrawPreview(command);
+        expect(command.execute).toHaveBeenCalledWith(service.previewCtx);
+    });
 
     it('should block undo redo properly', () => {
         service.blockUndoRedo();

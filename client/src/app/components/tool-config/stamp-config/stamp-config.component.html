@@ -17,25 +17,25 @@
     <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style">
         <div class="textFormatButton">
             <mat-button-toggle
-                [checked]="stampService.config.etampe === StampMode.Alexis"
+                [checked]="stampService.config.etampe === stampMode.Alexis"
                 class="buttons"
-                (click)="toggleStamp(StampMode.Alexis)"
+                (click)="toggleStamp(stampMode.Alexis)"
                 >Alexis</mat-button-toggle
             >
         </div>
         <div class="textFormatButton">
             <mat-button-toggle
-                [checked]="stampService.config.etampe === StampMode.Felix"
+                [checked]="stampService.config.etampe === stampMode.Felix"
                 class="buttons"
-                (click)="toggleStamp(StampMode.Felix)"
+                (click)="toggleStamp(stampMode.Felix)"
                 >Félix</mat-button-toggle
             >
         </div>
         <div class="textFormatButton">
             <mat-button-toggle
-                [checked]="stampService.config.etampe === StampMode.Gaya"
+                [checked]="stampService.config.etampe === stampMode.Gaya"
                 class="buttons"
-                (click)="toggleStamp(StampMode.Gaya)"
+                (click)="toggleStamp(stampMode.Gaya)"
                 >Gaya</mat-button-toggle
             >
         </div>

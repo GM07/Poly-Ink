@@ -1,4 +1,4 @@
-import { Vec2 } from '../vec2';
+import { Vec2 } from '@app/classes/vec2';
 
 export enum Stamp {
     Alexis = 0,
@@ -7,7 +7,7 @@ export enum Stamp {
 }
 
 export class StampConfig {
-    static readonly stampList = ['assets/stamps/alexis.png', 'assets/stamps/felix.png', 'assets/stamps/alexis.png'];
+    static readonly stampList: string[] = ['assets/stamps/alexis.png', 'assets/stamps/felix.png', 'assets/stamps/alexis.png'];
     scale: number;
     angle: number;
     position: Vec2;

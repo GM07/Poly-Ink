@@ -49,7 +49,7 @@ class MockToolHandler extends ToolHandlerService {
             eraserService,
             polygoneService,
             eyeDropperService,
-            stampService
+            stampService,
         );
         this.TOOLS_MOCK.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
