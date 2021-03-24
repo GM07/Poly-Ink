@@ -1,5 +1,4 @@
-<div (document:mousemove)="onMouseMove($event)"></div>
-<div (document:mousedown)="onMouseDown($event)"></div>
+<div (document:mousedown)="confirmSelection($event)"></div>
 <div (document:mouseup)="onMouseUp()"></div>
 
 <div *ngIf="displayControlPoints">
@@ -16,7 +15,7 @@
             <div class="control-point" #bottomMiddle style="cursor: s-resize"></div>
             <div class="control-point" #bottomRight style="cursor: se-resize"></div>
         </div>
-        <div class="resize-border" #border></div>
+        <div class="resize-border" #border (mousedown)="onMouseDown($event)"></div>
     </div>
     <div style="position: relative; z-index: 0">
         <div class="selection-background" #selectionBackground></div>

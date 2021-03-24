@@ -54,7 +54,6 @@ describe('AbstractSelectionComponent', () => {
     });
 
     it('it should disable control if in selection on mouse down', () => {
-        spyOn(abstractSelectionService, 'isInSelection').and.returnValue(true);
         const makeControlsUnselectable = spyOn<any>(component, 'makeControlsUnselectable');
         component['shortcutHandlerService'].blockShortcuts = true;
         component['isInSidebar'] = false;
@@ -84,7 +83,6 @@ describe('AbstractSelectionComponent', () => {
     });
 
     it('should change translationOrigin when mouseDown and inSelection', () => {
-        spyOn(abstractSelectionService, 'isInSelection').and.returnValue(true);
         spyOn(abstractSelectionService, 'getPositionFromMouse');
         spyOn<any>(component, 'makeControlsUnselectable');
         component.onMouseDown(mouseEvent);
@@ -96,7 +94,6 @@ describe('AbstractSelectionComponent', () => {
         component['isInSidebar'] = true;
         expect(component['makeControlsUnselectable']).not.toHaveBeenCalled();
         component['isInSidebar'] = false;
-        component['leftMouseDown'] = false;
         expect(component['makeControlsUnselectable']).not.toHaveBeenCalled();
     });
 
@@ -116,32 +113,6 @@ describe('AbstractSelectionComponent', () => {
         abstractSelectionService['config'].selectionCtx = drawService.previewCtx;
         component.onMouseUp();
         expect(controlSaveBoolean).not.toEqual(component.displayControlPoints);
-    });
-
-    it('should update the cursor when hovering the selection', () => {
-        spyOn(abstractSelectionService, 'isInSelection').and.returnValue(true);
-        component['isInSidebar'] = false;
-        component['shortcutHandlerService'].blockShortcuts = true;
-        component.onMouseMove(mouseEvent);
-        expect(drawService.previewCanvas.style.cursor).not.toEqual('all-scroll');
-        component['shortcutHandlerService'].blockShortcuts = false;
-        component.onMouseMove(mouseEvent);
-        expect(drawService.previewCanvas.style.cursor).toEqual('all-scroll');
-    });
-
-    it('should reset the cursor when not hovering the selection', () => {
-        spyOn(abstractSelectionService, 'isInSelection').and.returnValue(false);
-        component['isInSidebar'] = false;
-        component['lastCanvasCursor'] = 'pointer';
-        component.onMouseMove(mouseEvent);
-        expect(drawService.previewCanvas.style.cursor).toEqual('pointer');
-    });
-
-    it('should do nothing if mouse is down and we are not diplaying the control points', () => {
-        component['leftMouseDown'] = true;
-        const placePoints = spyOn<any>(component, 'placePoints');
-        component.onMouseMove(mouseEvent);
-        expect(placePoints).not.toHaveBeenCalled();
     });
 
     it('should check for change and init points detection when the control points are first displayed', () => {

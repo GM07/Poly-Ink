@@ -45,10 +45,9 @@ describe('RectangleSelectionService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('should draw set mouseDown and mouseUp to same coordinate on mouseDown outside of selection', () => {
+    it('should draw and set mouseDown and mouseUp to same coordinate on mouseDown outside of selection', () => {
         spyOn<any>(service, 'endSelection');
         spyOn<any>(service, 'drawPreviewSelection');
-        spyOn(service, 'isInSelection').and.returnValue(false);
         service.onMouseDown(mouseEvent);
         expect(service.mouseDownCoord).toEqual(service.mouseUpCoord);
     });

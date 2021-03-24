@@ -49,17 +49,6 @@ describe('AbstractSelectionService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('is in selection should return true if is in selection', () => {
-        // tslint:disable:no-magic-numbers
-        service['config'].selectionCtx = canvasSelection.getContext('2d');
-        service.config.endCoords = { x: 0, y: 0 } as Vec2;
-        service.config.width = 50;
-        service.config.height = 50;
-        spyOn<any>(service, 'getPositionFromMouse').and.returnValue({ x: 25, y: 25 } as Vec2);
-        spyOn<any>(service, 'isInSelection').and.callThrough();
-        expect(service.isInSelection(mouseEvent)).toBeTruthy();
-    });
-
     it('on mouse down should do nothing with different click', () => {
         spyOn(service, 'getPositionFromMouse');
         const badMouseEvent = { button: 1 } as MouseEvent;
@@ -146,12 +135,6 @@ describe('AbstractSelectionService', () => {
         expect(service.stopDrawing).not.toHaveBeenCalled();
         expect(service.selectAll).not.toHaveBeenCalled();
         expect(service['updateDrawingSelection']).not.toHaveBeenCalled();
-    });
-
-    it('isInSelection should do nothing if there is no selection', () => {
-        spyOn(service, 'getPositionFromMouse');
-        service.isInSelection(mouseEvent);
-        expect(service.getPositionFromMouse).not.toHaveBeenCalled();
     });
 
     it('should start mouse translation', () => {

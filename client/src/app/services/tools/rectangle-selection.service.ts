@@ -25,7 +25,6 @@ export class RectangleSelectionService extends AbstractSelectionService {
         this.draw();
 
         this.config.selectionCtx = null;
-
         this.config.endCoords = { x: 0, y: 0 } as Vec2;
     }
 

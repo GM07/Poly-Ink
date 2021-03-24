@@ -98,6 +98,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.draw();
+
         this.config.selectionCtx = null;
         this.config.endCoords = { x: 0, y: 0 } as Vec2;
     }
