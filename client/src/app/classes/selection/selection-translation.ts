@@ -1,7 +1,7 @@
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
+import { Vec2 } from '@app/classes/vec2';
 import { Subject } from 'rxjs';
-import { Vec2 } from '../vec2';
 
 export class SelectionTranslation {
     private readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
@@ -72,7 +72,7 @@ export class SelectionTranslation {
         this.translationOrigin = mousePosition;
     }
 
-    stopDrawing() {
+    stopDrawing(): void {
         this.translationOrigin = { x: 0, y: 0 } as Vec2;
         document.body.style.width = this.bodyWidth;
         document.body.style.height = this.bodyHeight;
@@ -83,7 +83,7 @@ export class SelectionTranslation {
         this.clearArrowKeys();
     }
 
-    private sendUpdateSelectionRequest(translation: Vec2) {
+    private sendUpdateSelectionRequest(translation: Vec2): void {
         this.translationOrigin.x += translation.x;
         this.translationOrigin.y += translation.y;
         this.updateSelectionRequest.next(translation);
@@ -92,7 +92,7 @@ export class SelectionTranslation {
     private getTranslation(mousePos: Vec2): Vec2 {
         return { x: mousePos.x - this.translationOrigin.x, y: mousePos.y - this.translationOrigin.y } as Vec2;
     }
-    
+
     private isArrowKeyDown(event: KeyboardEvent, leftMouseDown: boolean): boolean {
         return (
             !leftMouseDown &&

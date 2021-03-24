@@ -165,6 +165,7 @@ describe('AbstractSelectionService', () => {
     it('should initialise subscriptions', () => {
         const drawingServiceSubscribe = spyOn(service['drawingService'].changes, 'subscribe');
         const selectionTranslationSubscribe = spyOn(service['selectionTranslation'].updateSelectionRequest, 'subscribe');
+        service['initSubscriptions']();
         expect(drawingServiceSubscribe).toHaveBeenCalled();
         expect(selectionTranslationSubscribe).toHaveBeenCalled();
     });

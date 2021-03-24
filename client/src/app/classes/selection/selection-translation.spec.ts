@@ -1,8 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { SelectionConfig } from '../tool-config/selection-config';
-import { Vec2 } from '../vec2';
+import { SelectionConfig } from '@app/classes/tool-config/selection-config';
+import { Vec2 } from '@app/classes/vec2';
 import { SelectionTranslation } from './selection-translation';
 
+// tslint:disable:no-any
+// tslint:disable:no-string-literal
 describe('SelectionTranslation', () => {
     let selectionTranslation: SelectionTranslation;
     let selectionConfig: SelectionConfig;

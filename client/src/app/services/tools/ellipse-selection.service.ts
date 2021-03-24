@@ -88,7 +88,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         ctx.save();
         ctx.ellipse(centerX, centerY, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
         ctx.clip();
-        ctx.drawImage(this.SELECTION_DATA, this.config.endCoords.x, this.config.endCoords.y);
+        ctx.drawImage(this.selectionData, this.config.endCoords.x, this.config.endCoords.y);
         ctx.restore();
         this.drawSelection(ctx, { x: centerX, y: centerY } as Vec2, this.radiusAbs);
     }

@@ -20,7 +20,7 @@ export abstract class AbstractSelectionService extends Tool {
     private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
     private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
     protected readonly SHIFT: ShortcutKey = new ShiftKey();
-    protected SELECTION_DATA: HTMLCanvasElement;
+    protected selectionData: HTMLCanvasElement;
     protected selectionTranslation: SelectionTranslation;
 
     updatePoints: Subject<boolean>;
@@ -31,7 +31,7 @@ export abstract class AbstractSelectionService extends Tool {
         super(drawingService, colorService);
         this.config = new SelectionConfig();
         this.selectionTranslation = new SelectionTranslation(this.config);
-        this.SELECTION_DATA = document.createElement('canvas');
+        this.selectionData = document.createElement('canvas');
         this.config.endCoords = { x: 0, y: 0 } as Vec2;
         this.initSubscriptions();
         this.updatePoints = new Subject<boolean>();
@@ -153,7 +153,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.updatePoints.next(false);
     }
 
-    startMouseTranslation(event: MouseEvent) {
+    startMouseTranslation(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
         if (this.leftMouseDown) this.selectionTranslation.startMouseTranslation(this.getPositionFromMouse(event));
     }
@@ -186,9 +186,9 @@ export abstract class AbstractSelectionService extends Tool {
             this.drawingService.unblockUndoRedo();
             return;
         }
-        this.SELECTION_DATA.width = Math.abs(this.config.width);
-        this.SELECTION_DATA.height = Math.abs(this.config.height);
-        this.config.selectionCtx = this.SELECTION_DATA.getContext('2d') as CanvasRenderingContext2D;
+        this.selectionData.width = Math.abs(this.config.width);
+        this.selectionData.height = Math.abs(this.config.height);
+        this.config.selectionCtx = this.selectionData.getContext('2d') as CanvasRenderingContext2D;
         const x = Math.min(this.mouseDownCoord.x, this.mouseDownCoord.x + this.config.width);
         const y = Math.min(this.mouseDownCoord.y, this.mouseDownCoord.y + this.config.height);
         this.config.endCoords = { x, y } as Vec2;
@@ -207,7 +207,7 @@ export abstract class AbstractSelectionService extends Tool {
         );
 
         const previewCtx = this.drawingService.previewCtx;
-        previewCtx.drawImage(this.SELECTION_DATA, x, y);
+        previewCtx.drawImage(this.selectionData, x, y);
 
         this.drawPreviewSelection();
         this.updatePoints.next(true);

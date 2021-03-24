@@ -156,7 +156,7 @@ describe('RectangleSelectionService', () => {
         canvasSelection.height = 250;
         drawServiceSpy.previewCanvas = document.createElement('canvas');
         drawServiceSpy.previewCtx = drawServiceSpy.previewCanvas.getContext('2d') as CanvasRenderingContext2D;
-        service['SELECTION_DATA'] = canvasSelection;
+        service['selectionData'] = canvasSelection;
         const drawPreviewSelection = spyOn<any>(service, 'drawPreviewSelection');
         spyOn(drawServiceSpy.previewCtx, 'drawImage');
         spyOn<any>(service['config'].selectionCtx, 'drawImage');
@@ -183,7 +183,6 @@ describe('RectangleSelectionService', () => {
         const translation = { x: 0, y: 0 } as Vec2;
         const updateSelectionRequired = spyOn<any>(service, 'updateSelectionRequired');
         service.config.endCoords = { x: 0, y: 0 } as Vec2;
-        //service['translationOrigin'] = { x: 0, y: 0 } as Vec2;
         service['config'].selectionCtx = canvasSelection.getContext('2d');
         service['updateSelection'](translation);
         expect(updateSelectionRequired).toHaveBeenCalled();
