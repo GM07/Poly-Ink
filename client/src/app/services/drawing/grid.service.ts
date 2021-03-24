@@ -33,12 +33,12 @@ export class GridService {
     }
 
     set opacityValue(size: number) {
-        this.opacity = Math.max(ToolSettingsConst.GRID_MIN_OPACITY, Math.min(size, ToolSettingsConst.GRID_MAX_OPACITY));
+        this.opacity = Math.max(ToolSettingsConst.GRID_MIN_OPACITY, Math.min(1-(size/100), ToolSettingsConst.GRID_MAX_OPACITY));
         this.updateGrid();
     }
 
     get opacityValue(): number {
-        return this.opacity;
+        return Math.round((1-this.opacity)*100);
     }
 
     updateGrid(): void {

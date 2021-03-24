@@ -11,8 +11,8 @@ export class GridConfigComponent implements OnInit {
     readonly MIN_SIZE: number = 25;
     readonly MAX_SIZE: number = 75;
 
-    readonly MIN_OPACITY: number = 0.4;
-    readonly MAX_OPACITY: number = 1;
+    readonly MIN_OPACITY: number = 0;
+    readonly MAX_OPACITY: number = 60;
 
     constructor(public gridService: GridService) {}
 
