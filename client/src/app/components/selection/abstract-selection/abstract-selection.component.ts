@@ -87,9 +87,8 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         this.leftMouseDown = event.button === MouseButton.Left;
         if (!this.isInSidebar && this.leftMouseDown) {
             if (this.selectionService.isInSelection(event)) {
-                this.selectionService.onMouseDown(event);
                 this.makeControlsUnselectable();
-                this.selectionService.translationOrigin = this.selectionService.getPositionFromMouse(event);
+                this.selectionService.startMouseTranslation(event);
             } else if (this.selectionService.config.selectionCtx !== null) {
                 this.selectionService.stopDrawing();
             }

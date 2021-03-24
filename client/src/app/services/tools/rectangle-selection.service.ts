@@ -27,7 +27,6 @@ export class RectangleSelectionService extends AbstractSelectionService {
         this.config.selectionCtx = null;
 
         this.config.endCoords = { x: 0, y: 0 } as Vec2;
-        this.translationOrigin = { x: 0, y: 0 } as Vec2;
     }
 
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {

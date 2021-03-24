@@ -6,15 +6,17 @@ export class SelectionConfig {
     height: number;
     width: number;
     shiftDown: boolean;
+    leftMouseDown: boolean;
     selectionCtx: CanvasRenderingContext2D | null;
 
     constructor() {
-        this.startCoords = { x: 0, y: 0 };
-        this.endCoords = { x: 0, y: 0 };
+        this.startCoords = { x: 0, y: 0 } as Vec2;
+        this.endCoords = { x: 0, y: 0 } as Vec2;
         this.height = 0;
         this.width = 0;
         this.shiftDown = false;
         this.selectionCtx = null;
+        this.leftMouseDown = false;
     }
 
     clone(): SelectionConfig {
@@ -24,6 +26,8 @@ export class SelectionConfig {
         config.shiftDown = this.shiftDown;
         config.height = this.height;
         config.width = this.width;
+        config.leftMouseDown = this.leftMouseDown;
+        config.selectionCtx = null;
 
         return config;
     }
