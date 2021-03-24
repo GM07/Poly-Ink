@@ -63,16 +63,6 @@ describe('RectangleSelectionService', () => {
         expect(startSelection).toHaveBeenCalled();
     });
 
-    it('on mouse up should move selection if canvas is set', () => {
-        service.leftMouseDown = true;
-        spyOn(service, 'isInCanvas').and.returnValue(false);
-        spyOn<any>(service, 'getTranslation').and.returnValue({ x: 0, y: 0 } as Vec2);
-        const updateSelection = spyOn<any>(service, 'updateSelection');
-        service['config'].selectionCtx = canvasSelection.getContext('2d');
-        service.onMouseUp(mouseEvent);
-        expect(updateSelection).toHaveBeenCalled();
-    });
-
     it('should draw preview on mouse move', () => {
         service.mouseUpCoord = { x: 0, y: 0 } as Vec2;
         service.leftMouseDown = true;
@@ -81,16 +71,6 @@ describe('RectangleSelectionService', () => {
         service.onMouseMove(mouseEvent);
         expect(drawPreviewSelection).toHaveBeenCalled();
         expect(service.mouseUpCoord).not.toEqual({ x: 0, y: 0 } as Vec2);
-    });
-
-    it('should update the selection on mouse move if the selection is not null', () => {
-        service.leftMouseDown = true;
-        service['config'].selectionCtx = canvasSelection.getContext('2d');
-        const updateSelection = spyOn<any>(service, 'updateSelection');
-        spyOn<any>(service, 'getTranslation');
-        spyOn(service, 'isInCanvas').and.returnValue(false);
-        service.onMouseMove(mouseEvent);
-        expect(updateSelection).toHaveBeenCalled();
     });
 
     it('should stop drawing when the esc key is pressed', () => {
@@ -116,46 +96,6 @@ describe('RectangleSelectionService', () => {
         service.leftMouseDown = true;
         service.onKeyDown(keyboardEvent);
         expect(updateDrawingSelection).toHaveBeenCalled();
-    });
-
-    it('it should move the selection when there is a selection and an arrow is pressed', () => {
-        jasmine.clock().install();
-        const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowdown' });
-        const updateSelection = spyOn<any>(service, 'updateSelection');
-        spyOn<any>(service['selectionTranslation'], 'HorizontalTranslationModifier').and.returnValue(1);
-        spyOn<any>(service['selectionTranslation'], 'VerticalTranslationModifier').and.returnValue(1);
-        service['config'].selectionCtx = canvasSelection.getContext('2d');
-        service.onKeyDown(keyboardEvent);
-        jasmine.clock().tick(600);
-        expect(updateSelection).toHaveBeenCalled();
-        expect(updateSelection).toHaveBeenCalledTimes(2);
-        jasmine.clock().uninstall();
-        window.clearInterval(service['selectionTranslation']['moveId']);
-    });
-
-    it('should not move the selection multiple times if the key was pressed multiple times', () => {
-        jasmine.clock().install();
-        const updateSelection = spyOn<any>(service, 'updateSelection');
-        const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowdown' });
-        service['config'].selectionCtx = canvasSelection.getContext('2d');
-        service.onKeyDown(keyboardEvent);
-        jasmine.clock().tick(200);
-        service['selectionTranslation']['moveId'] = 1;
-        jasmine.clock().tick(350);
-        expect(updateSelection).toHaveBeenCalledTimes(1);
-        jasmine.clock().uninstall();
-    });
-
-    it('should not move the selection if it is already moving', () => {
-        jasmine.clock().install();
-        const updateSelection = spyOn<any>(service, 'updateSelection');
-        const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowdown' });
-        service['config'].selectionCtx = canvasSelection.getContext('2d');
-        service['selectionTranslation']['moveId'] = 1;
-        service.onKeyDown(keyboardEvent);
-        jasmine.clock().tick(500);
-        expect(updateSelection).toHaveBeenCalledTimes(1);
-        jasmine.clock().uninstall();
     });
 
     it('should update the selection when key up', () => {
@@ -243,7 +183,7 @@ describe('RectangleSelectionService', () => {
         const translation = { x: 0, y: 0 } as Vec2;
         const updateSelectionRequired = spyOn<any>(service, 'updateSelectionRequired');
         service.config.endCoords = { x: 0, y: 0 } as Vec2;
-        service['translationOrigin'] = { x: 0, y: 0 } as Vec2;
+        //service['translationOrigin'] = { x: 0, y: 0 } as Vec2;
         service['config'].selectionCtx = canvasSelection.getContext('2d');
         service['updateSelection'](translation);
         expect(updateSelectionRequired).toHaveBeenCalled();

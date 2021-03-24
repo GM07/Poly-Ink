@@ -6,7 +6,6 @@ export class SelectionConfig {
     height: number;
     width: number;
     shiftDown: boolean;
-    leftMouseDown: boolean;
     selectionCtx: CanvasRenderingContext2D | null;
 
     constructor() {
@@ -16,7 +15,6 @@ export class SelectionConfig {
         this.width = 0;
         this.shiftDown = false;
         this.selectionCtx = null;
-        this.leftMouseDown = false;
     }
 
     clone(): SelectionConfig {
@@ -26,7 +24,6 @@ export class SelectionConfig {
         config.shiftDown = this.shiftDown;
         config.height = this.height;
         config.width = this.width;
-        config.leftMouseDown = this.leftMouseDown;
         config.selectionCtx = null;
 
         return config;

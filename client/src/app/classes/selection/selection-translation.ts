@@ -92,8 +92,7 @@ export class SelectionTranslation {
     private getTranslation(mousePos: Vec2): Vec2 {
         return { x: mousePos.x - this.translationOrigin.x, y: mousePos.y - this.translationOrigin.y } as Vec2;
     }
-
-    // TODO: tester
+    
     private isArrowKeyDown(event: KeyboardEvent, leftMouseDown: boolean): boolean {
         return (
             !leftMouseDown &&

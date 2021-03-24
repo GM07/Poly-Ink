@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { SelectionConfig } from '../tool-config/selection-config';
+import { Vec2 } from '../vec2';
 import { SelectionTranslation } from './selection-translation';
 
 describe('SelectionTranslation', () => {
@@ -12,6 +13,12 @@ describe('SelectionTranslation', () => {
         canvasSelection = document.createElement('canvas');
         selectionConfig = new SelectionConfig();
         selectionTranslation = new SelectionTranslation(selectionConfig);
+    });
+
+    it('get translation should return the current translation', () => {
+        const mousePos = { x: 25, y: 25 } as Vec2;
+        selectionTranslation['translationOrigin'] = { x: 25, y: 25 } as Vec2;
+        expect(selectionTranslation['getTranslation'](mousePos)).toEqual({ x: 0, y: 0 } as Vec2);
     });
 
     it('set ArrowKeyUp should update the keys when down', () => {
@@ -114,8 +121,74 @@ describe('SelectionTranslation', () => {
         expect(window.clearInterval).not.toHaveBeenCalled();
     });
 
+    it('should indicate if an arrow key is down', () => {
+        expect(selectionTranslation['isArrowKeyDown'](new KeyboardEvent('keyup', { key: 'arrowleft' }), false)).toBeTruthy();
+    });
+
     it('should clear the translation interval for the arrow keys', () => {
         selectionTranslation['clearArrowKeys']();
         expect(selectionTranslation['moveId']).toEqual(selectionTranslation['DEFAULT_MOVE_ID']);
+    });
+
+    it('it should move the selection when there is a selection and an arrow is pressed', () => {
+        jasmine.clock().install();
+        const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowdown' });
+        const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
+        spyOn<any>(selectionTranslation, 'HorizontalTranslationModifier').and.returnValue(1);
+        spyOn<any>(selectionTranslation, 'VerticalTranslationModifier').and.returnValue(1);
+        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
+        selectionTranslation.onKeyDown(keyboardEvent, false);
+        jasmine.clock().tick(600);
+        expect(updateSelection).toHaveBeenCalled();
+        expect(updateSelection).toHaveBeenCalledTimes(2);
+        jasmine.clock().uninstall();
+        window.clearInterval(selectionTranslation['moveId']);
+    });
+
+    it('should not move the selection multiple times if the key was pressed multiple times', () => {
+        jasmine.clock().install();
+        const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
+        const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowdown' });
+        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
+        selectionTranslation.onKeyDown(keyboardEvent, false);
+        jasmine.clock().tick(200);
+        selectionTranslation['moveId'] = 1;
+        jasmine.clock().tick(350);
+        expect(updateSelection).toHaveBeenCalledTimes(1);
+        jasmine.clock().uninstall();
+    });
+
+    it('should not move the selection if it is already moving', () => {
+        jasmine.clock().install();
+        const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
+        const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowdown' });
+        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
+        selectionTranslation['moveId'] = 1;
+        selectionTranslation.onKeyDown(keyboardEvent, false);
+        jasmine.clock().tick(500);
+        expect(updateSelection).toHaveBeenCalledTimes(1);
+        jasmine.clock().uninstall();
+    });
+
+    it('should update the selection on mouse move if the selection is not null', () => {
+        selectionTranslation['config'].selectionCtx = null;
+        const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
+        spyOn<any>(selectionTranslation, 'getTranslation');
+        selectionTranslation.onMouseMove({ pageX: 1, pageY: 1 } as MouseEvent, { x: 1, y: 1 } as Vec2);
+        expect(updateSelection).not.toHaveBeenCalled();
+        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
+        selectionTranslation.onMouseMove({ pageX: 1, pageY: 1 } as MouseEvent, { x: 1, y: 1 } as Vec2);
+        expect(updateSelection).toHaveBeenCalled();
+    });
+
+    it('on mouse up should move selection if canvas is set', () => {
+        selectionTranslation['config'].selectionCtx = null;
+        const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
+        spyOn<any>(selectionTranslation, 'getTranslation');
+        selectionTranslation.onMouseUp({} as MouseEvent);
+        expect(updateSelection).not.toHaveBeenCalled();
+        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
+        selectionTranslation.onMouseUp({} as MouseEvent);
+        expect(updateSelection).toHaveBeenCalled();
     });
 });

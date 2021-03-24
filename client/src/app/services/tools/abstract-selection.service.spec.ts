@@ -60,12 +60,6 @@ describe('AbstractSelectionService', () => {
         expect(service.isInSelection(mouseEvent)).toBeTruthy();
     });
 
-    it('get translation should return the current translation', () => {
-        const mousePos = { x: 25, y: 25 } as Vec2;
-        service['translationOrigin'] = { x: 25, y: 25 } as Vec2;
-        expect(service['getTranslation'](mousePos)).toEqual({ x: 0, y: 0 } as Vec2);
-    });
-
     it('on mouse down should do nothing with different click', () => {
         spyOn(service, 'getPositionFromMouse');
         const badMouseEvent = { button: 1 } as MouseEvent;
@@ -73,13 +67,12 @@ describe('AbstractSelectionService', () => {
         expect(service.getPositionFromMouse).not.toHaveBeenCalled();
     });
 
-    it('should change update selection on mouseMove', () => {
+    it('should transfer the selection movement on mouseMove', () => {
         service.leftMouseDown = true;
         service['config'].selectionCtx = canvasSelection.getContext('2d');
-        const updateSpy = spyOn<any>(service, 'updateSelection');
-        spyOn(service, 'getTranslation').and.returnValue({ x: 1, y: 1 } as Vec2);
+        const mouseMoveSpy = spyOn(service['selectionTranslation'], 'onMouseMove');
         service.onMouseMove(mouseEvent);
-        expect(updateSpy).toHaveBeenCalled();
+        expect(mouseMoveSpy).toHaveBeenCalled();
     });
 
     it('should update the mouseUp coords when outside the canvas', () => {
@@ -103,9 +96,17 @@ describe('AbstractSelectionService', () => {
     });
 
     it('should do nothing on mouseUp if mouse is not down', () => {
-        spyOn<any>(service, 'isInCanvas');
+        const setMouseUpCoordSpy = spyOn<any>(service, 'setMouseUpCoord');
         service.onMouseUp(mouseEvent);
-        expect(service['isInCanvas']).not.toHaveBeenCalled();
+        expect(setMouseUpCoordSpy).not.toHaveBeenCalled();
+    });
+
+    it('on mouseUp should tranfer the events the selection translation', () => {
+        service.leftMouseDown = true;
+        service['config'].selectionCtx = canvasSelection.getContext('2d');
+        const mouseUpSpy = spyOn(service['selectionTranslation'], 'onMouseUp');
+        service.onMouseUp(mouseEvent);
+        expect(mouseUpSpy).toHaveBeenCalled();
     });
 
     it('on mouse move should do nothing if mouse is not down', () => {
@@ -126,7 +127,7 @@ describe('AbstractSelectionService', () => {
     });
 
     it('pressing shift should do nothing if selection is not null', () => {
-        service['leftMouseDown'] = true;
+        service.leftMouseDown = true;
         const keyboardEventDown = new KeyboardEvent('keydown', { shiftKey: true });
         const keyboardEventUp = new KeyboardEvent('keydown', { shiftKey: false });
         spyOn<any>(service, 'updateDrawingSelection');
@@ -151,5 +152,20 @@ describe('AbstractSelectionService', () => {
         spyOn(service, 'getPositionFromMouse');
         service.isInSelection(mouseEvent);
         expect(service.getPositionFromMouse).not.toHaveBeenCalled();
+    });
+
+    it('should start mouse translation', () => {
+        const startMouseTranslationSpy = spyOn(service['selectionTranslation'], 'startMouseTranslation');
+        service.startMouseTranslation({ button: 2 } as MouseEvent);
+        expect(startMouseTranslationSpy).not.toHaveBeenCalled();
+        service.startMouseTranslation(mouseEvent);
+        expect(startMouseTranslationSpy).toHaveBeenCalled();
+    });
+
+    it('should initialise subscriptions', () => {
+        const drawingServiceSubscribe = spyOn(service['drawingService'].changes, 'subscribe');
+        const selectionTranslationSubscribe = spyOn(service['selectionTranslation'].updateSelectionRequest, 'subscribe');
+        expect(drawingServiceSubscribe).toHaveBeenCalled();
+        expect(selectionTranslationSubscribe).toHaveBeenCalled();
     });
 });
