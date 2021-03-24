@@ -55,30 +55,23 @@ describe('AbstractSelectionComponent', () => {
 
     it('it should disable control if in selection on mouse down', () => {
         const makeControlsUnselectable = spyOn<any>(component, 'makeControlsUnselectable');
-        component['shortcutHandlerService'].blockShortcuts = true;
-        component['isInSidebar'] = false;
+        component['isInSidebar'] = true;
         component['selectionService']['config'].selectionCtx = null;
         component.onMouseDown(mouseEvent);
         expect(makeControlsUnselectable).not.toHaveBeenCalled();
-        component['shortcutHandlerService'].blockShortcuts = false;
+        component['isInSidebar'] = false;
         component.onMouseDown(mouseEvent);
         expect(makeControlsUnselectable).toHaveBeenCalled();
-    });
-
-    it('should update control points on mouse down', () => {
-        const controlSaveBoolean = (component.displayControlPoints = true);
-        component.onMouseDown(mouseEvent);
-        expect(controlSaveBoolean).not.toEqual(component.displayControlPoints);
     });
 
     it('should confirm selection on mouse down outside of the selection', () => {
         const stopDrawingSpy = spyOn(component['selectionService'], 'stopDrawing');
         component['isInSidebar'] = true;
-        component.onMouseDown(mouseEvent);
+        component.confirmSelection(mouseEvent);
         expect(stopDrawingSpy).not.toHaveBeenCalled();
         component['isInSidebar'] = false;
         component['selectionService']['config'].selectionCtx = drawService.previewCtx;
-        component.onMouseDown(mouseEvent);
+        component.confirmSelection(mouseEvent);
         expect(stopDrawingSpy).toHaveBeenCalled();
     });
 
@@ -89,21 +82,12 @@ describe('AbstractSelectionComponent', () => {
         expect(abstractSelectionService.getPositionFromMouse).toHaveBeenCalled();
     });
 
-    it('should not select when in the sidebar', () => {
-        spyOn<any>(component, 'makeControlsUnselectable');
-        component['isInSidebar'] = true;
-        expect(component['makeControlsUnselectable']).not.toHaveBeenCalled();
-        component['isInSidebar'] = false;
-        expect(component['makeControlsUnselectable']).not.toHaveBeenCalled();
-    });
-
     it('should enable the controls points selection if there are controls points', () => {
-        component.displayControlPoints = true;
         const makeControlsSelectable = spyOn<any>(component, 'makeControlsSelectable');
-        component['shortcutHandlerService'].blockShortcuts = true;
+        component.displayControlPoints = false;
         component.onMouseUp();
         expect(makeControlsSelectable).not.toHaveBeenCalled();
-        component['shortcutHandlerService'].blockShortcuts = false;
+        component.displayControlPoints = true;
         component.onMouseUp();
         expect(makeControlsSelectable).toHaveBeenCalled();
     });
@@ -199,14 +183,6 @@ describe('AbstractSelectionComponent', () => {
         const placePoints = spyOn<any>(component, 'placePoints');
         abstractSelectionService.updatePoints.next(false);
         expect(placePoints).not.toHaveBeenCalled();
-    });
-
-    it('should reset the cursor when the shortcuts are blocked', () => {
-        const resetCursorSpy = spyOn<any>(component, 'resetCursor').and.callThrough();
-        component['shortcutHandlerService'].blockShortcutsEvent.next(false);
-        expect(resetCursorSpy).not.toHaveBeenCalled();
-        component['shortcutHandlerService'].blockShortcutsEvent.next(true);
-        expect(resetCursorSpy).toHaveBeenCalled();
     });
 
     it('should start the resize', () => {

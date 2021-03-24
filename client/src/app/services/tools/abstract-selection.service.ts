@@ -130,18 +130,6 @@ export abstract class AbstractSelectionService extends Tool {
         this.updatePoints.next(true);
     }
 
-    // isInSelection(event: MouseEvent): boolean {
-    //     if (this.config.selectionCtx === null) return false;
-
-    //     const left = this.config.endCoords.x;
-    //     const right = this.config.endCoords.x + Math.abs(this.config.width);
-    //     const top = this.config.endCoords.y;
-    //     const bottom = this.config.endCoords.y + Math.abs(this.config.height);
-
-    //     const currentPos = this.getPositionFromMouse(event);
-    //     return currentPos.x >= left && currentPos.x <= right && currentPos.y >= top && currentPos.y <= bottom;
-    // }
-
     stopDrawing(): void {
         this.drawingService.unblockUndoRedo();
         this.endSelection();
