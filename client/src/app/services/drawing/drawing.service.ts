@@ -96,7 +96,7 @@ export class DrawingService {
     }
 
     passDrawPreview(command: AbstractDraw): void {
-      this.clearCanvas(this.previewCtx);
-      command.execute(this.previewCtx);
+        this.clearCanvas(this.previewCtx);
+        command.execute(this.previewCtx);
     }
 }

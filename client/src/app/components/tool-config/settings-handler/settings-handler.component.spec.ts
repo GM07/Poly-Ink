@@ -17,6 +17,7 @@ import { PencilService } from '@app/services/tools/pencil.service';
 import { PolygoneService } from '@app/services/tools/polygone.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
+import { StampService } from '@app/services/tools/stamp.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
 // tslint:disable:max-classes-per-file
@@ -35,6 +36,7 @@ class MockToolHandler extends ToolHandlerService {
         rectangleSelectionService: RectangleSelectionService,
         polygoneService: PolygoneService,
         eyeDropperService: EyeDropperService,
+        stampService: StampService,
     ) {
         super(
             pencilService,
@@ -47,6 +49,7 @@ class MockToolHandler extends ToolHandlerService {
             eraserService,
             polygoneService,
             eyeDropperService,
+            stampService
         );
         this.TOOLS_MOCK.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
@@ -56,6 +59,7 @@ class MockToolHandler extends ToolHandlerService {
         this.TOOLS_MOCK.set(ToolsConstants.AerosolToolConstants.TOOL_ID, aerosolService);
         this.TOOLS_MOCK.set(ToolsConstants.RectangleSelectionToolConstants.TOOL_ID, rectangleSelectionService);
         this.TOOLS_MOCK.set(ToolsConstants.EyeDropperToolConstants.TOOL_ID, eyeDropperService);
+        this.TOOLS_MOCK.set(ToolsConstants.StampToolConstants.TOOL_ID, stampService);
         this.currentToolStub = this.TOOLS_MOCK.values().next().value;
     }
 
@@ -92,6 +96,7 @@ describe('SettingsHandlerComponent', () => {
     let rectangleSelectionService: RectangleSelectionService;
     let eyeDropperService: EyeDropperService;
     let toolHandlerService: MockToolHandler;
+    let stampService: StampService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -108,6 +113,7 @@ describe('SettingsHandlerComponent', () => {
         ellipseSelectionService = TestBed.inject(EllipseSelectionService);
         rectangleSelectionService = TestBed.inject(RectangleSelectionService);
         eyeDropperService = TestBed.inject(EyeDropperService);
+        stampService = TestBed.inject(StampService);
         toolHandlerService = new MockToolHandler(
             pencilService,
             lineService,
@@ -119,6 +125,7 @@ describe('SettingsHandlerComponent', () => {
             rectangleSelectionService,
             polygoneService,
             eyeDropperService,
+            stampService,
         );
         component = new SettingsHandlerComponent(toolHandlerService);
     });

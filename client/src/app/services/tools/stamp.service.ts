@@ -10,86 +10,77 @@ import { ColorService } from 'src/color-picker/services/color.service';
 import { DrawingService } from '../drawing/drawing.service';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
+export class StampService extends Tool {
+    alt: AltKey;
+    config: StampConfig;
 
-export class StampService extends Tool{
+    constructor(protected drawingService: DrawingService, protected colorService: ColorService) {
+        super(drawingService, colorService);
+        this.shortcutKey = new ShortcutKey(StampToolConstants.SHORTCUT_KEY);
+        this.toolID = StampToolConstants.TOOL_ID;
+        this.alt = new AltKey();
+        this.alt.isDown = false;
 
-  alt: AltKey;
-  config: StampConfig;
+        this.config = new StampConfig();
+    }
 
-  constructor(protected drawingService: DrawingService, protected colorService: ColorService) {
-    super(drawingService, colorService);
-    this.shortcutKey = new ShortcutKey(StampToolConstants.SHORTCUT_KEY);
-    this.toolID = StampToolConstants.TOOL_ID;
-    this.alt = new AltKey();
-    this.alt.isDown = false;
+    set scaleValue(scale: number) {
+        this.config.scale = Math.min(Math.max(scale, 0.1), 5);
+    }
 
-    this.config = new StampConfig();
-  }
+    set angleValue(angle: number) {
+        this.config.angle = Math.min(Math.max((angle / 180) * Math.PI, 0), 2 * Math.PI);
+    }
 
-  set scaleValue(scale: number) {
-    this.config.scale = Math.min(Math.max(scale, 0.1), 5);
-  }
+    get angleValue(): number {
+      return Math.round((this.config.angle / Math.PI) * 180);
+    }
 
-  set angleValue(angle: number) {
-    this.config.angle = Math.min(Math.max(angle/180*Math.PI, 0), 2*Math.PI);
-  }
+    updateStampValue() {
+        this.config.etampeImg.src = StampConfig.stampList[this.config.etampe];
+    }
 
-  updateStampValue(){
-    this.config.etampeImg.src = StampConfig.stampList[this.config.etampe];
-  }
+    isActive(): boolean {
+        return this.drawingService.previewCanvas.style.cursor == 'none';
+    }
 
-  isActive(){
-    return this.drawingService.previewCanvas.style.cursor == 'none';
-  }
+    stopDrawing() {
+        this.drawingService.previewCanvas.style.cursor = 'crosshair';
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
+    }
 
-  get angleValue(): number{
-    return Math.round(this.config.angle/Math.PI*180);
-  }
+    onMouseMove(event: MouseEvent) {
+        this.drawingService.previewCanvas.style.cursor = this.isInCanvas(event) ? 'none' : 'crosshair';
+        this.config.position = this.getPositionFromMouse(event);
+        this.drawPreview();
+    }
 
-  stopDrawing(){
-    this.drawingService.previewCanvas.style.cursor = 'crosshair';
-    this.drawingService.clearCanvas(this.drawingService.previewCtx);
-  }
+    onMouseDown(event: MouseEvent) {
+        if (event.button === MouseButton.Left) {
+            this.config.position = this.getPositionFromMouse(event);
+            this.draw();
+        }
+    }
 
-  onMouseEnter(){
-    this.drawingService.previewCanvas.style.cursor = 'none';
-  }
+    onKeyDown(event: KeyboardEvent) {
+        if(!this.alt.isDown && event.altKey)
+          this.alt.isDown = this.alt.equals(event);
+    }
 
-  onMouseLeave(){
-    this.drawingService.previewCanvas.style.cursor = 'crosshair';
-  }
+    onKeyUp(event: KeyboardEvent) {
+        if(this.alt.isDown && !event.altKey)
+          this.alt.isDown = !this.alt.equals(event);
+    }
 
-  onMouseMove(event: MouseEvent){
-    this.config.position = this.getPositionFromMouse(event);
-    this.drawPreview();
-  }
+    draw() {
+        const command = new StampDraw(this.colorService, this.config);
+        this.drawingService.draw(command);
+    }
 
-   onMouseDown(event: MouseEvent){
-     if(event.button === MouseButton.Left){
-      this.config.position = this.getPositionFromMouse(event)
-      this.draw();
-     }
-  }
-
-  onKeyDown(event: KeyboardEvent){
-    this.alt.isDown = event.altKey;
-  }
-
-  onKeyUp(event: KeyboardEvent){
-    this.alt.isDown = event.altKey
-  }
-
-  draw(){
-    const command = new StampDraw(this.colorService, this.config);
-    this.drawingService.draw(command);
-  }
-
-  drawPreview(){
-    const command = new StampDraw(this.colorService, this.config);
-    this.drawingService.passDrawPreview(command);
-  }
-
-
+    drawPreview() {
+        const command = new StampDraw(this.colorService, this.config);
+        this.drawingService.passDrawPreview(command);
+    }
 }
