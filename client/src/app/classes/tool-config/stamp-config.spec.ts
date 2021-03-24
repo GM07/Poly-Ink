@@ -14,7 +14,7 @@ describe('StampConfig', () => {
 
     it('should clone properly', () => {
         const newConfig = config.clone();
-        expect(newConfig.etampeImg).not.toBe(config.etampeImg);
+        expect(newConfig.stampImg).not.toBe(config.stampImg);
         expect(newConfig.position).not.toBe(config.position);
     });
 });

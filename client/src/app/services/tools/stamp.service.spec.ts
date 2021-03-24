@@ -53,13 +53,13 @@ describe('StampService', () => {
     });
 
     it('update stamp value should set the stamp', () => {
-        service.config.etampeImg = new Image();
-        service.config.etampe = Stamp.Felix;
+        service.config.stampImg = new Image();
+        service.config.stamp = Stamp.Felix;
         service.updateStampValue();
         expect(
-            service.config.etampeImg.src.substring(
-                service.config.etampeImg.src.length - StampConfig.stampList[Stamp.Felix].length,
-                service.config.etampeImg.src.length,
+            service.config.stampImg.src.substring(
+                service.config.stampImg.src.length - StampConfig.stampList[Stamp.Felix].length,
+                service.config.stampImg.src.length,
             ),
         ).toEqual(StampConfig.stampList[Stamp.Felix]);
     });

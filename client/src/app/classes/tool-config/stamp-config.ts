@@ -11,22 +11,22 @@ export class StampConfig {
     scale: number;
     angle: number;
     position: Vec2;
-    etampeImg: HTMLImageElement;
-    etampe: Stamp;
+    stampImg: HTMLImageElement;
+    stamp: Stamp;
 
     constructor() {
-        this.etampe = Stamp.Alexis;
-        this.etampeImg = new Image();
-        this.etampeImg.src = StampConfig.stampList[this.etampe];
+        this.stamp = Stamp.Alexis;
+        this.stampImg = new Image();
+        this.stampImg.src = StampConfig.stampList[this.stamp];
         this.scale = 1;
         this.angle = 0;
     }
 
     clone(): StampConfig {
         const config = new StampConfig();
-        config.etampe = this.etampe;
-        config.etampeImg = new Image();
-        config.etampeImg.src = this.etampeImg.src;
+        config.stamp = this.stamp;
+        config.stampImg = new Image();
+        config.stampImg.src = this.stampImg.src;
         config.scale = this.scale;
         config.angle = this.angle;
         config.position = { x: this.position.x, y: this.position.y } as Vec2;

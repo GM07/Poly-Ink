@@ -15,7 +15,7 @@ export class StampDraw extends AbstractDraw {
         context.translate(this.config.position.x, this.config.position.y);
         context.rotate(this.config.angle);
         context.drawImage(
-            this.config.etampeImg,
+            this.config.stampImg,
             (-ToolSettingsConst.STAMP_DEFAULT_SIZE * this.config.scale) / 2,
             (-ToolSettingsConst.STAMP_DEFAULT_SIZE * this.config.scale) / 2,
             ToolSettingsConst.STAMP_DEFAULT_SIZE * this.config.scale,

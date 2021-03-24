@@ -40,7 +40,7 @@ export class StampService extends Tool {
     }
 
     updateStampValue(): void {
-        this.config.etampeImg.src = StampConfig.stampList[this.config.etampe];
+        this.config.stampImg.src = StampConfig.stampList[this.config.stamp];
     }
 
     isActive(): boolean {
