@@ -1,75 +1,95 @@
 import { Injectable } from '@angular/core';
+import { StampDraw } from '@app/classes/commands/stamp-draw';
+import { AltKey } from '@app/classes/shortcut/alt-key';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
+import { StampConfig } from '@app/classes/tool-config/stamp-config';
 import { StampToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
-import { Vec2 } from '@app/classes/vec2';
+import { MouseButton } from '@app/constants/control';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { DrawingService } from '../drawing/drawing.service';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class StampService extends Tool{
 
-  private etampe = new Image();
-  public scale: number;
-  private angle = Math.PI/4;
-  private position: Vec2;
-  public alt: boolean;
+  alt: AltKey;
+  config: StampConfig;
 
   constructor(protected drawingService: DrawingService, protected colorService: ColorService) {
     super(drawingService, colorService);
     this.shortcutKey = new ShortcutKey(StampToolConstants.SHORTCUT_KEY);
     this.toolID = StampToolConstants.TOOL_ID;
-    this.etampe.src = 'assets/stamps/alexis.png';
-    this.scale = 1;
-    this.alt = false;
+    this.alt = new AltKey();
+    this.alt.isDown = false;
+
+    this.config = new StampConfig();
   }
 
-   set scaleValue(scale: number) {
-    this.scale = Math.min(Math.max(scale, 0.1), 5);
+  set scaleValue(scale: number) {
+    this.config.scale = Math.min(Math.max(scale, 0.1), 5);
   }
 
   set angleValue(angle: number) {
-    this.angle = Math.min(Math.max(angle/180*Math.PI, 0), 2*Math.PI);
+    this.config.angle = Math.min(Math.max(angle/180*Math.PI, 0), 2*Math.PI);
+  }
+
+  updateStampValue(){
+    this.config.etampeImg.src = StampConfig.stampList[this.config.etampe];
+  }
+
+  isActive(){
+    return this.drawingService.previewCanvas.style.cursor == 'none';
   }
 
   get angleValue(): number{
-    return this.angle/Math.PI*180;
+    return Math.round(this.config.angle/Math.PI*180);
   }
 
-   onMouseMove(event: MouseEvent){
-    this.position = this.getPositionFromMouse(event);
-    this.updateStampPreview();
+  stopDrawing(){
+    this.drawingService.previewCanvas.style.cursor = 'crosshair';
+    this.drawingService.clearCanvas(this.drawingService.previewCtx);
+  }
+
+  onMouseEnter(){
+    this.drawingService.previewCanvas.style.cursor = 'none';
+  }
+
+  onMouseLeave(){
+    this.drawingService.previewCanvas.style.cursor = 'crosshair';
+  }
+
+  onMouseMove(event: MouseEvent){
+    this.config.position = this.getPositionFromMouse(event);
+    this.drawPreview();
   }
 
    onMouseDown(event: MouseEvent){
-    const position = this.getPositionFromMouse(event);
-    this.rotateAndPaintImage(this.drawingService.baseCtx, this.etampe, this.angle, position);
+     if(event.button === MouseButton.Left){
+      this.config.position = this.getPositionFromMouse(event)
+      this.draw();
+     }
   }
 
   onKeyDown(event: KeyboardEvent){
-    this.alt = (event.altKey && !this.alt);
+    this.alt.isDown = event.altKey;
   }
 
   onKeyUp(event: KeyboardEvent){
-    this.alt = !(!event.altKey && this.alt);
+    this.alt.isDown = event.altKey
   }
 
-  onMouseEnter(event: MouseEvent){
-    document.body.style.cursor = 'none';
+  draw(){
+    const command = new StampDraw(this.colorService, this.config);
+    this.drawingService.draw(command);
   }
 
-  updateStampPreview(){
-    this.drawingService.clearCanvas(this.drawingService.previewCtx);
-    this.rotateAndPaintImage(this.drawingService.previewCtx, this.etampe, this.angle, this.position);
+  drawPreview(){
+    const command = new StampDraw(this.colorService, this.config);
+    this.drawingService.passDrawPreview(command);
   }
 
-   rotateAndPaintImage ( context: CanvasRenderingContext2D, image: HTMLImageElement, angleInRad: number , position: Vec2) {
-    context.translate( position.x, position.y );
-    context.rotate( angleInRad );
-    context.drawImage( image, -50*this.scale/2, -50*this.scale/2,  50*this.scale, 50*this.scale);
-    context.rotate( -angleInRad );
-    context.translate( -position.x, -position.y );
-  }
+
 }

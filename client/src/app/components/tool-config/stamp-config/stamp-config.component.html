@@ -1,9 +1,9 @@
 <div class="tab">
   <h5 class="textFormat">Scale</h5>
   <div class="textFormatForSlider">
-      <mat-slider min="{{ MIN_SCALE }}" max="{{ MAX_SCALE }}" step="0.1" [(ngModel)]="stampService.scale" thumbLabel [displayWith]="colorSliderLabel">
+      <mat-slider min="{{ MIN_SCALE }}" max="{{ MAX_SCALE }}" step="0.1" [(ngModel)]="stampService.config.scale" thumbLabel [displayWith]="colorSliderLabel">
       </mat-slider>
-      {{ stampService.scale }}x
+      {{ stampService.config.scale }}x
   </div>
 
   <h5 class="textFormat">Rotation</h5>
@@ -12,4 +12,33 @@
       </mat-slider>
       {{ stampService.angleValue }}
   </div>
+
+  <h5 class="textFormat">Choix Étampe</h5>
+    <mat-button-toggle-group vertical="true" name="fontStyle" aria-label="Font Style">
+        <div class="textFormatButton">
+            <mat-button-toggle
+                [checked]="stampService.config.etampe === StampMode.Alexis"
+                class="buttons"
+                (click)="toggleStamp(StampMode.Alexis)"
+                >Alexis</mat-button-toggle
+            >
+        </div>
+        <div class="textFormatButton">
+            <mat-button-toggle
+                [checked]="stampService.config.etampe === StampMode.Felix"
+                class="buttons"
+                (click)="toggleStamp(StampMode.Felix)"
+                >Félix</mat-button-toggle
+            >
+        </div>
+        <div class="textFormatButton">
+            <mat-button-toggle
+                [checked]="stampService.config.etampe === StampMode.Gaya"
+                class="buttons"
+                (click)="toggleStamp(StampMode.Gaya)"
+                >Gaya</mat-button-toggle
+            >
+        </div>
+    </mat-button-toggle-group>
+    <mat-divider></mat-divider>
 </div>
