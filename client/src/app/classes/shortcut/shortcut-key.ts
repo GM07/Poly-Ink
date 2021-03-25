@@ -43,4 +43,10 @@ export class ShortcutKey {
         }
         return equals && this.key === event.key.toLocaleLowerCase();
     }
+
+    clone(): ShortcutKey {
+        const shortcut = new ShortcutKey(this.key, this.ctrlKey, this.shiftKey, this.altKey);
+        shortcut.isDown = this.isDown;
+        return shortcut;
+    }
 }

@@ -49,8 +49,8 @@ describe('EllipseSelectionService', () => {
         const drawSelection = spyOn<any>(service, 'drawSelection');
         const saveWidth = (service.config.width = 5);
         const saveHeight = (service.config.height = 25);
-        service.config.shiftDown = true;
-        service.mouseDownCoord = new Vec2(0, 0);
+        service.config.shift.isDown = true;
+        service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
         service['drawPreviewSelectionRequired']();
         expect(saveWidth).toEqual(service.config.width);
         expect(saveHeight).not.toEqual(service.config.height);
@@ -99,9 +99,9 @@ describe('EllipseSelectionService', () => {
     });
 
     it('end selection should draw the selection on the base canvas', () => {
-        service.selectionCtx = previewCtxStub;
-        service.config.endCoords = new Vec2(0, 0);
-        service['radiusAbs'] = new Vec2(0, 0);
+        service['config'].selectionCtx = previewCtxStub;
+        service.config.endCoords = { x: 0, y: 0 } as Vec2;
+        service['radiusAbs'] = { x: 0, y: 0 } as Vec2;
         spyOn(service, 'draw').and.stub();
         service['endSelection']();
         expect(service.draw).toHaveBeenCalled();

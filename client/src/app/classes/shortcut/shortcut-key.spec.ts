@@ -90,4 +90,11 @@ describe('ShortcutKey', () => {
         const event: KeyboardEvent = { key: 'c', shiftKey: false, ctrlKey: false, altKey: false } as KeyboardEvent;
         expect(ShortcutKey.get(shortcutKeyArray, event)).toEqual(shortcutKey);
     });
+
+    it('should clone', () => {
+        shortcutKey.isDown = true;
+        const clone = shortcutKey.clone();
+        expect(clone.isDown).toBe(shortcutKey.isDown);
+        expect(clone.key).toBe(shortcutKey.key);
+    });
 });

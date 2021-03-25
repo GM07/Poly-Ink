@@ -18,16 +18,14 @@ export class RectangleSelectionService extends AbstractSelectionService {
     }
 
     protected endSelection(): void {
-        if (this.selectionCtx === null) return;
+        if (this.config.selectionCtx === null) return;
 
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
 
         this.draw();
 
-        this.selectionCtx = null;
-
-        this.config.endCoords = new Vec2(0, 0);
-        this.translationOrigin = new Vec2(0, 0);
+        this.config.selectionCtx = null;
+        this.config.endCoords = { x: 0, y: 0 } as Vec2;
     }
 
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {
@@ -45,14 +43,14 @@ export class RectangleSelectionService extends AbstractSelectionService {
 
         this.fillBackground(ctx, this.config.endCoords);
 
-        const rectangleCoords = new Vec2(this.config.endCoords.x, this.config.endCoords.y);
-        ctx.drawImage(this.SELECTION_DATA, this.config.endCoords.x, this.config.endCoords.y);
-        this.drawSelection(ctx, rectangleCoords, new Vec2(Math.abs(this.config.width), Math.abs(this.config.height)));
+        const rectangleCoords = { x: this.config.endCoords.x, y: this.config.endCoords.y } as Vec2;
+        ctx.drawImage(this.selectionData, this.config.endCoords.x, this.config.endCoords.y);
+        this.drawSelection(ctx, rectangleCoords, { x: Math.abs(this.config.width), y: Math.abs(this.config.height) } as Vec2);
     }
 
     protected drawPreviewSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
-        if (this.config.shiftDown) {
+        if (this.config.shift.isDown) {
             this.config.height = Math.sign(this.config.height) * Math.min(Math.abs(this.config.width), Math.abs(this.config.height));
             this.config.width = Math.sign(this.config.width) * Math.abs(this.config.height);
         }

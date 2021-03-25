@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { SelectionEventsService } from '@app/services/selection/selection-events.service';
@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
     templateUrl: './abstract-selection.component.html',
     styleUrls: ['./abstract-selection.component.scss'],
 })
-export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnInit {
+export class AbstractSelectionComponent implements OnDestroy, OnInit {
     @ViewChild('controlPointContainer', { static: false }) controlPointContainer: ElementRef<HTMLElement>;
     @ViewChild('topLeft', { static: false }) topLeft: ElementRef<HTMLElement>;
     @ViewChild('topMiddle', { static: false }) topMiddle: ElementRef<HTMLElement>;
@@ -30,16 +30,11 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     private readonly DESIRED_ZINDEX: number = 3;
 
     private controlPointList: ElementRef<HTMLElement>[];
-    private lastCanvasCursor: string;
-    private lastDocumentCursor: string;
-
     private resizeSelected: boolean;
-    private isOverSelection: boolean;
+    private selectionSelected: boolean;
     private isInSidebar: boolean;
-    private leftMouseDown: boolean;
-    displayControlPoints: boolean;
     private updateSubscription: Subscription;
-    private shortcutSubscription: Subscription;
+    displayControlPoints: boolean;
 
     constructor(
         protected selectionService: AbstractSelectionService,
@@ -59,66 +54,45 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
 
         this.selectionEvents.onMouseEnterEvent.subscribe(() => (this.isInSidebar = true));
         this.selectionEvents.onMouseLeaveEvent.subscribe(() => (this.isInSidebar = false));
-        this.isOverSelection = false;
         this.isInSidebar = false;
-        this.leftMouseDown = false;
+        this.selectionSelected = false;
         this.displayControlPoints = false;
         this.resizeSelected = false;
     }
 
-    ngAfterViewInit(): void {
-        this.lastDocumentCursor = document.body.style.cursor;
-        this.lastCanvasCursor = this.drawingService.previewCanvas.style.cursor;
-
-        this.shortcutSubscription = this.shortcutHandlerService.blockShortcutsEvent.subscribe((block: boolean) => {
-            if (block) this.resetCursor();
-        });
-    }
-
     ngOnDestroy(): void {
-        this.resetCursor();
         this.updateSubscription.unsubscribe();
-        this.shortcutSubscription.unsubscribe();
     }
 
     onMouseDown(event: MouseEvent): void {
-        if (this.shortcutHandlerService.blockShortcuts || this.resizeSelected) return;
-
-        this.leftMouseDown = event.button === MouseButton.Left;
-        if (!this.isInSidebar && this.leftMouseDown) {
-            if (this.selectionService.isInSelection(event)) {
-                this.selectionService.onMouseDown(event);
-                this.makeControlsUnselectable();
-                this.selectionService.translationOrigin = this.selectionService.getPositionFromMouse(event);
-            } else if (this.selectionService.selectionCtx !== null) {
-                this.selectionService.stopDrawing();
-            }
+        this.selectionSelected = event.button === MouseButton.Left;
+        if (!this.isInSidebar && this.selectionSelected) {
+            this.makeControlsUnselectable();
+            this.selectionService.startMouseTranslation(event);
         }
-        this.updateControlPointDisplay(this.selectionService.selectionCtx !== null);
+        this.updateControlPointDisplay(this.selectionService.config.selectionCtx !== null);
     }
 
     onMouseUp(): void {
-        this.leftMouseDown = false;
+        this.selectionSelected = false;
         this.resizeSelected = false;
-        if (this.shortcutHandlerService.blockShortcuts) return;
-
         if (this.displayControlPoints) {
             this.makeControlsSelectable();
         }
-        this.updateControlPointDisplay(this.selectionService.selectionCtx !== null);
+        this.updateControlPointDisplay(this.selectionService.config.selectionCtx !== null);
     }
 
-    onMouseMove(event: MouseEvent): void {
-        if (this.shortcutHandlerService.blockShortcuts) return;
+    confirmSelection(event: MouseEvent): void {
+        const canConfirmSelection =
+            !this.resizeSelected &&
+            !this.selectionSelected &&
+            !this.shortcutHandlerService.blockShortcuts &&
+            !this.isInSidebar &&
+            this.selectionService.config.selectionCtx !== null &&
+            event.button === MouseButton.Left;
 
-        if (!this.leftMouseDown) {
-            this.isOverSelection = this.selectionService.isInSelection(event);
-            if (this.isOverSelection && !this.isInSidebar) {
-                this.drawingService.previewCanvas.style.cursor = 'all-scroll';
-                document.body.style.cursor = 'all-scroll';
-            } else {
-                this.resetCursor();
-            }
+        if (canConfirmSelection) {
+            this.selectionService.stopDrawing();
         }
     }
 
@@ -162,7 +136,7 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
     }
 
     private placePoints(): void {
-        if (this.selectionService.selectionCtx === null) return;
+        if (this.selectionService.config.selectionCtx === null) return;
 
         const width = Math.abs(this.selectionService.config.width);
         const height = Math.abs(this.selectionService.config.height);
@@ -203,18 +177,11 @@ export class AbstractSelectionComponent implements OnDestroy, AfterViewInit, OnI
         for (const elementRef of this.controlPointList) {
             elementRef.nativeElement.style.pointerEvents = 'none';
         }
-        this.border.nativeElement.style.pointerEvents = 'none';
     }
 
     private makeControlsSelectable(): void {
         for (const elementRef of this.controlPointList) {
             elementRef.nativeElement.style.pointerEvents = 'auto';
         }
-        this.border.nativeElement.style.pointerEvents = 'auto';
-    }
-
-    private resetCursor(): void {
-        this.drawingService.previewCanvas.style.cursor = this.lastCanvasCursor;
-        document.body.style.cursor = this.lastDocumentCursor;
     }
 }
