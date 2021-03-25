@@ -3,16 +3,14 @@ import { ToolMath } from '@app/constants/math';
 
 export class Geometry {
     static getDistanceBetween(initial: Vec2, final: Vec2): number {
-        const dx: number = final.x - initial.x;
-        const dy: number = final.y - initial.y;
-        return Math.sqrt(dx * dx + dy * dy);
+        const dp: Vec2 = final.substract(initial);
+        return Math.sqrt(dp.x * dp.x + dp.y * dp.y);
     }
 
     // Returns vector's angle pointing from [initial] to final in radians
     static getAngle(initial: Vec2, final: Vec2): number {
-        const dx: number = initial.x - final.x;
-        const dy: number = initial.y - final.y;
-        return -Math.atan2(dy, dx) + Math.PI;
+        const dp: Vec2 = initial.substract(final);
+        return -Math.atan2(dp.y, dp.x) + Math.PI;
     }
 
     static toDegrees(radians: number): number {
@@ -25,7 +23,7 @@ export class Geometry {
 
     static isAPoint(path: Vec2[]): boolean {
         const isPoint = path.length === 1;
-        return isPoint || (path.length === 2 && path[0].x === path[1].x && path[0].y === path[1].y);
+        return isPoint || (path.length === 2 && path[0].equals(path[1]));
     }
 
     /**

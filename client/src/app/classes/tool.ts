@@ -50,6 +50,6 @@ export abstract class Tool {
     getPositionFromMouse(event: MouseEvent): Vec2 {
         const clientRect = this.drawingService.canvas.getBoundingClientRect();
         const border: number = this.getBorder();
-        return new Vec2(event.clientX - clientRect.x - border, event.clientY - clientRect.y - border);
+        return new Vec2(event.clientX - clientRect.x, event.clientY - clientRect.y).substractValue(border);
     }
 }

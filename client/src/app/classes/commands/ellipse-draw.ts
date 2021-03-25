@@ -15,7 +15,7 @@ export class EllipseDraw extends AbstractDraw {
             (this.config.endCoords.x - this.config.startCoords.x) / 2,
             (this.config.endCoords.y - this.config.startCoords.y) / 2,
         );
-        const center: Vec2 = new Vec2(this.config.startCoords.x + radius.x, this.config.startCoords.y + radius.y);
+        const center: Vec2 = this.config.startCoords.add(radius);
 
         if (this.config.shiftDown) {
             const minRadius = Math.min(Math.abs(radius.x), Math.abs(radius.y));
@@ -25,7 +25,7 @@ export class EllipseDraw extends AbstractDraw {
             radius.y = minRadius;
         }
 
-        const radiusAbs: Vec2 = new Vec2(Math.abs(radius.x), Math.abs(radius.y));
+        const radiusAbs: Vec2 = radius.apply(Math.abs);
 
         if (this.config.showPerimeter) {
             this.drawRectanglePerimeter(context, center, radiusAbs);
@@ -68,17 +68,15 @@ export class EllipseDraw extends AbstractDraw {
             lineWidth = 0;
         }
 
-        const x = center.x - radius.x - lineWidth / 2;
-        const y = center.y - radius.y - lineWidth / 2;
-        const width = radius.x * 2 + lineWidth;
-        const height = radius.y * 2 + lineWidth;
+        const position = center.substract(radius).substractValue(lineWidth / 2);
+        const size = radius.scalar(2).addValue(lineWidth);
 
         const lineDash = 6;
         ctx.lineWidth = dashWidth;
         ctx.strokeStyle = 'gray';
         ctx.setLineDash([lineDash]);
         ctx.beginPath();
-        ctx.strokeRect(x, y, width, height);
+        ctx.strokeRect(position.x, position.y, size.x, size.y);
         ctx.stroke();
         ctx.closePath();
         ctx.setLineDash([]);

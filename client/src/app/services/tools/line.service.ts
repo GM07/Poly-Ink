@@ -187,20 +187,19 @@ export class LineService extends Tool {
         const angle: number = Geometry.getAngle(this.getLastPoint(), cursor) + LineService.ANGLE_STEPS / 2;
         const finalAngle = Math.floor(angle / LineService.ANGLE_STEPS) * LineService.ANGLE_STEPS;
 
-        const distanceX = cursor.x - this.getLastPoint().x;
-        const distanceY = cursor.y - this.getLastPoint().y;
-        let distance = Geometry.getDistanceBetween(this.getLastPoint(), cursor);
+        const distance = cursor.substract(this.getLastPoint());
+        let totalDistance = Geometry.getDistanceBetween(this.getLastPoint(), cursor);
 
         if (Math.abs(Math.cos(finalAngle)) >= ToolMath.ZERO_THRESHOLD) {
-            distance = Math.abs(distanceX / Math.cos(finalAngle));
+            totalDistance = Math.abs(distance.x / Math.cos(finalAngle));
         } else {
-            distance = Math.abs(distanceY / Math.sin(finalAngle));
+            totalDistance = Math.abs(distance.y / Math.sin(finalAngle));
         }
 
-        const dx = distance * Math.cos(finalAngle) + this.getLastPoint().x;
-        const dy = -(distance * Math.sin(finalAngle)) + this.getLastPoint().y;
+        const dx = totalDistance * Math.cos(finalAngle) + this.getLastPoint().x;
+        const dy = -(totalDistance * Math.sin(finalAngle)) + this.getLastPoint().y;
 
-        return { x: Math.round(dx), y: Math.round(dy) } as Vec2;
+        return new Vec2(Math.round(dx), Math.round(dy));
     }
 
     private getLastPoint(): Vec2 {

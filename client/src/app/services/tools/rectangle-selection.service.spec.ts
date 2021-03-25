@@ -66,7 +66,7 @@ describe('RectangleSelectionService', () => {
     it('on mouse up should move selection if canvas is set', () => {
         service.leftMouseDown = true;
         spyOn(service, 'isInCanvas').and.returnValue(false);
-        spyOn<any>(service, 'getTranslation').and.returnValue({ x: 0, y: 0 } as Vec2);
+        spyOn<any>(service, 'getTranslation').and.returnValue(new Vec2(0, 0));
         const updateSelection = spyOn<any>(service, 'updateSelection');
         service.selectionCtx = canvasSelection.getContext('2d');
         service.onMouseUp(mouseEvent);
@@ -74,13 +74,13 @@ describe('RectangleSelectionService', () => {
     });
 
     it('should draw preview on mouse move', () => {
-        service.mouseUpCoord = { x: 0, y: 0 } as Vec2;
+        service.mouseUpCoord = new Vec2(0, 0);
         service.leftMouseDown = true;
         const drawPreviewSelection = spyOn<any>(service, 'drawPreviewSelection');
         spyOn(service, 'isInCanvas').and.returnValue(true);
         service.onMouseMove(mouseEvent);
         expect(drawPreviewSelection).toHaveBeenCalled();
-        expect(service.mouseUpCoord).not.toEqual({ x: 0, y: 0 } as Vec2);
+        expect(service.mouseUpCoord).not.toEqual(new Vec2(0, 0));
     });
 
     it('should update the selection on mouse move if the selection is not null', () => {
@@ -183,8 +183,8 @@ describe('RectangleSelectionService', () => {
         drawServiceSpy.canvas = document.createElement('canvas');
         drawServiceSpy.canvas.width = 10;
         drawServiceSpy.canvas.height = 10;
-        const mouseDown = { x: 0, y: 0 } as Vec2;
-        const mouseUp = { x: drawServiceSpy.canvas.width, y: drawServiceSpy.canvas.height } as Vec2;
+        const mouseDown = new Vec2(0, 0);
+        const mouseUp = new Vec2(drawServiceSpy.canvas.width, drawServiceSpy.canvas.height);
         spyOn<any>(service, 'stopDrawing');
         spyOn<any>(service, 'startSelection');
         service.selectAll();
@@ -210,7 +210,7 @@ describe('RectangleSelectionService', () => {
     it('start selection should init needed variables', () => {
         service.config.width = 100;
         service.config.height = 100;
-        service.mouseDownCoord = { x: 25, y: 25 } as Vec2;
+        service.mouseDownCoord = new Vec2(25, 25);
         service.selectionCtx = canvasSelection.getContext('2d');
         canvasSelection.width = 250;
         canvasSelection.height = 250;
@@ -233,25 +233,25 @@ describe('RectangleSelectionService', () => {
     });
 
     it('update selection should do nothing if there is no selection', () => {
-        const translation = { x: 0, y: 0 } as Vec2;
+        const translation = new Vec2(0, 0);
         const updateSelectionRequired = spyOn<any>(service, 'updateSelectionRequired');
         service['updateSelection'](translation);
         expect(updateSelectionRequired).not.toHaveBeenCalled();
     });
 
     it('update selection should call the child class to update', () => {
-        const translation = { x: 0, y: 0 } as Vec2;
+        const translation = new Vec2(0, 0);
         const updateSelectionRequired = spyOn<any>(service, 'updateSelectionRequired');
-        service.config.endCoords = { x: 0, y: 0 } as Vec2;
-        service['translationOrigin'] = { x: 0, y: 0 } as Vec2;
+        service.config.endCoords = new Vec2(0, 0);
+        service['translationOrigin'] = new Vec2(0, 0);
         service.selectionCtx = canvasSelection.getContext('2d');
         service['updateSelection'](translation);
         expect(updateSelectionRequired).toHaveBeenCalled();
     });
 
     it('draw preview should update width and height and call child method', () => {
-        service.mouseUpCoord = { x: 25, y: 25 } as Vec2;
-        service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
+        service.mouseUpCoord = new Vec2(25, 25);
+        service.mouseDownCoord = new Vec2(0, 0);
         const drawPreviewSelectionRequired = spyOn<any>(service, 'drawPreviewSelectionRequired');
         service['drawPreviewSelection']();
         expect(service.config.width).toEqual(25);
@@ -273,21 +273,21 @@ describe('RectangleSelectionService', () => {
 
     it('end selection should draw the selection on the base canvas', () => {
         service.selectionCtx = previewCtxStub;
-        service.config.endCoords = { x: 0, y: 0 } as Vec2;
+        service.config.endCoords = new Vec2(0, 0);
         spyOn(service, 'draw');
         service['endSelection']();
         expect(service.draw).toHaveBeenCalled();
     });
 
     it('fill background should fill a rectangle at the location', () => {
-        service.config.startCoords = { x: 0, y: 0 } as Vec2;
+        service.config.startCoords = new Vec2(0, 0);
         spyOn(previewCtxStub, 'fillRect');
-        service['fillBackground'](previewCtxStub, { x: 10, y: 25 } as Vec2);
+        service['fillBackground'](previewCtxStub, new Vec2(10, 25));
         expect(previewCtxStub.fillRect).toHaveBeenCalled();
     });
 
     it('update selection required should draw the image, update it and update the background', () => {
-        service.config.endCoords = { x: 0, y: 0 } as Vec2;
+        service.config.endCoords = new Vec2(0, 0);
         spyOn(previewCtxStub, 'drawImage');
         const fillBackground = spyOn<any>(service, 'fillBackground');
         const drawSelection = spyOn<any>(service, 'drawSelection');
@@ -301,7 +301,7 @@ describe('RectangleSelectionService', () => {
         const drawSelection = spyOn<any>(service, 'drawSelection');
         const saveWidth = (service.config.width = 5);
         const saveHeight = (service.config.height = 25);
-        service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
+        service.mouseDownCoord = new Vec2(0, 0);
         service['drawPreviewSelectionRequired']();
         expect(saveWidth).toEqual(service.config.width);
         expect(saveHeight).toEqual(service.config.height);
@@ -313,7 +313,7 @@ describe('RectangleSelectionService', () => {
         const saveWidth = (service.config.width = 5);
         const saveHeight = (service.config.height = 25);
         service.config.shiftDown = true;
-        service.mouseDownCoord = { x: 0, y: 0 } as Vec2;
+        service.mouseDownCoord = new Vec2(0, 0);
         service['drawPreviewSelectionRequired']();
         expect(saveWidth).toEqual(service.config.width);
         expect(saveHeight).not.toEqual(service.config.height);
@@ -323,15 +323,15 @@ describe('RectangleSelectionService', () => {
     it('draw selection should draw a rectangle and a border around the selection', () => {
         spyOn(baseCtxStub, 'strokeRect');
         spyOn(baseCtxStub, 'setLineDash');
-        service['drawSelection'](baseCtxStub, { x: 10, y: 25 } as Vec2, { x: 0, y: 0 } as Vec2);
+        service['drawSelection'](baseCtxStub, new Vec2(10, 25), new Vec2(0, 0));
         expect(baseCtxStub.strokeRect).toHaveBeenCalledTimes(2);
         expect(baseCtxStub.setLineDash).toHaveBeenCalledTimes(2);
     });
 
     it("fill background should do nothing if the mouse hasn't move", () => {
-        service.config.startCoords = { x: 0, y: 0 };
+        service.config.startCoords = new Vec2(0, 0);
         spyOn(previewCtxStub, 'beginPath');
-        service['fillBackground'](previewCtxStub, { x: 0, y: 0 } as Vec2);
+        service['fillBackground'](previewCtxStub, new Vec2(0, 0));
         expect(previewCtxStub.beginPath).not.toHaveBeenCalled();
     });
 

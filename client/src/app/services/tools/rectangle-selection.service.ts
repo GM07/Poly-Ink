@@ -26,12 +26,12 @@ export class RectangleSelectionService extends AbstractSelectionService {
 
         this.selectionCtx = null;
 
-        this.config.endCoords = { x: 0, y: 0 } as Vec2;
-        this.translationOrigin = { x: 0, y: 0 } as Vec2;
+        this.config.endCoords = new Vec2(0, 0);
+        this.translationOrigin = new Vec2(0, 0);
     }
 
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {
-        if (this.config.startCoords.x !== currentPos.x || this.config.startCoords.y !== currentPos.y) {
+        if (!this.config.startCoords.equals(currentPos)) {
             ctx.beginPath();
             ctx.fillStyle = 'white';
             ctx.fillRect(this.config.startCoords.x, this.config.startCoords.y, Math.abs(this.config.width), Math.abs(this.config.height));
@@ -45,9 +45,9 @@ export class RectangleSelectionService extends AbstractSelectionService {
 
         this.fillBackground(ctx, this.config.endCoords);
 
-        const rectangleCoords = { x: this.config.endCoords.x, y: this.config.endCoords.y } as Vec2;
+        const rectangleCoords = new Vec2(this.config.endCoords.x, this.config.endCoords.y);
         ctx.drawImage(this.SELECTION_DATA, this.config.endCoords.x, this.config.endCoords.y);
-        this.drawSelection(ctx, rectangleCoords, { x: Math.abs(this.config.width), y: Math.abs(this.config.height) } as Vec2);
+        this.drawSelection(ctx, rectangleCoords, new Vec2(Math.abs(this.config.width), Math.abs(this.config.height)));
     }
 
     protected drawPreviewSelectionRequired(): void {
@@ -57,7 +57,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
             this.config.width = Math.sign(this.config.width) * Math.abs(this.config.height);
         }
 
-        this.drawSelection(ctx, this.mouseDownCoord, { x: this.config.width, y: this.config.height } as Vec2);
+        this.drawSelection(ctx, this.mouseDownCoord, new Vec2(this.config.width, this.config.height));
     }
 
     protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void {

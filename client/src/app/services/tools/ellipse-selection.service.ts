@@ -22,18 +22,16 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
     protected drawPreviewSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
-        let radiusX: number = this.config.width / 2;
-        let radiusY: number = this.config.height / 2;
-        this.center = new Vec2(this.mouseDownCoord.x + radiusX, this.mouseDownCoord.y + radiusY);
+        const radius: Vec2 = new Vec2(this.config.width / 2, this.config.height / 2);
+        this.center = new Vec2(this.mouseDownCoord.x + radius.x, this.mouseDownCoord.y + radius.y);
         if (this.config.shiftDown) {
-            const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
-            this.center.x = this.mouseDownCoord.x + Math.sign(radiusX) * minRadius;
-            this.center.y = this.mouseDownCoord.y + Math.sign(radiusY) * minRadius;
-            radiusX = minRadius;
-            radiusY = minRadius;
+            const minRadius = Math.min(Math.abs(radius.x), Math.abs(radius.y));
+            this.center = this.center.addValue(Math.sign(radius.x) * minRadius);
+            radius.x = minRadius;
+            radius.y = minRadius;
         }
 
-        this.radiusAbs = new Vec2(Math.abs(radiusX), Math.abs(radiusY));
+        this.radiusAbs = radius.apply(Math.abs);
         this.config.width = 2 * this.radiusAbs.x * Math.sign(this.config.width);
         this.config.height = 2 * this.radiusAbs.y * Math.sign(this.config.height);
 
@@ -67,7 +65,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
     }
 
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {
-        if (this.config.startCoords.x !== currentPos.x || this.config.startCoords.y !== currentPos.y) {
+        if (!this.config.startCoords.equals(currentPos)) {
             ctx.beginPath();
             ctx.fillStyle = 'white';
             ctx.ellipse(this.center.x, this.center.y, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
@@ -79,18 +77,17 @@ export class EllipseSelectionService extends AbstractSelectionService {
     protected updateSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
-        const centerX = this.config.endCoords.x + Math.abs(this.config.width / 2);
-        const centerY = this.config.endCoords.y + Math.abs(this.config.height / 2);
+        const center: Vec2 = this.config.endCoords.add(new Vec2(this.config.width / 2, this.config.height / 2).apply(Math.abs));
 
         this.fillBackground(ctx, this.config.endCoords);
 
         ctx.beginPath();
         ctx.save();
-        ctx.ellipse(centerX, centerY, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
+        ctx.ellipse(center.x, center.y, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
         ctx.clip();
         ctx.drawImage(this.SELECTION_DATA, this.config.endCoords.x, this.config.endCoords.y);
         ctx.restore();
-        this.drawSelection(ctx, { x: centerX, y: centerY } as Vec2, this.radiusAbs);
+        this.drawSelection(ctx, center, this.radiusAbs);
     }
 
     protected endSelection(): void {
@@ -99,7 +96,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.draw();
         this.selectionCtx = null;
-        this.config.endCoords = { x: 0, y: 0 } as Vec2;
+        this.config.endCoords = new Vec2(0, 0);
     }
 
     draw(): void {
