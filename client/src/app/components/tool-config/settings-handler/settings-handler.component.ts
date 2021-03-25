@@ -22,6 +22,8 @@ import { PolygoneService } from '@app/services/tools/polygone.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+import { BucketService } from './../../../services/tools/bucket.service';
+import { BucketConfigComponent } from './../bucket-config/bucket-config.component';
 @Component({
     selector: 'app-settings-handler',
     templateUrl: './settings-handler.component.html',
@@ -43,6 +45,7 @@ export class SettingsHandlerComponent {
         this.settingsList.set(EllipseSelectionService, EllipseSelectionConfigComponent);
         this.settingsList.set(AerosolService, AerosolConfigComponent);
         this.settingsList.set(EyeDropperService, EyeDropperConfigComponent);
+        this.settingsList.set(BucketService, BucketConfigComponent);
         this.applyNewTab();
     }
 

@@ -46,6 +46,7 @@ import { RectangleConfigComponent } from './components/tool-config/rectangle-con
 import { RectangleSelectionConfigComponent } from './components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
 import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
 import { SidebarDirective } from './directives/sidebar.directive';
+import { BucketConfigComponent } from './components/tool-config/bucket-config/bucket-config.component';
 
 @NgModule({
     declarations: [
@@ -79,6 +80,7 @@ import { SidebarDirective } from './directives/sidebar.directive';
         CarrouselComponent,
         SaveDrawingComponent,
         SidebarDirective,
+        BucketConfigComponent,
     ],
     imports: [
         AppRoutingModule,

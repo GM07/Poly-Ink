@@ -22,4 +22,7 @@ export abstract class ToolSettingsConst {
     static readonly EYE_DROPPER_PREVIEW_WIDTH: number = 11;
     static readonly LINE_DEFAULT_DIAMETER_JUNCTION: number = 10;
     static readonly LINE_DEFAULT_WIDTH: number = 6;
+    static readonly BUCKET_MIN_TOLERANCE: number = 0;
+    static readonly BUCKET_MAX_TOLERANCE: number = 100;
+    static readonly BUCKET_DEFAULT_TOLERANCE: number = 20;
 }

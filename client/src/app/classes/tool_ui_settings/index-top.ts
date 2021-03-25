@@ -1,4 +1,5 @@
 import { AerosolSettings } from './aerosol-settings';
+import { BucketSettings } from './bucket-settings';
 import { EllipseSelectionSettings } from './ellipse-selection-settings';
 import { EllipseSettings } from './ellipse-settings';
 import { EraserSettings } from './eraser-settings';
@@ -26,4 +27,5 @@ export const TOP_TOOLS: ToolSettings[] = [
     new EllipseSelectionSettings(),
     new AerosolSettings(),
     new EyeDropperSettings(),
+    new BucketSettings(),
 ];
