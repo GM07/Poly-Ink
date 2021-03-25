@@ -7,6 +7,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
 import { EraserDraw } from './eraser-draw';
 
 // tslint:disable:no-string-literal
+// tslint:disable:no-magic-numbers
 
 describe('EraserDraw', () => {
     let eraserDraw: EraserDraw;
@@ -26,7 +27,7 @@ describe('EraserDraw', () => {
     it('Should draw a single pixel if the smallest size was selected', () => {
         eraserDraw['config'].lineWidth = 1;
 
-        const point: Vec2 = { x: 0, y: 0 };
+        const point: Vec2 = new Vec2(0, 0);
         eraserDraw['config'].pathData[0].push(point);
         eraserDraw.execute(ctxStub);
 
@@ -40,8 +41,8 @@ describe('EraserDraw', () => {
 
     // Useful integration test example
     it(' should change the pixel of the canvas ', () => {
-        const point1: Vec2 = { x: 0, y: 0 };
-        const point2: Vec2 = { x: 5, y: 5 };
+        const point1: Vec2 = new Vec2(0, 0);
+        const point2: Vec2 = new Vec2(5, 5);
         eraserDraw['config'].pathData[0].push(point1);
         eraserDraw['config'].pathData[0].push(point2);
         eraserDraw['config'].pathData.push([]);

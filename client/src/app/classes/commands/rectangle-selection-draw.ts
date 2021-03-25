@@ -15,11 +15,11 @@ export class RectangleSelectionDraw extends AbstractDraw {
 
         this.fillBackground(context);
 
-        context.drawImage(selectionCanvas, this.config.endCoords.x, this.config.endCoords.y);
+        context.drawImage(selectionCanvas, Math.floor(this.config.endCoords.x), Math.floor(this.config.endCoords.y));
     }
 
     private fillBackground(context: CanvasRenderingContext2D): void {
-        if (this.config.startCoords.x === this.config.endCoords.x && this.config.startCoords.y === this.config.endCoords.y) return;
+        if (this.config.startCoords.equals(this.config.endCoords)) return;
         context.beginPath();
         context.fillStyle = 'white';
         context.fillRect(this.config.startCoords.x, this.config.startCoords.y, Math.abs(this.config.width), Math.abs(this.config.height));

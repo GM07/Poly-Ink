@@ -137,7 +137,7 @@ describe('EyeDropperService', () => {
         service['drawingService'].baseCtx.fillStyle = 'black';
         service['drawingService'].baseCtx.fillRect(0, 0, 5, 5);
         expect(
-            (service['getPrevisualisation']({ x: 1, y: 1 } as Vec2, 1).getContext('2d') as CanvasRenderingContext2D).getImageData(1, 1, 1, 1).data[0],
+            (service['getPrevisualisation'](new Vec2(1, 1), 1).getContext('2d') as CanvasRenderingContext2D).getImageData(1, 1, 1, 1).data[0],
         ).toEqual(0);
     });
 
@@ -156,13 +156,13 @@ describe('EyeDropperService', () => {
     it('draw circle around mouse should draw a circle around the mouse', () => {
         spyOn(baseCtxStub, 'clearRect');
         spyOn(baseCtxStub, 'ellipse');
-        service['drawCircleAroundMouse'](baseCtxStub, { x: 10, y: 10 } as Vec2, 5);
+        service['drawCircleAroundMouse'](baseCtxStub, new Vec2(10, 10), 5);
         expect(baseCtxStub.ellipse).toHaveBeenCalledWith(10, 10, 5, 5, 0, 0, 2 * Math.PI);
     });
 
     it('get color should return the color on the canvas', () => {
         service['drawingService'].baseCtx.fillStyle = 'white';
         service['drawingService'].baseCtx.fillRect(0, 0, 10, 10);
-        expect(service['getColor']({ x: 5, y: 5 } as Vec2)).toEqual(new Color(255, 255, 255));
+        expect(service['getColor'](new Vec2(5, 5))).toEqual(new Color(255, 255, 255));
     });
 });

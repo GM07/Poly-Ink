@@ -7,6 +7,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
 import { PencilDraw } from './pencil-draw';
 
 // tslint:disable:no-string-literal
+// tslint:disable:no-magic-numbers
 
 describe('PencilDraw', () => {
     let pencilDraw: PencilDraw;
@@ -25,7 +26,7 @@ describe('PencilDraw', () => {
     it('Should draw a single pixel if the smallest size was selected', () => {
         pencilDraw['config'].lineWidth = 1;
 
-        const point: Vec2 = { x: 0, y: 0 };
+        const point: Vec2 = new Vec2(0, 0);
         pencilDraw['config'].pathData[0].push(point);
         pencilDraw.execute(ctxStub);
 
@@ -39,8 +40,8 @@ describe('PencilDraw', () => {
 
     // Useful integration test example
     it(' should change the pixel of the canvas ', () => {
-        const point1: Vec2 = { x: 0, y: 0 };
-        const point2: Vec2 = { x: 3, y: 3 };
+        const point1: Vec2 = new Vec2(0, 0);
+        const point2: Vec2 = new Vec2(3, 3);
         pencilDraw['config'].pathData[0].push(point1);
         pencilDraw['config'].pathData[0].push(point2);
         pencilDraw.execute(ctxStub);
