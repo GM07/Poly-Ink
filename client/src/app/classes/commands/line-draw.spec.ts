@@ -53,7 +53,7 @@ describe('LineDraw', () => {
     });
 
     it('should not draw junction if disabled', () => {
-        const point: Vec2 = { x: 1, y: 1 };
+        const point: Vec2 = new Vec2(1, 1);
         lineDraw['config'].showJunctionPoints = false;
         lineDraw['drawJunction'](ctxStub, point);
 
@@ -66,7 +66,7 @@ describe('LineDraw', () => {
     });
 
     it('should draw junction if enabled', () => {
-        const point: Vec2 = { x: 1, y: 1 };
+        const point: Vec2 = new Vec2(1, 1);
         lineDraw['config'].showJunctionPoints = true;
         lineDraw['drawJunction'](ctxStub, point);
 
@@ -79,10 +79,7 @@ describe('LineDraw', () => {
     });
 
     it('should attempt to draw junction on line draw', () => {
-        const points: Vec2[] = [
-            { x: 0, y: 0 },
-            { x: 2, y: 2 },
-        ];
+        const points: Vec2[] = [new Vec2(0, 0), new Vec2(2, 2)];
         lineDraw['config'].points = points;
         spyOn<any>(lineDraw, 'drawJunction').and.stub();
         lineDraw['drawLinePath'](ctxStub);
@@ -90,12 +87,7 @@ describe('LineDraw', () => {
     });
 
     it('should draw line between point', () => {
-        const points: Vec2[] = [
-            { x: 0, y: 0 },
-            { x: 2, y: 2 },
-            { x: 1, y: 2 },
-            { x: 0, y: 1 },
-        ];
+        const points: Vec2[] = [new Vec2(0, 0), new Vec2(2, 2), new Vec2(1, 2), new Vec2(0, 1)];
         lineDraw['config'].points = points;
         lineDraw['config'].showJunctionPoints = false;
         lineDraw['config'].closedLoop = true;

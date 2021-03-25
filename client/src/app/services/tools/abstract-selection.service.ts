@@ -131,17 +131,16 @@ export abstract class AbstractSelectionService extends Tool {
                 event.preventDefault();
                 if (event.repeat) return;
                 this.setArrowKeyDown(event);
-                this.updateSelection({ x: PIXELS * this.HorizontalTranslationModifier(), y: PIXELS * this.VerticalTranslationModifier() } as Vec2);
+                this.updateSelection(new Vec2(PIXELS * this.HorizontalTranslationModifier(), PIXELS * this.VerticalTranslationModifier()));
 
                 if (this.moveId === this.DEFAULT_MOVE_ID) {
                     setTimeout(() => {
                         if (this.moveId === this.DEFAULT_MOVE_ID && this.selectionCtx !== null)
                             this.moveId = window.setInterval(() => {
                                 this.clearArrowKeys();
-                                this.updateSelection({
-                                    x: PIXELS * this.HorizontalTranslationModifier(),
-                                    y: PIXELS * this.VerticalTranslationModifier(),
-                                } as Vec2);
+                                this.updateSelection(
+                                    new Vec2(PIXELS * this.HorizontalTranslationModifier(), PIXELS * this.VerticalTranslationModifier()),
+                                );
                             }, this.NEXT_MOVES_TIMEOUT);
                     }, this.FIRST_MOVE_TIMEOUT);
                 }
@@ -165,11 +164,11 @@ export abstract class AbstractSelectionService extends Tool {
     selectAll(): void {
         this.resetArrowKeys();
         this.endSelection();
-        this.config.endCoords = { x: 0, y: 0 } as Vec2;
+        this.config.endCoords = new Vec2(0, 0);
         const width = this.drawingService.canvas.width;
         const height = this.drawingService.canvas.height;
-        this.mouseDownCoord = { x: 0, y: 0 } as Vec2;
-        this.mouseUpCoord = { x: width, y: height } as Vec2;
+        this.mouseDownCoord = new Vec2(0, 0);
+        this.mouseUpCoord = new Vec2(width, height);
         this.config.width = width;
         this.config.height = height;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
@@ -201,7 +200,7 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     getTranslation(mousePos: Vec2): Vec2 {
-        return { x: mousePos.x - this.translationOrigin.x, y: mousePos.y - this.translationOrigin.y } as Vec2;
+        return mousePos.substract(this.translationOrigin);
     }
 
     private setMouseUpCoord(event: MouseEvent): void {
@@ -265,8 +264,8 @@ export abstract class AbstractSelectionService extends Tool {
         this.selectionCtx = this.SELECTION_DATA.getContext('2d') as CanvasRenderingContext2D;
         const x = Math.min(this.mouseDownCoord.x, this.mouseDownCoord.x + this.config.width);
         const y = Math.min(this.mouseDownCoord.y, this.mouseDownCoord.y + this.config.height);
-        this.config.endCoords = { x, y } as Vec2;
-        this.config.startCoords = { x, y } as Vec2;
+        this.config.endCoords = new Vec2(x, y);
+        this.config.startCoords = new Vec2(x, y);
 
         this.selectionCtx.drawImage(
             this.drawingService.canvas,
@@ -291,10 +290,8 @@ export abstract class AbstractSelectionService extends Tool {
         if (this.selectionCtx === null) return;
 
         this.drawingService.blockUndoRedo();
-        this.config.endCoords.x += translation.x;
-        this.config.endCoords.y += translation.y;
-        this.translationOrigin.x += translation.x;
-        this.translationOrigin.y += translation.y;
+        this.config.endCoords = this.config.endCoords.add(translation);
+        this.translationOrigin = this.translationOrigin.add(translation);
         this.updateSelectionRequired();
         this.updatePoints.next(true);
     }

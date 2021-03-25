@@ -12,27 +12,24 @@ export class PolygonDraw extends AbstractDraw {
     }
 
     execute(ctx: CanvasRenderingContext2D): void {
-        const radiusX: number = Math.abs(this.config.endCoords.x - this.config.startCoords.x) / 2;
-        const radiusY: number = Math.abs(this.config.endCoords.y - this.config.startCoords.y) / 2;
-        const radius: number = Math.min(radiusX, radiusY);
+        const radiusVec: Vec2 = this.config.endCoords
+            .substract(this.config.startCoords)
+            .apply(Math.abs)
+            .scalar(1 / 2);
+        const radius: number = Math.min(radiusVec.x, radiusVec.y);
 
-        let centerX: number = this.config.startCoords.x + radius;
-        let centerY: number = this.config.startCoords.y + radius;
+        const center: Vec2 = this.config.startCoords.addValue(radius);
 
         if (this.config.endCoords.y < this.config.startCoords.y) {
-            centerY = this.config.startCoords.y - radius;
+            center.y = this.config.startCoords.y - radius;
         }
 
         if (this.config.endCoords.x < this.config.startCoords.x) {
-            centerX = this.config.startCoords.x - radius;
+            center.x = this.config.startCoords.x - radius;
         }
 
         ctx.lineCap = 'round' as CanvasLineCap;
         ctx.lineJoin = 'round' as CanvasLineJoin;
-        const center: Vec2 = {
-            x: centerX,
-            y: centerY,
-        };
 
         if (this.config.showPerimeter) {
             this.drawCirclePerimeter(ctx, center, radius);
@@ -43,9 +40,6 @@ export class PolygonDraw extends AbstractDraw {
     }
 
     private drawPolygoneSides(ctx: CanvasRenderingContext2D, center: Vec2, radiusAbs: number): void {
-        const centerX: number = center.x;
-        const centerY: number = center.y;
-
         // tslint:disable-next-line:no-magic-numbers
         const startingAngle = -Math.PI / 2 + (this.config.numEdges % 2 !== 0 ? 0 : Math.PI / this.config.numEdges);
         ctx.lineWidth = this.config.shapeMode === ShapeMode.Filled ? 0 : this.config.lineWidth;
@@ -56,8 +50,8 @@ export class PolygonDraw extends AbstractDraw {
 
         ctx.beginPath();
         for (let i = 0; i < this.config.numEdges; i++) {
-            const currentX = centerX + lineWidthWeightedRadius * Math.cos(startingAngle + (i * (2 * Math.PI)) / this.config.numEdges);
-            const currentY = centerY + lineWidthWeightedRadius * Math.sin(startingAngle + (i * (2 * Math.PI)) / this.config.numEdges);
+            const currentX = center.x + lineWidthWeightedRadius * Math.cos(startingAngle + (i * (2 * Math.PI)) / this.config.numEdges);
+            const currentY = center.y + lineWidthWeightedRadius * Math.sin(startingAngle + (i * (2 * Math.PI)) / this.config.numEdges);
             ctx.lineTo(currentX, currentY);
         }
         ctx.closePath();
@@ -75,13 +69,11 @@ export class PolygonDraw extends AbstractDraw {
     private drawCirclePerimeter(ctx: CanvasRenderingContext2D, center: Vec2, radiusAbs: number): void {
         const dashWidth = 1;
         const lineDash = 6;
-        const centerX: number = center.x;
-        const centerY: number = center.y;
         ctx.lineWidth = dashWidth;
         ctx.strokeStyle = 'black';
         ctx.setLineDash([lineDash]);
         ctx.beginPath();
-        ctx.arc(centerX, centerY, radiusAbs, 0, Math.PI * 2, true);
+        ctx.arc(center.x, center.y, radiusAbs, 0, Math.PI * 2, true);
         ctx.stroke();
         ctx.closePath();
         ctx.setLineDash([]);

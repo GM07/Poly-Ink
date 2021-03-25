@@ -23,7 +23,7 @@ export class LineConfig {
         config.thickness = this.thickness;
         config.showJunctionPoints = this.showJunctionPoints;
         this.points.forEach((point) => {
-            config.points.push({ x: point.x, y: point.y });
+            config.points.push({ x: point.x, y: point.y } as Vec2);
         });
 
         return config;

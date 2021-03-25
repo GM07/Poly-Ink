@@ -10,6 +10,7 @@ import { AerosolDraw } from './aerosol-draw';
 
 // tslint:disable:no-string-literal
 // tslint:disable:no-any
+// tslint:disable:no-magic-numbers
 
 describe('AerosolDraw', () => {
     let aerosolDraw: AerosolDraw;
@@ -35,7 +36,7 @@ describe('AerosolDraw', () => {
     });
 
     it('should generate predictable droplet position with seed', () => {
-        const point: Vec2 = { x: 25, y: 25 };
+        const point: Vec2 = new Vec2(25, 25);
         const iteration = 30;
 
         const firstPoints: Vec2[] = [];
@@ -55,7 +56,7 @@ describe('AerosolDraw', () => {
     });
 
     it('should draw droplet properly', () => {
-        const point: Vec2 = { x: 25, y: 25 };
+        const point: Vec2 = new Vec2(25, 25);
         aerosolDraw['drawDroplet'](ctxStub, point);
 
         const imageData: ImageData = ctxStub.getImageData(point.x, point.y, 1, 1);

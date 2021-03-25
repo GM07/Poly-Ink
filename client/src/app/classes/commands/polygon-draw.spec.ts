@@ -9,6 +9,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
 
 // tslint:disable:no-string-literal
 // tslint:disable:no-any
+// tslint:disable:no-magic-numbers
 
 describe('PolygonDraw', () => {
     let polygonDraw: PolygonDraw;
@@ -23,8 +24,8 @@ describe('PolygonDraw', () => {
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
 
-        const startPoint: Vec2 = { x: 0, y: 0 };
-        const endPoint: Vec2 = { x: 15, y: 15 };
+        const startPoint: Vec2 = new Vec2(0, 0);
+        const endPoint: Vec2 = new Vec2(15, 15);
 
         polygonDraw['config'].startCoords = startPoint;
         polygonDraw['config'].endCoords = endPoint;
@@ -34,12 +35,11 @@ describe('PolygonDraw', () => {
         polygonDraw['config'].shapeMode = ShapeMode.Contour;
         polygonDraw['config'].showPerimeter = true;
 
-        const middleX: number = (polygonDraw['config'].endCoords.x - polygonDraw['config'].startCoords.x) / 2;
-        const middleY: number = (polygonDraw['config'].endCoords.y - polygonDraw['config'].startCoords.y) / 2;
+        const middle: Vec2 = polygonDraw['config'].endCoords.substract(polygonDraw['config'].startCoords).scalar(1 / 2);
 
-        polygonDraw['drawCirclePerimeter'](ctxStub, { x: middleX, y: middleY }, middleX);
+        polygonDraw['drawCirclePerimeter'](ctxStub, new Vec2(middle.x, middle.y), middle.x);
 
-        const previewImageData = ctxStub.getImageData(middleX, 0, 1, 1);
+        const previewImageData = ctxStub.getImageData(middle.x, 0, 1, 1);
         expect(previewImageData.data[ALPHA]).not.toEqual(0); // A
 
         const voidImageData = ctxStub.getImageData(0, 0, 1, 1);
@@ -51,17 +51,16 @@ describe('PolygonDraw', () => {
 
         polygonDraw.execute(ctxStub);
 
-        const middleX: number = (polygonDraw['config'].endCoords.x - polygonDraw['config'].startCoords.x) / 2;
-        const middleY: number = (polygonDraw['config'].endCoords.y - polygonDraw['config'].startCoords.y) / 2;
+        const middle: Vec2 = polygonDraw['config'].endCoords.substract(polygonDraw['config'].startCoords).scalar(1 / 2);
 
-        let imageData: ImageData = ctxStub.getImageData(middleX, 0, 1, 1);
+        let imageData: ImageData = ctxStub.getImageData(middle.x, 0, 1, 1);
 
         expect(imageData.data[0]).toEqual(Colors.BLUE.r); // R
         expect(imageData.data[1]).toEqual(Colors.BLUE.g); // G
         expect(imageData.data[2]).toEqual(Colors.BLUE.b); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
 
-        imageData = ctxStub.getImageData(middleX, middleY, 1, 1);
+        imageData = ctxStub.getImageData(middle.x, middle.y, 1, 1);
         expect(imageData.data[ALPHA]).toEqual(0); // A
     });
 
@@ -85,19 +84,18 @@ describe('PolygonDraw', () => {
 
         polygonDraw.execute(ctxStub);
 
-        const middleX: number = (polygonDraw['config'].endCoords.x - polygonDraw['config'].startCoords.x) / 2;
-        const middleY: number = (polygonDraw['config'].endCoords.y - polygonDraw['config'].startCoords.y) / 2;
+        const middle: Vec2 = polygonDraw['config'].endCoords.substract(polygonDraw['config'].startCoords).scalar(1 / 2);
 
-        let imageData: ImageData = ctxStub.getImageData(middleX, 0, 1, 1);
+        let imageData: ImageData = ctxStub.getImageData(middle.x, 0, 1, 1);
         expect(imageData.data[0]).toEqual(Colors.BLUE.r); // R
         expect(imageData.data[1]).toEqual(Colors.BLUE.g); // G
         expect(imageData.data[2]).toEqual(Colors.BLUE.b); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
 
-        imageData = ctxStub.getImageData(0, middleY, 1, 1);
+        imageData = ctxStub.getImageData(0, middle.y, 1, 1);
         expect(imageData.data[ALPHA]).toEqual(0); // A
 
-        imageData = ctxStub.getImageData(middleX, middleY, 1, 1);
+        imageData = ctxStub.getImageData(middle.x, middle.y, 1, 1);
         expect(imageData.data[0]).toEqual(Colors.RED.r); // R
         expect(imageData.data[1]).toEqual(Colors.RED.g); // G
         expect(imageData.data[2]).toEqual(Colors.RED.b); // B
@@ -114,22 +112,21 @@ describe('PolygonDraw', () => {
 
         polygonDraw.execute(ctxStub);
 
-        const middleX: number = (polygonDraw['config'].endCoords.x - polygonDraw['config'].startCoords.x) / 2;
-        const middleY: number = (polygonDraw['config'].endCoords.y - polygonDraw['config'].startCoords.y) / 2;
+        const middle: Vec2 = polygonDraw['config'].endCoords.substract(polygonDraw['config'].startCoords).scalar(1 / 2);
 
-        let imageData: ImageData = ctxStub.getImageData(middleX, 2, 1, 1);
+        let imageData: ImageData = ctxStub.getImageData(middle.x, 2, 1, 1);
         expect(imageData.data[0]).toEqual(Colors.BLUE.r); // R
         expect(imageData.data[1]).toEqual(Colors.BLUE.g); // G
         expect(imageData.data[2]).toEqual(Colors.BLUE.b); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
 
-        imageData = ctxStub.getImageData(2, middleY, 1, 1);
+        imageData = ctxStub.getImageData(2, middle.y, 1, 1);
         expect(imageData.data[0]).toEqual(Colors.BLUE.r); // R
         expect(imageData.data[1]).toEqual(Colors.BLUE.g); // G
         expect(imageData.data[2]).toEqual(Colors.BLUE.b); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
 
-        imageData = ctxStub.getImageData(middleX, middleY, 1, 1);
+        imageData = ctxStub.getImageData(middle.x, middle.y, 1, 1);
         expect(imageData.data[0]).toEqual(Colors.RED.r); // R
         expect(imageData.data[1]).toEqual(Colors.RED.g); // G
         expect(imageData.data[2]).toEqual(Colors.RED.b); // B
@@ -145,15 +142,13 @@ describe('PolygonDraw', () => {
 
     it('should draw polygon left properly', () => {
         polygonDraw['config'].shapeMode = ShapeMode.Filled;
-        polygonDraw['config'].startCoords = { x: 15, y: 15 };
-        polygonDraw['config'].endCoords = { x: 0, y: 0 };
+        polygonDraw['config'].startCoords = new Vec2(15, 15);
+        polygonDraw['config'].endCoords = new Vec2(0, 0);
 
         polygonDraw.execute(ctxStub);
+        const middle: Vec2 = polygonDraw['config'].startCoords.substract(polygonDraw['config'].endCoords).scalar(1 / 2);
 
-        const middleX: number = (polygonDraw['config'].startCoords.x - polygonDraw['config'].endCoords.x) / 2;
-        const middleY: number = (polygonDraw['config'].startCoords.y - polygonDraw['config'].endCoords.y) / 2;
-
-        const imageData: ImageData = ctxStub.getImageData(middleX, middleY, 1, 1);
+        const imageData: ImageData = ctxStub.getImageData(middle.x, middle.y, 1, 1);
         expect(imageData.data[ALPHA]).not.toEqual(0);
     });
 
