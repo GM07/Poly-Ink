@@ -5,7 +5,7 @@ describe('StampConfig', () => {
     let config: StampConfig;
     beforeEach(() => {
         config = new StampConfig();
-        config.position = { x: 0, y: 0 } as Vec2;
+        config.position = new Vec2(0, 0);
     });
 
     it('should create an instance', () => {

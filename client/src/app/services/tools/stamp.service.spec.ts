@@ -84,7 +84,7 @@ describe('StampService', () => {
     it('on mouse move should update preview inside of canvas', () => {
         service['drawingService'].previewCanvas = document.createElement('canvas');
         spyOn(service, 'isInCanvas').and.returnValue(true);
-        spyOn(service, 'getPositionFromMouse').and.returnValue({ x: 0, y: 0 } as Vec2);
+        spyOn(service, 'getPositionFromMouse').and.returnValue(new Vec2(0, 0));
         spyOn(service, 'drawPreview');
         service.onMouseMove({} as MouseEvent);
         expect(service.drawPreview).toHaveBeenCalled();
@@ -93,21 +93,21 @@ describe('StampService', () => {
     it('on mouse move should update preview outside of canvas', () => {
         service['drawingService'].previewCanvas = document.createElement('canvas');
         spyOn(service, 'isInCanvas').and.returnValue(false);
-        spyOn(service, 'getPositionFromMouse').and.returnValue({ x: 0, y: 0 } as Vec2);
+        spyOn(service, 'getPositionFromMouse').and.returnValue(new Vec2(0, 0));
         spyOn(service, 'drawPreview');
         service.onMouseMove({} as MouseEvent);
         expect(service.drawPreview).toHaveBeenCalled();
     });
 
     it('onMouseDown should draw on left click', () => {
-        spyOn(service, 'getPositionFromMouse').and.returnValue({ x: 0, y: 0 } as Vec2);
+        spyOn(service, 'getPositionFromMouse').and.returnValue(new Vec2(0, 0));
         spyOn(service, 'draw');
         service.onMouseDown({ button: 0 } as MouseEvent);
         expect(service.draw).toHaveBeenCalled();
     });
 
     it('onMouseDown should not draw on other click', () => {
-        spyOn(service, 'getPositionFromMouse').and.returnValue({ x: 0, y: 0 } as Vec2);
+        spyOn(service, 'getPositionFromMouse').and.returnValue(new Vec2(0, 0));
         spyOn(service, 'draw');
         service.onMouseDown({ button: 2 } as MouseEvent);
         expect(service.draw).not.toHaveBeenCalled();

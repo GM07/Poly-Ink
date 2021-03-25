@@ -29,7 +29,7 @@ export class StampConfig {
         config.stampImg.src = this.stampImg.src;
         config.scale = this.scale;
         config.angle = this.angle;
-        config.position = { x: this.position.x, y: this.position.y } as Vec2;
+        config.position = new Vec2(this.position.x, this.position.y);
 
         return config;
     }

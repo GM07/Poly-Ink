@@ -25,7 +25,7 @@ describe('StampDraw', () => {
     it('execute should draw', () => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-        stampDraw['config'].position = { x: 0, y: 0 } as Vec2;
+        stampDraw['config'].position = new Vec2(0, 0);
         spyOn(ctx, 'translate');
         spyOn(ctx, 'rotate');
         spyOn(ctx, 'drawImage');
