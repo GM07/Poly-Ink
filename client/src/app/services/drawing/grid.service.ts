@@ -49,11 +49,11 @@ export class GridService {
         for (let i = 0; i < this.canvas.width; i += this.size) {
             this.ctx.setLineDash([2, 2]);
             this.ctx.strokeStyle = 'rgba(0,0,0,' + this.opacity + ')';
-            this.drawLine({ x: i, y: 0 } as Vec2, { x: i, y: this.canvas.height } as Vec2);
+            this.drawLine(new Vec2(i, 0), new Vec2(i, this.canvas.height));
             this.ctx.lineDashOffset = 2;
             this.ctx.strokeStyle = 'white';
             this.ctx.beginPath();
-            this.drawLine({ x: i, y: 0 } as Vec2, { x: i, y: this.canvas.height } as Vec2);
+            this.drawLine(new Vec2(i, 0), new Vec2(i, this.canvas.height));
             this.ctx.lineDashOffset = 0;
             this.ctx.setLineDash([]);
         }
@@ -61,10 +61,10 @@ export class GridService {
         for (let i = 0; i < this.canvas.height; i += this.size) {
             this.ctx.setLineDash([2, 2]);
             this.ctx.strokeStyle = 'rgba(0,0,0,' + this.opacity + ')';
-            this.drawLine({ x: 0, y: i } as Vec2, { x: this.canvas.width, y: i } as Vec2);
+            this.drawLine(new Vec2(0, i), new Vec2(this.canvas.width, i));
             this.ctx.lineDashOffset = 2;
             this.ctx.strokeStyle = 'white';
-            this.drawLine({ x: 0, y: i } as Vec2, { x: this.canvas.width, y: i } as Vec2);
+            this.drawLine(new Vec2(0, i), new Vec2(this.canvas.width, i));
             this.ctx.lineDashOffset = 0;
             this.ctx.setLineDash([]);
         }

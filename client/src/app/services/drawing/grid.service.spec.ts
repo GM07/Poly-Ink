@@ -57,7 +57,7 @@ describe('GridService', () => {
         spyOn(service.ctx, 'moveTo');
         spyOn(service.ctx, 'lineTo');
         spyOn(service.ctx, 'stroke');
-        service.drawLine({ x: 0, y: 0 } as Vec2, { x: ToolSettingsConst.GRID_STEP, y: ToolSettingsConst.GRID_STEP } as Vec2);
+        service.drawLine(new Vec2(0, 0), new Vec2(ToolSettingsConst.GRID_STEP, ToolSettingsConst.GRID_STEP));
         expect(service.ctx.moveTo).toHaveBeenCalled();
         expect(service.ctx.lineTo).toHaveBeenCalled();
         expect(service.ctx.stroke).toHaveBeenCalled();

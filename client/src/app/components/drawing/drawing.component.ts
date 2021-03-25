@@ -31,7 +31,7 @@ export class DrawingComponent implements AfterViewInit {
         private newDrawingService: NewDrawingService,
         private gridService: GridService,
     ) {
-        this.canvasSize = { x: CanvasConst.DEFAULT_WIDTH, y: CanvasConst.DEFAULT_HEIGHT } as Vec2;
+        this.canvasSize = new Vec2(CanvasConst.DEFAULT_WIDTH, CanvasConst.DEFAULT_HEIGHT);
         this.gridVisibility = true;
     }
 

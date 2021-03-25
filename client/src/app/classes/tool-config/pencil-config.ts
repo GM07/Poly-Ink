@@ -14,7 +14,7 @@ export class PencilConfig {
         this.pathData.forEach((path, index) => {
             config.pathData.push([]);
             path.forEach((point) => {
-                config.pathData[index].push({ x: point.x, y: point.y } as Vec2);
+                config.pathData[index].push(new Vec2(point.x, point.y));
             });
         });
 

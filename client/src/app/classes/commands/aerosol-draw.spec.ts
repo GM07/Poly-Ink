@@ -29,7 +29,7 @@ describe('AerosolDraw', () => {
 
     it('should draw the right amount of droplets', () => {
         aerosolDraw['config'].seed = 'test';
-        aerosolDraw['config'].points = [{ x: 1, y: 1 } as Vec2];
+        aerosolDraw['config'].points = [new Vec2(1, 1)];
         const dropletDrawSpy = spyOn<any>(aerosolDraw, 'drawDroplet');
         aerosolDraw.execute(ctxStub);
         expect(dropletDrawSpy).toHaveBeenCalledTimes(aerosolDraw['config'].nDropletsPerSpray);
