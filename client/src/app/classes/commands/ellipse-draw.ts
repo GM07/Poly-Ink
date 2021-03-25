@@ -11,14 +11,11 @@ export class EllipseDraw extends AbstractDraw {
     }
 
     execute(context: CanvasRenderingContext2D): void {
-        const radius: Vec2 = {
-            x: (this.config.endCoords.x - this.config.startCoords.x) / 2,
-            y: (this.config.endCoords.y - this.config.startCoords.y) / 2,
-        };
-        const center: Vec2 = {
-            x: this.config.startCoords.x + radius.x,
-            y: this.config.startCoords.y + radius.y,
-        };
+        const radius: Vec2 = new Vec2(
+            (this.config.endCoords.x - this.config.startCoords.x) / 2,
+            (this.config.endCoords.y - this.config.startCoords.y) / 2,
+        );
+        const center: Vec2 = new Vec2(this.config.startCoords.x + radius.x, this.config.startCoords.y + radius.y);
 
         if (this.config.shiftDown) {
             const minRadius = Math.min(Math.abs(radius.x), Math.abs(radius.y));
@@ -28,7 +25,7 @@ export class EllipseDraw extends AbstractDraw {
             radius.y = minRadius;
         }
 
-        const radiusAbs: Vec2 = { x: Math.abs(radius.x), y: Math.abs(radius.y) };
+        const radiusAbs: Vec2 = new Vec2(Math.abs(radius.x), Math.abs(radius.y));
 
         if (this.config.showPerimeter) {
             this.drawRectanglePerimeter(context, center, radiusAbs);

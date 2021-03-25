@@ -32,7 +32,7 @@ export class PolygonDraw extends AbstractDraw {
         const center: Vec2 = {
             x: centerX,
             y: centerY,
-        };
+        } as Vec2;
 
         if (this.config.showPerimeter) {
             this.drawCirclePerimeter(ctx, center, radius);

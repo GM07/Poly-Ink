@@ -34,10 +34,7 @@ export class AerosolDraw extends AbstractDraw {
         const randomDistFromCenter = prng() * areaRadius + prng() * areaRadius;
         const randomRadius = randomDistFromCenter > areaRadius ? this.config.areaDiameter - randomDistFromCenter : randomDistFromCenter;
 
-        return {
-            x: Math.cos(angle) * randomRadius + point.x,
-            y: Math.sin(angle) * randomRadius + point.y,
-        };
+        return new Vec2(Math.cos(angle) * randomRadius + point.x, Math.sin(angle) * randomRadius + point.y);
     }
 
     private drawDroplet(context: CanvasRenderingContext2D, point: Vec2): void {

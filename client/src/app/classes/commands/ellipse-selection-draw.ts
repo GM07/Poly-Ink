@@ -31,7 +31,7 @@ export class EllipseSelectionDraw extends AbstractDraw {
     }
 
     private fillBackground(context: CanvasRenderingContext2D): void {
-        if (this.config.startCoords.x === this.config.endCoords.x && this.config.startCoords.y === this.config.endCoords.y) return;
+        if (this.config.startCoords.equals(this.config.endCoords)) return;
         const radiusX = Math.abs(this.config.width / 2);
         const radiusY = Math.abs(this.config.height / 2);
         const centerX = this.config.startCoords.x + Math.abs(this.config.width / 2);

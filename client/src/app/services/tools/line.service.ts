@@ -200,7 +200,7 @@ export class LineService extends Tool {
         const dx = distance * Math.cos(finalAngle) + this.getLastPoint().x;
         const dy = -(distance * Math.sin(finalAngle)) + this.getLastPoint().y;
 
-        return { x: Math.round(dx), y: Math.round(dy) };
+        return { x: Math.round(dx), y: Math.round(dy) } as Vec2;
     }
 
     private getLastPoint(): Vec2 {

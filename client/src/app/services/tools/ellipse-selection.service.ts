@@ -24,7 +24,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         const ctx = this.drawingService.previewCtx;
         let radiusX: number = this.config.width / 2;
         let radiusY: number = this.config.height / 2;
-        this.center = { x: this.mouseDownCoord.x + radiusX, y: this.mouseDownCoord.y + radiusY };
+        this.center = new Vec2(this.mouseDownCoord.x + radiusX, this.mouseDownCoord.y + radiusY);
         if (this.config.shiftDown) {
             const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
             this.center.x = this.mouseDownCoord.x + Math.sign(radiusX) * minRadius;
@@ -33,7 +33,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
             radiusY = minRadius;
         }
 
-        this.radiusAbs = { x: Math.abs(radiusX), y: Math.abs(radiusY) };
+        this.radiusAbs = new Vec2(Math.abs(radiusX), Math.abs(radiusY));
         this.config.width = 2 * this.radiusAbs.x * Math.sign(this.config.width);
         this.config.height = 2 * this.radiusAbs.y * Math.sign(this.config.height);
 
