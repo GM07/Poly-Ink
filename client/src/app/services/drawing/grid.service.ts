@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Vec2 } from '@app/classes/vec2';
+import { ToolMath } from '@app/constants/math';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 
 @Injectable({
@@ -33,12 +34,12 @@ export class GridService {
     }
 
     set opacityValue(size: number) {
-        this.opacity = Math.max(ToolSettingsConst.GRID_MIN_OPACITY, Math.min(1-(size/100), ToolSettingsConst.GRID_MAX_OPACITY));
+        this.opacity = Math.max(ToolSettingsConst.GRID_MIN_OPACITY, Math.min(1 - size / ToolMath.PERCENTAGE, ToolSettingsConst.GRID_MAX_OPACITY));
         this.updateGrid();
     }
 
     get opacityValue(): number {
-        return Math.round((1-this.opacity)*100);
+        return Math.round((1 - this.opacity) * ToolMath.PERCENTAGE);
     }
 
     updateGrid(): void {

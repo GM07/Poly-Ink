@@ -50,7 +50,7 @@ describe('GridConfigComponent', () => {
     it('should get default value of opacity slider', async () => {
         const slider = await loader.getAllHarnesses(MatSliderHarness);
         // tslint:disable-next-line:no-magic-numbers
-        expect(await slider[1].getValue()).toBe(0.5);
+        expect(await slider[1].getValue()).toBe(50);
     });
 
     it('should get max value of size slider', async () => {
@@ -60,7 +60,7 @@ describe('GridConfigComponent', () => {
 
     it('should get max value of opacity slider', async () => {
         const slider = await loader.getAllHarnesses(MatSliderHarness);
-        expect(await slider[1].getMaxValue()).toBe(ToolSettingsConst.GRID_MAX_OPACITY);
+        expect(await slider[1].getMaxValue()).toBe(component.MAX_OPACITY);
     });
 
     it('should be able to set value of size slider', async () => {
@@ -74,10 +74,10 @@ describe('GridConfigComponent', () => {
     });
 
     it('should be able to set value of opacity slider', async () => {
-        const setValue = 0.8;
+        const setValue = 55;
         const slider = await loader.getAllHarnesses(MatSliderHarness);
         // tslint:disable-next-line:no-magic-numbers
-        expect(await slider[1].getValue()).toBe(0.5);
+        expect(await slider[1].getValue()).toBe(50);
 
         await slider[1].setValue(setValue);
 

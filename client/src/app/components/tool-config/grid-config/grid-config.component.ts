@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatSliderChange } from '@angular/material/slider';
 import { GridService } from '@app/services/drawing/grid.service';
 
@@ -7,7 +7,7 @@ import { GridService } from '@app/services/drawing/grid.service';
     templateUrl: './grid-config.component.html',
     styleUrls: ['./grid-config.component.scss'],
 })
-export class GridConfigComponent implements OnInit {
+export class GridConfigComponent {
     readonly MIN_SIZE: number = 25;
     readonly MAX_SIZE: number = 75;
 
@@ -15,10 +15,6 @@ export class GridConfigComponent implements OnInit {
     readonly MAX_OPACITY: number = 60;
 
     constructor(public gridService: GridService) {}
-
-    ngOnInit(): void {
-        //
-    }
 
     colorSliderLabel(value: number): string {
         return value + '';
