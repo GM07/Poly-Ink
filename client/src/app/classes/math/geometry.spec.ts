@@ -35,13 +35,13 @@ describe('Geometry', () => {
     });
 
     it('verifies if it is a point', () => {
-        let point: Vec2[] = {} as Vec2[];
+        let point: Vec2[] = [];
         expect(Geometry.isAPoint(point)).toBeFalsy();
-        point = [{ x: 1, y: 1 }] as Vec2[];
+        point = [new Vec2(1,1)];
         expect(Geometry.isAPoint(point)).toBeTruthy();
-        point = [new Vec2(1, 1), new Vec2(1, 1)] as Vec2[];
+        point = [new Vec2(1, 1), new Vec2(1, 1)];
         expect(Geometry.isAPoint(point)).toBeTruthy();
-        point = [new Vec2(1, 1), new Vec2(1, 2)] as Vec2[];
+        point = [new Vec2(1, 1), new Vec2(1, 2)];
         expect(Geometry.isAPoint(point)).toBeFalsy();
     });
 
