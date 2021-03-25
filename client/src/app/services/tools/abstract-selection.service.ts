@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Geometry } from '@app/classes/math/geometry';
 import { SelectionTranslation } from '@app/classes/selection/selection-translation';
-import { ShiftKey } from '@app/classes/shortcut/shift-key';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
@@ -15,11 +14,10 @@ import { ColorService } from 'src/color-picker/services/color.service';
     providedIn: 'root',
 })
 export abstract class AbstractSelectionService extends Tool {
-    protected readonly LINE_DASH: number = 8;
-    protected readonly BORDER_WIDTH: number = 2;
     private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
     private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
-    protected readonly SHIFT: ShortcutKey = new ShiftKey();
+    protected readonly LINE_DASH: number = 8;
+    protected readonly BORDER_WIDTH: number = 2;
     protected selectionData: HTMLCanvasElement;
     protected selectionTranslation: SelectionTranslation;
 
@@ -51,8 +49,6 @@ export abstract class AbstractSelectionService extends Tool {
         this.leftMouseDown = event.button === MouseButton.Left;
         if (this.leftMouseDown) {
             const mousePos = this.getPositionFromMouse(event);
-            // document.body.style.width = this.bodyWidth;
-            // document.body.style.height = this.bodyHeight;
             this.selectionTranslation.stopDrawing();
             this.endSelection();
             this.updatePoints.next(false);
@@ -95,8 +91,8 @@ export abstract class AbstractSelectionService extends Tool {
         } else if (this.SELECT_ALL.equals(event) && !this.leftMouseDown) {
             event.preventDefault();
             this.selectAll();
-        } else if (this.SHIFT.equals(event)) {
-            this.config.shiftDown = true;
+        } else if (this.config.shift.equals(event)) {
+            this.config.shift.isDown = true;
             if (this.leftMouseDown && this.config.selectionCtx === null) {
                 this.updateDrawingSelection();
             }
@@ -105,8 +101,8 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if (this.SHIFT.equals(event)) {
-            this.config.shiftDown = false;
+        if (this.config.shift.equals(event)) {
+            this.config.shift.isDown = false;
             if (this.leftMouseDown && this.config.selectionCtx === null) {
                 this.updateDrawingSelection();
             }
@@ -134,7 +130,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.drawingService.unblockUndoRedo();
         this.endSelection();
         this.leftMouseDown = false;
-        this.config.shiftDown = false;
+        this.config.shift.isDown = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
 
         this.selectionTranslation.stopDrawing();

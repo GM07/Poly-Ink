@@ -50,7 +50,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
 
     protected drawPreviewSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
-        if (this.config.shiftDown) {
+        if (this.config.shift.isDown) {
             this.config.height = Math.sign(this.config.height) * Math.min(Math.abs(this.config.width), Math.abs(this.config.height));
             this.config.width = Math.sign(this.config.width) * Math.abs(this.config.height);
         }

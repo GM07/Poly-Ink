@@ -25,7 +25,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         let radiusX: number = this.config.width / 2;
         let radiusY: number = this.config.height / 2;
         this.center = { x: this.mouseDownCoord.x + radiusX, y: this.mouseDownCoord.y + radiusY };
-        if (this.config.shiftDown) {
+        if (this.config.shift.isDown) {
             const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
             this.center.x = this.mouseDownCoord.x + Math.sign(radiusX) * minRadius;
             this.center.y = this.mouseDownCoord.y + Math.sign(radiusY) * minRadius;
