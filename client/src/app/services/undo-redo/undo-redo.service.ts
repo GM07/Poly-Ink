@@ -16,19 +16,19 @@ export class UndoRedoService {
 
     originalCanvas: HTMLCanvasElement;
 
-    blockUndoRedo: boolean = true;
+    blockUndoRedo: boolean;
 
-    commands: AbstractDraw[] = [];
-    currentAction: number = this.initialActionPosition;
+    commands: AbstractDraw[];
+    currentAction: number;
 
     constructor() {
         this.shortcutRedo = new ShortcutKey('z', true, true, false);
         this.shortcutUndo = new ShortcutKey('z', true);
+        this.reset();
     }
 
     init(context: CanvasRenderingContext2D, preview: CanvasRenderingContext2D, originalResize: ResizeDraw): void {
-        this.commands = [];
-        this.currentAction = this.initialActionPosition;
+        this.reset();
 
         this.originalResize = originalResize;
         this.preview = preview;
@@ -75,5 +75,11 @@ export class UndoRedoService {
     onKeyDown(event: KeyboardEvent): void {
         if (this.shortcutRedo.equals(event)) this.redo();
         else if (this.shortcutUndo.equals(event)) this.undo();
+    }
+
+    reset(): void {
+        this.blockUndoRedo = true;
+        this.commands = [];
+        this.currentAction = this.initialActionPosition;
     }
 }

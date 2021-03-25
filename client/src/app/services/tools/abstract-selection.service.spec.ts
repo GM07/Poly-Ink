@@ -253,6 +253,12 @@ describe('AbstractSelectionService', () => {
         expect(service.getPositionFromMouse).not.toHaveBeenCalled();
     });
 
+    it('should reset the arrow keys', () => {
+        service['LEFT_ARROW'].isDown = true;
+        service['resetArrowKeys']();
+        expect(service['LEFT_ARROW'].isDown).toBeFalsy();
+    });
+
     it('should clear the translation interval for the arrow keys', () => {
         service['clearArrowKeys']();
         expect(service['moveId']).toEqual(service['DEFAULT_MOVE_ID']);
