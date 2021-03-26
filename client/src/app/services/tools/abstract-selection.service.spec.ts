@@ -145,11 +145,20 @@ describe('AbstractSelectionService', () => {
         expect(startMouseTranslationSpy).toHaveBeenCalled();
     });
 
+    it('should resize on mouse move', () => {
+        service['selectionResize'].resizeSelected = true;
+        const resizeSpy = spyOn(service['selectionResize'], 'resize');
+        service.onMouseMove(mouseEvent);
+        expect(resizeSpy).toHaveBeenCalled();
+    });
+
     it('should initialise subscriptions', () => {
         const drawingServiceSubscribe = spyOn(service['drawingService'].changes, 'subscribe');
         const selectionTranslationSubscribe = spyOn(service['selectionTranslation'].updateSelectionRequest, 'subscribe');
+        const selectionResizeSubscribe = spyOn(service['selectionResize'].updateSelectionRequest, 'subscribe');
         service['initSubscriptions']();
         expect(drawingServiceSubscribe).toHaveBeenCalled();
         expect(selectionTranslationSubscribe).toHaveBeenCalled();
+        expect(selectionResizeSubscribe).toHaveBeenCalled();
     });
 });

@@ -17,7 +17,7 @@ export class SelectionResize {
     resizeSelected: boolean;
     updateSelectionRequest: Subject<Vec2>;
 
-    constructor(config: SelectionConfig, private drawingService: DrawingService) {
+    constructor(config: SelectionConfig) {
         this.config = config;
         this.oppositeSide = { x: 0, y: 0 } as Vec2;
         this.resizeOrigin = { x: 0, y: 0 } as Vec2;
@@ -38,10 +38,8 @@ export class SelectionResize {
         this.lockHorizontal = false;
     }
 
-    resize(event: MouseEvent): void {
-        const mousePos = this.getPositionFromMouse(event);
-
-        if (this.config.selectionCtx === null) return;
+    resize(mousePos: Vec2): void {
+        if (this.config.selectionCtx === null || this.memoryCanvas == undefined) return;
         const translation = this.getTranslation(mousePos);
         const newSize = this.getNewSize(translation);
 
@@ -54,67 +52,65 @@ export class SelectionResize {
             this.flipVertical();
         }
 
-        if (this.memoryCanvas !== undefined) {
-            this.config.width = newSize.x;
-            this.config.height = newSize.y;
-            const canvas = this.config.selectionCtx.canvas;
-            canvas.width = newSize.x;
-            canvas.height = newSize.y;
-            this.config.selectionCtx.drawImage(this.memoryCanvas, 0, 0, newSize.x, newSize.y);
-            this.updateSelectionRequest.next(this.getTranslationForResize(mousePos));
-        }
+        this.config.width = newSize.x;
+        this.config.height = newSize.y;
+        const canvas = this.config.selectionCtx.canvas;
+        canvas.width = newSize.x;
+        canvas.height = newSize.y;
+        this.config.selectionCtx.drawImage(this.memoryCanvas, 0, 0, newSize.x, newSize.y);
+        this.updateSelectionRequest.next(this.getTranslationForResize(mousePos));
 
         this.resizeOrigin.x += translation.x;
         this.resizeOrigin.y += translation.y;
     }
 
-    topLeftResize(event: MouseEvent): void {
+    topLeftResize(): void {
         const resizeOriginOffset = { x: 0, y: 0 } as Vec2;
         const oppositeSideOffset = { x: Math.abs(this.config.width), y: Math.abs(this.config.height) } as Vec2;
         this.initResize(resizeOriginOffset, oppositeSideOffset);
     }
 
-    topMiddleResize(event: MouseEvent): void {
+    topMiddleResize(): void {
         const resizeOriginOffset = { x: Math.abs(this.config.width / 2), y: 0 } as Vec2;
         const oppositeSideOffset = { x: Math.abs(this.config.width / 2), y: Math.abs(this.config.height) } as Vec2;
         this.initResize(resizeOriginOffset, oppositeSideOffset);
         this.lockHorizontal = true;
     }
 
-    topRightResize(event: MouseEvent): void {
+    topRightResize(): void {
         const resizeOriginOffset = { x: Math.abs(this.config.width), y: 0 } as Vec2;
         const oppositeSideOffset = { x: 0, y: Math.abs(this.config.height) } as Vec2;
         this.initResize(resizeOriginOffset, oppositeSideOffset);
     }
 
-    middleLeftResize(event: MouseEvent): void {
+    middleLeftResize(): void {
         const resizeOriginOffset = { x: 0, y: Math.abs(this.config.height / 2) } as Vec2;
         const oppositeSideOffset = { x: Math.abs(this.config.width), y: Math.abs(this.config.height / 2) } as Vec2;
         this.initResize(resizeOriginOffset, oppositeSideOffset);
         this.lockVertical = true;
     }
 
-    middleRightResize(event: MouseEvent): void {
+    middleRightResize(): void {
         const resizeOriginOffset = { x: Math.abs(this.config.width), y: Math.abs(this.config.height / 2) } as Vec2;
         const oppositeSideOffset = { x: 0, y: Math.abs(this.config.height / 2) } as Vec2;
         this.initResize(resizeOriginOffset, oppositeSideOffset);
         this.lockVertical = true;
     }
 
-    bottomLeftResize(event: MouseEvent): void {
+    bottomLeftResize(): void {
         const resizeOriginOffset = { x: 0, y: Math.abs(this.config.height) } as Vec2;
         const oppositeSideOffset = { x: Math.abs(this.config.width), y: 0 } as Vec2;
         this.initResize(resizeOriginOffset, oppositeSideOffset);
     }
 
-    bottomMiddleResize(event: MouseEvent): void {
+    bottomMiddleResize(): void {
         const resizeOriginOffset = { x: Math.abs(this.config.width / 2), y: Math.abs(this.config.height) } as Vec2;
         const oppositeSideOffset = { x: Math.abs(this.config.width / 2), y: 0 } as Vec2;
         this.initResize(resizeOriginOffset, oppositeSideOffset);
         this.lockHorizontal = true;
     }
 
-    bottomRightResize(event: MouseEvent): void {
+    bottomRightResize(): void {
         const resizeOriginOffset = { x: Math.abs(this.config.width), y: Math.abs(this.config.height) } as Vec2;
         const oppositeSideOffset = { x: 0, y: 0 } as Vec2;
         this.initResize(resizeOriginOffset, oppositeSideOffset);
@@ -141,12 +137,12 @@ export class SelectionResize {
 
         const tempCanvas = document.createElement('canvas');
         DrawingService.saveCanvas(tempCanvas, this.memoryCanvas);
-        this.config.scaleFactor.x = this.FLIP_IMAGE_FACTOR;
+        this.config.scaleFactor.x *= this.FLIP_IMAGE_FACTOR;
 
         const ctx = this.memoryCanvas.getContext('2d') as CanvasRenderingContext2D;
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.save();
-        ctx.scale(-1, 1);
+        ctx.scale(this.FLIP_IMAGE_FACTOR, 1);
         ctx.drawImage(tempCanvas, -tempCanvas.width, 0);
         ctx.restore();
     }
@@ -155,12 +151,12 @@ export class SelectionResize {
         if (this.config.selectionCtx === null || this.memoryCanvas === undefined) return;
         const tempCanvas = document.createElement('canvas');
         DrawingService.saveCanvas(tempCanvas, this.memoryCanvas);
-        this.config.scaleFactor.y = this.FLIP_IMAGE_FACTOR;
+        this.config.scaleFactor.y *= this.FLIP_IMAGE_FACTOR;
 
         const ctx = this.memoryCanvas.getContext('2d') as CanvasRenderingContext2D;
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.save();
-        ctx.scale(1, -1);
+        ctx.scale(1, this.FLIP_IMAGE_FACTOR);
         ctx.drawImage(tempCanvas, 0, -tempCanvas.height);
         ctx.restore();
     }
@@ -214,13 +210,6 @@ export class SelectionResize {
             x: translationX,
             y: translationY,
         } as Vec2;
-    }
-
-    private getPositionFromMouse(event: MouseEvent): Vec2 {
-        const clientRect = this.drawingService.canvas.getBoundingClientRect();
-        const borderValue: string = window.getComputedStyle(this.drawingService.canvas).getPropertyValue('border-left-width');
-        const border = Number(borderValue.substring(0, borderValue.length - 2));
-        return { x: event.clientX - clientRect.x - border, y: event.clientY - clientRect.y - border };
     }
 
     private getNewSize(translation: Vec2): Vec2 {

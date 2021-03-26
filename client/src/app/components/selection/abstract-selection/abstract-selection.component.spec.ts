@@ -108,17 +108,11 @@ describe('AbstractSelectionComponent', () => {
 
     it('init point should initialise the control points', () => {
         const placePoints = spyOn<any>(component, 'placePoints');
-        const startResizeSpy = spyOn<any>(component, 'startResize');
-        const endResizeSpy = spyOn<any>(component, 'endResize');
         component.displayControlPoints = true;
         fixture.detectChanges();
         component['initPoints']();
         expect(placePoints).toHaveBeenCalled();
         expect(component['controlPointList'].length).toBeGreaterThan(0);
-        component['topLeft'].nativeElement.dispatchEvent(new Event('mousedown'));
-        component['topLeft'].nativeElement.dispatchEvent(new Event('mouseup'));
-        expect(startResizeSpy).toHaveBeenCalled();
-        expect(endResizeSpy).toHaveBeenCalled();
     });
 
     it('place points should set all 8 points', () => {
@@ -183,15 +177,5 @@ describe('AbstractSelectionComponent', () => {
         const placePoints = spyOn<any>(component, 'placePoints');
         abstractSelectionService.updatePoints.next(false);
         expect(placePoints).not.toHaveBeenCalled();
-    });
-
-    it('should start the resize', () => {
-        component['startResize']();
-        expect(component['resizeSelected']).toBeTruthy();
-    });
-
-    it('should end the resize', () => {
-        component['endResize']();
-        expect(component['resizeSelected']).toBeFalsy();
     });
 });

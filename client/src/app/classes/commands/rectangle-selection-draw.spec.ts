@@ -26,7 +26,9 @@ describe('RectangleDraw', () => {
         rectangleSelectionDraw['config'].startCoords = { x: 0, y: 0 };
         rectangleSelectionDraw['config'].endCoords = { x: 15, y: 15 };
         rectangleSelectionDraw['config'].height = 10;
+        rectangleSelectionDraw['config'].originalHeight = 10;
         rectangleSelectionDraw['config'].width = 10;
+        rectangleSelectionDraw['config'].originalWidth = 10;
 
         ctxStub.canvas.width = 100;
         ctxStub.canvas.height = 100;
@@ -86,5 +88,19 @@ describe('RectangleDraw', () => {
 
         expect(rectangleSelectionDraw['fillBackground']).toHaveBeenCalled();
         expect(rectangleSelectionDraw['saveSelectionToCanvas']).toHaveBeenCalled();
+    });
+
+    it('should use the scaling factor when saving the selection to the canvas', () => {
+        rectangleSelectionDraw['config'].scaleFactor = { x: -1, y: -1 } as Vec2;
+        spyOn(ctxStub, 'getImageData').and.callThrough();
+        let canvas = rectangleSelectionDraw['saveSelectionToCanvas'](ctxStub);
+        expect(canvas).not.toBeUndefined();
+        rectangleSelectionDraw['config'].scaleFactor = { x: 1, y: -1 } as Vec2;
+        canvas = rectangleSelectionDraw['saveSelectionToCanvas'](ctxStub);
+        expect(canvas).not.toBeUndefined();
+        rectangleSelectionDraw['config'].scaleFactor = { x: -1, y: 1 } as Vec2;
+        canvas = rectangleSelectionDraw['saveSelectionToCanvas'](ctxStub);
+        expect(ctxStub.getImageData).toHaveBeenCalledTimes(3);
+        expect(canvas).not.toBeUndefined();
     });
 });

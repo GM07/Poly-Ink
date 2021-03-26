@@ -31,7 +31,7 @@ export abstract class AbstractSelectionService extends Tool {
         super(drawingService, colorService);
         this.config = new SelectionConfig();
         this.selectionTranslation = new SelectionTranslation(this.config);
-        this.selectionResize = new SelectionResize(this.config, drawingService);
+        this.selectionResize = new SelectionResize(this.config);
         this.selectionData = document.createElement('canvas');
         this.config.endCoords = { x: 0, y: 0 } as Vec2;
         this.initSubscriptions();
@@ -78,7 +78,7 @@ export abstract class AbstractSelectionService extends Tool {
 
     onMouseMove(event: MouseEvent): void {
         if (this.resizeSelected) {
-            this.selectionResize.resize(event);
+            this.selectionResize.resize(this.getPositionFromMouse(event));
         } else if (this.leftMouseDown) {
             this.setMouseUpCoord(event);
             if (this.config.selectionCtx === null) {

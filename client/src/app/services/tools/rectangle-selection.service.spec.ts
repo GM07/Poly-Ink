@@ -204,8 +204,9 @@ describe('RectangleSelectionService', () => {
     });
 
     it('end selection should do nothing if there is no selection', () => {
-        service['endSelection']();
+        spyOn(service.config, 'didChange').and.returnValue(false);
         const fillBackground = spyOn<any>(service, 'fillBackground');
+        service['endSelection']();
         expect(fillBackground).not.toHaveBeenCalled();
     });
 
@@ -218,6 +219,7 @@ describe('RectangleSelectionService', () => {
     });
 
     it('fill background should fill a rectangle at the location', () => {
+        spyOn(service.config, 'didChange').and.returnValue(true);
         service.config.startCoords = { x: 0, y: 0 } as Vec2;
         spyOn(previewCtxStub, 'fillRect');
         service['fillBackground'](previewCtxStub, { x: 10, y: 25 } as Vec2);
@@ -266,8 +268,9 @@ describe('RectangleSelectionService', () => {
         expect(baseCtxStub.setLineDash).toHaveBeenCalledTimes(2);
     });
 
-    it("fill background should do nothing if the mouse hasn't move", () => {
+    it('fill background should do nothing if the mouse has not moved', () => {
         service.config.startCoords = { x: 0, y: 0 };
+        spyOn(service.config, 'didChange').and.returnValue(false);
         spyOn(previewCtxStub, 'beginPath');
         service['fillBackground'](previewCtxStub, { x: 0, y: 0 } as Vec2);
         expect(previewCtxStub.beginPath).not.toHaveBeenCalled();

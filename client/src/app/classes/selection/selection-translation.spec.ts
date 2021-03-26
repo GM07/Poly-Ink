@@ -17,6 +17,11 @@ describe('SelectionTranslation', () => {
         selectionTranslation = new SelectionTranslation(selectionConfig);
     });
 
+    it('should be created', () => {
+        expect(selectionConfig).toBeTruthy();
+        expect(selectionTranslation).toBeTruthy();
+    })
+
     it('get translation should return the current translation', () => {
         const mousePos = { x: 25, y: 25 } as Vec2;
         selectionTranslation['translationOrigin'] = { x: 25, y: 25 } as Vec2;

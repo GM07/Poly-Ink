@@ -26,7 +26,9 @@ describe('EllipseDraw', () => {
         ellipseSelectionDraw['config'].startCoords = { x: 0, y: 0 };
         ellipseSelectionDraw['config'].endCoords = { x: 15, y: 15 };
         ellipseSelectionDraw['config'].height = 10;
+        ellipseSelectionDraw['config'].originalHeight = 10;
         ellipseSelectionDraw['config'].width = 10;
+        ellipseSelectionDraw['config'].originalWidth = 10;
 
         ctxStub.canvas.width = 100;
         ctxStub.canvas.height = 100;
@@ -86,5 +88,19 @@ describe('EllipseDraw', () => {
 
         expect(ellipseSelectionDraw['fillBackground']).toHaveBeenCalled();
         expect(ellipseSelectionDraw['saveSelectionToCanvas']).toHaveBeenCalled();
+    });
+
+    it('should use the scaling factor when saving the selection to the canvas', () => {
+        ellipseSelectionDraw['config'].scaleFactor = { x: -1, y: -1 } as Vec2;
+        spyOn(ctxStub, 'getImageData').and.callThrough();
+        let canvas = ellipseSelectionDraw['saveSelectionToCanvas'](ctxStub);
+        expect(canvas).not.toBeUndefined();
+        ellipseSelectionDraw['config'].scaleFactor = { x: 1, y: -1 } as Vec2;
+        canvas = ellipseSelectionDraw['saveSelectionToCanvas'](ctxStub);
+        expect(canvas).not.toBeUndefined();
+        ellipseSelectionDraw['config'].scaleFactor = { x: -1, y: 1 } as Vec2;
+        canvas = ellipseSelectionDraw['saveSelectionToCanvas'](ctxStub);
+        expect(ctxStub.getImageData).toHaveBeenCalledTimes(3);
+        expect(canvas).not.toBeUndefined();
     });
 });
