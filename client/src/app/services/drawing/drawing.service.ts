@@ -5,6 +5,7 @@ import { ResizeConfig } from '@app/classes/tool-config/resize-config';
 import { GridService } from '@app/services/drawing/grid.service';
 import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 import { Subject } from 'rxjs';
+import { MagnetismService } from './magnetism.service';
 
 @Injectable({
     providedIn: 'root',
@@ -18,7 +19,7 @@ export class DrawingService {
     changes: Subject<void>;
     loadedCanvas: HTMLCanvasElement | undefined;
 
-    constructor(private undoRedoService: UndoRedoService, public gridService: GridService) {
+    constructor(private undoRedoService: UndoRedoService, public gridService: GridService, public magnetismService: MagnetismService) {
         this.changes = new Subject();
         this.loadedCanvas = undefined;
     }

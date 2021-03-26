@@ -28,7 +28,7 @@ export abstract class AbstractSelectionService extends Tool {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.config = new SelectionConfig();
-        this.selectionTranslation = new SelectionTranslation(this.config);
+        this.selectionTranslation = new SelectionTranslation(this.config, this.drawingService.magnetismService);
         this.selectionData = document.createElement('canvas');
         this.config.endCoords = { x: 0, y: 0 } as Vec2;
         this.initSubscriptions();

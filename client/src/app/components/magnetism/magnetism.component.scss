@@ -1,0 +1,38 @@
+.box-selection{
+  width: 125px;
+  height: 250px;
+  border: 2px dotted black;
+  margin-left: 30px;
+}
+
+.magnetism-selection{
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  position: absolute;
+  border: 1px solid black;
+}
+
+.north{
+ margin-top: -5px;
+}
+
+.east{
+  margin-left: 120px;
+}
+
+.south{
+  margin-top: 245px;
+}
+
+.west{
+  margin-left: -5px;
+}
+
+.xCenter{
+  margin-left: 57px;
+}
+
+.yCenter{
+  margin-top: 122px;
+}

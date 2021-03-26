@@ -22,7 +22,7 @@ export class SelectionTranslation {
 
     updateSelectionRequest: Subject<Vec2>;
 
-    constructor(config: SelectionConfig, magnetismService: MagnetismService) {
+    constructor(config: SelectionConfig, private magnetismService: MagnetismService) {
         this.bodyWidth = document.body.style.width;
         this.bodyHeight = document.body.style.height;
         this.config = config;
@@ -38,9 +38,10 @@ export class SelectionTranslation {
                 if (event.repeat) return;
 
                 this.setArrowKeyDown(event);
-                this.sendUpdateSelectionRequest({
-                    x: this.TRANSLATION_PIXELS * this.HorizontalTranslationModifier(),
-                    y: this.TRANSLATION_PIXELS * this.VerticalTranslationModifier(),
+                this.sendUpdateSelectionRequest(
+                {
+                    x: this.HorizontalTranslationModifier(),
+                    y: this.VerticalTranslationModifier(),
                 } as Vec2);
 
                 this.startArrowKeyTranslation();
@@ -57,19 +58,20 @@ export class SelectionTranslation {
 
     onMouseUp(mouseUpCoord: Vec2): void {
         if (this.config.selectionCtx !== null) {
-            this.sendUpdateSelectionRequest(this.getTranslation(mouseUpCoord));
+            this.sendUpdateSelectionRequest(this.getTranslation(this.magnetismService.getGridPosition(
+              mouseUpCoord, new Vec2(this.config.width, this.config.height))));
         }
     }
 
     onMouseMove(event: MouseEvent, mouseUpCoord: Vec2): void {
         if (this.config.selectionCtx !== null) {
-            this.sendUpdateSelectionRequest(this.getTranslation(mouseUpCoord));
-            document.body.style.width = event.pageX + this.config.width + 'px';
-            document.body.style.height = event.pageY + this.config.height + 'px';
+            let translation = this.getTranslation(this.magnetismService.getGridPosition(mouseUpCoord, new Vec2(this.config.width, this.config.height)));
+            this.sendUpdateSelectionRequest(translation);
         }
     }
 
     startMouseTranslation(mousePosition: Vec2): void {
+        this.magnetismService.distance = new Vec2(mousePosition.x - (this.config.endCoords.x), mousePosition.y - (this.config.endCoords.y));
         this.translationOrigin = mousePosition;
     }
 
@@ -111,8 +113,8 @@ export class SelectionTranslation {
                     this.moveId = window.setInterval(() => {
                         this.clearArrowKeys();
                         this.sendUpdateSelectionRequest({
-                            x: this.TRANSLATION_PIXELS * this.HorizontalTranslationModifier(),
-                            y: this.TRANSLATION_PIXELS * this.VerticalTranslationModifier(),
+                            x: this.HorizontalTranslationModifier(),
+                            y: this.VerticalTranslationModifier(),
                         } as Vec2);
                     }, this.NEXT_MOVES_TIMEOUT);
             }, this.FIRST_MOVE_TIMEOUT);
@@ -141,10 +143,16 @@ export class SelectionTranslation {
     }
 
     private HorizontalTranslationModifier(): number {
-        return +this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown;
+      if(this.magnetismService.isEnabled){
+        return (this.magnetismService.gridService.size - this.config.endCoords.x%this.magnetismService.gridService.size - this.magnetismService.gridService.size) + (+this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown) * this.magnetismService.gridService.size;
+      } else
+        return (+this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown) * this.TRANSLATION_PIXELS;
     }
 
     private VerticalTranslationModifier(): number {
-        return +this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown;
+      if(this.magnetismService.isEnabled)
+        return (this.magnetismService.gridService.size - this.config.endCoords.y%this.magnetismService.gridService.size - this.magnetismService.gridService.size) + (+this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown) * this.magnetismService.gridService.size;
+      else
+        return (+this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown) * this.TRANSLATION_PIXELS;
     }
 }

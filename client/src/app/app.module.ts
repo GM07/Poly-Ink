@@ -47,6 +47,7 @@ import { RectangleConfigComponent } from './components/tool-config/rectangle-con
 import { RectangleSelectionConfigComponent } from './components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
 import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
 import { SidebarDirective } from './directives/sidebar.directive';
+import { MagnetismComponent } from './components/magnetism/magnetism.component';
 
 @NgModule({
     declarations: [
@@ -81,6 +82,7 @@ import { SidebarDirective } from './directives/sidebar.directive';
         SaveDrawingComponent,
         SidebarDirective,
         GridConfigComponent,
+        MagnetismComponent,
     ],
     imports: [
         AppRoutingModule,
