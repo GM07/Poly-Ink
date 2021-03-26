@@ -161,4 +161,12 @@ describe('AbstractSelectionService', () => {
         expect(selectionTranslationSubscribe).toHaveBeenCalled();
         expect(selectionResizeSubscribe).toHaveBeenCalled();
     });
+
+    it('should call the appropriate subscribed methods', () => {
+        const updateSelectionSpy = spyOn<any>(service, 'updateSelection');
+        service['drawingService'].changes.next();
+        service['selectionTranslation'].updateSelectionRequest.next({ x: 0, y: 0 } as Vec2);
+        service['selectionResize'].updateSelectionRequest.next({ x: 0, y: 0 } as Vec2);
+        expect(updateSelectionSpy).toHaveBeenCalledTimes(3);
+    });
 });

@@ -66,6 +66,10 @@ describe('SelectionResize', () => {
     });
 
     it('should determine if it can flip', () => {
+        selectionResize['resizeOrigin'] = { x: 0, y: 0 } as Vec2;
+        mousePosition = { x: 2, y: 2 } as Vec2;
+        expect(selectionResize['shouldFlipHorizontally'](mousePosition)).toBeTruthy();
+        expect(selectionResize['shouldFlipVertically'](mousePosition)).toBeTruthy();
         selectionResize['lockHorizontal'] = true;
         selectionResize['lockVertical'] = true;
         expect(selectionResize['shouldFlipHorizontally'](mousePosition)).toBeFalsy();
@@ -124,6 +128,12 @@ describe('SelectionResize', () => {
         expect(selectionResize['getTranslationForResize'](mousePosition)).toEqual({ x: 0, y: 0 } as Vec2);
     });
 
+    it('should not modify the translation for a resize if it is not needed', () => {
+        selectionResize['resizeOrigin'] = { x: 2, y: 2 } as Vec2;
+        mousePosition = { x: 2, y: 2 } as Vec2;
+        expect(selectionResize['getTranslationForResize'](mousePosition)).toEqual({ x: 0, y: 0 } as Vec2);
+    });
+
     it('should initialize the memory canvas only if it was undefined before', () => {
         spyOn(DrawingService, 'saveCanvas');
         selectionResize['initResize']({ x: 0, y: 0 } as Vec2, { x: 0, y: 0 } as Vec2);
@@ -131,6 +141,14 @@ describe('SelectionResize', () => {
         selectionResize['memoryCanvas'] = undefined;
         selectionResize['initResize']({ x: 0, y: 0 } as Vec2, { x: 0, y: 0 } as Vec2);
         expect(DrawingService.saveCanvas).toHaveBeenCalled();
+    });
+
+    it('should not initialise if there are no drawings', () => {
+        spyOn(DrawingService, 'saveCanvas');
+        selectionResize['config'].selectionCtx = null;
+        selectionResize['memoryCanvas'] = undefined;
+        selectionResize['initResize']({ x: 0, y: 0 } as Vec2, { x: 0, y: 0 } as Vec2);
+        expect(DrawingService.saveCanvas).not.toHaveBeenCalled();
     });
 
     it('should get the translation', () => {
@@ -141,5 +159,8 @@ describe('SelectionResize', () => {
 
     it('should get the new size', () => {
         getNewSizeSpy.and.callThrough();
+        mousePosition = { x: 2, y: 2 } as Vec2;
+        selectionResize['oppositeSide'] = { x: 1, y: 1 } as Vec2;
+        expect(selectionResize['getNewSize'](mousePosition)).toEqual({ x: 1, y: 1 } as Vec2);
     });
 });

@@ -40,9 +40,8 @@ export class SelectionResize {
 
     resize(mousePos: Vec2): void {
         if (this.config.selectionCtx === null || this.memoryCanvas == undefined) return;
-        const translation = this.getTranslation(mousePos);
-        const newSize = this.getNewSize(translation);
 
+        const newSize = this.getNewSize(mousePos);
         if (Geometry.roundTowardsZero(newSize.x) === 0 || Geometry.roundTowardsZero(newSize.y) === 0) return;
 
         if (this.shouldFlipHorizontally(mousePos)) {
@@ -60,6 +59,7 @@ export class SelectionResize {
         this.config.selectionCtx.drawImage(this.memoryCanvas, 0, 0, newSize.x, newSize.y);
         this.updateSelectionRequest.next(this.getTranslationForResize(mousePos));
 
+        const translation = this.getTranslation(mousePos);
         this.resizeOrigin.x += translation.x;
         this.resizeOrigin.y += translation.y;
     }
@@ -212,10 +212,10 @@ export class SelectionResize {
         } as Vec2;
     }
 
-    private getNewSize(translation: Vec2): Vec2 {
+    private getNewSize(mousePos: Vec2): Vec2 {
         return {
-            x: Math.abs(Math.abs(this.config.width) - translation.x * Math.sign(this.oppositeSide.x - this.resizeOrigin.x)),
-            y: Math.abs(Math.abs(this.config.height) - translation.y * Math.sign(this.oppositeSide.y - this.resizeOrigin.y)),
+            x: Math.abs(mousePos.x - this.oppositeSide.x),
+            y: Math.abs(mousePos.y - this.oppositeSide.y),
         } as Vec2;
     }
 }
