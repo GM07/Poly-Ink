@@ -1,11 +1,11 @@
+import { Geometry } from '@app/classes/math/geometry';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
+import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
-import { Geometry } from '../math/geometry';
-import { Vec2 } from '../vec2';
 
 export class SelectionResize {
-    private readonly FLIP_IMAGE_FACTOR = -1;
+    private readonly FLIP_IMAGE_FACTOR: number = -1;
 
     private config: SelectionConfig;
     private oppositeSide: Vec2;
@@ -28,7 +28,7 @@ export class SelectionResize {
         this.lockHorizontal = false;
     }
 
-    stopDrawing() {
+    stopDrawing(): void {
         this.oppositeSide = { x: 0, y: 0 } as Vec2;
         this.resizeOrigin = { x: 0, y: 0 } as Vec2;
         this.config.scaleFactor = { x: 1, y: 1 } as Vec2;
