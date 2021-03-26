@@ -29,12 +29,11 @@ export class RectangleSelectionService extends AbstractSelectionService {
     }
 
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {
-        if (this.config.startCoords.x !== currentPos.x || this.config.startCoords.y !== currentPos.y) {
-            ctx.beginPath();
-            ctx.fillStyle = 'white';
-            ctx.fillRect(this.config.startCoords.x, this.config.startCoords.y, Math.abs(this.config.width), Math.abs(this.config.height));
-            ctx.closePath();
-        }
+        if (!this.config.didChange()) return;
+        ctx.beginPath();
+        ctx.fillStyle = 'white';
+        ctx.fillRect(this.config.startCoords.x, this.config.startCoords.y, Math.abs(this.config.originalWidth), Math.abs(this.config.originalHeight));
+        ctx.closePath();
     }
 
     protected updateSelectionRequired(): void {

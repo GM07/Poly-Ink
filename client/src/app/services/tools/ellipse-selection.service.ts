@@ -11,9 +11,6 @@ import { ColorService } from 'src/color-picker/services/color.service';
     providedIn: 'root',
 })
 export class EllipseSelectionService extends AbstractSelectionService {
-    private center: Vec2;
-    private radiusAbs: Vec2;
-
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(EllipseSelectionToolConstants.SHORTCUT_KEY);
@@ -24,20 +21,18 @@ export class EllipseSelectionService extends AbstractSelectionService {
         const ctx = this.drawingService.previewCtx;
         let radiusX: number = this.config.width / 2;
         let radiusY: number = this.config.height / 2;
-        this.center = { x: this.mouseDownCoord.x + radiusX, y: this.mouseDownCoord.y + radiusY };
+        const center = { x: this.mouseDownCoord.x + radiusX, y: this.mouseDownCoord.y + radiusY };
         if (this.config.shift.isDown) {
             const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
-            this.center.x = this.mouseDownCoord.x + Math.sign(radiusX) * minRadius;
-            this.center.y = this.mouseDownCoord.y + Math.sign(radiusY) * minRadius;
             radiusX = minRadius;
             radiusY = minRadius;
         }
 
-        this.radiusAbs = { x: Math.abs(radiusX), y: Math.abs(radiusY) };
-        this.config.width = 2 * this.radiusAbs.x * Math.sign(this.config.width);
-        this.config.height = 2 * this.radiusAbs.y * Math.sign(this.config.height);
+        const radiusAbs = { x: Math.abs(radiusX), y: Math.abs(radiusY) };
+        this.config.width = 2 * radiusAbs.x * Math.sign(this.config.width);
+        this.config.height = 2 * radiusAbs.y * Math.sign(this.config.height);
 
-        this.drawSelection(ctx, this.center, this.radiusAbs);
+        this.drawSelection(ctx, center, radiusAbs);
     }
 
     protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void {
@@ -67,30 +62,36 @@ export class EllipseSelectionService extends AbstractSelectionService {
     }
 
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {
-        if (this.config.startCoords.x !== currentPos.x || this.config.startCoords.y !== currentPos.y) {
-            ctx.beginPath();
-            ctx.fillStyle = 'white';
-            ctx.ellipse(this.center.x, this.center.y, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.closePath();
-        }
+        if (!this.config.didChange()) return;
+        const radiusX = Math.abs(this.config.originalWidth / 2);
+        const radiusY = Math.abs(this.config.originalHeight / 2);
+        const centerX = this.config.startCoords.x + radiusX;
+        const centerY = this.config.startCoords.y + radiusY;
+
+        ctx.beginPath();
+        ctx.fillStyle = 'white';
+        ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.closePath();
     }
 
     protected updateSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
-        const centerX = this.config.endCoords.x + Math.abs(this.config.width / 2);
-        const centerY = this.config.endCoords.y + Math.abs(this.config.height / 2);
+        const radiusX = Math.abs(this.config.width / 2);
+        const radiusY = Math.abs(this.config.height / 2);
+        const centerX = this.config.endCoords.x + radiusX;
+        const centerY = this.config.endCoords.y + radiusY;
 
         this.fillBackground(ctx, this.config.endCoords);
 
         ctx.beginPath();
         ctx.save();
-        ctx.ellipse(centerX, centerY, this.radiusAbs.x, this.radiusAbs.y, 0, 0, 2 * Math.PI);
+        ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
         ctx.clip();
         ctx.drawImage(this.selectionData, this.config.endCoords.x, this.config.endCoords.y);
         ctx.restore();
-        this.drawSelection(ctx, { x: centerX, y: centerY } as Vec2, this.radiusAbs);
+        this.drawSelection(ctx, { x: centerX, y: centerY } as Vec2, { x: radiusX, y: radiusY } as Vec2);
     }
 
     protected endSelection(): void {

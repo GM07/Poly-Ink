@@ -30,14 +30,13 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
     private readonly DESIRED_ZINDEX: number = 3;
 
     private controlPointList: ElementRef<HTMLElement>[];
-    private resizeSelected: boolean;
     private selectionSelected: boolean;
     private isInSidebar: boolean;
     private updateSubscription: Subscription;
     displayControlPoints: boolean;
 
     constructor(
-        protected selectionService: AbstractSelectionService,
+        public selectionService: AbstractSelectionService,
         protected drawingService: DrawingService,
         private cd: ChangeDetectorRef,
         private selectionEvents: SelectionEventsService,
@@ -57,7 +56,6 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
         this.isInSidebar = false;
         this.selectionSelected = false;
         this.displayControlPoints = false;
-        this.resizeSelected = false;
     }
 
     ngOnDestroy(): void {
@@ -75,7 +73,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
 
     onMouseUp(): void {
         this.selectionSelected = false;
-        this.resizeSelected = false;
+        this.selectionService.resizeSelected = false;
         if (this.displayControlPoints) {
             this.makeControlsSelectable();
         }
@@ -84,7 +82,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
 
     confirmSelection(event: MouseEvent): void {
         const canConfirmSelection =
-            !this.resizeSelected &&
+            !this.selectionService.resizeSelected &&
             !this.selectionSelected &&
             !this.shortcutHandlerService.blockShortcuts &&
             !this.isInSidebar &&
@@ -94,14 +92,6 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
         if (canConfirmSelection) {
             this.selectionService.stopDrawing();
         }
-    }
-
-    private startResize(): void {
-        this.resizeSelected = true;
-    }
-
-    private endResize(): void {
-        this.resizeSelected = false;
     }
 
     private updateControlPointDisplay(display: boolean): void {
@@ -128,11 +118,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
         this.placePoints();
 
         this.controlPointContainer.nativeElement.style.zIndex = this.DESIRED_ZINDEX.toString();
-        this.resizeSelected = false;
-        for (const element of this.controlPointList) {
-            element.nativeElement.onmousedown = () => this.startResize();
-            element.nativeElement.onmouseup = () => this.endResize();
-        }
+        this.selectionService.resizeSelected = false;
     }
 
     private placePoints(): void {
