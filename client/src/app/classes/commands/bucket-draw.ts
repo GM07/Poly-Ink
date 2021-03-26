@@ -37,42 +37,10 @@ export class BucketDraw extends AbstractDraw {
 
         this.getOriginalPixel(context);
 
-        if (this.config.contiguous) this.floodFill(context);
-        else this.spanFill(context);
+        if (this.config.contiguous) this.spanFill(context);
+        else this.pixelFill();
 
         context.putImageData(this.pixels, 0, 0);
-    }
-
-    private floodFill(context: CanvasRenderingContext2D) {
-        const width = context.canvas.width;
-        const height = context.canvas.height;
-
-        this.visited = new Array<boolean>(width * height).fill(false);
-
-        const startIndex = (this.config.point.x + this.config.point.y * width) * this.DataPerPixel;
-        this.queue.push(startIndex);
-
-        while (this.queue.length > 0) {
-            const pos = this.queue.pop() as number;
-
-            if (this.shouldFill(pos)) {
-                this.setPixel(pos);
-                this.visited[Math.floor(pos >> 2)] = true;
-
-                //Takes canvas borders into consideration
-                if (((pos + 4) >> 2) % width !== 0) {
-                    this.addAdjacent(pos + 4);
-                }
-
-                //Takes canvas borders into consideration
-                if (((pos - 4) >> 2) % width !== width - 1) {
-                    this.addAdjacent(pos - 4);
-                }
-
-                this.addAdjacent(pos + width * this.DataPerPixel);
-                this.addAdjacent(pos - width * this.DataPerPixel);
-            }
-        }
     }
 
     // Span Filling Algorithm from : https://en.wikipedia.org/wiki/Flood_fill
