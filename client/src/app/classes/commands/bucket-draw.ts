@@ -1,11 +1,18 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { BucketConfig } from './../tool-config/bucket-config';
+
+interface spanData {
+    x1: number;
+    x2: number;
+    dx: number;
+}
 export class BucketDraw extends AbstractDraw {
     private config: BucketConfig;
     private queue: number[];
+    private scanQueue: spanData[];
+    private visited: boolean[];
     private originalPixel: Uint8ClampedArray;
-    private fillPixel: Uint8ClampedArray;
     private pixels: ImageData;
 
     private readonly MaxColorDifference = Math.pow(255, 2) * 3;
@@ -18,54 +25,120 @@ export class BucketDraw extends AbstractDraw {
         super(colorService);
         this.config = config.clone();
         this.queue = [];
+        this.scanQueue = [];
         this.originalPixel = new Uint8ClampedArray(this.DataPerPixel);
+
+        this.config.point.x = Math.floor(this.config.point.x);
+        this.config.point.y = Math.floor(this.config.point.y);
     }
 
     execute(context: CanvasRenderingContext2D): void {
         this.pixels = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
 
-        this.config.point.x = Math.floor(this.config.point.x);
-        this.config.point.y = Math.floor(this.config.point.y);
-
-        this.setupFillPixel();
         this.getOriginalPixel(context);
 
         if (this.config.contiguous) this.floodFill(context);
-        else this.pixelFill(context);
+        else this.spanFill(context);
 
         context.putImageData(this.pixels, 0, 0);
     }
 
     private floodFill(context: CanvasRenderingContext2D) {
         const width = context.canvas.width;
+        const height = context.canvas.height;
+
+        this.visited = new Array<boolean>(width * height).fill(false);
+
         const startIndex = (this.config.point.x + this.config.point.y * width) * this.DataPerPixel;
         this.queue.push(startIndex);
-        this.fillPixel[3] = 0;
 
         while (this.queue.length > 0) {
             const pos = this.queue.pop() as number;
 
-            const pixel = this.pixels.data.subarray(pos, pos + this.DataPerPixel);
+            if (this.shouldFill(pos)) {
+                this.setPixel(pos);
+                this.visited[Math.floor(pos >> 2)] = true;
 
-            if (this.shouldFill(pixel) && this.isNotAlreadyFilled(pixel)) {
-                this.pixels.data.set(this.fillPixel, pos);
-                this.addAdjacent(pos + 4);
-                this.addAdjacent(pos - 4);
+                //Takes canvas borders into consideration
+                if (((pos + 4) >> 2) % width !== 0) {
+                    this.addAdjacent(pos + 4);
+                }
+
+                //Takes canvas borders into consideration
+                if (((pos - 4) >> 2) % width !== width - 1) {
+                    this.addAdjacent(pos - 4);
+                }
+
                 this.addAdjacent(pos + width * this.DataPerPixel);
                 this.addAdjacent(pos - width * this.DataPerPixel);
             }
         }
+    }
 
-        for (let i = 3; i < this.pixels.data.length; i += this.DataPerPixel) {
-            this.pixels.data[i] = 255;
+    // Span Filling Algorithm from : https://en.wikipedia.org/wiki/Flood_fill
+    private spanFill(context: CanvasRenderingContext2D) {
+        const width = context.canvas.width;
+        const dx = width * this.DataPerPixel;
+        const height = context.canvas.height;
+
+        this.visited = new Array<boolean>(width * height).fill(false);
+        const startIndex = (this.config.point.x + this.config.point.y * width) * this.DataPerPixel;
+
+        this.scanQueue.push({ x1: startIndex, x2: startIndex, dx: dx });
+        this.scanQueue.push({ x1: startIndex - dx, x2: startIndex - dx, dx: -dx });
+
+        while (this.scanQueue.length > 0) {
+            const spanData = this.scanQueue.pop() as spanData;
+            let x = spanData.x1;
+
+            if (this.shouldFill(x)) {
+                // Considers canvas border as edges
+                while ((x >> 2) % width !== 0 && this.shouldFill(x - this.DataPerPixel)) {
+                    this.setPixel(x - this.DataPerPixel);
+                    this.visited[(x - this.DataPerPixel) >> 2] = true;
+                    x -= this.DataPerPixel;
+                }
+            }
+
+            if (x < spanData.x1) {
+                this.scanQueue.push({ x1: x - spanData.dx, x2: spanData.x1 - this.DataPerPixel - spanData.dx, dx: -spanData.dx });
+            }
+
+            while (spanData.x1 < spanData.x2) {
+                while (this.shouldFill(spanData.x1)) {
+                    this.setPixel(spanData.x1);
+                    this.visited[spanData.x1 >> 2] = true;
+
+                    // Considers canvas border as edges
+                    if ((spanData.x1 >> 2) % width !== width - 1) {
+                        spanData.x1 += this.DataPerPixel;
+                    }
+                }
+
+                this.scanQueue.push({ x1: x + spanData.dx, x2: spanData.x1 - this.DataPerPixel + spanData.dx, dx: spanData.dx });
+
+                if (spanData.x1 - this.DataPerPixel > spanData.x2) {
+                    this.scanQueue.push({
+                        x1: spanData.x2 + this.DataPerPixel - spanData.dx,
+                        x2: spanData.x1 - this.DataPerPixel - spanData.dx,
+                        dx: -spanData.dx,
+                    });
+                }
+
+                // Considers canvas border as edges
+                while (spanData.x1 < spanData.x2 && !this.shouldFill(spanData.x1) && (spanData.x1 >> 2) % width !== width - 1) {
+                    spanData.x1 += this.DataPerPixel;
+                }
+
+                x = spanData.x1;
+            }
         }
     }
 
-    private pixelFill(context: CanvasRenderingContext2D) {
+    private pixelFill() {
         for (let i = 0; i < this.pixels.data.length; i += this.DataPerPixel) {
-            const pixel = this.pixels.data.subarray(i, i + this.DataPerPixel);
-            if (this.shouldFill(pixel)) {
-                this.pixels.data.set(this.fillPixel, i);
+            if (this.shouldFill(i)) {
+                this.setPixel(i);
             }
         }
     }
@@ -75,12 +148,15 @@ export class BucketDraw extends AbstractDraw {
         this.queue.push(pos);
     }
 
-    private isNotAlreadyFilled(pixel: Uint8ClampedArray): boolean {
-        return pixel[3] !== 0;
-    }
+    private shouldFill(pos: number): boolean {
+        //Pixel is out of bounds
+        if (pos < 0 || pos > this.pixels.data.length - 4) return false;
 
-    private shouldFill(pixel: Uint8ClampedArray): boolean {
+        //Pixel has been visited
+        if (this.visited[pos >> 2]) return false;
+
         //TODO Implement perceptually accurate difference: https://en.wikipedia.org/wiki/Color_difference
+        const pixel = this.pixels.data.subarray(pos, pos + this.DataPerPixel);
 
         const deltaR2 = Math.pow(pixel[this.R] - this.originalPixel[this.R], 2);
         const deltaG2 = Math.pow(pixel[this.G] - this.originalPixel[this.G], 2);
@@ -92,8 +168,14 @@ export class BucketDraw extends AbstractDraw {
         return colorDifference <= toleratedColorDifference;
     }
 
-    private setupFillPixel(): void {
-        this.fillPixel = new Uint8ClampedArray([this.primary.r, this.primary.g, this.primary.b, 255]);
+    private setPixel(pos: number): void {
+        const previousPixel = this.pixels.data.subarray(pos, pos + this.DataPerPixel);
+
+        const R = this.primary.r * this.primaryAlpha + (1 - this.primaryAlpha) * previousPixel[this.R];
+        const G = this.primary.g * this.primaryAlpha + (1 - this.primaryAlpha) * previousPixel[this.G];
+        const B = this.primary.b * this.primaryAlpha + (1 - this.primaryAlpha) * previousPixel[this.B];
+
+        this.pixels.data.set([R, G, B], pos);
     }
 
     private getOriginalPixel(context: CanvasRenderingContext2D): void {
