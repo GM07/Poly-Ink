@@ -115,15 +115,26 @@ describe('AbstractSelectionService', () => {
         expect(updateSpy).toHaveBeenCalled();
     });
 
-    it('pressing shift should do nothing if selection is not null', () => {
+    it('pressing shift should update the selection', () => {
         service.leftMouseDown = true;
-        const keyboardEventDown = new KeyboardEvent('keydown', { shiftKey: true });
-        const keyboardEventUp = new KeyboardEvent('keydown', { shiftKey: false });
+        const keyboardEventDown = new KeyboardEvent('keydown', { key: 'shift', shiftKey: true });
+        const keyboardEventUp = new KeyboardEvent('keydown', { key: 'shift', shiftKey: false });
         spyOn<any>(service, 'updateDrawingSelection');
         service['config'].selectionCtx = canvasSelection.getContext('2d');
         service.onKeyDown(keyboardEventDown);
         service.onKeyUp(keyboardEventUp);
         expect(service['updateDrawingSelection']).not.toHaveBeenCalled();
+    });
+
+    it('pressing shift should update the resize', () => {
+        service.resizeSelected = true;
+        service['config'].selectionCtx = canvasSelection.getContext('2d');
+        const keyboardEventDown = new KeyboardEvent('keydown', { key: 'shift', shiftKey: true });
+        const keyboardEventUp = new KeyboardEvent('keydown', { key: 'shift', shiftKey: false });
+        const resizeSpy = spyOn(service['selectionResize'], 'resize');
+        service.onKeyDown(keyboardEventDown);
+        service.onKeyUp(keyboardEventUp);
+        expect(resizeSpy).toHaveBeenCalledTimes(2);
     });
 
     it('key down should do nothing on invalid key', () => {

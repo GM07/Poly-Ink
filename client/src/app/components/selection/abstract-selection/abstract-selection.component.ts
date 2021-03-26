@@ -30,7 +30,6 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
     private readonly DESIRED_ZINDEX: number = 3;
 
     private controlPointList: ElementRef<HTMLElement>[];
-    private selectionSelected: boolean;
     private isInSidebar: boolean;
     private updateSubscription: Subscription;
     displayControlPoints: boolean;
@@ -54,7 +53,6 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
         this.selectionEvents.onMouseEnterEvent.subscribe(() => (this.isInSidebar = true));
         this.selectionEvents.onMouseLeaveEvent.subscribe(() => (this.isInSidebar = false));
         this.isInSidebar = false;
-        this.selectionSelected = false;
         this.displayControlPoints = false;
     }
 
@@ -63,8 +61,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.selectionSelected = event.button === MouseButton.Left;
-        if (!this.isInSidebar && this.selectionSelected) {
+        if (!this.isInSidebar && event.button === MouseButton.Left) {
             this.makeControlsUnselectable();
             this.selectionService.startMouseTranslation(event);
         }
@@ -72,7 +69,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
     }
 
     onMouseUp(): void {
-        this.selectionSelected = false;
+        this.selectionService.leftMouseDown = false;
         this.selectionService.resizeSelected = false;
         if (this.displayControlPoints) {
             this.makeControlsSelectable();
@@ -83,7 +80,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
     confirmSelection(event: MouseEvent): void {
         const canConfirmSelection =
             !this.selectionService.resizeSelected &&
-            !this.selectionSelected &&
+            !this.selectionService.leftMouseDown &&
             !this.shortcutHandlerService.blockShortcuts &&
             !this.isInSidebar &&
             this.selectionService.config.selectionCtx !== null &&

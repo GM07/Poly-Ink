@@ -78,6 +78,7 @@ export abstract class AbstractSelectionService extends Tool {
 
     onMouseMove(event: MouseEvent): void {
         if (this.resizeSelected) {
+            this.setMouseUpCoord(event);
             this.selectionResize.resize(this.getPositionFromMouse(event));
         } else if (this.leftMouseDown) {
             this.setMouseUpCoord(event);
@@ -101,6 +102,8 @@ export abstract class AbstractSelectionService extends Tool {
             this.config.shift.isDown = true;
             if (this.leftMouseDown && this.config.selectionCtx === null) {
                 this.updateDrawingSelection();
+            } else if (this.selectionResize.resizeSelected && !event.repeat) {
+                this.selectionResize.resize(this.mouseUpCoord);
             }
         }
         this.selectionTranslation.onKeyDown(event, this.leftMouseDown);
@@ -111,6 +114,8 @@ export abstract class AbstractSelectionService extends Tool {
             this.config.shift.isDown = false;
             if (this.leftMouseDown && this.config.selectionCtx === null) {
                 this.updateDrawingSelection();
+            } else if (this.selectionResize.resizeSelected) {
+                this.selectionResize.resize(this.mouseUpCoord);
             }
         }
         this.selectionTranslation.onKeyUp(event);

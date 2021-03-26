@@ -38,8 +38,10 @@ export class SelectionResize {
         this.lockHorizontal = false;
     }
 
-    resize(mousePos: Vec2): void {
+    resize(mousePosIn: Vec2): void {
         if (this.config.selectionCtx === null || this.memoryCanvas == undefined) return;
+
+        const mousePos = this.adaptMousePosition(mousePosIn);
 
         const newSize = this.getNewSize(mousePos);
         if (Math.abs(newSize.x) < this.MINIMUM_RESIZE_SIZE || Math.abs(newSize.y) < this.MINIMUM_RESIZE_SIZE) return;
@@ -54,9 +56,9 @@ export class SelectionResize {
         this.config.width = newSize.x;
         this.config.height = newSize.y;
         const canvas = this.config.selectionCtx.canvas;
-        canvas.width = newSize.x;
-        canvas.height = newSize.y;
-        this.config.selectionCtx.drawImage(this.memoryCanvas, 0, 0, newSize.x, newSize.y);
+        canvas.width = Math.abs(newSize.x);
+        canvas.height = Math.abs(newSize.y);
+        this.config.selectionCtx.drawImage(this.memoryCanvas, 0, 0, Math.abs(newSize.x), Math.abs(newSize.y));
         this.updateSelectionRequest.next(this.getTranslationForResize(mousePos));
 
         const translation = this.getTranslation(mousePos);
@@ -114,6 +116,19 @@ export class SelectionResize {
         const resizeOriginOffset = { x: Math.abs(this.config.width), y: Math.abs(this.config.height) } as Vec2;
         const oppositeSideOffset = { x: 0, y: 0 } as Vec2;
         this.initResize(resizeOriginOffset, oppositeSideOffset);
+    }
+
+    private adaptMousePosition(mousePos: Vec2): Vec2 {
+        if (this.config.shift.isDown) {
+            const distanceX = mousePos.x - this.oppositeSide.x;
+            const distanceY = mousePos.y - this.oppositeSide.y;
+            const smallestDistance = Math.min(Math.abs(distanceX), Math.abs(distanceY));
+            const returnedX = this.oppositeSide.x + Math.sign(distanceX) * smallestDistance;
+            const returnedY = this.oppositeSide.y + Math.sign(distanceY) * smallestDistance;
+            return { x: returnedX, y: returnedY };
+        } else {
+            return mousePos;
+        }
     }
 
     private shouldFlipHorizontally(mousePos: Vec2): boolean {
@@ -214,8 +229,8 @@ export class SelectionResize {
 
     private getNewSize(mousePos: Vec2): Vec2 {
         return {
-            x: this.lockHorizontal ? this.config.width : Math.abs(mousePos.x - this.oppositeSide.x),
-            y: this.lockVertical ? this.config.height : Math.abs(mousePos.y - this.oppositeSide.y),
+            x: this.lockHorizontal ? this.config.width : mousePos.x - this.oppositeSide.x,
+            y: this.lockVertical ? this.config.height : mousePos.y - this.oppositeSide.y,
         } as Vec2;
     }
 }

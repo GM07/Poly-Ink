@@ -173,4 +173,12 @@ describe('SelectionResize', () => {
             y: selectionResize['config'].height,
         } as Vec2);
     });
+
+    it('should adapt the mouse position', () => {
+        selectionResize['config'].shift.isDown = false;
+        expect(selectionResize['adaptMousePosition'](mousePosition)).toEqual(mousePosition);
+        selectionResize['config'].shift.isDown = true;
+        mousePosition = { x: 1, y: 2 };
+        expect(selectionResize['adaptMousePosition'](mousePosition)).toEqual({ x: 1, y: 1 } as Vec2);
+    });
 });
