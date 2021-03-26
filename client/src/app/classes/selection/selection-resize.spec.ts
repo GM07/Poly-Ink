@@ -163,4 +163,14 @@ describe('SelectionResize', () => {
         selectionResize['oppositeSide'] = { x: 1, y: 1 } as Vec2;
         expect(selectionResize['getNewSize'](mousePosition)).toEqual({ x: 1, y: 1 } as Vec2);
     });
+
+    it('should not get the new size if the resize is locked', () => {
+        getNewSizeSpy.and.callThrough();
+        selectionResize['lockHorizontal'] = true;
+        selectionResize['lockVertical'] = true;
+        expect(selectionResize['getNewSize'](mousePosition)).toEqual({
+            x: selectionResize['config'].width,
+            y: selectionResize['config'].height,
+        } as Vec2);
+    });
 });

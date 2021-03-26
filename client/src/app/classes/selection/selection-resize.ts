@@ -1,4 +1,3 @@
-import { Geometry } from '@app/classes/math/geometry';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -6,6 +5,7 @@ import { Subject } from 'rxjs';
 
 export class SelectionResize {
     private readonly FLIP_IMAGE_FACTOR: number = -1;
+    private readonly MINIMUM_RESIZE_SIZE: number = 1;
 
     private config: SelectionConfig;
     private oppositeSide: Vec2;
@@ -42,7 +42,7 @@ export class SelectionResize {
         if (this.config.selectionCtx === null || this.memoryCanvas == undefined) return;
 
         const newSize = this.getNewSize(mousePos);
-        if (Geometry.roundTowardsZero(newSize.x) === 0 || Geometry.roundTowardsZero(newSize.y) === 0) return;
+        if (Math.abs(newSize.x) < this.MINIMUM_RESIZE_SIZE || Math.abs(newSize.y) < this.MINIMUM_RESIZE_SIZE) return;
 
         if (this.shouldFlipHorizontally(mousePos)) {
             this.flipHorizontal();
@@ -167,19 +167,19 @@ export class SelectionResize {
         let finalY = 0;
         if (!this.lockHorizontal) {
             if (this.resizeOrigin.x < this.oppositeSide.x) {
-                const maxTranslation = this.oppositeSide.x - this.resizeOrigin.x - 1;
+                const maxTranslation = this.oppositeSide.x - this.resizeOrigin.x - this.MINIMUM_RESIZE_SIZE;
                 finalX = translation.x > maxTranslation ? maxTranslation : translation.x;
             } else if (mousePos.x < this.oppositeSide.x) {
-                finalX = mousePos.x - this.oppositeSide.x + 1;
+                finalX = mousePos.x - this.oppositeSide.x + this.MINIMUM_RESIZE_SIZE;
             }
         }
 
         if (!this.lockVertical) {
             if (this.resizeOrigin.y < this.oppositeSide.y) {
-                const maxTranslation = this.oppositeSide.y - this.resizeOrigin.y - 1;
+                const maxTranslation = this.oppositeSide.y - this.resizeOrigin.y - this.MINIMUM_RESIZE_SIZE;
                 finalY = translation.y > maxTranslation ? maxTranslation : translation.y;
             } else if (mousePos.y < this.oppositeSide.y) {
-                finalY = mousePos.y - this.oppositeSide.y + 1;
+                finalY = mousePos.y - this.oppositeSide.y + this.MINIMUM_RESIZE_SIZE;
             }
         }
 
@@ -214,8 +214,8 @@ export class SelectionResize {
 
     private getNewSize(mousePos: Vec2): Vec2 {
         return {
-            x: Math.abs(mousePos.x - this.oppositeSide.x),
-            y: Math.abs(mousePos.y - this.oppositeSide.y),
+            x: this.lockHorizontal ? this.config.width : Math.abs(mousePos.x - this.oppositeSide.x),
+            y: this.lockVertical ? this.config.height : Math.abs(mousePos.y - this.oppositeSide.y),
         } as Vec2;
     }
 }
