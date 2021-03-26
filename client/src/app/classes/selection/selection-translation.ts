@@ -71,7 +71,7 @@ export class SelectionTranslation {
     }
 
     startMouseTranslation(mousePosition: Vec2): void {
-        this.magnetismService.distance = new Vec2(mousePosition.x - (this.config.endCoords.x), mousePosition.y - (this.config.endCoords.y));
+        this.magnetismService.setDistanceVector(mousePosition, this.config.endCoords, new Vec2(this.config.width, this.config.height));
         this.translationOrigin = mousePosition;
     }
 
@@ -144,14 +144,14 @@ export class SelectionTranslation {
 
     private HorizontalTranslationModifier(): number {
       if(this.magnetismService.isEnabled){
-        return (this.magnetismService.gridService.size - this.config.endCoords.x%this.magnetismService.gridService.size - this.magnetismService.gridService.size) + (+this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown) * this.magnetismService.gridService.size;
+        return this.magnetismService.getXKeyAjustement(this.config.endCoords.x, this.config.width) + (+this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown) * this.magnetismService.gridService.size;
       } else
         return (+this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown) * this.TRANSLATION_PIXELS;
     }
 
     private VerticalTranslationModifier(): number {
       if(this.magnetismService.isEnabled)
-        return (this.magnetismService.gridService.size - this.config.endCoords.y%this.magnetismService.gridService.size - this.magnetismService.gridService.size) + (+this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown) * this.magnetismService.gridService.size;
+        return this.magnetismService.getYKeyAjustement(this.config.endCoords.y, this.config.height) + (+this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown) * this.magnetismService.gridService.size;
       else
         return (+this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown) * this.TRANSLATION_PIXELS;
     }
