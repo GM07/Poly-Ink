@@ -42,7 +42,11 @@ export class EditorComponent {
         }
     }
 
-    constructor(public shortcutHandler: ShortcutHandlerService, private undoRedoService: UndoRedoService, private magnetismService: MagnetismService) {}
+    constructor(
+        public shortcutHandler: ShortcutHandlerService,
+        private undoRedoService: UndoRedoService,
+        private magnetismService: MagnetismService,
+    ) {}
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {

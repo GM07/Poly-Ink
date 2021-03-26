@@ -27,6 +27,7 @@ import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { ExportDrawingComponent } from './components/export-drawing/export-drawing.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { MagnetismComponent } from './components/magnetism/magnetism.component';
 import { SaveDrawingComponent } from './components/save-drawing/save-drawing.component';
 import { AbstractSelectionComponent } from './components/selection/abstract-selection/abstract-selection.component';
 import { EllipseSelectionComponent } from './components/selection/ellipse-selection/ellipse-selection.component';
@@ -47,7 +48,6 @@ import { RectangleConfigComponent } from './components/tool-config/rectangle-con
 import { RectangleSelectionConfigComponent } from './components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
 import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
 import { SidebarDirective } from './directives/sidebar.directive';
-import { MagnetismComponent } from './components/magnetism/magnetism.component';
 
 @NgModule({
     declarations: [

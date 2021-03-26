@@ -1,8 +1,8 @@
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
-import { Subject } from 'rxjs';
 import { MagnetismService } from '@app/services/drawing/magnetism.service';
+import { Subject } from 'rxjs';
 
 export class SelectionTranslation {
     private readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
@@ -38,8 +38,7 @@ export class SelectionTranslation {
                 if (event.repeat) return;
 
                 this.setArrowKeyDown(event);
-                this.sendUpdateSelectionRequest(
-                {
+                this.sendUpdateSelectionRequest({
                     x: this.HorizontalTranslationModifier(),
                     y: this.VerticalTranslationModifier(),
                 } as Vec2);
@@ -58,14 +57,17 @@ export class SelectionTranslation {
 
     onMouseUp(mouseUpCoord: Vec2): void {
         if (this.config.selectionCtx !== null) {
-            this.sendUpdateSelectionRequest(this.getTranslation(this.magnetismService.getGridPosition(
-              mouseUpCoord, new Vec2(this.config.width, this.config.height))));
+            this.sendUpdateSelectionRequest(
+                this.getTranslation(this.magnetismService.getGridPosition(mouseUpCoord, new Vec2(this.config.width, this.config.height))),
+            );
         }
     }
 
     onMouseMove(event: MouseEvent, mouseUpCoord: Vec2): void {
         if (this.config.selectionCtx !== null) {
-            let translation = this.getTranslation(this.magnetismService.getGridPosition(mouseUpCoord, new Vec2(this.config.width, this.config.height)));
+            const translation = this.getTranslation(
+                this.magnetismService.getGridPosition(mouseUpCoord, new Vec2(this.config.width, this.config.height)),
+            );
             this.sendUpdateSelectionRequest(translation);
         }
     }
@@ -143,16 +145,20 @@ export class SelectionTranslation {
     }
 
     private HorizontalTranslationModifier(): number {
-      if(this.magnetismService.isEnabled){
-        return this.magnetismService.getXKeyAjustement(this.config.endCoords.x, this.config.width) + (+this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown) * this.magnetismService.gridService.size;
-      } else
-        return (+this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown) * this.TRANSLATION_PIXELS;
+        if (this.magnetismService.isEnabled) {
+            return (
+                this.magnetismService.getXKeyAjustement(this.config.endCoords.x, this.config.width) +
+                (+this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown) * this.magnetismService.gridService.size
+            );
+        } else return (+this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown) * this.TRANSLATION_PIXELS;
     }
 
     private VerticalTranslationModifier(): number {
-      if(this.magnetismService.isEnabled)
-        return this.magnetismService.getYKeyAjustement(this.config.endCoords.y, this.config.height) + (+this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown) * this.magnetismService.gridService.size;
-      else
-        return (+this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown) * this.TRANSLATION_PIXELS;
+        if (this.magnetismService.isEnabled)
+            return (
+                this.magnetismService.getYKeyAjustement(this.config.endCoords.y, this.config.height) +
+                (+this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown) * this.magnetismService.gridService.size
+            );
+        else return (+this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown) * this.TRANSLATION_PIXELS;
     }
 }

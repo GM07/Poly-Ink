@@ -22,7 +22,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
     protected drawPreviewSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
-        let radius: Vec2 = new Vec2(this.config.width/2, this.config.height/2);
+        const radius: Vec2 = new Vec2(this.config.width / 2, this.config.height / 2);
         this.center = new Vec2(this.mouseDownCoord.x + radius.x, this.mouseDownCoord.y + radius.y);
         if (this.config.shift.isDown) {
             const minRadius = Math.min(Math.abs(radius.x), Math.abs(radius.y));

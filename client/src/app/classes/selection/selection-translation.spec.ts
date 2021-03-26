@@ -187,10 +187,10 @@ describe('SelectionTranslation', () => {
         selectionTranslation['config'].selectionCtx = null;
         const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
         spyOn<any>(selectionTranslation, 'getTranslation');
-        selectionTranslation.onMouseUp(new Vec2(0,0));
+        selectionTranslation.onMouseUp(new Vec2(0, 0));
         expect(updateSelection).not.toHaveBeenCalled();
         selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
-        selectionTranslation.onMouseUp(new Vec2(0,0));
+        selectionTranslation.onMouseUp(new Vec2(0, 0));
         expect(updateSelection).toHaveBeenCalled();
     });
 });
