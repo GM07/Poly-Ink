@@ -119,7 +119,7 @@ export class SelectionResize {
     }
 
     private adaptMousePosition(mousePos: Vec2): Vec2 {
-        if (this.config.shift.isDown) {
+        if (this.config.shift.isDown && !this.lockHorizontal && !this.lockVertical) {
             const distanceX = mousePos.x - this.oppositeSide.x;
             const distanceY = mousePos.y - this.oppositeSide.y;
             const smallestDistance = Math.min(Math.abs(distanceX), Math.abs(distanceY));
