@@ -43,11 +43,11 @@ export abstract class AbstractSelectionService extends Tool {
         super(drawingService, colorService);
         this.SELECTION_DATA = document.createElement('canvas');
         this.selectionCtx = null;
-        this.config.endCoords = { x: 0, y: 0 } as Vec2;
-        this.translationOrigin = { x: 0, y: 0 } as Vec2;
+        this.config.endCoords = new Vec2(0, 0);
+        this.translationOrigin = new Vec2(0, 0);
         this.moveId = this.DEFAULT_MOVE_ID;
         this.drawingService.changes.subscribe(() => {
-            this.updateSelection({ x: 0, y: 0 } as Vec2);
+            this.updateSelection(new Vec2(0, 0));
         });
         this.bodyWidth = document.body.style.width;
         this.bodyHeight = document.body.style.height;

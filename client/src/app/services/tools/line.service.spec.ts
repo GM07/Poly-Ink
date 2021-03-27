@@ -202,7 +202,7 @@ describe('LineService', () => {
     });
 
     it('should call correct function when Shift key is pressed', () => {
-        service.config.points.push({ x: 100, y: 100 } as Vec2);
+        service.config.points.push(new Vec2(100, 100));
         const handleShift = spyOn<any>(service, 'handleShiftKey');
         service['handleKeys'](service['SHIFT']);
         expect(handleShift).toHaveBeenCalled();
