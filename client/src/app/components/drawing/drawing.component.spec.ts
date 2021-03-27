@@ -3,6 +3,7 @@ import { Tool } from '@app/classes/tool';
 import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { GridService } from '@app/services/drawing/grid.service';
+import { MagnetismService } from '@app/services/drawing/magnetism.service';
 import { PencilService } from '@app/services/tools/pencil.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { DrawingComponent } from './drawing.component';
@@ -22,22 +23,22 @@ describe('DrawingComponent', () => {
 
     beforeEach(async(() => {
         toolStub = new ToolStub({} as DrawingService, {} as ColorService);
-        gridService = new GridService();
         const undoRedoServiceSpy = jasmine.createSpyObj('UndoRedoService', ['init', 'saveCommand', 'undo', 'redo', 'isPreviewEmpty', 'onKeyDown']);
-        drawingStub = new DrawingService(undoRedoServiceSpy, gridService);
+        const magnetismService = new MagnetismService(new GridService());
+        drawingStub = new DrawingService(undoRedoServiceSpy, magnetismService);
 
         TestBed.configureTestingModule({
             declarations: [DrawingComponent],
             providers: [
                 { provide: PencilService, useValue: toolStub },
                 { provide: DrawingService, useValue: drawingStub },
-                { provide: GridService, useValue: gridService },
             ],
         }).compileComponents();
     }));
 
     beforeEach(() => {
         fixture = TestBed.createComponent(DrawingComponent);
+        gridService = TestBed.inject(GridService);
         component = fixture.componentInstance;
         fixture.detectChanges();
         spyOn(gridService, 'updateGrid');
@@ -128,6 +129,7 @@ describe('DrawingComponent', () => {
 
     it('should upsize the grid on key down with =', () => {
         const event = { key: '=', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
+        spyOn(drawingStub, 'clearCanvas');
         component.onKeyDown(event);
         expect(gridService.updateGrid).toHaveBeenCalled();
         expect(gridService.upsizeGrid).toHaveBeenCalled();
@@ -135,6 +137,7 @@ describe('DrawingComponent', () => {
 
     it('should downsize the grid on key down with -', () => {
         const event = { key: '-', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
+        spyOn(drawingStub, 'clearCanvas');
         component.onKeyDown(event);
         expect(gridService.updateGrid).toHaveBeenCalled();
         expect(gridService.downsizeGrid).toHaveBeenCalled();

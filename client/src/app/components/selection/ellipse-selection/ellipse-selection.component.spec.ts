@@ -11,8 +11,8 @@ describe('EllipseSelectionComponent', () => {
 
     beforeEach(async(() => {
         const undoRedoServiceSpy = jasmine.createSpyObj('UndoRedoService', ['init', 'saveCommand', 'undo', 'redo', 'isPreviewEmpty', 'onKeyDown']);
-        const gridServiceSPy = jasmine.createSpyObj('GridService', ['updateGrid']);
-        service = new DrawingService(undoRedoServiceSpy, gridServiceSPy);
+        const magnetismServiceSpy = jasmine.createSpyObj('MagnetismService', ['getGridPosition']);
+        service = new DrawingService(undoRedoServiceSpy, magnetismServiceSpy);
         TestBed.configureTestingModule({
             declarations: [EllipseSelectionComponent],
             providers: [{ provide: DrawingService, useValue: service }],

@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { GridService } from '@app/services/drawing/grid.service';
+import { MagnetismService } from '@app/services/drawing/magnetism.service';
 import { SelectionEventsService } from '@app/services/selection/selection-events.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
 import { AbstractSelectionComponent } from './abstract-selection.component';
@@ -22,8 +24,7 @@ describe('AbstractSelectionComponent', () => {
 
     beforeEach(async(() => {
         const undoRedoServiceSpy = jasmine.createSpyObj('UndoRedoService', ['init', 'saveCommand', 'undo', 'redo', 'isPreviewEmpty', 'onKeyDown']);
-        const gridServiceSpy = jasmine.createSpyObj('GridService', ['updateGrid']);
-        drawService = new DrawingService(undoRedoServiceSpy, gridServiceSpy);
+        drawService = new DrawingService(undoRedoServiceSpy, new MagnetismService(new GridService()));
         TestBed.configureTestingModule({
             declarations: [AbstractSelectionComponent],
             providers: [AbstractSelectionService, { provide: DrawingService, useValue: drawService }, SelectionEventsService],
@@ -79,6 +80,7 @@ describe('AbstractSelectionComponent', () => {
     it('should change translationOrigin when mouseDown and inSelection', () => {
         spyOn(abstractSelectionService, 'getPositionFromMouse');
         spyOn<any>(component, 'makeControlsUnselectable');
+        spyOn(drawService.magnetismService, 'setDistanceVector');
         component.onMouseDown(mouseEvent);
         expect(abstractSelectionService.getPositionFromMouse).toHaveBeenCalled();
     });

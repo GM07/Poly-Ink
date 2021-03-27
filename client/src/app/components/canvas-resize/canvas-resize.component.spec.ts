@@ -6,6 +6,8 @@ import { RectangleSelectionComponent } from '@app/components/selection/rectangle
 import { SelectionHandlerComponent } from '@app/components/selection/selection-handler/selection-handler.component';
 import { CanvasConst } from '@app/constants/canvas.ts';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { GridService } from '@app/services/drawing/grid.service';
+import { MagnetismService } from '@app/services/drawing/magnetism.service';
 import { CanvasResizeComponent } from './canvas-resize.component';
 
 describe('CanvasResizeComponent', () => {
@@ -16,8 +18,7 @@ describe('CanvasResizeComponent', () => {
 
     beforeEach(async(() => {
         const undoRedoServiceSpy = jasmine.createSpyObj('UndoRedoService', ['init', 'saveCommand', 'undo', 'redo', 'isPreviewEmpty', 'onKeyDown']);
-        const gridServiceSpy = jasmine.createSpyObj('GridService', ['updateGrid']);
-        service = new DrawingService(undoRedoServiceSpy, gridServiceSpy);
+        service = new DrawingService(undoRedoServiceSpy, new MagnetismService(new GridService()));
         TestBed.configureTestingModule({
             declarations: [
                 CanvasResizeComponent,
@@ -150,6 +151,7 @@ describe('CanvasResizeComponent', () => {
         const upEvent = new MouseEvent('document:mouseUp', { clientX: 1, clientY: 1 });
         component['isDown'] = false;
         component['shortcutHandler'].blockShortcuts = true;
+        spyOn(component, 'resizeCanvas');
         component.onMouseUp(upEvent);
         expect(component['shortcutHandler'].blockShortcuts).toBeTruthy();
     });

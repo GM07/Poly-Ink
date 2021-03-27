@@ -3,6 +3,8 @@ import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
+import { GridService } from '../drawing/grid.service';
+import { MagnetismService } from '../drawing/magnetism.service';
 import { AbstractSelectionService } from './abstract-selection.service';
 
 // tslint:disable:no-any
@@ -111,6 +113,7 @@ describe('AbstractSelectionService', () => {
         service.mouseUpCoord = { x: 10, y: 10 } as Vec2;
         service.leftMouseDown = true;
         mouseEvent = { x: 1000, y: 1000 } as MouseEvent;
+        service['selectionTranslation']['magnetismService'] = new MagnetismService(new GridService());
         service.onMouseMove(mouseEvent);
         expect(updateSpy).toHaveBeenCalled();
     });

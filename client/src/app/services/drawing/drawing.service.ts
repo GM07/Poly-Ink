@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { ResizeDraw } from '@app/classes/commands/resize-draw';
 import { ResizeConfig } from '@app/classes/tool-config/resize-config';
-import { GridService } from '@app/services/drawing/grid.service';
 import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 import { Subject } from 'rxjs';
 import { MagnetismService } from './magnetism.service';
@@ -19,7 +18,7 @@ export class DrawingService {
     changes: Subject<void>;
     loadedCanvas: HTMLCanvasElement | undefined;
 
-    constructor(private undoRedoService: UndoRedoService, public gridService: GridService, public magnetismService: MagnetismService) {
+    constructor(private undoRedoService: UndoRedoService, public magnetismService: MagnetismService) {
         this.changes = new Subject();
         this.loadedCanvas = undefined;
     }
@@ -38,8 +37,8 @@ export class DrawingService {
         this.canvas.height = height;
         this.previewCanvas.width = width; // Canvas resize
         this.previewCanvas.height = height;
-        this.gridService.canvas.width = width;
-        this.gridService.canvas.height = height;
+        this.magnetismService.gridService.canvas.width = width;
+        this.magnetismService.gridService.canvas.height = height;
 
         this.initBackground();
 
@@ -48,7 +47,7 @@ export class DrawingService {
 
         this.changes.next();
 
-        this.gridService.updateGrid();
+        this.magnetismService.gridService.updateGrid();
     }
 
     initUndoRedo(): void {

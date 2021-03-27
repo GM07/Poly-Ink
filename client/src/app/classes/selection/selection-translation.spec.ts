@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
+import { GridService } from '@app/services/drawing/grid.service';
+import { MagnetismService } from '@app/services/drawing/magnetism.service';
 import { SelectionTranslation } from './selection-translation';
 
 // tslint:disable:no-any
@@ -14,7 +16,7 @@ describe('SelectionTranslation', () => {
         TestBed.configureTestingModule({});
         canvasSelection = document.createElement('canvas');
         selectionConfig = new SelectionConfig();
-        selectionTranslation = new SelectionTranslation(selectionConfig);
+        selectionTranslation = new SelectionTranslation(selectionConfig, new MagnetismService(new GridService()));
     });
 
     it('get translation should return the current translation', () => {
@@ -75,27 +77,27 @@ describe('SelectionTranslation', () => {
         expect(selectionTranslation['UP_ARROW'].isDown).toBeFalsy();
     });
 
-    it('HorizontalTranslationModifier should return 1 if right Arrow is down', () => {
+    it('HorizontalTranslationModifier should return 3 if right Arrow is down', () => {
         selectionTranslation['RIGHT_ARROW'].isDown = true;
-        expect(selectionTranslation['HorizontalTranslationModifier']()).toEqual(1);
+        expect(selectionTranslation['HorizontalTranslationModifier']()).toEqual(3);
     });
 
-    it('HorizontalTranslationModifier should return -1 if left Arrow is down', () => {
+    it('HorizontalTranslationModifier should return -3 if left Arrow is down', () => {
         // tslint:disable:no-magic-numbers
         selectionTranslation['RIGHT_ARROW'].isDown = false;
         selectionTranslation['LEFT_ARROW'].isDown = true;
-        expect(selectionTranslation['HorizontalTranslationModifier']()).toEqual(-1);
+        expect(selectionTranslation['HorizontalTranslationModifier']()).toEqual(-3);
     });
 
-    it('VerticalTranslationModifier should return 1 if down Arrow is down', () => {
+    it('VerticalTranslationModifier should return 3 if down Arrow is down', () => {
         selectionTranslation['DOWN_ARROW'].isDown = true;
-        expect(selectionTranslation['VerticalTranslationModifier']()).toEqual(1);
+        expect(selectionTranslation['VerticalTranslationModifier']()).toEqual(3);
     });
 
-    it('VerticalTranslationModifier should return -1 if up Arrow is down', () => {
+    it('VerticalTranslationModifier should return -3 if up Arrow is down', () => {
         // tslint:disable:no-magic-numbers
         selectionTranslation['UP_ARROW'].isDown = true;
-        expect(selectionTranslation['VerticalTranslationModifier']()).toEqual(-1);
+        expect(selectionTranslation['VerticalTranslationModifier']()).toEqual(-3);
     });
 
     it('selection should not move with different keys than arrow', () => {

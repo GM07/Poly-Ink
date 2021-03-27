@@ -41,10 +41,10 @@ export class DrawingComponent implements AfterViewInit {
         this.gridCtx = this.grid.nativeElement.getContext('2d') as CanvasRenderingContext2D;
         this.drawingService.baseCtx = this.baseCtx;
         this.drawingService.previewCtx = this.previewCtx;
-        this.drawingService.gridService.ctx = this.gridCtx;
+        this.drawingService.magnetismService.gridService.ctx = this.gridCtx;
         this.drawingService.canvas = this.baseCanvas.nativeElement;
         this.drawingService.previewCanvas = this.previewCanvas.nativeElement;
-        this.drawingService.gridService.canvas = this.grid.nativeElement;
+        this.drawingService.magnetismService.gridService.canvas = this.grid.nativeElement;
         document.body.style.overflow = 'auto';
 
         this.newDrawingService.newCanvas();
@@ -90,11 +90,11 @@ export class DrawingComponent implements AfterViewInit {
             this.grid.nativeElement.style.visibility = this.gridVisibility ? 'visible' : 'hidden';
         } else if (ShortcutKey.contains(this.gridService.upsizeGridShortcut, event)) {
             this.gridService.upsizeGrid();
-            this.drawingService.clearCanvas(this.drawingService.gridService.ctx);
+            this.drawingService.clearCanvas(this.drawingService.magnetismService.gridService.ctx);
             this.gridService.updateGrid();
         } else if (this.gridService.downSizeGridShortcut.equals(event)) {
             this.gridService.downsizeGrid();
-            this.drawingService.clearCanvas(this.drawingService.gridService.ctx);
+            this.drawingService.clearCanvas(this.drawingService.magnetismService.gridService.ctx);
             this.gridService.updateGrid();
         }
     }
