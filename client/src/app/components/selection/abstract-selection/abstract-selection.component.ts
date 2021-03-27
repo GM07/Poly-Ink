@@ -78,12 +78,15 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
     }
 
     confirmSelection(event: MouseEvent): void {
+        const clickedOnScrollbar = event.clientX >= document.documentElement.offsetWidth || event.clientY >= document.documentElement.offsetHeight;
+
         const canConfirmSelection =
             !this.selectionService.resizeSelected &&
             !this.selectionService.leftMouseDown &&
             !this.shortcutHandlerService.blockShortcuts &&
             !this.isInSidebar &&
             this.selectionService.config.selectionCtx !== null &&
+            !clickedOnScrollbar &&
             event.button === MouseButton.Left;
 
         if (canConfirmSelection) {
