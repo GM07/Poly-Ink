@@ -15,7 +15,9 @@ export class BucketDraw extends AbstractDraw {
     private originalPixel: Uint8ClampedArray;
     private pixels: ImageData;
 
-    private readonly MaxColorDifference = Math.pow(255, 2) * 3;
+    // Calculated from redMean formula : https://en.wikipedia.org/wiki/Color_difference
+    private readonly MaxColorDifference = 764.8339663572415;
+
     private readonly R = 0;
     private readonly G = 1;
     private readonly B = 2;
@@ -121,16 +123,17 @@ export class BucketDraw extends AbstractDraw {
         if (pos < 0 || pos > this.pixels.data.length - 4) return false;
 
         //Pixel has been visited
-        if (this.visited[pos >> 2]) return false;
+        if (this.config.contiguous && this.visited[pos >> 2]) return false;
 
-        //TODO Implement perceptually accurate difference: https://en.wikipedia.org/wiki/Color_difference
         const pixel = this.pixels.data.subarray(pos, pos + this.DataPerPixel);
 
+        const r = (pixel[this.R] + this.originalPixel[this.R]) / 2;
         const deltaR2 = Math.pow(pixel[this.R] - this.originalPixel[this.R], 2);
         const deltaG2 = Math.pow(pixel[this.G] - this.originalPixel[this.G], 2);
         const deltaB2 = Math.pow(pixel[this.B] - this.originalPixel[this.B], 2);
 
-        const colorDifference = deltaR2 + deltaG2 + deltaB2;
+        // RedMean formula : https://en.wikipedia.org/wiki/Color_difference
+        const colorDifference = Math.sqrt((2 + r / 256) * deltaR2 + 4 * deltaG2 + (2 + (255 - r) / 256) * deltaB2);
         const toleratedColorDifference = this.MaxColorDifference * (this.config.tolerance / 100);
 
         return colorDifference <= toleratedColorDifference;
