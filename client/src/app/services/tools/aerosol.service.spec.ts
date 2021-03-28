@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
+import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AerosolService } from '@app/services/tools/aerosol.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 
 // tslint:disable:no-any
+// tslint:disable:no-magic-numbers
 describe('AerosolService', () => {
     const MS_PER_SECOND = 1000;
     let service: AerosolService;
@@ -73,14 +75,14 @@ describe('AerosolService', () => {
 
     it('onMouseUp should not call drawSpray if mouse was not already down', () => {
         service.leftMouseDown = false;
-        service.mouseDownCoord = { x: 0, y: 0 };
+        service.mouseDownCoord = new Vec2(0, 0);
 
         service.onMouseUp();
         expect(drawSpy).not.toHaveBeenCalled();
     });
 
     it('onMouseMove should set the mouse down coordinates', () => {
-        const expectedResult = { x: 25, y: 25 };
+        const expectedResult = new Vec2(25, 25);
         service.leftMouseDown = true;
         service.onMouseMove(mouseEvent);
         expect(service.mouseDownCoord).toEqual(expectedResult);
@@ -180,7 +182,7 @@ describe('AerosolService', () => {
     });
 
     it('should add seeds and mousePosition to config when placing points', () => {
-        service.mouseDownCoord = { x: 0, y: 0 };
+        service.mouseDownCoord = new Vec2(0, 0);
         expect(service.config.points.length).toEqual(0);
         service['placePoints']();
         expect(service.config.points.length).not.toEqual(0);

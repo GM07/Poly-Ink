@@ -4,7 +4,7 @@ import { Filter } from './filter';
 
 export class SpotlightFilter extends Filter {
     apply(image: ImageData): void {
-        const imageCenter: Vec2 = { x: Math.floor(image.width / 2), y: Math.floor(image.height / 2) };
+        const imageCenter: Vec2 = new Vec2(Math.floor(image.width / 2), Math.floor(image.height / 2));
 
         for (let i = 0; i < image.data.length; i += Filter.PIXEL_FORMAT_LENGTH) {
             const r: number = image.data[i + 0];
@@ -26,6 +26,6 @@ export class SpotlightFilter extends Filter {
         const xPos = pixelIndex % width;
         const yPos = Math.floor(pixelIndex / width);
 
-        return { x: xPos, y: yPos } as Vec2;
+        return new Vec2(xPos, yPos);
     }
 }

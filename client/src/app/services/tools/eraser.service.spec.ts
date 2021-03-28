@@ -5,6 +5,8 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 import { EraserService } from './eraser.service';
 
 // tslint:disable:no-any
+// tslint:disable:no-magic-numbers
+
 describe('EraserService', () => {
     let service: EraserService;
     let mouseEvent: MouseEvent;
@@ -50,7 +52,7 @@ describe('EraserService', () => {
     });
 
     it(' mouseDown should set mouseDownCoord to correct position', () => {
-        const expectedResult: Vec2 = { x: 25, y: 25 };
+        const expectedResult: Vec2 = new Vec2(25, 25);
         service.onMouseDown(mouseEvent);
         expect(service.mouseDownCoord).toEqual(expectedResult);
     });
@@ -71,7 +73,7 @@ describe('EraserService', () => {
     });
 
     it(' onMouseUp should call drawLine if mouse was already down', () => {
-        service.mouseDownCoord = { x: 0, y: 0 };
+        service.mouseDownCoord = new Vec2(0, 0);
         service.leftMouseDown = true;
 
         service.onMouseUp(mouseEvent);
@@ -80,14 +82,14 @@ describe('EraserService', () => {
 
     it(' onMouseUp should not call drawLine if mouse was not already down', () => {
         service.leftMouseDown = false;
-        service.mouseDownCoord = { x: 0, y: 0 };
+        service.mouseDownCoord = new Vec2(0, 0);
 
         service.onMouseUp(mouseEvent);
         expect(drawPreviewSpy).not.toHaveBeenCalled();
     });
 
     it(' onMouseMove should call drawLine if mouse was already down', () => {
-        service.mouseDownCoord = { x: 0, y: 0 };
+        service.mouseDownCoord = new Vec2(0, 0);
         service.leftMouseDown = true;
 
         service.onMouseMove(mouseEvent);
@@ -96,8 +98,8 @@ describe('EraserService', () => {
     });
 
     it('should not erase a line between the points where it left and entered the canvas', () => {
-        const firstClickOffset: Vec2 = { x: 0, y: 0 };
-        const lastClickOffset: Vec2 = { x: 0, y: 50 };
+        const firstClickOffset: Vec2 = new Vec2(0, 0);
+        const lastClickOffset: Vec2 = new Vec2(0, 50);
         service.lineWidth = 2;
         let mouseEventLClick: MouseEvent = { clientX: firstClickOffset.x, clientY: firstClickOffset.y, button: 0, buttons: 1 } as MouseEvent;
         service.onMouseDown(mouseEventLClick);

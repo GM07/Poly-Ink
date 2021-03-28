@@ -77,7 +77,7 @@ export class EyeDropperService extends Tool {
 
             this.drawCircleAroundMouse(
                 this.drawingService.previewCtx,
-                { x: event.offsetX, y: event.offsetY } as Vec2,
+                new Vec2(event.offsetX, event.offsetY),
                 ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH / 2,
             );
 

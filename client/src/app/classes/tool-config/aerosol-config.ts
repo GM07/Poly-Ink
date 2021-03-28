@@ -19,7 +19,7 @@ export class AerosolConfig {
         const config = new AerosolConfig();
 
         this.points.forEach((oldPoints) => {
-            config.points.push({ x: oldPoints.x, y: oldPoints.y });
+            config.points.push(new Vec2(oldPoints.x, oldPoints.y));
         });
 
         config.seed = this.seed;

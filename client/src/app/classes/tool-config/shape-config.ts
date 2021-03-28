@@ -17,8 +17,8 @@ export class ShapeConfig {
     numEdges: number;
 
     constructor() {
-        this.startCoords = { x: 0, y: 0 };
-        this.endCoords = { x: 0, y: 0 };
+        this.startCoords = new Vec2(0, 0);
+        this.endCoords = new Vec2(0, 0);
         this.shapeMode = ShapeMode.FilledWithContour;
         this.shiftDown = false;
         this.lineWidth = ToolSettingsConst.MIN_WIDTH;
@@ -28,8 +28,8 @@ export class ShapeConfig {
 
     clone(): ShapeConfig {
         const config = new ShapeConfig();
-        config.startCoords = { x: this.startCoords.x, y: this.startCoords.y };
-        config.endCoords = { x: this.endCoords.x, y: this.endCoords.y };
+        config.startCoords = new Vec2(this.startCoords.x, this.startCoords.y);
+        config.endCoords = new Vec2(this.endCoords.x, this.endCoords.y);
         config.shapeMode = this.shapeMode;
         config.shiftDown = this.shiftDown;
         config.lineWidth = this.lineWidth;

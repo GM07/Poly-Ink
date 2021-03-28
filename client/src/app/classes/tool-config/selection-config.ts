@@ -8,8 +8,8 @@ export class SelectionConfig {
     shiftDown: boolean;
 
     constructor() {
-        this.startCoords = { x: 0, y: 0 };
-        this.endCoords = { x: 0, y: 0 };
+        this.startCoords = new Vec2(0, 0);
+        this.endCoords = new Vec2(0, 0);
         this.height = 0;
         this.width = 0;
         this.shiftDown = false;
@@ -17,8 +17,8 @@ export class SelectionConfig {
 
     clone(): SelectionConfig {
         const config = new SelectionConfig();
-        config.startCoords = { x: this.startCoords.x, y: this.startCoords.y };
-        config.endCoords = { x: this.endCoords.x, y: this.endCoords.y };
+        config.startCoords = new Vec2(this.startCoords.x, this.startCoords.y);
+        config.endCoords = new Vec2(this.endCoords.x, this.endCoords.y);
         config.shiftDown = this.shiftDown;
         config.height = this.height;
         config.width = this.width;

@@ -1,5 +1,6 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { ShapeConfig, ShapeMode } from '@app/classes/tool-config/shape-config';
+import { Vec2 } from '@app/classes/vec2';
 import { ColorService } from 'src/color-picker/services/color.service';
 export class RectangleDraw extends AbstractDraw {
     private config: ShapeConfig;
@@ -10,11 +11,10 @@ export class RectangleDraw extends AbstractDraw {
     }
 
     execute(context: CanvasRenderingContext2D): void {
-        let width: number = this.config.endCoords.x - this.config.startCoords.x;
-        let height: number = this.config.endCoords.y - this.config.startCoords.y;
+        const size: Vec2 = this.config.endCoords.substract(this.config.startCoords);
         if (this.config.shiftDown) {
-            height = Math.sign(height) * Math.min(Math.abs(width), Math.abs(height));
-            width = Math.sign(width) * Math.abs(height);
+            size.y = Math.sign(size.y) * Math.min(Math.abs(size.x), Math.abs(size.y));
+            size.x = Math.sign(size.x) * Math.abs(size.y);
         }
         context.lineWidth = this.config.lineWidth;
         context.strokeStyle = this.secondaryRgba;
@@ -25,13 +25,13 @@ export class RectangleDraw extends AbstractDraw {
 
         switch (this.config.shapeMode) {
             case ShapeMode.Contour:
-                context.strokeRect(this.config.startCoords.x, this.config.startCoords.y, width, height);
+                context.strokeRect(this.config.startCoords.x, this.config.startCoords.y, size.x, size.y);
                 break;
             case ShapeMode.Filled:
-                context.fillRect(this.config.startCoords.x, this.config.startCoords.y, width, height);
+                context.fillRect(this.config.startCoords.x, this.config.startCoords.y, size.x, size.y);
                 break;
             case ShapeMode.FilledWithContour:
-                context.rect(this.config.startCoords.x, this.config.startCoords.y, width, height);
+                context.rect(this.config.startCoords.x, this.config.startCoords.y, size.x, size.y);
                 context.fill();
                 break;
         }
