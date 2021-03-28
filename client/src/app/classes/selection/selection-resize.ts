@@ -19,23 +19,12 @@ export class SelectionResize {
 
     constructor(config: SelectionConfig) {
         this.config = config;
-        this.oppositeSide = { x: 0, y: 0 } as Vec2;
-        this.resizeOrigin = { x: 0, y: 0 } as Vec2;
-        this.resizeSelected = false;
         this.updateSelectionRequest = new Subject<Vec2>();
-        this.memoryCanvas = undefined;
-        this.lockVertical = false;
-        this.lockHorizontal = false;
+        this.initAttribs();
     }
 
     stopDrawing(): void {
-        this.oppositeSide = { x: 0, y: 0 } as Vec2;
-        this.resizeOrigin = { x: 0, y: 0 } as Vec2;
-        this.config.scaleFactor = { x: 1, y: 1 } as Vec2;
-        this.resizeSelected = false;
-        this.memoryCanvas = undefined;
-        this.lockVertical = false;
-        this.lockHorizontal = false;
+        this.initAttribs();
     }
 
     resize(mousePosIn: Vec2): void {
@@ -116,6 +105,16 @@ export class SelectionResize {
         const resizeOriginOffset = { x: Math.abs(this.config.width), y: Math.abs(this.config.height) } as Vec2;
         const oppositeSideOffset = { x: 0, y: 0 } as Vec2;
         this.initResize(resizeOriginOffset, oppositeSideOffset);
+    }
+
+    private initAttribs(): void {
+        this.oppositeSide = { x: 0, y: 0 } as Vec2;
+        this.resizeOrigin = { x: 0, y: 0 } as Vec2;
+        this.config.scaleFactor = { x: 1, y: 1 } as Vec2;
+        this.resizeSelected = false;
+        this.memoryCanvas = undefined;
+        this.lockVertical = false;
+        this.lockHorizontal = false;
     }
 
     private adaptMousePosition(mousePos: Vec2): Vec2 {

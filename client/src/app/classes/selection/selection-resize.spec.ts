@@ -38,6 +38,11 @@ describe('SelectionResize', () => {
         expect(selectionResize['memoryCanvas']).toBeUndefined();
     });
 
+    it('should init the attributes', () => {
+        selectionResize['initAttribs']();
+        expect(selectionResize['memoryCanvas']).toBeUndefined();
+    });
+
     it('should not resize if there are no drawings', () => {
         selectionResize['config'].selectionCtx = null;
         selectionResize.resize(mousePosition);
