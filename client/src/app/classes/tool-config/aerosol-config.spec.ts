@@ -1,9 +1,10 @@
+import { Vec2 } from '@app/classes/vec2';
 import { AerosolConfig } from './aerosol-config';
 describe('PencilConfig', () => {
     let config: AerosolConfig;
     beforeEach(() => {
         config = new AerosolConfig();
-        config.points.push({ x: 0, y: 0 });
+        config.points.push(new Vec2(0, 0));
     });
 
     it('should clone droplets properly', () => {

@@ -23,9 +23,11 @@ describe('SelectionTranslation', () => {
     });
 
     it('get translation should return the current translation', () => {
-        const mousePos = { x: 25, y: 25 } as Vec2;
-        selectionTranslation['translationOrigin'] = { x: 25, y: 25 } as Vec2;
-        expect(selectionTranslation['getTranslation'](mousePos)).toEqual({ x: 0, y: 0 } as Vec2);
+        // tslint:disable-next-line:no-magic-numbers
+        const mousePos = new Vec2(25, 25);
+        // tslint:disable-next-line:no-magic-numbers
+        selectionTranslation['translationOrigin'] = new Vec2(25, 25);
+        expect(selectionTranslation['getTranslation'](mousePos)).toEqual(new Vec2(0, 0));
     });
 
     it('set ArrowKeyUp should update the keys when down', () => {
@@ -181,10 +183,10 @@ describe('SelectionTranslation', () => {
         selectionTranslation['config'].selectionCtx = null;
         const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
         spyOn<any>(selectionTranslation, 'getTranslation');
-        selectionTranslation.onMouseMove({ pageX: 1, pageY: 1 } as MouseEvent, { x: 1, y: 1 } as Vec2);
+        selectionTranslation.onMouseMove({ pageX: 1, pageY: 1 } as MouseEvent, new Vec2(1, 1));
         expect(updateSelection).not.toHaveBeenCalled();
         selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
-        selectionTranslation.onMouseMove({ pageX: 1, pageY: 1 } as MouseEvent, { x: 1, y: 1 } as Vec2);
+        selectionTranslation.onMouseMove({ pageX: 1, pageY: 1 } as MouseEvent, new Vec2(1, 1));
         expect(updateSelection).toHaveBeenCalled();
     });
 
@@ -192,10 +194,10 @@ describe('SelectionTranslation', () => {
         selectionTranslation['config'].selectionCtx = null;
         const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
         spyOn<any>(selectionTranslation, 'getTranslation');
-        selectionTranslation.onMouseUp({} as MouseEvent);
+        selectionTranslation.onMouseUp(new Vec2(0, 0));
         expect(updateSelection).not.toHaveBeenCalled();
         selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
-        selectionTranslation.onMouseUp({} as MouseEvent);
+        selectionTranslation.onMouseUp(new Vec2(0, 0));
         expect(updateSelection).toHaveBeenCalled();
     });
 });

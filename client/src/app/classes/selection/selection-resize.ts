@@ -56,61 +56,61 @@ export class SelectionResize {
     }
 
     topLeftResize(): void {
-        const resizeOriginOffset = { x: 0, y: 0 } as Vec2;
-        const oppositeSideOffset = { x: Math.abs(this.config.width), y: Math.abs(this.config.height) } as Vec2;
+        const resizeOriginOffset = new Vec2(0, 0);
+        const oppositeSideOffset = new Vec2(Math.abs(this.config.width), Math.abs(this.config.height));
         this.initResize(resizeOriginOffset, oppositeSideOffset);
     }
 
     topMiddleResize(): void {
-        const resizeOriginOffset = { x: Math.abs(this.config.width / 2), y: 0 } as Vec2;
-        const oppositeSideOffset = { x: Math.abs(this.config.width / 2), y: Math.abs(this.config.height) } as Vec2;
+        const resizeOriginOffset = new Vec2(Math.abs(this.config.width / 2), 0);
+        const oppositeSideOffset = new Vec2(Math.abs(this.config.width / 2), Math.abs(this.config.height));
         this.initResize(resizeOriginOffset, oppositeSideOffset);
         this.lockHorizontal = true;
     }
 
     topRightResize(): void {
-        const resizeOriginOffset = { x: Math.abs(this.config.width), y: 0 } as Vec2;
-        const oppositeSideOffset = { x: 0, y: Math.abs(this.config.height) } as Vec2;
+        const resizeOriginOffset = new Vec2(Math.abs(this.config.width), 0);
+        const oppositeSideOffset = new Vec2(0, Math.abs(this.config.height));
         this.initResize(resizeOriginOffset, oppositeSideOffset);
     }
 
     middleLeftResize(): void {
-        const resizeOriginOffset = { x: 0, y: Math.abs(this.config.height / 2) } as Vec2;
-        const oppositeSideOffset = { x: Math.abs(this.config.width), y: Math.abs(this.config.height / 2) } as Vec2;
+        const resizeOriginOffset = new Vec2(0, Math.abs(this.config.height / 2));
+        const oppositeSideOffset = new Vec2(Math.abs(this.config.width), Math.abs(this.config.height / 2));
         this.initResize(resizeOriginOffset, oppositeSideOffset);
         this.lockVertical = true;
     }
 
     middleRightResize(): void {
-        const resizeOriginOffset = { x: Math.abs(this.config.width), y: Math.abs(this.config.height / 2) } as Vec2;
-        const oppositeSideOffset = { x: 0, y: Math.abs(this.config.height / 2) } as Vec2;
+        const resizeOriginOffset = new Vec2(Math.abs(this.config.width), Math.abs(this.config.height / 2));
+        const oppositeSideOffset = new Vec2(0, Math.abs(this.config.height / 2));
         this.initResize(resizeOriginOffset, oppositeSideOffset);
         this.lockVertical = true;
     }
 
     bottomLeftResize(): void {
-        const resizeOriginOffset = { x: 0, y: Math.abs(this.config.height) } as Vec2;
-        const oppositeSideOffset = { x: Math.abs(this.config.width), y: 0 } as Vec2;
+        const resizeOriginOffset = new Vec2(0, Math.abs(this.config.height));
+        const oppositeSideOffset = new Vec2(Math.abs(this.config.width), 0);
         this.initResize(resizeOriginOffset, oppositeSideOffset);
     }
 
     bottomMiddleResize(): void {
-        const resizeOriginOffset = { x: Math.abs(this.config.width / 2), y: Math.abs(this.config.height) } as Vec2;
-        const oppositeSideOffset = { x: Math.abs(this.config.width / 2), y: 0 } as Vec2;
+        const resizeOriginOffset = new Vec2(Math.abs(this.config.width / 2), Math.abs(this.config.height));
+        const oppositeSideOffset = new Vec2(Math.abs(this.config.width / 2), 0);
         this.initResize(resizeOriginOffset, oppositeSideOffset);
         this.lockHorizontal = true;
     }
 
     bottomRightResize(): void {
-        const resizeOriginOffset = { x: Math.abs(this.config.width), y: Math.abs(this.config.height) } as Vec2;
-        const oppositeSideOffset = { x: 0, y: 0 } as Vec2;
+        const resizeOriginOffset = new Vec2(Math.abs(this.config.width), Math.abs(this.config.height));
+        const oppositeSideOffset = new Vec2(0, 0);
         this.initResize(resizeOriginOffset, oppositeSideOffset);
     }
 
     private initAttribs(): void {
-        this.oppositeSide = { x: 0, y: 0 } as Vec2;
-        this.resizeOrigin = { x: 0, y: 0 } as Vec2;
-        this.config.scaleFactor = { x: 1, y: 1 } as Vec2;
+        this.oppositeSide = new Vec2(0, 0);
+        this.resizeOrigin = new Vec2(0, 0);
+        this.config.scaleFactor = new Vec2(1, 1);
         this.resizeSelected = false;
         this.memoryCanvas = undefined;
         this.lockVertical = false;
@@ -124,7 +124,7 @@ export class SelectionResize {
             const smallestDistance = Math.min(Math.abs(distanceX), Math.abs(distanceY));
             const returnedX = this.oppositeSide.x + Math.sign(distanceX) * smallestDistance;
             const returnedY = this.oppositeSide.y + Math.sign(distanceY) * smallestDistance;
-            return { x: returnedX, y: returnedY };
+            return new Vec2(returnedX, returnedY);
         } else {
             return mousePos;
         }
@@ -197,7 +197,7 @@ export class SelectionResize {
             }
         }
 
-        return { x: finalX, y: finalY } as Vec2;
+        return new Vec2(finalX, finalY);
     }
 
     private initResize(resizeOriginOffset: Vec2, oppositeSideOffset: Vec2): void {
@@ -220,16 +220,13 @@ export class SelectionResize {
     private getTranslation(mousePos: Vec2): Vec2 {
         const translationX = this.lockHorizontal ? 0 : Math.round(mousePos.x - this.resizeOrigin.x);
         const translationY = this.lockVertical ? 0 : Math.round(mousePos.y - this.resizeOrigin.y);
-        return {
-            x: translationX,
-            y: translationY,
-        } as Vec2;
+        return new Vec2(translationX, translationY);
     }
 
     private getNewSize(mousePos: Vec2): Vec2 {
-        return {
-            x: this.lockHorizontal ? this.config.width : mousePos.x - this.oppositeSide.x,
-            y: this.lockVertical ? this.config.height : mousePos.y - this.oppositeSide.y,
-        } as Vec2;
+        return new Vec2(
+            this.lockHorizontal ? this.config.width : mousePos.x - this.oppositeSide.x,
+            this.lockVertical ? this.config.height : mousePos.y - this.oppositeSide.y,
+        );
     }
 }

@@ -33,7 +33,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.selectionTranslation = new SelectionTranslation(this.config);
         this.selectionResize = new SelectionResize(this.config);
         this.selectionData = document.createElement('canvas');
-        this.config.endCoords = { x: 0, y: 0 } as Vec2;
+        this.config.endCoords = new Vec2(0, 0);
         this.initSubscriptions();
         this.updatePoints = new Subject<boolean>();
     }
@@ -126,11 +126,11 @@ export abstract class AbstractSelectionService extends Tool {
         this.selectionResize.stopDrawing();
         this.selectionTranslation.stopDrawing();
         this.leftMouseDown = false;
-        this.config.endCoords = { x: 0, y: 0 } as Vec2;
+        this.config.endCoords = new Vec2(0, 0);
         const width = this.drawingService.canvas.width;
         const height = this.drawingService.canvas.height;
-        this.mouseDownCoord = { x: 0, y: 0 } as Vec2;
-        this.mouseUpCoord = { x: width, y: height } as Vec2;
+        this.mouseDownCoord = new Vec2(0, 0);
+        this.mouseUpCoord = new Vec2(width, height);
         this.config.width = width;
         this.config.height = height;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
@@ -201,8 +201,8 @@ export abstract class AbstractSelectionService extends Tool {
         this.config.selectionCtx = this.selectionData.getContext('2d') as CanvasRenderingContext2D;
         const x = Math.min(this.mouseDownCoord.x, this.mouseDownCoord.x + this.config.width);
         const y = Math.min(this.mouseDownCoord.y, this.mouseDownCoord.y + this.config.height);
-        this.config.endCoords = { x, y } as Vec2;
-        this.config.startCoords = { x, y } as Vec2;
+        this.config.endCoords = new Vec2(x, y);
+        this.config.startCoords = new Vec2(x, y);
 
         this.config.selectionCtx.drawImage(
             this.drawingService.canvas,
@@ -227,8 +227,7 @@ export abstract class AbstractSelectionService extends Tool {
         if (this.config.selectionCtx === null) return;
 
         this.drawingService.blockUndoRedo();
-        this.config.endCoords.x += translation.x;
-        this.config.endCoords.y += translation.y;
+        this.config.endCoords = this.config.endCoords.add(translation);
         this.updateSelectionRequired();
         this.updatePoints.next(true);
     }

@@ -26,7 +26,7 @@ export class SelectionTranslation {
         this.bodyHeight = document.body.style.height;
         this.config = config;
         this.moveId = this.DEFAULT_MOVE_ID;
-        this.translationOrigin = { x: 0, y: 0 } as Vec2;
+        this.translationOrigin = new Vec2(0, 0);
         this.updateSelectionRequest = new Subject<Vec2>();
     }
 
@@ -37,10 +37,12 @@ export class SelectionTranslation {
                 if (event.repeat) return;
 
                 this.setArrowKeyDown(event);
-                this.sendUpdateSelectionRequest({
-                    x: this.TRANSLATION_PIXELS * this.HorizontalTranslationModifier(),
-                    y: this.TRANSLATION_PIXELS * this.VerticalTranslationModifier(),
-                } as Vec2);
+                this.sendUpdateSelectionRequest(
+                    new Vec2(
+                        this.TRANSLATION_PIXELS * this.HorizontalTranslationModifier(),
+                        this.TRANSLATION_PIXELS * this.VerticalTranslationModifier(),
+                    ),
+                );
 
                 this.startArrowKeyTranslation();
             }
@@ -73,7 +75,7 @@ export class SelectionTranslation {
     }
 
     stopDrawing(): void {
-        this.translationOrigin = { x: 0, y: 0 } as Vec2;
+        this.translationOrigin = new Vec2(0, 0);
         document.body.style.width = this.bodyWidth;
         document.body.style.height = this.bodyHeight;
         this.RIGHT_ARROW.isDown = false;
@@ -84,13 +86,12 @@ export class SelectionTranslation {
     }
 
     private sendUpdateSelectionRequest(translation: Vec2): void {
-        this.translationOrigin.x += translation.x;
-        this.translationOrigin.y += translation.y;
+        this.translationOrigin = this.translationOrigin.add(translation);
         this.updateSelectionRequest.next(translation);
     }
 
     private getTranslation(mousePos: Vec2): Vec2 {
-        return { x: mousePos.x - this.translationOrigin.x, y: mousePos.y - this.translationOrigin.y } as Vec2;
+        return mousePos.substract(this.translationOrigin);
     }
 
     private isArrowKeyDown(event: KeyboardEvent, leftMouseDown: boolean): boolean {
@@ -109,10 +110,12 @@ export class SelectionTranslation {
                 if (this.moveId === this.DEFAULT_MOVE_ID && this.config.selectionCtx !== null)
                     this.moveId = window.setInterval(() => {
                         this.clearArrowKeys();
-                        this.sendUpdateSelectionRequest({
-                            x: this.TRANSLATION_PIXELS * this.HorizontalTranslationModifier(),
-                            y: this.TRANSLATION_PIXELS * this.VerticalTranslationModifier(),
-                        } as Vec2);
+                        this.sendUpdateSelectionRequest(
+                            new Vec2(
+                                this.TRANSLATION_PIXELS * this.HorizontalTranslationModifier(),
+                                this.TRANSLATION_PIXELS * this.VerticalTranslationModifier(),
+                            ),
+                        );
                     }, this.NEXT_MOVES_TIMEOUT);
             }, this.FIRST_MOVE_TIMEOUT);
         }

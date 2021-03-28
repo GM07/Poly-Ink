@@ -67,14 +67,14 @@ describe('AbstractSelectionService', () => {
     it('should update the mouseUp coords when outside the canvas', () => {
         spyOn<any>(service, 'isInCanvas').and.returnValue(false);
         // tslint:disable:no-magic-numbers
-        const getPositionSpy = spyOn<any>(service, 'getPositionFromMouse').and.returnValue({ x: 1000, y: 1000 } as Vec2);
+        const getPositionSpy = spyOn<any>(service, 'getPositionFromMouse').and.returnValue(new Vec2(1000, 1000));
         service.leftMouseDown = true;
         service['config'].selectionCtx = null;
         service['setMouseUpCoord'](mouseEvent);
-        expect(service.mouseUpCoord).toEqual({ x: canvasTestHelper.canvas.width, y: canvasTestHelper.canvas.height } as Vec2);
-        getPositionSpy.and.returnValue({ x: -1, y: -1 } as Vec2);
+        expect(service.mouseUpCoord).toEqual(new Vec2(canvasTestHelper.canvas.width, canvasTestHelper.canvas.height));
+        getPositionSpy.and.returnValue(new Vec2(-1, -1));
         service['setMouseUpCoord']({ x: -1, y: -1 } as MouseEvent);
-        expect(service.mouseUpCoord).toEqual({ x: 0, y: 0 } as Vec2);
+        expect(service.mouseUpCoord).toEqual(new Vec2(0, 0));
     });
 
     it('should update the mouseUp coords when inside the canvas', () => {
@@ -108,7 +108,7 @@ describe('AbstractSelectionService', () => {
         const updateSpy = spyOn<any>(service, 'updateSelection');
         spyOn<any>(service, 'setMouseUpCoord');
         service['config'].selectionCtx = canvasSelection.getContext('2d');
-        service.mouseUpCoord = { x: 10, y: 10 } as Vec2;
+        service.mouseUpCoord = new Vec2(10, 10);
         service.leftMouseDown = true;
         mouseEvent = { x: 1000, y: 1000 } as MouseEvent;
         service.onMouseMove(mouseEvent);

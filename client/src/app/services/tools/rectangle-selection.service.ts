@@ -25,7 +25,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
         this.draw();
 
         this.config.selectionCtx = null;
-        this.config.endCoords = { x: 0, y: 0 } as Vec2;
+        this.config.endCoords = new Vec2(0, 0);
     }
 
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {
@@ -42,9 +42,9 @@ export class RectangleSelectionService extends AbstractSelectionService {
 
         this.fillBackground(ctx, this.config.endCoords);
 
-        const rectangleCoords = { x: this.config.endCoords.x, y: this.config.endCoords.y } as Vec2;
+        const rectangleCoords = new Vec2(this.config.endCoords.x, this.config.endCoords.y); // TODO
         ctx.drawImage(this.selectionData, this.config.endCoords.x, this.config.endCoords.y);
-        this.drawSelection(ctx, rectangleCoords, { x: Math.abs(this.config.width), y: Math.abs(this.config.height) } as Vec2);
+        this.drawSelection(ctx, rectangleCoords, new Vec2(Math.abs(this.config.width), Math.abs(this.config.height))); // TODO
     }
 
     protected drawPreviewSelectionRequired(): void {
@@ -54,7 +54,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
             this.config.width = Math.sign(this.config.width) * Math.abs(this.config.height);
         }
 
-        this.drawSelection(ctx, this.mouseDownCoord, { x: this.config.width, y: this.config.height } as Vec2);
+        this.drawSelection(ctx, this.mouseDownCoord, new Vec2(this.config.width, this.config.height));
     }
 
     protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void {

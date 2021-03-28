@@ -13,9 +13,9 @@ export class SelectionConfig {
     selectionCtx: CanvasRenderingContext2D | null;
 
     constructor() {
-        this.startCoords = { x: 0, y: 0 } as Vec2;
-        this.endCoords = { x: 0, y: 0 } as Vec2;
-        this.scaleFactor = { x: 1, y: 1 } as Vec2;
+        this.startCoords = new Vec2(0, 0);
+        this.endCoords = new Vec2(0, 0);
+        this.scaleFactor = new Vec2(1, 1);
         this.originalHeight = 0;
         this.height = 0;
         this.originalWidth = 0;
@@ -26,9 +26,9 @@ export class SelectionConfig {
 
     clone(): SelectionConfig {
         const config = new SelectionConfig();
-        config.startCoords = { x: this.startCoords.x, y: this.startCoords.y } as Vec2;
-        config.endCoords = { x: this.endCoords.x, y: this.endCoords.y } as Vec2;
-        config.scaleFactor = { x: this.scaleFactor.x, y: this.scaleFactor.y } as Vec2;
+        config.startCoords = this.startCoords.clone();
+        config.endCoords = this.endCoords.clone();
+        config.scaleFactor = this.scaleFactor.clone();
         config.shift = this.shift.clone();
         config.originalHeight = this.originalHeight;
         config.height = this.height;
@@ -40,11 +40,6 @@ export class SelectionConfig {
     }
 
     didChange(): boolean {
-        return (
-            this.startCoords.x !== this.endCoords.x ||
-            this.startCoords.y !== this.endCoords.y ||
-            this.width !== this.originalWidth ||
-            this.height !== this.originalHeight
-        );
+        return !this.startCoords.equals(this.endCoords) || this.width !== this.originalWidth || this.height !== this.originalHeight;
     }
 }

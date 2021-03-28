@@ -23,8 +23,8 @@ describe('EllipseDraw', () => {
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
 
-        ellipseSelectionDraw['config'].startCoords = { x: 0, y: 0 };
-        ellipseSelectionDraw['config'].endCoords = { x: 15, y: 15 };
+        ellipseSelectionDraw['config'].startCoords = new Vec2(0, 0);
+        ellipseSelectionDraw['config'].endCoords = new Vec2(15, 15);
         ellipseSelectionDraw['config'].height = 10;
         ellipseSelectionDraw['config'].originalHeight = 10;
         ellipseSelectionDraw['config'].width = 10;
@@ -53,8 +53,8 @@ describe('EllipseDraw', () => {
 
     it('should not fill the background if the selection has not moved', () => {
         const fillSpy = spyOn(ctxStub, 'fill');
-        ellipseSelectionDraw['config'].startCoords = { x: 0, y: 0 } as Vec2;
-        ellipseSelectionDraw['config'].endCoords = { x: 0, y: 0 } as Vec2;
+        ellipseSelectionDraw['config'].startCoords = new Vec2(0, 0);
+        ellipseSelectionDraw['config'].endCoords = new Vec2(0, 0);
         ellipseSelectionDraw['fillBackground'](ctxStub);
         expect(fillSpy).not.toHaveBeenCalled();
     });
