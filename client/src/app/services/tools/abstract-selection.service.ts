@@ -179,7 +179,7 @@ export abstract class AbstractSelectionService extends Tool {
 
     private initSubscriptions(): void {
         this.drawingService.changes.subscribe(() => {
-            this.updateSelection({ x: 0, y: 0 } as Vec2);
+            this.updateSelection(new Vec2(0, 0));
         });
         this.selectionTranslation.updateSelectionRequest.subscribe((translation: Vec2) => {
             this.updateSelection(translation);

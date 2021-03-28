@@ -71,7 +71,7 @@ describe('EllipseSelectionService', () => {
         spyOn(previewCtxStub, 'ellipse');
         spyOn(previewCtxStub, 'fill');
         spyOn(service.config, 'didChange').and.returnValue(true);
-        service['fillBackground'](previewCtxStub, { x: 10, y: 25 } as Vec2);
+        service['fillBackground'](previewCtxStub, new Vec2(10, 25));
         expect(previewCtxStub.ellipse).toHaveBeenCalled();
         expect(previewCtxStub.fill).toHaveBeenCalled();
     });

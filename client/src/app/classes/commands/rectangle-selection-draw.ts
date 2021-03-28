@@ -21,6 +21,7 @@ export class RectangleSelectionDraw extends AbstractDraw {
 
     private fillBackground(context: CanvasRenderingContext2D): void {
         if (!this.config.didChange()) return;
+
         context.beginPath();
         context.fillStyle = 'white';
         context.fillRect(

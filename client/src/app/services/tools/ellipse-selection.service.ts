@@ -63,14 +63,12 @@ export class EllipseSelectionService extends AbstractSelectionService {
 
     protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {
         if (!this.config.didChange()) return;
-        const radiusX = Math.abs(this.config.originalWidth / 2);
-        const radiusY = Math.abs(this.config.originalHeight / 2);
-        const centerX = this.config.startCoords.x + radiusX;
-        const centerY = this.config.startCoords.y + radiusY;
 
+        const radius = new Vec2(this.config.originalWidth / 2, this.config.originalHeight / 2).apply(Math.abs);
+        const center = this.config.startCoords.add(radius);
         ctx.beginPath();
         ctx.fillStyle = 'white';
-        ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+        ctx.ellipse(center.x, center.y, radius.x, radius.y, 0, 0, 2 * Math.PI);
         ctx.fill();
         ctx.closePath();
     }
@@ -78,20 +76,18 @@ export class EllipseSelectionService extends AbstractSelectionService {
     protected updateSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
-        const radiusX = Math.abs(this.config.width / 2);
-        const radiusY = Math.abs(this.config.height / 2);
-        const centerX = this.config.endCoords.x + radiusX;
-        const centerY = this.config.endCoords.y + radiusY;
+        const radius = new Vec2(this.config.width / 2, this.config.height / 2).apply(Math.abs);
+        const center = this.config.endCoords.add(radius);
 
         this.fillBackground(ctx, this.config.endCoords);
 
         ctx.beginPath();
         ctx.save();
-        ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+        ctx.ellipse(center.x, center.y, radius.x, radius.y, 0, 0, 2 * Math.PI);
         ctx.clip();
         ctx.drawImage(this.selectionData, this.config.endCoords.x, this.config.endCoords.y);
         ctx.restore();
-        this.drawSelection(ctx, new Vec2(centerX, centerY), new Vec2(radiusX, radiusY));
+        this.drawSelection(ctx, center, radius);
     }
 
     protected endSelection(): void {

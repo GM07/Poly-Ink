@@ -51,8 +51,7 @@ export class SelectionResize {
         this.updateSelectionRequest.next(this.getTranslationForResize(mousePos));
 
         const translation = this.getTranslation(mousePos);
-        this.resizeOrigin.x += translation.x;
-        this.resizeOrigin.y += translation.y;
+        this.resizeOrigin = this.resizeOrigin.add(translation);
     }
 
     topLeftResize(): void {
@@ -119,11 +118,10 @@ export class SelectionResize {
 
     private adaptMousePosition(mousePos: Vec2): Vec2 {
         if (this.config.shift.isDown && !this.lockHorizontal && !this.lockVertical) {
-            const distanceX = mousePos.x - this.oppositeSide.x;
-            const distanceY = mousePos.y - this.oppositeSide.y;
-            const smallestDistance = Math.min(Math.abs(distanceX), Math.abs(distanceY));
-            const returnedX = this.oppositeSide.x + Math.sign(distanceX) * smallestDistance;
-            const returnedY = this.oppositeSide.y + Math.sign(distanceY) * smallestDistance;
+            const distance = mousePos.substract(this.oppositeSide);
+            const smallestDistance = Math.min(Math.abs(distance.x), Math.abs(distance.y));
+            const returnedX = this.oppositeSide.x + Math.sign(distance.x) * smallestDistance;
+            const returnedY = this.oppositeSide.y + Math.sign(distance.y) * smallestDistance;
             return new Vec2(returnedX, returnedY);
         } else {
             return mousePos;
@@ -203,10 +201,8 @@ export class SelectionResize {
     private initResize(resizeOriginOffset: Vec2, oppositeSideOffset: Vec2): void {
         if (this.config.selectionCtx === null) return;
 
-        this.resizeOrigin.x = this.config.endCoords.x + resizeOriginOffset.x;
-        this.resizeOrigin.y = this.config.endCoords.y + resizeOriginOffset.y;
-        this.oppositeSide.x = this.config.endCoords.x + oppositeSideOffset.x;
-        this.oppositeSide.y = this.config.endCoords.y + oppositeSideOffset.y;
+        this.resizeOrigin = this.config.endCoords.add(resizeOriginOffset);
+        this.oppositeSide = this.config.endCoords.add(oppositeSideOffset);
 
         this.resizeSelected = true;
         this.lockHorizontal = false;

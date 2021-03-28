@@ -91,14 +91,14 @@ describe('EllipseDraw', () => {
     });
 
     it('should use the scaling factor when saving the selection to the canvas', () => {
-        ellipseSelectionDraw['config'].scaleFactor = { x: -1, y: -1 } as Vec2;
+        ellipseSelectionDraw['config'].scaleFactor = new Vec2(-1, -1);
         spyOn(ctxStub, 'getImageData').and.callThrough();
         let canvas = ellipseSelectionDraw['saveSelectionToCanvas'](ctxStub);
         expect(canvas).not.toBeUndefined();
-        ellipseSelectionDraw['config'].scaleFactor = { x: 1, y: -1 } as Vec2;
+        ellipseSelectionDraw['config'].scaleFactor = new Vec2(-1, -1);
         canvas = ellipseSelectionDraw['saveSelectionToCanvas'](ctxStub);
         expect(canvas).not.toBeUndefined();
-        ellipseSelectionDraw['config'].scaleFactor = { x: -1, y: 1 } as Vec2;
+        ellipseSelectionDraw['config'].scaleFactor = new Vec2(-1, -1);
         canvas = ellipseSelectionDraw['saveSelectionToCanvas'](ctxStub);
         expect(ctxStub.getImageData).toHaveBeenCalledTimes(3);
         expect(canvas).not.toBeUndefined();

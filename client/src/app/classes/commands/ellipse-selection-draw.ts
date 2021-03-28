@@ -1,5 +1,6 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
+import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 
@@ -12,11 +13,8 @@ export class EllipseSelectionDraw extends AbstractDraw {
     }
 
     execute(context: CanvasRenderingContext2D): void {
-        const radiusX = Math.abs(this.config.width / 2);
-        const radiusY = Math.abs(this.config.height / 2);
-
-        const centerX = this.config.endCoords.x + radiusX;
-        const centerY = this.config.endCoords.y + radiusY;
+        const radius = new Vec2(this.config.width / 2, this.config.height / 2).apply(Math.abs);
+        const center = this.config.endCoords.add(radius);
 
         const selectionCanvas = this.saveSelectionToCanvas(context);
 
@@ -24,7 +22,7 @@ export class EllipseSelectionDraw extends AbstractDraw {
 
         context.beginPath();
         context.save();
-        context.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+        context.ellipse(center.x, center.y, radius.x, radius.y, 0, 0, 2 * Math.PI);
         context.clip();
         context.drawImage(selectionCanvas, Math.floor(this.config.endCoords.x), Math.floor(this.config.endCoords.y));
         context.restore();
@@ -33,13 +31,12 @@ export class EllipseSelectionDraw extends AbstractDraw {
 
     private fillBackground(context: CanvasRenderingContext2D): void {
         if (!this.config.didChange()) return;
-        const radiusX = Math.abs(this.config.originalWidth / 2);
-        const radiusY = Math.abs(this.config.originalHeight / 2);
-        const centerX = this.config.startCoords.x + Math.abs(this.config.originalWidth / 2);
-        const centerY = this.config.startCoords.y + Math.abs(this.config.originalHeight / 2);
+
+        const radius = new Vec2(this.config.originalWidth / 2, this.config.originalHeight / 2).apply(Math.abs);
+        const center = this.config.startCoords.add(radius);
         context.beginPath();
         context.fillStyle = 'white';
-        context.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+        context.ellipse(center.x, center.y, radius.x, radius.y, 0, 0, 2 * Math.PI);
         context.fill();
         context.closePath();
     }
