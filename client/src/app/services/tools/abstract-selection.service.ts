@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Geometry } from '@app/classes/math/geometry';
+import { SelectionClipboard } from '@app/classes/selection/selection-clipboard';
 import { SelectionResize } from '@app/classes/selection/selection-resize';
 import { SelectionTranslation } from '@app/classes/selection/selection-translation';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
@@ -24,6 +25,7 @@ export abstract class AbstractSelectionService extends Tool {
 
     readonly UPDATE_POINTS: Subject<boolean> = new Subject<boolean>();
     selectionResize: SelectionResize;
+    selectionClipboard: SelectionClipboard;
     mouseUpCoord: Vec2;
     config: SelectionConfig;
 
@@ -32,6 +34,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.config = new SelectionConfig();
         this.selectionTranslation = new SelectionTranslation(this.config);
         this.selectionResize = new SelectionResize(this.config);
+        this.selectionClipboard = new SelectionClipboard(this);
         this.selectionData = document.createElement('canvas');
         this.config.endCoords = new Vec2(0, 0);
         this.initSubscriptions();
@@ -106,6 +109,7 @@ export abstract class AbstractSelectionService extends Tool {
             }
         }
         this.selectionTranslation.onKeyDown(event, this.leftMouseDown);
+        this.selectionClipboard.onKeyDown(event);
     }
 
     onKeyUp(event: KeyboardEvent): void {
