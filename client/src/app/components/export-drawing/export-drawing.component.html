@@ -1,7 +1,7 @@
 <div *ngIf="this.canShowPopup()" id="background">
     <div id="main">
         <div id="content">
-            <h1 class="white" id="title">Exporter le dessins</h1>
+            <h1 class="white" id="title">Exporter le dessin</h1>
             <div class="options">
                 <h3 class="white" id="format_text">Format</h3>
                 <mat-button-toggle-group name="fontStyle" aria-label="Font Style" value="png">
@@ -9,9 +9,9 @@
                     <mat-button-toggle id="corner-right" value="jpeg" (change)="changeExportFormat($event.value)">JPEG</mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
-            <form [formGroup]="exportForm" (ngSubmit)="export()" id="exportForm">
+            <form [formGroup]="exportForm" (ngSubmit)="export($event.submitter.id)" id="exportForm">
                 <mat-form-field appearance="legacy">
-                    <input matInput formControlName="nameFormControl" name="filename" maxlength="100" />
+                    <input matInput (input)="resetImgurData()" formControlName="nameFormControl" name="filename" maxlength="100" />
                     <span matSuffix>{{ '.' + exportFormat }} &nbsp;</span>
                     <mat-error *ngIf="nameFormControl.invalid"> Le nom n'est pas <strong>valide</strong> </mat-error>
                 </mat-form-field>
@@ -27,8 +27,12 @@
                 </mat-button-toggle-group>
             </div>
             <canvas #exportPreview id="exportPreview" [attr.width]="this.getPreviewWidth()" [attr.height]="this.getPreviewHeight()"></canvas>
+            <br />
+            <a *ngIf="imgurURL.length !== 0" id="imgur-link-button" mat-raised-button [href]="imgurURL" target="_blank">Lien sur Imgur</a>
+            <h3 *ngIf="hasImgurServerError" class="error">Aucune connexion au serveur de Imgur!</h3>
             <div class="options">
-                <button class="button green white" type="submit" mat-raised-button form="exportForm">Confirmer</button>
+                <button id="imgur-export" class="button green white" type="submit" mat-raised-button form="exportForm">Sur Imgur</button>
+                <button id="local-export" class="button green white" type="submit" mat-raised-button form="exportForm">Localement</button>
                 <button class="button red white" mat-raised-button (click)="hidePopup()">Annuler</button>
             </div>
         </div>
