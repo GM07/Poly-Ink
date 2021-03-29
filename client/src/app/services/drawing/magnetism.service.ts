@@ -70,8 +70,7 @@ export class MagnetismService {
     }
 
     getGridPosition(currentPos: Vec2): Vec2 {
-        if (this.isEnabled)
-            currentPos = this.getAjustement(this.getClosestIntersection(currentPos));
+        if (this.isEnabled) currentPos = this.getAjustement(this.getClosestIntersection(currentPos));
         return currentPos;
     }
 
@@ -102,7 +101,7 @@ export class MagnetismService {
                 return this.gridService.size - (endCoords % this.gridService.size) - this.gridService.size;
             case MagnetismSelection.top:
             case MagnetismSelection.center:
-            case MagnetismSelection.bottomLeft:
+            case MagnetismSelection.bottom:
                 return this.gridService.size - ((endCoords + size / 2) % this.gridService.size) - this.gridService.size;
             default:
                 return this.gridService.size - ((endCoords + size) % this.gridService.size) - this.gridService.size;

@@ -79,14 +79,14 @@ describe('SelectionTranslation', () => {
 
     it('HorizontalTranslationModifier should return 3 if right Arrow is down', () => {
         selectionTranslation['RIGHT_ARROW'].isDown = true;
-        expect(selectionTranslation['HorizontalTranslationModifier']()).toEqual(3);
+        expect(selectionTranslation['HorizontalTranslationModifier']()).toEqual(selectionTranslation['TRANSLATION_PIXELS']);
     });
 
     it('HorizontalTranslationModifier should return -3 if left Arrow is down', () => {
         // tslint:disable:no-magic-numbers
         selectionTranslation['RIGHT_ARROW'].isDown = false;
         selectionTranslation['LEFT_ARROW'].isDown = true;
-        expect(selectionTranslation['HorizontalTranslationModifier']()).toEqual(-3);
+        expect(selectionTranslation['HorizontalTranslationModifier']()).toEqual(-selectionTranslation['TRANSLATION_PIXELS']);
     });
 
     it('VerticalTranslationModifier should return 3 if down Arrow is down', () => {
@@ -194,5 +194,19 @@ describe('SelectionTranslation', () => {
         selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
         selectionTranslation.onMouseUp(new Vec2(0, 0));
         expect(updateSelection).toHaveBeenCalled();
+    });
+
+    it('horizontal translation modifier should use magnetism if enabled', () => {
+        selectionTranslation['magnetismService'].isEnabled = true;
+        spyOn(selectionTranslation['magnetismService'], 'getXKeyAjustement');
+        selectionTranslation['HorizontalTranslationModifier']();
+        expect(selectionTranslation['magnetismService'].getXKeyAjustement).toHaveBeenCalled();
+    });
+
+    it('vertical translation modifier should use magnetism if enabled', () => {
+        selectionTranslation['magnetismService'].isEnabled = true;
+        spyOn(selectionTranslation['magnetismService'], 'getYKeyAjustement');
+        selectionTranslation['VerticalTranslationModifier']();
+        expect(selectionTranslation['magnetismService'].getYKeyAjustement).toHaveBeenCalled();
     });
 });
