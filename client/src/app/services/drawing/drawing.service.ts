@@ -49,7 +49,7 @@ export class DrawingService {
         this.previewCtx.drawImage(memoryPreviewCanvas, 0, 0);
 
         this.changes.next();
-        if (!this.isReloading) {
+        if (!this.isReloading()) {
             this.autoSaveService.save(this.baseCtx);
         }
     }
@@ -90,7 +90,6 @@ export class DrawingService {
             await this.createLoadedCanvasFromStorage();
         }
         if (this.loadedCanvas === undefined) return;
-        console.log('we found something....');
         const width = this.loadedCanvas.width;
         const height = this.loadedCanvas.height;
         this.resizeCanvas(width, height);
