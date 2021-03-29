@@ -107,19 +107,19 @@ describe('SelectionTranslation', () => {
     });
 
     it('selection should not move with different keys than arrow', () => {
-        spyOn<any>(selectionTranslation, 'updateSelectionRequest');
+        spyOn<any>(selectionTranslation, 'UPDATE_SELECTION_REQUEST');
         const keyboardEvent = new KeyboardEvent('keydown', { key: 'invalid' });
         selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
         selectionTranslation.onKeyDown(keyboardEvent, false);
-        expect(selectionTranslation['updateSelectionRequest']).not.toHaveBeenCalled();
+        expect(selectionTranslation['UPDATE_SELECTION_REQUEST']).not.toHaveBeenCalled();
     });
 
     it('should do nothing on event repeat', () => {
         const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowleft', repeat: true });
         selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
-        spyOn<any>(selectionTranslation, 'updateSelectionRequest');
+        spyOn<any>(selectionTranslation, 'UPDATE_SELECTION_REQUEST');
         selectionTranslation.onKeyDown(keyboardEvent, false);
-        expect(selectionTranslation['updateSelectionRequest']).not.toHaveBeenCalled();
+        expect(selectionTranslation['UPDATE_SELECTION_REQUEST']).not.toHaveBeenCalled();
     });
 
     it('should not stop moving the selection if we release a different key than an arrow', () => {

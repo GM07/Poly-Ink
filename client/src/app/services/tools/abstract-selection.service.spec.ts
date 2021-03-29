@@ -166,8 +166,8 @@ describe('AbstractSelectionService', () => {
 
     it('should initialise subscriptions', () => {
         const drawingServiceSubscribe = spyOn(service['drawingService'].changes, 'subscribe');
-        const selectionTranslationSubscribe = spyOn(service['selectionTranslation'].updateSelectionRequest, 'subscribe');
-        const selectionResizeSubscribe = spyOn(service['selectionResize'].updateSelectionRequest, 'subscribe');
+        const selectionTranslationSubscribe = spyOn(service['selectionTranslation'].UPDATE_SELECTION_REQUEST, 'subscribe');
+        const selectionResizeSubscribe = spyOn(service['selectionResize'].UPDATE_SELECTION_REQUEST, 'subscribe');
         service['initSubscriptions']();
         expect(drawingServiceSubscribe).toHaveBeenCalled();
         expect(selectionTranslationSubscribe).toHaveBeenCalled();
@@ -177,8 +177,8 @@ describe('AbstractSelectionService', () => {
     it('should call the appropriate subscribed methods', () => {
         const updateSelectionSpy = spyOn<any>(service, 'updateSelection');
         service['drawingService'].changes.next();
-        service['selectionTranslation'].updateSelectionRequest.next({ x: 0, y: 0 } as Vec2);
-        service['selectionResize'].updateSelectionRequest.next({ x: 0, y: 0 } as Vec2);
+        service['selectionTranslation'].UPDATE_SELECTION_REQUEST.next({ x: 0, y: 0 } as Vec2);
+        service['selectionResize'].UPDATE_SELECTION_REQUEST.next({ x: 0, y: 0 } as Vec2);
         expect(updateSelectionSpy).toHaveBeenCalledTimes(3);
     });
 });

@@ -14,12 +14,11 @@ export class SelectionResize {
     private lockVertical: boolean;
     private lockHorizontal: boolean;
 
+    readonly UPDATE_SELECTION_REQUEST: Subject<Vec2> = new Subject<Vec2>();
     resizeSelected: boolean;
-    updateSelectionRequest: Subject<Vec2>;
 
     constructor(config: SelectionConfig) {
         this.config = config;
-        this.updateSelectionRequest = new Subject<Vec2>();
         this.initAttribs();
     }
 
@@ -48,7 +47,7 @@ export class SelectionResize {
         canvas.width = Math.abs(newSize.x);
         canvas.height = Math.abs(newSize.y);
         this.config.selectionCtx.drawImage(this.memoryCanvas, 0, 0, Math.abs(newSize.x), Math.abs(newSize.y));
-        this.updateSelectionRequest.next(this.getTranslationForResize(mousePos));
+        this.UPDATE_SELECTION_REQUEST.next(this.getTranslationForResize(mousePos));
 
         const translation = this.getTranslation(mousePos);
         this.resizeOrigin = this.resizeOrigin.add(translation);

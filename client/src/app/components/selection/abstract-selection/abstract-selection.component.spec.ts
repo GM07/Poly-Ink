@@ -165,17 +165,17 @@ describe('AbstractSelectionComponent', () => {
     it('should update control point on init if update is true', () => {
         component.displayControlPoints = false;
         const placePoints = spyOn<any>(component, 'placePoints');
-        abstractSelectionService.updatePoints.next(true);
+        abstractSelectionService.UPDATE_POINTS.next(true);
         expect(placePoints).toHaveBeenCalled();
         component.displayControlPoints = true;
-        abstractSelectionService.updatePoints.next(true);
+        abstractSelectionService.UPDATE_POINTS.next(true);
         expect(placePoints).toHaveBeenCalledTimes(2);
     });
 
     it('should not update control point on init if update is false', () => {
         component.displayControlPoints = false;
         const placePoints = spyOn<any>(component, 'placePoints');
-        abstractSelectionService.updatePoints.next(false);
+        abstractSelectionService.UPDATE_POINTS.next(false);
         expect(placePoints).not.toHaveBeenCalled();
     });
 });

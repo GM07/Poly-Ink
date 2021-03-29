@@ -20,7 +20,7 @@ export class SelectionTranslation {
     private bodyHeight: string;
     private isMouseTranslationStarted: boolean;
 
-    updateSelectionRequest: Subject<Vec2>;
+    readonly UPDATE_SELECTION_REQUEST: Subject<Vec2> = new Subject<Vec2>();
 
     constructor(config: SelectionConfig) {
         this.bodyWidth = document.body.style.width;
@@ -28,7 +28,6 @@ export class SelectionTranslation {
         this.config = config;
         this.moveId = this.DEFAULT_MOVE_ID;
         this.translationOrigin = new Vec2(0, 0);
-        this.updateSelectionRequest = new Subject<Vec2>();
         this.isMouseTranslationStarted = false;
     }
 
@@ -92,7 +91,7 @@ export class SelectionTranslation {
 
     private sendUpdateSelectionRequest(translation: Vec2): void {
         this.translationOrigin = this.translationOrigin.add(translation);
-        this.updateSelectionRequest.next(translation);
+        this.UPDATE_SELECTION_REQUEST.next(translation);
     }
 
     private getTranslation(mousePos: Vec2): Vec2 {

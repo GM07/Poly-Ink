@@ -21,9 +21,9 @@ export abstract class AbstractSelectionService extends Tool {
     protected readonly BORDER_WIDTH: number = 2;
     protected selectionData: HTMLCanvasElement;
     protected selectionTranslation: SelectionTranslation;
-    selectionResize: SelectionResize;
 
-    updatePoints: Subject<boolean>;
+    readonly UPDATE_POINTS: Subject<boolean> = new Subject<boolean>();
+    selectionResize: SelectionResize;
     mouseUpCoord: Vec2;
     config: SelectionConfig;
 
@@ -35,7 +35,6 @@ export abstract class AbstractSelectionService extends Tool {
         this.selectionData = document.createElement('canvas');
         this.config.endCoords = new Vec2(0, 0);
         this.initSubscriptions();
-        this.updatePoints = new Subject<boolean>();
     }
 
     protected abstract endSelection(): void;
@@ -55,7 +54,7 @@ export abstract class AbstractSelectionService extends Tool {
             this.endSelection();
             this.selectionResize.stopDrawing();
             this.selectionTranslation.stopDrawing();
-            this.updatePoints.next(false);
+            this.UPDATE_POINTS.next(false);
             this.mouseDownCoord = mousePos;
             this.mouseUpCoord = mousePos;
             this.config.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
@@ -135,7 +134,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.config.height = height;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.startSelection();
-        this.updatePoints.next(true);
+        this.UPDATE_POINTS.next(true);
     }
 
     stopDrawing(): void {
@@ -147,7 +146,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.config.shift.isDown = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
 
-        this.updatePoints.next(false);
+        this.UPDATE_POINTS.next(false);
     }
 
     startMouseTranslation(event: MouseEvent): void {
@@ -181,10 +180,10 @@ export abstract class AbstractSelectionService extends Tool {
         this.drawingService.changes.subscribe(() => {
             this.updateSelection(new Vec2(0, 0));
         });
-        this.selectionTranslation.updateSelectionRequest.subscribe((translation: Vec2) => {
+        this.selectionTranslation.UPDATE_SELECTION_REQUEST.subscribe((translation: Vec2) => {
             this.updateSelection(translation);
         });
-        this.selectionResize.updateSelectionRequest.subscribe((translation: Vec2) => {
+        this.selectionResize.UPDATE_SELECTION_REQUEST.subscribe((translation: Vec2) => {
             this.updateSelection(translation);
         });
     }
@@ -220,7 +219,7 @@ export abstract class AbstractSelectionService extends Tool {
         previewCtx.drawImage(this.selectionData, x, y);
 
         this.drawPreviewSelection();
-        this.updatePoints.next(true);
+        this.UPDATE_POINTS.next(true);
     }
 
     private updateSelection(translation: Vec2): void {
@@ -229,7 +228,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.drawingService.blockUndoRedo();
         this.config.endCoords = this.config.endCoords.add(translation);
         this.updateSelectionRequired();
-        this.updatePoints.next(true);
+        this.UPDATE_POINTS.next(true);
     }
 
     private drawPreviewSelection(): void {

@@ -43,7 +43,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.updateSubscription = this.selectionService.updatePoints.subscribe((display: boolean) => {
+        this.updateSubscription = this.selectionService.UPDATE_POINTS.subscribe((display: boolean) => {
             if (display && this.displayControlPoints) {
                 this.placePoints();
             }
