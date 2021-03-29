@@ -70,6 +70,11 @@ export class DrawingComponent implements AfterViewInit {
         this.toolHandlerService.onMouseEnter(event);
     }
 
+    @HostListener('window:beforeunload', ['$event'])
+    onPageReload(event: Event) {
+        this.drawingService.reloadedDrawing = true;
+    }
+
     get width(): number {
         return this.canvasSize.x;
     }

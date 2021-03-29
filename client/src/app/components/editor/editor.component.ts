@@ -4,7 +4,7 @@ import {
     NewDrawingConstants,
     RedoConstants,
     SaveFileToolConstants,
-    UndoConstants,
+    UndoConstants
 } from '@app/classes/tool_ui_settings/tools.constants';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 import { ExportDrawingComponent } from '@app/components/export-drawing/export-drawing.component';
@@ -51,5 +51,11 @@ export class EditorComponent {
     @HostListener('document:mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
         this.shortcutHandler.onMouseMove(event);
+    }
+
+    @HostListener('window:beforeunload', ['$event'])
+    onPageReload(event: Event) {
+        localStorage.setItem('editor_reloaded', 'true');
+        console.log('We loaded canvas from storage');
     }
 }
