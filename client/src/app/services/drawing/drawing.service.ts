@@ -105,12 +105,12 @@ export class DrawingService {
             return localStorage.getItem('drawing');
     }
 
-    setIsDoneReloading(): void {
-        localStorage.removeItem('editor_reloaded');
+    private setIsDoneReloading(): void {
+        localStorage.removeItem('editor_reloading');
     }
 
-    isReloading(): boolean {
-        return localStorage.getItem('editor_reloaded') !== null;
+    private isReloading(): boolean {
+        return localStorage.getItem('editor_reloading') !== null;
     }
 
     async createLoadedCanvasFromStorage (): Promise<void> {
@@ -129,7 +129,7 @@ export class DrawingService {
         }
     }
 
-    loadImagePromise(image: HTMLImageElement) : Promise<Event> {
+    private loadImagePromise(image: HTMLImageElement) : Promise<Event> {
         return new Promise((resolve, _) => {
             image.onload = resolve;
         });

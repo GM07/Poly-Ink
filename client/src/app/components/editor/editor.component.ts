@@ -55,7 +55,6 @@ export class EditorComponent {
 
     @HostListener('window:beforeunload', ['$event'])
     onPageReload(event: Event) {
-        localStorage.setItem('editor_reloaded', 'true');
-        console.log('We loaded canvas from storage');
+        localStorage.setItem('editor_reloading', 'true');
     }
 }
