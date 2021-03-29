@@ -15,6 +15,7 @@ describe('SelectionTranslation', () => {
         canvasSelection = document.createElement('canvas');
         selectionConfig = new SelectionConfig();
         selectionTranslation = new SelectionTranslation(selectionConfig);
+        selectionTranslation['isMouseTranslationStarted'] = true;
     });
 
     it('should be created', () => {
@@ -137,6 +138,12 @@ describe('SelectionTranslation', () => {
     it('should clear the translation interval for the arrow keys', () => {
         selectionTranslation['clearArrowKeys']();
         expect(selectionTranslation['moveId']).toEqual(selectionTranslation['DEFAULT_MOVE_ID']);
+    });
+
+    it('should send an update selection request', () => {
+        const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
+        selectionTranslation['sendUpdateSelectionRequest'](new Vec2(0, 0));
+        expect(updateSelection).toHaveBeenCalled();
     });
 
     it('it should move the selection when there is a selection and an arrow is pressed', () => {
