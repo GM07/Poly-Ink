@@ -48,7 +48,7 @@ describe('DrawingService', () => {
         expect(service.baseCtx.drawImage).toHaveBeenCalled();
     });
 
-    it('should load drawing from local storage if editor is realoading', async () => {
+    it('should load drawing from local storage if editor is reloading', async () => {
         spyOn<any>(service, 'isReloading').and.returnValue(true);
         spyOn(service, 'createLoadedCanvasFromStorage').and.resolveTo();
         await service.loadDrawing();
