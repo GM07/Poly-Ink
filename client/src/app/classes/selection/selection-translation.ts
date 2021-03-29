@@ -18,6 +18,7 @@ export class SelectionTranslation {
     private translationOrigin: Vec2;
     private bodyWidth: string;
     private bodyHeight: string;
+    private isMouseTranslationStarted: boolean;
 
     updateSelectionRequest: Subject<Vec2>;
 
@@ -28,6 +29,7 @@ export class SelectionTranslation {
         this.moveId = this.DEFAULT_MOVE_ID;
         this.translationOrigin = new Vec2(0, 0);
         this.updateSelectionRequest = new Subject<Vec2>();
+        this.isMouseTranslationStarted = false;
     }
 
     onKeyDown(event: KeyboardEvent, leftMouseDown: boolean): void {
@@ -57,13 +59,14 @@ export class SelectionTranslation {
     }
 
     onMouseUp(mouseUpCoord: Vec2): void {
-        if (this.config.selectionCtx !== null) {
+        if (this.config.selectionCtx !== null && this.isMouseTranslationStarted) {
+            this.isMouseTranslationStarted = false;
             this.sendUpdateSelectionRequest(this.getTranslation(mouseUpCoord));
         }
     }
 
     onMouseMove(event: MouseEvent, mouseUpCoord: Vec2): void {
-        if (this.config.selectionCtx !== null) {
+        if (this.config.selectionCtx !== null && this.isMouseTranslationStarted) {
             this.sendUpdateSelectionRequest(this.getTranslation(mouseUpCoord));
             document.body.style.width = event.pageX + this.config.width + 'px';
             document.body.style.height = event.pageY + this.config.height + 'px';
@@ -71,10 +74,12 @@ export class SelectionTranslation {
     }
 
     startMouseTranslation(mousePosition: Vec2): void {
+        this.isMouseTranslationStarted = true;
         this.translationOrigin = mousePosition;
     }
 
     stopDrawing(): void {
+        this.isMouseTranslationStarted = false;
         this.translationOrigin = new Vec2(0, 0);
         document.body.style.width = this.bodyWidth;
         document.body.style.height = this.bodyHeight;

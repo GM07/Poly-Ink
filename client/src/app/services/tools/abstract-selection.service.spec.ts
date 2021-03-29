@@ -108,6 +108,7 @@ describe('AbstractSelectionService', () => {
         const updateSpy = spyOn<any>(service, 'updateSelection');
         spyOn<any>(service, 'setMouseUpCoord');
         service['config'].selectionCtx = canvasSelection.getContext('2d');
+        service['selectionTranslation']['isMouseTranslationStarted'] = true;
         service.mouseUpCoord = new Vec2(10, 10);
         service.leftMouseDown = true;
         mouseEvent = { x: 1000, y: 1000 } as MouseEvent;
