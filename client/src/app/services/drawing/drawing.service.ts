@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { ResizeDraw } from '@app/classes/commands/resize-draw';
 import { ResizeConfig } from '@app/classes/tool-config/resize-config';
-import { AutoSaveService } from '@app/services/auto-save/auto-save.service';
 import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 import { Subject } from 'rxjs';
 
@@ -19,7 +17,7 @@ export class DrawingService {
     changes: Subject<void>;
     loadedCanvas: HTMLCanvasElement | undefined;
 
-    constructor(private undoRedoService: UndoRedoService, private autoSaveService: AutoSaveService, private router: Router) {
+    constructor(private undoRedoService: UndoRedoService) {
         this.changes = new Subject();
         if(this.isReloading()) {
             this.createLoadedCanvasFromStorage();
@@ -50,7 +48,7 @@ export class DrawingService {
 
         this.changes.next();
         if (!this.isReloading()) {
-            this.autoSaveService.save(this.baseCtx);
+            this.save(this.baseCtx);
         }
     }
 
@@ -81,7 +79,7 @@ export class DrawingService {
         this.baseCtx.fillStyle = 'white';
         this.baseCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         if(!this.isReloading) {
-            this.autoSaveService.save(this.baseCtx);
+            this.save(this.baseCtx);
         }
     }
 
@@ -96,7 +94,7 @@ export class DrawingService {
         this.baseCtx.drawImage(this.loadedCanvas, 0, 0);
         this.initUndoRedo();
         this.loadedCanvas = undefined;
-        this.autoSaveService.save(this.baseCtx);
+        this.save(this.baseCtx);
         this.setIsDoneReloading();
     }
 
@@ -124,7 +122,6 @@ export class DrawingService {
             canvas.height = savedImage.height;
             canvasCTX.drawImage(savedImage, 0, 0);
             this.loadedCanvas = canvas;
-            this.router.navigateByUrl('editor');
         }
     }
 
@@ -134,10 +131,14 @@ export class DrawingService {
         });
     }
 
+    private save(canvas: CanvasRenderingContext2D) {
+        localStorage.setItem('drawing', canvas.canvas.toDataURL()); 
+    }
+
     draw(command: AbstractDraw): void {
         this.undoRedoService.blockUndoRedo = false;
         command.execute(this.baseCtx);
-        this.autoSaveService.save(this.baseCtx);
+        this.save(this.baseCtx);
         this.undoRedoService.saveCommand(command);
     }
 

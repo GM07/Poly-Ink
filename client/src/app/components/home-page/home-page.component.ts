@@ -22,8 +22,12 @@ export class HomePageComponent {
     showContinueDrawing: boolean;
 
     constructor(private router: Router, private zone: NgZone, private drawingService: DrawingService) {
+        this.init();
+    }
+
+    init(): void {
         this.state = 'visible';
-        this.showContinueDrawing = drawingService.getSavedDrawing() !== null;
+        this.showContinueDrawing = this.drawingService.getSavedDrawing() !== null;
         this.showComponent = true;
     }
 
@@ -38,9 +42,10 @@ export class HomePageComponent {
         this.zone.run(() => this.router.navigateByUrl('carrousel'));
     }
 
-    continueDrawing(): void {
+    async continueDrawing(): Promise<void> {
         this.fadeOut();
-        this.drawingService.createLoadedCanvasFromStorage();
+        await this.drawingService.createLoadedCanvasFromStorage();
+        this.zone.run(() => this.router.navigateByUrl('editor'));
     }
 
     backToMenu(): void {
