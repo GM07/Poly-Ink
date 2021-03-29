@@ -6,7 +6,7 @@ import { Monochrome } from '@app/classes/filters/monochrome-filter';
 import { NegativeFilter } from '@app/classes/filters/negative-filter';
 import { SepiaFilter } from '@app/classes/filters/sepia-filter';
 import { SpotlightFilter } from '@app/classes/filters/spotlight-filter';
-import { ImgurResponse } from '@app/classes/imgur-res-data';
+import { ImgurResponse } from '@app/classes/imgur-res';
 import { DrawingConstants } from '@app/constants/drawing';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ExportDrawingService } from '@app/services/popups/export-drawing';
@@ -97,15 +97,18 @@ export class ExportDrawingComponent {
         this.resetImgurData();
         if (this.nameFormControl.valid) {
             this.filename = this.nameFormControl.value;
-            if(submitterId === 'local-export') {
+            if (submitterId === 'local-export') {
                 this.exportDrawingService.exportImage(this.canvasImage, this.exportFormat, this.filename);
             } else {
-                this.exportImgurService.exportImage(this.canvasImage, this.exportFormat, this.filename).toPromise().then((res: ImgurResponse) => {
-                    console.log(res);
-                    this.imgurURL = res.data.link;
-                }).catch((error: Error) => {
-                    this.hasImgurServerError = true;
-                });
+                this.exportImgurService
+                    .exportImage(this.canvasImage, this.exportFormat, this.filename)
+                    .toPromise()
+                    .then((res: ImgurResponse) => {
+                        this.imgurURL = res.data.link;
+                    })
+                    .catch((error: Error) => {
+                        this.hasImgurServerError = true;
+                    });
             }
         }
     }
