@@ -40,7 +40,7 @@ export class HomePageComponent {
 
     continueDrawing(): void {
         this.fadeOut();
-        this.drawingService.createLoadedCanvas();
+        this.drawingService.createLoadedCanvasFromStorage();
     }
 
     backToMenu(): void {

@@ -18,12 +18,14 @@ export class DrawingService {
 
     changes: Subject<void>;
     loadedCanvas: HTMLCanvasElement | undefined;
-    reloadedDrawing: boolean;
 
     constructor(private undoRedoService: UndoRedoService, private autoSaveService: AutoSaveService, private router: Router) {
         this.changes = new Subject();
-        this.loadedCanvas = undefined;
-        this.reloadedDrawing = false;
+        if(this.isReloading()) {
+            this.createLoadedCanvasFromStorage();
+        } else {
+            this.loadedCanvas = undefined;
+        }
     }
 
     clearCanvas(context: CanvasRenderingContext2D): void {
@@ -47,7 +49,9 @@ export class DrawingService {
         this.previewCtx.drawImage(memoryPreviewCanvas, 0, 0);
 
         this.changes.next();
-        this.autoSaveService.save(this.baseCtx);
+        if (!this.isReloading) {
+            this.autoSaveService.save(this.baseCtx);
+        }
     }
 
     initUndoRedo(): void {
@@ -76,13 +80,14 @@ export class DrawingService {
     initBackground(): void {
         this.baseCtx.fillStyle = 'white';
         this.baseCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        this.autoSaveService.save(this.baseCtx);
+        if(!this.isReloading) {
+            this.autoSaveService.save(this.baseCtx);
+        }
     }
 
-    loadDrawing(): void {
-        if(localStorage.getItem('editor_reloaded') !== null) {
-            this.createLoadedCanvas();
-            localStorage.removeItem('editor_reloaded');
+    async loadDrawing(): Promise<void> {
+        if(this.isReloading()) {
+            await this.createLoadedCanvasFromStorage();
         }
         if (this.loadedCanvas === undefined) return;
         console.log('we found something....');
@@ -93,28 +98,41 @@ export class DrawingService {
         this.initUndoRedo();
         this.loadedCanvas = undefined;
         this.autoSaveService.save(this.baseCtx);
+        this.setIsDoneReloading();
     }
 
     getSavedDrawing(): string | null {
             return localStorage.getItem('drawing');
     }
 
-    createLoadedCanvas (): void {
+    setIsDoneReloading(): void {
+        localStorage.removeItem('editor_reloaded');
+    }
+
+    isReloading(): boolean {
+        return localStorage.getItem('editor_reloaded') !== null;
+    }
+
+    async createLoadedCanvasFromStorage (): Promise<void> {
         const canvas = document.createElement('canvas');
         const canvasCTX = canvas.getContext('2d') as CanvasRenderingContext2D;
         let savedImage: HTMLImageElement = new Image();
         const savedDrawingStr: string | null = this.getSavedDrawing();
         if(savedDrawingStr !== null) {
             savedImage.src = savedDrawingStr; 
-            savedImage.onload = () => {
-                canvas.width = savedImage.width;
-                canvas.height = savedImage.height;
-                canvasCTX.drawImage(savedImage, 0, 0);
-                this.loadedCanvas = canvas;
-                this.loadDrawing();
-                this.router.navigateByUrl('editor');
-            };
+            await this.loadImagePromise(savedImage);
+            canvas.width = savedImage.width;
+            canvas.height = savedImage.height;
+            canvasCTX.drawImage(savedImage, 0, 0);
+            this.loadedCanvas = canvas;
+            this.router.navigateByUrl('editor');
         }
+    }
+
+    loadImagePromise(image: HTMLImageElement) : Promise<Event> {
+        return new Promise((resolve, _) => {
+            image.onload = resolve;
+        });
     }
 
     draw(command: AbstractDraw): void {
