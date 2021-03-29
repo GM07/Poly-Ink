@@ -119,8 +119,9 @@ describe('StampService', () => {
     });
 
     it('onKeyDown should not set alt key if incorrect key', () => {
+        service.alt.isDown = true;
         service.onKeyDown({ key: 'Shift', altKey: false } as KeyboardEvent);
-        expect(service.alt.isDown).toEqual(false);
+        expect(service.alt.isDown).toEqual(true);
     });
 
     it('onKeyUp should update alt key if correct key', () => {
@@ -130,9 +131,9 @@ describe('StampService', () => {
     });
 
     it('onKeyUp should not update alt key if incorrect key', () => {
-        service.onKeyDown({ key: 'Alt', altKey: true } as KeyboardEvent);
+        service.alt.isDown = false;
         service.onKeyUp({ key: 'Shift', altKey: true } as KeyboardEvent);
-        expect(service.alt.isDown).toEqual(true);
+        expect(service.alt.isDown).toEqual(false);
     });
 
     it('draw should call draw from drawingService', () => {

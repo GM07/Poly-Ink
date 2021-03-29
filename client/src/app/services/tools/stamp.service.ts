@@ -66,11 +66,11 @@ export class StampService extends Tool {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (!this.alt.isDown && event.altKey) this.alt.isDown = this.alt.equals(event);
+        if (!this.alt.isDown) this.alt.isDown = this.alt.equals(event);
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if (this.alt.isDown && !event.altKey) this.alt.isDown = !this.alt.equals(event);
+        if (this.alt.isDown) this.alt.isDown = !this.alt.equals(event);
     }
 
     draw(): void {
