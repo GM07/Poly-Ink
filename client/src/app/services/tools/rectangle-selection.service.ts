@@ -42,9 +42,9 @@ export class RectangleSelectionService extends AbstractSelectionService {
 
         this.fillBackground(ctx, this.config.endCoords);
 
-        const rectangleCoords = new Vec2(this.config.endCoords.x, this.config.endCoords.y); // TODO
+        const rectangleCoords = new Vec2(this.config.endCoords.x, this.config.endCoords.y);
         ctx.drawImage(this.selectionData, this.config.endCoords.x, this.config.endCoords.y);
-        this.drawSelection(ctx, rectangleCoords, new Vec2(Math.abs(this.config.width), Math.abs(this.config.height))); // TODO
+        this.drawSelection(ctx, rectangleCoords, new Vec2(Math.abs(this.config.width), Math.abs(this.config.height)));
     }
 
     protected drawPreviewSelectionRequired(): void {
