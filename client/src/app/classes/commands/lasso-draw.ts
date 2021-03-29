@@ -23,6 +23,8 @@ export class LassoDraw extends AbstractDraw {
     }
 
     private drawLinePath(ctx: CanvasRenderingContext2D): void {
+        if (this.config.points.length === 0) return;
+
         ctx.beginPath();
         ctx.moveTo(this.config.points[0].x, this.config.points[0].y);
         for (let index = 1; index < this.config.points.length; index++) {

@@ -21,7 +21,7 @@ export class LineService extends Tool {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.config = new LineConfig();
-        this.lineDrawer = new LineDrawer(drawingService, this.config);
+        this.lineDrawer = new LineDrawer(this.config, drawingService);
         this.lineDrawer.drawPreview.subscribe(() => {
             this.drawPreview();
         });

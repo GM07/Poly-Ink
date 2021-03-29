@@ -49,98 +49,6 @@ describe('AbstractSelectionService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('set ArrowKeyUp should update the keys when down', () => {
-        const keyboardEventLeft = new KeyboardEvent('keydown', { key: 'arrowleft' });
-        const keyboardEventRight = new KeyboardEvent('keydown', { key: 'arrowright' });
-        const keyboardEventDown = new KeyboardEvent('keydown', { key: 'arrowdown' });
-        const keyboardEventUp = new KeyboardEvent('keydown', { key: 'arrowup' });
-        service['setArrowKeyDown'](keyboardEventLeft);
-        service['setArrowKeyDown'](keyboardEventRight);
-        service['setArrowKeyDown'](keyboardEventUp);
-        service['setArrowKeyDown'](keyboardEventDown);
-        expect(service['LEFT_ARROW'].isDown).toBeTruthy();
-        expect(service['RIGHT_ARROW'].isDown).toBeTruthy();
-        expect(service['DOWN_ARROW'].isDown).toBeTruthy();
-        expect(service['UP_ARROW'].isDown).toBeTruthy();
-    });
-
-    it('set ArrowKeyUp should update the keys when not down', () => {
-        const keyboardEventLeft = new KeyboardEvent('keydown', { key: 'randomKey' });
-        service['setArrowKeyDown'](keyboardEventLeft);
-        expect(service['LEFT_ARROW'].isDown).toBeFalsy();
-        expect(service['RIGHT_ARROW'].isDown).toBeFalsy();
-        expect(service['DOWN_ARROW'].isDown).toBeFalsy();
-        expect(service['UP_ARROW'].isDown).toBeFalsy();
-    });
-
-    it('set arrowKeyDown should update the keys when up', () => {
-        service['LEFT_ARROW'].isDown = true;
-        service['RIGHT_ARROW'].isDown = true;
-        service['DOWN_ARROW'].isDown = true;
-        service['UP_ARROW'].isDown = true;
-        const keyboardEventLeft = new KeyboardEvent('keyup', { key: 'arrowleft' });
-        const keyboardEventRight = new KeyboardEvent('keyup', { key: 'arrowright' });
-        const keyboardEventDown = new KeyboardEvent('keyup', { key: 'arrowdown' });
-        const keyboardEventUp = new KeyboardEvent('keyup', { key: 'arrowup' });
-        service['setArrowKeyUp'](keyboardEventLeft);
-        service['setArrowKeyUp'](keyboardEventRight);
-        service['setArrowKeyUp'](keyboardEventUp);
-        service['setArrowKeyUp'](keyboardEventDown);
-        expect(service['LEFT_ARROW'].isDown).toBeFalsy();
-        expect(service['RIGHT_ARROW'].isDown).toBeFalsy();
-        expect(service['DOWN_ARROW'].isDown).toBeFalsy();
-        expect(service['UP_ARROW'].isDown).toBeFalsy();
-    });
-
-    it('set ArrowKeyDown should update the keys when not up', () => {
-        const keyboardEventLeft = new KeyboardEvent('keydown', { key: 'randomKey' });
-        service['setArrowKeyUp'](keyboardEventLeft);
-        expect(service['LEFT_ARROW'].isDown).toBeFalsy();
-        expect(service['RIGHT_ARROW'].isDown).toBeFalsy();
-        expect(service['DOWN_ARROW'].isDown).toBeFalsy();
-        expect(service['UP_ARROW'].isDown).toBeFalsy();
-    });
-
-    it('is in selection should return true if is in selection', () => {
-        // tslint:disable:no-magic-numbers
-        service['selectionCtx'] = canvasSelection.getContext('2d');
-        service.config.endCoords = new Vec2(0, 0);
-        service.config.width = 50;
-        service.config.height = 50;
-        spyOn<any>(service, 'getPositionFromMouse').and.returnValue(new Vec2(25, 25));
-        spyOn<any>(service, 'isInSelection').and.callThrough();
-        expect(service.isInSelection(mouseEvent)).toBeTruthy();
-    });
-
-    it('HorizontalTranslationModifier should return 1 if right Arrow is down', () => {
-        service['RIGHT_ARROW'].isDown = true;
-        expect(service['HorizontalTranslationModifier']()).toEqual(1);
-    });
-
-    it('HorizontalTranslationModifier should return -1 if left Arrow is down', () => {
-        // tslint:disable:no-magic-numbers
-        service['RIGHT_ARROW'].isDown = false;
-        service['LEFT_ARROW'].isDown = true;
-        expect(service['HorizontalTranslationModifier']()).toEqual(-1);
-    });
-
-    it('VerticalTranslationModifier should return 1 if down Arrow is down', () => {
-        service['DOWN_ARROW'].isDown = true;
-        expect(service['VerticalTranslationModifier']()).toEqual(1);
-    });
-
-    it('VerticalTranslationModifier should return -1 if up Arrow is down', () => {
-        // tslint:disable:no-magic-numbers
-        service['UP_ARROW'].isDown = true;
-        expect(service['VerticalTranslationModifier']()).toEqual(-1);
-    });
-
-    it('get translation should return the current translation', () => {
-        const mousePos = new Vec2(25, 25);
-        service['translationOrigin'] = new Vec2(25, 25);
-        expect(service['getTranslation'](mousePos)).toEqual(new Vec2(0, 0));
-    });
-
     it('on mouse down should do nothing with different click', () => {
         spyOn(service, 'getPositionFromMouse');
         const badMouseEvent = { button: 1 } as MouseEvent;
@@ -148,13 +56,12 @@ describe('AbstractSelectionService', () => {
         expect(service.getPositionFromMouse).not.toHaveBeenCalled();
     });
 
-    it('should change update selection on mouseMove', () => {
+    it('should transfer the selection movement on mouseMove', () => {
         service.leftMouseDown = true;
-        service.selectionCtx = canvasSelection.getContext('2d');
-        const updateSpy = spyOn<any>(service, 'updateSelection');
-        spyOn(service, 'getTranslation').and.returnValue(new Vec2(1, 1));
+        service['config'].selectionCtx = canvasSelection.getContext('2d');
+        const mouseMoveSpy = spyOn(service['selectionTranslation'], 'onMouseMove');
         service.onMouseMove(mouseEvent);
-        expect(updateSpy).toHaveBeenCalled();
+        expect(mouseMoveSpy).toHaveBeenCalled();
     });
 
     it('should update the mouseUp coords when outside the canvas', () => {
@@ -162,7 +69,7 @@ describe('AbstractSelectionService', () => {
         // tslint:disable:no-magic-numbers
         const getPositionSpy = spyOn<any>(service, 'getPositionFromMouse').and.returnValue(new Vec2(1000, 1000));
         service.leftMouseDown = true;
-        service.selectionCtx = null;
+        service['config'].selectionCtx = null;
         service['setMouseUpCoord'](mouseEvent);
         expect(service.mouseUpCoord).toEqual(new Vec2(canvasTestHelper.canvas.width, canvasTestHelper.canvas.height));
         getPositionSpy.and.returnValue(new Vec2(-1, -1));
@@ -178,9 +85,17 @@ describe('AbstractSelectionService', () => {
     });
 
     it('should do nothing on mouseUp if mouse is not down', () => {
-        spyOn<any>(service, 'isInCanvas');
+        const setMouseUpCoordSpy = spyOn<any>(service, 'setMouseUpCoord');
         service.onMouseUp(mouseEvent);
-        expect(service['isInCanvas']).not.toHaveBeenCalled();
+        expect(setMouseUpCoordSpy).not.toHaveBeenCalled();
+    });
+
+    it('on mouseUp should tranfer the events the selection translation', () => {
+        service.leftMouseDown = true;
+        service['config'].selectionCtx = canvasSelection.getContext('2d');
+        const mouseUpSpy = spyOn(service['selectionTranslation'], 'onMouseUp');
+        service.onMouseUp(mouseEvent);
+        expect(mouseUpSpy).toHaveBeenCalled();
     });
 
     it('on mouse move should do nothing if mouse is not down', () => {
@@ -192,7 +107,7 @@ describe('AbstractSelectionService', () => {
     it('Makes sure the selection updates in the canvas when the mouse moves outside of the canvas', () => {
         const updateSpy = spyOn<any>(service, 'updateSelection');
         spyOn<any>(service, 'setMouseUpCoord');
-        service['selectionCtx'] = canvasSelection.getContext('2d');
+        service['config'].selectionCtx = canvasSelection.getContext('2d');
         service.mouseUpCoord = new Vec2(10, 10);
         service.leftMouseDown = true;
         mouseEvent = { x: 1000, y: 1000 } as MouseEvent;
@@ -200,15 +115,26 @@ describe('AbstractSelectionService', () => {
         expect(updateSpy).toHaveBeenCalled();
     });
 
-    it('pressing shift should do nothing if selection is not null', () => {
-        service['leftMouseDown'] = true;
-        const keyboardEventDown = new KeyboardEvent('keydown', { shiftKey: true });
-        const keyboardEventUp = new KeyboardEvent('keydown', { shiftKey: false });
+    it('pressing shift should update the selection', () => {
+        service.leftMouseDown = true;
+        const keyboardEventDown = new KeyboardEvent('keydown', { key: 'shift', shiftKey: true });
+        const keyboardEventUp = new KeyboardEvent('keydown', { key: 'shift', shiftKey: false });
         spyOn<any>(service, 'updateDrawingSelection');
-        service['selectionCtx'] = canvasSelection.getContext('2d');
+        service['config'].selectionCtx = canvasSelection.getContext('2d');
         service.onKeyDown(keyboardEventDown);
         service.onKeyUp(keyboardEventUp);
         expect(service['updateDrawingSelection']).not.toHaveBeenCalled();
+    });
+
+    it('pressing shift should update the resize', () => {
+        service.resizeSelected = true;
+        service['config'].selectionCtx = canvasSelection.getContext('2d');
+        const keyboardEventDown = new KeyboardEvent('keydown', { key: 'shift', shiftKey: true });
+        const keyboardEventUp = new KeyboardEvent('keydown', { key: 'shift', shiftKey: false });
+        const resizeSpy = spyOn(service['selectionResize'], 'resize');
+        service.onKeyDown(keyboardEventDown);
+        service.onKeyUp(keyboardEventUp);
+        expect(resizeSpy).toHaveBeenCalledTimes(2);
     });
 
     it('key down should do nothing on invalid key', () => {
@@ -222,45 +148,36 @@ describe('AbstractSelectionService', () => {
         expect(service['updateDrawingSelection']).not.toHaveBeenCalled();
     });
 
-    it('selection should not move with different keys than arrow', () => {
-        spyOn<any>(service, 'updateSelection');
-        const keyboardEvent = new KeyboardEvent('keydown', { key: 'invalid' });
-        service['selectionCtx'] = canvasSelection.getContext('2d');
-        service.onKeyDown(keyboardEvent);
-        expect(service['updateSelection']).not.toHaveBeenCalled();
+    it('should start mouse translation', () => {
+        const startMouseTranslationSpy = spyOn(service['selectionTranslation'], 'startMouseTranslation');
+        service.startMouseTranslation({ button: 2 } as MouseEvent);
+        expect(startMouseTranslationSpy).not.toHaveBeenCalled();
+        service.startMouseTranslation(mouseEvent);
+        expect(startMouseTranslationSpy).toHaveBeenCalled();
     });
 
-    it('should do nothing on event repeat', () => {
-        const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowleft', repeat: true });
-        service['selectionCtx'] = canvasSelection.getContext('2d');
-        spyOn<any>(service, 'updateSelection');
-        service.onKeyDown(keyboardEvent);
-        expect(service['updateSelection']).not.toHaveBeenCalled();
+    it('should resize on mouse move', () => {
+        service['selectionResize'].resizeSelected = true;
+        const resizeSpy = spyOn(service['selectionResize'], 'resize');
+        service.onMouseMove(mouseEvent);
+        expect(resizeSpy).toHaveBeenCalled();
     });
 
-    it('should not stop moving the selection if we release a different key than an arrow', () => {
-        service['LEFT_ARROW'].isDown = true;
-        const keyboardEventUp = new KeyboardEvent('keydown', { shiftKey: false });
-        service['selectionCtx'] = canvasSelection.getContext('2d');
-        spyOn(window, 'clearInterval');
-        service.onKeyUp(keyboardEventUp);
-        expect(window.clearInterval).not.toHaveBeenCalled();
+    it('should initialise subscriptions', () => {
+        const drawingServiceSubscribe = spyOn(service['drawingService'].changes, 'subscribe');
+        const selectionTranslationSubscribe = spyOn(service['selectionTranslation'].updateSelectionRequest, 'subscribe');
+        const selectionResizeSubscribe = spyOn(service['selectionResize'].updateSelectionRequest, 'subscribe');
+        service['initSubscriptions']();
+        expect(drawingServiceSubscribe).toHaveBeenCalled();
+        expect(selectionTranslationSubscribe).toHaveBeenCalled();
+        expect(selectionResizeSubscribe).toHaveBeenCalled();
     });
 
-    it('isInSelection should do nothing if there is no selection', () => {
-        spyOn(service, 'getPositionFromMouse');
-        service.isInSelection(mouseEvent);
-        expect(service.getPositionFromMouse).not.toHaveBeenCalled();
-    });
-
-    it('should reset the arrow keys', () => {
-        service['LEFT_ARROW'].isDown = true;
-        service['resetArrowKeys']();
-        expect(service['LEFT_ARROW'].isDown).toBeFalsy();
-    });
-
-    it('should clear the translation interval for the arrow keys', () => {
-        service['clearArrowKeys']();
-        expect(service['moveId']).toEqual(service['DEFAULT_MOVE_ID']);
+    it('should call the appropriate subscribed methods', () => {
+        const updateSelectionSpy = spyOn<any>(service, 'updateSelection');
+        service['drawingService'].changes.next();
+        service['selectionTranslation'].updateSelectionRequest.next({ x: 0, y: 0 } as Vec2);
+        service['selectionResize'].updateSelectionRequest.next({ x: 0, y: 0 } as Vec2);
+        expect(updateSelectionSpy).toHaveBeenCalledTimes(3);
     });
 });

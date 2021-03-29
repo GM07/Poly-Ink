@@ -4,8 +4,10 @@ import { AbstractSelectionComponent } from '@app/components/selection/abstract-s
 import { EllipseSelectionComponent } from '@app/components/selection/ellipse-selection/ellipse-selection.component';
 import { RectangleSelectionComponent } from '@app/components/selection/rectangle-selection/rectangle-selection.component';
 import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.service';
+import { LassoService } from '@app/services/tools/lasso.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+import { LassoSelectionComponent } from '../lasso-selection/lasso-selection.component';
 
 @Component({
     selector: 'app-selection-handler',
@@ -21,6 +23,7 @@ export class SelectionHandlerComponent {
         this.applyNewTab();
         this.settingsList.set(RectangleSelectionService, RectangleSelectionComponent);
         this.settingsList.set(EllipseSelectionService, EllipseSelectionComponent);
+        this.settingsList.set(LassoService, LassoSelectionComponent);
     }
 
     get activeTab(): Type<AbstractSelectionComponent> | undefined {

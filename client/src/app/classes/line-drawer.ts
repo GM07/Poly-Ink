@@ -1,16 +1,12 @@
-import { Injectable } from '@angular/core';
 import { Geometry } from '@app/classes/math/geometry';
 import { ShiftKey } from '@app/classes/shortcut/shift-key';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
-import { AbstractLineConfig } from '@app/classes/tool-config/abstract-line-config';
 import { Vec2 } from '@app/classes/vec2';
 import { ToolMath } from '@app/constants/math';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
+import { AbstractLineConfig } from './tool-config/abstract-line-config';
 
-@Injectable({
-    providedIn: 'root',
-})
 export class LineDrawer {
     protected static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...x
 
@@ -24,9 +20,11 @@ export class LineDrawer {
     private config: AbstractLineConfig;
     public drawPreview: Subject<void>;
     public leftMouseDown: boolean;
+    private drawingService: DrawingService;
 
-    constructor(private drawingService: DrawingService, config: AbstractLineConfig) {
+    constructor(config: AbstractLineConfig, drawingService: DrawingService) {
         this.config = config;
+        this.drawingService = drawingService;
         this.drawPreview = new Subject<void>();
         this.leftMouseDown = false;
         this.init();

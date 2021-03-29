@@ -1,7 +1,9 @@
 import { Vec2 } from '../vec2';
 import { AbstractLineConfig } from './abstract-line-config';
+import { SelectionConfig } from './selection-config';
 
-export class LassoConfig extends AbstractLineConfig {
+export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
+    points: Vec2[];
     startCoords: Vec2;
     endCoords: Vec2;
     height: number;
@@ -10,6 +12,7 @@ export class LassoConfig extends AbstractLineConfig {
 
     constructor() {
         super();
+        this.points = [];
         this.startCoords = new Vec2(0, 0);
         this.endCoords = new Vec2(0, 0);
         this.width = 0;

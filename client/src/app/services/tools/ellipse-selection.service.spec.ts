@@ -49,7 +49,7 @@ describe('EllipseSelectionService', () => {
         const drawSelection = spyOn<any>(service, 'drawSelection');
         const saveWidth = (service.config.width = 5);
         const saveHeight = (service.config.height = 25);
-        service.config.shiftDown = true;
+        service.config.shift.isDown = true;
         service.mouseDownCoord = new Vec2(0, 0);
         service['drawPreviewSelectionRequired']();
         expect(saveWidth).toEqual(service.config.width);
@@ -66,22 +66,24 @@ describe('EllipseSelectionService', () => {
     });
 
     it('fill background should fill an ellipse at the location', () => {
-        service['center'] = new Vec2(0, 0);
-        service['radiusAbs'] = new Vec2(0, 0);
         service.config.startCoords = new Vec2(0, 0);
+        service.config.endCoords = new Vec2(0, 0);
         spyOn(previewCtxStub, 'ellipse');
         spyOn(previewCtxStub, 'fill');
+        spyOn(service.config, 'didChange').and.returnValue(true);
         service['fillBackground'](previewCtxStub, new Vec2(10, 25));
         expect(previewCtxStub.ellipse).toHaveBeenCalled();
         expect(previewCtxStub.fill).toHaveBeenCalled();
     });
 
     it('update selection required should clip the image, draw it, update it and update the background', () => {
-        service['radiusAbs'] = new Vec2(0, 0);
+        service.config.width = 1;
+        service.config.height = 1;
         service.config.endCoords = new Vec2(0, 0);
         spyOn(previewCtxStub, 'ellipse');
         spyOn(previewCtxStub, 'clip');
         spyOn(previewCtxStub, 'drawImage');
+        spyOn(service.config, 'didChange').and.returnValue(true);
         const fillBackground = spyOn<any>(service, 'fillBackground');
         const drawSelection = spyOn<any>(service, 'drawSelection');
         service['updateSelectionRequired']();
@@ -93,22 +95,25 @@ describe('EllipseSelectionService', () => {
     });
 
     it('end selection should do nothing if there is no selection', () => {
+        spyOn(service.config, 'didChange').and.returnValue(true);
         const fillBackground = spyOn<any>(service, 'fillBackground');
         service['endSelection']();
         expect(fillBackground).not.toHaveBeenCalled();
     });
 
     it('end selection should draw the selection on the base canvas', () => {
-        service.selectionCtx = previewCtxStub;
+        service['config'].selectionCtx = previewCtxStub;
         service.config.endCoords = new Vec2(0, 0);
-        service['radiusAbs'] = new Vec2(0, 0);
+        service.config.width = 1;
+        service.config.height = 1;
         spyOn(service, 'draw').and.stub();
         service['endSelection']();
         expect(service.draw).toHaveBeenCalled();
     });
 
-    it("fill background should do nothing if the mouse hasn't move", () => {
+    it('fill background should do nothing if the mouse has not moved', () => {
         service.config.startCoords = new Vec2(0, 0);
+        spyOn(service.config, 'didChange').and.returnValue(false);
         spyOn(previewCtxStub, 'beginPath');
         service['fillBackground'](previewCtxStub, new Vec2(0, 0));
         expect(previewCtxStub.beginPath).not.toHaveBeenCalled();
