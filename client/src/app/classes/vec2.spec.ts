@@ -42,4 +42,9 @@ describe('Vec2', () => {
         const v1: Vec2 = new Vec2(-1, -3);
         expect(v1.apply(Math.abs)).toEqual(new Vec2(1, 3));
     });
+
+    it('should clone', () => {
+        const v1: Vec2 = new Vec2(5, 9);
+        expect(v1.clone()).toEqual(v1);
+    });
 });

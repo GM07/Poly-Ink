@@ -34,4 +34,8 @@ export class Vec2 {
     apply(func: (value: number) => number): Vec2 {
         return new Vec2(func(this.x), func(this.y));
     }
+
+    clone(): Vec2 {
+        return new Vec2(this.x, this.y);
+    }
 }
