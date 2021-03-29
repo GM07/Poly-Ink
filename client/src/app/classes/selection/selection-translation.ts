@@ -58,7 +58,7 @@ export class SelectionTranslation {
     onMouseUp(mouseUpCoord: Vec2): void {
         if (this.config.selectionCtx !== null) {
             this.sendUpdateSelectionRequest(
-                this.getTranslation(this.magnetismService.getGridPosition(mouseUpCoord, new Vec2(this.config.width, this.config.height))),
+                this.getTranslation(this.magnetismService.getGridPosition(mouseUpCoord)),
             );
         }
     }
@@ -66,7 +66,7 @@ export class SelectionTranslation {
     onMouseMove(event: MouseEvent, mouseUpCoord: Vec2): void {
         if (this.config.selectionCtx !== null) {
             const translation = this.getTranslation(
-                this.magnetismService.getGridPosition(mouseUpCoord, new Vec2(this.config.width, this.config.height)),
+                this.magnetismService.getGridPosition(mouseUpCoord),
             );
             this.sendUpdateSelectionRequest(translation);
         }

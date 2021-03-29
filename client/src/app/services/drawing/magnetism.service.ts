@@ -69,18 +69,13 @@ export class MagnetismService {
         }
     }
 
-    getGridPosition(currentPos: Vec2, size: Vec2): Vec2 {
-        if (this.isEnabled) {
-            currentPos = this.getClosestIntersection(currentPos, size);
-            currentPos = this.getAjustement(currentPos, size);
-
-            return new Vec2(currentPos.x, currentPos.y);
-        } else {
-            return currentPos;
-        }
+    getGridPosition(currentPos: Vec2): Vec2 {
+        if (this.isEnabled)
+            currentPos = this.getAjustement(this.getClosestIntersection(currentPos));
+        return currentPos;
     }
 
-    getClosestIntersection(position: Vec2, size: Vec2): Vec2 {
+    getClosestIntersection(position: Vec2): Vec2 {
         const xMod = position.x % this.gridService.size;
         const yMod = position.y % this.gridService.size;
         const xPos = xMod > this.gridService.size / 2 ? position.x + (this.gridService.size - xMod) : xMod === 0 ? position.x : position.x - xMod;
@@ -88,7 +83,7 @@ export class MagnetismService {
         return new Vec2(xPos, yPos);
     }
 
-    getAjustement(currentPos: Vec2, size: Vec2): Vec2 {
+    getAjustement(currentPos: Vec2): Vec2 {
         const newEndCoords = new Vec2(currentPos.x + this.distance.x, currentPos.y + this.distance.y);
         const newCoordsXMod = newEndCoords.x % this.gridService.size;
         const newCoordsYMod = newEndCoords.y % this.gridService.size;
