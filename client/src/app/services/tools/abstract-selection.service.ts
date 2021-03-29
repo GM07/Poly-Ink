@@ -254,7 +254,7 @@ export abstract class AbstractSelectionService extends Tool {
         return +this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown;
     }
 
-    private startSelection(): void {
+    protected startSelection(): void {
         if (Geometry.roundTowardsZero(this.config.width) === 0 || Geometry.roundTowardsZero(this.config.height) === 0) {
             this.drawingService.unblockUndoRedo();
             return;
@@ -286,7 +286,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.updatePoints.next(true);
     }
 
-    private updateSelection(translation: Vec2): void {
+    protected updateSelection(translation: Vec2): void {
         if (this.selectionCtx === null) return;
 
         this.drawingService.blockUndoRedo();
@@ -296,7 +296,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.updatePoints.next(true);
     }
 
-    private drawPreviewSelection(): void {
+    protected drawPreviewSelection(): void {
         this.drawingService.blockUndoRedo();
 
         this.config.width = this.mouseUpCoord.x - this.mouseDownCoord.x;

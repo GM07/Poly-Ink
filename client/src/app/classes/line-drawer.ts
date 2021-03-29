@@ -1,0 +1,150 @@
+import { Injectable } from '@angular/core';
+import { Geometry } from '@app/classes/math/geometry';
+import { ShiftKey } from '@app/classes/shortcut/shift-key';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { AbstractLineConfig } from '@app/classes/tool-config/abstract-line-config';
+import { Vec2 } from '@app/classes/vec2';
+import { ToolMath } from '@app/constants/math';
+import { DrawingService } from '@app/services/drawing/drawing.service';
+import { Subject } from 'rxjs';
+
+@Injectable({
+    providedIn: 'root',
+})
+export class LineDrawer {
+    protected static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...x
+
+    pointToAdd: Vec2;
+    mousePosition: Vec2;
+    shift: ShiftKey = new ShiftKey();
+    escape: ShortcutKey = new ShortcutKey('escape');
+    backspace: ShortcutKey = new ShortcutKey('backspace');
+    shortcutList: ShortcutKey[] = [this.escape, this.backspace, this.shift];
+
+    private config: AbstractLineConfig;
+    public drawPreview: Subject<void>;
+    public leftMouseDown: boolean;
+
+    constructor(private drawingService: DrawingService, config: AbstractLineConfig) {
+        this.config = config;
+        this.drawPreview = new Subject<void>();
+        this.leftMouseDown = false;
+        this.init();
+    }
+
+    init() {
+        this.shift.isDown = false;
+        this.escape.isDown = false;
+        this.backspace.isDown = false;
+        this.pointToAdd = {} as Vec2;
+        this.mousePosition = {} as Vec2;
+        this.config.points = [];
+    }
+
+    addNewPoint(event: MouseEvent): void {
+        if (this.config.points.length === 0 || this.pointToAdd === undefined) {
+            this.pointToAdd = this.getPositionFromMouse(event);
+        }
+
+        this.config.points.push(this.pointToAdd);
+    }
+
+    followCursor(event: MouseEvent): void {
+        let point: Vec2 = (this.mousePosition = this.getPositionFromMouse(event));
+        if (this.shift.isDown) {
+            point = this.getAlignedPoint(point);
+        }
+
+        this.pointToAdd = point;
+        this.renderLinePreview();
+    }
+
+    getAlignedPoint(cursor: Vec2): Vec2 {
+        const angle: number = Geometry.getAngle(this.getLastPoint(), cursor) + LineDrawer.ANGLE_STEPS / 2;
+        const finalAngle = Math.floor(angle / LineDrawer.ANGLE_STEPS) * LineDrawer.ANGLE_STEPS;
+
+        const distance = cursor.substract(this.getLastPoint());
+        let totalDistance = Geometry.getDistanceBetween(this.getLastPoint(), cursor);
+
+        if (Math.abs(Math.cos(finalAngle)) >= ToolMath.ZERO_THRESHOLD) {
+            totalDistance = Math.abs(distance.x / Math.cos(finalAngle));
+        } else {
+            totalDistance = Math.abs(distance.y / Math.sin(finalAngle));
+        }
+
+        const dx = totalDistance * Math.cos(finalAngle) + this.getLastPoint().x;
+        const dy = -(totalDistance * Math.sin(finalAngle)) + this.getLastPoint().y;
+
+        return new Vec2(Math.round(dx), Math.round(dy));
+    }
+
+    renderLinePreview(): void {
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.config.points.push(this.pointToAdd);
+
+        this.drawPreview.next();
+
+        this.config.points.pop();
+    }
+
+    removeLastPoint(): void {
+        if (this.backspace.isDown) {
+            if (this.config.points.length >= 2) {
+                this.config.points.pop();
+                this.renderLinePreview();
+            }
+        }
+    }
+
+    alignNextPoint(): void {
+        if (this.leftMouseDown) return;
+
+        if (this.shift.isDown) {
+            this.pointToAdd = this.getAlignedPoint(this.mousePosition);
+        } else {
+            this.pointToAdd = this.mousePosition;
+        }
+        this.renderLinePreview();
+    }
+
+    clearPoints(): void {
+        if (this.escape.isDown) {
+            this.config.points = [];
+            this.drawingService.clearCanvas(this.drawingService.previewCtx);
+            this.drawingService.unblockUndoRedo();
+        }
+    }
+
+    handleKeys(shortcutKey: ShortcutKey): void {
+        if (this.config.points.length === 0) {
+            return;
+        }
+
+        switch (shortcutKey) {
+            case this.escape:
+                this.clearPoints();
+                break;
+            case this.backspace:
+                this.removeLastPoint();
+                break;
+            case this.shift:
+                this.alignNextPoint();
+                break;
+        }
+    }
+
+    getLastPoint(): Vec2 {
+        return this.config.points[this.config.points.length - 1];
+    }
+
+    private getBorder(): number {
+        const borderValue: string = window.getComputedStyle(this.drawingService.canvas).getPropertyValue('border-left-width');
+        return Number(borderValue.substring(0, borderValue.length - 2));
+    }
+
+    getPositionFromMouse(event: MouseEvent): Vec2 {
+        const clientRect = this.drawingService.canvas.getBoundingClientRect();
+        const border: number = this.getBorder();
+        return new Vec2(event.clientX - clientRect.x, event.clientY - clientRect.y).substractValue(border);
+    }
+}
