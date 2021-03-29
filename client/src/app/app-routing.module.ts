@@ -8,7 +8,7 @@ const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: HomePageComponent },
     { path: 'carrousel', component: CarrouselComponent },
-    { path: 'editor', component: EditorComponent},
+    { path: 'editor', component: EditorComponent },
     { path: '**', redirectTo: '/home' },
 ];
 

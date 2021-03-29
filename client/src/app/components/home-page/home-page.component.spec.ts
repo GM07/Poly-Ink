@@ -12,7 +12,7 @@ import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
-fdescribe('HomePageComponent', () => {
+describe('HomePageComponent', () => {
     let component: HomePageComponent;
     let fixture: ComponentFixture<HomePageComponent>;
     let drawingService: DrawingService;
@@ -110,5 +110,4 @@ fdescribe('HomePageComponent', () => {
         component.init();
         expect(component.showContinueDrawing).toBeTruthy();
     });
-
 });

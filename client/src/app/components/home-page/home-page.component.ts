@@ -68,7 +68,6 @@ export class HomePageComponent {
     endOfFadeAnimation(): void {
         this.showComponent = this.state === 'visible';
     }
-
 }
 
 type OpacityState = 'visible' | 'invisible';

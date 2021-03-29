@@ -113,6 +113,12 @@ describe('EditorComponent', () => {
         expect(shortcutServiceSpy.onMouseMove).toHaveBeenCalled();
     });
 
+    it('should register the beginning of editor realoading in local storage', () => {
+        spyOn(localStorage, 'setItem');
+        component.onPageReload({} as BeforeUnloadEvent);
+        expect(localStorage.setItem).toHaveBeenCalledWith('editor_reloading', 'true');
+    });
+
     it('should call undo on button click', () => {
         spyOn(component['undoRedoService'], 'undo').and.stub();
         component.receiveSidebarButtonEvent(UndoConstants.TOOL_ID);
