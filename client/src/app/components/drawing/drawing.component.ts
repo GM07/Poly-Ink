@@ -5,6 +5,7 @@ import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { GridService } from '@app/services/drawing/grid.service';
 import { NewDrawingService } from '@app/services/popups/new-drawing';
+import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
 @Component({
@@ -30,9 +31,9 @@ export class DrawingComponent implements AfterViewInit {
         readonly toolHandlerService: ToolHandlerService,
         private newDrawingService: NewDrawingService,
         private gridService: GridService,
+        private shortcutHandler: ShortcutHandlerService
     ) {
         this.canvasSize = new Vec2(CanvasConst.DEFAULT_WIDTH, CanvasConst.DEFAULT_HEIGHT);
-        this.gridVisibility = true;
     }
 
     ngAfterViewInit(): void {
@@ -85,6 +86,7 @@ export class DrawingComponent implements AfterViewInit {
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
+        if(this.shortcutHandler.blockShortcuts) return;
         if (this.gridService.toggleGridShortcut.equals(event)) {
             this.gridVisibility = !this.gridVisibility;
             this.grid.nativeElement.style.visibility = this.gridVisibility ? 'visible' : 'hidden';

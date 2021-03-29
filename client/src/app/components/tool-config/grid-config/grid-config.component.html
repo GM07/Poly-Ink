@@ -8,7 +8,7 @@
 
   <h5 class="textFormat">Transparence de la grille</h5>
   <div class="textFormatForSlider">
-      <mat-slider min="{{ MIN_OPACITY }}" max="{{ MAX_OPACITY }}" step="5" (input)="opacityChange($event)" [(ngModel)]="gridService.opacityValue" thumbLabel [displayWith]="colorSliderLabel">
+      <mat-slider min="{{ MIN_TRANSPARENCY }}" max="{{ MAX_TRANSPARENCY }}" step="5" (input)="opacityChange($event)" [(ngModel)]="gridService.opacityValue" thumbLabel [displayWith]="colorSliderLabel">
       </mat-slider>
       {{ gridService.opacityValue }}%
   </div>

@@ -147,4 +147,10 @@ describe('DrawingComponent', () => {
         expect(gridService.downsizeGrid).not.toHaveBeenCalled();
         expect(gridService.upsizeGrid).not.toHaveBeenCalled();
     });
+
+    it('should do nothing if shortcuts are blocked', () => {
+      component['shortcutHandler'].blockShortcuts = true;
+      component.onKeyDown({} as KeyboardEvent);
+      expect(component['gridService'].updateGrid).not.toHaveBeenCalled();
+    });
 });
