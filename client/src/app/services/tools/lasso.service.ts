@@ -41,13 +41,6 @@ export class LassoService extends AbstractSelectionService {
         this.initSelection();
     }
 
-    private addNewLine() {
-        if (this.configLasso.points.length > 1) {
-            const length: number = this.configLasso.points.length;
-            this.lines.push(new Line(this.configLasso.points[length - 2], this.configLasso.points[length - 1]));
-        }
-    }
-
     private onClosedPath(): void {
         this.endSelection();
         this.selectionResize.stopDrawing();
@@ -67,10 +60,15 @@ export class LassoService extends AbstractSelectionService {
         this.addNewLine();
     }
 
+    private addNewLine() {
+        if (this.configLasso.points.length > 1) {
+            const length: number = this.configLasso.points.length;
+            this.lines.push(new Line(this.configLasso.points[length - 2], this.configLasso.points[length - 1]));
+        }
+    }
+
     private createSelection(event: MouseEvent): void {
         if (this.configLasso.points.length > 1 && this.configLasso.intersecting) return;
-
-        this.lineDrawer.pointToAdd = this.getPositionFromMouse(event);
 
         if (this.configLasso.points.length > 2) {
             const closedLoop: boolean =
@@ -108,7 +106,7 @@ export class LassoService extends AbstractSelectionService {
         }
 
         if (this.configLasso.selectionCtx === null) {
-            const nextPoint = this.getPositionFromMouse(event);
+            const nextPoint = this.lineDrawer.pointToAdd;
             this.configLasso.intersecting = Geometry.lastLineIntersecting(
                 this.lines,
                 new Line(this.configLasso.points[this.configLasso.points.length - 1], nextPoint),
@@ -121,36 +119,38 @@ export class LassoService extends AbstractSelectionService {
 
     onMouseUp(event: MouseEvent): void {
         if (this.leftMouseDown) {
+            this.setMouseUpCoord(event);
             if (this.configLasso.selectionCtx !== null) {
-                this.setMouseUpCoord(event);
                 this.selectionTranslation.onMouseUp(this.mouseUpCoord);
-            } else {
-                super.onMouseUp(event);
             }
         }
         this.leftMouseDown = false;
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        const shortcut = ShortcutKey.get(this.lineDrawer.shortcutList, event, true);
-        if (shortcut !== undefined && shortcut.isDown !== true) {
-            shortcut.isDown = true;
-            this.lineDrawer.handleKeys(shortcut);
+        if (this.configLasso.selectionCtx === null) {
+            const shortcut = ShortcutKey.get(this.lineDrawer.shortcutList, event, true);
+            if (shortcut !== undefined && shortcut.isDown !== true) {
+                shortcut.isDown = true;
+                this.lineDrawer.handleKeys(shortcut);
+            }
+        } else {
+            super.onKeyDown(event);
         }
-
-        super.onKeyDown(event);
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        this.lineDrawer.shift.isDown = event.shiftKey;
+        if (this.configLasso.selectionCtx === null) {
+            this.lineDrawer.shift.isDown = event.shiftKey;
 
-        const shortcut = ShortcutKey.get(this.lineDrawer.shortcutList, event, true);
-        if (shortcut !== undefined) {
-            shortcut.isDown = false;
-            this.lineDrawer.handleKeys(shortcut);
+            const shortcut = ShortcutKey.get(this.lineDrawer.shortcutList, event, true);
+            if (shortcut !== undefined) {
+                shortcut.isDown = false;
+                this.lineDrawer.handleKeys(shortcut);
+            }
+        } else {
+            super.onKeyUp(event);
         }
-
-        super.onKeyUp(event);
     }
 
     private findSmallestRectangle(): [Vec2, Vec2] {

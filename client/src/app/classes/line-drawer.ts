@@ -45,7 +45,7 @@ export class LineDrawer {
             this.pointToAdd = this.getPositionFromMouse(event);
         }
 
-        this.config.points.push(this.pointToAdd);
+        this.config.points.push(this.pointToAdd.clone());
     }
 
     followCursor(event: MouseEvent): void {
@@ -54,7 +54,7 @@ export class LineDrawer {
             point = this.getAlignedPoint(point);
         }
 
-        this.pointToAdd = point;
+        this.pointToAdd = point.clone();
         this.renderLinePreview();
     }
 
@@ -82,7 +82,6 @@ export class LineDrawer {
     }
 
     renderLinePreview(): void {
-        this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.config.points.push(this.pointToAdd);
 
         this.drawPreview.next();
@@ -100,12 +99,12 @@ export class LineDrawer {
     }
 
     alignNextPoint(): void {
-        if (this.leftMouseDown) return;
+        // if (this.leftMouseDown) return;
 
         if (this.shift.isDown) {
             this.pointToAdd = this.getAlignedPoint(this.mousePosition);
         } else {
-            this.pointToAdd = this.mousePosition;
+            this.pointToAdd = this.mousePosition.clone();
         }
         this.renderLinePreview();
     }
