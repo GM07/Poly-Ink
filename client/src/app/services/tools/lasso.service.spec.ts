@@ -44,7 +44,6 @@ describe('Lasso service', () => {
         service.lineDrawer['getPositionFromMouse'] = (event: MouseEvent) => {
             return mousePos;
         };
-
         service['start'] = mousePos.clone();
         service['end'] = mousePos.clone();
     });
@@ -188,6 +187,7 @@ describe('Lasso service', () => {
     });
 
     it('should handle keys itself when key is pressed', () => {
+        service.configLasso.points = pointsTest;
         const spy = spyOn(service.lineDrawer, 'handleKeys').and.callThrough();
         service.onKeyDown({ key: 'backspace', ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent);
         expect(spy).toHaveBeenCalled();

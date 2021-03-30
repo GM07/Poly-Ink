@@ -17,6 +17,7 @@ export class LineDrawer {
     backspace: ShortcutKey = new ShortcutKey('backspace');
     shortcutList: ShortcutKey[] = [this.escape, this.backspace, this.shift];
     drawPreview: Subject<void>;
+    removeLine: Subject<void>;
     leftMouseDown: boolean;
 
     private config: AbstractLineConfig;
@@ -72,6 +73,7 @@ export class LineDrawer {
         this.config = config;
         this.drawingService = drawingService;
         this.drawPreview = new Subject<void>();
+        this.removeLine = new Subject<void>();
         this.leftMouseDown = false;
         this.init();
     }
@@ -126,6 +128,7 @@ export class LineDrawer {
         if (this.backspace.isDown) {
             if (this.config.points.length >= 2) {
                 this.config.points.pop();
+                this.removeLine.next();
                 this.renderLinePreview();
             }
         }

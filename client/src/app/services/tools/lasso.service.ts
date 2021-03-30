@@ -38,6 +38,9 @@ export class LassoService extends AbstractSelectionService {
         this.lineDrawer.drawPreview.subscribe(() => {
             this.drawPreview();
         });
+        this.lineDrawer.removeLine.subscribe(() => {
+            this.lines.pop();
+        });
         this.initSelection();
     }
 
