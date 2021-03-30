@@ -7,6 +7,8 @@ import { PencilService } from '@app/services/tools/pencil.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { DrawingComponent } from './drawing.component';
 
+// tslint:disable:no-string-literal
+
 class ToolStub extends Tool {
     stopDrawing(): void {
         /**/
@@ -149,8 +151,8 @@ describe('DrawingComponent', () => {
     });
 
     it('should do nothing if shortcuts are blocked', () => {
-      component['shortcutHandler'].blockShortcuts = true;
-      component.onKeyDown({} as KeyboardEvent);
-      expect(component['gridService'].updateGrid).not.toHaveBeenCalled();
+        component['shortcutHandler'].blockShortcuts = true;
+        component.onKeyDown({} as KeyboardEvent);
+        expect(component['gridService'].updateGrid).not.toHaveBeenCalled();
     });
 });

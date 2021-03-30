@@ -31,7 +31,7 @@ export class DrawingComponent implements AfterViewInit {
         readonly toolHandlerService: ToolHandlerService,
         private newDrawingService: NewDrawingService,
         private gridService: GridService,
-        private shortcutHandler: ShortcutHandlerService
+        private shortcutHandler: ShortcutHandlerService,
     ) {
         this.canvasSize = new Vec2(CanvasConst.DEFAULT_WIDTH, CanvasConst.DEFAULT_HEIGHT);
     }
@@ -86,7 +86,7 @@ export class DrawingComponent implements AfterViewInit {
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
-        if(this.shortcutHandler.blockShortcuts) return;
+        if (this.shortcutHandler.blockShortcuts) return;
         if (this.gridService.toggleGridShortcut.equals(event)) {
             this.gridVisibility = !this.gridVisibility;
             this.grid.nativeElement.style.visibility = this.gridVisibility ? 'visible' : 'hidden';
