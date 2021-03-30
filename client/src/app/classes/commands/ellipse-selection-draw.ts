@@ -20,6 +20,8 @@ export class EllipseSelectionDraw extends AbstractDraw {
 
         this.fillBackground(context);
 
+        if (this.config.markedForDelete) return;
+
         context.beginPath();
         context.save();
         context.ellipse(center.x, center.y, radius.x, radius.y, 0, 0, 2 * Math.PI);

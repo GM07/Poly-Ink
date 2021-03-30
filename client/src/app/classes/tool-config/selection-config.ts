@@ -10,6 +10,7 @@ export class SelectionConfig {
     height: number;
     originalWidth: number;
     width: number;
+    markedForDelete: boolean;
     selectionCtx: CanvasRenderingContext2D | null;
 
     constructor() {
@@ -22,6 +23,7 @@ export class SelectionConfig {
         this.width = 0;
         this.shift = new ShiftKey();
         this.selectionCtx = null;
+        this.markedForDelete = false;
     }
 
     clone(): SelectionConfig {
@@ -35,11 +37,17 @@ export class SelectionConfig {
         config.originalWidth = this.originalWidth;
         config.width = this.width;
         config.selectionCtx = null;
+        config.markedForDelete = this.markedForDelete;
 
         return config;
     }
 
     didChange(): boolean {
-        return !this.startCoords.equals(this.endCoords) || this.width !== this.originalWidth || this.height !== this.originalHeight;
+        return (
+            !this.startCoords.equals(this.endCoords) ||
+            this.width !== this.originalWidth ||
+            this.height !== this.originalHeight ||
+            this.markedForDelete
+        );
     }
 }

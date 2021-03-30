@@ -16,6 +16,8 @@ export class RectangleSelectionDraw extends AbstractDraw {
 
         this.fillBackground(context);
 
+        if (this.config.markedForDelete) return;
+
         context.drawImage(selectionCanvas, Math.floor(this.config.endCoords.x), Math.floor(this.config.endCoords.y));
     }
 

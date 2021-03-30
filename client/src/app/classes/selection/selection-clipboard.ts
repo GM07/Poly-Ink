@@ -1,6 +1,7 @@
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
+import { Vec2 } from '../vec2';
 
 export class SelectionClipboard {
     private readonly COPY: ShortcutKey = new ShortcutKey('c', true);
@@ -20,6 +21,7 @@ export class SelectionClipboard {
             this.copyDrawing();
         } else if (this.PASTE.equals(event)) {
             console.log('paste');
+            this.pasteDrawing();
         } else if (this.CUT.equals(event)) {
             console.log('cut');
             this.copyDrawing();
@@ -38,16 +40,27 @@ export class SelectionClipboard {
         DrawingService.saveCanvas(this.savedDrawing, canvas);
     }
 
-    pasteDrawing(): void {}
+    pasteDrawing(): void {
+        const ctx = this.selectionService.config.selectionCtx;
+        if (ctx === null) return;
+        this.selectionService.stopDrawing();
+
+        const canvas = ctx.canvas;
+        this.selectionService.config.endCoords = new Vec2(0, 0);
+        this.selectionService.config.width = this.savedDrawing.width;
+        this.selectionService.config.height = this.savedDrawing.height;
+        canvas.width = this.savedDrawing.width;
+        canvas.height = this.savedDrawing.height;
+        ctx.drawImage(this.savedDrawing, 0, 0);
+        this.selectionService.UPDATE_POINTS.next(true);
+    }
 
     deleteDrawing(): void {
         const ctx = this.selectionService.config.selectionCtx;
         if (ctx === null) return;
 
-        const canvas = ctx.canvas;
-        ctx.beginPath();
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.closePath();
+        this.selectionService.config.markedForDelete = true;
         this.selectionService.stopDrawing();
+        this.selectionService.config.markedForDelete = false;
     }
 }
