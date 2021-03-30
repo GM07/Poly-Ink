@@ -31,6 +31,7 @@ export abstract class AbstractSelectionService extends Tool {
         super(drawingService, colorService);
         this.config = new SelectionConfig();
         this.initSelection();
+        this.updatePoints = new Subject<boolean>();
     }
 
     protected initSelection() {
@@ -39,7 +40,6 @@ export abstract class AbstractSelectionService extends Tool {
         this.selectionData = document.createElement('canvas');
         this.config.endCoords = new Vec2(0, 0);
         this.initSubscriptions();
-        this.updatePoints = new Subject<boolean>();
     }
 
     protected abstract endSelection(): void;

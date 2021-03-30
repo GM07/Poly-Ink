@@ -32,7 +32,6 @@ export class LassoDraw extends AbstractDraw {
         context.save();
 
         const dp = this.config.endCoords.substract(this.config.startCoords);
-        console.log(dp);
         context.beginPath();
         context.moveTo(this.config.points[0].x + dp.x, this.config.points[0].y + dp.y);
         for (let index = 1; index < this.config.points.length; index++) {

@@ -29,9 +29,14 @@ export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
         });
         config.startCoords = this.startCoords.clone();
         config.endCoords = this.endCoords.clone();
-        config.width = this.width;
+        config.scaleFactor = this.scaleFactor.clone();
+        config.shift = this.shift.clone();
+        config.originalHeight = this.originalHeight;
         config.height = this.height;
-        config.shiftDown = this.shiftDown;
+        config.originalWidth = this.originalWidth;
+        config.width = this.width;
+        config.selectionCtx = null;
+        config.inSelection = this.inSelection;
         return config;
     }
 }
