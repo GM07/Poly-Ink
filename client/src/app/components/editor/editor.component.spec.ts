@@ -9,7 +9,7 @@ import {
     NewDrawingConstants,
     RedoConstants,
     SaveFileToolConstants,
-    UndoConstants
+    UndoConstants,
 } from '@app/classes/tool_ui_settings/tools.constants';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resize.component';
