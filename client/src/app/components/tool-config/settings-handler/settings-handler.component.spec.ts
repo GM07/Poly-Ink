@@ -12,6 +12,7 @@ import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.s
 import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
 import { EyeDropperService } from '@app/services/tools/eye-dropper.service';
+import { LassoService } from '@app/services/tools/lasso.service';
 import { LineService } from '@app/services/tools/line.service';
 import { PencilService } from '@app/services/tools/pencil.service';
 import { PolygoneService } from '@app/services/tools/polygone.service';
@@ -35,6 +36,7 @@ class MockToolHandler extends ToolHandlerService {
         rectangleSelectionService: RectangleSelectionService,
         polygoneService: PolygoneService,
         eyeDropperService: EyeDropperService,
+        lassoService: LassoService,
     ) {
         super(
             pencilService,
@@ -47,6 +49,7 @@ class MockToolHandler extends ToolHandlerService {
             eraserService,
             polygoneService,
             eyeDropperService,
+            lassoService,
         );
         this.TOOLS_MOCK.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
@@ -92,6 +95,7 @@ describe('SettingsHandlerComponent', () => {
     let rectangleSelectionService: RectangleSelectionService;
     let eyeDropperService: EyeDropperService;
     let toolHandlerService: MockToolHandler;
+    let lassoService: LassoService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -108,6 +112,7 @@ describe('SettingsHandlerComponent', () => {
         ellipseSelectionService = TestBed.inject(EllipseSelectionService);
         rectangleSelectionService = TestBed.inject(RectangleSelectionService);
         eyeDropperService = TestBed.inject(EyeDropperService);
+        lassoService = TestBed.inject(LassoService);
         toolHandlerService = new MockToolHandler(
             pencilService,
             lineService,
@@ -119,6 +124,7 @@ describe('SettingsHandlerComponent', () => {
             rectangleSelectionService,
             polygoneService,
             eyeDropperService,
+            lassoService,
         );
         component = new SettingsHandlerComponent(toolHandlerService);
     });

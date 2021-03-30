@@ -8,6 +8,7 @@ import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
+import { AbstractSelectionDraw } from './abstract-selection-draw';
 import { EllipseSelectionDraw } from './ellipse-selection-draw';
 
 describe('EllipseDraw', () => {
@@ -82,24 +83,24 @@ describe('EllipseDraw', () => {
 
     it('should make appropriate calls on execute', () => {
         spyOn<any>(ellipseSelectionDraw, 'fillBackground').and.callThrough();
-        spyOn<any>(ellipseSelectionDraw, 'saveSelectionToCanvas').and.callThrough();
+        spyOn<any>(AbstractSelectionDraw, 'saveSelectionToCanvas').and.callThrough();
 
         ellipseSelectionDraw.execute(ctxStub);
 
         expect(ellipseSelectionDraw['fillBackground']).toHaveBeenCalled();
-        expect(ellipseSelectionDraw['saveSelectionToCanvas']).toHaveBeenCalled();
+        expect(AbstractSelectionDraw.saveSelectionToCanvas).toHaveBeenCalled();
     });
 
     it('should use the scaling factor when saving the selection to the canvas', () => {
         ellipseSelectionDraw['config'].scaleFactor = new Vec2(-1, -1);
         spyOn(ctxStub, 'getImageData').and.callThrough();
-        let canvas = ellipseSelectionDraw['saveSelectionToCanvas'](ctxStub);
+        let canvas = AbstractSelectionDraw.saveSelectionToCanvas(ctxStub, ellipseSelectionDraw['config']);
         expect(canvas).not.toBeUndefined();
         ellipseSelectionDraw['config'].scaleFactor = new Vec2(-1, -1);
-        canvas = ellipseSelectionDraw['saveSelectionToCanvas'](ctxStub);
+        canvas = AbstractSelectionDraw.saveSelectionToCanvas(ctxStub, ellipseSelectionDraw['config']);
         expect(canvas).not.toBeUndefined();
         ellipseSelectionDraw['config'].scaleFactor = new Vec2(-1, -1);
-        canvas = ellipseSelectionDraw['saveSelectionToCanvas'](ctxStub);
+        canvas = AbstractSelectionDraw.saveSelectionToCanvas(ctxStub, ellipseSelectionDraw['config']);
         expect(ctxStub.getImageData).toHaveBeenCalledTimes(3);
         expect(canvas).not.toBeUndefined();
     });

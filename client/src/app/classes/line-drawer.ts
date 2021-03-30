@@ -58,10 +58,6 @@ export class LineDrawer {
         this.renderLinePreview();
     }
 
-    drawCurrentPath(): void {
-        this.drawPreview.next();
-    }
-
     getAlignedPoint(cursor: Vec2): Vec2 {
         const angle: number = Geometry.getAngle(this.getLastPoint(), cursor) + LineDrawer.ANGLE_STEPS / 2;
         const finalAngle = Math.floor(angle / LineDrawer.ANGLE_STEPS) * LineDrawer.ANGLE_STEPS;
@@ -81,7 +77,7 @@ export class LineDrawer {
         return new Vec2(Math.round(dx), Math.round(dy));
     }
 
-    renderLinePreview(): void {
+    private renderLinePreview(): void {
         this.config.points.push(this.pointToAdd);
 
         this.drawPreview.next();
@@ -98,8 +94,8 @@ export class LineDrawer {
         }
     }
 
-    alignNextPoint(): void {
-        // if (this.leftMouseDown) return;
+    private alignNextPoint(): void {
+        if (this.leftMouseDown) return;
 
         if (this.shift.isDown) {
             this.pointToAdd = this.getAlignedPoint(this.mousePosition);
@@ -135,7 +131,7 @@ export class LineDrawer {
         }
     }
 
-    getLastPoint(): Vec2 {
+    private getLastPoint(): Vec2 {
         return this.config.points[this.config.points.length - 1];
     }
 
@@ -144,7 +140,7 @@ export class LineDrawer {
         return Number(borderValue.substring(0, borderValue.length - 2));
     }
 
-    getPositionFromMouse(event: MouseEvent): Vec2 {
+    private getPositionFromMouse(event: MouseEvent): Vec2 {
         const clientRect = this.drawingService.canvas.getBoundingClientRect();
         const border: number = this.getBorder();
         return new Vec2(event.clientX - clientRect.x, event.clientY - clientRect.y).substractValue(border);

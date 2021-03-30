@@ -1,0 +1,3 @@
+describe('Lasso service', () => {
+    beforeEach(() => {});
+});
