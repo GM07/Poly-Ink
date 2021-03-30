@@ -10,18 +10,63 @@ import { AbstractLineConfig } from './tool-config/abstract-line-config';
 
 export class LineDrawer {
     protected static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...x
-
     pointToAdd: Vec2;
     mousePosition: Vec2;
     shift: ShiftKey = new ShiftKey();
     escape: ShortcutKey = new ShortcutKey('escape');
     backspace: ShortcutKey = new ShortcutKey('backspace');
     shortcutList: ShortcutKey[] = [this.escape, this.backspace, this.shift];
+    drawPreview: Subject<void>;
+    leftMouseDown: boolean;
 
     private config: AbstractLineConfig;
-    public drawPreview: Subject<void>;
-    public leftMouseDown: boolean;
     private drawingService: DrawingService;
+
+    private static drawLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)): void {
+        ctx.beginPath();
+        const firstPoint: Vec2 = points[0].add(transform);
+        ctx.moveTo(firstPoint.x, firstPoint.y);
+        for (let index = 1; index < points.length; index++) {
+            const point = points[index].add(transform);
+            ctx.lineTo(point.x, point.y);
+        }
+    }
+
+    static drawFilledLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)): void {
+        LineDrawer.drawLinePath(ctx, points, transform);
+        ctx.fill();
+    }
+
+    static drawStrokedLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)): void {
+        LineDrawer.drawLinePath(ctx, points, transform);
+        ctx.stroke();
+    }
+
+    static drawClippedLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)): void {
+        LineDrawer.drawLinePath(ctx, points, transform);
+        ctx.clip();
+    }
+
+    static drawDashedLinePath(
+        ctx: CanvasRenderingContext2D,
+        points: Vec2[],
+        transform: Vec2 = new Vec2(0, 0),
+        styles: string[] = ['black', 'white'],
+    ): void {
+        ctx.lineWidth = AbstractSelectionService.BORDER_WIDTH;
+        ctx.setLineDash([AbstractSelectionService.LINE_DASH, AbstractSelectionService.LINE_DASH]);
+        ctx.lineJoin = 'round' as CanvasLineJoin;
+        ctx.lineCap = 'round' as CanvasLineCap;
+
+        for (let index = 0; index < styles.length; index++) {
+            const style: string = styles[index];
+            ctx.lineDashOffset = index * AbstractSelectionService.LINE_DASH;
+            ctx.strokeStyle = style;
+            LineDrawer.drawStrokedLinePath(ctx, points, transform);
+        }
+        ctx.closePath();
+        ctx.lineDashOffset = 0;
+    }
 
     constructor(config: AbstractLineConfig, drawingService: DrawingService) {
         this.config = config;
@@ -31,7 +76,7 @@ export class LineDrawer {
         this.init();
     }
 
-    init() {
+    init(): void {
         this.shift.isDown = false;
         this.escape.isDown = false;
         this.backspace.isDown = false;
@@ -77,14 +122,6 @@ export class LineDrawer {
         return new Vec2(Math.round(dx), Math.round(dy));
     }
 
-    private renderLinePreview(): void {
-        this.config.points.push(this.pointToAdd);
-
-        this.drawPreview.next();
-
-        this.config.points.pop();
-    }
-
     removeLastPoint(): void {
         if (this.backspace.isDown) {
             if (this.config.points.length >= 2) {
@@ -92,17 +129,6 @@ export class LineDrawer {
                 this.renderLinePreview();
             }
         }
-    }
-
-    private alignNextPoint(): void {
-        if (this.leftMouseDown) return;
-
-        if (this.shift.isDown) {
-            this.pointToAdd = this.getAlignedPoint(this.mousePosition);
-        } else {
-            this.pointToAdd = this.mousePosition.clone();
-        }
-        this.renderLinePreview();
     }
 
     clearPoints(): void {
@@ -131,6 +157,25 @@ export class LineDrawer {
         }
     }
 
+    private renderLinePreview(): void {
+        this.config.points.push(this.pointToAdd);
+
+        this.drawPreview.next();
+
+        this.config.points.pop();
+    }
+
+    private alignNextPoint(): void {
+        if (this.leftMouseDown) return;
+
+        if (this.shift.isDown) {
+            this.pointToAdd = this.getAlignedPoint(this.mousePosition);
+        } else {
+            this.pointToAdd = this.mousePosition.clone();
+        }
+        this.renderLinePreview();
+    }
+
     private getLastPoint(): Vec2 {
         return this.config.points[this.config.points.length - 1];
     }
@@ -144,51 +189,5 @@ export class LineDrawer {
         const clientRect = this.drawingService.canvas.getBoundingClientRect();
         const border: number = this.getBorder();
         return new Vec2(event.clientX - clientRect.x, event.clientY - clientRect.y).substractValue(border);
-    }
-
-    private static drawLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)) {
-        ctx.beginPath();
-        const firstPoint: Vec2 = points[0].add(transform);
-        ctx.moveTo(firstPoint.x, firstPoint.y);
-        for (let index = 1; index < points.length; index++) {
-            const point = points[index].add(transform);
-            ctx.lineTo(point.x, point.y);
-        }
-    }
-
-    static drawFilledLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)) {
-        LineDrawer.drawLinePath(ctx, points, transform);
-        ctx.fill();
-    }
-
-    static drawStrokedLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)) {
-        LineDrawer.drawLinePath(ctx, points, transform);
-        ctx.stroke();
-    }
-
-    static drawClippedLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)) {
-        LineDrawer.drawLinePath(ctx, points, transform);
-        ctx.clip();
-    }
-
-    static drawDashedLinePath(
-        ctx: CanvasRenderingContext2D,
-        points: Vec2[],
-        transform: Vec2 = new Vec2(0, 0),
-        styles: string[] = ['black', 'white'],
-    ) {
-        ctx.lineWidth = AbstractSelectionService.BORDER_WIDTH;
-        ctx.setLineDash([AbstractSelectionService.LINE_DASH, AbstractSelectionService.LINE_DASH]);
-        ctx.lineJoin = 'round' as CanvasLineJoin;
-        ctx.lineCap = 'round' as CanvasLineCap;
-
-        for (let index = 0; index < styles.length; index++) {
-            const style: string = styles[index];
-            ctx.lineDashOffset = index * AbstractSelectionService.LINE_DASH;
-            ctx.strokeStyle = style;
-            LineDrawer.drawStrokedLinePath(ctx, points, transform);
-        }
-        ctx.closePath();
-        ctx.lineDashOffset = 0;
     }
 }

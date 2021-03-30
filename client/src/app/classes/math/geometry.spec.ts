@@ -2,7 +2,7 @@ import { Vec2 } from '@app/classes/vec2';
 import { Geometry } from './geometry';
 import { Line } from './line';
 
-/* tslint:disable */
+/* tslint:disable:no-magic-numbers */
 describe('Geometry', () => {
     it('should get distance between (4, 5) and (1, 1)', () => {
         const initial: Vec2 = new Vec2(4, 5);
@@ -47,7 +47,7 @@ describe('Geometry', () => {
     });
 
     it('should floor towards 0', () => {
-        let value: number = 0.7;
+        let value = 0.7;
         expect(Geometry.roundTowardsZero(value) === 0).toBeTruthy();
         value = -0.7;
         expect(Geometry.roundTowardsZero(value) === 0).toBeTruthy();

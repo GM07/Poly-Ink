@@ -1,4 +1,4 @@
-import { Vec2 } from '../vec2';
+import { Vec2 } from '@app/classes/vec2';
 import { AbstractLineConfig } from './abstract-line-config';
 import { SelectionConfig } from './selection-config';
 

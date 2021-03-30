@@ -1,5 +1,5 @@
+import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { SelectionConfig } from '../tool-config/selection-config';
 
 export class AbstractSelectionDraw {
     static saveSelectionToCanvas(context: CanvasRenderingContext2D, config: SelectionConfig): HTMLCanvasElement {

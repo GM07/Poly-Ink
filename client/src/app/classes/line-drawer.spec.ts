@@ -16,7 +16,7 @@ describe('Line Drawer', () => {
     let lineDrawer: LineDrawer;
     let config: AbstractLineConfig;
     let spyDrawing: jasmine.SpyObj<DrawingService>;
-    let mousePos: Vec2 = new Vec2(50, 40);
+    const mousePos: Vec2 = new Vec2(50, 40);
 
     beforeEach(() => {
         spyDrawing = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'drawPreview', 'draw', 'unblockUndoRedo', 'getBoundingClientRect']);

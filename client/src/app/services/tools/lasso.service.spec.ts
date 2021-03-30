@@ -5,11 +5,15 @@ import { Line } from '@app/classes/math/line';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
-import { DrawingService } from '../drawing/drawing.service';
 import { AbstractSelectionService } from './abstract-selection.service';
 import { LassoService } from './lasso.service';
 
+/* tslint:disable:no-magic-numbers */
+/* tslint:disable:no-string-literal */
+/* tslint:disable:no-any */
+/* tslint:disable:no-empty */
 describe('Lasso service', () => {
     let service: LassoService;
     let canvasTestHelper: CanvasTestHelper;
@@ -18,7 +22,7 @@ describe('Lasso service', () => {
     let baseCtxStub: CanvasRenderingContext2D;
     let previewCtxStub: CanvasRenderingContext2D;
     let pointsTest: Vec2[];
-    let mousePos: Vec2 = new Vec2(50, 40);
+    const mousePos: Vec2 = new Vec2(50, 40);
 
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'drawPreview'], { changes: new Subject<void>() });

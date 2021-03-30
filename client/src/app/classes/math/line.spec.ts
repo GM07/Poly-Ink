@@ -1,6 +1,8 @@
-import { Vec2 } from '../vec2';
+import { Vec2 } from '@app/classes/vec2';
 import { Line } from './line';
 
+/* tslint:disable:no-magic-numbers */
+/* tslint:disable:no-string-literal */
 describe('Line', () => {
     let a: Line;
     let b: Line;

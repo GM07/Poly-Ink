@@ -15,14 +15,15 @@ import { ColorService } from 'src/color-picker/services/color.service';
     providedIn: 'root',
 })
 export abstract class AbstractSelectionService extends Tool {
-    private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
-    private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
     static readonly LINE_DASH: number = 8;
     static readonly BORDER_WIDTH: number = 2;
+
+    private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
+    private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
     protected selectionData: HTMLCanvasElement;
     protected selectionTranslation: SelectionTranslation;
-    selectionResize: SelectionResize;
 
+    selectionResize: SelectionResize;
     updatePoints: Subject<boolean>;
     mouseUpCoord: Vec2;
     config: SelectionConfig;
@@ -34,7 +35,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.updatePoints = new Subject<boolean>();
     }
 
-    protected initSelection() {
+    protected initSelection(): void {
         this.selectionTranslation = new SelectionTranslation(this.config);
         this.selectionResize = new SelectionResize(this.config);
         this.selectionData = document.createElement('canvas');

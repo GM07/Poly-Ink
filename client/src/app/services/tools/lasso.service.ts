@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { LassoDraw } from '@app/classes/commands/lasso-draw';
 import { LineDrawer } from '@app/classes/line-drawer';
 import { Geometry } from '@app/classes/math/geometry';
 import { Line } from '@app/classes/math/line';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { LassoConfig } from '@app/classes/tool-config/lasso-config';
 import { LassoToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
@@ -10,8 +12,6 @@ import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { LassoDraw } from '../../classes/commands/lasso-draw';
-import { LassoConfig } from '../../classes/tool-config/lasso-config';
 
 @Injectable({
     providedIn: 'root',
@@ -55,12 +55,12 @@ export class LassoService extends AbstractSelectionService {
         this.startSelection();
     }
 
-    private addPointToSelection(event: MouseEvent) {
+    private addPointToSelection(event: MouseEvent): void {
         this.lineDrawer.addNewPoint(event);
         this.addNewLine();
     }
 
-    private addNewLine() {
+    private addNewLine(): void {
         if (this.configLasso.points.length > 1) {
             const length: number = this.configLasso.points.length;
             this.lines.push(new Line(this.configLasso.points[length - 2], this.configLasso.points[length - 1]));
@@ -153,9 +153,15 @@ export class LassoService extends AbstractSelectionService {
         }
     }
 
+    stopDrawing(): void {
+        this.endSelection();
+        this.initService();
+        super.stopDrawing();
+    }
+
     private findSmallestRectangle(): [Vec2, Vec2] {
         const start: Vec2 = new Vec2(this.drawingService.canvas.width + 1, this.drawingService.canvas.height + 1);
-        const end: Vec2 = new Vec2(-1, -1);
+        const end: Vec2 = new Vec2(0 - 1, 0 - 1);
         this.configLasso.points.forEach((point) => {
             start.x = point.x < start.x ? point.x : start.x;
             start.y = point.y < start.y ? point.y : start.y;
@@ -221,11 +227,5 @@ export class LassoService extends AbstractSelectionService {
     protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, _: Vec2): void {
         if (this.configLasso.points.length < 2) return;
         LineDrawer.drawDashedLinePath(ctx, this.configLasso.points, position.substract(this.start));
-    }
-
-    stopDrawing() {
-        this.endSelection();
-        this.initService();
-        super.stopDrawing();
     }
 }
