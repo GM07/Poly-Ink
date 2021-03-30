@@ -34,6 +34,7 @@ export class LassoService extends AbstractSelectionService {
         this.lineDrawer = new LineDrawer(this.configLasso, this.drawingService);
         this.lineDrawer.drawPreview.subscribe(() => {
             this.drawPreview();
+            //this.drawSelection(this.drawingService.previewCtx, new Vec2(0, 0), new Vec2(0, 0));
         });
         this.initSelection();
     }
@@ -48,6 +49,7 @@ export class LassoService extends AbstractSelectionService {
         this.configLasso.width = size.x;
         this.configLasso.height = size.y;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.configLasso.inSelection = true;
         this.startSelection();
     }
 
@@ -77,7 +79,6 @@ export class LassoService extends AbstractSelectionService {
             }
         } else {
             super.onMouseDown(event);
-            this.stopDrawing();
         }
     }
 
@@ -94,13 +95,14 @@ export class LassoService extends AbstractSelectionService {
     }
 
     onMouseUp(event: MouseEvent): void {
-        if (this.leftMouseDown && this.configLasso.selectionCtx !== null) {
-            this.setMouseUpCoord(event);
-            this.selectionTranslation.onMouseUp(this.mouseUpCoord);
-        } else {
-            super.onMouseUp(event);
+        if (this.leftMouseDown) {
+            if (this.configLasso.selectionCtx !== null) {
+                this.setMouseUpCoord(event);
+                this.selectionTranslation.onMouseUp(this.mouseUpCoord);
+            } else {
+                super.onMouseUp(event);
+            }
         }
-
         this.leftMouseDown = false;
     }
 
@@ -141,11 +143,16 @@ export class LassoService extends AbstractSelectionService {
     }
 
     draw(): void {
+        console.log('IM DRAWING');
+
         const command = new LassoDraw(this.colorService, this.configLasso);
         this.drawingService.draw(command);
+        this.initService();
     }
 
     drawPreview(): void {
+        console.log('IM FAKE DRAWING');
+
         const command = new LassoDraw(this.colorService, this.configLasso);
         this.drawingService.drawPreview(command);
     }
@@ -163,6 +170,7 @@ export class LassoService extends AbstractSelectionService {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.draw();
 
+        this.initService();
         this.configLasso.selectionCtx = null;
         this.configLasso.endCoords = new Vec2(0, 0);
     }
@@ -206,6 +214,8 @@ export class LassoService extends AbstractSelectionService {
     }
 
     protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void {
+        if (this.configLasso.points.length < 2) return;
+
         ctx.beginPath();
 
         ctx.lineWidth = this.BORDER_WIDTH;
@@ -228,7 +238,7 @@ export class LassoService extends AbstractSelectionService {
     }
 
     stopDrawing() {
-        this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.configLasso.inSelection = false;
         this.initService();
         super.stopDrawing();
     }

@@ -9,10 +9,12 @@ export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
     height: number;
     width: number;
     shiftDown: boolean;
+    inSelection: boolean;
 
     constructor() {
         super();
         this.points = [];
+        this.inSelection = false;
         this.startCoords = new Vec2(0, 0);
         this.endCoords = new Vec2(0, 0);
         this.width = 0;
