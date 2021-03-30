@@ -177,7 +177,7 @@ export class LassoService extends AbstractSelectionService {
         this.drawingService.drawPreview(command);
     }
 
-    drawPreviewSelectionRequired(): void {
+    protected drawPreviewSelectionRequired(): void {
         if (this.configLasso.points.length === 0) return;
 
         const size: Vec2 = this.end.substract(this.start);
