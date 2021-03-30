@@ -41,7 +41,7 @@ export class DrawingService {
 
         this.canvas.width = width;
         this.canvas.height = height;
-        this.previewCanvas.width = width; // Canvas resize
+        this.previewCanvas.width = width;
         this.previewCanvas.height = height;
 
         this.initBackground();

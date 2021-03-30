@@ -119,9 +119,7 @@ export class SelectionResize {
         if (this.config.shift.isDown && !this.lockHorizontal && !this.lockVertical) {
             const distance = mousePos.substract(this.oppositeSide);
             const smallestDistance = Math.min(Math.abs(distance.x), Math.abs(distance.y));
-            const returnedX = this.oppositeSide.x + Math.sign(distance.x) * smallestDistance;
-            const returnedY = this.oppositeSide.y + Math.sign(distance.y) * smallestDistance;
-            return new Vec2(returnedX, returnedY);
+            return this.oppositeSide.add(distance.apply(Math.sign).scalar(smallestDistance));
         } else {
             return mousePos;
         }
@@ -184,7 +182,7 @@ export class SelectionResize {
         if (!this.lockHorizontal) {
             if (this.resizeOrigin.x < this.oppositeSide.x) {
                 const maxTranslation = this.oppositeSide.x - this.resizeOrigin.x - this.MINIMUM_RESIZE_SIZE;
-                finalX = translation.x > maxTranslation ? maxTranslation : translation.x;
+                finalX = Math.min(translation.x, maxTranslation);
             } else if (mousePos.x < this.oppositeSide.x) {
                 finalX = mousePos.x - this.oppositeSide.x + this.MINIMUM_RESIZE_SIZE;
             }
@@ -193,7 +191,7 @@ export class SelectionResize {
         if (!this.lockVertical) {
             if (this.resizeOrigin.y < this.oppositeSide.y) {
                 const maxTranslation = this.oppositeSide.y - this.resizeOrigin.y - this.MINIMUM_RESIZE_SIZE;
-                finalY = translation.y > maxTranslation ? maxTranslation : translation.y;
+                finalY = Math.min(translation.y, maxTranslation);
             } else if (mousePos.y < this.oppositeSide.y) {
                 finalY = mousePos.y - this.oppositeSide.y + this.MINIMUM_RESIZE_SIZE;
             }
