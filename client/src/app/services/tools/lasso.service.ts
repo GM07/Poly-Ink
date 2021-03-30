@@ -166,13 +166,13 @@ export class LassoService extends AbstractSelectionService {
         return [start, end];
     }
 
-    draw(): void {
+    private draw(): void {
         const command = new LassoDraw(this.colorService, this.configLasso);
         this.drawingService.draw(command);
         this.initService();
     }
 
-    drawPreview(): void {
+    private drawPreview(): void {
         const command = new LassoDraw(this.colorService, this.configLasso);
         this.drawingService.drawPreview(command);
     }
