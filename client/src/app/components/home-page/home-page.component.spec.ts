@@ -10,10 +10,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { CarrouselComponent } from '@app/components/carrousel/carrousel.component';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
+import { DrawingService } from '@app/services/drawing/drawing.service';
 
 describe('HomePageComponent', () => {
     let component: HomePageComponent;
     let fixture: ComponentFixture<HomePageComponent>;
+    let drawingService: DrawingService;
     let zone: NgZone;
     let router: Router;
 
@@ -41,6 +43,7 @@ describe('HomePageComponent', () => {
         fixture.detectChanges();
         router = TestBed.inject(Router);
         zone = TestBed.inject(NgZone);
+        drawingService = TestBed.inject(DrawingService);
         zone.run(() => {
             router.initialNavigation();
         });
@@ -72,11 +75,6 @@ describe('HomePageComponent', () => {
         expect(component.showComponent).toBe(false);
     });
 
-    it('can continue to draw', () => {
-        // For now, we can't continue to draw, because the feature hasn't been implemented yet
-        expect(component.continuingDrawing()).toBe(false);
-    });
-
     it('should create new drawing', () => {
         component.createNewDrawing();
         expect(component.state).toBe('invisible');
@@ -92,5 +90,19 @@ describe('HomePageComponent', () => {
         expect(component.state).toBe('invisible');
         component.backToMenu();
         expect(component.state).toBe('visible');
+    });
+
+    it('should call fadeOut and createLoadedCanvasFromStorage when continue drawing button is clicked', () => {
+        spyOn(component, 'fadeOut');
+        spyOn(drawingService, 'createLoadedCanvasFromStorage');
+        component.continueDrawing();
+        expect(component.fadeOut).toHaveBeenCalled();
+        expect(drawingService.createLoadedCanvasFromStorage).toHaveBeenCalled();
+    });
+
+    it('should show continue drawing button when drawingService provided a non null drawing from local storage', () => {
+        drawingService.getSavedDrawing = jasmine.createSpy().and.returnValue('test_drawing');
+        component.init();
+        expect(component.showContinueDrawing).toBeTruthy();
     });
 });
