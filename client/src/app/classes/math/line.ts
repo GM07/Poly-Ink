@@ -29,10 +29,10 @@ export class Line {
     }
 
     private halfSpaceFunction(pointToCheck: Vec2): number {
-        return this.lineProduct(this.end.substract(this.start), pointToCheck.substract(this.start));
+        return this.determinant(this.end.substract(this.start), pointToCheck.substract(this.start));
     }
 
-    private lineProduct(a: Vec2, b: Vec2): number {
+    private determinant(a: Vec2, b: Vec2): number {
         return a.x * b.y - a.y * b.x;
     }
 }

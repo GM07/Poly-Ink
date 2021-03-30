@@ -146,7 +146,7 @@ export class LineDrawer {
         return new Vec2(event.clientX - clientRect.x, event.clientY - clientRect.y).substractValue(border);
     }
 
-    static drawLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)) {
+    private static drawLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)) {
         ctx.beginPath();
         const firstPoint: Vec2 = points[0].add(transform);
         ctx.moveTo(firstPoint.x, firstPoint.y);

@@ -36,15 +36,6 @@ export class Geometry {
         return value >= 0 ? Math.floor(value) : Math.ceil(value);
     }
 
-    static getLinesFromPoints(points: Vec2[]): Line[] {
-        const lines: Line[] = [];
-        for (let i = 1; i < points.length; i++) {
-            lines.push(new Line(points[i - 1], points[i]));
-        }
-
-        return lines;
-    }
-
     static lastLineIntersecting(lines: Line[], nextLine: Line): boolean {
         for (let i = 0; i < lines.length - 1; i++) {
             if (lines[i].intersects(nextLine)) {

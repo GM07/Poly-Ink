@@ -156,14 +156,14 @@ describe('Line Drawer', () => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
         const spy = spyOn(ctx, 'lineTo').and.callThrough();
-        LineDrawer.drawLinePath(ctx, [mousePos, mousePos, mousePos]);
+        LineDrawer['drawLinePath'](ctx, [mousePos, mousePos, mousePos]);
         expect(spy).toHaveBeenCalledTimes(2);
     });
 
     it('should draw filled line path', () => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-        const spy = spyOn(LineDrawer, 'drawLinePath').and.callThrough();
+        const spy = spyOn<any>(LineDrawer, 'drawLinePath').and.callThrough();
         const actionSpy = spyOn(ctx, 'fill').and.callThrough();
         LineDrawer.drawFilledLinePath(ctx, [mousePos, mousePos]);
         expect(spy).toHaveBeenCalled();
@@ -173,7 +173,7 @@ describe('Line Drawer', () => {
     it('should draw stroked line path', () => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-        const spy = spyOn(LineDrawer, 'drawLinePath').and.callThrough();
+        const spy = spyOn<any>(LineDrawer, 'drawLinePath').and.callThrough();
         const actionSpy = spyOn(ctx, 'stroke').and.callThrough();
         LineDrawer.drawStrokedLinePath(ctx, [mousePos, mousePos]);
         expect(spy).toHaveBeenCalled();
@@ -183,7 +183,7 @@ describe('Line Drawer', () => {
     it('should draw clipped line path', () => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-        const spy = spyOn(LineDrawer, 'drawLinePath').and.callThrough();
+        const spy = spyOn<any>(LineDrawer, 'drawLinePath').and.callThrough();
         const actionSpy = spyOn(ctx, 'clip').and.callThrough();
         LineDrawer.drawClippedLinePath(ctx, [mousePos, mousePos]);
         expect(spy).toHaveBeenCalled();
