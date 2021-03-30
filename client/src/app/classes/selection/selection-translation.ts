@@ -32,7 +32,7 @@ export class SelectionTranslation {
     }
 
     onKeyDown(event: KeyboardEvent, leftMouseDown: boolean): void {
-        if (this.config.selectionCtx !== null) {
+        if (this.config.previewSelectionCtx !== null) {
             if (this.isArrowKeyDown(event, leftMouseDown)) {
                 event.preventDefault();
                 if (event.repeat) return;
@@ -51,21 +51,21 @@ export class SelectionTranslation {
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if (this.config.selectionCtx !== null) {
+        if (this.config.previewSelectionCtx !== null) {
             this.setArrowKeyUp(event);
             this.clearArrowKeys();
         }
     }
 
     onMouseUp(mouseUpCoord: Vec2): void {
-        if (this.config.selectionCtx !== null && this.isMouseTranslationStarted) {
+        if (this.config.previewSelectionCtx !== null && this.isMouseTranslationStarted) {
             this.isMouseTranslationStarted = false;
             this.sendUpdateSelectionRequest(this.getTranslation(mouseUpCoord));
         }
     }
 
     onMouseMove(event: MouseEvent, mouseUpCoord: Vec2): void {
-        if (this.config.selectionCtx !== null && this.isMouseTranslationStarted) {
+        if (this.config.previewSelectionCtx !== null && this.isMouseTranslationStarted) {
             this.sendUpdateSelectionRequest(this.getTranslation(mouseUpCoord));
             document.body.style.width = event.pageX + this.config.width + 'px';
             document.body.style.height = event.pageY + this.config.height + 'px';
@@ -111,7 +111,7 @@ export class SelectionTranslation {
     private startArrowKeyTranslation(): void {
         if (this.moveId === this.DEFAULT_MOVE_ID) {
             setTimeout(() => {
-                if (this.moveId === this.DEFAULT_MOVE_ID && this.config.selectionCtx !== null)
+                if (this.moveId === this.DEFAULT_MOVE_ID && this.config.previewSelectionCtx !== null)
                     this.moveId = window.setInterval(() => {
                         this.clearArrowKeys();
                         this.sendUpdateSelectionRequest(

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EllipseSelectionDraw } from '@app/classes/commands/ellipse-selection-draw';
+import { SelectionData } from '@app/classes/selection/selection-data';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { EllipseSelectionToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -21,13 +22,13 @@ export class EllipseSelectionService extends AbstractSelectionService {
         const ctx = this.drawingService.previewCtx;
         let radiusX: number = this.config.width / 2;
         let radiusY: number = this.config.height / 2;
-        const center = new Vec2(this.mouseDownCoord.x + radiusX, this.mouseDownCoord.y + radiusY);
         if (this.config.shift.isDown) {
             const minRadius = Math.min(Math.abs(radiusX), Math.abs(radiusY));
-            radiusX = minRadius;
-            radiusY = minRadius;
+            radiusX = Math.sign(radiusX) * minRadius;
+            radiusY = Math.sign(radiusY) * minRadius;
         }
 
+        const center = new Vec2(this.mouseDownCoord.x + radiusX, this.mouseDownCoord.y + radiusY);
         const radiusAbs = new Vec2(Math.abs(radiusX), Math.abs(radiusY));
         this.config.width = 2 * radiusAbs.x * Math.sign(this.config.width);
         this.config.height = 2 * radiusAbs.y * Math.sign(this.config.height);
@@ -61,7 +62,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         ctx.closePath();
     }
 
-    protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {
+    protected fillBackground(ctx: CanvasRenderingContext2D): void {
         if (!this.config.didChange()) return;
 
         const radius = new Vec2(this.config.originalWidth / 2, this.config.originalHeight / 2).apply(Math.abs);
@@ -73,30 +74,42 @@ export class EllipseSelectionService extends AbstractSelectionService {
         ctx.closePath();
     }
 
-    protected updateSelectionRequired(): void {
-        const ctx = this.drawingService.previewCtx;
-        this.drawingService.clearCanvas(ctx);
+    protected drawFinalselection(): void {
+        const previewCTX = this.drawingService.previewCtx;
+        this.drawingService.clearCanvas(previewCTX);
+
+        this.fillBackground(previewCTX);
+
         const radius = new Vec2(this.config.width / 2, this.config.height / 2).apply(Math.abs);
-        const center = this.config.endCoords.add(radius);
+        const center = radius.clone();
+        for (const data of this.config.SELECTION_DATA) {
+            const memoryCanvas = document.createElement('canvas');
+            DrawingService.saveCanvas(memoryCanvas, data);
 
-        this.fillBackground(ctx, this.config.endCoords);
+            const ctx = data.getContext('2d') as CanvasRenderingContext2D;
+            ctx.clearRect(0, 0, Math.abs(this.config.width), Math.abs(this.config.height));
+            ctx.beginPath();
+            ctx.save();
+            ctx.ellipse(center.x, center.y, radius.x, radius.y, 0, 0, 2 * Math.PI);
+            ctx.clip();
+            ctx.drawImage(memoryCanvas, 0, 0);
+            ctx.restore();
+            ctx.closePath();
+        }
 
-        ctx.beginPath();
-        ctx.save();
-        ctx.ellipse(center.x, center.y, radius.x, radius.y, 0, 0, 2 * Math.PI);
-        ctx.clip();
-        ctx.drawImage(this.selectionData, this.config.endCoords.x, this.config.endCoords.y);
-        ctx.restore();
-        this.drawSelection(ctx, center, radius);
+        const previewSelectionCTX = this.config.previewSelectionCtx as CanvasRenderingContext2D;
+        this.drawSelection(previewSelectionCTX, center, radius);
+
+        previewCTX.drawImage(this.config.SELECTION_DATA[SelectionData.PreviewData], this.config.endCoords.x, this.config.endCoords.y);
     }
 
     protected endSelection(): void {
-        if (this.config.selectionCtx === null) return;
+        if (this.config.previewSelectionCtx === null) return;
 
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.draw();
 
-        this.config.selectionCtx = null;
+        this.config.previewSelectionCtx = null;
         this.config.endCoords = new Vec2(0, 0);
     }
 

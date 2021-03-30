@@ -20,7 +20,7 @@ describe('SelectionResize', () => {
         canvasSelection.height = 2;
         selectionConfig = new SelectionConfig();
         selectionResize = new SelectionResize(selectionConfig);
-        selectionResize['config'].selectionCtx = canvasSelection.getContext('2d') as CanvasRenderingContext2D;
+        selectionResize['config'].previewSelectionCtx = canvasSelection.getContext('2d') as CanvasRenderingContext2D;
         selectionResize['memoryCanvas'] = document.createElement('canvas');
         DrawingService.saveCanvas(selectionResize['memoryCanvas'], canvasSelection);
         selectionResize['oppositeSide'] = new Vec2(1, 1);
@@ -44,14 +44,14 @@ describe('SelectionResize', () => {
     });
 
     it('should not resize if there are no drawings', () => {
-        selectionResize['config'].selectionCtx = null;
+        selectionResize['config'].previewSelectionCtx = null;
         selectionResize.resize(mousePosition);
         expect(getNewSizeSpy).not.toHaveBeenCalled();
     });
 
     it('should not resize for a width or a height of 0', () => {
         getNewSizeSpy.and.returnValue(new Vec2(0, 0));
-        const drawImageSpy = spyOn<any>(selectionResize['config'].selectionCtx, 'drawImage');
+        const drawImageSpy = spyOn<any>(selectionResize['config'].previewSelectionCtx, 'drawImage');
         selectionResize.resize(mousePosition);
         expect(drawImageSpy).not.toHaveBeenCalled();
     });
@@ -83,7 +83,7 @@ describe('SelectionResize', () => {
 
     it('should not flip if there are now drawings', () => {
         const getContextSpy = spyOn<any>(selectionResize['memoryCanvas'], 'getContext');
-        selectionResize['config'].selectionCtx = null;
+        selectionResize['config'].previewSelectionCtx = null;
         selectionResize['flipHorizontal']();
         selectionResize['flipVertical']();
         expect(getContextSpy).not.toHaveBeenCalled();
@@ -96,8 +96,16 @@ describe('SelectionResize', () => {
         expect(getContextSpy).toHaveBeenCalledTimes(2);
     });
 
+    it('should flip', () => {
+        const canvas = selectionResize['memoryCanvas'] as HTMLCanvasElement;
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+        spyOn(ctx, 'scale');
+        selectionResize['flipDrawing'](canvas, new Vec2(0, 0), new Vec2(1, 1));
+        expect(ctx.scale).toHaveBeenCalled();
+    });
+
     it('should resize', () => {
-        const drawImageSpy = spyOn<any>(selectionResize['config'].selectionCtx, 'drawImage');
+        const drawImageSpy = spyOn<any>(selectionResize['config'].previewSelectionCtx, 'drawImage');
         selectionResize.resize(mousePosition);
         expect(drawImageSpy).toHaveBeenCalled();
     });
@@ -152,7 +160,7 @@ describe('SelectionResize', () => {
 
     it('should not initialise if there are no drawings', () => {
         spyOn(DrawingService, 'saveCanvas');
-        selectionResize['config'].selectionCtx = null;
+        selectionResize['config'].previewSelectionCtx = null;
         selectionResize['memoryCanvas'] = undefined;
         selectionResize['initResize'](new Vec2(0, 0), new Vec2(0, 0));
         expect(DrawingService.saveCanvas).not.toHaveBeenCalled();
