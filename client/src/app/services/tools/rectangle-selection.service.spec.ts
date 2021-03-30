@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
+import { SelectionData } from '@app/classes/selection/selection-data';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
@@ -113,7 +114,7 @@ describe('RectangleSelectionService', () => {
         const keyboardEvent = { ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent;
         spyOn<any>(service['selectionTranslation'], 'setArrowKeyUp');
         spyOn(window, 'clearInterval');
-        service['config'].selectionCtx = canvasSelection.getContext('2d');
+        service['config'].previewSelectionCtx = canvasSelection.getContext('2d');
         service.onKeyUp(keyboardEvent);
         expect(window.clearInterval).toHaveBeenCalled();
     });
@@ -150,18 +151,18 @@ describe('RectangleSelectionService', () => {
         service.config.width = 100;
         service.config.height = 100;
         service.mouseDownCoord = new Vec2(25, 25);
-        service['config'].selectionCtx = canvasSelection.getContext('2d');
+        service['config'].previewSelectionCtx = canvasSelection.getContext('2d');
         canvasSelection.width = 250;
         canvasSelection.height = 250;
         drawServiceSpy.previewCanvas = document.createElement('canvas');
         drawServiceSpy.previewCtx = drawServiceSpy.previewCanvas.getContext('2d') as CanvasRenderingContext2D;
-        service['selectionData'] = canvasSelection;
-        const drawPreviewSelection = spyOn<any>(service, 'drawPreviewSelection');
+        service.config.SELECTION_DATA[SelectionData.PreviewData] = canvasSelection;
+        const drawFinalselection = spyOn<any>(service, 'drawFinalselection');
         spyOn(drawServiceSpy.previewCtx, 'drawImage');
-        spyOn<any>(service['config'].selectionCtx, 'drawImage');
+        spyOn<any>(service['config'].previewSelectionCtx, 'drawImage');
         service['startSelection']();
         expect(drawServiceSpy.previewCtx.drawImage).toHaveBeenCalled();
-        expect(drawPreviewSelection).toHaveBeenCalled();
+        expect(drawFinalselection).toHaveBeenCalled();
     });
 
     it('update drawing should clear canvas and draw new preview', () => {
@@ -173,18 +174,18 @@ describe('RectangleSelectionService', () => {
 
     it('update selection should do nothing if there is no selection', () => {
         const translation = new Vec2(0, 0);
-        const updateSelectionRequired = spyOn<any>(service, 'updateSelectionRequired');
+        const drawImageSpy = spyOn(service['drawingService'].previewCtx, 'drawImage');
         service['updateSelection'](translation);
-        expect(updateSelectionRequired).not.toHaveBeenCalled();
+        expect(drawImageSpy).not.toHaveBeenCalled();
     });
 
     it('update selection should call the child class to update', () => {
         const translation = new Vec2(0, 0);
-        const updateSelectionRequired = spyOn<any>(service, 'updateSelectionRequired');
+        const drawImageSpy = spyOn(service['drawingService'].previewCtx, 'drawImage');
         service.config.endCoords = new Vec2(0, 0);
-        service['config'].selectionCtx = canvasSelection.getContext('2d');
+        service['config'].previewSelectionCtx = canvasSelection.getContext('2d');
         service['updateSelection'](translation);
-        expect(updateSelectionRequired).toHaveBeenCalled();
+        expect(drawImageSpy).toHaveBeenCalled();
     });
 
     it('draw preview should update width and height and call child method', () => {
@@ -211,7 +212,7 @@ describe('RectangleSelectionService', () => {
     });
 
     it('end selection should draw the selection on the base canvas', () => {
-        service['config'].selectionCtx = previewCtxStub;
+        service['config'].previewSelectionCtx = previewCtxStub;
         service.config.endCoords = new Vec2(0, 0);
         spyOn(service, 'draw');
         service['endSelection']();
@@ -222,16 +223,16 @@ describe('RectangleSelectionService', () => {
         spyOn(service.config, 'didChange').and.returnValue(true);
         service.config.startCoords = new Vec2(0, 0);
         spyOn(previewCtxStub, 'fillRect');
-        service['fillBackground'](previewCtxStub, new Vec2(10, 25));
+        service['fillBackground'](previewCtxStub);
         expect(previewCtxStub.fillRect).toHaveBeenCalled();
     });
 
-    it('update selection required should draw the image, update it and update the background', () => {
+    it('the final drawn selection should draw the image, update it and update the background', () => {
         service.config.endCoords = new Vec2(0, 0);
         spyOn(previewCtxStub, 'drawImage');
         const fillBackground = spyOn<any>(service, 'fillBackground');
         const drawSelection = spyOn<any>(service, 'drawSelection');
-        service['updateSelectionRequired']();
+        service['drawFinalselection']();
         expect(previewCtxStub.drawImage).toHaveBeenCalled();
         expect(fillBackground).toHaveBeenCalled();
         expect(drawSelection).toHaveBeenCalled();
@@ -272,7 +273,7 @@ describe('RectangleSelectionService', () => {
         service.config.startCoords = new Vec2(0, 0);
         spyOn(service.config, 'didChange').and.returnValue(false);
         spyOn(previewCtxStub, 'beginPath');
-        service['fillBackground'](previewCtxStub, new Vec2(0, 0));
+        service['fillBackground'](previewCtxStub);
         expect(previewCtxStub.beginPath).not.toHaveBeenCalled();
     });
 

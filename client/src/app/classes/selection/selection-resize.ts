@@ -2,6 +2,7 @@ import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
+import { SelectionData } from './selection-data';
 
 export class SelectionResize {
     private readonly FLIP_IMAGE_FACTOR: number = -1;
@@ -27,7 +28,7 @@ export class SelectionResize {
     }
 
     resize(mousePosIn: Vec2): void {
-        if (this.config.selectionCtx === null || this.memoryCanvas == undefined) return;
+        if (this.config.previewSelectionCtx === null || this.memoryCanvas == undefined) return;
 
         const mousePos = this.adaptMousePosition(mousePosIn);
 
@@ -43,10 +44,10 @@ export class SelectionResize {
 
         this.config.width = newSize.x;
         this.config.height = newSize.y;
-        const canvas = this.config.selectionCtx.canvas;
+        const canvas = this.config.SELECTION_DATA[SelectionData.PreviewData];
         canvas.width = Math.abs(newSize.x);
         canvas.height = Math.abs(newSize.y);
-        this.config.selectionCtx.drawImage(this.memoryCanvas, 0, 0, Math.abs(newSize.x), Math.abs(newSize.y));
+        this.config.previewSelectionCtx.drawImage(this.memoryCanvas, 0, 0, Math.abs(newSize.x), Math.abs(newSize.y));
         this.UPDATE_SELECTION_REQUEST.next(this.getTranslationForResize(mousePos));
 
         const translation = this.getTranslation(mousePos);
@@ -108,7 +109,6 @@ export class SelectionResize {
     private initAttribs(): void {
         this.oppositeSide = new Vec2(0, 0);
         this.resizeOrigin = new Vec2(0, 0);
-        this.config.scaleFactor = new Vec2(1, 1);
         this.resizeSelected = false;
         this.memoryCanvas = undefined;
         this.lockVertical = false;
@@ -144,31 +144,36 @@ export class SelectionResize {
     }
 
     private flipHorizontal(): void {
-        if (this.config.selectionCtx === null || this.memoryCanvas === undefined) return;
+        if (this.config.previewSelectionCtx === null || this.memoryCanvas === undefined) return;
 
-        const tempCanvas = document.createElement('canvas');
-        DrawingService.saveCanvas(tempCanvas, this.memoryCanvas);
-        this.config.scaleFactor.x *= this.FLIP_IMAGE_FACTOR;
-
-        const ctx = this.memoryCanvas.getContext('2d') as CanvasRenderingContext2D;
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.save();
-        ctx.scale(this.FLIP_IMAGE_FACTOR, 1);
-        ctx.drawImage(tempCanvas, -tempCanvas.width, 0);
-        ctx.restore();
+        this.flipDrawing(this.memoryCanvas, new Vec2(-this.memoryCanvas.width, 0), new Vec2(this.FLIP_IMAGE_FACTOR, 1));
+        this.flipDrawing(
+            this.config.SELECTION_DATA[SelectionData.FinalData],
+            new Vec2(-this.config.SELECTION_DATA[SelectionData.FinalData].width, 0),
+            new Vec2(this.FLIP_IMAGE_FACTOR, 1),
+        );
     }
 
     private flipVertical(): void {
-        if (this.config.selectionCtx === null || this.memoryCanvas === undefined) return;
-        const tempCanvas = document.createElement('canvas');
-        DrawingService.saveCanvas(tempCanvas, this.memoryCanvas);
-        this.config.scaleFactor.y *= this.FLIP_IMAGE_FACTOR;
+        if (this.config.previewSelectionCtx === null || this.memoryCanvas === undefined) return;
 
-        const ctx = this.memoryCanvas.getContext('2d') as CanvasRenderingContext2D;
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        this.flipDrawing(this.memoryCanvas, new Vec2(0, -this.memoryCanvas.height), new Vec2(1, this.FLIP_IMAGE_FACTOR));
+        this.flipDrawing(
+            this.config.SELECTION_DATA[SelectionData.FinalData],
+            new Vec2(0, -this.config.SELECTION_DATA[SelectionData.FinalData].height),
+            new Vec2(1, this.FLIP_IMAGE_FACTOR),
+        );
+    }
+
+    private flipDrawing(canvas: HTMLCanvasElement, offset: Vec2, scaleFactor: Vec2): void {
+        const tempCanvas = document.createElement('canvas');
+        DrawingService.saveCanvas(tempCanvas, canvas);
+
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.save();
-        ctx.scale(1, this.FLIP_IMAGE_FACTOR);
-        ctx.drawImage(tempCanvas, 0, -tempCanvas.height);
+        ctx.scale(scaleFactor.x, scaleFactor.y);
+        ctx.drawImage(tempCanvas, offset.x, offset.y);
         ctx.restore();
     }
 
@@ -198,7 +203,7 @@ export class SelectionResize {
     }
 
     private initResize(resizeOriginOffset: Vec2, oppositeSideOffset: Vec2): void {
-        if (this.config.selectionCtx === null) return;
+        if (this.config.previewSelectionCtx === null) return;
 
         this.resizeOrigin = this.config.endCoords.add(resizeOriginOffset);
         this.oppositeSide = this.config.endCoords.add(oppositeSideOffset);
@@ -208,7 +213,7 @@ export class SelectionResize {
         this.lockVertical = false;
         if (this.memoryCanvas === undefined) {
             this.memoryCanvas = document.createElement('canvas');
-            DrawingService.saveCanvas(this.memoryCanvas, this.config.selectionCtx.canvas);
+            DrawingService.saveCanvas(this.memoryCanvas, this.config.SELECTION_DATA[SelectionData.PreviewData]);
         }
     }
 
