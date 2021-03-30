@@ -38,8 +38,8 @@ export class EllipseSelectionService extends AbstractSelectionService {
     protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void {
         ctx.beginPath();
 
-        ctx.lineWidth = this.BORDER_WIDTH;
-        ctx.setLineDash([this.LINE_DASH, this.LINE_DASH]);
+        ctx.lineWidth = AbstractSelectionService.BORDER_WIDTH;
+        ctx.setLineDash([AbstractSelectionService.LINE_DASH, AbstractSelectionService.LINE_DASH]);
         ctx.lineCap = 'round' as CanvasLineCap;
         ctx.lineJoin = 'round' as CanvasLineJoin;
 
@@ -50,7 +50,7 @@ export class EllipseSelectionService extends AbstractSelectionService {
         ctx.closePath();
         ctx.beginPath();
 
-        ctx.lineDashOffset = this.LINE_DASH;
+        ctx.lineDashOffset = AbstractSelectionService.LINE_DASH;
         ctx.strokeStyle = 'white';
         ctx.ellipse(position.x, position.y, size.x, size.y, 0, 0, 2 * Math.PI);
         ctx.stroke();

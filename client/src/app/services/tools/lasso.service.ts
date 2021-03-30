@@ -52,6 +52,26 @@ export class LassoService extends AbstractSelectionService {
         this.startSelection();
     }
 
+    createSelection(event: MouseEvent): void {
+        this.lineDrawer.pointToAdd = this.getPositionFromMouse(event);
+
+        if (this.configLasso.points.length > 2) {
+            const closedLoop: boolean =
+                Geometry.getDistanceBetween(this.lineDrawer.pointToAdd, this.configLasso.points[0]) <=
+                ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;
+
+            if (closedLoop) {
+                this.configLasso.points.push(this.configLasso.points[0]);
+                [this.start, this.end] = this.findSmallestRectangle();
+                this.onClosedPath();
+            } else {
+                this.lineDrawer.addNewPoint(event);
+            }
+        } else {
+            this.lineDrawer.addNewPoint(event);
+        }
+    }
+
     onMouseDown(event: MouseEvent): void {
         this.lineDrawer.leftMouseDown = event.button === MouseButton.Left;
         this.leftMouseDown = this.lineDrawer.leftMouseDown;
@@ -59,23 +79,7 @@ export class LassoService extends AbstractSelectionService {
         if (!this.leftMouseDown) return;
 
         if (this.configLasso.selectionCtx === null) {
-            this.lineDrawer.pointToAdd = this.getPositionFromMouse(event);
-
-            if (this.configLasso.points.length > 2) {
-                const closedLoop: boolean =
-                    Geometry.getDistanceBetween(this.lineDrawer.pointToAdd, this.configLasso.points[0]) <=
-                    ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;
-
-                if (closedLoop) {
-                    this.configLasso.points.push(this.configLasso.points[0]);
-                    [this.start, this.end] = this.findSmallestRectangle();
-                    this.onClosedPath();
-                } else {
-                    this.lineDrawer.addNewPoint(event);
-                }
-            } else {
-                this.lineDrawer.addNewPoint(event);
-            }
+            this.createSelection(event);
         } else {
             this.endSelection();
         }
@@ -106,16 +110,13 @@ export class LassoService extends AbstractSelectionService {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (this.configLasso.selectionCtx !== null) {
-            super.onKeyDown(event);
-            return;
-        }
-
         const shortcut = ShortcutKey.get(this.lineDrawer.shortcutList, event, true);
         if (shortcut !== undefined && shortcut.isDown !== true) {
             shortcut.isDown = true;
             this.lineDrawer.handleKeys(shortcut);
         }
+
+        super.onKeyDown(event);
     }
 
     onKeyUp(event: KeyboardEvent): void {
@@ -126,6 +127,8 @@ export class LassoService extends AbstractSelectionService {
             shortcut.isDown = false;
             this.lineDrawer.handleKeys(shortcut);
         }
+
+        super.onKeyUp(event);
     }
 
     private findSmallestRectangle(): [Vec2, Vec2] {
@@ -166,22 +169,13 @@ export class LassoService extends AbstractSelectionService {
         this.draw();
 
         this.initService();
-        this.configLasso.selectionCtx = null;
-        this.configLasso.endCoords = new Vec2(0, 0);
     }
 
-    protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {
+    protected fillBackground(ctx: CanvasRenderingContext2D, _: Vec2): void {
         if (!this.configLasso.didChange()) return;
 
         ctx.fillStyle = 'white';
-        ctx.beginPath();
-        ctx.moveTo(this.configLasso.points[0].x, this.configLasso.points[0].y);
-        for (let index = 1; index < this.configLasso.points.length; index++) {
-            const point = this.configLasso.points[index];
-            ctx.lineTo(point.x, point.y);
-        }
-        ctx.fill();
-        ctx.closePath();
+        LineDrawer.drawFilledLinePath(ctx, this.configLasso.points);
     }
 
     protected updateSelectionRequired(): void {
@@ -194,13 +188,7 @@ export class LassoService extends AbstractSelectionService {
         ctx.save();
 
         const dp = this.configLasso.endCoords.substract(this.configLasso.startCoords);
-        ctx.beginPath();
-        ctx.moveTo(this.configLasso.points[0].x + dp.x, this.configLasso.points[0].y + dp.y);
-        for (let index = 1; index < this.configLasso.points.length; index++) {
-            const point = this.configLasso.points[index];
-            ctx.lineTo(point.x + dp.x, point.y + dp.y);
-        }
-        ctx.clip();
+        LineDrawer.drawClippedLinePath(ctx, this.configLasso.points, dp);
 
         ctx.drawImage(this.selectionData, this.configLasso.endCoords.x, this.configLasso.endCoords.y);
         ctx.restore();
@@ -208,28 +196,9 @@ export class LassoService extends AbstractSelectionService {
         this.drawSelection(ctx, this.configLasso.endCoords, new Vec2(Math.abs(this.configLasso.width), Math.abs(this.configLasso.height)));
     }
 
-    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void {
+    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, _: Vec2): void {
         if (this.configLasso.points.length < 2) return;
-
-        ctx.beginPath();
-
-        ctx.lineWidth = this.BORDER_WIDTH;
-        ctx.setLineDash([this.LINE_DASH, this.LINE_DASH]);
-        ctx.strokeStyle = 'black';
-        ctx.lineJoin = 'miter' as CanvasLineJoin;
-        ctx.lineCap = 'square' as CanvasLineCap;
-
-        const firstPoint: Vec2 = this.configLasso.points[0].substract(this.start).add(position);
-        ctx.moveTo(firstPoint.x, firstPoint.y);
-        for (let index = 1; index < this.configLasso.points.length; index++) {
-            const point = this.configLasso.points[index].substract(this.start).add(position);
-            ctx.lineTo(point.x, point.y);
-        }
-        ctx.stroke();
-        ctx.closePath();
-
-        ctx.lineDashOffset = 0;
-        ctx.setLineDash([]);
+        LineDrawer.drawDashedLinePath(ctx, this.configLasso.points, position.substract(this.start));
     }
 
     stopDrawing() {

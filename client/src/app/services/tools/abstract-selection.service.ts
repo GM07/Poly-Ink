@@ -17,8 +17,8 @@ import { ColorService } from 'src/color-picker/services/color.service';
 export abstract class AbstractSelectionService extends Tool {
     private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
     private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
-    protected readonly LINE_DASH: number = 8;
-    protected readonly BORDER_WIDTH: number = 2;
+    static readonly LINE_DASH: number = 8;
+    static readonly BORDER_WIDTH: number = 2;
     protected selectionData: HTMLCanvasElement;
     protected selectionTranslation: SelectionTranslation;
     selectionResize: SelectionResize;
