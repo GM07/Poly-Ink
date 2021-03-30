@@ -75,11 +75,6 @@ describe('HomePageComponent', () => {
         expect(component.showComponent).toBe(false);
     });
 
-    it('can continue to draw', () => {
-        // For now, we can't continue to draw, because the feature hasn't been implemented yet
-        expect(component.continuingDrawing()).toBe(false);
-    });
-
     it('should create new drawing', () => {
         component.createNewDrawing();
         expect(component.state).toBe('invisible');

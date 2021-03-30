@@ -9,7 +9,7 @@ import {
     NewDrawingConstants,
     RedoConstants,
     SaveFileToolConstants,
-    UndoConstants,
+    UndoConstants
 } from '@app/classes/tool_ui_settings/tools.constants';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resize.component';
@@ -113,7 +113,7 @@ describe('EditorComponent', () => {
         expect(shortcutServiceSpy.onMouseMove).toHaveBeenCalled();
     });
 
-    it('should register the beginning of editor realoading in local storage', () => {
+    it('should register the beginning of editor reloading in local storage', () => {
         spyOn(localStorage, 'setItem');
         component.onPageReload({} as BeforeUnloadEvent);
         expect(localStorage.setItem).toHaveBeenCalledWith('editor_reloading', 'true');

@@ -52,10 +52,6 @@ export class HomePageComponent {
         this.fadeIn();
     }
 
-    continuingDrawing(): boolean {
-        return false;
-    }
-
     fadeOut(): void {
         this.state = 'invisible';
     }
