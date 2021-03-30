@@ -58,6 +58,10 @@ export class LineDrawer {
         this.renderLinePreview();
     }
 
+    drawCurrentPath(): void {
+        this.drawPreview.next();
+    }
+
     getAlignedPoint(cursor: Vec2): Vec2 {
         const angle: number = Geometry.getAngle(this.getLastPoint(), cursor) + LineDrawer.ANGLE_STEPS / 2;
         const finalAngle = Math.floor(angle / LineDrawer.ANGLE_STEPS) * LineDrawer.ANGLE_STEPS;
@@ -172,13 +176,16 @@ export class LineDrawer {
         ctx.clip();
     }
 
-    static drawDashedLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)) {
+    static drawDashedLinePath(
+        ctx: CanvasRenderingContext2D,
+        points: Vec2[],
+        transform: Vec2 = new Vec2(0, 0),
+        styles: string[] = ['black', 'white'],
+    ) {
         ctx.lineWidth = AbstractSelectionService.BORDER_WIDTH;
         ctx.setLineDash([AbstractSelectionService.LINE_DASH, AbstractSelectionService.LINE_DASH]);
         ctx.lineJoin = 'round' as CanvasLineJoin;
         ctx.lineCap = 'round' as CanvasLineCap;
-
-        const styles: string[] = ['black', 'white'];
 
         for (let index = 0; index < styles.length; index++) {
             const style: string = styles[index];

@@ -10,6 +10,7 @@ export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
     width: number;
     shiftDown: boolean;
     inSelection: boolean;
+    intersecting: boolean;
 
     constructor() {
         super();
@@ -20,6 +21,7 @@ export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
         this.width = 0;
         this.height = 0;
         this.shiftDown = false;
+        this.intersecting = false;
     }
 
     clone(): LassoConfig {
@@ -37,6 +39,7 @@ export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
         config.width = this.width;
         config.selectionCtx = null;
         config.inSelection = this.inSelection;
+        config.intersecting = this.intersecting;
         return config;
     }
 }

@@ -2,6 +2,7 @@ import { AbstractSelectionDraw } from '@app/classes/commands/abstract-selection-
 import { LassoConfig } from '@app/classes/tool-config/lasso-config';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { LineDrawer } from '../line-drawer';
+import { Vec2 } from '../vec2';
 import { AbstractDraw } from './abstract-draw';
 
 export class LassoDraw extends AbstractDraw {
@@ -13,7 +14,12 @@ export class LassoDraw extends AbstractDraw {
 
     execute(context: CanvasRenderingContext2D): void {
         if (!this.config.inSelection) {
-            LineDrawer.drawDashedLinePath(context, this.config.points);
+            LineDrawer.drawDashedLinePath(
+                context,
+                this.config.points,
+                new Vec2(0, 0),
+                this.config.intersecting ? ['red', 'white'] : ['black', 'white'],
+            );
             return;
         }
 
