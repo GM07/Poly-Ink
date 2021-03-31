@@ -157,7 +157,7 @@ describe('RectangleSelectionService', () => {
         drawServiceSpy.previewCanvas = document.createElement('canvas');
         drawServiceSpy.previewCtx = drawServiceSpy.previewCanvas.getContext('2d') as CanvasRenderingContext2D;
         service.config.SELECTION_DATA[SelectionData.PreviewData] = canvasSelection;
-        const drawFinalselection = spyOn<any>(service, 'drawFinalselection');
+        const drawFinalselection = spyOn<any>(service, 'drawFinalSelection');
         spyOn(drawServiceSpy.previewCtx, 'drawImage');
         spyOn<any>(service['config'].previewSelectionCtx, 'drawImage');
         service['startSelection']();
@@ -232,7 +232,7 @@ describe('RectangleSelectionService', () => {
         spyOn(previewCtxStub, 'drawImage');
         const fillBackground = spyOn<any>(service, 'fillBackground');
         const drawSelection = spyOn<any>(service, 'drawSelection');
-        service['drawFinalselection']();
+        service['drawFinalSelection']();
         expect(previewCtxStub.drawImage).toHaveBeenCalled();
         expect(fillBackground).toHaveBeenCalled();
         expect(drawSelection).toHaveBeenCalled();

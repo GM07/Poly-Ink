@@ -138,7 +138,7 @@ describe('Lasso service', () => {
 
     it('should call not create selection when selection is already created', () => {
         const spy = spyOn<any>(service, 'endSelection').and.callFake(() => {});
-        service.configLasso.selectionCtx = {} as CanvasRenderingContext2D;
+        service.configLasso.previewSelectionCtx = {} as CanvasRenderingContext2D;
         service.onMouseDown({ button: MouseButton.Left } as MouseEvent);
         expect(spy).toHaveBeenCalled();
     });
@@ -158,7 +158,7 @@ describe('Lasso service', () => {
 
     it('should let parent handle mouse move if selection is completed', () => {
         service.configLasso.points = pointsTest;
-        service.configLasso.selectionCtx = service['drawingService'].baseCtx;
+        service.configLasso.previewSelectionCtx = service['drawingService'].baseCtx;
         const spy = spyOn(AbstractSelectionService.prototype, 'onMouseMove').and.callThrough();
         service.onMouseMove({ clientX: 10, clientY: 10 } as MouseEvent);
         expect(spy).toHaveBeenCalled();
@@ -167,7 +167,7 @@ describe('Lasso service', () => {
     it('should set translation mouse up', () => {
         const spy = spyOn<any>(service['selectionTranslation'], 'onMouseUp').and.callFake(() => {});
         service.leftMouseDown = true;
-        service.configLasso.selectionCtx = service['drawingService'].baseCtx;
+        service.configLasso.previewSelectionCtx = service['drawingService'].baseCtx;
         service.onMouseUp({ clientX: 100, clientY: 100 } as MouseEvent);
         expect(spy).toHaveBeenCalled();
     });
@@ -200,7 +200,7 @@ describe('Lasso service', () => {
     });
 
     it('should let parent handle keys when key is pressed if selection is completed', () => {
-        service.configLasso.selectionCtx = service['drawingService'].baseCtx;
+        service.configLasso.previewSelectionCtx = service['drawingService'].baseCtx;
         const spy = spyOn(AbstractSelectionService.prototype, 'onKeyDown').and.callFake(() => {});
         service.onKeyDown({} as KeyboardEvent);
         expect(spy).toHaveBeenCalled();
@@ -219,7 +219,7 @@ describe('Lasso service', () => {
     });
 
     it('should let parent handle keys when key is up if selection is completed', () => {
-        service.configLasso.selectionCtx = service['drawingService'].baseCtx;
+        service.configLasso.previewSelectionCtx = service['drawingService'].baseCtx;
         const spy = spyOn(AbstractSelectionService.prototype, 'onKeyUp').and.callFake(() => {});
         service.onKeyUp({} as KeyboardEvent);
         expect(spy).toHaveBeenCalled();
@@ -259,7 +259,7 @@ describe('Lasso service', () => {
 
     it('should init service when ending selection', () => {
         const spy = spyOn(service, 'initService').and.callThrough();
-        service.configLasso.selectionCtx = service['drawingService'].baseCtx;
+        service.configLasso.previewSelectionCtx = service['drawingService'].baseCtx;
         service['endSelection']();
         expect(spy).toHaveBeenCalled();
     });
@@ -267,7 +267,7 @@ describe('Lasso service', () => {
     it('should draw white background when selection is completed', () => {
         const drawSpy = spyOn(LineDrawer, 'drawFilledLinePath').and.callFake(() => {});
         const changeSpy = spyOn(service.configLasso, 'didChange').and.returnValue(true);
-        service['fillBackground']({} as CanvasRenderingContext2D, new Vec2(0, 0));
+        service['fillBackground']({} as CanvasRenderingContext2D);
         expect(drawSpy).toHaveBeenCalled();
         expect(changeSpy).toHaveBeenCalled();
     });
@@ -275,7 +275,7 @@ describe('Lasso service', () => {
     it('shoudl update selection with clipped line path', () => {
         const clipSpy = spyOn(LineDrawer, 'drawClippedLinePath').and.callFake(() => {});
         const drawSpy = spyOn<any>(service, 'drawSelection').and.callFake(() => {});
-        service['updateSelectionRequired']();
+        service['drawFinalSelection']();
         expect(clipSpy).toHaveBeenCalled();
         expect(drawSpy).toHaveBeenCalled();
     });

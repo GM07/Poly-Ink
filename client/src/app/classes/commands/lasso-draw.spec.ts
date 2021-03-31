@@ -76,8 +76,8 @@ describe('LassoDraw', () => {
 
     it('should draw dashed clipped path in selection', () => {
         lassoDraw['config'].inSelection = true;
-        const spy = spyOn(LineDrawer, 'drawClippedLinePath').and.callFake(() => {});
+        const spy = spyOn<any>(lassoDraw, 'fillBackground').and.callFake(() => {});
         lassoDraw.execute(ctxStub);
-        expect(spy).toHaveBeenCalledWith(ctxStub, lassoDraw['config'].points, new Vec2(15, 15));
+        expect(spy).toHaveBeenCalled();
     });
 });

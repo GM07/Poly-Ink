@@ -9,7 +9,6 @@ import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { AbstractSelectionDraw } from './abstract-selection-draw';
 import { EllipseSelectionDraw } from './ellipse-selection-draw';
 
 describe('EllipseSelectionDraw', () => {
@@ -92,31 +91,7 @@ describe('EllipseSelectionDraw', () => {
 
     it('should make appropriate calls on execute', () => {
         spyOn<any>(ellipseSelectionDraw, 'fillBackground').and.callThrough();
-<<<<<<< HEAD
-        spyOn<any>(AbstractSelectionDraw, 'saveSelectionToCanvas').and.callThrough();
-=======
->>>>>>> c4a0893c0358d3d11aec52340a4eaa1823c2d2d8
-
         ellipseSelectionDraw.execute(ctxStub);
-
         expect(ellipseSelectionDraw['fillBackground']).toHaveBeenCalled();
-<<<<<<< HEAD
-        expect(AbstractSelectionDraw.saveSelectionToCanvas).toHaveBeenCalled();
-    });
-
-    it('should use the scaling factor when saving the selection to the canvas', () => {
-        ellipseSelectionDraw['config'].scaleFactor = new Vec2(-1, -1);
-        spyOn(ctxStub, 'getImageData').and.callThrough();
-        let canvas = AbstractSelectionDraw.saveSelectionToCanvas(ctxStub, ellipseSelectionDraw['config']);
-        expect(canvas).not.toBeUndefined();
-        ellipseSelectionDraw['config'].scaleFactor = new Vec2(-1, -1);
-        canvas = AbstractSelectionDraw.saveSelectionToCanvas(ctxStub, ellipseSelectionDraw['config']);
-        expect(canvas).not.toBeUndefined();
-        ellipseSelectionDraw['config'].scaleFactor = new Vec2(-1, -1);
-        canvas = AbstractSelectionDraw.saveSelectionToCanvas(ctxStub, ellipseSelectionDraw['config']);
-        expect(ctxStub.getImageData).toHaveBeenCalledTimes(3);
-        expect(canvas).not.toBeUndefined();
-=======
->>>>>>> c4a0893c0358d3d11aec52340a4eaa1823c2d2d8
     });
 });

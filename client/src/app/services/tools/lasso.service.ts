@@ -225,7 +225,7 @@ export class LassoService extends AbstractSelectionService {
             ctx.beginPath();
             ctx.save();
 
-            const dp = this.configLasso.startCoords.scalar(-1);
+            const dp = this.configLasso.startCoords.scalar(0 - 1);
             LineDrawer.drawClippedLinePath(ctx, this.configLasso.points, dp);
 
             ctx.drawImage(memoryCanvas, 0, 0);
@@ -245,6 +245,6 @@ export class LassoService extends AbstractSelectionService {
 
     protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, _: Vec2): void {
         if (this.configLasso.points.length < 2) return;
-        LineDrawer.drawDashedLinePath(ctx, this.configLasso.points, this.start.scalar(-1));
+        LineDrawer.drawDashedLinePath(ctx, this.configLasso.points, this.start.scalar(0 - 1));
     }
 }
