@@ -49,6 +49,20 @@ export class GridService {
         return Math.round((1 - this.opacity) * ToolMath.PERCENTAGE);
     }
 
+    onKeyDown(event: KeyboardEvent): void {
+        if (this.toggleGridShortcut.equals(event)) {
+            this.toggleGridVisibility();
+        } else if (ShortcutKey.contains(this.upsizeGridShortcut, event)) {
+            this.upsizeGrid();
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.updateGrid();
+        } else if (this.downSizeGridShortcut.equals(event)) {
+            this.downsizeGrid();
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.updateGrid();
+        }
+    }
+
     updateGrid(): void {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.lineWidth = 1;

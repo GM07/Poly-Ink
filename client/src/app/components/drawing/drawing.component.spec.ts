@@ -119,40 +119,18 @@ describe('DrawingComponent', () => {
         expect(keyboardSpy).toHaveBeenCalledWith(event);
     });
 
-    it('should toggle the grid on key down with g', () => {
-        const event = { key: 'g', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
-        const gridVisibility = component['gridService'].gridVisibility;
-        component.onKeyDown(event);
-        expect(component['gridService'].gridVisibility).not.toEqual(gridVisibility);
-        component.onKeyDown(event);
-        expect(component['gridService'].gridVisibility).toEqual(gridVisibility);
-    });
-
-    it('should upsize the grid on key down with =', () => {
-        const event = { key: '=', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
-        component.onKeyDown(event);
-        expect(gridService.updateGrid).toHaveBeenCalled();
-        expect(gridService.upsizeGrid).toHaveBeenCalled();
-    });
-
-    it('should downsize the grid on key down with -', () => {
-        const event = { key: '-', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
-        component.onKeyDown(event);
-        expect(gridService.updateGrid).toHaveBeenCalled();
-        expect(gridService.downsizeGrid).toHaveBeenCalled();
-    });
-
-    it('should do nothing on other key', () => {
-        const event = { key: '_', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
-        component.onKeyDown(event);
-        expect(gridService.updateGrid).not.toHaveBeenCalled();
-        expect(gridService.downsizeGrid).not.toHaveBeenCalled();
-        expect(gridService.upsizeGrid).not.toHaveBeenCalled();
-    });
-
     it('should do nothing if shortcuts are blocked', () => {
         component['shortcutHandler'].blockShortcuts = true;
+        spyOn(component['gridService'], 'onKeyDown');
         component.onKeyDown({} as KeyboardEvent);
-        expect(component['gridService'].updateGrid).not.toHaveBeenCalled();
+        expect(component['gridService'].onKeyDown).not.toHaveBeenCalled();
+    });
+
+    it('should transfer keydown to grid service', () => {
+        spyOn(component['gridService'], 'onKeyDown');
+        component.onKeyDown({} as KeyboardEvent);
+        component['gridService'].gridVisibility = true;
+        component.onKeyDown({} as KeyboardEvent);
+        expect(component['gridService'].onKeyDown).toHaveBeenCalledTimes(2);
     });
 });

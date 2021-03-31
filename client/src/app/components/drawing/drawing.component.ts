@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Vec2 } from '@app/classes/vec2';
 import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -83,18 +82,8 @@ export class DrawingComponent implements AfterViewInit {
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
         if (this.shortcutHandler.blockShortcuts) return;
-        if (this.gridService.toggleGridShortcut.equals(event)) {
-            this.gridService.toggleGridVisibility();
-            this.grid.nativeElement.style.visibility = this.gridService.gridVisibility ? 'visible' : 'hidden';
-        } else if (ShortcutKey.contains(this.gridService.upsizeGridShortcut, event)) {
-            this.gridService.upsizeGrid();
-            this.drawingService.clearCanvas(this.drawingService.gridService.ctx);
-            this.gridService.updateGrid();
-        } else if (this.gridService.downSizeGridShortcut.equals(event)) {
-            this.gridService.downsizeGrid();
-            this.drawingService.clearCanvas(this.drawingService.gridService.ctx);
-            this.gridService.updateGrid();
-        }
+        this.gridService.onKeyDown(event);
+        this.grid.nativeElement.style.visibility = this.gridService.gridVisibility ? 'visible' : 'hidden';
     }
 
     get width(): number {

@@ -9,6 +9,8 @@ describe('GridService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({});
         service = TestBed.inject(GridService);
+        service.canvas = document.createElement('canvas');
+        service.ctx = service.canvas.getContext('2d') as CanvasRenderingContext2D;
     });
 
     it('should be created', () => {
@@ -61,5 +63,45 @@ describe('GridService', () => {
         expect(service.ctx.moveTo).toHaveBeenCalled();
         expect(service.ctx.lineTo).toHaveBeenCalled();
         expect(service.ctx.stroke).toHaveBeenCalled();
+    });
+
+    it('should toggle the grid on key down with g', () => {
+        const event = { key: 'g', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
+        const gridVisibility = service.gridVisibility;
+        service.onKeyDown(event);
+        expect(service.gridVisibility).not.toEqual(gridVisibility);
+        service.onKeyDown(event);
+        expect(service.gridVisibility).toEqual(gridVisibility);
+    });
+
+    it('should upsize the grid on key down with =', () => {
+        const event = { key: '=', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
+        spyOn(service, 'updateGrid');
+        spyOn(service, 'upsizeGrid');
+        spyOn(service.ctx, 'clearRect');
+        service.onKeyDown(event);
+        expect(service.updateGrid).toHaveBeenCalled();
+        expect(service.upsizeGrid).toHaveBeenCalled();
+    });
+
+    it('should downsize the grid on key down with -', () => {
+        const event = { key: '-', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
+        spyOn(service, 'updateGrid');
+        spyOn(service, 'downsizeGrid');
+        spyOn(service.ctx, 'clearRect');
+        service.onKeyDown(event);
+        expect(service.updateGrid).toHaveBeenCalled();
+        expect(service.downsizeGrid).toHaveBeenCalled();
+    });
+
+    it('should do nothing on other key', () => {
+        const event = { key: '_', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
+        spyOn(service, 'updateGrid');
+        spyOn(service, 'downsizeGrid');
+        spyOn(service, 'upsizeGrid');
+        service.onKeyDown(event);
+        expect(service.updateGrid).not.toHaveBeenCalled();
+        expect(service.downsizeGrid).not.toHaveBeenCalled();
+        expect(service.upsizeGrid).not.toHaveBeenCalled();
     });
 });
