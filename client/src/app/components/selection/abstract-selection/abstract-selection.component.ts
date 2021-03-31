@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MouseButton } from '@app/constants/control';
+import { ClipboardService } from '@app/services/clipboard/clipboard.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { SelectionEventsService } from '@app/services/selection/selection-events.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
@@ -40,6 +41,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
         private cd: ChangeDetectorRef,
         private selectionEvents: SelectionEventsService,
         private shortcutHandlerService: ShortcutHandlerService,
+        private clipboardService: ClipboardService,
     ) {}
 
     ngOnInit(): void {
@@ -50,13 +52,15 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
             this.updateControlPointDisplay(display);
         });
 
-        this.selectionEvents.onMouseEnterEvent.subscribe(() => (this.isInSidebar = true));
-        this.selectionEvents.onMouseLeaveEvent.subscribe(() => (this.isInSidebar = false));
         this.isInSidebar = false;
         this.displayControlPoints = false;
+        this.selectionEvents.onMouseEnterEvent.subscribe(() => (this.isInSidebar = true));
+        this.selectionEvents.onMouseLeaveEvent.subscribe(() => (this.isInSidebar = false));
+        this.clipboardService.INITIALISATION_SIGNAL.next(true);
     }
 
     ngOnDestroy(): void {
+        this.clipboardService.INITIALISATION_SIGNAL.next(false);
         this.updateSubscription.unsubscribe();
     }
 

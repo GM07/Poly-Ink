@@ -3,6 +3,7 @@ import { SelectionData } from '@app/classes/selection/selection-data';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
+import { Subject } from 'rxjs';
 import { AbstractSelectionService } from '../tools/abstract-selection.service';
 import { ToolHandlerService } from '../tools/tool-handler.service';
 
@@ -17,9 +18,28 @@ export class ClipboardService {
 
     private savedConfigs: SelectionConfig | undefined;
     private lastSelectionTool: AbstractSelectionService;
+    private wantsToPaste: boolean;
+    private isInitialised: boolean;
+
+    readonly INITIALISATION_SIGNAL: Subject<boolean> = new Subject<boolean>();
 
     constructor(private toolHandler: ToolHandlerService) {
         this.savedConfigs = undefined;
+        this.isInitialised = false;
+        this.wantsToPaste = false;
+        this.INITIALISATION_SIGNAL.subscribe((init: boolean) => {
+            if (this.toolHandler.getCurrentTool() === this.lastSelectionTool) {
+                if (!this.isInitialised && init && this.wantsToPaste) {
+                    this.lastSelectionTool.updateSelection(new Vec2(0, 0));
+                    this.wantsToPaste = false;
+                    this.isInitialised = init;
+                }
+                this.isInitialised = init;
+            } else {
+                this.isInitialised = false;
+            }
+            console.log(this.isInitialised);
+        });
     }
 
     onKeyDown(event: KeyboardEvent): void {
@@ -75,6 +95,10 @@ export class ClipboardService {
             '2d',
         ) as CanvasRenderingContext2D;
 
-        this.lastSelectionTool.updateSelection(new Vec2(0, 0));
+        if (this.isInitialised) {
+            this.lastSelectionTool.updateSelection(new Vec2(0, 0));
+        } else {
+            this.wantsToPaste = true;
+        }
     }
 }

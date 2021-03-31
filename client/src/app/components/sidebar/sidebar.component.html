@@ -34,7 +34,7 @@
                 mat-icon-button
                 matTooltipPosition="right"
                 [@.disabled]="true"
-                [disabled]="undoRedoService.blockUndoRedo || undoRedoService.currentAction < 0"
+                [disabled]="blockUndoIcon"
                 [style.background]="undoToolSettings.toolId === selectedTool.toolID ? HIGHLIGHTED_COLOR : 'white'"
             >
                 <mat-icon svgIcon="{{ undoToolSettings.iconName }}"></mat-icon>
@@ -47,7 +47,7 @@
                 mat-icon-button
                 matTooltipPosition="right"
                 [@.disabled]="true"
-                [disabled]="undoRedoService.blockUndoRedo || undoRedoService.currentAction >= undoRedoService.commands.length - 1"
+                [disabled]="blockRedoIcon"
                 [style.background]="redoToolSettings.toolId === selectedTool.toolID ? HIGHLIGHTED_COLOR : 'white'"
             >
                 <mat-icon svgIcon="{{ redoToolSettings.iconName }}"></mat-icon>

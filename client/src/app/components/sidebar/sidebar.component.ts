@@ -1,4 +1,4 @@
-import { Component, EventEmitter, NgZone, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, NgZone, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Tool } from '@app/classes/tool';
 import { BOTTOM_TOOLS } from '@app/classes/tool_ui_settings/index-bottom';
@@ -18,12 +18,21 @@ export class SidebarComponent implements OnInit {
     undoToolSettings: Undo;
     redoToolSettings: Redo;
 
+    blockUndoIcon: boolean;
+    blockRedoIcon: boolean;
+
     toolHandlerService: ToolHandlerService;
     selectedTool: Tool;
     readonly HIGHLIGHTED_COLOR: string = HIGHLIGHTED_COLOR;
     @Output() settingClicked: EventEmitter<string>;
 
-    constructor(public undoRedoService: UndoRedoService, toolHandlerService: ToolHandlerService, private router: Router, private zone: NgZone) {
+    constructor(
+        private undoRedoService: UndoRedoService,
+        toolHandlerService: ToolHandlerService,
+        private router: Router,
+        private zone: NgZone,
+        private cd: ChangeDetectorRef,
+    ) {
         this.toolHandlerService = toolHandlerService;
         this.selectedTool = this.toolHandlerService.getCurrentTool();
         this.toolHandlerService.currentToolSubject.subscribe((newTool) => {
@@ -35,6 +44,22 @@ export class SidebarComponent implements OnInit {
 
         this.undoToolSettings = new Undo();
         this.redoToolSettings = new Redo();
+        this.blockUndoIcon = true;
+        this.blockRedoIcon = true;
+
+        this.undoRedoService.BLOCK_UNDO_ICON.subscribe((block) => {
+            if (this.blockUndoIcon != block) {
+                this.blockUndoIcon = block;
+                this.cd.detectChanges();
+            }
+        });
+
+        this.undoRedoService.BLOCK_REDO_ICON.subscribe((block) => {
+            if (this.blockRedoIcon != block) {
+                this.blockRedoIcon = block;
+                this.cd.detectChanges();
+            }
+        });
 
         this.settingClicked = new EventEmitter<string>();
     }
