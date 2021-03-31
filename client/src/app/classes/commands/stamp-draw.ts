@@ -14,7 +14,7 @@ export class StampDraw extends AbstractDraw {
     execute(context: CanvasRenderingContext2D): void {
         context.translate(this.config.position.x, this.config.position.y);
         context.rotate(this.config.angle);
-        let img: HTMLImageElement = new Image();
+        const img: HTMLImageElement = new Image();
         img.src = StampConfig.stampList[this.config.stamp];
         context.drawImage(
             img,
