@@ -76,7 +76,6 @@ export class GridService {
             this.ctx.beginPath();
             this.drawLine(new Vec2(i, 0), new Vec2(i, this.canvas.height));
             this.ctx.lineDashOffset = 0;
-            this.ctx.setLineDash([]);
         }
 
         for (let i = 0; i < this.canvas.height; i += this.size) {
@@ -87,8 +86,8 @@ export class GridService {
             this.ctx.strokeStyle = 'white';
             this.drawLine(new Vec2(0, i), new Vec2(this.canvas.width, i));
             this.ctx.lineDashOffset = 0;
-            this.ctx.setLineDash([]);
         }
+        this.ctx.setLineDash([]);
     }
 
     drawLine(begin: Vec2, end: Vec2): void {
