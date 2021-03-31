@@ -1,8 +1,80 @@
 import { Injectable } from '@angular/core';
+import { SelectionData } from '@app/classes/selection/selection-data';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { SelectionConfig } from '@app/classes/tool-config/selection-config';
+import { Vec2 } from '@app/classes/vec2';
+import { AbstractSelectionService } from '../tools/abstract-selection.service';
+import { ToolHandlerService } from '../tools/tool-handler.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ClipboardService {
-    constructor() {}
+    private readonly COPY: ShortcutKey = new ShortcutKey('c', true);
+    private readonly PASTE: ShortcutKey = new ShortcutKey('v', true);
+    private readonly CUT: ShortcutKey = new ShortcutKey('x', true);
+    private readonly DELETE: ShortcutKey = new ShortcutKey('delete');
+
+    private savedConfigs: SelectionConfig | undefined;
+    private lastSelectionTool: AbstractSelectionService;
+
+    constructor(private toolHandler: ToolHandlerService) {
+        this.savedConfigs = undefined;
+    }
+
+    onKeyDown(event: KeyboardEvent): void {
+        if (!this.toolHandler.getCurrentTool().leftMouseDown && !event.repeat) {
+            if (this.toolHandler.getCurrentTool() instanceof AbstractSelectionService) {
+                if (this.COPY.equals(event)) {
+                    event.preventDefault();
+                    this.copyDrawing();
+                } else if (this.CUT.equals(event)) {
+                    event.preventDefault();
+                    this.copyDrawing();
+                    this.deleteDrawing();
+                } else if (this.DELETE.equals(event)) {
+                    this.deleteDrawing();
+                }
+            }
+
+            if (this.PASTE.equals(event)) {
+                event.preventDefault();
+                this.pasteDrawing();
+            }
+        }
+    }
+
+    private copyDrawing(): void {
+        this.lastSelectionTool = this.toolHandler.getCurrentTool() as AbstractSelectionService;
+        this.savedConfigs = this.lastSelectionTool.config.clone();
+        this.savedConfigs.endCoords = new Vec2(0, 0);
+        this.savedConfigs.markedForPaste = true;
+        this.savedConfigs.previewSelectionCtx = this.savedConfigs.SELECTION_DATA[SelectionData.PreviewData].getContext(
+            '2d',
+        ) as CanvasRenderingContext2D;
+    }
+
+    private deleteDrawing(): void {
+        this.lastSelectionTool = this.toolHandler.getCurrentTool() as AbstractSelectionService;
+
+        const ctx = this.lastSelectionTool.config.previewSelectionCtx;
+        if (ctx === null) return;
+
+        this.lastSelectionTool.config.markedForDelete = true;
+        this.lastSelectionTool.stopDrawing();
+        this.lastSelectionTool.config.markedForDelete = false;
+    }
+
+    private pasteDrawing(): void {
+        if (this.savedConfigs === undefined) return;
+        this.toolHandler.getCurrentTool().stopDrawing();
+
+        this.toolHandler.setTool(this.lastSelectionTool.toolID);
+        this.lastSelectionTool.initAttribs(this.savedConfigs.clone());
+        this.lastSelectionTool.config.previewSelectionCtx = this.lastSelectionTool.config.SELECTION_DATA[SelectionData.PreviewData].getContext(
+            '2d',
+        ) as CanvasRenderingContext2D;
+
+        this.lastSelectionTool.updateSelection(new Vec2(0, 0));
+    }
 }

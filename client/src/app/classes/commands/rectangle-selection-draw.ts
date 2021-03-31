@@ -12,7 +12,9 @@ export class RectangleSelectionDraw extends AbstractDraw {
     }
 
     execute(context: CanvasRenderingContext2D): void {
-        this.fillBackground(context);
+        if (!this.config.markedForPaste) {
+            this.fillBackground(context);
+        }
 
         if (!this.config.markedForDelete) {
             context.drawImage(
