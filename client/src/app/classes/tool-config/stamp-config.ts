@@ -9,7 +9,7 @@ export enum Stamp {
 export class StampConfig {
     static readonly stampList: string[] = ['assets/stamps/alexis.png', 'assets/stamps/felix.png', 'assets/stamps/alexis.png'];
     scale: number;
-    angle: number;
+    angle: number; //Angle in radians
     position: Vec2;
     stampImg: HTMLImageElement;
     stamp: Stamp;
