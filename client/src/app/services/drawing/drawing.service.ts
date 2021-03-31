@@ -21,19 +21,19 @@ export class DrawingService {
         this.changes = new Subject();
     }
 
+    static saveCanvas(memoryCanvas: HTMLCanvasElement, canvas: HTMLCanvasElement): void {
+        const memoryCtx = memoryCanvas.getContext('2d') as CanvasRenderingContext2D;
+        memoryCanvas.width = canvas.width;
+        memoryCanvas.height = canvas.height; // Saving canvas
+        memoryCtx.drawImage(canvas, 0, 0);
+    }
+
     initLoadedCanvas(): void {
         if (this.isReloading()) {
             this.createLoadedCanvasFromStorage();
         } else {
             this.loadedCanvas = undefined;
         }
-    }
-
-    static saveCanvas(memoryCanvas: HTMLCanvasElement, canvas: HTMLCanvasElement): void {
-        const memoryCtx = memoryCanvas.getContext('2d') as CanvasRenderingContext2D;
-        memoryCanvas.width = canvas.width;
-        memoryCanvas.height = canvas.height; // Saving canvas
-        memoryCtx.drawImage(canvas, 0, 0);
     }
 
     clearCanvas(context: CanvasRenderingContext2D): void {
