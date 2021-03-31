@@ -22,3 +22,7 @@ canvas {
 #canvas-container {
     position: relative;
 }
+
+#grid{
+  pointer-events: none !important;
+}

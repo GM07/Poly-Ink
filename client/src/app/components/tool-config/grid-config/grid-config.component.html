@@ -5,7 +5,7 @@
   <h5 class="textFormat">Dimensions des carreaux</h5>
   <br />
   <div class="textFormatForSlider">
-      <mat-slider min="{{ MIN_SIZE }}" max="{{ MAX_SIZE }}" (input)="sizeChange($event)" [(ngModel)]="gridService.sizeValue" thumbLabel [displayWith]="colorSliderLabel">
+      <mat-slider min="{{ MIN_SIZE }}" max="{{ MAX_SIZE }}" step="5" (input)="sizeChange($event)" [(ngModel)]="gridService.sizeValue" thumbLabel [displayWith]="colorSliderLabel">
       </mat-slider>
       {{ gridService.sizeValue }}px
   </div>
