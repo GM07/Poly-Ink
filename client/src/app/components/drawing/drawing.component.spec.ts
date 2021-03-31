@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Tool } from '@app/classes/tool';
-import { CanvasConst } from '@app/constants/canvas.ts';
+import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { GridService } from '@app/services/drawing/grid.service';
 import { PencilService } from '@app/services/tools/pencil.service';
@@ -121,11 +121,11 @@ describe('DrawingComponent', () => {
 
     it('should toggle the grid on key down with g', () => {
         const event = { key: 'g', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
-        const gridVisibility = component.gridVisibility;
+        const gridVisibility = component['gridService'].gridVisibility;
         component.onKeyDown(event);
-        expect(component.gridVisibility).not.toEqual(gridVisibility);
+        expect(component['gridService'].gridVisibility).not.toEqual(gridVisibility);
         component.onKeyDown(event);
-        expect(component.gridVisibility).toEqual(gridVisibility);
+        expect(component['gridService'].gridVisibility).toEqual(gridVisibility);
     });
 
     it('should upsize the grid on key down with =', () => {

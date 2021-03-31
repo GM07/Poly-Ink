@@ -16,13 +16,19 @@ export class GridService {
     downSizeGridShortcut: ShortcutKey;
     ctx: CanvasRenderingContext2D;
     canvas: HTMLCanvasElement;
+    gridVisibility: boolean;
 
     constructor() {
         this.size = ToolSettingsConst.GRID_MIN_SIZE;
         this.toggleGridShortcut = new ShortcutKey('g');
-        this.upsizeGridShortcut = [new ShortcutKey('+'), new ShortcutKey('=')];
+        this.upsizeGridShortcut = [new ShortcutKey('+'), new ShortcutKey('='), new ShortcutKey('+', false, true)];
         this.downSizeGridShortcut = new ShortcutKey('-');
         this.opacity = ToolSettingsConst.GRID_DEFAULT_OPACITY;
+        this.gridVisibility = false;
+    }
+
+    toggleGridVisibility(): void {
+        this.gridVisibility = !this.gridVisibility;
     }
 
     set sizeValue(size: number) {

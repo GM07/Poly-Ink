@@ -24,8 +24,6 @@ export class DrawingComponent implements AfterViewInit {
     private gridCtx: CanvasRenderingContext2D;
     private canvasSize: Vec2;
 
-    gridVisibility: boolean;
-
     constructor(
         private drawingService: DrawingService,
         readonly toolHandlerService: ToolHandlerService,
@@ -50,8 +48,6 @@ export class DrawingComponent implements AfterViewInit {
 
         this.newDrawingService.newCanvas();
         this.drawingService.loadDrawing();
-
-        this.gridVisibility = false;
     }
 
     @HostListener('mousedown', ['$event'])
@@ -88,8 +84,8 @@ export class DrawingComponent implements AfterViewInit {
     onKeyDown(event: KeyboardEvent): void {
         if (this.shortcutHandler.blockShortcuts) return;
         if (this.gridService.toggleGridShortcut.equals(event)) {
-            this.gridVisibility = !this.gridVisibility;
-            this.grid.nativeElement.style.visibility = this.gridVisibility ? 'visible' : 'hidden';
+            this.gridService.toggleGridVisibility();
+            this.grid.nativeElement.style.visibility = this.gridService.gridVisibility ? 'visible' : 'hidden';
         } else if (ShortcutKey.contains(this.gridService.upsizeGridShortcut, event)) {
             this.gridService.upsizeGrid();
             this.drawingService.clearCanvas(this.drawingService.gridService.ctx);

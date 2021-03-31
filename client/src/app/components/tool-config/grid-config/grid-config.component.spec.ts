@@ -28,6 +28,7 @@ describe('GridConfigComponent', () => {
         gridService = TestBed.inject(GridService);
         fixture = TestBed.createComponent(GridConfigComponent);
         component = fixture.componentInstance;
+        gridService.gridVisibility = true;
         fixture.detectChanges();
         spyOn(gridService, 'updateGrid');
         loader = TestbedHarnessEnvironment.loader(fixture);
