@@ -61,9 +61,7 @@ describe('StampConfigComponent', () => {
 
     it('toggleStamp should update the stamp', () => {
         const currentStamp = stampService.config.stamp;
-        spyOn(stampService, 'updateStampValue');
         component.toggleStamp(Stamp.Felix);
-        expect(stampService.updateStampValue).toHaveBeenCalled();
         expect(currentStamp).not.toEqual(stampService.config.stamp);
     });
 

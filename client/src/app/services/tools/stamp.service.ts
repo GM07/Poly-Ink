@@ -39,10 +39,6 @@ export class StampService extends Tool {
         return Math.round((this.config.angle / Math.PI) * ToolMath.DEGREE_CONVERSION_FACTOR);
     }
 
-    updateStampValue(): void {
-        this.config.stampImg.src = StampConfig.stampList[this.config.stamp];
-    }
-
     isActive(): boolean {
         return this.drawingService.previewCanvas.style.cursor === 'none';
     }

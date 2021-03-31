@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { Stamp, StampConfig } from '@app/classes/tool-config/stamp-config';
 import { Vec2 } from '@app/classes/vec2';
 import { ToolMath } from '@app/constants/math';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
@@ -50,18 +49,6 @@ describe('StampService', () => {
         expect(service.config.angle).toEqual(0);
         service.angleValue = invalidMaxAngle;
         expect(service.config.angle).toEqual(ToolSettingsConst.STAMP_MAX_ANGLE);
-    });
-
-    it('update stamp value should set the stamp', () => {
-        service.config.stampImg = new Image();
-        service.config.stamp = Stamp.Felix;
-        service.updateStampValue();
-        expect(
-            service.config.stampImg.src.substring(
-                service.config.stampImg.src.length - StampConfig.stampList[Stamp.Felix].length,
-                service.config.stampImg.src.length,
-            ),
-        ).toEqual(StampConfig.stampList[Stamp.Felix]);
     });
 
     it('is active should return true if the cursor is none', () => {

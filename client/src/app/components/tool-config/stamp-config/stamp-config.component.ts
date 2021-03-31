@@ -45,6 +45,5 @@ export class StampConfigComponent implements OnInit, OnDestroy {
 
     toggleStamp(stamp: Stamp): void {
         this.stampService.config.stamp = stamp;
-        this.stampService.updateStampValue();
     }
 }
