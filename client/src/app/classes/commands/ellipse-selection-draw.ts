@@ -1,8 +1,8 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
+import { SelectionData } from '@app/classes/selection/selection-data';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { AbstractSelectionDraw } from './abstract-selection-draw';
 
 export class EllipseSelectionDraw extends AbstractDraw {
     private config: SelectionConfig;
@@ -13,20 +13,15 @@ export class EllipseSelectionDraw extends AbstractDraw {
     }
 
     execute(context: CanvasRenderingContext2D): void {
-        const radius = new Vec2(this.config.width / 2, this.config.height / 2).apply(Math.abs);
-        const center = this.config.endCoords.add(radius);
-
-        const selectionCanvas = AbstractSelectionDraw.saveSelectionToCanvas(context, this.config);
-
         this.fillBackground(context);
 
-        context.beginPath();
-        context.save();
-        context.ellipse(center.x, center.y, radius.x, radius.y, 0, 0, 2 * Math.PI);
-        context.clip();
-        context.drawImage(selectionCanvas, Math.floor(this.config.endCoords.x), Math.floor(this.config.endCoords.y));
-        context.restore();
-        context.closePath();
+        context.drawImage(
+            this.config.SELECTION_DATA[SelectionData.FinalData],
+            Math.floor(this.config.endCoords.x),
+            Math.floor(this.config.endCoords.y),
+            Math.abs(this.config.width),
+            Math.abs(this.config.height),
+        );
     }
 
     private fillBackground(context: CanvasRenderingContext2D): void {

@@ -1,7 +1,7 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
+import { SelectionData } from '@app/classes/selection/selection-data';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { AbstractSelectionDraw } from './abstract-selection-draw';
 
 export class RectangleSelectionDraw extends AbstractDraw {
     private config: SelectionConfig;
@@ -12,11 +12,15 @@ export class RectangleSelectionDraw extends AbstractDraw {
     }
 
     execute(context: CanvasRenderingContext2D): void {
-        const selectionCanvas = AbstractSelectionDraw.saveSelectionToCanvas(context, this.config);
-
         this.fillBackground(context);
 
-        context.drawImage(selectionCanvas, Math.floor(this.config.endCoords.x), Math.floor(this.config.endCoords.y));
+        context.drawImage(
+            this.config.SELECTION_DATA[SelectionData.FinalData],
+            Math.floor(this.config.endCoords.x),
+            Math.floor(this.config.endCoords.y),
+            Math.abs(this.config.width),
+            Math.abs(this.config.height),
+        );
     }
 
     private fillBackground(context: CanvasRenderingContext2D): void {

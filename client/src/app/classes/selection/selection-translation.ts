@@ -20,7 +20,7 @@ export class SelectionTranslation {
     private bodyHeight: string;
     private isMouseTranslationStarted: boolean;
 
-    updateSelectionRequest: Subject<Vec2>;
+    readonly UPDATE_SELECTION_REQUEST: Subject<Vec2> = new Subject<Vec2>();
 
     constructor(config: SelectionConfig) {
         this.bodyWidth = document.body.style.width;
@@ -28,12 +28,11 @@ export class SelectionTranslation {
         this.config = config;
         this.moveId = this.DEFAULT_MOVE_ID;
         this.translationOrigin = new Vec2(0, 0);
-        this.updateSelectionRequest = new Subject<Vec2>();
         this.isMouseTranslationStarted = false;
     }
 
     onKeyDown(event: KeyboardEvent, leftMouseDown: boolean): void {
-        if (this.config.selectionCtx !== null) {
+        if (this.config.previewSelectionCtx !== null) {
             if (this.isArrowKeyDown(event, leftMouseDown)) {
                 event.preventDefault();
                 if (event.repeat) return;
@@ -52,21 +51,21 @@ export class SelectionTranslation {
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if (this.config.selectionCtx !== null) {
+        if (this.config.previewSelectionCtx !== null) {
             this.setArrowKeyUp(event);
             this.clearArrowKeys();
         }
     }
 
     onMouseUp(mouseUpCoord: Vec2): void {
-        if (this.config.selectionCtx !== null && this.isMouseTranslationStarted) {
+        if (this.config.previewSelectionCtx !== null && this.isMouseTranslationStarted) {
             this.isMouseTranslationStarted = false;
             this.sendUpdateSelectionRequest(this.getTranslation(mouseUpCoord));
         }
     }
 
     onMouseMove(event: MouseEvent, mouseUpCoord: Vec2): void {
-        if (this.config.selectionCtx !== null && this.isMouseTranslationStarted) {
+        if (this.config.previewSelectionCtx !== null && this.isMouseTranslationStarted) {
             this.sendUpdateSelectionRequest(this.getTranslation(mouseUpCoord));
             document.body.style.width = event.pageX + this.config.width + 'px';
             document.body.style.height = event.pageY + this.config.height + 'px';
@@ -92,7 +91,7 @@ export class SelectionTranslation {
 
     private sendUpdateSelectionRequest(translation: Vec2): void {
         this.translationOrigin = this.translationOrigin.add(translation);
-        this.updateSelectionRequest.next(translation);
+        this.UPDATE_SELECTION_REQUEST.next(translation);
     }
 
     private getTranslation(mousePos: Vec2): Vec2 {
@@ -112,7 +111,7 @@ export class SelectionTranslation {
     private startArrowKeyTranslation(): void {
         if (this.moveId === this.DEFAULT_MOVE_ID) {
             setTimeout(() => {
-                if (this.moveId === this.DEFAULT_MOVE_ID && this.config.selectionCtx !== null)
+                if (this.moveId === this.DEFAULT_MOVE_ID && this.config.previewSelectionCtx !== null)
                     this.moveId = window.setInterval(() => {
                         this.clearArrowKeys();
                         this.sendUpdateSelectionRequest(

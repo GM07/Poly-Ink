@@ -1,4 +1,5 @@
 import { Vec2 } from '@app/classes/vec2';
+import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractLineConfig } from './abstract-line-config';
 import { SelectionConfig } from './selection-config';
 
@@ -31,15 +32,19 @@ export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
         });
         config.startCoords = this.startCoords.clone();
         config.endCoords = this.endCoords.clone();
-        config.scaleFactor = this.scaleFactor.clone();
         config.shift = this.shift.clone();
         config.originalHeight = this.originalHeight;
         config.height = this.height;
         config.originalWidth = this.originalWidth;
         config.width = this.width;
-        config.selectionCtx = null;
+        config.previewSelectionCtx = null;
         config.inSelection = this.inSelection;
         config.intersecting = this.intersecting;
+
+        for (let i = 0; i < this.SELECTION_DATA.length; ++i) {
+            DrawingService.saveCanvas(config.SELECTION_DATA[i], this.SELECTION_DATA[i]);
+        }
+
         return config;
     }
 }

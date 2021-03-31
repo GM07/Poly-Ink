@@ -1,5 +1,5 @@
-import { AbstractSelectionDraw } from '@app/classes/commands/abstract-selection-draw';
 import { LineDrawer } from '@app/classes/line-drawer';
+import { SelectionData } from '@app/classes/selection/selection-data';
 import { LassoConfig } from '@app/classes/tool-config/lasso-config';
 import { Vec2 } from '@app/classes/vec2';
 import { ColorService } from 'src/color-picker/services/color.service';
@@ -23,17 +23,14 @@ export class LassoDraw extends AbstractDraw {
             return;
         }
 
-        const selectionCanvas = AbstractSelectionDraw.saveSelectionToCanvas(context, this.config);
         this.fillBackground(context);
-
-        context.beginPath();
-        context.save();
-
-        const dp = this.config.endCoords.substract(this.config.startCoords);
-        LineDrawer.drawClippedLinePath(context, this.config.points, dp);
-
-        context.drawImage(selectionCanvas, this.config.endCoords.x, this.config.endCoords.y);
-        context.restore();
+        context.drawImage(
+            this.config.SELECTION_DATA[SelectionData.FinalData],
+            Math.floor(this.config.endCoords.x),
+            Math.floor(this.config.endCoords.y),
+            Math.abs(this.config.width),
+            Math.abs(this.config.height),
+        );
     }
 
     private fillBackground(context: CanvasRenderingContext2D): void {

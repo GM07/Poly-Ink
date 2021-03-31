@@ -107,25 +107,25 @@ describe('SelectionTranslation', () => {
     });
 
     it('selection should not move with different keys than arrow', () => {
-        spyOn<any>(selectionTranslation, 'updateSelectionRequest');
+        spyOn<any>(selectionTranslation, 'UPDATE_SELECTION_REQUEST');
         const keyboardEvent = new KeyboardEvent('keydown', { key: 'invalid' });
-        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
+        selectionTranslation['config'].previewSelectionCtx = canvasSelection.getContext('2d');
         selectionTranslation.onKeyDown(keyboardEvent, false);
-        expect(selectionTranslation['updateSelectionRequest']).not.toHaveBeenCalled();
+        expect(selectionTranslation['UPDATE_SELECTION_REQUEST']).not.toHaveBeenCalled();
     });
 
     it('should do nothing on event repeat', () => {
         const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowleft', repeat: true });
-        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
-        spyOn<any>(selectionTranslation, 'updateSelectionRequest');
+        selectionTranslation['config'].previewSelectionCtx = canvasSelection.getContext('2d');
+        spyOn<any>(selectionTranslation, 'UPDATE_SELECTION_REQUEST');
         selectionTranslation.onKeyDown(keyboardEvent, false);
-        expect(selectionTranslation['updateSelectionRequest']).not.toHaveBeenCalled();
+        expect(selectionTranslation['UPDATE_SELECTION_REQUEST']).not.toHaveBeenCalled();
     });
 
     it('should not stop moving the selection if we release a different key than an arrow', () => {
         selectionTranslation['LEFT_ARROW'].isDown = true;
         const keyboardEventUp = new KeyboardEvent('keydown', { shiftKey: false });
-        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
+        selectionTranslation['config'].previewSelectionCtx = canvasSelection.getContext('2d');
         spyOn(window, 'clearInterval');
         selectionTranslation.onKeyUp(keyboardEventUp);
         expect(window.clearInterval).not.toHaveBeenCalled();
@@ -152,7 +152,7 @@ describe('SelectionTranslation', () => {
         const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
         spyOn<any>(selectionTranslation, 'HorizontalTranslationModifier').and.returnValue(1);
         spyOn<any>(selectionTranslation, 'VerticalTranslationModifier').and.returnValue(1);
-        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
+        selectionTranslation['config'].previewSelectionCtx = canvasSelection.getContext('2d');
         selectionTranslation.onKeyDown(keyboardEvent, false);
         jasmine.clock().tick(600);
         expect(updateSelection).toHaveBeenCalled();
@@ -165,7 +165,7 @@ describe('SelectionTranslation', () => {
         jasmine.clock().install();
         const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
         const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowdown' });
-        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
+        selectionTranslation['config'].previewSelectionCtx = canvasSelection.getContext('2d');
         selectionTranslation.onKeyDown(keyboardEvent, false);
         jasmine.clock().tick(200);
         selectionTranslation['moveId'] = 1;
@@ -178,7 +178,7 @@ describe('SelectionTranslation', () => {
         jasmine.clock().install();
         const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
         const keyboardEvent = new KeyboardEvent('keydown', { key: 'arrowdown' });
-        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
+        selectionTranslation['config'].previewSelectionCtx = canvasSelection.getContext('2d');
         selectionTranslation['moveId'] = 1;
         selectionTranslation.onKeyDown(keyboardEvent, false);
         jasmine.clock().tick(500);
@@ -187,23 +187,23 @@ describe('SelectionTranslation', () => {
     });
 
     it('should update the selection on mouse move if the selection is not null', () => {
-        selectionTranslation['config'].selectionCtx = null;
+        selectionTranslation['config'].previewSelectionCtx = null;
         const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
         spyOn<any>(selectionTranslation, 'getTranslation');
         selectionTranslation.onMouseMove({ pageX: 1, pageY: 1 } as MouseEvent, new Vec2(1, 1));
         expect(updateSelection).not.toHaveBeenCalled();
-        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
+        selectionTranslation['config'].previewSelectionCtx = canvasSelection.getContext('2d');
         selectionTranslation.onMouseMove({ pageX: 1, pageY: 1 } as MouseEvent, new Vec2(1, 1));
         expect(updateSelection).toHaveBeenCalled();
     });
 
     it('on mouse up should move selection if canvas is set', () => {
-        selectionTranslation['config'].selectionCtx = null;
+        selectionTranslation['config'].previewSelectionCtx = null;
         const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
         spyOn<any>(selectionTranslation, 'getTranslation');
         selectionTranslation.onMouseUp(new Vec2(0, 0));
         expect(updateSelection).not.toHaveBeenCalled();
-        selectionTranslation['config'].selectionCtx = canvasSelection.getContext('2d');
+        selectionTranslation['config'].previewSelectionCtx = canvasSelection.getContext('2d');
         selectionTranslation.onMouseUp(new Vec2(0, 0));
         expect(updateSelection).toHaveBeenCalled();
     });

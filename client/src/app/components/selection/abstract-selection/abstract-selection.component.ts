@@ -43,7 +43,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.updateSubscription = this.selectionService.updatePoints.subscribe((display: boolean) => {
+        this.updateSubscription = this.selectionService.UPDATE_POINTS.subscribe((display: boolean) => {
             if (display && this.displayControlPoints) {
                 this.placePoints();
             }
@@ -65,7 +65,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
             this.makeControlsUnselectable();
             this.selectionService.startMouseTranslation(event);
         }
-        this.updateControlPointDisplay(this.selectionService.config.selectionCtx !== null);
+        this.updateControlPointDisplay(this.selectionService.config.previewSelectionCtx !== null);
     }
 
     onMouseUp(): void {
@@ -74,7 +74,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
         if (this.displayControlPoints) {
             this.makeControlsSelectable();
         }
-        this.updateControlPointDisplay(this.selectionService.config.selectionCtx !== null);
+        this.updateControlPointDisplay(this.selectionService.config.previewSelectionCtx !== null);
     }
 
     confirmSelection(event: MouseEvent): void {
@@ -85,7 +85,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
             !this.selectionService.leftMouseDown &&
             !this.shortcutHandlerService.blockShortcuts &&
             !this.isInSidebar &&
-            this.selectionService.config.selectionCtx !== null &&
+            this.selectionService.config.previewSelectionCtx !== null &&
             !clickedOnScrollbar &&
             event.button === MouseButton.Left;
 
@@ -122,7 +122,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
     }
 
     private placePoints(): void {
-        if (this.selectionService.config.selectionCtx === null) return;
+        if (this.selectionService.config.previewSelectionCtx === null) return;
 
         const width = Math.abs(this.selectionService.config.width);
         const height = Math.abs(this.selectionService.config.height);

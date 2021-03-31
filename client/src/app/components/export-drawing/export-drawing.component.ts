@@ -6,11 +6,12 @@ import { Monochrome } from '@app/classes/filters/monochrome-filter';
 import { NegativeFilter } from '@app/classes/filters/negative-filter';
 import { SepiaFilter } from '@app/classes/filters/sepia-filter';
 import { SpotlightFilter } from '@app/classes/filters/spotlight-filter';
+import { ImgurResponse } from '@app/classes/imgur-res';
 import { DrawingConstants } from '@app/constants/drawing';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ExportDrawingService } from '@app/services/popups/export-drawing';
+import { ExportImgurService } from '@app/services/popups/export-imgur.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
-
 @Component({
     selector: 'app-export-drawing',
     templateUrl: './export-drawing.component.html',
@@ -29,7 +30,8 @@ export class ExportDrawingComponent {
     currentFilter: string;
     aspectRatio: number;
     exportForm: FormGroup;
-
+    imgurURL: string;
+    hasImgurServerError: boolean;
     private exportPreview: ElementRef<HTMLCanvasElement>;
     @ViewChild('exportPreview', { static: false }) set content(element: ElementRef) {
         if (element) {
@@ -51,6 +53,7 @@ export class ExportDrawingComponent {
         private drawingService: DrawingService,
         private shortcutHandler: ShortcutHandlerService,
         private exportDrawingService: ExportDrawingService,
+        private exportImgurService: ExportImgurService,
     ) {
         this.initValues();
     }
@@ -63,8 +66,10 @@ export class ExportDrawingComponent {
         this.defaultFileNames = DrawingConstants.defaultFileNames;
         this.exportFormat = 'png';
         this.currentFilter = 'default';
+        this.hasImgurServerError = false;
         this.aspectRatio = 1;
         this.filename = this.defaultFileNames[Math.floor(Math.random() * this.defaultFileNames.length)];
+        this.resetImgurData();
         this.exportForm = new FormGroup({
             nameFormControl: new FormControl(this.filename, [Validators.pattern('(?! )[a-zA-Z0-9\u00C0-\u017F, ]*(?<! )'), Validators.required]),
         });
@@ -88,10 +93,23 @@ export class ExportDrawingComponent {
         return this.exportDrawingService.showPopup;
     }
 
-    export(): void {
+    export(submitterId: string): void {
+        this.resetImgurData();
         if (this.nameFormControl.valid) {
             this.filename = this.nameFormControl.value;
-            this.exportDrawingService.exportImage(this.canvasImage, this.exportFormat, this.filename);
+            if (submitterId === 'local-export') {
+                this.exportDrawingService.exportImage(this.canvasImage, this.exportFormat, this.filename);
+            } else {
+                this.exportImgurService
+                    .exportImage(this.canvasImage, this.exportFormat, this.filename)
+                    .toPromise()
+                    .then((res: ImgurResponse) => {
+                        this.imgurURL = res.data.link;
+                    })
+                    .catch((error: Error) => {
+                        this.hasImgurServerError = true;
+                    });
+            }
         }
     }
 
@@ -115,13 +133,20 @@ export class ExportDrawingComponent {
 
     async changeExportFormat(newFormat: string): Promise<void> {
         this.exportFormat = newFormat;
+        this.resetImgurData();
         await this.changeFilter(this.currentFilter);
     }
 
     async changeFilter(newFilter: string): Promise<void> {
         this.currentFilter = newFilter;
+        this.resetImgurData();
         this.backupBaseCanvas();
         await this.applyFilter();
+    }
+
+    resetImgurData(): void {
+        this.imgurURL = '';
+        this.hasImgurServerError = false;
     }
 
     getPreviewHeight(): number {

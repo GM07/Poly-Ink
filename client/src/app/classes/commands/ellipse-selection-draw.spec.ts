@@ -4,6 +4,7 @@
 
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
+import { SelectionData } from '@app/classes/selection/selection-data';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
 import { Colors } from 'src/color-picker/constants/colors';
@@ -11,7 +12,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
 import { AbstractSelectionDraw } from './abstract-selection-draw';
 import { EllipseSelectionDraw } from './ellipse-selection-draw';
 
-describe('EllipseDraw', () => {
+describe('EllipseSelectionDraw', () => {
     let ellipseSelectionDraw: EllipseSelectionDraw;
     let colorService: ColorService;
     let canvasTestHelper: CanvasTestHelper;
@@ -33,8 +34,16 @@ describe('EllipseDraw', () => {
 
         ctxStub.canvas.width = 100;
         ctxStub.canvas.height = 100;
+        ctxStub.fillStyle = Colors.WHITE.rgbString;
+        ctxStub.fillRect(0, 0, 100, 100);
         ctxStub.fillStyle = Colors.BLACK.rgbString;
         ctxStub.fillRect(0, 0, 10, 10);
+
+        ellipseSelectionDraw['config'].SELECTION_DATA[SelectionData.FinalData].width = 10;
+        ellipseSelectionDraw['config'].SELECTION_DATA[SelectionData.FinalData].height = 10;
+        const ctx = ellipseSelectionDraw['config'].SELECTION_DATA[SelectionData.FinalData].getContext('2d') as CanvasRenderingContext2D;
+        ctx.fillStyle = Colors.BLACK.rgbString;
+        ctx.fillRect(0, 0, 10, 10);
     });
 
     it('should fillbacground with white', () => {
@@ -76,18 +85,22 @@ describe('EllipseDraw', () => {
 
         imageData = ctxStub.getImageData(middleX, middleY, 1, 1);
         expect(imageData.data[0]).toEqual(Colors.WHITE.r);
-        expect(imageData.data[1]).toEqual(Colors.WHITE.g);
-        expect(imageData.data[2]).toEqual(Colors.WHITE.b);
+        expect(imageData.data[1]).toEqual(Colors.WHITE.r);
+        expect(imageData.data[2]).toEqual(Colors.WHITE.r);
         expect(imageData.data[ALPHA]).not.toEqual(0);
     });
 
     it('should make appropriate calls on execute', () => {
         spyOn<any>(ellipseSelectionDraw, 'fillBackground').and.callThrough();
+<<<<<<< HEAD
         spyOn<any>(AbstractSelectionDraw, 'saveSelectionToCanvas').and.callThrough();
+=======
+>>>>>>> c4a0893c0358d3d11aec52340a4eaa1823c2d2d8
 
         ellipseSelectionDraw.execute(ctxStub);
 
         expect(ellipseSelectionDraw['fillBackground']).toHaveBeenCalled();
+<<<<<<< HEAD
         expect(AbstractSelectionDraw.saveSelectionToCanvas).toHaveBeenCalled();
     });
 
@@ -103,5 +116,7 @@ describe('EllipseDraw', () => {
         canvas = AbstractSelectionDraw.saveSelectionToCanvas(ctxStub, ellipseSelectionDraw['config']);
         expect(ctxStub.getImageData).toHaveBeenCalledTimes(3);
         expect(canvas).not.toBeUndefined();
+=======
+>>>>>>> c4a0893c0358d3d11aec52340a4eaa1823c2d2d8
     });
 });
