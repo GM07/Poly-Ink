@@ -1,14 +1,14 @@
 <div class="tab">
-  <h5 class="textFormat">Scale</h5>
+  <h5 class="textFormat">Mise à l'échelle</h5>
   <div class="textFormatForSlider">
-      <mat-slider min="{{ MIN_SCALE }}" max="{{ MAX_SCALE }}" step="0.1" [(ngModel)]="stampService.config.scale" thumbLabel [displayWith]="colorSliderLabel">
+      <mat-slider min="{{ MIN_SCALE }}" max="{{ MAX_SCALE }}" step="0.1" [(ngModel)]="stampService.config.scale" thumbLabel [displayWith]="SliderLabel">
       </mat-slider>
       {{ stampService.config.scale }}x
   </div>
 
   <h5 class="textFormat">Rotation</h5>
   <div class="textFormatForSlider">
-      <mat-slider min="{{ MIN_ROTATION }}" max="{{ MAX_ROTATION }}" step="1" [(ngModel)]="stampService.angleValue" thumbLabel [displayWith]="colorSliderLabel">
+      <mat-slider min="{{ MIN_ROTATION }}" max="{{ MAX_ROTATION }}" step="1" [(ngModel)]="stampService.angleValue" thumbLabel [displayWith]="SliderLabel">
       </mat-slider>
       {{ stampService.angleValue }}
   </div>

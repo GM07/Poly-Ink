@@ -17,7 +17,7 @@ export class StampConfigComponent implements OnInit, OnDestroy {
     readonly MIN_SCALE: number = ToolSettingsConst.STAMP_MIN_VALUE;
     readonly MIN_ROTATION: number = ToolSettingsConst.STAMP_MIN_ANGLE;
     readonly MAX_ROTATION: number = (ToolSettingsConst.STAMP_MAX_ANGLE / Math.PI) * ToolMath.DEGREE_CONVERSION_FACTOR;
-    readonly ROTATION: number = 15;
+    readonly ROTATION: number = ToolSettingsConst.STAMP_ANGLE_STEP;
     stampMode: typeof Stamp = Stamp;
 
     ngOnInit(): void {
@@ -39,7 +39,7 @@ export class StampConfigComponent implements OnInit, OnDestroy {
         }
     }
 
-    colorSliderLabel(value: number): string {
+    SliderLabel(value: number): string {
         return value + 'x';
     }
 

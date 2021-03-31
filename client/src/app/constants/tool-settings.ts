@@ -27,4 +27,5 @@ export abstract class ToolSettingsConst {
     static readonly STAMP_MIN_ANGLE: number = 0;
     static readonly STAMP_MAX_ANGLE: number = 2 * Math.PI;
     static readonly STAMP_DEFAULT_SIZE: number = 50;
+    static readonly STAMP_ANGLE_STEP: number = 15;
 }
