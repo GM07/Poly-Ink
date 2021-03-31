@@ -38,7 +38,6 @@ export class ClipboardService {
             } else {
                 this.isInitialised = false;
             }
-            console.log(this.isInitialised);
         });
     }
 
@@ -72,6 +71,7 @@ export class ClipboardService {
         this.savedConfigs.previewSelectionCtx = this.savedConfigs.SELECTION_DATA[SelectionData.PreviewData].getContext(
             '2d',
         ) as CanvasRenderingContext2D;
+        this.isInitialised = true;
     }
 
     private deleteDrawing(): void {
