@@ -3,6 +3,7 @@ import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Vec2 } from '@app/classes/vec2';
 import { ToolMath } from '@app/constants/math';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { Color } from 'src/color-picker/classes/color';
 
 @Injectable({
     providedIn: 'root',
@@ -48,7 +49,7 @@ export class GridService {
 
         for (let i = 0; i < this.canvas.width; i += this.size) {
             this.ctx.setLineDash([2, 2]);
-            this.ctx.strokeStyle = 'rgba(0,0,0,' + this.opacity + ')';
+            this.ctx.strokeStyle = new Color(0, 0, 0).toRgbaString(this.opacity);
             this.drawLine(new Vec2(i, 0), new Vec2(i, this.canvas.height));
             this.ctx.lineDashOffset = 2;
             this.ctx.strokeStyle = 'white';
@@ -60,7 +61,7 @@ export class GridService {
 
         for (let i = 0; i < this.canvas.height; i += this.size) {
             this.ctx.setLineDash([2, 2]);
-            this.ctx.strokeStyle = 'rgba(0,0,0,' + this.opacity + ')';
+            this.ctx.strokeStyle = new Color(0, 0, 0).toRgbaString(this.opacity);
             this.drawLine(new Vec2(0, i), new Vec2(this.canvas.width, i));
             this.ctx.lineDashOffset = 2;
             this.ctx.strokeStyle = 'white';

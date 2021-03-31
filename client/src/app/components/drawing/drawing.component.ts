@@ -15,7 +15,7 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 })
 export class DrawingComponent implements AfterViewInit {
     @ViewChild('baseCanvas', { static: false }) baseCanvas: ElementRef<HTMLCanvasElement>;
-    // Using this canvas to draw without affecting the final drawing
+    // Using the preview canvas to draw without affecting the final drawing
     @ViewChild('previewCanvas', { static: false }) previewCanvas: ElementRef<HTMLCanvasElement>;
     @ViewChild('grid', { static: false }) grid: ElementRef<HTMLCanvasElement>;
 
