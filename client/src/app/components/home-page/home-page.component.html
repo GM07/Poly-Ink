@@ -6,9 +6,10 @@
             <h1 class="white" id="title">Poly Ink.</h1>
             <button class="button" mat-raised-button color="primary" (click)="createNewDrawing()">Nouveau dessin</button>
             <button class="button" mat-raised-button color="primary" (click)="openCarrousel()">Carrousel</button>
-            <button *ngIf="continuingDrawing()" class="button" mat-raised-button color="primary">Continuer</button>
+            <button *ngIf="showContinueDrawing" class="button" mat-raised-button color="primary" (click)="continueDrawing()">
+                Continuer un dessin
+            </button>
         </div>
-
         <div>
             <mat-expansion-panel id="team" class="white" hideToggle>
                 <mat-expansion-panel-header>
