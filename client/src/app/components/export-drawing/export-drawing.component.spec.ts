@@ -1,13 +1,18 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ElementRef } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ImgurResponse } from '@app/classes/imgur-res';
+import { ImgurDataResponse } from '@app/classes/imgur-res-data';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ExportDrawingService } from '@app/services/popups/export-drawing';
+import { ExportImgurService } from '@app/services/popups/export-imgur.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+import { of } from 'rxjs';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ExportDrawingComponent } from './export-drawing.component';
 
@@ -21,12 +26,14 @@ describe('ExportDrawingComponent', () => {
     let fixture: ComponentFixture<ExportDrawingComponent>;
 
     let exportDrawingService: ExportDrawingService;
+    let exportImgurService: ExportImgurService;
     let shortcutService: ShortcutHandlerService;
     let toolHandlerService: ToolHandlerService;
 
     let drawingService: DrawingService;
     let drawServiceSpy: jasmine.SpyObj<DrawingService>;
-
+    let mockImgurResponse: ImgurResponse;
+    let mockImgurResponseData: ImgurDataResponse;
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [ExportDrawingComponent],
@@ -36,6 +43,7 @@ describe('ExportDrawingComponent', () => {
                 MatInputModule,
                 FormsModule,
                 FormsModule,
+                HttpClientTestingModule,
                 ReactiveFormsModule.withConfig({ warnOnNgModelWithFormControl: 'never' }),
             ],
         }).compileComponents();
@@ -53,6 +61,7 @@ describe('ExportDrawingComponent', () => {
         drawServiceSpy.baseCtx = drawServiceSpy.canvas.getContext('2d') as CanvasRenderingContext2D;
 
         exportDrawingService = TestBed.inject(ExportDrawingService);
+        exportImgurService = TestBed.inject(ExportImgurService);
     }));
 
     beforeEach(() => {
@@ -65,6 +74,14 @@ describe('ExportDrawingComponent', () => {
         component['baseCanvas'].height = 300;
         component['baseContext'] = component['baseCanvas'].getContext('2d') as CanvasRenderingContext2D;
         component['exportPreview'] = new ElementRef(component['baseCanvas']);
+        mockImgurResponse = new ImgurResponse();
+        mockImgurResponseData = new ImgurDataResponse();
+        mockImgurResponseData.link = 'https://imgur.com/234';
+        mockImgurResponseData.name = 'drawing_link';
+        mockImgurResponseData.type = 'png';
+        mockImgurResponse.data = mockImgurResponseData;
+        mockImgurResponse.status = '200';
+        mockImgurResponse.success = true;
     });
 
     it('should create', () => {
@@ -115,7 +132,7 @@ describe('ExportDrawingComponent', () => {
         Object.defineProperty(component.nameFormControl, 'value', { value: 'test' });
 
         const spy = spyOn(exportDrawingService, 'exportImage').and.callFake(() => {});
-        component.export();
+        component.export('local-export');
         expect(spy).toHaveBeenCalledWith(component['canvasImage'], 'png', 'test');
     });
 
@@ -223,7 +240,7 @@ describe('ExportDrawingComponent', () => {
 
     it('should not export if name is invalid', () => {
         Object.defineProperty(component.nameFormControl, 'valid', { value: false });
-        component.export();
+        component.export('local-export');
 
         const spy = spyOn(exportDrawingService, 'exportImage').and.callThrough();
         expect(spy).not.toHaveBeenCalled();
@@ -231,9 +248,60 @@ describe('ExportDrawingComponent', () => {
 
     it('should export if name is valid', () => {
         Object.defineProperty(component.nameFormControl, 'valid', { value: true });
-        component.export();
+        component.export('local-export');
 
         const spy = spyOn(exportDrawingService, 'exportImage').and.callFake(() => {});
         expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should reset imgur data on filter change', () => {
+        component.imgurURL = 'https://www.imgur.com/234';
+        component.hasImgurServerError = true;
+        component.changeFilter('default');
+        expect(component.imgurURL).toBe('');
+        expect(component.hasImgurServerError).toBeFalsy();
+    });
+
+    it('should reset imgur data on export formmat change', () => {
+        component.imgurURL = 'https://www.imgur.com/234';
+        component.hasImgurServerError = true;
+        component.changeExportFormat('png');
+        expect(component.imgurURL).toBe('');
+        expect(component.hasImgurServerError).toBeFalsy();
+    });
+
+    it('should reset imgur data on init', () => {
+        component.imgurURL = 'https://www.imgur.com/234';
+        component.hasImgurServerError = true;
+        component.initValues();
+        expect(component.imgurURL).toBe('');
+        expect(component.hasImgurServerError).toBeFalsy();
+    });
+
+    it('should export image using Imgur service on imgur-export submitter id and change the link on a successful request', () => {
+        Object.defineProperty(component.nameFormControl, 'valid', { value: true });
+        spyOn(exportImgurService, 'exportImage').and.callFake((submitterId: string) => {
+            return of(Promise.resolve(mockImgurResponse));
+        });
+        component.export('imgur-export');
+        setTimeout(() => {
+            expect(component.imgurURL).toEqual(mockImgurResponse.data.link);
+        });
+        expect(exportImgurService.exportImage).toHaveBeenCalled();
+    });
+
+    it('should export image using Imgur service on imgur-export submitter id and set server error flag on failed request', () => {
+        Object.defineProperty(component.nameFormControl, 'valid', { value: true });
+        mockImgurResponse.status = '400';
+        mockImgurResponse.success = false;
+        spyOn(exportImgurService, 'exportImage').and.callFake((submitterId: string) => {
+            return of(Promise.reject(mockImgurResponse));
+        });
+        component.export('imgur-export');
+        setTimeout(() => {
+            expect(component.imgurURL).toEqual('');
+            expect(component.hasImgurServerError).toBeTruthy();
+        });
+        expect(exportImgurService.exportImage).toHaveBeenCalled();
     });
 });
