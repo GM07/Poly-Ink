@@ -54,6 +54,13 @@ describe('LassoDraw', () => {
         expect(imageData.data[ALPHA]).not.toEqual(0);
     });
 
+    it('should not fill basckground if did not change', () => {
+        spyOn(lassoDraw['config'], 'didChange').and.returnValue(false);
+        spyOn(LineDrawer, 'drawFilledLinePath').and.callThrough();
+        lassoDraw['fillBackground'](ctxStub);
+        expect(LineDrawer['drawFilledLinePath']).not.toHaveBeenCalled();
+    });
+
     it('should draw dashed line path with red white if intersecting', () => {
         lassoDraw['config'].intersecting = true;
         const spy = spyOn(LineDrawer, 'drawDashedLinePath').and.callFake(() => {});

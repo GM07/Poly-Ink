@@ -34,6 +34,7 @@ export class LassoDraw extends AbstractDraw {
     }
 
     private fillBackground(context: CanvasRenderingContext2D): void {
+        if (!this.config.didChange()) return;
         context.fillStyle = 'white';
         LineDrawer.drawFilledLinePath(context, this.config.points);
     }
