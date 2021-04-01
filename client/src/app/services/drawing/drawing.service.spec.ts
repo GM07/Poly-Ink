@@ -110,7 +110,7 @@ describe('DrawingService', () => {
     it('should not save to local storage while resizing canvas if editor is reloading', () => {
         spyOn<any>(service, 'save');
         spyOn<any>(service, 'isReloading').and.returnValue(true);
-        spyOn<any>(service, 'saveCanvas');
+        spyOn(DrawingService, 'saveCanvas');
         spyOn(service, 'initBackground');
         spyOn(service.baseCtx, 'drawImage');
         spyOn(service.previewCtx, 'drawImage');
@@ -122,7 +122,7 @@ describe('DrawingService', () => {
     it('should save to local storage while initializing background if editor is not reloading', () => {
         spyOn<any>(service, 'save');
         spyOn<any>(service, 'isReloading').and.returnValue(false);
-        spyOn<any>(service, 'saveCanvas');
+        spyOn(DrawingService, 'saveCanvas');
         spyOn(service, 'initBackground');
         spyOn(service.baseCtx, 'drawImage');
         spyOn(service.previewCtx, 'drawImage');

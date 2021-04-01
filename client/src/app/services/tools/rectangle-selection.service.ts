@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RectangleSelectionDraw } from '@app/classes/commands/rectangle-selection-draw';
+import { SelectionData } from '@app/classes/selection/selection-data';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { RectangleSelectionToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -18,41 +19,27 @@ export class RectangleSelectionService extends AbstractSelectionService {
     }
 
     protected endSelection(): void {
-        if (this.selectionCtx === null) return;
+        if (this.config.previewSelectionCtx === null) return;
 
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
 
         this.draw();
 
-        this.selectionCtx = null;
-
+        this.config.previewSelectionCtx = null;
         this.config.endCoords = new Vec2(0, 0);
-        this.translationOrigin = new Vec2(0, 0);
     }
 
-    protected fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void {
-        if (!this.config.startCoords.equals(currentPos)) {
-            ctx.beginPath();
-            ctx.fillStyle = 'white';
-            ctx.fillRect(this.config.startCoords.x, this.config.startCoords.y, Math.abs(this.config.width), Math.abs(this.config.height));
-            ctx.closePath();
-        }
-    }
-
-    protected updateSelectionRequired(): void {
-        const ctx = this.drawingService.previewCtx;
-        this.drawingService.clearCanvas(ctx);
-
-        this.fillBackground(ctx, this.config.endCoords);
-
-        const rectangleCoords = new Vec2(this.config.endCoords.x, this.config.endCoords.y);
-        ctx.drawImage(this.SELECTION_DATA, this.config.endCoords.x, this.config.endCoords.y);
-        this.drawSelection(ctx, rectangleCoords, new Vec2(Math.abs(this.config.width), Math.abs(this.config.height)));
+    protected fillBackground(ctx: CanvasRenderingContext2D): void {
+        if (!this.config.didChange()) return;
+        ctx.beginPath();
+        ctx.fillStyle = 'white';
+        ctx.fillRect(this.config.startCoords.x, this.config.startCoords.y, Math.abs(this.config.originalWidth), Math.abs(this.config.originalHeight));
+        ctx.closePath();
     }
 
     protected drawPreviewSelectionRequired(): void {
         const ctx = this.drawingService.previewCtx;
-        if (this.config.shiftDown) {
+        if (this.config.shift.isDown) {
             this.config.height = Math.sign(this.config.height) * Math.min(Math.abs(this.config.width), Math.abs(this.config.height));
             this.config.width = Math.sign(this.config.width) * Math.abs(this.config.height);
         }
@@ -74,6 +61,19 @@ export class RectangleSelectionService extends AbstractSelectionService {
 
         ctx.lineDashOffset = 0;
         ctx.setLineDash([]);
+    }
+
+    protected drawFinalselection(): void {
+        const previewCTX = this.drawingService.previewCtx;
+        this.drawingService.clearCanvas(previewCTX);
+
+        this.fillBackground(previewCTX);
+
+        const size = new Vec2(this.config.width, this.config.height).apply(Math.abs);
+        const previewSelectionCTX = this.config.previewSelectionCtx as CanvasRenderingContext2D;
+        this.drawSelection(previewSelectionCTX, new Vec2(0, 0), size);
+
+        previewCTX.drawImage(this.config.SELECTION_DATA[SelectionData.PreviewData], this.config.endCoords.x, this.config.endCoords.y);
     }
 
     draw(): void {

@@ -21,7 +21,7 @@
     position: absolute;
     border: 1px solid blue;
     z-index: 5;
-    pointer-events: none !important;
+    cursor: all-scroll;
 }
 
 .selection-background {
