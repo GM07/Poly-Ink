@@ -8,6 +8,7 @@ import { PencilConfigComponent } from '@app/components/tool-config/pencil-config
 import { RectangleConfigComponent } from '@app/components/tool-config/rectangle-config/rectangle-config.component';
 import { SettingsHandlerComponent } from '@app/components/tool-config/settings-handler/settings-handler.component';
 import { AerosolService } from '@app/services/tools/aerosol.service';
+import { BucketService } from '@app/services/tools/bucket.service';
 import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.service';
 import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
@@ -18,7 +19,6 @@ import { PolygoneService } from '@app/services/tools/polygone.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
-import { BucketService } from './../../../services/tools/bucket.service';
 
 // tslint:disable:max-classes-per-file
 class MockToolHandler extends ToolHandlerService {

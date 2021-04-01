@@ -35,6 +35,7 @@ import { SelectionHandlerComponent } from './components/selection/selection-hand
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { AbstractSelectionConfigComponent } from './components/tool-config/abstract-selection-config/abstract-selection-config.component';
 import { AerosolConfigComponent } from './components/tool-config/aerosol-config/aerosol-config.component';
+import { BucketConfigComponent } from './components/tool-config/bucket-config/bucket-config.component';
 import { EllipseConfigComponent } from './components/tool-config/ellipse-config/ellipse-config.component';
 import { EllipseSelectionConfigComponent } from './components/tool-config/ellipse-selection-config/ellipse-selection-config.component';
 import { EraserConfigComponent } from './components/tool-config/eraser-config/eraser-config.component';
@@ -46,7 +47,6 @@ import { RectangleConfigComponent } from './components/tool-config/rectangle-con
 import { RectangleSelectionConfigComponent } from './components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
 import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
 import { SidebarDirective } from './directives/sidebar.directive';
-import { BucketConfigComponent } from './components/tool-config/bucket-config/bucket-config.component';
 
 @NgModule({
     declarations: [

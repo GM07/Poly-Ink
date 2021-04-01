@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
+import { BucketDraw } from '@app/classes/commands/bucket-draw';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
-import { ColorService } from './../../../color-picker/services/color.service';
-import { BucketDraw } from './../../classes/commands/bucket-draw';
-import { BucketConfig } from './../../classes/tool-config/bucket-config';
-import { BucketToolConstants } from './../../classes/tool_ui_settings/tools.constants';
-import { MouseButton } from './../../constants/control';
-import { DrawingService } from './../drawing/drawing.service';
+import { BucketConfig } from '@app/classes/tool-config/bucket-config';
+import { BucketToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
+import { MouseButton } from '@app/constants/control';
+import { DrawingService } from '@app/services/drawing/drawing.service';
+import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',
@@ -19,9 +19,10 @@ export class BucketService extends Tool {
 
         this.shortcutKey = new ShortcutKey(BucketToolConstants.SHORTCUT_KEY);
         this.config = new BucketConfig();
+        this.toolID = BucketToolConstants.TOOL_ID;
     }
 
-    onMouseDown(event: MouseEvent) {
+    onMouseDown(event: MouseEvent): void {
         if (event.button === MouseButton.Left) this.config.contiguous = true;
         else if (event.button === MouseButton.Right) this.config.contiguous = false;
         else return;
@@ -32,7 +33,7 @@ export class BucketService extends Tool {
         }
     }
 
-    draw() {
+    draw(): void {
         const command = new BucketDraw(this.colorService, this.config);
         this.drawingService.draw(command);
     }

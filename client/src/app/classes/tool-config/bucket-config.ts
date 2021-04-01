@@ -16,7 +16,7 @@ export class BucketConfig {
 
         config.contiguous = this.contiguous;
         config.tolerance = this.tolerance;
-        config.point = this.point.clone()
+        config.point = this.point.clone();
 
         return config;
     }

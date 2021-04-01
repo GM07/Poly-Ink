@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { BucketService } from './../../../services/tools/bucket.service';
+import { BucketService } from '@app/services/tools/bucket.service';
 
 @Component({
     selector: 'app-bucket-config',

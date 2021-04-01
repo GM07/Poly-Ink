@@ -1,6 +1,6 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
+import { BucketConfig } from '@app/classes/tool-config/bucket-config';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { BucketConfig } from './../tool-config/bucket-config';
 export class BucketDraw extends AbstractDraw {
     private config: BucketConfig;
     private queue: number[];
@@ -8,19 +8,21 @@ export class BucketDraw extends AbstractDraw {
     private originalPixel: Uint8ClampedArray;
     private pixels: ImageData;
 
-    // Max euclidian distance for 3 colors (255^2 * 3)
-    private readonly MaxColorDifference = 195075;
+    // Max euclidian distance for 3 colors Math.sqrt(255^2 * 3)
+    // tslint:disable-next-line:no-magic-numbers
+    private readonly maxColorDifference: number = Math.sqrt(Math.pow(255, 2) * 3);
 
-    private readonly R = 0;
-    private readonly G = 1;
-    private readonly B = 2;
-    private readonly DataPerPixel = 4;
+    private readonly R: number = 0;
+    private readonly G: number = 1;
+    private readonly B: number = 2;
+    private readonly colorComponentMax: number = 255;
+    private readonly dataPerPixel: number = 4;
 
     constructor(colorService: ColorService, config: BucketConfig) {
         super(colorService);
         this.config = config.clone();
         this.queue = [];
-        this.originalPixel = new Uint8ClampedArray(this.DataPerPixel);
+        this.originalPixel = new Uint8ClampedArray(this.dataPerPixel);
 
         this.config.point.x = Math.floor(this.config.point.x);
         this.config.point.y = Math.floor(this.config.point.y);
@@ -37,10 +39,10 @@ export class BucketDraw extends AbstractDraw {
         context.putImageData(this.pixels, 0, 0);
     }
 
-    private floodFill(width: number) {
+    private floodFill(width: number): void {
         this.visited = new Set<number>();
 
-        const startIndex = (this.config.point.x + this.config.point.y * width) * this.DataPerPixel;
+        const startIndex = (this.config.point.x + this.config.point.y * width) * this.dataPerPixel;
         this.queue.push(startIndex);
 
         while (this.queue.length > 0) {
@@ -49,31 +51,31 @@ export class BucketDraw extends AbstractDraw {
             if (this.shouldFill(pos)) {
                 this.setPixel(pos);
 
-                //Takes canvas borders into consideration
-                if (((pos + 4) >> 2) % width !== 0) {
-                    this.addAdjacent(pos + 4);
+                // Takes canvas borders into consideration
+                if (((pos + this.dataPerPixel) / this.dataPerPixel) % width !== 0) {
+                    this.addAdjacent(pos + this.dataPerPixel);
                 }
 
-                //Takes canvas borders into consideration
-                if (((pos - 4) >> 2) % width !== width - 1) {
-                    this.addAdjacent(pos - 4);
+                // Takes canvas borders into consideration
+                if (((pos - this.dataPerPixel) / this.dataPerPixel) % width !== width - 1) {
+                    this.addAdjacent(pos - this.dataPerPixel);
                 }
 
-                this.addAdjacent(pos + width * this.DataPerPixel);
-                this.addAdjacent(pos - width * this.DataPerPixel);
+                this.addAdjacent(pos + width * this.dataPerPixel);
+                this.addAdjacent(pos - width * this.dataPerPixel);
             }
         }
     }
 
-    private pixelFill() {
-        for (let i = 0; i < this.pixels.data.length; i += this.DataPerPixel) {
+    private pixelFill(): void {
+        for (let i = 0; i < this.pixels.data.length; i += this.dataPerPixel) {
             if (this.shouldFill(i)) {
                 this.setPixel(i);
             }
         }
     }
 
-    addAdjacent(pos: number) {
+    private addAdjacent(pos: number): void {
         if (pos < 0 || pos >= this.pixels.data.length) return;
         if (this.visited.has(pos)) return;
 
@@ -82,32 +84,33 @@ export class BucketDraw extends AbstractDraw {
     }
 
     private shouldFill(pos: number): boolean {
-        const pixel = this.pixels.data.subarray(pos, pos + this.DataPerPixel);
+        const pixel = this.pixels.data.subarray(pos, pos + this.dataPerPixel);
 
         const deltaR2 = Math.pow(pixel[this.R] - this.originalPixel[this.R], 2);
         const deltaG2 = Math.pow(pixel[this.G] - this.originalPixel[this.G], 2);
         const deltaB2 = Math.pow(pixel[this.B] - this.originalPixel[this.B], 2);
 
-        const colorDifference = deltaB2 + deltaG2 + deltaR2;
-        const toleratedColorDifference = this.MaxColorDifference * (this.config.tolerance / 100);
+        const colorDifference = Math.sqrt(deltaB2 + deltaG2 + deltaR2);
+
+        // tslint:disable-next-line:no-magic-numbers
+        const toleratedColorDifference = this.maxColorDifference * (this.config.tolerance / 100);
 
         return colorDifference <= toleratedColorDifference;
     }
 
     private setPixel(pos: number): void {
-        const previousPixel = this.pixels.data.subarray(pos, pos + this.DataPerPixel);
-
+        const previousPixel = this.pixels.data.subarray(pos, pos + this.dataPerPixel);
         const R = this.primary.r * this.primaryAlpha + (1 - this.primaryAlpha) * previousPixel[this.R];
         const G = this.primary.g * this.primaryAlpha + (1 - this.primaryAlpha) * previousPixel[this.G];
         const B = this.primary.b * this.primaryAlpha + (1 - this.primaryAlpha) * previousPixel[this.B];
 
-        this.pixels.data.set([R, G, B], pos);
+        this.pixels.data.set([R, G, B, this.colorComponentMax], pos);
     }
 
     private getOriginalPixel(context: CanvasRenderingContext2D): void {
-        const arrayPos = (this.config.point.x + this.config.point.y * context.canvas.width) * this.DataPerPixel;
+        const arrayPos = (this.config.point.x + this.config.point.y * context.canvas.width) * this.dataPerPixel;
 
-        for (let i = 0; i < this.DataPerPixel; ++i) {
+        for (let i = 0; i < this.dataPerPixel; ++i) {
             this.originalPixel[i] = this.pixels.data[arrayPos + i];
         }
     }

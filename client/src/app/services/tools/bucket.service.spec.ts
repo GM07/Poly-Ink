@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { MouseButton } from '@app/constants/control';
+import { DrawingService } from '@app/services/drawing/drawing.service';
+import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { DrawingService } from '../drawing/drawing.service';
 import { BucketService } from './bucket.service';
-import { Colors } from 'src/color-picker/constants/colors'
 
 describe('BucketService', () => {
     let service: BucketService;
@@ -37,8 +37,6 @@ describe('BucketService', () => {
             pageY: 1,
             button: MouseButton.Left,
         } as MouseEvent;
-
-
         spyOn(service, 'isInCanvas').and.returnValue(false);
         service.onMouseDown(event);
         expect(service.config.contiguous).toEqual(true);
@@ -72,7 +70,7 @@ describe('BucketService', () => {
             button: MouseButton.Right,
         } as MouseEvent;
         spyOn(service, 'isInCanvas').and.returnValue(true);
-        spyOn(service, 'getPositionFromMouse').and.stub()
+        spyOn(service, 'getPositionFromMouse').and.stub();
         spyOn(service, 'draw').and.stub();
         service.onMouseDown(event);
         expect(service.getPositionFromMouse).toHaveBeenCalled();
