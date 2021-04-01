@@ -17,13 +17,13 @@ export class Line {
         const halfSpaceEnd = this.halfSpaceFunction(other.end);
 
         if (halfSpaceStart === halfSpaceEnd && halfSpaceStart === 0) {
-            return this.intersecting(this, other);
+            return this.intersecting(other);
         }
 
         return halfSpaceStart * halfSpaceEnd <= 0 && other.halfSpaceFunction(this.start) * other.halfSpaceFunction(this.end) < 0;
     }
 
-    private intersecting(start: Line, other: Line): boolean {
+    private intersecting(other: Line): boolean {
         return (
             Math.min(other.start.x, other.end.x) <= Math.max(this.start.x, this.end.x) &&
             Math.max(other.start.x, other.end.x) >= Math.min(this.start.x, this.end.x) &&
