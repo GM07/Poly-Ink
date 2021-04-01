@@ -6,7 +6,7 @@ export class BucketConfig {
     tolerance: number;
 
     constructor() {
-        this.point = { x: 0, y: 0 };
+        this.point = new Vec2(0, 0);
         this.contiguous = true;
         this.tolerance = ToolSettingsConst.BUCKET_DEFAULT_TOLERANCE;
     }
@@ -16,7 +16,7 @@ export class BucketConfig {
 
         config.contiguous = this.contiguous;
         config.tolerance = this.tolerance;
-        config.point = { x: this.point.x, y: this.point.y };
+        config.point = this.point.clone()
 
         return config;
     }

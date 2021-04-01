@@ -4,6 +4,7 @@ import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { PencilService } from './pencil.service';
+import { Colors } from 'src/color-picker/constants/colors'
 
 // tslint:disable:no-any
 // tslint:disable:no-magic-numbers
@@ -23,7 +24,7 @@ describe('PencilService', () => {
 
     beforeEach(() => {
         drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'drawPreview']);
-        colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(0, 0, 0, 1)' });
+        colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryColor: Colors.BLACK, primaryColorAlpha: 1.0 });
 
         TestBed.configureTestingModule({
             providers: [
