@@ -74,7 +74,8 @@ describe('GridService', () => {
 
     it('should downsize the grid on key down with -', () => {
         const event = { key: '-', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
-        const gridSize = service.sizeValue = 30;
+        // tslint:disable-next-line:no-magic-numbers
+        const gridSize = (service.sizeValue = 30);
         spyOn(service, 'updateGrid');
         spyOn(service.ctx, 'clearRect');
         service.onKeyDown(event);
