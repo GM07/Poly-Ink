@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
+import { DrawingService } from '@app/services/drawing/drawing.service';
 
 @Component({
     selector: 'app-home-page',
@@ -18,9 +19,15 @@ import { Router } from '@angular/router';
 export class HomePageComponent {
     state: OpacityState;
     showComponent: boolean;
+    showContinueDrawing: boolean;
 
-    constructor(private router: Router, private zone: NgZone) {
+    constructor(private router: Router, private zone: NgZone, private drawingService: DrawingService) {
+        this.init();
+    }
+
+    init(): void {
         this.state = 'visible';
+        this.showContinueDrawing = this.drawingService.getSavedDrawing() !== null;
         this.showComponent = true;
     }
 
@@ -35,12 +42,14 @@ export class HomePageComponent {
         this.zone.run(() => this.router.navigateByUrl('carrousel'));
     }
 
-    backToMenu(): void {
-        this.fadeIn();
+    async continueDrawing(): Promise<void> {
+        this.fadeOut();
+        await this.drawingService.createLoadedCanvasFromStorage();
+        this.zone.run(() => this.router.navigateByUrl('editor'));
     }
 
-    continuingDrawing(): boolean {
-        return false;
+    backToMenu(): void {
+        this.fadeIn();
     }
 
     fadeOut(): void {

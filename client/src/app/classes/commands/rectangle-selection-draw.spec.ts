@@ -4,13 +4,14 @@
 
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
+import { SelectionData } from '@app/classes/selection/selection-data';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { RectangleSelectionDraw } from './rectangle-selection-draw';
 
-describe('RectangleDraw', () => {
+describe('RectangleSelectionDraw', () => {
     let rectangleSelectionDraw: RectangleSelectionDraw;
     let colorService: ColorService;
     let canvasTestHelper: CanvasTestHelper;
@@ -23,15 +24,25 @@ describe('RectangleDraw', () => {
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
 
-        rectangleSelectionDraw['config'].startCoords = { x: 0, y: 0 };
-        rectangleSelectionDraw['config'].endCoords = { x: 15, y: 15 };
+        rectangleSelectionDraw['config'].startCoords = new Vec2(0, 0);
+        rectangleSelectionDraw['config'].endCoords = new Vec2(15, 15);
         rectangleSelectionDraw['config'].height = 10;
+        rectangleSelectionDraw['config'].originalHeight = 10;
         rectangleSelectionDraw['config'].width = 10;
+        rectangleSelectionDraw['config'].originalWidth = 10;
 
         ctxStub.canvas.width = 100;
         ctxStub.canvas.height = 100;
+        ctxStub.fillStyle = Colors.WHITE.rgbString;
+        ctxStub.fillRect(0, 0, 100, 100);
         ctxStub.fillStyle = Colors.BLACK.rgbString;
         ctxStub.fillRect(0, 0, 10, 10);
+
+        rectangleSelectionDraw['config'].SELECTION_DATA[SelectionData.FinalData].width = 10;
+        rectangleSelectionDraw['config'].SELECTION_DATA[SelectionData.FinalData].height = 10;
+        const ctx = rectangleSelectionDraw['config'].SELECTION_DATA[SelectionData.FinalData].getContext('2d') as CanvasRenderingContext2D;
+        ctx.fillStyle = Colors.BLACK.rgbString;
+        ctx.fillRect(0, 0, 10, 10);
     });
 
     it('should fillbacground with white', () => {
@@ -51,27 +62,25 @@ describe('RectangleDraw', () => {
 
     it('should not fill the background if the selection has not moved', () => {
         const fillSpy = spyOn(ctxStub, 'fill');
-        rectangleSelectionDraw['config'].startCoords = { x: 0, y: 0 } as Vec2;
-        rectangleSelectionDraw['config'].endCoords = { x: 0, y: 0 } as Vec2;
+        rectangleSelectionDraw['config'].startCoords = new Vec2(0, 0);
+        rectangleSelectionDraw['config'].endCoords = new Vec2(0, 0);
         rectangleSelectionDraw['fillBackground'](ctxStub);
         expect(fillSpy).not.toHaveBeenCalled();
     });
 
     it('should move selection properly', () => {
-        const middleX = rectangleSelectionDraw['config'].width / 2;
-        const middleY = rectangleSelectionDraw['config'].height / 2;
-        const posX = rectangleSelectionDraw['config'].endCoords.x + middleX;
-        const posY = rectangleSelectionDraw['config'].endCoords.x + middleY;
+        const middle = new Vec2(rectangleSelectionDraw['config'].width / 2, rectangleSelectionDraw['config'].height / 2);
+        const pos = rectangleSelectionDraw['config'].endCoords.add(middle);
 
         rectangleSelectionDraw.execute(ctxStub);
 
-        let imageData = ctxStub.getImageData(posX, posY, 1, 1);
+        let imageData = ctxStub.getImageData(pos.x, pos.y, 1, 1);
         expect(imageData.data[0]).toEqual(0);
         expect(imageData.data[1]).toEqual(0);
         expect(imageData.data[2]).toEqual(0);
         expect(imageData.data[ALPHA]).not.toEqual(0);
 
-        imageData = ctxStub.getImageData(middleX, middleY, 1, 1);
+        imageData = ctxStub.getImageData(middle.x, middle.y, 1, 1);
         expect(imageData.data[0]).toEqual(Colors.WHITE.r);
         expect(imageData.data[1]).toEqual(Colors.WHITE.g);
         expect(imageData.data[2]).toEqual(Colors.WHITE.b);
@@ -80,11 +89,9 @@ describe('RectangleDraw', () => {
 
     it('should make appropriate calls on execute', () => {
         spyOn<any>(rectangleSelectionDraw, 'fillBackground').and.callThrough();
-        spyOn<any>(rectangleSelectionDraw, 'saveSelectionToCanvas').and.callThrough();
 
         rectangleSelectionDraw.execute(ctxStub);
 
         expect(rectangleSelectionDraw['fillBackground']).toHaveBeenCalled();
-        expect(rectangleSelectionDraw['saveSelectionToCanvas']).toHaveBeenCalled();
     });
 });

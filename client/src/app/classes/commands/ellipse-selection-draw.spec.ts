@@ -4,13 +4,14 @@
 
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
+import { SelectionData } from '@app/classes/selection/selection-data';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { EllipseSelectionDraw } from './ellipse-selection-draw';
 
-describe('EllipseDraw', () => {
+describe('EllipseSelectionDraw', () => {
     let ellipseSelectionDraw: EllipseSelectionDraw;
     let colorService: ColorService;
     let canvasTestHelper: CanvasTestHelper;
@@ -23,15 +24,25 @@ describe('EllipseDraw', () => {
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
 
-        ellipseSelectionDraw['config'].startCoords = { x: 0, y: 0 };
-        ellipseSelectionDraw['config'].endCoords = { x: 15, y: 15 };
+        ellipseSelectionDraw['config'].startCoords = new Vec2(0, 0);
+        ellipseSelectionDraw['config'].endCoords = new Vec2(15, 15);
         ellipseSelectionDraw['config'].height = 10;
+        ellipseSelectionDraw['config'].originalHeight = 10;
         ellipseSelectionDraw['config'].width = 10;
+        ellipseSelectionDraw['config'].originalWidth = 10;
 
         ctxStub.canvas.width = 100;
         ctxStub.canvas.height = 100;
+        ctxStub.fillStyle = Colors.WHITE.rgbString;
+        ctxStub.fillRect(0, 0, 100, 100);
         ctxStub.fillStyle = Colors.BLACK.rgbString;
         ctxStub.fillRect(0, 0, 10, 10);
+
+        ellipseSelectionDraw['config'].SELECTION_DATA[SelectionData.FinalData].width = 10;
+        ellipseSelectionDraw['config'].SELECTION_DATA[SelectionData.FinalData].height = 10;
+        const ctx = ellipseSelectionDraw['config'].SELECTION_DATA[SelectionData.FinalData].getContext('2d') as CanvasRenderingContext2D;
+        ctx.fillStyle = Colors.BLACK.rgbString;
+        ctx.fillRect(0, 0, 10, 10);
     });
 
     it('should fillbacground with white', () => {
@@ -51,8 +62,8 @@ describe('EllipseDraw', () => {
 
     it('should not fill the background if the selection has not moved', () => {
         const fillSpy = spyOn(ctxStub, 'fill');
-        ellipseSelectionDraw['config'].startCoords = { x: 0, y: 0 } as Vec2;
-        ellipseSelectionDraw['config'].endCoords = { x: 0, y: 0 } as Vec2;
+        ellipseSelectionDraw['config'].startCoords = new Vec2(0, 0);
+        ellipseSelectionDraw['config'].endCoords = new Vec2(0, 0);
         ellipseSelectionDraw['fillBackground'](ctxStub);
         expect(fillSpy).not.toHaveBeenCalled();
     });
@@ -73,18 +84,16 @@ describe('EllipseDraw', () => {
 
         imageData = ctxStub.getImageData(middleX, middleY, 1, 1);
         expect(imageData.data[0]).toEqual(Colors.WHITE.r);
-        expect(imageData.data[1]).toEqual(Colors.WHITE.g);
-        expect(imageData.data[2]).toEqual(Colors.WHITE.b);
+        expect(imageData.data[1]).toEqual(Colors.WHITE.r);
+        expect(imageData.data[2]).toEqual(Colors.WHITE.r);
         expect(imageData.data[ALPHA]).not.toEqual(0);
     });
 
     it('should make appropriate calls on execute', () => {
         spyOn<any>(ellipseSelectionDraw, 'fillBackground').and.callThrough();
-        spyOn<any>(ellipseSelectionDraw, 'saveSelectionToCanvas').and.callThrough();
 
         ellipseSelectionDraw.execute(ctxStub);
 
         expect(ellipseSelectionDraw['fillBackground']).toHaveBeenCalled();
-        expect(ellipseSelectionDraw['saveSelectionToCanvas']).toHaveBeenCalled();
     });
 });

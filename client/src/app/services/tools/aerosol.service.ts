@@ -4,6 +4,7 @@ import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { AerosolConfig } from '@app/classes/tool-config/aerosol-config';
 import { AerosolToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
+import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -125,6 +126,6 @@ export class AerosolService extends Tool {
     }
 
     private placePoints(): void {
-        this.config.points.push({ x: this.mouseDownCoord.x, y: this.mouseDownCoord.y });
+        this.config.points.push(new Vec2(this.mouseDownCoord.x, this.mouseDownCoord.y));
     }
 }

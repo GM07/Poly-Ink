@@ -8,6 +8,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
 import { RectangleDraw } from './rectangle-draw';
 
 // tslint:disable:no-string-literal
+// tslint:disable:no-magic-numbers
 
 describe('RectangleDraw', () => {
     let rectangleDraw: RectangleDraw;
@@ -25,8 +26,8 @@ describe('RectangleDraw', () => {
 
         rectangleDraw['config'].lineWidth = 1;
 
-        const startPoint: Vec2 = { x: 0, y: 0 };
-        const endPoint: Vec2 = { x: 10, y: 20 };
+        const startPoint: Vec2 = new Vec2(0, 0);
+        const endPoint: Vec2 = new Vec2(10, 20);
 
         rectangleDraw['config'].startCoords = startPoint;
         rectangleDraw['config'].endCoords = endPoint;
