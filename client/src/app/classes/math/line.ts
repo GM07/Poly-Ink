@@ -17,15 +17,19 @@ export class Line {
         const halfSpaceEnd = this.halfSpaceFunction(other.end);
 
         if (halfSpaceStart === halfSpaceEnd && halfSpaceStart === 0) {
-            return (
-                Math.min(other.start.x, other.end.x) <= Math.max(this.start.x, this.end.x) &&
-                Math.max(other.start.x, other.end.x) >= Math.min(this.start.x, this.end.x) &&
-                Math.min(other.start.y, other.end.y) <= Math.max(this.start.y, this.end.y) &&
-                Math.max(other.start.y, other.end.y) >= Math.min(this.start.y, this.end.y)
-            );
+            return this.intersecting(this, other);
         }
 
         return halfSpaceStart * halfSpaceEnd <= 0 && other.halfSpaceFunction(this.start) * other.halfSpaceFunction(this.end) < 0;
+    }
+
+    private intersecting(start: Line, other: Line) {
+        return (
+            Math.min(other.start.x, other.end.x) <= Math.max(this.start.x, this.end.x) &&
+            Math.max(other.start.x, other.end.x) >= Math.min(this.start.x, this.end.x) &&
+            Math.min(other.start.y, other.end.y) <= Math.max(this.start.y, this.end.y) &&
+            Math.max(other.start.y, other.end.y) >= Math.min(this.start.y, this.end.y)
+        );
     }
 
     private halfSpaceFunction(pointToCheck: Vec2): number {
