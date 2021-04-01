@@ -7,10 +7,9 @@
   </div>
 
   <h5 class="textFormat">Rotation</h5>
+  <canvas id="angleCanvas" width="100" height="100"></canvas>
   <div class="textFormatForSlider">
-      <mat-slider min="{{ MIN_ROTATION }}" max="{{ MAX_ROTATION }}" step="1" [(ngModel)]="stampService.angleValue" thumbLabel [displayWith]="SliderLabel">
-      </mat-slider>
-      {{ stampService.angleValue }}
+    <h5 id="angleValue" #angleValue>0°</h5>
   </div>
 
   <h5 class="textFormat">Choix Étampe</h5>

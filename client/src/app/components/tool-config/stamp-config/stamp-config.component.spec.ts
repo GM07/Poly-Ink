@@ -20,8 +20,6 @@ describe('StampConfigComponent', () => {
     let stampService: StampService;
     let loader: HarnessLoader;
 
-    const DEFAULT_VALUE = 2;
-
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [StampConfigComponent],
@@ -67,7 +65,7 @@ describe('StampConfigComponent', () => {
 
     it('should load all slider harnesses', async () => {
         const sliders = await loader.getAllHarnesses(MatSliderHarness);
-        expect(sliders.length).toBe(DEFAULT_VALUE);
+        expect(sliders.length).toBe(1);
     });
 
     it('should get max value of slider', async () => {
