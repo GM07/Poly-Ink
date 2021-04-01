@@ -19,13 +19,33 @@ export interface SliderValues {
 }
 
 export class Slider {
+    constructor(options: Options) {
+        this.sliders = [];
+
+        this.continuousMode = options.continuousMode;
+
+        this.container = document.getElementById(options.canvasId) as HTMLCanvasElement;
+        this.theBody = document.body;
+        this.context = this.container.getContext('2d') as CanvasRenderingContext2D;
+
+        this.position = options.position;
+
+        this.mousePos = new Vec2(0, 0);
+
+        this.rotationEventListener = this._rotation.bind(this);
+        this.container.addEventListener('mousedown', this._handleMouseDown.bind(this), false);
+        this.theBody.addEventListener('mouseup', this._handleMouseUp.bind(this), false);
+        this.container.addEventListener('click', this._handleClick.bind(this), false);
+    }
     private sliders: SliderBand[];
+    // tslint:disable:no-magic-numbers
     private readonly scaleWidth: number = 17;
     private readonly fillWidth: number = 18;
     private readonly knobWidth: number = 18;
     private readonly MATH_CONVERSION_FACTOR: number = 1.5;
-    private readonly backgroundColor: string = "#" + new Color(238, 238, 238).hexString;
-    private readonly knobColor: string = "#" + new Color(236,86,129).hexString;
+    private readonly backgroundColor: string = '#' + new Color(238, 238, 238).hexString;
+    private readonly knobColor: string = '#' + new Color(236, 86, 129).hexString;
+    // tslint:enable:no-magic-numbers
 
     private readonly startAngle: number = this.MATH_CONVERSION_FACTOR * Math.PI + ToolMath.ZERO_THRESHOLD;
     private readonly endAngle: number = this.MATH_CONVERSION_FACTOR * Math.PI - ToolMath.ZERO_THRESHOLD;
@@ -45,23 +65,12 @@ export class Slider {
     // tslint:disable-next-line:no-any
     private rotationEventListener: any;
 
-    constructor(options: Options) {
-        this.sliders = [];
+    private static radToDeg(ang: number): number {
+        return (ang * ToolMath.DEGREE_CONVERSION_FACTOR) / Math.PI;
+    }
 
-        this.continuousMode = options.continuousMode;
-
-        this.container = document.getElementById(options.canvasId) as HTMLCanvasElement;
-        this.theBody = document.body;
-        this.context = this.container.getContext('2d') as CanvasRenderingContext2D;
-
-        this.position = options.position;
-
-        this.mousePos = new Vec2(0, 0);
-
-        this.rotationEventListener = this._rotation.bind(this);
-        this.container.addEventListener('mousedown', this._handleMouseDown.bind(this), false);
-        this.theBody.addEventListener('mouseup', this._handleMouseUp.bind(this), false);
-        this.container.addEventListener('click', this._handleClick.bind(this), false);
+    private static normalizeTan(ang: number): number {
+        return ang + Math.PI / 2 > 0 ? ang + Math.PI / 2 : 2 * Math.PI + ang + Math.PI / 2;
     }
 
     addSlider(options: SliderBandOptions): void {
@@ -174,8 +183,6 @@ export class Slider {
         this.context.fill();
     }
 
-
-
     private calculateAngles(position: Vec2): void {
         if (!this.selectedSlider) return;
 
@@ -212,14 +219,6 @@ export class Slider {
             }
         }
         return selectedSlider ? selectedSlider : null;
-    }
-
-    private static radToDeg(ang: number): number {
-        return (ang * ToolMath.DEGREE_CONVERSION_FACTOR) / Math.PI;
-    }
-
-    private static normalizeTan(ang: number): number {
-        return ang + Math.PI / 2 > 0 ? ang + Math.PI / 2 : 2 * Math.PI + ang + Math.PI / 2;
     }
 
     _handleMouseDown(event: MouseEvent): void {

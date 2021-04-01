@@ -9,6 +9,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Stamp } from '@app/classes/tool-config/stamp-config';
+import { ToolMath } from '@app/constants/math';
 import { StampService } from '@app/services/tools/stamp.service';
 import { StampConfigComponent } from './stamp-config.component';
 
@@ -41,7 +42,7 @@ describe('StampConfigComponent', () => {
 
     it('wheel event should rotate the stamp', () => {
         const wheelEvent = { deltaY: 1, preventDefault: () => {} } as WheelEvent;
-        const currentAngle = stampService.angleValue = 360;
+        const currentAngle = (stampService.angleValue = ToolMath.DEGREE_CONVERSION_FACTOR * 2);
         spyOn(stampService, 'drawPreview');
         spyOn(stampService, 'isActive').and.returnValue(true);
         component.wheelEvent(wheelEvent);
@@ -50,14 +51,14 @@ describe('StampConfigComponent', () => {
     });
 
     it('wheel event should rotate the stamp', () => {
-      const wheelEvent = { deltaY: -1, preventDefault: () => {} } as WheelEvent;
-      const currentAngle = stampService.angleValue = 0;
-      spyOn(stampService, 'drawPreview');
-      spyOn(stampService, 'isActive').and.returnValue(true);
-      component.wheelEvent(wheelEvent);
-      expect(stampService.drawPreview).toHaveBeenCalled();
-      expect(currentAngle).not.toEqual(stampService.angleValue);
-  });
+        const wheelEvent = { deltaY: -1, preventDefault: () => {} } as WheelEvent;
+        const currentAngle = (stampService.angleValue = 0);
+        spyOn(stampService, 'drawPreview');
+        spyOn(stampService, 'isActive').and.returnValue(true);
+        component.wheelEvent(wheelEvent);
+        expect(stampService.drawPreview).toHaveBeenCalled();
+        expect(currentAngle).not.toEqual(stampService.angleValue);
+    });
 
     it('wheel event should not rotate the stamp if not active', () => {
         const wheelEvent = { deltaY: 1, preventDefault: () => {} } as WheelEvent;
