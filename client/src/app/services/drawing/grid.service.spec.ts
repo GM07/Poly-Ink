@@ -65,29 +65,29 @@ describe('GridService', () => {
     it('should upsize the grid on key down with =', () => {
         const event = { key: '=', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
         spyOn(service, 'updateGrid');
-        const gridSize = service.size;
+        const gridSize = service.sizeValue;
         spyOn(service.ctx, 'clearRect');
         service.onKeyDown(event);
         expect(service.updateGrid).toHaveBeenCalled();
-        expect(service.size).toEqual(gridSize + ToolSettingsConst.GRID_STEP);
+        expect(service.sizeValue).toEqual(gridSize + ToolSettingsConst.GRID_STEP);
     });
 
     it('should downsize the grid on key down with -', () => {
         const event = { key: '-', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
-        const gridSize = service.size;
+        const gridSize = service.sizeValue = 30;
         spyOn(service, 'updateGrid');
         spyOn(service.ctx, 'clearRect');
         service.onKeyDown(event);
         expect(service.updateGrid).toHaveBeenCalled();
-        expect(service.size).toEqual(gridSize - ToolSettingsConst.GRID_STEP);
+        expect(service.sizeValue).toEqual(gridSize - ToolSettingsConst.GRID_STEP);
     });
 
     it('should do nothing on other key', () => {
         const event = { key: '_', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
-        const gridSize = service.size;
+        const gridSize = service.sizeValue;
         spyOn(service, 'updateGrid');
         service.onKeyDown(event);
         expect(service.updateGrid).not.toHaveBeenCalled();
-        expect(gridSize).toEqual(service.size);
+        expect(gridSize).toEqual(service.sizeValue);
     });
 });

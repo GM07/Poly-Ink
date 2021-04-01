@@ -54,11 +54,11 @@ export class GridService {
         if (this.toggleGridShortcut.equals(event)) {
             this.toggleGridVisibility();
         } else if (ShortcutKey.contains(this.upsizeGridShortcut, event)) {
-            this.size = this.size + ToolSettingsConst.GRID_STEP;
+            this.sizeValue = this.sizeValue + ToolSettingsConst.GRID_STEP;
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.updateGrid();
         } else if (this.downSizeGridShortcut.equals(event)) {
-            this.size = this.size - ToolSettingsConst.GRID_STEP;
+            this.sizeValue = this.sizeValue - ToolSettingsConst.GRID_STEP;
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.updateGrid();
         }
@@ -70,10 +70,9 @@ export class GridService {
         this.ctx.setLineDash([2, 2]);
         this.gridColor = Colors.BLACK.toRgbaString(this.opacity);
 
-        for (let i = 0; i < this.canvas.width; i += this.size) {
-            this.drawDotted(new Vec2(i, 0), new Vec2(i, this.canvas.height));
-            this.drawDotted(new Vec2(0, i), new Vec2(this.canvas.width, i));
-        }
+        for (let i = 0; i < this.canvas.width; i += this.size) this.drawDotted(new Vec2(i, 0), new Vec2(i, this.canvas.height));
+
+        for (let i = 0; i < this.canvas.width; i += this.size) this.drawDotted(new Vec2(0, i), new Vec2(this.canvas.width, i));
 
         this.ctx.setLineDash([]);
     }
