@@ -10,13 +10,13 @@ export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
     height: number;
     width: number;
     shiftDown: boolean;
-    inSelection: boolean;
+    isInSelection: boolean;
     intersecting: boolean;
 
     constructor() {
         super();
         this.points = [];
-        this.inSelection = false;
+        this.isInSelection = false;
         this.startCoords = new Vec2(0, 0);
         this.endCoords = new Vec2(0, 0);
         this.width = 0;
@@ -38,7 +38,7 @@ export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
         config.originalWidth = this.originalWidth;
         config.width = this.width;
         config.previewSelectionCtx = null;
-        config.inSelection = this.inSelection;
+        config.isInSelection = this.isInSelection;
         config.intersecting = this.intersecting;
 
         for (let i = 0; i < this.SELECTION_DATA.length; ++i) {

@@ -55,7 +55,7 @@ export class LassoService extends AbstractSelectionService {
         this.configLasso.width = size.x;
         this.configLasso.height = size.y;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
-        this.configLasso.inSelection = true;
+        this.configLasso.isInSelection = true;
         this.startSelection();
     }
 

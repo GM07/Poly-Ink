@@ -210,7 +210,6 @@ export abstract class AbstractSelectionService extends Tool {
         this.config.previewSelectionCtx = this.config.SELECTION_DATA[SelectionData.PreviewData].getContext('2d') as CanvasRenderingContext2D;
         const x = Math.min(this.mouseDownCoord.x, this.mouseDownCoord.x + this.config.width);
         const y = Math.min(this.mouseDownCoord.y, this.mouseDownCoord.y + this.config.height);
-        console.log(x, y);
         this.config.endCoords = new Vec2(x, y);
         this.config.startCoords = new Vec2(x, y);
 

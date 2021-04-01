@@ -13,7 +13,7 @@ export class LassoDraw extends AbstractDraw {
     }
 
     execute(context: CanvasRenderingContext2D): void {
-        if (!this.config.inSelection) {
+        if (!this.config.isInSelection) {
             LineDrawer.drawDashedLinePath(
                 context,
                 this.config.points,

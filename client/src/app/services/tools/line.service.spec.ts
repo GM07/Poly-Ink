@@ -80,7 +80,6 @@ describe('LineService', () => {
         mouseEvent = { button: MouseButton.Left } as MouseEvent;
         service.onMouseUp(mouseEvent);
         expect(service.lineDrawer['leftMouseDown']).toBe(false);
-        //
     });
 
     it('should do nothing when awaiting a double click', () => {
