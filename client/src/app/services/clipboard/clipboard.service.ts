@@ -61,7 +61,6 @@ export class ClipboardService {
         if (this.lastSelectionTool.config.previewSelectionCtx === null) return;
 
         this.savedConfigs = this.lastSelectionTool.config.clone();
-        console.log(this.savedConfigs);
         this.savedConfigs.endCoords = new Vec2(0, 0);
         this.savedConfigs.markedForPaste = true;
         this.savedConfigs.previewSelectionCtx = this.savedConfigs.SELECTION_DATA[SelectionData.PreviewData].getContext(
@@ -85,7 +84,6 @@ export class ClipboardService {
 
         this.toolHandler.setTool(this.lastSelectionTool.toolID);
         this.lastSelectionTool.initAttribs(this.savedConfigs.clone());
-        console.log(this.lastSelectionTool.config, this.savedConfigs);
         this.lastSelectionTool.config.previewSelectionCtx = this.lastSelectionTool.config.SELECTION_DATA[SelectionData.PreviewData].getContext(
             '2d',
         ) as CanvasRenderingContext2D;

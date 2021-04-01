@@ -31,7 +31,7 @@ export class LineService extends Tool {
     }
 
     initService(): void {
-        this.lineDrawer.init();
+        this.lineDrawer.init(new LineConfig());
         this.config.closedLoop = false;
     }
 

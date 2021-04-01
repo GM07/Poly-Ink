@@ -98,7 +98,6 @@ export class LassoService extends AbstractSelectionService {
         if (!this.leftMouseDown) return;
 
         if (this.configLasso.previewSelectionCtx === null) {
-            console.log(this.configLasso);
             this.createSelection(event);
         } else {
             this.endSelection();
