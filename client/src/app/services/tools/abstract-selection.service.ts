@@ -32,7 +32,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.initAttribs(new SelectionConfig());
     }
 
-    initAttribs(config: SelectionConfig) {
+    initAttribs(config: SelectionConfig): void {
         this.config = config;
         this.selectionTranslation = new SelectionTranslation(this.config);
         this.selectionResize = new SelectionResize(this.config);
@@ -238,7 +238,9 @@ export abstract class AbstractSelectionService extends Tool {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
 
-        if (!this.config.markedForPaste) this.fillBackground(ctx);
+        if (!this.config.markedForPaste) {
+            this.fillBackground(ctx);
+        }
         ctx.drawImage(this.config.SELECTION_DATA[SelectionData.PreviewData], this.config.endCoords.x, this.config.endCoords.y);
 
         this.UPDATE_POINTS.next(true);

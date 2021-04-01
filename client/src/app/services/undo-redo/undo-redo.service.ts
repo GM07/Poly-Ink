@@ -100,7 +100,7 @@ export class UndoRedoService {
         this.BLOCK_REDO_ICON.next(block);
     }
 
-    private sendIconSignals() {
+    private sendIconSignals(): void {
         this.BLOCK_UNDO_ICON.next(this.currentAction < 0);
         this.BLOCK_REDO_ICON.next(this.currentAction >= this.commands.length - 1);
     }

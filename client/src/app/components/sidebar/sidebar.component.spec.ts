@@ -23,6 +23,7 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 @Component({ selector: 'app-settings-handler', template: '' })
 class StubSettingsHandlerComponent {}
 
+// tslint:disable:no-string-literal
 describe('SidebarComponent', () => {
     let component: SidebarComponent;
     let fixture: ComponentFixture<SidebarComponent>;
@@ -86,11 +87,11 @@ describe('SidebarComponent', () => {
     });
 
     it('should go back to menu', () => {
-        spyOn(component.undoRedoService, 'reset');
+        const resetSpy = spyOn(component['undoRedoService'], 'reset');
         const funct = spyOn(router, 'navigateByUrl');
         component.backToMenu();
         expect(funct).toHaveBeenCalledWith('home');
-        expect(component.undoRedoService.reset).toHaveBeenCalled();
+        expect(resetSpy).toHaveBeenCalled();
     });
 
     it('should emit event when newDrawing is clicked', () => {
@@ -98,5 +99,30 @@ describe('SidebarComponent', () => {
         component.emitClickEvent(new NewDrawing());
         expect(component.settingClicked.emit).toHaveBeenCalled();
         expect(component.settingClicked.emit).toHaveBeenCalledWith(NewDrawingConstants.TOOL_ID);
+    });
+
+    it('should init the undo Icon subscription', () => {
+        component['undoRedoService'].BLOCK_UNDO_ICON.next(true);
+        component['undoRedoService'].BLOCK_UNDO_ICON.next(true);
+        expect(component.blockUndoIcon).toBeTruthy();
+        component['undoRedoService'].BLOCK_UNDO_ICON.next(false);
+        expect(component.blockUndoIcon).toBeFalsy();
+    });
+
+    it('should init the redo Icon subscription', () => {
+        component['undoRedoService'].BLOCK_REDO_ICON.next(true);
+        component['undoRedoService'].BLOCK_REDO_ICON.next(true);
+        expect(component.blockRedoIcon).toBeTruthy();
+        component['undoRedoService'].BLOCK_REDO_ICON.next(false);
+        expect(component.blockRedoIcon).toBeFalsy();
+    });
+
+    it('should block the undo redo icons depending on the undoRedoService state', () => {
+        component['undoRedoService'].blockUndoRedo = false;
+        component['undoRedoService'].currentAction = 0;
+        component['undoRedoService'].commands = [];
+        component['initUndoRedoService']();
+        expect(component.blockUndoIcon).toBeFalsy();
+        expect(component.blockRedoIcon).toBeTruthy();
     });
 });

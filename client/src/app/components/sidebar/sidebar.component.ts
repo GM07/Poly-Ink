@@ -42,24 +42,7 @@ export class SidebarComponent implements OnInit {
         this.topToolsSettings = [];
         this.bottomToolsSettings = [];
 
-        this.undoToolSettings = new Undo();
-        this.redoToolSettings = new Redo();
-        this.blockUndoIcon = true;
-        this.blockRedoIcon = true;
-
-        this.undoRedoService.BLOCK_UNDO_ICON.subscribe((block) => {
-            if (this.blockUndoIcon != block) {
-                this.blockUndoIcon = block;
-                this.cd.detectChanges();
-            }
-        });
-
-        this.undoRedoService.BLOCK_REDO_ICON.subscribe((block) => {
-            if (this.blockRedoIcon != block) {
-                this.blockRedoIcon = block;
-                this.cd.detectChanges();
-            }
-        });
+        this.initUndoRedoService();
 
         this.settingClicked = new EventEmitter<string>();
     }
@@ -84,5 +67,26 @@ export class SidebarComponent implements OnInit {
 
     emitClickEvent(toolSettings: ToolSettings): void {
         this.settingClicked.emit(toolSettings.toolId);
+    }
+
+    private initUndoRedoService(): void {
+        this.undoToolSettings = new Undo();
+        this.redoToolSettings = new Redo();
+        this.blockUndoIcon = this.undoRedoService.blockUndoRedo || this.undoRedoService.currentAction < 0;
+        this.blockRedoIcon = this.undoRedoService.blockUndoRedo || this.undoRedoService.currentAction >= this.undoRedoService.commands.length - 1;
+
+        this.undoRedoService.BLOCK_UNDO_ICON.subscribe((block) => {
+            if (this.blockUndoIcon !== block) {
+                this.blockUndoIcon = block;
+                this.cd.detectChanges();
+            }
+        });
+
+        this.undoRedoService.BLOCK_REDO_ICON.subscribe((block) => {
+            if (this.blockRedoIcon !== block) {
+                this.blockRedoIcon = block;
+                this.cd.detectChanges();
+            }
+        });
     }
 }

@@ -3,9 +3,9 @@ import { SelectionData } from '@app/classes/selection/selection-data';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
+import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
+import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { Subject } from 'rxjs';
-import { AbstractSelectionService } from '../tools/abstract-selection.service';
-import { ToolHandlerService } from '../tools/tool-handler.service';
 
 @Injectable({
     providedIn: 'root',
@@ -27,18 +27,7 @@ export class ClipboardService {
         this.savedConfigs = undefined;
         this.isInitialised = false;
         this.wantsToPaste = false;
-        this.INITIALISATION_SIGNAL.subscribe((init: boolean) => {
-            if (this.toolHandler.getCurrentTool() === this.lastSelectionTool) {
-                if (!this.isInitialised && init && this.wantsToPaste) {
-                    this.lastSelectionTool.updateSelection(new Vec2(0, 0));
-                    this.wantsToPaste = false;
-                    this.isInitialised = init;
-                }
-                this.isInitialised = init;
-            } else {
-                this.isInitialised = false;
-            }
-        });
+        this.initSignal();
     }
 
     onKeyDown(event: KeyboardEvent): void {
@@ -63,8 +52,25 @@ export class ClipboardService {
         }
     }
 
+    private initSignal(): void {
+        this.INITIALISATION_SIGNAL.subscribe((init: boolean) => {
+            if (this.toolHandler.getCurrentTool() === this.lastSelectionTool) {
+                if (!this.isInitialised && init && this.wantsToPaste) {
+                    this.lastSelectionTool.updateSelection(new Vec2(0, 0));
+                    this.wantsToPaste = false;
+                    this.isInitialised = init;
+                }
+                this.isInitialised = init;
+            } else {
+                this.isInitialised = false;
+            }
+        });
+    }
+
     private copyDrawing(): void {
         this.lastSelectionTool = this.toolHandler.getCurrentTool() as AbstractSelectionService;
+        if (this.lastSelectionTool.config.previewSelectionCtx === null) return;
+
         this.savedConfigs = this.lastSelectionTool.config.clone();
         this.savedConfigs.endCoords = new Vec2(0, 0);
         this.savedConfigs.markedForPaste = true;
@@ -76,9 +82,7 @@ export class ClipboardService {
 
     private deleteDrawing(): void {
         this.lastSelectionTool = this.toolHandler.getCurrentTool() as AbstractSelectionService;
-
-        const ctx = this.lastSelectionTool.config.previewSelectionCtx;
-        if (ctx === null) return;
+        if (this.lastSelectionTool.config.previewSelectionCtx === null) return;
 
         this.lastSelectionTool.config.markedForDelete = true;
         this.lastSelectionTool.stopDrawing();
