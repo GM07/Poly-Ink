@@ -49,7 +49,7 @@ export class StampService extends Tool {
     }
 
     onMouseMove(event: MouseEvent): void {
-        this.drawingService.previewCanvas.style.cursor = this.isInCanvas(event) ? 'none' : 'crosshair';
+        this.drawingService.previewCanvas.style.cursor = 'none';
         this.config.position = this.getPositionFromMouse(event);
         this.drawPreview();
     }
