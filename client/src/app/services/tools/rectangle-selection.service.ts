@@ -50,14 +50,14 @@ export class RectangleSelectionService extends AbstractSelectionService {
     }
 
     protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void {
-        ctx.lineWidth = this.BORDER_WIDTH;
-        ctx.setLineDash([this.LINE_DASH, this.LINE_DASH]);
+        ctx.lineWidth = AbstractSelectionService.BORDER_WIDTH;
+        ctx.setLineDash([AbstractSelectionService.LINE_DASH, AbstractSelectionService.LINE_DASH]);
         ctx.strokeStyle = 'black';
         ctx.lineJoin = 'miter' as CanvasLineJoin;
         ctx.lineCap = 'square' as CanvasLineCap;
 
         ctx.strokeRect(position.x, position.y, size.x, size.y);
-        ctx.lineDashOffset = this.LINE_DASH;
+        ctx.lineDashOffset = AbstractSelectionService.LINE_DASH;
         ctx.strokeStyle = 'white';
         ctx.strokeRect(position.x, position.y, size.x, size.y);
 
@@ -65,7 +65,7 @@ export class RectangleSelectionService extends AbstractSelectionService {
         ctx.setLineDash([]);
     }
 
-    protected drawFinalselection(): void {
+    protected drawFinalSelection(): void {
         const previewCTX = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(previewCTX);
 

@@ -1,0 +1,254 @@
+import { Injectable } from '@angular/core';
+import { LassoDraw } from '@app/classes/commands/lasso-draw';
+import { LineDrawer } from '@app/classes/line-drawer';
+import { Geometry } from '@app/classes/math/geometry';
+import { Line } from '@app/classes/math/line';
+import { SelectionData } from '@app/classes/selection/selection-data';
+import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { LassoConfig } from '@app/classes/tool-config/lasso-config';
+import { SelectionConfig } from '@app/classes/tool-config/selection-config';
+import { LassoToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
+import { Vec2 } from '@app/classes/vec2';
+import { MouseButton } from '@app/constants/control';
+import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { DrawingService } from '@app/services/drawing/drawing.service';
+import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
+import { ColorService } from 'src/color-picker/services/color.service';
+
+@Injectable({
+    providedIn: 'root',
+})
+export class LassoService extends AbstractSelectionService {
+    lineDrawer: LineDrawer;
+    configLasso: LassoConfig;
+    private start: Vec2;
+    private end: Vec2;
+    private lines: Line[];
+
+    constructor(drawingService: DrawingService, colorService: ColorService) {
+        super(drawingService, colorService);
+        this.shortcutKey = new ShortcutKey(LassoToolConstants.SHORTCUT_KEY);
+        this.toolID = LassoToolConstants.TOOL_ID;
+        this.initAttribs(new LassoConfig());
+    }
+
+    initAttribs(config: SelectionConfig): void {
+        this.lines = [];
+        this.configLasso = config as LassoConfig;
+        this.lineDrawer = new LineDrawer(this.configLasso, this.drawingService);
+        this.lineDrawer.drawPreview.subscribe(() => {
+            this.drawPreview();
+        });
+        this.lineDrawer.removeLine.subscribe(() => {
+            this.lines.pop();
+        });
+        super.initAttribs(config);
+    }
+
+    private onClosedPath(): void {
+        this.endSelection();
+        this.selectionResize.stopDrawing();
+        this.selectionTranslation.stopDrawing();
+        this.mouseDownCoord = this.start;
+        this.mouseUpCoord = this.end;
+        const size: Vec2 = this.end.substract(this.start);
+        this.configLasso.width = size.x;
+        this.configLasso.height = size.y;
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.configLasso.isInSelection = true;
+        this.startSelection();
+    }
+
+    private addPointToSelection(event: MouseEvent): void {
+        this.lineDrawer.addNewPoint(event);
+        this.addNewLine();
+    }
+
+    private addNewLine(): void {
+        if (this.configLasso.points.length > 1) {
+            const length: number = this.configLasso.points.length;
+            this.lines.push(new Line(this.configLasso.points[length - 2], this.configLasso.points[length - 1]));
+        }
+    }
+
+    private createSelection(event: MouseEvent): void {
+        if (this.configLasso.points.length > 1 && this.configLasso.intersecting) return;
+
+        if (this.configLasso.points.length > 2) {
+            const closedLoop: boolean =
+                Geometry.getDistanceBetween(this.lineDrawer.pointToAdd, this.configLasso.points[0]) <=
+                ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;
+
+            if (closedLoop) {
+                this.configLasso.points.push(this.configLasso.points[0]);
+                [this.start, this.end] = this.findSmallestRectangle();
+                this.onClosedPath();
+            } else {
+                this.addPointToSelection(event);
+            }
+        } else {
+            this.addPointToSelection(event);
+        }
+    }
+
+    onMouseDown(event: MouseEvent): void {
+        this.lineDrawer.leftMouseDown = event.button === MouseButton.Left;
+        this.leftMouseDown = this.lineDrawer.leftMouseDown;
+
+        if (!this.leftMouseDown) return;
+
+        if (this.configLasso.previewSelectionCtx === null) {
+            console.log(this.configLasso);
+            this.createSelection(event);
+        } else {
+            this.endSelection();
+        }
+    }
+
+    onMouseMove(event: MouseEvent): void {
+        if (this.configLasso.points.length === 0 || event.clientX === undefined || event.clientY === undefined) {
+            return;
+        }
+
+        if (this.configLasso.previewSelectionCtx === null) {
+            const nextPoint = this.lineDrawer.pointToAdd;
+            this.configLasso.intersecting = Geometry.lastLineIntersecting(
+                this.lines,
+                new Line(this.configLasso.points[this.configLasso.points.length - 1], nextPoint),
+            );
+            this.lineDrawer.followCursor(event);
+        } else {
+            super.onMouseMove(event);
+        }
+    }
+
+    onMouseUp(event: MouseEvent): void {
+        if (this.leftMouseDown) {
+            this.setMouseUpCoord(event);
+            if (this.configLasso.previewSelectionCtx !== null) {
+                this.selectionTranslation.onMouseUp(this.mouseUpCoord);
+            }
+        }
+        this.leftMouseDown = false;
+    }
+
+    onKeyDown(event: KeyboardEvent): void {
+        if (this.configLasso.previewSelectionCtx === null) {
+            const shortcut = ShortcutKey.get(this.lineDrawer.shortcutList, event, true);
+            if (shortcut !== undefined && shortcut.isDown !== true) {
+                shortcut.isDown = true;
+                this.lineDrawer.handleKeys(shortcut);
+            }
+        } else {
+            super.onKeyDown(event);
+        }
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
+        if (this.configLasso.previewSelectionCtx === null) {
+            this.lineDrawer.shift.isDown = event.shiftKey;
+
+            const shortcut = ShortcutKey.get(this.lineDrawer.shortcutList, event, true);
+            if (shortcut !== undefined) {
+                shortcut.isDown = false;
+                this.lineDrawer.handleKeys(shortcut);
+            }
+        } else {
+            super.onKeyUp(event);
+        }
+    }
+
+    stopDrawing(): void {
+        super.stopDrawing();
+        this.initAttribs(new LassoConfig());
+    }
+
+    private findSmallestRectangle(): [Vec2, Vec2] {
+        const start: Vec2 = new Vec2(this.drawingService.canvas.width + 1, this.drawingService.canvas.height + 1);
+        const end: Vec2 = new Vec2(0 - 1, 0 - 1);
+        this.configLasso.points.forEach((point) => {
+            start.x = point.x < start.x ? point.x : start.x;
+            start.y = point.y < start.y ? point.y : start.y;
+            end.x = point.x > end.x ? point.x : end.x;
+            end.y = point.y > end.y ? point.y : end.y;
+        });
+
+        return [start, end];
+    }
+
+    private draw(): void {
+        const command = new LassoDraw(this.colorService, this.configLasso);
+        this.drawingService.draw(command);
+        this.initAttribs(new LassoConfig());
+    }
+
+    private drawPreview(): void {
+        const command = new LassoDraw(this.colorService, this.configLasso);
+        this.drawingService.drawPreview(command);
+    }
+
+    protected drawPreviewSelectionRequired(): void {
+        if (this.configLasso.points.length === 0) return;
+
+        const size: Vec2 = this.end.substract(this.start);
+        this.drawSelection(this.drawingService.previewCtx, this.start, size);
+    }
+
+    protected endSelection(): void {
+        if (this.configLasso.previewSelectionCtx === null) return;
+
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.draw();
+
+        this.initAttribs(new LassoConfig());
+        this.config.previewSelectionCtx = null;
+        this.config.endCoords = new Vec2(0, 0);
+        this.config.markedForDelete = false;
+        this.config.markedForPaste = false;
+    }
+
+    protected fillBackground(ctx: CanvasRenderingContext2D): void {
+        if (!this.configLasso.didChange()) return;
+
+        ctx.fillStyle = 'white';
+        LineDrawer.drawFilledLinePath(ctx, this.configLasso.points);
+    }
+
+    protected drawFinalSelection(): void {
+        const previewCTX = this.drawingService.previewCtx;
+        this.drawingService.clearCanvas(previewCTX);
+
+        this.fillBackground(previewCTX);
+
+        for (const data of this.configLasso.SELECTION_DATA) {
+            const memoryCanvas = document.createElement('canvas');
+            DrawingService.saveCanvas(memoryCanvas, data);
+
+            const ctx = data.getContext('2d') as CanvasRenderingContext2D;
+            ctx.clearRect(0, 0, Math.abs(this.config.width), Math.abs(this.config.height));
+            ctx.beginPath();
+            ctx.save();
+
+            const dp = this.configLasso.startCoords.scalar(0 - 1);
+            LineDrawer.drawClippedLinePath(ctx, this.configLasso.points, dp);
+
+            ctx.drawImage(memoryCanvas, 0, 0);
+            ctx.restore();
+            ctx.closePath();
+        }
+
+        const previewSelectionCTX = this.config.previewSelectionCtx as CanvasRenderingContext2D;
+        this.drawSelection(
+            previewSelectionCTX,
+            this.configLasso.endCoords,
+            new Vec2(Math.abs(this.configLasso.width), Math.abs(this.configLasso.height)),
+        );
+
+        previewCTX.drawImage(this.config.SELECTION_DATA[SelectionData.PreviewData], this.config.endCoords.x, this.config.endCoords.y);
+    }
+
+    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, _: Vec2): void {
+        if (this.configLasso.points.length < 2) return;
+        LineDrawer.drawDashedLinePath(ctx, this.configLasso.points, this.start.scalar(0 - 1));
+    }
+}

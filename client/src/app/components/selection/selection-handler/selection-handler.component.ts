@@ -1,9 +1,12 @@
-import { Component, Type } from '@angular/core';
+import { Component, OnInit, Type } from '@angular/core';
 import { Tool } from '@app/classes/tool';
-import { EllipseSelectionToolConstants, RectangleSelectionToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { AbstractSelectionComponent } from '@app/components/selection/abstract-selection/abstract-selection.component';
 import { EllipseSelectionComponent } from '@app/components/selection/ellipse-selection/ellipse-selection.component';
+import { LassoSelectionComponent } from '@app/components/selection/lasso-selection/lasso-selection.component';
 import { RectangleSelectionComponent } from '@app/components/selection/rectangle-selection/rectangle-selection.component';
+import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.service';
+import { LassoService } from '@app/services/tools/lasso.service';
+import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
 @Component({
@@ -11,15 +14,20 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
     templateUrl: './selection-handler.component.html',
     styleUrls: ['./selection-handler.component.scss'],
 })
-export class SelectionHandlerComponent {
-    settingsList: Map<string, typeof AbstractSelectionComponent> = new Map();
+export class SelectionHandlerComponent implements OnInit {
+    settingsList: Map<typeof Tool, typeof AbstractSelectionComponent> = new Map();
     lastTab: Type<AbstractSelectionComponent> | undefined;
     lastTool: Tool;
 
     constructor(private toolHandler: ToolHandlerService) {
         this.applyNewTab();
-        this.settingsList.set(RectangleSelectionToolConstants.TOOL_ID, RectangleSelectionComponent);
-        this.settingsList.set(EllipseSelectionToolConstants.TOOL_ID, EllipseSelectionComponent);
+        this.settingsList.set(RectangleSelectionService, RectangleSelectionComponent);
+        this.settingsList.set(EllipseSelectionService, EllipseSelectionComponent);
+        this.settingsList.set(LassoService, LassoSelectionComponent);
+    }
+
+    ngOnInit(): void {
+        this.applyNewTab();
     }
 
     get activeTab(): Type<AbstractSelectionComponent> | undefined {
@@ -29,8 +37,8 @@ export class SelectionHandlerComponent {
     }
 
     private applyNewTab(): void {
-        for (const [toolID, selectionComponent] of this.settingsList) {
-            if (this.toolHandler.getCurrentTool().toolID === toolID) {
+        for (const [tool, selectionComponent] of this.settingsList) {
+            if (this.toolHandler.getCurrentTool() instanceof tool) {
                 this.lastTool = this.toolHandler.getCurrentTool();
                 this.lastTab = selectionComponent;
                 return;

@@ -1,5 +1,6 @@
 import { Vec2 } from '@app/classes/vec2';
 import { ToolMath } from '@app/constants/math';
+import { Line } from './line';
 
 export class Geometry {
     static getDistanceBetween(initial: Vec2, final: Vec2): number {
@@ -33,5 +34,15 @@ export class Geometry {
      */
     static roundTowardsZero(value: number): number {
         return value >= 0 ? Math.floor(value) : Math.ceil(value);
+    }
+
+    static lastLineIntersecting(lines: Line[], nextLine: Line): boolean {
+        for (let i = 0; i < lines.length - 1; i++) {
+            if (lines[i].intersects(nextLine)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

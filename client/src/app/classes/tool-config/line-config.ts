@@ -1,19 +1,20 @@
+import { AbstractLineConfig } from '@app/classes/tool-config/abstract-line-config';
 import { Vec2 } from '@app/classes/vec2';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 
-export class LineConfig {
+export class LineConfig implements AbstractLineConfig {
+    points: Vec2[];
     showJunctionPoints: boolean;
     closedLoop: boolean;
     diameterJunctions: number;
     thickness: number;
-    points: Vec2[];
 
     constructor() {
+        this.points = [];
         this.showJunctionPoints = true;
         this.closedLoop = false;
         this.diameterJunctions = ToolSettingsConst.DEFAULT_LINE_JUNCTION_WIDTH;
         this.thickness = ToolSettingsConst.DEFAULT_LINE_WIDTH;
-        this.points = [];
     }
 
     clone(): LineConfig {
