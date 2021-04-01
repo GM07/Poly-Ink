@@ -41,13 +41,23 @@ describe('StampConfigComponent', () => {
 
     it('wheel event should rotate the stamp', () => {
         const wheelEvent = { deltaY: 1, preventDefault: () => {} } as WheelEvent;
-        const currentAngle = stampService.angleValue;
+        const currentAngle = stampService.angleValue = 360;
         spyOn(stampService, 'drawPreview');
         spyOn(stampService, 'isActive').and.returnValue(true);
         component.wheelEvent(wheelEvent);
         expect(stampService.drawPreview).toHaveBeenCalled();
         expect(currentAngle).not.toEqual(stampService.angleValue);
     });
+
+    it('wheel event should rotate the stamp', () => {
+      const wheelEvent = { deltaY: -1, preventDefault: () => {} } as WheelEvent;
+      const currentAngle = stampService.angleValue = 0;
+      spyOn(stampService, 'drawPreview');
+      spyOn(stampService, 'isActive').and.returnValue(true);
+      component.wheelEvent(wheelEvent);
+      expect(stampService.drawPreview).toHaveBeenCalled();
+      expect(currentAngle).not.toEqual(stampService.angleValue);
+  });
 
     it('wheel event should not rotate the stamp if not active', () => {
         const wheelEvent = { deltaY: 1, preventDefault: () => {} } as WheelEvent;
