@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Slider, SliderValues } from '@app/classes/slider';
-import { Stamp } from '@app/classes/tool-config/stamp-config';
+import { Stamp, StampConfig } from '@app/classes/tool-config/stamp-config';
 import { Vec2 } from '@app/classes/vec2';
 import { ToolMath } from '@app/constants/math';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
@@ -74,5 +74,6 @@ export class StampConfigComponent implements OnInit, OnDestroy, AfterViewInit {
 
     toggleStamp(stamp: Stamp): void {
         this.stampService.config.stamp = stamp;
+        this.stampService.config.stampImg.src = StampConfig.stampList[stamp];
     }
 }

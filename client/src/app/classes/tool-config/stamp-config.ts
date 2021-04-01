@@ -16,6 +16,8 @@ export class StampConfig {
 
     constructor() {
         this.stamp = Stamp.Alexis;
+        this.stampImg = new Image();
+        this.stampImg.src = StampConfig.stampList[this.stamp];
         this.scale = 1;
         this.angle = 0;
     }
@@ -25,6 +27,8 @@ export class StampConfig {
         config.stamp = this.stamp;
         config.scale = this.scale;
         config.angle = this.angle;
+        config.stampImg = new Image();
+        config.stampImg.src = this.stampImg.src;
         config.position = new Vec2(this.position.x, this.position.y);
 
         return config;
