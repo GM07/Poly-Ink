@@ -3,20 +3,21 @@ import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Vec2 } from '@app/classes/vec2';
 import { ToolMath } from '@app/constants/math';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { Color } from 'src/color-picker/classes/color';
+import { Colors } from 'src/color-picker/constants/colors';
 
 @Injectable({
     providedIn: 'root',
 })
 export class GridService {
-    size: number;
-    opacity: number;
-    toggleGridShortcut: ShortcutKey;
-    upsizeGridShortcut: ShortcutKey[];
-    downSizeGridShortcut: ShortcutKey;
     ctx: CanvasRenderingContext2D;
     canvas: HTMLCanvasElement;
     gridVisibility: boolean;
+    private size: number;
+    private gridColor: string;
+    private opacity: number;
+    private toggleGridShortcut: ShortcutKey;
+    private upsizeGridShortcut: ShortcutKey[];
+    private downSizeGridShortcut: ShortcutKey;
 
     constructor() {
         this.size = ToolSettingsConst.GRID_MIN_SIZE;
@@ -53,11 +54,11 @@ export class GridService {
         if (this.toggleGridShortcut.equals(event)) {
             this.toggleGridVisibility();
         } else if (ShortcutKey.contains(this.upsizeGridShortcut, event)) {
-            this.upsizeGrid();
+            this.size = this.size + ToolSettingsConst.GRID_STEP;
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.updateGrid();
         } else if (this.downSizeGridShortcut.equals(event)) {
-            this.downsizeGrid();
+            this.size = this.size - ToolSettingsConst.GRID_STEP;
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.updateGrid();
         }
@@ -66,28 +67,24 @@ export class GridService {
     updateGrid(): void {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.lineWidth = 1;
+        this.ctx.setLineDash([2, 2]);
+        this.gridColor = Colors.BLACK.toRgbaString(this.opacity);
 
         for (let i = 0; i < this.canvas.width; i += this.size) {
-            this.ctx.setLineDash([2, 2]);
-            this.ctx.strokeStyle = new Color(0, 0, 0).toRgbaString(this.opacity);
-            this.drawLine(new Vec2(i, 0), new Vec2(i, this.canvas.height));
-            this.ctx.lineDashOffset = 2;
-            this.ctx.strokeStyle = 'white';
-            this.ctx.beginPath();
-            this.drawLine(new Vec2(i, 0), new Vec2(i, this.canvas.height));
-            this.ctx.lineDashOffset = 0;
+            this.drawDotted(new Vec2(i, 0), new Vec2(i, this.canvas.height));
+            this.drawDotted(new Vec2(0, i), new Vec2(this.canvas.width, i));
         }
 
-        for (let i = 0; i < this.canvas.height; i += this.size) {
-            this.ctx.setLineDash([2, 2]);
-            this.ctx.strokeStyle = new Color(0, 0, 0).toRgbaString(this.opacity);
-            this.drawLine(new Vec2(0, i), new Vec2(this.canvas.width, i));
-            this.ctx.lineDashOffset = 2;
-            this.ctx.strokeStyle = 'white';
-            this.drawLine(new Vec2(0, i), new Vec2(this.canvas.width, i));
-            this.ctx.lineDashOffset = 0;
-        }
         this.ctx.setLineDash([]);
+    }
+
+    drawDotted(begin: Vec2, end: Vec2): void {
+        this.ctx.strokeStyle = this.gridColor;
+        this.drawLine(new Vec2(begin.x, begin.y), new Vec2(end.x, end.y));
+        this.ctx.lineDashOffset = 2;
+        this.ctx.strokeStyle = Colors.WHITE.rgbString;
+        this.drawLine(new Vec2(begin.x, begin.y), new Vec2(end.x, end.y));
+        this.ctx.lineDashOffset = 0;
     }
 
     drawLine(begin: Vec2, end: Vec2): void {
@@ -95,13 +92,5 @@ export class GridService {
         this.ctx.moveTo(begin.x, begin.y);
         this.ctx.lineTo(end.x, end.y);
         this.ctx.stroke();
-    }
-
-    upsizeGrid(): void {
-        this.size = Math.max(ToolSettingsConst.GRID_MIN_SIZE, Math.min(this.size + ToolSettingsConst.GRID_STEP, ToolSettingsConst.GRID_MAX_SIZE));
-    }
-
-    downsizeGrid(): void {
-        this.size = Math.max(ToolSettingsConst.GRID_MIN_SIZE, Math.min(this.size - ToolSettingsConst.GRID_STEP, ToolSettingsConst.GRID_MAX_SIZE));
     }
 }

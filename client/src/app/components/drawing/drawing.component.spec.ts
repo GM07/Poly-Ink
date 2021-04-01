@@ -42,9 +42,6 @@ describe('DrawingComponent', () => {
         fixture = TestBed.createComponent(DrawingComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
-        spyOn(gridService, 'updateGrid');
-        spyOn(gridService, 'upsizeGrid');
-        spyOn(gridService, 'downsizeGrid');
     });
 
     it('should create', () => {
@@ -117,20 +114,5 @@ describe('DrawingComponent', () => {
         component.onKeyUp(event);
         expect(keyboardSpy).toHaveBeenCalled();
         expect(keyboardSpy).toHaveBeenCalledWith(event);
-    });
-
-    it('should do nothing if shortcuts are blocked', () => {
-        component['shortcutHandler'].blockShortcuts = true;
-        spyOn(component['gridService'], 'onKeyDown');
-        component.onKeyDown({} as KeyboardEvent);
-        expect(component['gridService'].onKeyDown).not.toHaveBeenCalled();
-    });
-
-    it('should transfer keydown to grid service', () => {
-        spyOn(component['gridService'], 'onKeyDown');
-        component.onKeyDown({} as KeyboardEvent);
-        component['gridService'].gridVisibility = true;
-        component.onKeyDown({} as KeyboardEvent);
-        expect(component['gridService'].onKeyDown).toHaveBeenCalledTimes(2);
     });
 });
