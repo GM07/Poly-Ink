@@ -28,6 +28,19 @@
 
         <mat-action-list class="bottom-sidebar">
             <button
+                (click)="clipboardService.pasteDrawing()"
+                class="sidebar-item icon-button"
+                matTooltip="{{ pasteToolSettings.infoBubble }}"
+                mat-icon-button
+                matTooltipPosition="right"
+                [@.disabled]="true"
+                [disabled]="clipboardService.savedConfigs === undefined"
+                [style.background]="'white'"
+            >
+                <mat-icon>{{ pasteToolSettings.iconName }}</mat-icon>
+            </button>
+
+            <button
                 (click)="emitClickEvent(undoToolSettings)"
                 class="sidebar-item icon-button"
                 matTooltip="{{ undoToolSettings.infoBubble }}"

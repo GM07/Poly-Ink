@@ -142,6 +142,13 @@ export enum UndoConstants {
     ICON_NAME = 'undo',
 }
 
+export enum PasteConstants {
+    TOOL_ID = 'CLIPBOARD',
+    TOOL_TITLE = 'Coller',
+    INFO_BUBBLE = 'Coller (Ctrl-v)',
+    ICON_NAME = 'content_paste',
+}
+
 export const TOP_TOOLS_CONSTANTS = [
     PencilToolConstants,
     RectangleToolConstants,

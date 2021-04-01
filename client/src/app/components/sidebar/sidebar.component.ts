@@ -3,10 +3,12 @@ import { Router } from '@angular/router';
 import { Tool } from '@app/classes/tool';
 import { BOTTOM_TOOLS } from '@app/classes/tool_ui_settings/index-bottom';
 import { TOP_TOOLS } from '@app/classes/tool_ui_settings/index-top';
+import { Paste } from '@app/classes/tool_ui_settings/paste-settings';
 import { Redo } from '@app/classes/tool_ui_settings/redo-settings';
 import { ToolSettings } from '@app/classes/tool_ui_settings/tool-settings';
 import { HIGHLIGHTED_COLOR } from '@app/classes/tool_ui_settings/tools.constants';
 import { Undo } from '@app/classes/tool_ui_settings/undo-settings';
+import { ClipboardService } from '@app/services/clipboard/clipboard.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 
@@ -15,20 +17,22 @@ export class SidebarComponent implements OnInit {
     topToolsSettings: ToolSettings[];
     bottomToolsSettings: ToolSettings[];
 
+    pasteToolSettings: Paste;
+
     undoToolSettings: Undo;
     redoToolSettings: Redo;
 
     blockUndoIcon: boolean;
     blockRedoIcon: boolean;
 
-    toolHandlerService: ToolHandlerService;
     selectedTool: Tool;
     readonly HIGHLIGHTED_COLOR: string = HIGHLIGHTED_COLOR;
     @Output() settingClicked: EventEmitter<string>;
 
     constructor(
+        public clipboardService: ClipboardService,
+        public toolHandlerService: ToolHandlerService,
         private undoRedoService: UndoRedoService,
-        toolHandlerService: ToolHandlerService,
         private router: Router,
         private zone: NgZone,
         private cd: ChangeDetectorRef,
@@ -42,6 +46,7 @@ export class SidebarComponent implements OnInit {
         this.topToolsSettings = [];
         this.bottomToolsSettings = [];
 
+        this.pasteToolSettings = new Paste();
         this.initUndoRedoService();
 
         this.settingClicked = new EventEmitter<string>();

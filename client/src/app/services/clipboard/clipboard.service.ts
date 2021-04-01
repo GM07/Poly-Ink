@@ -16,7 +16,7 @@ export class ClipboardService {
     private readonly CUT: ShortcutKey = new ShortcutKey('x', true);
     private readonly DELETE: ShortcutKey = new ShortcutKey('delete');
 
-    private savedConfigs: SelectionConfig | undefined;
+    savedConfigs: SelectionConfig | undefined;
     private lastSelectionTool: AbstractSelectionService;
     private wantsToPaste: boolean;
     private isInitialised: boolean;
@@ -38,8 +38,7 @@ export class ClipboardService {
                     this.copyDrawing();
                 } else if (this.CUT.equals(event)) {
                     event.preventDefault();
-                    this.copyDrawing();
-                    this.deleteDrawing();
+                    this.cutDrawing();
                 } else if (this.DELETE.equals(event)) {
                     this.deleteDrawing();
                 }
@@ -49,6 +48,50 @@ export class ClipboardService {
                 event.preventDefault();
                 this.pasteDrawing();
             }
+        }
+    }
+
+    cutDrawing(): void {
+        this.copyDrawing();
+        this.deleteDrawing();
+    }
+
+    copyDrawing(): void {
+        this.lastSelectionTool = this.toolHandler.getCurrentTool() as AbstractSelectionService;
+        if (this.lastSelectionTool.config.previewSelectionCtx === null) return;
+
+        this.savedConfigs = this.lastSelectionTool.config.clone();
+        this.savedConfigs.endCoords = new Vec2(0, 0);
+        this.savedConfigs.markedForPaste = true;
+        this.savedConfigs.previewSelectionCtx = this.savedConfigs.SELECTION_DATA[SelectionData.PreviewData].getContext(
+            '2d',
+        ) as CanvasRenderingContext2D;
+        this.isInitialised = true;
+    }
+
+    deleteDrawing(): void {
+        this.lastSelectionTool = this.toolHandler.getCurrentTool() as AbstractSelectionService;
+        if (this.lastSelectionTool.config.previewSelectionCtx === null) return;
+
+        this.lastSelectionTool.config.markedForDelete = true;
+        this.lastSelectionTool.stopDrawing();
+        this.lastSelectionTool.config.markedForDelete = false;
+    }
+
+    pasteDrawing(): void {
+        if (this.savedConfigs === undefined) return;
+        this.toolHandler.getCurrentTool().stopDrawing();
+
+        this.toolHandler.setTool(this.lastSelectionTool.toolID);
+        this.lastSelectionTool.initAttribs(this.savedConfigs.clone());
+        this.lastSelectionTool.config.previewSelectionCtx = this.lastSelectionTool.config.SELECTION_DATA[SelectionData.PreviewData].getContext(
+            '2d',
+        ) as CanvasRenderingContext2D;
+
+        if (this.isInitialised) {
+            this.lastSelectionTool.updateSelection(new Vec2(0, 0));
+        } else {
+            this.wantsToPaste = true;
         }
     }
 
@@ -65,44 +108,5 @@ export class ClipboardService {
                 this.isInitialised = false;
             }
         });
-    }
-
-    private copyDrawing(): void {
-        this.lastSelectionTool = this.toolHandler.getCurrentTool() as AbstractSelectionService;
-        if (this.lastSelectionTool.config.previewSelectionCtx === null) return;
-
-        this.savedConfigs = this.lastSelectionTool.config.clone();
-        this.savedConfigs.endCoords = new Vec2(0, 0);
-        this.savedConfigs.markedForPaste = true;
-        this.savedConfigs.previewSelectionCtx = this.savedConfigs.SELECTION_DATA[SelectionData.PreviewData].getContext(
-            '2d',
-        ) as CanvasRenderingContext2D;
-        this.isInitialised = true;
-    }
-
-    private deleteDrawing(): void {
-        this.lastSelectionTool = this.toolHandler.getCurrentTool() as AbstractSelectionService;
-        if (this.lastSelectionTool.config.previewSelectionCtx === null) return;
-
-        this.lastSelectionTool.config.markedForDelete = true;
-        this.lastSelectionTool.stopDrawing();
-        this.lastSelectionTool.config.markedForDelete = false;
-    }
-
-    private pasteDrawing(): void {
-        if (this.savedConfigs === undefined) return;
-        this.toolHandler.getCurrentTool().stopDrawing();
-
-        this.toolHandler.setTool(this.lastSelectionTool.toolID);
-        this.lastSelectionTool.initAttribs(this.savedConfigs.clone());
-        this.lastSelectionTool.config.previewSelectionCtx = this.lastSelectionTool.config.SELECTION_DATA[SelectionData.PreviewData].getContext(
-            '2d',
-        ) as CanvasRenderingContext2D;
-
-        if (this.isInitialised) {
-            this.lastSelectionTool.updateSelection(new Vec2(0, 0));
-        } else {
-            this.wantsToPaste = true;
-        }
     }
 }

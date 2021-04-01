@@ -113,6 +113,14 @@ describe('ClipboardService', () => {
         expect(cloneSpy).toHaveBeenCalled();
     });
 
+    it('should cut a drawing', () => {
+        const copySpy = spyOn<any>(service, 'copyDrawing');
+        const deleteSpy = spyOn<any>(service, 'deleteDrawing');
+        service['cutDrawing']();
+        expect(copySpy).toHaveBeenCalled();
+        expect(deleteSpy).toHaveBeenCalled();
+    });
+
     it('should delete a drawing', () => {
         const stopDrawingSpy = spyOn(service['lastSelectionTool'], 'stopDrawing');
         service['deleteDrawing']();
