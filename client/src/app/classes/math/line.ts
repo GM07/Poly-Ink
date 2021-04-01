@@ -23,7 +23,7 @@ export class Line {
         return halfSpaceStart * halfSpaceEnd <= 0 && other.halfSpaceFunction(this.start) * other.halfSpaceFunction(this.end) < 0;
     }
 
-    private intersecting(start: Line, other: Line) {
+    private intersecting(start: Line, other: Line): boolean {
         return (
             Math.min(other.start.x, other.end.x) <= Math.max(this.start.x, this.end.x) &&
             Math.max(other.start.x, other.end.x) >= Math.min(this.start.x, this.end.x) &&
