@@ -194,4 +194,10 @@ describe('DrawingService', () => {
         await service.createLoadedCanvasFromStorage();
         expect(service.loadedCanvas).toBeUndefined();
     });
+
+    it('should remove the saved drawing from local storage', () => {
+        spyOn(localStorage, 'removeItem');
+        service.removeSavedDrawing();
+        expect(localStorage.removeItem).toHaveBeenCalledWith('drawing');
+    });
 });

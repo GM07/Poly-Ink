@@ -67,6 +67,7 @@ export class UndoRedoService {
         }
 
         this.sendIconSignals();
+        this.autoSave();
     }
 
     redo(): void {
@@ -77,6 +78,11 @@ export class UndoRedoService {
 
         this.commands[this.currentAction].execute(this.context);
         this.sendIconSignals();
+        this.autoSave();
+    }
+
+    private autoSave(): void {
+        localStorage.setItem('drawing', this.context.canvas.toDataURL());
     }
 
     onKeyDown(event: KeyboardEvent): void {
