@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { MatSliderChange } from '@angular/material/slider';
+import { ToolMath } from '@app/constants/math';
+import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { GridService } from '@app/services/drawing/grid.service';
 
 @Component({
@@ -8,16 +10,16 @@ import { GridService } from '@app/services/drawing/grid.service';
     styleUrls: ['./grid-config.component.scss'],
 })
 export class GridConfigComponent {
-    readonly MIN_SIZE: number = 25;
-    readonly MAX_SIZE: number = 75;
+    readonly MIN_SIZE: number = ToolSettingsConst.GRID_MIN_SIZE;
+    readonly MAX_SIZE: number = ToolSettingsConst.GRID_MAX_SIZE;
 
-    readonly MIN_OPACITY: number = 0;
-    readonly MAX_OPACITY: number = 60;
+    readonly MIN_TRANSPARENCY: number = (1 - ToolSettingsConst.GRID_MAX_OPACITY) * ToolMath.PERCENTAGE;
+    readonly MAX_TRANSPARENCY: number = (1 - ToolSettingsConst.GRID_MIN_OPACITY) * ToolMath.PERCENTAGE;
 
     constructor(public gridService: GridService) {}
 
     colorSliderLabel(value: number): string {
-        return value + '';
+        return value.toString();
     }
 
     sizeChange(event: MatSliderChange): void {

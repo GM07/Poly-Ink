@@ -28,6 +28,7 @@ describe('GridConfigComponent', () => {
         gridService = TestBed.inject(GridService);
         fixture = TestBed.createComponent(GridConfigComponent);
         component = fixture.componentInstance;
+        gridService.gridVisibility = true;
         fixture.detectChanges();
         spyOn(gridService, 'updateGrid');
         loader = TestbedHarnessEnvironment.loader(fixture);
@@ -60,7 +61,7 @@ describe('GridConfigComponent', () => {
 
     it('should get max value of opacity slider', async () => {
         const slider = await loader.getAllHarnesses(MatSliderHarness);
-        expect(await slider[1].getMaxValue()).toBe(component.MAX_OPACITY);
+        expect(await slider[1].getMaxValue()).toBe(component.MAX_TRANSPARENCY);
     });
 
     it('should be able to set value of size slider', async () => {

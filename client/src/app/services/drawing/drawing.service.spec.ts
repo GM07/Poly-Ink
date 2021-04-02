@@ -109,7 +109,9 @@ describe('DrawingService', () => {
         spyOn(service, 'initBackground');
         spyOn(service.baseCtx, 'drawImage');
         spyOn(service.previewCtx, 'drawImage');
+        spyOn(service.magnetismService.gridService, 'updateGrid');
         service.previewCanvas = canvasTestHelper.canvas;
+        service.magnetismService.gridService.canvas = canvasTestHelper.canvas;
         service.resizeCanvas(0, 0);
         expect(service['save']).not.toHaveBeenCalled();
     });
@@ -121,7 +123,9 @@ describe('DrawingService', () => {
         spyOn(service, 'initBackground');
         spyOn(service.baseCtx, 'drawImage');
         spyOn(service.previewCtx, 'drawImage');
+        spyOn(service.magnetismService.gridService, 'updateGrid');
         service.previewCanvas = canvasTestHelper.canvas;
+        service.magnetismService.gridService.canvas = canvasTestHelper.canvas;
         service.resizeCanvas(0, 0);
         expect(service['save']).toHaveBeenCalled();
     });

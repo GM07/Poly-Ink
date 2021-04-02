@@ -9,22 +9,12 @@ describe('GridService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({});
         service = TestBed.inject(GridService);
+        service.canvas = document.createElement('canvas');
+        service.ctx = service.canvas.getContext('2d') as CanvasRenderingContext2D;
     });
 
     it('should be created', () => {
         expect(service).toBeTruthy();
-    });
-
-    it('upsizegrid should add 5 to the size of the grid', () => {
-        service.size = ToolSettingsConst.GRID_MIN_SIZE;
-        service.upsizeGrid();
-        expect(service.size).toEqual(ToolSettingsConst.GRID_MIN_SIZE + ToolSettingsConst.GRID_STEP);
-    });
-
-    it('downsizegrid should remove 5 to the size of the grid', () => {
-        service.size = ToolSettingsConst.GRID_MIN_SIZE + ToolSettingsConst.GRID_STEP;
-        service.downsizeGrid();
-        expect(service.size).toEqual(ToolSettingsConst.GRID_MIN_SIZE);
     });
 
     it('get and set opacity should get and set the opacity', () => {
@@ -61,5 +51,44 @@ describe('GridService', () => {
         expect(service.ctx.moveTo).toHaveBeenCalled();
         expect(service.ctx.lineTo).toHaveBeenCalled();
         expect(service.ctx.stroke).toHaveBeenCalled();
+    });
+
+    it('should toggle the grid on key down with g', () => {
+        const event = { key: 'g', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
+        const gridVisibility = service.gridVisibility;
+        service.onKeyDown(event);
+        expect(service.gridVisibility).not.toEqual(gridVisibility);
+        service.onKeyDown(event);
+        expect(service.gridVisibility).toEqual(gridVisibility);
+    });
+
+    it('should upsize the grid on key down with =', () => {
+        const event = { key: '=', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
+        spyOn(service, 'updateGrid');
+        const gridSize = service.sizeValue;
+        spyOn(service.ctx, 'clearRect');
+        service.onKeyDown(event);
+        expect(service.updateGrid).toHaveBeenCalled();
+        expect(service.sizeValue).toEqual(gridSize + ToolSettingsConst.GRID_STEP);
+    });
+
+    it('should downsize the grid on key down with -', () => {
+        const event = { key: '-', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
+        // tslint:disable-next-line:no-magic-numbers
+        const gridSize = (service.sizeValue = 30);
+        spyOn(service, 'updateGrid');
+        spyOn(service.ctx, 'clearRect');
+        service.onKeyDown(event);
+        expect(service.updateGrid).toHaveBeenCalled();
+        expect(service.sizeValue).toEqual(gridSize - ToolSettingsConst.GRID_STEP);
+    });
+
+    it('should do nothing on other key', () => {
+        const event = { key: '_', ctrlKey: false, altKey: false, shiftKey: false } as KeyboardEvent;
+        const gridSize = service.sizeValue;
+        spyOn(service, 'updateGrid');
+        service.onKeyDown(event);
+        expect(service.updateGrid).not.toHaveBeenCalled();
+        expect(gridSize).toEqual(service.sizeValue);
     });
 });

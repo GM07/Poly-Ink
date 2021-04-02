@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
@@ -95,6 +96,7 @@ import { SidebarDirective } from './directives/sidebar.directive';
         MatIconModule,
         MatTooltipModule,
         MatSidenavModule,
+        MatSlideToggleModule,
         MatListModule,
         MatInputModule,
         MatExpansionModule,
