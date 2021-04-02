@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@
 import { Vec2 } from '@app/classes/vec2';
 import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { GridService } from '@app/services/drawing/grid.service';
 import { NewDrawingService } from '@app/services/popups/new-drawing';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
@@ -12,17 +13,20 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 })
 export class DrawingComponent implements AfterViewInit {
     @ViewChild('baseCanvas', { static: false }) baseCanvas: ElementRef<HTMLCanvasElement>;
-    // Using this canvas to draw without affecting the final drawing
+    // Using the preview canvas to draw without affecting the final drawing
     @ViewChild('previewCanvas', { static: false }) previewCanvas: ElementRef<HTMLCanvasElement>;
+    @ViewChild('grid', { static: false }) grid: ElementRef<HTMLCanvasElement>;
 
     private baseCtx: CanvasRenderingContext2D;
     private previewCtx: CanvasRenderingContext2D;
+    private gridCtx: CanvasRenderingContext2D;
     private canvasSize: Vec2;
 
     constructor(
         private drawingService: DrawingService,
         readonly toolHandlerService: ToolHandlerService,
         private newDrawingService: NewDrawingService,
+        public gridService: GridService,
     ) {
         this.canvasSize = new Vec2(CanvasConst.DEFAULT_WIDTH, CanvasConst.DEFAULT_HEIGHT);
     }
@@ -30,10 +34,13 @@ export class DrawingComponent implements AfterViewInit {
     ngAfterViewInit(): void {
         this.baseCtx = this.baseCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
         this.previewCtx = this.previewCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+        this.gridCtx = this.grid.nativeElement.getContext('2d') as CanvasRenderingContext2D;
         this.drawingService.baseCtx = this.baseCtx;
         this.drawingService.previewCtx = this.previewCtx;
+        this.drawingService.gridService.ctx = this.gridCtx;
         this.drawingService.canvas = this.baseCanvas.nativeElement;
         this.drawingService.previewCanvas = this.previewCanvas.nativeElement;
+        this.drawingService.gridService.canvas = this.grid.nativeElement;
         document.body.style.overflow = 'auto';
 
         this.newDrawingService.newCanvas();
