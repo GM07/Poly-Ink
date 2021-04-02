@@ -34,6 +34,8 @@ export class HomePageComponent {
     // Function called when the create new drawing button is pressed
     createNewDrawing(): void {
         this.fadeOut();
+        this.drawingService.setIsDoneReloading();
+        this.drawingService.removeSavedDrawing();
         this.zone.run(() => this.router.navigateByUrl('editor'));
     }
 

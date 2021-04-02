@@ -104,7 +104,11 @@ export class DrawingService {
         return localStorage.getItem('drawing');
     }
 
-    private setIsDoneReloading(): void {
+    removeSavedDrawing(): void {
+        localStorage.removeItem('drawing');
+    }
+
+    setIsDoneReloading(): void {
         localStorage.removeItem('editor_reloading');
     }
 

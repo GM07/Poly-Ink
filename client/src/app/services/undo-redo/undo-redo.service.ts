@@ -61,6 +61,7 @@ export class UndoRedoService {
         for (let i = 0; i <= this.currentAction; i++) {
             this.commands[i].execute(this.context);
         }
+        this.autoSave();
     }
 
     redo(): void {
@@ -70,6 +71,11 @@ export class UndoRedoService {
         this.currentAction += 1;
 
         this.commands[this.currentAction].execute(this.context);
+        this.autoSave();
+    }
+
+    private autoSave(): void {
+        localStorage.setItem('drawing', this.context.canvas.toDataURL());
     }
 
     onKeyDown(event: KeyboardEvent): void {
