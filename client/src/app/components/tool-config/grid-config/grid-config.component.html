@@ -1,6 +1,9 @@
+<div class="toggleGrid">
+  <span class="toggleName"> Grille </span>
+  <mat-slide-toggle [(ngModel)]="gridService.gridVisibility" ngDefaultControl></mat-slide-toggle>
+</div>
+
 <div *ngIf="gridService.gridVisibility" class="tab">
-  <br />
-  <h5 class="textFormat">Grille</h5>
   <br />
   <h5 class="textFormat">Dimensions des carreaux</h5>
   <br />
