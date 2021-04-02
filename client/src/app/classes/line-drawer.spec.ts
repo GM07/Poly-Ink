@@ -175,7 +175,7 @@ describe('Line Drawer', () => {
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
         const spy = spyOn<any>(LineDrawer, 'drawLinePath').and.callThrough();
         const actionSpy = spyOn(ctx, 'stroke').and.callThrough();
-        LineDrawer.drawStrokedLinePath(ctx, [mousePos, mousePos]);
+        LineDrawer['drawStrokedLinePath'](ctx, [mousePos, mousePos]);
         expect(spy).toHaveBeenCalled();
         expect(actionSpy).toHaveBeenCalled();
     });
@@ -193,7 +193,7 @@ describe('Line Drawer', () => {
     it('should draw dashed line path', () => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-        const spy = spyOn(LineDrawer, 'drawStrokedLinePath').and.callThrough();
+        const spy = spyOn<any>(LineDrawer, 'drawStrokedLinePath').and.callThrough();
         LineDrawer.drawDashedLinePath(ctx, [mousePos, mousePos]);
         expect(spy).toHaveBeenCalledTimes(2);
     });

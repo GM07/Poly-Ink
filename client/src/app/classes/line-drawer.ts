@@ -3,13 +3,12 @@ import { ShiftKey } from '@app/classes/shortcut/shift-key';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Vec2 } from '@app/classes/vec2';
 import { ToolMath } from '@app/constants/math';
+import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
 import { Subject } from 'rxjs';
 import { AbstractLineConfig } from './tool-config/abstract-line-config';
 
 export class LineDrawer {
-    protected static readonly ANGLE_STEPS: number = Math.PI / (2 * 2); // Lint...x
     pointToAdd: Vec2;
     mousePosition: Vec2;
     shift: ShiftKey = new ShiftKey();
@@ -38,7 +37,7 @@ export class LineDrawer {
         ctx.fill();
     }
 
-    static drawStrokedLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)): void {
+    private static drawStrokedLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)): void {
         LineDrawer.drawLinePath(ctx, points, transform);
         ctx.stroke();
     }
@@ -54,14 +53,14 @@ export class LineDrawer {
         transform: Vec2 = new Vec2(0, 0),
         styles: string[] = ['black', 'white'],
     ): void {
-        ctx.lineWidth = AbstractSelectionService.BORDER_WIDTH;
-        ctx.setLineDash([AbstractSelectionService.LINE_DASH, AbstractSelectionService.LINE_DASH]);
+        ctx.lineWidth = ToolSettingsConst.BORDER_WIDTH;
+        ctx.setLineDash([ToolSettingsConst.LINE_DASH, ToolSettingsConst.LINE_DASH]);
         ctx.lineJoin = 'round' as CanvasLineJoin;
         ctx.lineCap = 'round' as CanvasLineCap;
 
         for (let index = 0; index < styles.length; index++) {
             const style: string = styles[index];
-            ctx.lineDashOffset = index * AbstractSelectionService.LINE_DASH;
+            ctx.lineDashOffset = index * ToolSettingsConst.LINE_DASH;
             ctx.strokeStyle = style;
             LineDrawer.drawStrokedLinePath(ctx, points, transform);
         }
@@ -106,8 +105,8 @@ export class LineDrawer {
     }
 
     getAlignedPoint(cursor: Vec2): Vec2 {
-        const angle: number = Geometry.getAngle(this.getLastPoint(), cursor) + LineDrawer.ANGLE_STEPS / 2;
-        const finalAngle = Math.floor(angle / LineDrawer.ANGLE_STEPS) * LineDrawer.ANGLE_STEPS;
+        const angle: number = Geometry.getAngle(this.getLastPoint(), cursor) + ToolSettingsConst.LINE_DRAWER_ANGLE_STEPS / 2;
+        const finalAngle = Math.floor(angle / ToolSettingsConst.LINE_DRAWER_ANGLE_STEPS) * ToolSettingsConst.LINE_DRAWER_ANGLE_STEPS;
 
         const distance = cursor.substract(this.getLastPoint());
         let totalDistance = Geometry.getDistanceBetween(this.getLastPoint(), cursor);

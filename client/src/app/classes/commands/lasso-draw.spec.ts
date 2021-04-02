@@ -63,27 +63,27 @@ describe('LassoDraw', () => {
 
     it('should draw dashed line path with red white if intersecting', () => {
         lassoDraw['config'].intersecting = true;
-        const spy = spyOn(LineDrawer, 'drawDashedLinePath').and.callFake(() => {});
+        const spy = spyOn(LineDrawer, 'drawDashedLinePath');
         lassoDraw.execute(ctxStub);
         expect(spy).toHaveBeenCalledWith(ctxStub, lassoDraw['config'].points, new Vec2(0, 0), ['red', 'white']);
     });
 
     it('should draw dashed line path with red white if intersecting', () => {
         lassoDraw['config'].intersecting = true;
-        const spy = spyOn(LineDrawer, 'drawDashedLinePath').and.callFake(() => {});
+        const spy = spyOn(LineDrawer, 'drawDashedLinePath');
         lassoDraw.execute(ctxStub);
         expect(spy).toHaveBeenCalledWith(ctxStub, lassoDraw['config'].points, new Vec2(0, 0), ['red', 'white']);
     });
 
     it('should draw dashed line path with black white if intersecting', () => {
-        const spy = spyOn(LineDrawer, 'drawDashedLinePath').and.callFake(() => {});
+        const spy = spyOn(LineDrawer, 'drawDashedLinePath');
         lassoDraw.execute(ctxStub);
         expect(spy).toHaveBeenCalledWith(ctxStub, lassoDraw['config'].points, new Vec2(0, 0), ['black', 'white']);
     });
 
     it('should draw dashed clipped path in selection', () => {
         lassoDraw['config'].isInSelection = true;
-        const spy = spyOn<any>(lassoDraw, 'fillBackground').and.callFake(() => {});
+        const spy = spyOn<any>(lassoDraw, 'fillBackground');
         lassoDraw.execute(ctxStub);
         expect(spy).toHaveBeenCalled();
     });
