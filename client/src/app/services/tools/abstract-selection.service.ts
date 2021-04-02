@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Geometry } from '@app/classes/math/geometry';
+import { SelectionData } from '@app/classes/selection/selection-data';
+import { SelectionResize } from '@app/classes/selection/selection-resize';
 import { SelectionTranslation } from '@app/classes/selection/selection-translation';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
@@ -18,10 +20,10 @@ export abstract class AbstractSelectionService extends Tool {
     private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
     protected readonly LINE_DASH: number = 8;
     protected readonly BORDER_WIDTH: number = 2;
-    protected selectionData: HTMLCanvasElement;
     protected selectionTranslation: SelectionTranslation;
 
-    updatePoints: Subject<boolean>;
+    readonly UPDATE_POINTS: Subject<boolean> = new Subject<boolean>();
+    selectionResize: SelectionResize;
     mouseUpCoord: Vec2;
     config: SelectionConfig;
 
@@ -29,19 +31,18 @@ export abstract class AbstractSelectionService extends Tool {
         super(drawingService, colorService);
         this.config = new SelectionConfig();
         this.selectionTranslation = new SelectionTranslation(this.config, this.drawingService.magnetismService);
-        this.selectionData = document.createElement('canvas');
-        this.config.endCoords = { x: 0, y: 0 } as Vec2;
+        this.selectionResize = new SelectionResize(this.config);
+        this.config.endCoords = new Vec2(0, 0);
         this.initSubscriptions();
-        this.updatePoints = new Subject<boolean>();
     }
 
     protected abstract endSelection(): void;
 
-    protected abstract fillBackground(ctx: CanvasRenderingContext2D, currentPos: Vec2): void;
-
-    protected abstract updateSelectionRequired(): void;
+    protected abstract fillBackground(ctx: CanvasRenderingContext2D): void;
 
     protected abstract drawPreviewSelectionRequired(): void;
+
+    protected abstract drawFinalselection(): void;
 
     protected abstract drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void;
 
@@ -49,9 +50,10 @@ export abstract class AbstractSelectionService extends Tool {
         this.leftMouseDown = event.button === MouseButton.Left;
         if (this.leftMouseDown) {
             const mousePos = this.getPositionFromMouse(event);
-            this.selectionTranslation.stopDrawing();
             this.endSelection();
-            this.updatePoints.next(false);
+            this.selectionResize.stopDrawing();
+            this.selectionTranslation.stopDrawing();
+            this.UPDATE_POINTS.next(false);
             this.mouseDownCoord = mousePos;
             this.mouseUpCoord = mousePos;
             this.config.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
@@ -62,7 +64,7 @@ export abstract class AbstractSelectionService extends Tool {
     onMouseUp(event: MouseEvent): void {
         if (this.leftMouseDown) {
             this.setMouseUpCoord(event);
-            if (this.config.selectionCtx === null) {
+            if (this.config.previewSelectionCtx === null) {
                 this.drawingService.clearCanvas(this.drawingService.previewCtx);
                 this.startSelection();
             } else {
@@ -73,9 +75,12 @@ export abstract class AbstractSelectionService extends Tool {
     }
 
     onMouseMove(event: MouseEvent): void {
-        if (this.leftMouseDown) {
+        if (this.resizeSelected) {
             this.setMouseUpCoord(event);
-            if (this.config.selectionCtx === null) {
+            this.selectionResize.resize(this.getPositionFromMouse(event));
+        } else if (this.leftMouseDown) {
+            this.setMouseUpCoord(event);
+            if (this.config.previewSelectionCtx === null) {
                 const ctx = this.drawingService.previewCtx;
                 this.drawingService.clearCanvas(ctx);
                 this.drawPreviewSelection();
@@ -93,8 +98,10 @@ export abstract class AbstractSelectionService extends Tool {
             this.selectAll();
         } else if (this.config.shift.equals(event)) {
             this.config.shift.isDown = true;
-            if (this.leftMouseDown && this.config.selectionCtx === null) {
+            if (this.leftMouseDown && this.config.previewSelectionCtx === null) {
                 this.updateDrawingSelection();
+            } else if (this.selectionResize.resizeSelected && !event.repeat) {
+                this.selectionResize.resize(this.mouseUpCoord);
             }
         }
         this.selectionTranslation.onKeyDown(event, this.leftMouseDown);
@@ -103,18 +110,21 @@ export abstract class AbstractSelectionService extends Tool {
     onKeyUp(event: KeyboardEvent): void {
         if (this.config.shift.equals(event)) {
             this.config.shift.isDown = false;
-            if (this.leftMouseDown && this.config.selectionCtx === null) {
+            if (this.leftMouseDown && this.config.previewSelectionCtx === null) {
                 this.updateDrawingSelection();
+            } else if (this.selectionResize.resizeSelected) {
+                this.selectionResize.resize(this.mouseUpCoord);
             }
         }
         this.selectionTranslation.onKeyUp(event);
     }
 
     selectAll(): void {
-        this.selectionTranslation.stopDrawing();
         this.endSelection();
+        this.selectionResize.stopDrawing();
+        this.selectionTranslation.stopDrawing();
         this.leftMouseDown = false;
-        this.config.endCoords = { x: 0, y: 0 } as Vec2;
+        this.config.endCoords = new Vec2(0, 0);
         const width = this.drawingService.canvas.width;
         const height = this.drawingService.canvas.height;
         this.mouseDownCoord = new Vec2(0, 0);
@@ -123,18 +133,19 @@ export abstract class AbstractSelectionService extends Tool {
         this.config.height = height;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.startSelection();
-        this.updatePoints.next(true);
+        this.UPDATE_POINTS.next(true);
     }
 
     stopDrawing(): void {
         this.drawingService.unblockUndoRedo();
         this.endSelection();
+        this.selectionResize.stopDrawing();
+        this.selectionTranslation.stopDrawing();
         this.leftMouseDown = false;
         this.config.shift.isDown = false;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
 
-        this.selectionTranslation.stopDrawing();
-        this.updatePoints.next(false);
+        this.UPDATE_POINTS.next(false);
     }
 
     startMouseTranslation(event: MouseEvent): void {
@@ -142,8 +153,16 @@ export abstract class AbstractSelectionService extends Tool {
         if (this.leftMouseDown) this.selectionTranslation.startMouseTranslation(this.getPositionFromMouse(event));
     }
 
+    get resizeSelected(): boolean {
+        return this.selectionResize.resizeSelected;
+    }
+
+    set resizeSelected(selected: boolean) {
+        this.selectionResize.resizeSelected = selected;
+    }
+
     private setMouseUpCoord(event: MouseEvent): void {
-        if (this.leftMouseDown && this.config.selectionCtx === null && !this.isInCanvas(event)) {
+        if (this.leftMouseDown && this.config.previewSelectionCtx === null && !this.isInCanvas(event)) {
             const rect = this.drawingService.canvas.getBoundingClientRect();
             const mousePos: Vec2 = this.getPositionFromMouse(event);
             if (event.x >= rect.right) mousePos.x = this.drawingService.canvas.width;
@@ -158,9 +177,12 @@ export abstract class AbstractSelectionService extends Tool {
 
     private initSubscriptions(): void {
         this.drawingService.changes.subscribe(() => {
-            this.updateSelection({ x: 0, y: 0 } as Vec2);
+            this.updateSelection(new Vec2(0, 0));
         });
-        this.selectionTranslation.updateSelectionRequest.subscribe((translation: Vec2) => {
+        this.selectionTranslation.UPDATE_SELECTION_REQUEST.subscribe((translation: Vec2) => {
+            this.updateSelection(translation);
+        });
+        this.selectionResize.UPDATE_SELECTION_REQUEST.subscribe((translation: Vec2) => {
             this.updateSelection(translation);
         });
     }
@@ -170,41 +192,52 @@ export abstract class AbstractSelectionService extends Tool {
             this.drawingService.unblockUndoRedo();
             return;
         }
-        this.selectionData.width = Math.abs(this.config.width);
-        this.selectionData.height = Math.abs(this.config.height);
-        this.config.selectionCtx = this.selectionData.getContext('2d') as CanvasRenderingContext2D;
+        this.config.originalWidth = this.config.width;
+        this.config.originalHeight = this.config.height;
+        for (const data of this.config.SELECTION_DATA) {
+            data.width = Math.abs(this.config.width);
+            data.height = Math.abs(this.config.height);
+        }
+
+        this.config.previewSelectionCtx = this.config.SELECTION_DATA[SelectionData.PreviewData].getContext('2d') as CanvasRenderingContext2D;
         const x = Math.min(this.mouseDownCoord.x, this.mouseDownCoord.x + this.config.width);
         const y = Math.min(this.mouseDownCoord.y, this.mouseDownCoord.y + this.config.height);
         this.config.endCoords = new Vec2(x, y);
         this.config.startCoords = new Vec2(x, y);
 
-        this.config.selectionCtx.drawImage(
-            this.drawingService.canvas,
-            x,
-            y,
-            Math.abs(this.config.width),
-            Math.abs(this.config.height),
-            0,
-            0,
-            Math.abs(this.config.width),
-            Math.abs(this.config.height),
-        );
+        for (const data of this.config.SELECTION_DATA) {
+            const ctx = data.getContext('2d') as CanvasRenderingContext2D;
+            ctx.drawImage(
+                this.drawingService.canvas,
+                x,
+                y,
+                Math.abs(this.config.width),
+                Math.abs(this.config.height),
+                0,
+                0,
+                Math.abs(this.config.width),
+                Math.abs(this.config.height),
+            );
+        }
 
-        const previewCtx = this.drawingService.previewCtx;
-        previewCtx.drawImage(this.selectionData, x, y);
+        this.drawFinalselection();
+        this.drawingService.previewCtx.drawImage(this.config.SELECTION_DATA[SelectionData.PreviewData], x, y);
 
-        this.drawPreviewSelection();
-        this.updatePoints.next(true);
+        this.UPDATE_POINTS.next(true);
     }
 
     private updateSelection(translation: Vec2): void {
-        if (this.config.selectionCtx === null) return;
+        if (this.config.previewSelectionCtx === null) return;
 
         this.drawingService.blockUndoRedo();
-        this.config.endCoords.x += translation.x;
-        this.config.endCoords.y += translation.y;
-        this.updateSelectionRequired();
-        this.updatePoints.next(true);
+        this.config.endCoords = this.config.endCoords.add(translation);
+        const ctx = this.drawingService.previewCtx;
+        this.drawingService.clearCanvas(ctx);
+
+        this.fillBackground(ctx);
+        ctx.drawImage(this.config.SELECTION_DATA[SelectionData.PreviewData], this.config.endCoords.x, this.config.endCoords.y);
+
+        this.UPDATE_POINTS.next(true);
     }
 
     private drawPreviewSelection(): void {

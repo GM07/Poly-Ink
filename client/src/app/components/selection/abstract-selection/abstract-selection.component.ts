@@ -30,14 +30,12 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
     private readonly DESIRED_ZINDEX: number = 3;
 
     private controlPointList: ElementRef<HTMLElement>[];
-    private resizeSelected: boolean;
-    private selectionSelected: boolean;
     private isInSidebar: boolean;
     private updateSubscription: Subscription;
     displayControlPoints: boolean;
 
     constructor(
-        protected selectionService: AbstractSelectionService,
+        public selectionService: AbstractSelectionService,
         protected drawingService: DrawingService,
         private cd: ChangeDetectorRef,
         private selectionEvents: SelectionEventsService,
@@ -45,7 +43,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.updateSubscription = this.selectionService.updatePoints.subscribe((display: boolean) => {
+        this.updateSubscription = this.selectionService.UPDATE_POINTS.subscribe((display: boolean) => {
             if (display && this.displayControlPoints) {
                 this.placePoints();
             }
@@ -55,9 +53,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
         this.selectionEvents.onMouseEnterEvent.subscribe(() => (this.isInSidebar = true));
         this.selectionEvents.onMouseLeaveEvent.subscribe(() => (this.isInSidebar = false));
         this.isInSidebar = false;
-        this.selectionSelected = false;
         this.displayControlPoints = false;
-        this.resizeSelected = false;
     }
 
     ngOnDestroy(): void {
@@ -65,43 +61,37 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.selectionSelected = event.button === MouseButton.Left;
-        if (!this.isInSidebar && this.selectionSelected) {
+        if (!this.isInSidebar && event.button === MouseButton.Left) {
             this.makeControlsUnselectable();
             this.selectionService.startMouseTranslation(event);
         }
-        this.updateControlPointDisplay(this.selectionService.config.selectionCtx !== null);
+        this.updateControlPointDisplay(this.selectionService.config.previewSelectionCtx !== null);
     }
 
     onMouseUp(): void {
-        this.selectionSelected = false;
-        this.resizeSelected = false;
+        this.selectionService.leftMouseDown = false;
+        this.selectionService.resizeSelected = false;
         if (this.displayControlPoints) {
             this.makeControlsSelectable();
         }
-        this.updateControlPointDisplay(this.selectionService.config.selectionCtx !== null);
+        this.updateControlPointDisplay(this.selectionService.config.previewSelectionCtx !== null);
     }
 
     confirmSelection(event: MouseEvent): void {
+        const clickedOnScrollbar = event.clientX >= document.documentElement.offsetWidth || event.clientY >= document.documentElement.offsetHeight;
+
         const canConfirmSelection =
-            !this.resizeSelected &&
-            !this.selectionSelected &&
+            !this.selectionService.resizeSelected &&
+            !this.selectionService.leftMouseDown &&
             !this.shortcutHandlerService.blockShortcuts &&
             !this.isInSidebar &&
-            this.selectionService.config.selectionCtx !== null &&
+            this.selectionService.config.previewSelectionCtx !== null &&
+            !clickedOnScrollbar &&
             event.button === MouseButton.Left;
 
         if (canConfirmSelection) {
             this.selectionService.stopDrawing();
         }
-    }
-
-    private startResize(): void {
-        this.resizeSelected = true;
-    }
-
-    private endResize(): void {
-        this.resizeSelected = false;
     }
 
     private updateControlPointDisplay(display: boolean): void {
@@ -128,15 +118,11 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
         this.placePoints();
 
         this.controlPointContainer.nativeElement.style.zIndex = this.DESIRED_ZINDEX.toString();
-        this.resizeSelected = false;
-        for (const element of this.controlPointList) {
-            element.nativeElement.onmousedown = () => this.startResize();
-            element.nativeElement.onmouseup = () => this.endResize();
-        }
+        this.selectionService.resizeSelected = false;
     }
 
     private placePoints(): void {
-        if (this.selectionService.config.selectionCtx === null) return;
+        if (this.selectionService.config.previewSelectionCtx === null) return;
 
         const width = Math.abs(this.selectionService.config.width);
         const height = Math.abs(this.selectionService.config.height);

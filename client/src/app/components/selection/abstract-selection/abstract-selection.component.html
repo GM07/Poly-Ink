@@ -3,19 +3,29 @@
 
 <div *ngIf="displayControlPoints">
     <div class="control-point-container" #controlPointContainer>
-        <div class="control-point-group">
-            <div class="control-point" #topLeft style="cursor: nw-resize"></div>
-            <div class="control-point" #topMiddle style="cursor: n-resize"></div>
-            <div class="control-point" #topRight style="cursor: ne-resize"></div>
-
-            <div class="control-point" #middleLeft style="cursor: w-resize"></div>
-            <div class="control-point" #middleRight style="cursor: e-resize"></div>
-
-            <div class="control-point" #bottomLeft style="cursor: sw-resize"></div>
-            <div class="control-point" #bottomMiddle style="cursor: s-resize"></div>
-            <div class="control-point" #bottomRight style="cursor: se-resize"></div>
-        </div>
         <div class="resize-border" #border (mousedown)="onMouseDown($event)"></div>
+        <div class="control-point-group">
+            <div class="control-point" #topLeft style="cursor: nw-resize" (mousedown)="selectionService.selectionResize.topLeftResize()"></div>
+            <div class="control-point" #topMiddle style="cursor: n-resize" (mousedown)="selectionService.selectionResize.topMiddleResize()"></div>
+            <div class="control-point" #topRight style="cursor: ne-resize" (mousedown)="selectionService.selectionResize.topRightResize()"></div>
+
+            <div class="control-point" #middleLeft style="cursor: w-resize" (mousedown)="selectionService.selectionResize.middleLeftResize()"></div>
+            <div class="control-point" #middleRight style="cursor: e-resize" (mousedown)="selectionService.selectionResize.middleRightResize()"></div>
+
+            <div class="control-point" #bottomLeft style="cursor: sw-resize" (mousedown)="selectionService.selectionResize.bottomLeftResize()"></div>
+            <div
+                class="control-point"
+                #bottomMiddle
+                style="cursor: s-resize"
+                (mousedown)="selectionService.selectionResize.bottomMiddleResize()"
+            ></div>
+            <div
+                class="control-point"
+                #bottomRight
+                style="cursor: se-resize"
+                (mousedown)="selectionService.selectionResize.bottomRightResize()"
+            ></div>
+        </div>
     </div>
     <div style="position: relative; z-index: 0">
         <div class="selection-background" #selectionBackground></div>
