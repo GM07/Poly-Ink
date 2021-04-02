@@ -22,6 +22,13 @@ export class DrawingService {
         this.changes = new Subject();
     }
 
+    static saveCanvas(memoryCanvas: HTMLCanvasElement, canvas: HTMLCanvasElement): void {
+        const memoryCtx = memoryCanvas.getContext('2d') as CanvasRenderingContext2D;
+        memoryCanvas.width = canvas.width;
+        memoryCanvas.height = canvas.height; // Saving canvas
+        memoryCtx.drawImage(canvas, 0, 0);
+    }
+
     initLoadedCanvas(): void {
         if (this.isReloading()) {
             this.createLoadedCanvasFromStorage();
@@ -37,12 +44,12 @@ export class DrawingService {
     resizeCanvas(width: number, height: number): void {
         const memoryBaseCanvas = document.createElement('canvas'); // Temporary canvas
         const memoryPreviewCanvas = document.createElement('canvas'); // Temporary canvas
-        this.saveCanvas(memoryBaseCanvas, this.canvas);
-        this.saveCanvas(memoryPreviewCanvas, this.previewCanvas);
+        DrawingService.saveCanvas(memoryBaseCanvas, this.canvas);
+        DrawingService.saveCanvas(memoryPreviewCanvas, this.previewCanvas);
 
         this.canvas.width = width;
         this.canvas.height = height;
-        this.previewCanvas.width = width; // Canvas resize
+        this.previewCanvas.width = width;
         this.previewCanvas.height = height;
         this.gridService.canvas.width = width;
         this.gridService.canvas.height = height;
@@ -65,13 +72,6 @@ export class DrawingService {
         config.width = this.canvas.width;
         const initialResize = new ResizeDraw(config, this);
         this.undoRedoService.init(this.baseCtx, this.previewCtx, initialResize);
-    }
-
-    private saveCanvas(memoryCanvas: HTMLCanvasElement, canvas: HTMLCanvasElement): void {
-        const memoryCtx = memoryCanvas.getContext('2d') as CanvasRenderingContext2D;
-        memoryCanvas.width = canvas.width;
-        memoryCanvas.height = canvas.height; // Saving canvas
-        memoryCtx.drawImage(canvas, 0, 0);
     }
 
     blockUndoRedo(): void {
