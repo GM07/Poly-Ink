@@ -19,7 +19,6 @@ import { RectangleSelectionService } from '@app/services/tools/rectangle-selecti
 import { RectangleService } from '@app/services/tools/rectangle.service';
 import { StampService } from '@app/services/tools/stamp.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
-
 // tslint:disable:max-classes-per-file
 class MockToolHandler extends ToolHandlerService {
     TOOLS_MOCK: Map<string, Tool> = new Map();

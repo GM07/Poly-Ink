@@ -24,6 +24,7 @@ import { RectangleSelectionService } from '@app/services/tools/rectangle-selecti
 import { RectangleService } from '@app/services/tools/rectangle.service';
 import { StampService } from '@app/services/tools/stamp.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+
 @Component({
     selector: 'app-settings-handler',
     templateUrl: './settings-handler.component.html',

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, NgZone, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, NgZone, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Tool } from '@app/classes/tool';
 import { BOTTOM_TOOLS } from '@app/classes/tool_ui_settings/index-bottom';
@@ -22,6 +22,7 @@ export class SidebarComponent implements OnInit {
     selectedTool: Tool;
     readonly HIGHLIGHTED_COLOR: string = HIGHLIGHTED_COLOR;
     @Output() settingClicked: EventEmitter<string>;
+    @Input() disableClose: boolean;
 
     constructor(public undoRedoService: UndoRedoService, toolHandlerService: ToolHandlerService, private router: Router, private zone: NgZone) {
         this.toolHandlerService = toolHandlerService;
