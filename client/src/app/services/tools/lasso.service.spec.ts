@@ -53,7 +53,7 @@ describe('Lasso service', () => {
     });
 
     it('should init service', () => {
-        spyOn<any>(service, 'initSelection').and.callFake(() => {});
+        spyOn<any>(service, 'initSelection');
         service['lines'].push(new Line(pointsTest[0], pointsTest[1]));
         service.initService();
         expect(service['lines'].length).toEqual(0);
@@ -61,7 +61,7 @@ describe('Lasso service', () => {
     });
 
     it('should start selection on closed path', () => {
-        spyOn<any>(service, 'startSelection').and.callFake(() => {});
+        spyOn<any>(service, 'startSelection');
         service['onClosedPath']();
         expect(service['startSelection']).toHaveBeenCalled();
     });
@@ -86,7 +86,7 @@ describe('Lasso service', () => {
     it('should not create selection if intersecting', () => {
         service.configLasso.intersecting = true;
         service.configLasso.points = pointsTest;
-        const spy = spyOn<any>(service, 'addPointToSelection').and.callFake(() => {});
+        const spy = spyOn<any>(service, 'addPointToSelection');
         service['createSelection']({} as MouseEvent);
         expect(spy).not.toHaveBeenCalled();
     });
@@ -94,14 +94,14 @@ describe('Lasso service', () => {
     it('should add points with 3 points on createSelection', () => {
         service.configLasso.points = pointsTest;
         service.configLasso.points.push(mousePos);
-        const spy = spyOn<any>(service, 'addPointToSelection').and.callFake(() => {});
+        const spy = spyOn<any>(service, 'addPointToSelection');
         service['createSelection']({} as MouseEvent);
         expect(spy).toHaveBeenCalled();
     });
 
     it('should add points with 3 points on createSelection', () => {
         service.configLasso.points = pointsTest;
-        const spy = spyOn<any>(service, 'addPointToSelection').and.callFake(() => {});
+        const spy = spyOn<any>(service, 'addPointToSelection');
         service['createSelection']({} as MouseEvent);
         expect(spy).toHaveBeenCalled();
     });
@@ -110,7 +110,7 @@ describe('Lasso service', () => {
         service.configLasso.points = pointsTest;
         service.configLasso.points.push(mousePos);
         service.lineDrawer.pointToAdd = new Vec2(100, 100);
-        const spy = spyOn<any>(service, 'onClosedPath').and.callFake(() => {});
+        const spy = spyOn<any>(service, 'onClosedPath');
         service['createSelection']({} as MouseEvent);
         expect(spy).toHaveBeenCalled();
     });
@@ -119,25 +119,25 @@ describe('Lasso service', () => {
         service.configLasso.points = pointsTest;
         service.configLasso.points.push(mousePos);
         service.lineDrawer.pointToAdd = new Vec2(100 + ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH + 1, 100);
-        const spy = spyOn<any>(service, 'onClosedPath').and.callFake(() => {});
+        const spy = spyOn<any>(service, 'onClosedPath');
         service['createSelection']({} as MouseEvent);
         expect(spy).not.toHaveBeenCalled();
     });
 
     it('should not do anything if mouse button is not left button', () => {
-        const spy = spyOn<any>(service, 'createSelection').and.callFake(() => {});
+        const spy = spyOn<any>(service, 'createSelection');
         service.onMouseDown({ button: MouseButton.Right } as MouseEvent);
         expect(spy).not.toHaveBeenCalled();
     });
 
     it('should call create selection when selecting', () => {
-        const spy = spyOn<any>(service, 'createSelection').and.callFake(() => {});
+        const spy = spyOn<any>(service, 'createSelection');
         service.onMouseDown({ button: MouseButton.Left } as MouseEvent);
         expect(spy).toHaveBeenCalled();
     });
 
     it('should call not create selection when selection is already created', () => {
-        const spy = spyOn<any>(service, 'endSelection').and.callFake(() => {});
+        const spy = spyOn<any>(service, 'endSelection');
         service.configLasso.previewSelectionCtx = {} as CanvasRenderingContext2D;
         service.onMouseDown({ button: MouseButton.Left } as MouseEvent);
         expect(spy).toHaveBeenCalled();
@@ -165,7 +165,7 @@ describe('Lasso service', () => {
     });
 
     it('should set translation mouse up', () => {
-        const spy = spyOn<any>(service['selectionTranslation'], 'onMouseUp').and.callFake(() => {});
+        const spy = spyOn<any>(service['selectionTranslation'], 'onMouseUp');
         service.leftMouseDown = true;
         service.configLasso.previewSelectionCtx = service['drawingService'].baseCtx;
         service.onMouseUp({ clientX: 100, clientY: 100 } as MouseEvent);
@@ -173,14 +173,14 @@ describe('Lasso service', () => {
     });
 
     it('should not set translation mouse up if not left button was not down', () => {
-        const spy = spyOn<any>(service['selectionTranslation'], 'onMouseUp').and.callFake(() => {});
+        const spy = spyOn<any>(service['selectionTranslation'], 'onMouseUp');
         service.leftMouseDown = false;
         service.onMouseUp({ clientX: 100, clientY: 100 } as MouseEvent);
         expect(spy).not.toHaveBeenCalled();
     });
 
     it('should only update mouse up coord on mouse up if selection was not completed', () => {
-        const spy = spyOn<any>(service['selectionTranslation'], 'onMouseUp').and.callFake(() => {});
+        const spy = spyOn<any>(service['selectionTranslation'], 'onMouseUp');
         service.leftMouseDown = true;
         service.onMouseUp({ clientX: 100, clientY: 100 } as MouseEvent);
         expect(spy).not.toHaveBeenCalled();
@@ -201,7 +201,7 @@ describe('Lasso service', () => {
 
     it('should let parent handle keys when key is pressed if selection is completed', () => {
         service.configLasso.previewSelectionCtx = service['drawingService'].baseCtx;
-        const spy = spyOn(AbstractSelectionService.prototype, 'onKeyDown').and.callFake(() => {});
+        const spy = spyOn(AbstractSelectionService.prototype, 'onKeyDown');
         service.onKeyDown({} as KeyboardEvent);
         expect(spy).toHaveBeenCalled();
     });
@@ -220,7 +220,7 @@ describe('Lasso service', () => {
 
     it('should let parent handle keys when key is up if selection is completed', () => {
         service.configLasso.previewSelectionCtx = service['drawingService'].baseCtx;
-        const spy = spyOn(AbstractSelectionService.prototype, 'onKeyUp').and.callFake(() => {});
+        const spy = spyOn(AbstractSelectionService.prototype, 'onKeyUp');
         service.onKeyUp({} as KeyboardEvent);
         expect(spy).toHaveBeenCalled();
     });
@@ -245,14 +245,14 @@ describe('Lasso service', () => {
     });
 
     it('should not draw selection if point array is empty', () => {
-        const spy = spyOn<any>(service, 'drawSelection').and.callFake(() => {});
+        const spy = spyOn<any>(service, 'drawSelection');
         service['drawPreviewSelectionRequired']();
         expect(spy).not.toHaveBeenCalled();
     });
 
     it('should draw selection if point array is not empty', () => {
         service.configLasso.points = pointsTest;
-        const spy = spyOn<any>(service, 'drawSelection').and.callFake(() => {});
+        const spy = spyOn<any>(service, 'drawSelection');
         service['drawPreviewSelectionRequired']();
         expect(spy).toHaveBeenCalled();
     });
@@ -265,7 +265,7 @@ describe('Lasso service', () => {
     });
 
     it('should draw white background when selection is completed', () => {
-        const drawSpy = spyOn(LineDrawer, 'drawFilledLinePath').and.callFake(() => {});
+        const drawSpy = spyOn(LineDrawer, 'drawFilledLinePath');
         const changeSpy = spyOn(service.configLasso, 'didChange').and.returnValue(true);
         service['fillBackground']({} as CanvasRenderingContext2D);
         expect(drawSpy).toHaveBeenCalled();
@@ -273,15 +273,15 @@ describe('Lasso service', () => {
     });
 
     it('shoudl update selection with clipped line path', () => {
-        const clipSpy = spyOn(LineDrawer, 'drawClippedLinePath').and.callFake(() => {});
-        const drawSpy = spyOn<any>(service, 'drawSelection').and.callFake(() => {});
+        const clipSpy = spyOn(LineDrawer, 'drawClippedLinePath');
+        const drawSpy = spyOn<any>(service, 'drawSelection');
         service['drawFinalSelection']();
         expect(clipSpy).toHaveBeenCalled();
         expect(drawSpy).toHaveBeenCalled();
     });
 
     it('should not draw selection if point array length is less than two', () => {
-        const dashSpy = spyOn(LineDrawer, 'drawDashedLinePath').and.callFake(() => {});
+        const dashSpy = spyOn(LineDrawer, 'drawDashedLinePath');
         service['drawSelection']({} as CanvasRenderingContext2D, mousePos, mousePos);
         expect(dashSpy).not.toHaveBeenCalled();
     });
@@ -289,15 +289,15 @@ describe('Lasso service', () => {
     it('should draw selection', () => {
         service.configLasso.points = pointsTest;
         service.configLasso.points.push(mousePos);
-        const dashSpy = spyOn(LineDrawer, 'drawDashedLinePath').and.callFake(() => {});
+        const dashSpy = spyOn(LineDrawer, 'drawDashedLinePath');
         service['drawSelection']({} as CanvasRenderingContext2D, mousePos, mousePos);
         expect(dashSpy).toHaveBeenCalled();
     });
 
     it('should stop drawing', () => {
-        const endSpy = spyOn<any>(service, 'endSelection').and.callFake(() => {});
-        const initSpy = spyOn<any>(service, 'initService').and.callFake(() => {});
-        const stopSpy = spyOn<any>(AbstractSelectionService.prototype, 'stopDrawing').and.callFake(() => {});
+        const endSpy = spyOn<any>(service, 'endSelection');
+        const initSpy = spyOn<any>(service, 'initService');
+        const stopSpy = spyOn<any>(AbstractSelectionService.prototype, 'stopDrawing');
         service.stopDrawing();
         expect(endSpy).toHaveBeenCalled();
         expect(initSpy).toHaveBeenCalled();
