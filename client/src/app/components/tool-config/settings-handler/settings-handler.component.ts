@@ -23,6 +23,7 @@ import { PolygoneService } from '@app/services/tools/polygone.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+
 @Component({
     selector: 'app-settings-handler',
     templateUrl: './settings-handler.component.html',

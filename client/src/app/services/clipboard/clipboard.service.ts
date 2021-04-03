@@ -101,7 +101,6 @@ export class ClipboardService {
                 if (!this.isInitialised && init && this.wantsToPaste) {
                     this.lastSelectionTool.updateSelection(new Vec2(0, 0));
                     this.wantsToPaste = false;
-                    this.isInitialised = init;
                 }
                 this.isInitialised = init;
             } else {

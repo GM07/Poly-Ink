@@ -36,14 +36,14 @@ describe('Line Drawer', () => {
     });
 
     it('should follow cursor when shift not pressed', () => {
-        spyOn<any>(lineDrawer, 'renderLinePreview').and.callFake(() => {});
+        spyOn<any>(lineDrawer, 'renderLinePreview');
         lineDrawer.followCursor({} as MouseEvent);
         expect(lineDrawer.pointToAdd).toEqual(mousePos);
         expect(lineDrawer['renderLinePreview']).toHaveBeenCalled();
     });
 
     it('should follow cursor when shift not pressed', () => {
-        const rendSpy = spyOn<any>(lineDrawer, 'renderLinePreview').and.callFake(() => {});
+        const rendSpy = spyOn<any>(lineDrawer, 'renderLinePreview');
         const alignSpy = spyOn(lineDrawer, 'getAlignedPoint').and.callFake(() => {
             return mousePos;
         });
@@ -67,7 +67,7 @@ describe('Line Drawer', () => {
     });
 
     it('should render', () => {
-        const spy = spyOn<any>(lineDrawer.drawPreview, 'next').and.callFake(() => {});
+        const spy = spyOn<any>(lineDrawer.drawPreview, 'next');
         lineDrawer['renderLinePreview']();
         expect(spy).toHaveBeenCalled();
     });
@@ -175,7 +175,7 @@ describe('Line Drawer', () => {
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
         const spy = spyOn<any>(LineDrawer, 'drawLinePath').and.callThrough();
         const actionSpy = spyOn(ctx, 'stroke').and.callThrough();
-        LineDrawer.drawStrokedLinePath(ctx, [mousePos, mousePos]);
+        LineDrawer['drawStrokedLinePath'](ctx, [mousePos, mousePos]);
         expect(spy).toHaveBeenCalled();
         expect(actionSpy).toHaveBeenCalled();
     });
@@ -193,7 +193,7 @@ describe('Line Drawer', () => {
     it('should draw dashed line path', () => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-        const spy = spyOn(LineDrawer, 'drawStrokedLinePath').and.callThrough();
+        const spy = spyOn<any>(LineDrawer, 'drawStrokedLinePath').and.callThrough();
         LineDrawer.drawDashedLinePath(ctx, [mousePos, mousePos]);
         expect(spy).toHaveBeenCalledTimes(2);
     });

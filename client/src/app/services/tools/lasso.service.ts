@@ -13,6 +13,7 @@ import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
+import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
@@ -209,7 +210,7 @@ export class LassoService extends AbstractSelectionService {
     protected fillBackground(ctx: CanvasRenderingContext2D): void {
         if (!this.configLasso.didChange()) return;
 
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = Colors.WHITE.rgbString;
         LineDrawer.drawFilledLinePath(ctx, this.configLasso.points);
     }
 
