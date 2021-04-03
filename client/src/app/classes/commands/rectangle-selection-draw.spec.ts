@@ -89,9 +89,7 @@ describe('RectangleSelectionDraw', () => {
 
     it('should make appropriate calls on execute', () => {
         spyOn<any>(rectangleSelectionDraw, 'fillBackground').and.callThrough();
-
         rectangleSelectionDraw.execute(ctxStub);
-
         expect(rectangleSelectionDraw['fillBackground']).toHaveBeenCalled();
     });
 });

@@ -5,6 +5,7 @@ import { AerosolService } from '@app/services/tools/aerosol.service';
 import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.service';
 import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
+import { LassoService } from '@app/services/tools/lasso.service';
 import { LineService } from '@app/services/tools/line.service';
 import { PencilService } from '@app/services/tools/pencil.service';
 import { PolygoneService } from '@app/services/tools/polygone.service';
@@ -33,6 +34,7 @@ export class ToolHandlerService {
         eraserService: EraserService,
         polygoneService: PolygoneService,
         eyeDropperService: EyeDropperService,
+        lassoService: LassoService,
     ) {
         this.TOOLS.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
@@ -42,7 +44,7 @@ export class ToolHandlerService {
         this.TOOLS.set(ToolsConstants.EraserToolConstants.TOOL_ID, eraserService);
         this.TOOLS.set(ToolsConstants.EyeDropperToolConstants.TOOL_ID, eyeDropperService);
         // this.TOOLS.set(ToolsConstants.FillToolConstants.TOOL_ID, pencilService);
-        // this.TOOLS.set(ToolsConstants.LassoToolConstants.TOOL_ID, pencilService);
+        this.TOOLS.set(ToolsConstants.LassoToolConstants.TOOL_ID, lassoService);
         this.TOOLS.set(ToolsConstants.PolygoneToolConstants.TOOL_ID, polygoneService);
         this.TOOLS.set(ToolsConstants.RectangleSelectionToolConstants.TOOL_ID, rectangleSelectionService);
         this.TOOLS.set(ToolsConstants.RectangleToolConstants.TOOL_ID, rectangleService);

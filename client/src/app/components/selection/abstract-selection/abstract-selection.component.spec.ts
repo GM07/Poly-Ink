@@ -76,7 +76,7 @@ describe('AbstractSelectionComponent', () => {
         expect(stopDrawingSpy).toHaveBeenCalled();
     });
 
-    it('should change translationOrigin when mouseDown and inSelection', () => {
+    it('should change translationOrigin when mouseDown and in selection', () => {
         spyOn(abstractSelectionService, 'getPositionFromMouse');
         spyOn<any>(component, 'makeControlsUnselectable');
         component.onMouseDown(mouseEvent);
