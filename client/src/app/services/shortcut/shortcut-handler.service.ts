@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { GridService } from '@app/services/drawing/grid.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 import { Subject } from 'rxjs';
@@ -11,7 +12,7 @@ export class ShortcutHandlerService {
     private lastMouseMoveEvent: MouseEvent;
     blockShortcutsEvent: Subject<boolean>;
 
-    constructor(private toolHandlerService: ToolHandlerService, private undoRedoService: UndoRedoService) {
+    constructor(private toolHandlerService: ToolHandlerService, private undoRedoService: UndoRedoService, private gridService: GridService) {
         this.blockShortcutsIn = false;
         this.blockShortcutsEvent = new Subject<boolean>();
     }
@@ -33,6 +34,7 @@ export class ShortcutHandlerService {
         if (!this.blockShortcutsIn) {
             this.undoRedoService.onKeyDown(event);
             this.toolHandlerService.onKeyDown(event);
+            this.gridService.onKeyDown(event);
         }
     }
 

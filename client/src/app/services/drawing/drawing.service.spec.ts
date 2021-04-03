@@ -107,7 +107,9 @@ describe('DrawingService', () => {
         spyOn(service, 'initBackground');
         spyOn(service.baseCtx, 'drawImage');
         spyOn(service.previewCtx, 'drawImage');
+        spyOn(service.gridService, 'updateGrid');
         service.previewCanvas = canvasTestHelper.canvas;
+        service.gridService.canvas = canvasTestHelper.canvas;
         service.resizeCanvas(0, 0);
         expect(service['save']).not.toHaveBeenCalled();
     });
@@ -119,7 +121,9 @@ describe('DrawingService', () => {
         spyOn(service, 'initBackground');
         spyOn(service.baseCtx, 'drawImage');
         spyOn(service.previewCtx, 'drawImage');
+        spyOn(service.gridService, 'updateGrid');
         service.previewCanvas = canvasTestHelper.canvas;
+        service.gridService.canvas = canvasTestHelper.canvas;
         service.resizeCanvas(0, 0);
         expect(service['save']).toHaveBeenCalled();
     });
@@ -193,5 +197,11 @@ describe('DrawingService', () => {
         expect(service.loadedCanvas).toBeUndefined();
         await service.createLoadedCanvasFromStorage();
         expect(service.loadedCanvas).toBeUndefined();
+    });
+
+    it('should remove the saved drawing from local storage', () => {
+        spyOn(localStorage, 'removeItem');
+        service.removeSavedDrawing();
+        expect(localStorage.removeItem).toHaveBeenCalledWith('drawing');
     });
 });
