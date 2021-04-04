@@ -1,6 +1,11 @@
-<div class="box-selection">
+<div class="toggleMagnetism">
+  <span class="toggleName"> Magnétisme </span>
+  <mat-slide-toggle [(ngModel)]="magnetismService.isEnabled" ngDefaultControl></mat-slide-toggle>
+</div>
 
-  <div class="magnetism-selection north west" #topLeft (click)="setSelected(magnetismSelection.topLeft)"></div>
+<div *ngIf="magnetismService.isEnabled" class="box-selection">
+
+  <div class="magnetism-selection north west" #topLeft (click)="setSelected(magnetismSelection.topLeft)" style="background-color: gray;"></div>
   <div class="magnetism-selection north xCenter" #top (click)="setSelected(magnetismSelection.top)"></div>
   <div class="magnetism-selection north east" #topRight (click)="setSelected(magnetismSelection.topRight)"></div>
   <div class="magnetism-selection west yCenter" #left (click)="setSelected(magnetismSelection.left)"></div>

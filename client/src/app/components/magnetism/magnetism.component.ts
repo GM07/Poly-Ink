@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MagnetismSelection, MagnetismService } from '@app/services/drawing/magnetism.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { MagnetismSelection, MagnetismService } from '@app/services/drawing/magn
     templateUrl: './magnetism.component.html',
     styleUrls: ['./magnetism.component.scss'],
 })
-export class MagnetismComponent implements AfterViewInit {
+export class MagnetismComponent {
     magnetismSelection: typeof MagnetismSelection;
 
     @ViewChild('topLeft', { static: false }) topLeft: ElementRef<HTMLDivElement>;
@@ -19,12 +19,8 @@ export class MagnetismComponent implements AfterViewInit {
     @ViewChild('bottom', { static: false }) bottom: ElementRef<HTMLDivElement>;
     @ViewChild('bottomRight', { static: false }) bottomRight: ElementRef<HTMLDivElement>;
 
-    constructor(private magnetismService: MagnetismService) {
+    constructor(public magnetismService: MagnetismService) {
         this.magnetismSelection = MagnetismSelection;
-    }
-
-    ngAfterViewInit(): void {
-        this.topLeft.nativeElement.style.backgroundColor = 'gray';
     }
 
     setSelected(position: MagnetismSelection): void {

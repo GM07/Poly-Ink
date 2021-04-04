@@ -180,8 +180,8 @@ describe('AbstractSelectionService', () => {
     it('should call the appropriate subscribed methods', () => {
         const updateSelectionSpy = spyOn<any>(service, 'updateSelection');
         service['drawingService'].changes.next();
-        service['selectionTranslation'].UPDATE_SELECTION_REQUEST.next({ x: 0, y: 0 } as Vec2);
-        service['selectionResize'].UPDATE_SELECTION_REQUEST.next({ x: 0, y: 0 } as Vec2);
+        service['selectionTranslation'].UPDATE_SELECTION_REQUEST.next(new Vec2(0, 0));
+        service['selectionResize'].UPDATE_SELECTION_REQUEST.next(new Vec2(0, 0));
         expect(updateSelectionSpy).toHaveBeenCalledTimes(3);
     });
 });
