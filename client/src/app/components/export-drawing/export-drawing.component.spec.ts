@@ -49,7 +49,7 @@ describe('ExportDrawingComponent', () => {
         }).compileComponents();
 
         toolHandlerService = TestBed.inject(ToolHandlerService);
-        spyOn(toolHandlerService.getCurrentTool(), 'stopDrawing').and.callFake(() => {});
+        spyOn(toolHandlerService.getCurrentTool(), 'stopDrawing');
 
         shortcutService = TestBed.inject(ShortcutHandlerService);
 
@@ -131,7 +131,7 @@ describe('ExportDrawingComponent', () => {
         Object.defineProperty(component.nameFormControl, 'valid', { value: true });
         Object.defineProperty(component.nameFormControl, 'value', { value: 'test' });
 
-        const spy = spyOn(exportDrawingService, 'exportImage').and.callFake(() => {});
+        const spy = spyOn(exportDrawingService, 'exportImage');
         component.export('local-export');
         expect(spy).toHaveBeenCalledWith(component['canvasImage'], 'png', 'test');
     });
@@ -250,7 +250,7 @@ describe('ExportDrawingComponent', () => {
         Object.defineProperty(component.nameFormControl, 'valid', { value: true });
         component.export('local-export');
 
-        const spy = spyOn(exportDrawingService, 'exportImage').and.callFake(() => {});
+        const spy = spyOn(exportDrawingService, 'exportImage');
         expect(spy).not.toHaveBeenCalled();
     });
 

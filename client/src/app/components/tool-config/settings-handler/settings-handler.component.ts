@@ -16,6 +16,7 @@ import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.s
 import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
 import { EyeDropperService } from '@app/services/tools/eye-dropper.service';
+import { LassoService } from '@app/services/tools/lasso.service';
 import { LineService } from '@app/services/tools/line.service';
 import { PencilService } from '@app/services/tools/pencil.service';
 import { PolygoneService } from '@app/services/tools/polygone.service';
@@ -44,6 +45,7 @@ export class SettingsHandlerComponent {
         this.settingsList.set(EllipseSelectionService, EllipseSelectionConfigComponent);
         this.settingsList.set(AerosolService, AerosolConfigComponent);
         this.settingsList.set(EyeDropperService, EyeDropperConfigComponent);
+        this.settingsList.set(LassoService, EraserConfigComponent);
         this.applyNewTab();
     }
 

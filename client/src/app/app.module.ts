@@ -32,6 +32,7 @@ import { MagnetismComponent } from './components/magnetism/magnetism.component';
 import { SaveDrawingComponent } from './components/save-drawing/save-drawing.component';
 import { AbstractSelectionComponent } from './components/selection/abstract-selection/abstract-selection.component';
 import { EllipseSelectionComponent } from './components/selection/ellipse-selection/ellipse-selection.component';
+import { LassoSelectionComponent } from './components/selection/lasso-selection/lasso-selection.component';
 import { RectangleSelectionComponent } from './components/selection/rectangle-selection/rectangle-selection.component';
 import { SelectionHandlerComponent } from './components/selection/selection-handler/selection-handler.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -82,6 +83,7 @@ import { SidebarDirective } from './directives/sidebar.directive';
         CarrouselComponent,
         SaveDrawingComponent,
         SidebarDirective,
+        LassoSelectionComponent,
         GridConfigComponent,
         MagnetismComponent,
     ],

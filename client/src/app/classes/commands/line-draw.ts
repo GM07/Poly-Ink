@@ -1,4 +1,4 @@
-import { LineConfig } from '@app/classes/tool-config/line-config.ts';
+import { LineConfig } from '@app/classes/tool-config/line-config';
 import { Vec2 } from '@app/classes/vec2';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { AbstractDraw } from './abstract-draw';

@@ -16,6 +16,9 @@ import { ColorService } from 'src/color-picker/services/color.service';
     providedIn: 'root',
 })
 export abstract class AbstractSelectionService extends Tool {
+    static readonly LINE_DASH: number = 8;
+    static readonly BORDER_WIDTH: number = 2;
+
     private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
     private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
     protected readonly LINE_DASH: number = 8;
@@ -30,6 +33,11 @@ export abstract class AbstractSelectionService extends Tool {
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.config = new SelectionConfig();
+        this.initSelection();
+        this.UPDATE_POINTS = new Subject<boolean>();
+    }
+
+    protected initSelection(): void {
         this.selectionTranslation = new SelectionTranslation(this.config, this.drawingService.magnetismService);
         this.selectionResize = new SelectionResize(this.config);
         this.config.endCoords = new Vec2(0, 0);
@@ -42,7 +50,7 @@ export abstract class AbstractSelectionService extends Tool {
 
     protected abstract drawPreviewSelectionRequired(): void;
 
-    protected abstract drawFinalselection(): void;
+    protected abstract drawFinalSelection(): void;
 
     protected abstract drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void;
 
@@ -161,7 +169,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.selectionResize.resizeSelected = selected;
     }
 
-    private setMouseUpCoord(event: MouseEvent): void {
+    protected setMouseUpCoord(event: MouseEvent): void {
         if (this.leftMouseDown && this.config.previewSelectionCtx === null && !this.isInCanvas(event)) {
             const rect = this.drawingService.canvas.getBoundingClientRect();
             const mousePos: Vec2 = this.getPositionFromMouse(event);
@@ -175,7 +183,7 @@ export abstract class AbstractSelectionService extends Tool {
         }
     }
 
-    private initSubscriptions(): void {
+    protected initSubscriptions(): void {
         this.drawingService.changes.subscribe(() => {
             this.updateSelection(new Vec2(0, 0));
         });
@@ -187,7 +195,7 @@ export abstract class AbstractSelectionService extends Tool {
         });
     }
 
-    private startSelection(): void {
+    protected startSelection(): void {
         if (Geometry.roundTowardsZero(this.config.width) === 0 || Geometry.roundTowardsZero(this.config.height) === 0) {
             this.drawingService.unblockUndoRedo();
             return;
@@ -220,7 +228,7 @@ export abstract class AbstractSelectionService extends Tool {
             );
         }
 
-        this.drawFinalselection();
+        this.drawFinalSelection();
         this.drawingService.previewCtx.drawImage(this.config.SELECTION_DATA[SelectionData.PreviewData], x, y);
 
         this.UPDATE_POINTS.next(true);
@@ -240,7 +248,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.UPDATE_POINTS.next(true);
     }
 
-    private drawPreviewSelection(): void {
+    protected drawPreviewSelection(): void {
         this.drawingService.blockUndoRedo();
 
         this.config.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
