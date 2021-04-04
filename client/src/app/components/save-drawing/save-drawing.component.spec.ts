@@ -50,7 +50,7 @@ describe('SaveDrawingComponent', () => {
         }).compileComponents();
 
         toolHandlerService = TestBed.inject(ToolHandlerService);
-        spyOn(toolHandlerService.getCurrentTool(), 'stopDrawing').and.callFake(() => {});
+        spyOn(toolHandlerService.getCurrentTool(), 'stopDrawing');
         shortcutService = TestBed.inject(ShortcutHandlerService);
         serverCommunicationService = TestBed.inject(ServerCommunicationService);
         drawingService = TestBed.inject(DrawingService);
@@ -190,7 +190,7 @@ describe('SaveDrawingComponent', () => {
     });
 
     it('should hide the popup on a successful request', async () => {
-        spyOn(component, 'hidePopup').and.callFake(() => {});
+        spyOn(component, 'hidePopup');
         spyOn(serverCommunicationService, 'createDrawing').and.callFake((drawing: Drawing) => {
             return of(Promise.resolve(new HttpResponse({ status: 200 })));
         });
@@ -199,7 +199,7 @@ describe('SaveDrawingComponent', () => {
     });
 
     it('should not hide the popup on a bad request and should enable noServerConnection boolean on component', async () => {
-        spyOn(component, 'hidePopup').and.callFake(() => {});
+        spyOn(component, 'hidePopup');
         spyOn(serverCommunicationService, 'createDrawing').and.callFake((drawing: Drawing) => {
             return of(Promise.reject(new HttpErrorResponse({ status: 400 })));
         });
@@ -209,7 +209,7 @@ describe('SaveDrawingComponent', () => {
     });
 
     it('should not hide the popup on a bad request and should enable noServerConnection boolean on component', async () => {
-        spyOn(component, 'hidePopup').and.callFake(() => {});
+        spyOn(component, 'hidePopup');
         spyOn(serverCommunicationService, 'createDrawing').and.callFake((drawing: Drawing) => {
             return of(Promise.reject(new HttpErrorResponse({ status: 401 })));
         });
@@ -219,7 +219,7 @@ describe('SaveDrawingComponent', () => {
     });
 
     it('should not hide the popup on a bad request and should enable unavailableServer error boolean on component', async () => {
-        spyOn(component, 'hidePopup').and.callFake(() => {});
+        spyOn(component, 'hidePopup');
         spyOn(serverCommunicationService, 'createDrawing').and.callFake((drawing: Drawing) => {
             return of(Promise.reject(new HttpErrorResponse({ status: 503 })));
         });
@@ -229,7 +229,7 @@ describe('SaveDrawingComponent', () => {
     });
 
     it('should not hide the popup on a bad request and should enable dataLimitReached error boolean on component', async () => {
-        spyOn(component, 'hidePopup').and.callFake(() => {});
+        spyOn(component, 'hidePopup');
         spyOn(serverCommunicationService, 'createDrawing').and.callFake((drawing: Drawing) => {
             return of(Promise.reject(new HttpErrorResponse({ status: 413 })));
         });

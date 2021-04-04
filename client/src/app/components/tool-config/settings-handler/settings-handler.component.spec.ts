@@ -12,6 +12,7 @@ import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.s
 import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
 import { EyeDropperService } from '@app/services/tools/eye-dropper.service';
+import { LassoService } from '@app/services/tools/lasso.service';
 import { LineService } from '@app/services/tools/line.service';
 import { PencilService } from '@app/services/tools/pencil.service';
 import { PolygoneService } from '@app/services/tools/polygone.service';
@@ -36,6 +37,7 @@ class MockToolHandler extends ToolHandlerService {
         polygoneService: PolygoneService,
         eyeDropperService: EyeDropperService,
         stampService: StampService,
+        lassoService: LassoService,
     ) {
         super(
             pencilService,
@@ -49,6 +51,7 @@ class MockToolHandler extends ToolHandlerService {
             polygoneService,
             eyeDropperService,
             stampService,
+            lassoService,
         );
         this.TOOLS_MOCK.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS_MOCK.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
@@ -96,6 +99,7 @@ describe('SettingsHandlerComponent', () => {
     let eyeDropperService: EyeDropperService;
     let toolHandlerService: MockToolHandler;
     let stampService: StampService;
+    let lassoService: LassoService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -113,6 +117,7 @@ describe('SettingsHandlerComponent', () => {
         rectangleSelectionService = TestBed.inject(RectangleSelectionService);
         eyeDropperService = TestBed.inject(EyeDropperService);
         stampService = TestBed.inject(StampService);
+        lassoService = TestBed.inject(LassoService);
         toolHandlerService = new MockToolHandler(
             pencilService,
             lineService,
@@ -125,6 +130,7 @@ describe('SettingsHandlerComponent', () => {
             polygoneService,
             eyeDropperService,
             stampService,
+            lassoService,
         );
         component = new SettingsHandlerComponent(toolHandlerService);
     });

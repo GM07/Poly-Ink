@@ -1,7 +1,8 @@
 import { Vec2 } from '@app/classes/vec2';
 import { Geometry } from './geometry';
+import { Line } from './line';
 
-/* tslint:disable */
+/* tslint:disable:no-magic-numbers */
 describe('Geometry', () => {
     it('should get distance between (4, 5) and (1, 1)', () => {
         const initial: Vec2 = new Vec2(4, 5);
@@ -37,7 +38,7 @@ describe('Geometry', () => {
     it('verifies if it is a point', () => {
         let point: Vec2[] = [];
         expect(Geometry.isAPoint(point)).toBeFalsy();
-        point = [new Vec2(1,1)];
+        point = [new Vec2(1, 1)];
         expect(Geometry.isAPoint(point)).toBeTruthy();
         point = [new Vec2(1, 1), new Vec2(1, 1)];
         expect(Geometry.isAPoint(point)).toBeTruthy();
@@ -46,11 +47,31 @@ describe('Geometry', () => {
     });
 
     it('should floor towards 0', () => {
-        let value: number = 0.7;
+        let value = 0.7;
         expect(Geometry.roundTowardsZero(value) === 0).toBeTruthy();
         value = -0.7;
         expect(Geometry.roundTowardsZero(value) === 0).toBeTruthy();
         value = -1.1;
         expect(Geometry.roundTowardsZero(value)).toEqual(-1);
+    });
+
+    it('should detect if next line is intersecting', () => {
+        const lines: Line[] = [
+            new Line(new Vec2(0, 10), new Vec2(10, 10)),
+            new Line(new Vec2(10, 10), new Vec2(10, 20)),
+            new Line(new Vec2(10, 20), new Vec2(20, 20)),
+        ];
+        const nextLine: Line = new Line(new Vec2(20, 20), new Vec2(0, 10));
+        expect(Geometry.lastLineIntersecting(lines, nextLine)).toEqual(true);
+    });
+
+    it('should return false if next line is not intersecting', () => {
+        const lines: Line[] = [
+            new Line(new Vec2(0, 10), new Vec2(10, 10)),
+            new Line(new Vec2(10, 10), new Vec2(10, 20)),
+            new Line(new Vec2(10, 20), new Vec2(20, 20)),
+        ];
+        const nextLine: Line = new Line(new Vec2(20, 20), new Vec2(30, 30));
+        expect(Geometry.lastLineIntersecting(lines, nextLine)).toEqual(false);
     });
 });

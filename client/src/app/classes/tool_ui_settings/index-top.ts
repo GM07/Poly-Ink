@@ -4,7 +4,7 @@ import { EllipseSettings } from './ellipse-settings';
 import { EraserSettings } from './eraser-settings';
 import { EyeDropperSettings } from './eyedropper-settings';
 // import { FillSettings } from './fill-settings';
-// import { LassoSettings } from './lasso-settings';
+import { LassoSettings } from './lasso-settings';
 import { LineSettings } from './line-settings';
 import { PencilSettings } from './pencil-settings';
 import { PolygoneSettings } from './polygone-settings';
@@ -26,4 +26,5 @@ export const TOP_TOOLS: ToolSettings[] = [
     new AerosolSettings(),
     new EyeDropperSettings(),
     new StampSettings(),
+    new LassoSettings(),
 ];
