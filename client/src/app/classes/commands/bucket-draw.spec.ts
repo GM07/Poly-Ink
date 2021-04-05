@@ -47,7 +47,7 @@ describe('BucketDraw', () => {
     it('should do appropriate calls on execute with contiguous pixels', () => {
         spyOn(ctxStub, 'getImageData').and.stub();
         spyOn(ctxStub, 'putImageData').and.stub();
-        spyOn<any>(bucketDraw, 'getOriginalPixel').and.stub();
+        spyOn<any>(bucketDraw, 'saveOriginalPixel').and.stub();
         spyOn<any>(bucketDraw, 'floodFill').and.stub();
         spyOn<any>(bucketDraw, 'pixelFill').and.stub();
 
@@ -56,7 +56,7 @@ describe('BucketDraw', () => {
 
         expect(ctxStub.getImageData).toHaveBeenCalled();
         expect(ctxStub.putImageData).toHaveBeenCalled();
-        expect(bucketDraw['getOriginalPixel']).toHaveBeenCalled();
+        expect(bucketDraw['saveOriginalPixel']).toHaveBeenCalled();
         expect(bucketDraw['floodFill']).toHaveBeenCalled();
         expect(bucketDraw['pixelFill']).not.toHaveBeenCalled();
     });
@@ -64,7 +64,7 @@ describe('BucketDraw', () => {
     it('should do appropriate calls on execute with non contiguous pixels', () => {
         spyOn(ctxStub, 'getImageData').and.stub();
         spyOn(ctxStub, 'putImageData').and.stub();
-        spyOn<any>(bucketDraw, 'getOriginalPixel').and.stub();
+        spyOn<any>(bucketDraw, 'saveOriginalPixel').and.stub();
         spyOn<any>(bucketDraw, 'floodFill').and.stub();
         spyOn<any>(bucketDraw, 'pixelFill').and.stub();
 
@@ -73,7 +73,7 @@ describe('BucketDraw', () => {
 
         expect(ctxStub.getImageData).toHaveBeenCalled();
         expect(ctxStub.putImageData).toHaveBeenCalled();
-        expect(bucketDraw['getOriginalPixel']).toHaveBeenCalled();
+        expect(bucketDraw['saveOriginalPixel']).toHaveBeenCalled();
         expect(bucketDraw['floodFill']).not.toHaveBeenCalled();
         expect(bucketDraw['pixelFill']).toHaveBeenCalled();
     });
@@ -198,7 +198,7 @@ describe('BucketDraw', () => {
     });
 
     it('should duplicate original pixel to prevent it from changing', () => {
-        bucketDraw['getOriginalPixel'](ctxStub);
+        bucketDraw['saveOriginalPixel'](ctxStub);
 
         const originalPixel = bucketDraw['originalPixel'];
         const pixels = bucketDraw['pixels'].data;

@@ -27,10 +27,8 @@ export class BucketService extends Tool {
         else if (event.button === MouseButton.Right) this.config.contiguous = false;
         else return;
 
-        if (this.isInCanvas(event)) {
-            this.config.point = this.getPositionFromMouse(event);
-            this.draw();
-        }
+        this.config.point = this.getPositionFromMouse(event);
+        this.draw();
     }
 
     draw(): void {

@@ -24,14 +24,13 @@ export class BucketDraw extends AbstractDraw {
         this.queue = [];
         this.originalPixel = new Uint8ClampedArray(this.dataPerPixel);
 
-        this.config.point.x = Math.floor(this.config.point.x);
-        this.config.point.y = Math.floor(this.config.point.y);
+        this.config.point = this.config.point.apply(Math.floor);
     }
 
     execute(context: CanvasRenderingContext2D): void {
         this.pixels = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
 
-        this.getOriginalPixel(context);
+        this.saveOriginalPixel(context);
 
         if (this.config.contiguous) this.floodFill(context.canvas.width);
         else this.pixelFill();
@@ -76,8 +75,7 @@ export class BucketDraw extends AbstractDraw {
     }
 
     private addAdjacent(pos: number): void {
-        if (pos < 0 || pos >= this.pixels.data.length) return;
-        if (this.visited.has(pos)) return;
+        if (pos < 0 || pos >= this.pixels.data.length || this.visited.has(pos)) return;
 
         this.visited.add(pos);
         this.queue.push(pos);
@@ -107,7 +105,7 @@ export class BucketDraw extends AbstractDraw {
         this.pixels.data.set([R, G, B, this.colorComponentMax], pos);
     }
 
-    private getOriginalPixel(context: CanvasRenderingContext2D): void {
+    private saveOriginalPixel(context: CanvasRenderingContext2D): void {
         const arrayPos = (this.config.point.x + this.config.point.y * context.canvas.width) * this.dataPerPixel;
 
         for (let i = 0; i < this.dataPerPixel; ++i) {

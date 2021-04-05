@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Colors } from 'src/color-picker/constants/colors';
@@ -8,7 +7,6 @@ import { BucketService } from './bucket.service';
 
 describe('BucketService', () => {
     let service: BucketService;
-    let canvasTestHelper: CanvasTestHelper;
     let drawServiceSpy: jasmine.SpyObj<DrawingService>;
     let colorServiceSpy: jasmine.SpyObj<ColorService>;
 
@@ -23,7 +21,6 @@ describe('BucketService', () => {
             ],
         });
 
-        canvasTestHelper = TestBed.inject(CanvasTestHelper);
         service = TestBed.inject(BucketService);
     });
 
@@ -37,7 +34,8 @@ describe('BucketService', () => {
             pageY: 1,
             button: MouseButton.Left,
         } as MouseEvent;
-        spyOn(service, 'isInCanvas').and.returnValue(false);
+        spyOn(service, 'getPositionFromMouse').and.stub();
+        spyOn(service, 'draw').and.stub();
         service.onMouseDown(event);
         expect(service.config.contiguous).toEqual(true);
     });
@@ -46,8 +44,8 @@ describe('BucketService', () => {
         const event = {
             button: MouseButton.Right,
         } as MouseEvent;
-
-        spyOn(service, 'isInCanvas').and.returnValue(false);
+        spyOn(service, 'getPositionFromMouse').and.stub();
+        spyOn(service, 'draw').and.stub();
         service.onMouseDown(event);
         expect(service.config.contiguous).toEqual(false);
     });
@@ -75,20 +73,6 @@ describe('BucketService', () => {
         service.onMouseDown(event);
         expect(service.getPositionFromMouse).toHaveBeenCalled();
         expect(service.draw).toHaveBeenCalled();
-    });
-
-    it('Should not call draw when mousclick is out of canvas', () => {
-        canvasTestHelper.canvas.width = 1;
-        canvasTestHelper.canvas.height = 1;
-        const event = {
-            pageX: 2,
-            pageY: 2,
-            button: MouseButton.Right,
-        } as MouseEvent;
-        spyOn(service, 'isInCanvas').and.returnValue(false);
-        spyOn(service, 'draw').and.stub();
-        service.onMouseDown(event);
-        expect(service.draw).not.toHaveBeenCalled();
     });
 
     it('should draw properly', () => {
