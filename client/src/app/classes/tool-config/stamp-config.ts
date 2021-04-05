@@ -25,10 +25,10 @@ export class StampConfig {
     clone(): StampConfig {
         const config = new StampConfig();
         config.stamp = this.stamp;
-        config.stampImg = new Image();
-        config.stampImg.src = this.stampImg.src;
         config.scale = this.scale;
         config.angle = this.angle;
+        config.stampImg = new Image();
+        config.stampImg.src = this.stampImg.src;
         config.position = new Vec2(this.position.x, this.position.y);
 
         return config;
