@@ -1,6 +1,6 @@
 import { Vec2 } from '@app/classes/vec2';
 import { AerosolConfig } from './aerosol-config';
-describe('PencilConfig', () => {
+describe('AerosolConfig', () => {
     let config: AerosolConfig;
     beforeEach(() => {
         config = new AerosolConfig();

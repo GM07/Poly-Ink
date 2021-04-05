@@ -51,7 +51,7 @@ export enum TextToolConstants {
     SHORTCUT_KEY = 't',
 }
 
-export enum FillToolConstants {
+export enum BucketToolConstants {
     TOOL_ID = 'FILL',
     TOOL_TITLE = 'Sceau de peinture',
     INFO_BUBBLE = 'Sceau de peinture (B)',
@@ -156,7 +156,7 @@ export const TOP_TOOLS_CONSTANTS = [
     EllipseToolConstants,
     LineToolConstants,
     TextToolConstants,
-    FillToolConstants,
+    BucketToolConstants,
     EraserToolConstants,
     StampToolConstants,
     EyeDropperToolConstants,
