@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Tool } from '@app/classes/tool';
 import { AerosolConfigComponent } from '@app/components/tool-config/aerosol-config/aerosol-config.component';
+import { BucketConfigComponent } from '@app/components/tool-config/bucket-config/bucket-config.component';
 import { EllipseConfigComponent } from '@app/components/tool-config/ellipse-config/ellipse-config.component';
 import { EllipseSelectionConfigComponent } from '@app/components/tool-config/ellipse-selection-config/ellipse-selection-config.component';
 import { EraserConfigComponent } from '@app/components/tool-config/eraser-config/eraser-config.component';
@@ -12,6 +13,7 @@ import { RectangleConfigComponent } from '@app/components/tool-config/rectangle-
 import { RectangleSelectionConfigComponent } from '@app/components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
 import { ToolConfig } from '@app/components/tool-config/tool-config';
 import { AerosolService } from '@app/services/tools/aerosol.service';
+import { BucketService } from '@app/services/tools/bucket.service';
 import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.service';
 import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
@@ -45,6 +47,7 @@ export class SettingsHandlerComponent {
         this.settingsList.set(EllipseSelectionService, EllipseSelectionConfigComponent);
         this.settingsList.set(AerosolService, AerosolConfigComponent);
         this.settingsList.set(EyeDropperService, EyeDropperConfigComponent);
+        this.settingsList.set(BucketService, BucketConfigComponent);
         this.settingsList.set(LassoService, EraserConfigComponent);
         this.applyNewTab();
     }

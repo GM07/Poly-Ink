@@ -39,6 +39,11 @@ export abstract class ToolSettingsConst {
     static readonly LINE_DEFAULT_DIAMETER_JUNCTION: number = 10;
     static readonly LINE_DEFAULT_WIDTH: number = 6;
 
+    // Bucket
+    static readonly BUCKET_MIN_TOLERANCE: number = 0;
+    static readonly BUCKET_MAX_TOLERANCE: number = 100;
+    static readonly BUCKET_DEFAULT_TOLERANCE: number = 20;
+
     // Selection
     static readonly BORDER_WIDTH: number = 2;
     static readonly LINE_DASH: number = 8;

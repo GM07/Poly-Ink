@@ -19,7 +19,7 @@ describe('RectangleSelectionDraw', () => {
     const ALPHA = 3;
 
     beforeEach(() => {
-        colorService = { primaryRgba: Colors.RED.rgbString, secondaryRgba: Colors.BLUE.rgbString } as ColorService;
+        colorService = { primaryColor: Colors.RED, secondaryColor: Colors.BLUE, primaryColorAlpha: 1.0, secondaryColorAlpha: 1.0 } as ColorService;
         rectangleSelectionDraw = new RectangleSelectionDraw(colorService, new SelectionConfig());
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
