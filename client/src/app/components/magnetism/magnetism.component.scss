@@ -1,8 +1,9 @@
 .box-selection{
-  width: 125px;
-  height: 250px;
+  width: 75px;
+  height: 75px;
   border: 2px dotted black;
-  margin-left: 30px;
+  margin-left: 58px;
+  margin-bottom: 20px;
 }
 
 .magnetism-selection{
@@ -14,27 +15,27 @@
 }
 
 .north{
- margin-top: -5px;
+ margin-top: -7.5px;
 }
 
 .east{
-  margin-left: 120px;
+  margin-left: 70px;
 }
 
 .south{
-  margin-top: 245px;
+  margin-top: 70px;
 }
 
 .west{
-  margin-left: -5px;
+  margin-left: -7.5px;
 }
 
 .xCenter{
-  margin-left: 57px;
+  margin-left: 30px;
 }
 
 .yCenter{
-  margin-top: 122px;
+  margin-top: 30px;
 }
 
 .toggleMagnetism{
