@@ -25,14 +25,14 @@ export class MagnetismComponent {
 
     setSelected(position: MagnetismSelection): void {
         this.magnetismService.selection = position;
-        this.topLeft.nativeElement.style.background = position === MagnetismSelection.topLeft ? 'gray' : 'white';
-        this.top.nativeElement.style.background = position === MagnetismSelection.top ? 'gray' : 'white';
-        this.topRight.nativeElement.style.background = position === MagnetismSelection.topRight ? 'gray' : 'white';
-        this.left.nativeElement.style.background = position === MagnetismSelection.left ? 'gray' : 'white';
-        this.center.nativeElement.style.background = position === MagnetismSelection.center ? 'gray' : 'white';
-        this.right.nativeElement.style.background = position === MagnetismSelection.right ? 'gray' : 'white';
-        this.bottomLeft.nativeElement.style.background = position === MagnetismSelection.bottomLeft ? 'gray' : 'white';
-        this.bottom.nativeElement.style.background = position === MagnetismSelection.bottom ? 'gray' : 'white';
-        this.bottomRight.nativeElement.style.background = position === MagnetismSelection.bottomRight ? 'gray' : 'white';
+        this.topLeft.nativeElement.style.background = position === MagnetismSelection.TopLeft ? 'gray' : 'white';
+        this.top.nativeElement.style.background = position === MagnetismSelection.Top ? 'gray' : 'white';
+        this.topRight.nativeElement.style.background = position === MagnetismSelection.TopRight ? 'gray' : 'white';
+        this.left.nativeElement.style.background = position === MagnetismSelection.Left ? 'gray' : 'white';
+        this.center.nativeElement.style.background = position === MagnetismSelection.Center ? 'gray' : 'white';
+        this.right.nativeElement.style.background = position === MagnetismSelection.Right ? 'gray' : 'white';
+        this.bottomLeft.nativeElement.style.background = position === MagnetismSelection.BottomLeft ? 'gray' : 'white';
+        this.bottom.nativeElement.style.background = position === MagnetismSelection.Bottom ? 'gray' : 'white';
+        this.bottomRight.nativeElement.style.background = position === MagnetismSelection.BottomRight ? 'gray' : 'white';
     }
 }

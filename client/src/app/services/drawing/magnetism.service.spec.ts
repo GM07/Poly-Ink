@@ -31,7 +31,39 @@ describe('MagnetismService', () => {
     });
 
     it('set distance vector should set min of x and y', () => {
-        service.selection = MagnetismSelection.topLeft;
+        service.selection = MagnetismSelection.TopLeft;
+        const event = new Vec2(2, 2);
+        const endCoords = new Vec2(0, 0);
+        service.setDistanceVector(event, endCoords, new Vec2(0, 0));
+        expect(service.distance).toEqual(new Vec2(2, 2));
+    });
+
+    it('set distance vector should work on bottom Left', () => {
+        service.selection = MagnetismSelection.BottomLeft;
+        const event = new Vec2(2, 2);
+        const endCoords = new Vec2(0, 0);
+        service.setDistanceVector(event, endCoords, new Vec2(0, 0));
+        expect(service.distance).toEqual(new Vec2(2, 2));
+    });
+
+    it('set distance vector should work on Bottom', () => {
+        service.selection = MagnetismSelection.Bottom;
+        const event = new Vec2(2, 2);
+        const endCoords = new Vec2(0, 0);
+        service.setDistanceVector(event, endCoords, new Vec2(0, 0));
+        expect(service.distance).toEqual(new Vec2(2, 2));
+    });
+
+    it('set distance vector should work on top right', () => {
+        service.selection = MagnetismSelection.TopRight;
+        const event = new Vec2(2, 2);
+        const endCoords = new Vec2(0, 0);
+        service.setDistanceVector(event, endCoords, new Vec2(0, 0));
+        expect(service.distance).toEqual(new Vec2(2, 2));
+    });
+
+    it('set distance vector should work on Right', () => {
+        service.selection = MagnetismSelection.Right;
         const event = new Vec2(2, 2);
         const endCoords = new Vec2(0, 0);
         service.setDistanceVector(event, endCoords, new Vec2(0, 0));
@@ -39,7 +71,7 @@ describe('MagnetismService', () => {
     });
 
     it('set distance vector should set center of x and y', () => {
-        service.selection = MagnetismSelection.center;
+        service.selection = MagnetismSelection.Center;
         const event = new Vec2(2, 2);
         const endCoords = new Vec2(0, 0);
         const size = new Vec2(4, 4);
@@ -48,7 +80,7 @@ describe('MagnetismService', () => {
     });
 
     it('set distance vector should set max of x and y', () => {
-        service.selection = MagnetismSelection.bottomRight;
+        service.selection = MagnetismSelection.BottomRight;
         const event = new Vec2(2, 2);
         const endCoords = new Vec2(0, 0);
         const size = new Vec2(4, 4);
@@ -57,7 +89,7 @@ describe('MagnetismService', () => {
     });
 
     it('set distance vector should set correct value of x and y', () => {
-        service.selection = MagnetismSelection.top;
+        service.selection = MagnetismSelection.Top;
         const event = new Vec2(2, 2);
         const endCoords = new Vec2(0, 0);
         const size = new Vec2(4, 4);
@@ -66,7 +98,7 @@ describe('MagnetismService', () => {
     });
 
     it('set distance vector should set correct value of x and y', () => {
-        service.selection = MagnetismSelection.left;
+        service.selection = MagnetismSelection.Left;
         const event = new Vec2(2, 2);
         const endCoords = new Vec2(0, 0);
         const size = new Vec2(4, 4);
@@ -119,37 +151,37 @@ describe('MagnetismService', () => {
     });
 
     it('getXKeyAdjustement should return left corner', () => {
-        service.selection = MagnetismSelection.topLeft;
+        service.selection = MagnetismSelection.TopLeft;
         service.gridService.size = 25;
         expect(service.getXKeyAjustement(12, 12)).toEqual(-12);
     });
 
     it('getXKeyAdjustement should return center', () => {
-        service.selection = MagnetismSelection.top;
+        service.selection = MagnetismSelection.Top;
         service.gridService.size = 25;
         expect(service.getXKeyAjustement(12, 12)).toEqual(-18);
     });
 
     it('getXKeyAdjustement should return right', () => {
-        service.selection = MagnetismSelection.topRight;
+        service.selection = MagnetismSelection.TopRight;
         service.gridService.size = 25;
         expect(service.getXKeyAjustement(12, 12)).toEqual(-24);
     });
 
     it('getYKeyAdjustement should return top corner', () => {
-        service.selection = MagnetismSelection.topLeft;
+        service.selection = MagnetismSelection.TopLeft;
         service.gridService.size = 25;
         expect(service.getYKeyAjustement(12, 12)).toEqual(-12);
     });
 
     it('getYKeyAdjustement should return center', () => {
-        service.selection = MagnetismSelection.left;
+        service.selection = MagnetismSelection.Left;
         service.gridService.size = 25;
         expect(service.getYKeyAjustement(12, 12)).toEqual(-18);
     });
 
     it('getYKeyAdjustement should return bottom', () => {
-        service.selection = MagnetismSelection.bottomLeft;
+        service.selection = MagnetismSelection.BottomLeft;
         service.gridService.size = 25;
         expect(service.getYKeyAjustement(12, 12)).toEqual(-24);
     });

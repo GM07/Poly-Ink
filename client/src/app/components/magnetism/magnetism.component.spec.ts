@@ -30,55 +30,55 @@ describe('MagnetismComponent', () => {
     });
 
     it('setSelected should toggle topLeft correctly', () => {
-        component.setSelected(MagnetismSelection.topLeft);
+        component.setSelected(MagnetismSelection.TopLeft);
         expect(component.topLeft.nativeElement.style.background).toEqual('gray');
         expect(component.topRight.nativeElement.style.background).toEqual('white');
     });
 
     it('setSelected should toggle top correctly', () => {
-        component.setSelected(MagnetismSelection.top);
+        component.setSelected(MagnetismSelection.Top);
         expect(component.top.nativeElement.style.background).toEqual('gray');
         expect(component.topLeft.nativeElement.style.background).toEqual('white');
     });
 
     it('setSelected should toggle topRight correctly', () => {
-        component.setSelected(MagnetismSelection.topRight);
+        component.setSelected(MagnetismSelection.TopRight);
         expect(component.topRight.nativeElement.style.background).toEqual('gray');
         expect(component.topLeft.nativeElement.style.background).toEqual('white');
     });
 
     it('setSelected should toggle left correctly', () => {
-        component.setSelected(MagnetismSelection.left);
+        component.setSelected(MagnetismSelection.Left);
         expect(component.left.nativeElement.style.background).toEqual('gray');
         expect(component.topLeft.nativeElement.style.background).toEqual('white');
     });
 
     it('setSelected should toggle center correctly', () => {
-        component.setSelected(MagnetismSelection.center);
+        component.setSelected(MagnetismSelection.Center);
         expect(component.center.nativeElement.style.background).toEqual('gray');
         expect(component.topLeft.nativeElement.style.background).toEqual('white');
     });
 
     it('setSelected should toggle right correctly', () => {
-        component.setSelected(MagnetismSelection.right);
+        component.setSelected(MagnetismSelection.Right);
         expect(component.right.nativeElement.style.background).toEqual('gray');
         expect(component.topLeft.nativeElement.style.background).toEqual('white');
     });
 
     it('setSelected should toggle bottomLeft correctly', () => {
-        component.setSelected(MagnetismSelection.bottomLeft);
+        component.setSelected(MagnetismSelection.BottomLeft);
         expect(component.bottomLeft.nativeElement.style.background).toEqual('gray');
         expect(component.topLeft.nativeElement.style.background).toEqual('white');
     });
 
     it('setSelected should toggle bottom correctly', () => {
-        component.setSelected(MagnetismSelection.bottom);
+        component.setSelected(MagnetismSelection.Bottom);
         expect(component.bottom.nativeElement.style.background).toEqual('gray');
         expect(component.topLeft.nativeElement.style.background).toEqual('white');
     });
 
     it('setSelected should toggle bottomRight correctly', () => {
-        component.setSelected(MagnetismSelection.bottomRight);
+        component.setSelected(MagnetismSelection.BottomRight);
         expect(component.bottomRight.nativeElement.style.background).toEqual('gray');
         expect(component.topLeft.nativeElement.style.background).toEqual('white');
     });
