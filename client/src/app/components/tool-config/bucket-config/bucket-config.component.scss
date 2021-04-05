@@ -1,0 +1,24 @@
+.tab {
+    width: 190px;
+}
+
+.textFormat {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.textFormatForSlider {
+    padding-left: 8px;
+    font-size: small;
+}
+
+::ng-deep .mat-slider-wrapper {
+    .mat-slider-thumb-container {
+        .mat-slider-thumb-label {
+            width: 30px;
+            height: 30px;
+            top: -41px;
+            right: -15px;
+        }
+    }
+}

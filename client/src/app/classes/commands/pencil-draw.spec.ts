@@ -17,7 +17,7 @@ describe('PencilDraw', () => {
     const ALPHA = 3;
     // tslint:disable:no-string-literal
     beforeEach(() => {
-        colorService = { primaryRgba: Colors.BLACK.rgbString, secondaryRgba: Colors.BLUE.rgbString } as ColorService;
+        colorService = { primaryColor: Colors.BLACK, secondaryColor: Colors.BLUE, primaryColorAlpha: 1.0, secondaryColorAlpha: 1.0 } as ColorService;
         pencilDraw = new PencilDraw(colorService, new PencilConfig());
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;

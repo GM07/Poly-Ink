@@ -19,7 +19,7 @@ describe('LineDraw', () => {
     const ALPHA = 3;
 
     beforeEach(() => {
-        colorService = { primaryRgba: Colors.BLACK.rgbString, secondaryRgba: Colors.BLUE.rgbString } as ColorService;
+        colorService = { primaryColor: Colors.BLACK, secondaryColor: Colors.BLUE, primaryColorAlpha: 1.0, secondaryColorAlpha: 1.0 } as ColorService;
         lineDraw = new LineDraw(colorService, new LineConfig());
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -27,8 +27,8 @@ describe('LineDraw', () => {
 
     it('should construct properly', () => {
         expect(lineDraw).toBeDefined();
-        expect(lineDraw['primaryRgba']).toEqual(Colors.BLACK.rgbString);
-        expect(lineDraw['secondaryRgba']).toEqual(Colors.BLUE.rgbString);
+        expect(lineDraw['primaryRgba']).toEqual(Colors.BLACK.toRgbaString(1.0));
+        expect(lineDraw['secondaryRgba']).toEqual(Colors.BLUE.toRgbaString(1.0));
         expect(lineDraw['config'].showJunctionPoints).toBeTrue();
         expect(lineDraw['config'].points).toEqual([]);
         expect(lineDraw['config'].closedLoop).toBeFalse();

@@ -19,7 +19,7 @@ describe('RectangleDraw', () => {
 
     beforeEach(() => {
         // tslint:disable:no-string-literal
-        colorService = { primaryRgba: Colors.RED.rgbString, secondaryRgba: Colors.BLUE.rgbString } as ColorService;
+        colorService = { primaryColor: Colors.RED, secondaryColor: Colors.BLUE, primaryColorAlpha: 1.0, secondaryColorAlpha: 1.0 } as ColorService;
         rectangleDraw = new RectangleDraw(colorService, new ShapeConfig());
         canvasTestHelper = TestBed.inject(CanvasTestHelper);
         ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -35,8 +35,8 @@ describe('RectangleDraw', () => {
 
     it('should construct properly', () => {
         expect(rectangleDraw).toBeDefined();
-        expect(rectangleDraw['primaryRgba']).toEqual(Colors.RED.rgbString);
-        expect(rectangleDraw['secondaryRgba']).toEqual(Colors.BLUE.rgbString);
+        expect(rectangleDraw['primaryRgba']).toEqual(Colors.RED.toRgbaString(1.0));
+        expect(rectangleDraw['secondaryRgba']).toEqual(Colors.BLUE.toRgbaString(1.0));
         expect(rectangleDraw['config'].shapeMode).toEqual(ShapeMode.FilledWithContour);
         expect(rectangleDraw['config'].lineWidth).toEqual(ToolSettingsConst.MIN_WIDTH);
         expect(rectangleDraw['config'].shiftDown).toBeFalse();
