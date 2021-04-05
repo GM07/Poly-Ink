@@ -22,7 +22,8 @@ describe('AbstractSelectionComponent', () => {
 
     beforeEach(async(() => {
         const undoRedoServiceSpy = jasmine.createSpyObj('UndoRedoService', ['init', 'saveCommand', 'undo', 'redo', 'isPreviewEmpty', 'onKeyDown']);
-        drawService = new DrawingService(undoRedoServiceSpy);
+        const gridServiceSpy = jasmine.createSpyObj('GridService', ['updateGrid']);
+        drawService = new DrawingService(undoRedoServiceSpy, gridServiceSpy);
         TestBed.configureTestingModule({
             declarations: [AbstractSelectionComponent],
             providers: [AbstractSelectionService, { provide: DrawingService, useValue: drawService }, SelectionEventsService],
@@ -75,7 +76,7 @@ describe('AbstractSelectionComponent', () => {
         expect(stopDrawingSpy).toHaveBeenCalled();
     });
 
-    it('should change translationOrigin when mouseDown and inSelection', () => {
+    it('should change translationOrigin when mouseDown and in selection', () => {
         spyOn(abstractSelectionService, 'getPositionFromMouse');
         spyOn<any>(component, 'makeControlsUnselectable');
         component.onMouseDown(mouseEvent);

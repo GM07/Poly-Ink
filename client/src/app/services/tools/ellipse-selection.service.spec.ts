@@ -89,7 +89,7 @@ describe('EllipseSelectionService', () => {
         spyOn(service.config, 'didChange').and.returnValue(true);
         const fillBackground = spyOn<any>(service, 'fillBackground');
         const drawSelection = spyOn<any>(service, 'drawSelection');
-        service['drawFinalselection']();
+        service['drawFinalSelection']();
         expect(ctx.ellipse).toHaveBeenCalled();
         expect(ctx.clip).toHaveBeenCalled();
         expect(ctx.drawImage).toHaveBeenCalled();

@@ -91,9 +91,7 @@ describe('EllipseSelectionDraw', () => {
 
     it('should make appropriate calls on execute', () => {
         spyOn<any>(ellipseSelectionDraw, 'fillBackground').and.callThrough();
-
         ellipseSelectionDraw.execute(ctxStub);
-
         expect(ellipseSelectionDraw['fillBackground']).toHaveBeenCalled();
     });
 });

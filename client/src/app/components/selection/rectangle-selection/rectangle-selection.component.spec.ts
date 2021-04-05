@@ -11,7 +11,8 @@ describe('RectangleSelectionComponent', () => {
 
     beforeEach(async(() => {
         const undoRedoServiceSpy = jasmine.createSpyObj('UndoRedoService', ['init', 'saveCommand', 'undo', 'redo', 'isPreviewEmpty', 'onKeyDown']);
-        service = new DrawingService(undoRedoServiceSpy);
+        const gridServiceSpy = jasmine.createSpyObj('GridService', ['updateGrid']);
+        service = new DrawingService(undoRedoServiceSpy, gridServiceSpy);
         TestBed.configureTestingModule({
             declarations: [RectangleSelectionComponent],
             providers: [{ provide: DrawingService, useValue: service }],

@@ -18,12 +18,14 @@ import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.s
 import { EllipseService } from '@app/services/tools/ellipse.service';
 import { EraserService } from '@app/services/tools/eraser.service';
 import { EyeDropperService } from '@app/services/tools/eye-dropper.service';
+import { LassoService } from '@app/services/tools/lasso.service';
 import { LineService } from '@app/services/tools/line.service';
 import { PencilService } from '@app/services/tools/pencil.service';
 import { PolygoneService } from '@app/services/tools/polygone.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
+
 @Component({
     selector: 'app-settings-handler',
     templateUrl: './settings-handler.component.html',
@@ -46,6 +48,7 @@ export class SettingsHandlerComponent {
         this.settingsList.set(AerosolService, AerosolConfigComponent);
         this.settingsList.set(EyeDropperService, EyeDropperConfigComponent);
         this.settingsList.set(BucketService, BucketConfigComponent);
+        this.settingsList.set(LassoService, EraserConfigComponent);
         this.applyNewTab();
     }
 
