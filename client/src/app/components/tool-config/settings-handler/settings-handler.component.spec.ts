@@ -19,6 +19,7 @@ import { PencilService } from '@app/services/tools/pencil.service';
 import { PolygoneService } from '@app/services/tools/polygone.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 import { RectangleService } from '@app/services/tools/rectangle.service';
+import { StampService } from '@app/services/tools/stamp.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 // tslint:disable:max-classes-per-file
 class MockToolHandler extends ToolHandlerService {
@@ -36,6 +37,7 @@ class MockToolHandler extends ToolHandlerService {
         rectangleSelectionService: RectangleSelectionService,
         polygoneService: PolygoneService,
         eyeDropperService: EyeDropperService,
+        stampService: StampService,
         bucketService: BucketService,
         lassoService: LassoService,
     ) {
@@ -50,6 +52,7 @@ class MockToolHandler extends ToolHandlerService {
             eraserService,
             polygoneService,
             eyeDropperService,
+            stampService,
             bucketService,
             lassoService,
         );
@@ -61,6 +64,7 @@ class MockToolHandler extends ToolHandlerService {
         this.TOOLS_MOCK.set(ToolsConstants.AerosolToolConstants.TOOL_ID, aerosolService);
         this.TOOLS_MOCK.set(ToolsConstants.RectangleSelectionToolConstants.TOOL_ID, rectangleSelectionService);
         this.TOOLS_MOCK.set(ToolsConstants.EyeDropperToolConstants.TOOL_ID, eyeDropperService);
+        this.TOOLS_MOCK.set(ToolsConstants.StampToolConstants.TOOL_ID, stampService);
         this.TOOLS_MOCK.set(ToolsConstants.BucketToolConstants.TOOL_ID, bucketService);
         this.currentToolStub = this.TOOLS_MOCK.values().next().value;
     }
@@ -98,6 +102,7 @@ describe('SettingsHandlerComponent', () => {
     let rectangleSelectionService: RectangleSelectionService;
     let eyeDropperService: EyeDropperService;
     let toolHandlerService: MockToolHandler;
+    let stampService: StampService;
     let bucketService: BucketService;
     let lassoService: LassoService;
 
@@ -116,6 +121,7 @@ describe('SettingsHandlerComponent', () => {
         ellipseSelectionService = TestBed.inject(EllipseSelectionService);
         rectangleSelectionService = TestBed.inject(RectangleSelectionService);
         eyeDropperService = TestBed.inject(EyeDropperService);
+        stampService = TestBed.inject(StampService);
         bucketService = TestBed.inject(BucketService);
 
         lassoService = TestBed.inject(LassoService);
@@ -130,6 +136,7 @@ describe('SettingsHandlerComponent', () => {
             rectangleSelectionService,
             polygoneService,
             eyeDropperService,
+            stampService,
             bucketService,
             lassoService,
         );
