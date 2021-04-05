@@ -294,8 +294,8 @@ describe('Lasso service', () => {
     });
 
     it('should stop drawing', () => {
-        const initSpy = spyOn(service, 'initAttribs').and.callFake(() => {});
-        const stopSpy = spyOn<any>(AbstractSelectionService.prototype, 'stopDrawing').and.callFake(() => {});
+        const initSpy = spyOn(service, 'initAttribs');
+        const stopSpy = spyOn<any>(AbstractSelectionService.prototype, 'stopDrawing');
         service.stopDrawing();
         expect(initSpy).toHaveBeenCalled();
         expect(stopSpy).toHaveBeenCalled();
