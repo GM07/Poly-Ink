@@ -39,6 +39,13 @@ export abstract class ToolSettingsConst {
     static readonly LINE_DEFAULT_DIAMETER_JUNCTION: number = 10;
     static readonly LINE_DEFAULT_WIDTH: number = 6;
 
+    // Stamp
+    static readonly STAMP_MIN_VALUE: number = 0.1;
+    static readonly STAMP_MAX_VALUE: number = 5;
+    static readonly STAMP_MIN_ANGLE: number = 0;
+    static readonly STAMP_MAX_ANGLE: number = 2 * Math.PI;
+    static readonly STAMP_DEFAULT_SIZE: number = 50;
+    static readonly STAMP_ANGLE_STEP: number = 15;
     // Bucket
     static readonly BUCKET_MIN_TOLERANCE: number = 0;
     static readonly BUCKET_MAX_TOLERANCE: number = 100;

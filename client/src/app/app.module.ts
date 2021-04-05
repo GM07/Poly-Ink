@@ -17,6 +17,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StampConfigComponent } from '@app/components/tool-config/stamp-config/stamp-config.component';
 import { ColorPickerModule } from 'src/color-picker/color-picker.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
@@ -83,6 +84,7 @@ import { SidebarDirective } from './directives/sidebar.directive';
         CarrouselComponent,
         SaveDrawingComponent,
         SidebarDirective,
+        StampConfigComponent,
         BucketConfigComponent,
         LassoSelectionComponent,
         GridConfigComponent,
