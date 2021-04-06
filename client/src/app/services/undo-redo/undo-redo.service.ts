@@ -50,7 +50,7 @@ export class UndoRedoService {
 
         this.commands.push(command);
         this.currentAction += 1;
-        this.sendIconSignals();
+        this.sendIconSignals(false);
     }
 
     undo(): void {
@@ -66,7 +66,7 @@ export class UndoRedoService {
             this.commands[i].execute(this.context);
         }
 
-        this.sendIconSignals();
+        this.sendIconSignals(false);
         this.autoSave();
     }
 
@@ -77,7 +77,7 @@ export class UndoRedoService {
         this.currentAction += 1;
 
         this.commands[this.currentAction].execute(this.context);
-        this.sendIconSignals();
+        this.sendIconSignals(false);
         this.autoSave();
     }
 
@@ -102,12 +102,11 @@ export class UndoRedoService {
 
     set blockUndoRedo(block: boolean) {
         this.blockUndoRedoIn = block;
-        this.BLOCK_UNDO_ICON.next(block);
-        this.BLOCK_REDO_ICON.next(block);
+        this.sendIconSignals(block);
     }
 
-    private sendIconSignals(): void {
-        this.BLOCK_UNDO_ICON.next(this.currentAction < 0);
-        this.BLOCK_REDO_ICON.next(this.currentAction >= this.commands.length - 1);
+    private sendIconSignals(block: boolean): void {
+        this.BLOCK_UNDO_ICON.next(block || this.currentAction < 0);
+        this.BLOCK_REDO_ICON.next(block || this.currentAction >= this.commands.length - 1);
     }
 }
