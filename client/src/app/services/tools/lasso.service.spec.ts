@@ -4,6 +4,7 @@ import { LineDrawer } from '@app/classes/line-drawer';
 import { Line } from '@app/classes/math/line';
 import { LassoConfig } from '@app/classes/tool-config/lasso-config';
 import { Vec2 } from '@app/classes/vec2';
+import { CanvasConst } from '@app/constants/canvas';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -37,6 +38,8 @@ describe('Lasso service', () => {
 
         service = TestBed.inject(LassoService);
         service['drawingService'].canvas = document.createElement('canvas');
+        service['drawingService'].canvas.width = CanvasConst.MIN_WIDTH;
+        service['drawingService'].canvas.height = CanvasConst.MIN_HEIGHT;
         service['drawingService'].previewCtx = previewCtxStub;
         service['drawingService'].baseCtx = baseCtxStub;
         service.lineDrawer['pointToAdd'] = new Vec2(0, 0);
@@ -291,6 +294,19 @@ describe('Lasso service', () => {
         const dashSpy = spyOn(LineDrawer, 'drawDashedLinePath');
         service['drawSelection']({} as CanvasRenderingContext2D, mousePos, mousePos);
         expect(dashSpy).toHaveBeenCalled();
+    });
+
+    it('should select all', () => {
+        const closedSpy = spyOn<any>(service, 'onClosedPath');
+        service.selectAll();
+        expect(service.configLasso.points).toEqual([
+            new Vec2(0, 0),
+            new Vec2(CanvasConst.MIN_WIDTH, 0),
+            new Vec2(CanvasConst.MIN_WIDTH, CanvasConst.MIN_HEIGHT),
+            new Vec2(0, CanvasConst.MIN_HEIGHT),
+        ]);
+
+        expect(closedSpy).toHaveBeenCalled();
     });
 
     it('should stop drawing', () => {

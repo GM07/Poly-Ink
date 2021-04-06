@@ -46,52 +46,6 @@ export class LassoService extends AbstractSelectionService {
         super.initAttribs(config);
     }
 
-    private onClosedPath(): void {
-        this.endSelection();
-        this.selectionResize.stopDrawing();
-        this.selectionTranslation.stopDrawing();
-        this.mouseDownCoord = this.start;
-        this.mouseUpCoord = this.end;
-        const size: Vec2 = this.end.substract(this.start);
-        this.configLasso.width = size.x;
-        this.configLasso.height = size.y;
-        this.drawingService.clearCanvas(this.drawingService.previewCtx);
-        this.configLasso.isInSelection = true;
-        this.startSelection();
-    }
-
-    private addPointToSelection(event: MouseEvent): void {
-        this.lineDrawer.addNewPoint(event);
-        this.addNewLine();
-    }
-
-    private addNewLine(): void {
-        if (this.configLasso.points.length > 1) {
-            const length: number = this.configLasso.points.length;
-            this.lines.push(new Line(this.configLasso.points[length - 2], this.configLasso.points[length - 1]));
-        }
-    }
-
-    private createSelection(event: MouseEvent): void {
-        if (this.configLasso.points.length > 1 && this.configLasso.intersecting) return;
-
-        if (this.configLasso.points.length > 2) {
-            const closedLoop: boolean =
-                Geometry.getDistanceBetween(this.lineDrawer.pointToAdd, this.configLasso.points[0]) <=
-                ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;
-
-            if (closedLoop) {
-                this.configLasso.points.push(this.configLasso.points[0]);
-                [this.start, this.end] = this.findSmallestRectangle();
-                this.onClosedPath();
-            } else {
-                this.addPointToSelection(event);
-            }
-        } else {
-            this.addPointToSelection(event);
-        }
-    }
-
     onMouseDown(event: MouseEvent): void {
         this.lineDrawer.leftMouseDown = event.button === MouseButton.Left;
         this.leftMouseDown = this.lineDrawer.leftMouseDown;
@@ -158,9 +112,66 @@ export class LassoService extends AbstractSelectionService {
         }
     }
 
+    selectAll(): void {
+        const width = this.drawingService.canvas.width;
+        const height = this.drawingService.canvas.height;
+
+        this.start = new Vec2(0, 0);
+        this.end = new Vec2(width, height);
+
+        this.configLasso.points = [this.start.clone(), new Vec2(width, 0), this.end.clone(), new Vec2(0, height)];
+        this.onClosedPath();
+    }
+
     stopDrawing(): void {
         super.stopDrawing();
         this.initAttribs(new LassoConfig());
+    }
+
+    private onClosedPath(): void {
+        this.endSelection();
+        this.selectionResize.stopDrawing();
+        this.selectionTranslation.stopDrawing();
+        this.mouseDownCoord = this.start;
+        this.mouseUpCoord = this.end;
+        const size: Vec2 = this.end.substract(this.start);
+        this.configLasso.width = size.x;
+        this.configLasso.height = size.y;
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.configLasso.isInSelection = true;
+        this.startSelection();
+    }
+
+    private addPointToSelection(event: MouseEvent): void {
+        this.lineDrawer.addNewPoint(event);
+        this.addNewLine();
+    }
+
+    private addNewLine(): void {
+        if (this.configLasso.points.length > 1) {
+            const length: number = this.configLasso.points.length;
+            this.lines.push(new Line(this.configLasso.points[length - 2], this.configLasso.points[length - 1]));
+        }
+    }
+
+    private createSelection(event: MouseEvent): void {
+        if (this.configLasso.points.length > 1 && this.configLasso.intersecting) return;
+
+        if (this.configLasso.points.length > 2) {
+            const closedLoop: boolean =
+                Geometry.getDistanceBetween(this.lineDrawer.pointToAdd, this.configLasso.points[0]) <=
+                ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;
+
+            if (closedLoop) {
+                this.configLasso.points.push(this.configLasso.points[0]);
+                [this.start, this.end] = this.findSmallestRectangle();
+                this.onClosedPath();
+            } else {
+                this.addPointToSelection(event);
+            }
+        } else {
+            this.addPointToSelection(event);
+        }
     }
 
     private findSmallestRectangle(): [Vec2, Vec2] {
