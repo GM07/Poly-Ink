@@ -1,11 +1,27 @@
 import { Component } from '@angular/core';
-import { Tool } from '@app/classes/tool';
+import { TabHandler } from '@app/classes/tab-handler';
+import {
+    AerosolToolConstants,
+    BucketToolConstants,
+    EllipseSelectionToolConstants,
+    EllipseToolConstants,
+    EraserToolConstants,
+    EyeDropperToolConstants,
+    LassoToolConstants,
+    LineToolConstants,
+    PencilToolConstants,
+    PolygoneToolConstants,
+    RectangleSelectionToolConstants,
+    RectangleToolConstants,
+    StampToolConstants,
+} from '@app/classes/tool_ui_settings/tools.constants';
 import { AerosolConfigComponent } from '@app/components/tool-config/aerosol-config/aerosol-config.component';
 import { BucketConfigComponent } from '@app/components/tool-config/bucket-config/bucket-config.component';
 import { EllipseConfigComponent } from '@app/components/tool-config/ellipse-config/ellipse-config.component';
 import { EllipseSelectionConfigComponent } from '@app/components/tool-config/ellipse-selection-config/ellipse-selection-config.component';
 import { EraserConfigComponent } from '@app/components/tool-config/eraser-config/eraser-config.component';
 import { EyeDropperConfigComponent } from '@app/components/tool-config/eye-dropper-config/eye-dropper-config.component';
+import { LassoSelectionConfigComponent } from '@app/components/tool-config/lasso-selection-config/lasso-selection-config.component';
 import { LineConfigComponent } from '@app/components/tool-config/line-config/line-config.component';
 import { PencilConfigComponent } from '@app/components/tool-config/pencil-config/pencil-config.component';
 import { PolygoneConfigComponent } from '@app/components/tool-config/polygone-config/polygone-config.component';
@@ -13,19 +29,6 @@ import { RectangleConfigComponent } from '@app/components/tool-config/rectangle-
 import { RectangleSelectionConfigComponent } from '@app/components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
 import { StampConfigComponent } from '@app/components/tool-config/stamp-config/stamp-config.component';
 import { ToolConfig } from '@app/components/tool-config/tool-config';
-import { AerosolService } from '@app/services/tools/aerosol.service';
-import { BucketService } from '@app/services/tools/bucket.service';
-import { EllipseSelectionService } from '@app/services/tools/ellipse-selection.service';
-import { EllipseService } from '@app/services/tools/ellipse.service';
-import { EraserService } from '@app/services/tools/eraser.service';
-import { EyeDropperService } from '@app/services/tools/eye-dropper.service';
-import { LassoService } from '@app/services/tools/lasso.service';
-import { LineService } from '@app/services/tools/line.service';
-import { PencilService } from '@app/services/tools/pencil.service';
-import { PolygoneService } from '@app/services/tools/polygone.service';
-import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
-import { RectangleService } from '@app/services/tools/rectangle.service';
-import { StampService } from '@app/services/tools/stamp.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
 @Component({
@@ -34,40 +37,22 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
     styleUrls: ['./settings-handler.component.scss'],
 })
 export class SettingsHandlerComponent {
-    settingsList: Map<typeof Tool, ToolConfig> = new Map();
-    lastTool: Tool;
-    lastTab: ToolConfig = PencilConfigComponent;
+    readonly TAB_HANDLER: TabHandler<ToolConfig>;
 
-    constructor(private toolHandler: ToolHandlerService) {
-        this.settingsList.set(EraserService, EraserConfigComponent);
-        this.settingsList.set(PencilService, PencilConfigComponent);
-        this.settingsList.set(LineService, LineConfigComponent);
-        this.settingsList.set(RectangleService, RectangleConfigComponent);
-        this.settingsList.set(EllipseService, EllipseConfigComponent);
-        this.settingsList.set(PolygoneService, PolygoneConfigComponent);
-        this.settingsList.set(RectangleSelectionService, RectangleSelectionConfigComponent);
-        this.settingsList.set(EllipseSelectionService, EllipseSelectionConfigComponent);
-        this.settingsList.set(AerosolService, AerosolConfigComponent);
-        this.settingsList.set(EyeDropperService, EyeDropperConfigComponent);
-        this.settingsList.set(StampService, StampConfigComponent);
-        this.settingsList.set(BucketService, BucketConfigComponent);
-        this.settingsList.set(LassoService, EraserConfigComponent);
-        this.applyNewTab();
-    }
-
-    get activeTab(): ToolConfig {
-        if (this.toolHandler.getCurrentTool() === this.lastTool) return this.lastTab;
-        this.applyNewTab();
-        return this.lastTab;
-    }
-
-    applyNewTab(): void {
-        for (const [tool, toolConfig] of this.settingsList) {
-            if (this.toolHandler.getCurrentTool() instanceof tool) {
-                this.lastTool = this.toolHandler.getCurrentTool();
-                this.lastTab = toolConfig;
-                break;
-            }
-        }
+    constructor(toolHandler: ToolHandlerService) {
+        this.TAB_HANDLER = new TabHandler<ToolConfig>(toolHandler);
+        this.TAB_HANDLER.setTab(PencilToolConstants.TOOL_ID, PencilConfigComponent);
+        this.TAB_HANDLER.setTab(EraserToolConstants.TOOL_ID, EraserConfigComponent);
+        this.TAB_HANDLER.setTab(LineToolConstants.TOOL_ID, LineConfigComponent);
+        this.TAB_HANDLER.setTab(RectangleToolConstants.TOOL_ID, RectangleConfigComponent);
+        this.TAB_HANDLER.setTab(EllipseToolConstants.TOOL_ID, EllipseConfigComponent);
+        this.TAB_HANDLER.setTab(PolygoneToolConstants.TOOL_ID, PolygoneConfigComponent);
+        this.TAB_HANDLER.setTab(AerosolToolConstants.TOOL_ID, AerosolConfigComponent);
+        this.TAB_HANDLER.setTab(EyeDropperToolConstants.TOOL_ID, EyeDropperConfigComponent);
+        this.TAB_HANDLER.setTab(StampToolConstants.TOOL_ID, StampConfigComponent);
+        this.TAB_HANDLER.setTab(BucketToolConstants.TOOL_ID, BucketConfigComponent);
+        this.TAB_HANDLER.setTab(RectangleSelectionToolConstants.TOOL_ID, RectangleSelectionConfigComponent);
+        this.TAB_HANDLER.setTab(EllipseSelectionToolConstants.TOOL_ID, EllipseSelectionConfigComponent);
+        this.TAB_HANDLER.setTab(LassoToolConstants.TOOL_ID, LassoSelectionConfigComponent);
     }
 }
