@@ -21,6 +21,8 @@ describe('DrawingService', () => {
         service.previewCtx = canvasTestHelper.drawCanvas.getContext('2d') as CanvasRenderingContext2D;
         const pencilConfigSpy = jasmine.createSpyObj('PencilConfig', ['clone']);
         command = new PencilDraw({} as ColorService, pencilConfigSpy);
+        service.magnetismService.gridService.canvas = document.createElement('canvas');
+        service.magnetismService.gridService.ctx = service.magnetismService.gridService.canvas.getContext('2d') as CanvasRenderingContext2D;
     });
 
     it('should be created', () => {
@@ -114,9 +116,9 @@ describe('DrawingService', () => {
         spyOn(service, 'initBackground');
         spyOn(service.baseCtx, 'drawImage');
         spyOn(service.previewCtx, 'drawImage');
-        spyOn(service.gridService, 'updateGrid');
+        spyOn(service.magnetismService.gridService, 'updateGrid');
         service.previewCanvas = canvasTestHelper.canvas;
-        service.gridService.canvas = canvasTestHelper.canvas;
+        service.magnetismService.gridService.canvas = canvasTestHelper.canvas;
         service.resizeCanvas(0, 0);
         expect(service['save']).not.toHaveBeenCalled();
     });
@@ -128,9 +130,9 @@ describe('DrawingService', () => {
         spyOn(service, 'initBackground');
         spyOn(service.baseCtx, 'drawImage');
         spyOn(service.previewCtx, 'drawImage');
-        spyOn(service.gridService, 'updateGrid');
+        spyOn(service.magnetismService.gridService, 'updateGrid');
         service.previewCanvas = canvasTestHelper.canvas;
-        service.gridService.canvas = canvasTestHelper.canvas;
+        service.magnetismService.gridService.canvas = canvasTestHelper.canvas;
         service.resizeCanvas(0, 0);
         expect(service['save']).toHaveBeenCalled();
     });

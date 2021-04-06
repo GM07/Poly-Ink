@@ -29,6 +29,7 @@ import { DrawingComponent } from './components/drawing/drawing.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { ExportDrawingComponent } from './components/export-drawing/export-drawing.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { MagnetismComponent } from './components/magnetism/magnetism.component';
 import { SaveDrawingComponent } from './components/save-drawing/save-drawing.component';
 import { AbstractSelectionComponent } from './components/selection/abstract-selection/abstract-selection.component';
 import { EllipseSelectionComponent } from './components/selection/ellipse-selection/ellipse-selection.component';
@@ -88,6 +89,7 @@ import { SidebarDirective } from './directives/sidebar.directive';
         BucketConfigComponent,
         LassoSelectionComponent,
         GridConfigComponent,
+        MagnetismComponent,
     ],
     imports: [
         AppRoutingModule,

@@ -2,6 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { GridService } from '@app/services/drawing/grid.service';
+import { MagnetismService } from '@app/services/drawing/magnetism.service';
 import { Subject } from 'rxjs';
 import { AbstractSelectionService } from './abstract-selection.service';
 
@@ -112,6 +114,7 @@ describe('AbstractSelectionService', () => {
         service.mouseUpCoord = new Vec2(10, 10);
         service.leftMouseDown = true;
         mouseEvent = { x: 1000, y: 1000 } as MouseEvent;
+        service['selectionTranslation']['magnetismService'] = new MagnetismService(new GridService());
         service.onMouseMove(mouseEvent);
         expect(updateSpy).toHaveBeenCalled();
     });
@@ -177,8 +180,8 @@ describe('AbstractSelectionService', () => {
     it('should call the appropriate subscribed methods', () => {
         const updateSelectionSpy = spyOn<any>(service, 'updateSelection');
         service['drawingService'].changes.next();
-        service['selectionTranslation'].UPDATE_SELECTION_REQUEST.next({ x: 0, y: 0 } as Vec2);
-        service['selectionResize'].UPDATE_SELECTION_REQUEST.next({ x: 0, y: 0 } as Vec2);
+        service['selectionTranslation'].UPDATE_SELECTION_REQUEST.next(new Vec2(0, 0));
+        service['selectionResize'].UPDATE_SELECTION_REQUEST.next(new Vec2(0, 0));
         expect(updateSelectionSpy).toHaveBeenCalledTimes(3);
     });
 });

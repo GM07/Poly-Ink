@@ -9,6 +9,7 @@ import {
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 import { ExportDrawingComponent } from '@app/components/export-drawing/export-drawing.component';
 import { SaveDrawingComponent } from '@app/components/save-drawing/save-drawing.component';
+import { MagnetismService } from '@app/services/drawing/magnetism.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 
@@ -41,11 +42,16 @@ export class EditorComponent {
         }
     }
 
-    constructor(public shortcutHandler: ShortcutHandlerService, private undoRedoService: UndoRedoService) {}
+    constructor(
+        public shortcutHandler: ShortcutHandlerService,
+        private undoRedoService: UndoRedoService,
+        private magnetismService: MagnetismService,
+    ) {}
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
         this.shortcutHandler.onKeyDown(event);
+        this.magnetismService.onKeyDown(event);
     }
 
     @HostListener('document:mousemove', ['$event'])

@@ -12,7 +12,7 @@ export class GridService {
     ctx: CanvasRenderingContext2D;
     canvas: HTMLCanvasElement;
     gridVisibility: boolean;
-    private size: number;
+    size: number;
     private gridColor: string;
     private opacity: number;
     private toggleGridShortcut: ShortcutKey;

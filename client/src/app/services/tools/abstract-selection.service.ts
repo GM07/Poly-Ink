@@ -37,7 +37,7 @@ export abstract class AbstractSelectionService extends Tool {
 
     initAttribs(config: SelectionConfig): void {
         this.config = config;
-        this.selectionTranslation = new SelectionTranslation(this.config);
+        this.selectionTranslation = new SelectionTranslation(this.config, this.drawingService.magnetismService);
         this.selectionResize = new SelectionResize(this.config);
         this.config.endCoords = new Vec2(0, 0);
         this.initSubscriptions();

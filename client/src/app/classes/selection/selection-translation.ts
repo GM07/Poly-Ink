@@ -1,6 +1,7 @@
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
+import { MagnetismService } from '@app/services/drawing/magnetism.service';
 import { Subject } from 'rxjs';
 
 export class SelectionTranslation {
@@ -22,7 +23,7 @@ export class SelectionTranslation {
 
     readonly UPDATE_SELECTION_REQUEST: Subject<Vec2> = new Subject<Vec2>();
 
-    constructor(config: SelectionConfig) {
+    constructor(config: SelectionConfig, private magnetismService: MagnetismService) {
         this.bodyWidth = document.body.style.width;
         this.bodyHeight = document.body.style.height;
         this.config = config;
@@ -38,12 +39,7 @@ export class SelectionTranslation {
                 if (event.repeat) return;
 
                 this.setArrowKeyDown(event);
-                this.sendUpdateSelectionRequest(
-                    new Vec2(
-                        this.TRANSLATION_PIXELS * this.HorizontalTranslationModifier(),
-                        this.TRANSLATION_PIXELS * this.VerticalTranslationModifier(),
-                    ),
-                );
+                this.sendUpdateSelectionRequest(new Vec2(this.HorizontalTranslationModifier(), this.VerticalTranslationModifier()));
 
                 this.startArrowKeyTranslation();
             }
@@ -59,20 +55,21 @@ export class SelectionTranslation {
 
     onMouseUp(mouseUpCoord: Vec2): void {
         if (this.config.previewSelectionCtx !== null && this.isMouseTranslationStarted) {
-            this.isMouseTranslationStarted = false;
-            this.sendUpdateSelectionRequest(this.getTranslation(mouseUpCoord));
+            this.sendUpdateSelectionRequest(this.getTranslation(this.magnetismService.getGridPosition(mouseUpCoord)));
         }
     }
 
     onMouseMove(event: MouseEvent, mouseUpCoord: Vec2): void {
         if (this.config.previewSelectionCtx !== null && this.isMouseTranslationStarted) {
-            this.sendUpdateSelectionRequest(this.getTranslation(mouseUpCoord));
+            const translation = this.getTranslation(this.magnetismService.getGridPosition(mouseUpCoord));
+            this.sendUpdateSelectionRequest(translation);
             document.body.style.width = event.pageX + this.config.width + 'px';
             document.body.style.height = event.pageY + this.config.height + 'px';
         }
     }
 
     startMouseTranslation(mousePosition: Vec2): void {
+        this.magnetismService.setDistanceVector(mousePosition, this.config.endCoords, new Vec2(this.config.width, this.config.height));
         this.isMouseTranslationStarted = true;
         this.translationOrigin = mousePosition;
     }
@@ -114,12 +111,7 @@ export class SelectionTranslation {
                 if (this.moveId === this.DEFAULT_MOVE_ID && this.config.previewSelectionCtx !== null)
                     this.moveId = window.setInterval(() => {
                         this.clearArrowKeys();
-                        this.sendUpdateSelectionRequest(
-                            new Vec2(
-                                this.TRANSLATION_PIXELS * this.HorizontalTranslationModifier(),
-                                this.TRANSLATION_PIXELS * this.VerticalTranslationModifier(),
-                            ),
-                        );
+                        this.sendUpdateSelectionRequest(new Vec2(this.HorizontalTranslationModifier(), this.VerticalTranslationModifier()));
                     }, this.NEXT_MOVES_TIMEOUT);
             }, this.FIRST_MOVE_TIMEOUT);
         }
@@ -147,10 +139,20 @@ export class SelectionTranslation {
     }
 
     private HorizontalTranslationModifier(): number {
-        return +this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown;
+        if (this.magnetismService.isEnabled) {
+            return (
+                this.magnetismService.getXKeyAjustement(this.config.endCoords.x, this.config.width) +
+                (+this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown) * this.magnetismService.gridService.size
+            );
+        } else return (+this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown) * this.TRANSLATION_PIXELS;
     }
 
     private VerticalTranslationModifier(): number {
-        return +this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown;
+        if (this.magnetismService.isEnabled)
+            return (
+                this.magnetismService.getYKeyAjustement(this.config.endCoords.y, this.config.height) +
+                (+this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown) * this.magnetismService.gridService.size
+            );
+        else return (+this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown) * this.TRANSLATION_PIXELS;
     }
 }
