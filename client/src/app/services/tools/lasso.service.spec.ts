@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { LineDrawer } from '@app/classes/line-drawer';
 import { Line } from '@app/classes/math/line';
+import { LassoConfig } from '@app/classes/tool-config/lasso-config';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
@@ -52,12 +53,10 @@ describe('Lasso service', () => {
         expect(service).toBeTruthy();
     });
 
-    it('should init service', () => {
-        spyOn<any>(service, 'initSelection');
+    it('should init attribs', () => {
         service['lines'].push(new Line(pointsTest[0], pointsTest[1]));
-        service.initService();
+        service.initAttribs(new LassoConfig());
         expect(service['lines'].length).toEqual(0);
-        expect(service['initSelection']).toHaveBeenCalled();
     });
 
     it('should start selection on closed path', () => {
@@ -258,7 +257,7 @@ describe('Lasso service', () => {
     });
 
     it('should init service when ending selection', () => {
-        const spy = spyOn(service, 'initService').and.callThrough();
+        const spy = spyOn(service, 'initAttribs').and.callThrough();
         service.configLasso.previewSelectionCtx = service['drawingService'].baseCtx;
         service['endSelection']();
         expect(spy).toHaveBeenCalled();
@@ -295,11 +294,9 @@ describe('Lasso service', () => {
     });
 
     it('should stop drawing', () => {
-        const endSpy = spyOn<any>(service, 'endSelection');
-        const initSpy = spyOn<any>(service, 'initService');
+        const initSpy = spyOn(service, 'initAttribs');
         const stopSpy = spyOn<any>(AbstractSelectionService.prototype, 'stopDrawing');
         service.stopDrawing();
-        expect(endSpy).toHaveBeenCalled();
         expect(initSpy).toHaveBeenCalled();
         expect(stopSpy).toHaveBeenCalled();
     });

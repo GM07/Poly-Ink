@@ -68,6 +68,14 @@ describe('EllipseSelectionDraw', () => {
         expect(fillSpy).not.toHaveBeenCalled();
     });
 
+    it('should not fill the background if the selection is marked to be pasted', () => {
+        const fillSpy = spyOn<any>(ellipseSelectionDraw, 'fillBackground');
+        ellipseSelectionDraw['config'].markedForPaste = true;
+        ellipseSelectionDraw['config'].markedForDelete = true;
+        ellipseSelectionDraw.execute(ctxStub);
+        expect(fillSpy).not.toHaveBeenCalled();
+    });
+
     it('should move selection properly', () => {
         const middleX = ellipseSelectionDraw['config'].width / 2;
         const middleY = ellipseSelectionDraw['config'].height / 2;

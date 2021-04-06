@@ -40,6 +40,8 @@ export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
         config.previewSelectionCtx = null;
         config.isInSelection = this.isInSelection;
         config.intersecting = this.intersecting;
+        config.markedForDelete = this.markedForDelete;
+        config.markedForPaste = this.markedForPaste;
 
         for (let i = 0; i < this.SELECTION_DATA.length; ++i) {
             DrawingService.saveCanvas(config.SELECTION_DATA[i], this.SELECTION_DATA[i]);

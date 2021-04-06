@@ -12,15 +12,19 @@ export class RectangleSelectionDraw extends AbstractDraw {
     }
 
     execute(context: CanvasRenderingContext2D): void {
-        this.fillBackground(context);
+        if (!this.config.markedForPaste) {
+            this.fillBackground(context);
+        }
 
-        context.drawImage(
-            this.config.SELECTION_DATA[SelectionData.FinalData],
-            Math.floor(this.config.endCoords.x),
-            Math.floor(this.config.endCoords.y),
-            Math.abs(this.config.width),
-            Math.abs(this.config.height),
-        );
+        if (!this.config.markedForDelete) {
+            context.drawImage(
+                this.config.SELECTION_DATA[SelectionData.FinalData],
+                Math.floor(this.config.endCoords.x),
+                Math.floor(this.config.endCoords.y),
+                Math.abs(this.config.width),
+                Math.abs(this.config.height),
+            );
+        }
     }
 
     private fillBackground(context: CanvasRenderingContext2D): void {

@@ -6,6 +6,7 @@ import { Line } from '@app/classes/math/line';
 import { SelectionData } from '@app/classes/selection/selection-data';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { LassoConfig } from '@app/classes/tool-config/lasso-config';
+import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { LassoToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
@@ -29,13 +30,12 @@ export class LassoService extends AbstractSelectionService {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(LassoToolConstants.SHORTCUT_KEY);
         this.toolID = LassoToolConstants.TOOL_ID;
-        this.initService();
+        this.initAttribs(new LassoConfig());
     }
 
-    initService(): void {
+    initAttribs(config: SelectionConfig): void {
         this.lines = [];
-        this.configLasso = new LassoConfig();
-        this.config = this.configLasso;
+        this.configLasso = config as LassoConfig;
         this.lineDrawer = new LineDrawer(this.configLasso, this.drawingService);
         this.lineDrawer.drawPreview.subscribe(() => {
             this.drawPreview();
@@ -43,7 +43,7 @@ export class LassoService extends AbstractSelectionService {
         this.lineDrawer.removeLine.subscribe(() => {
             this.lines.pop();
         });
-        this.initSelection();
+        super.initAttribs(config);
     }
 
     private onClosedPath(): void {
@@ -159,9 +159,8 @@ export class LassoService extends AbstractSelectionService {
     }
 
     stopDrawing(): void {
-        this.endSelection();
-        this.initService();
         super.stopDrawing();
+        this.initAttribs(new LassoConfig());
     }
 
     private findSmallestRectangle(): [Vec2, Vec2] {
@@ -180,7 +179,7 @@ export class LassoService extends AbstractSelectionService {
     private draw(): void {
         const command = new LassoDraw(this.colorService, this.configLasso);
         this.drawingService.draw(command);
-        this.initService();
+        this.initAttribs(new LassoConfig());
     }
 
     private drawPreview(): void {
@@ -201,7 +200,11 @@ export class LassoService extends AbstractSelectionService {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.draw();
 
-        this.initService();
+        this.initAttribs(new LassoConfig());
+        this.config.previewSelectionCtx = null;
+        this.config.endCoords = new Vec2(0, 0);
+        this.config.markedForDelete = false;
+        this.config.markedForPaste = false;
     }
 
     protected fillBackground(ctx: CanvasRenderingContext2D): void {

@@ -74,16 +74,16 @@ export class LineDrawer {
         this.drawPreview = new Subject<void>();
         this.removeLine = new Subject<void>();
         this.leftMouseDown = false;
-        this.init();
+        this.init(config);
     }
 
-    init(): void {
+    init(config: AbstractLineConfig): void {
         this.shift.isDown = false;
         this.escape.isDown = false;
         this.backspace.isDown = false;
         this.pointToAdd = {} as Vec2;
         this.mousePosition = {} as Vec2;
-        this.config.points = [];
+        this.config.points = config.points;
     }
 
     addNewPoint(event: MouseEvent): void {

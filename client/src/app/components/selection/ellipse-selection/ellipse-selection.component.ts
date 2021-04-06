@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSelectionComponent } from '@app/components/selection/abstract-selection/abstract-selection.component';
+import { ClipboardService } from '@app/services/clipboard/clipboard.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { SelectionEventsService } from '@app/services/selection/selection-events.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
@@ -17,7 +18,8 @@ export class EllipseSelectionComponent extends AbstractSelectionComponent {
         cd: ChangeDetectorRef,
         selectionEvents: SelectionEventsService,
         shortcutHandlerService: ShortcutHandlerService,
+        clipboardService: ClipboardService,
     ) {
-        super(selectionService, drawingService, cd, selectionEvents, shortcutHandlerService);
+        super(selectionService, drawingService, cd, selectionEvents, shortcutHandlerService, clipboardService);
     }
 }

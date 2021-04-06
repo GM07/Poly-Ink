@@ -13,6 +13,8 @@ export class SelectionConfig {
     originalWidth: number;
     width: number;
     previewSelectionCtx: CanvasRenderingContext2D | null;
+    markedForDelete: boolean;
+    markedForPaste: boolean;
 
     constructor() {
         this.startCoords = new Vec2(0, 0);
@@ -22,6 +24,8 @@ export class SelectionConfig {
         this.originalWidth = 0;
         this.width = 0;
         this.shift = new ShiftKey();
+        this.markedForDelete = false;
+        this.markedForPaste = false;
 
         this.SELECTION_DATA.push(document.createElement('canvas'));
         this.SELECTION_DATA.push(document.createElement('canvas'));
@@ -37,6 +41,8 @@ export class SelectionConfig {
         config.height = this.height;
         config.originalWidth = this.originalWidth;
         config.width = this.width;
+        config.markedForDelete = this.markedForDelete;
+        config.markedForPaste = this.markedForPaste;
 
         for (let i = 0; i < this.SELECTION_DATA.length; ++i) {
             DrawingService.saveCanvas(config.SELECTION_DATA[i], this.SELECTION_DATA[i]);
@@ -46,6 +52,11 @@ export class SelectionConfig {
     }
 
     didChange(): boolean {
-        return !this.startCoords.equals(this.endCoords) || this.width !== this.originalWidth || this.height !== this.originalHeight;
+        return (
+            !this.startCoords.equals(this.endCoords) ||
+            this.width !== this.originalWidth ||
+            this.height !== this.originalHeight ||
+            this.markedForDelete
+        );
     }
 }

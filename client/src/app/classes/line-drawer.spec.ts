@@ -9,7 +9,7 @@ import { Vec2 } from './vec2';
 /* tslint:disable:no-empty */
 
 class MockConfig implements AbstractLineConfig {
-    points: Vec2[];
+    points: Vec2[] = [];
 }
 
 describe('Line Drawer', () => {

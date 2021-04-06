@@ -17,7 +17,7 @@ describe('EllipseSelectionService', () => {
     let baseCtxStub: CanvasRenderingContext2D;
     let previewCtxStub: CanvasRenderingContext2D;
     beforeEach(() => {
-        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw'], { changes: new Subject<void>() });
+        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'blockUndoRedo'], { changes: new Subject<void>() });
         TestBed.configureTestingModule({
             providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
         });
@@ -126,5 +126,13 @@ describe('EllipseSelectionService', () => {
     it('should send command to drawing service to draw on base', () => {
         service.draw();
         expect(drawServiceSpy.draw).toHaveBeenCalled();
+    });
+
+    it('should not fill the background of the selection if the current selection is marked to be pasted', () => {
+        service['config'].previewSelectionCtx = previewCtxStub;
+        const fillSpy = spyOn<any>(service, 'fillBackground');
+        service.config.markedForPaste = true;
+        service['updateSelection'](new Vec2(0, 0));
+        expect(fillSpy).not.toHaveBeenCalled();
     });
 });

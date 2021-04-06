@@ -32,12 +32,11 @@ export abstract class AbstractSelectionService extends Tool {
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
-        this.config = new SelectionConfig();
-        this.initSelection();
-        this.UPDATE_POINTS = new Subject<boolean>();
+        this.initAttribs(new SelectionConfig());
     }
 
-    protected initSelection(): void {
+    initAttribs(config: SelectionConfig): void {
+        this.config = config;
         this.selectionTranslation = new SelectionTranslation(this.config);
         this.selectionResize = new SelectionResize(this.config);
         this.config.endCoords = new Vec2(0, 0);
@@ -234,7 +233,7 @@ export abstract class AbstractSelectionService extends Tool {
         this.UPDATE_POINTS.next(true);
     }
 
-    private updateSelection(translation: Vec2): void {
+    updateSelection(translation: Vec2): void {
         if (this.config.previewSelectionCtx === null) return;
 
         this.drawingService.blockUndoRedo();
@@ -242,7 +241,9 @@ export abstract class AbstractSelectionService extends Tool {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
 
-        this.fillBackground(ctx);
+        if (!this.config.markedForPaste) {
+            this.fillBackground(ctx);
+        }
         ctx.drawImage(this.config.SELECTION_DATA[SelectionData.PreviewData], this.config.endCoords.x, this.config.endCoords.y);
 
         this.UPDATE_POINTS.next(true);
