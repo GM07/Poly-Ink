@@ -68,6 +68,14 @@ describe('RectangleSelectionDraw', () => {
         expect(fillSpy).not.toHaveBeenCalled();
     });
 
+    it('should not fill the background if the selection is marked to be pasted', () => {
+        const fillSpy = spyOn<any>(rectangleSelectionDraw, 'fillBackground');
+        rectangleSelectionDraw['config'].markedForPaste = true;
+        rectangleSelectionDraw['config'].markedForDelete = true;
+        rectangleSelectionDraw.execute(ctxStub);
+        expect(fillSpy).not.toHaveBeenCalled();
+    });
+
     it('should move selection properly', () => {
         const middle = new Vec2(rectangleSelectionDraw['config'].width / 2, rectangleSelectionDraw['config'].height / 2);
         const pos = rectangleSelectionDraw['config'].endCoords.add(middle);

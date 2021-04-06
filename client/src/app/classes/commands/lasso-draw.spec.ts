@@ -54,6 +54,24 @@ describe('LassoDraw', () => {
         expect(imageData.data[ALPHA]).not.toEqual(0);
     });
 
+    it('should not fill the background if the selection has not moved', () => {
+        const fillSpy = spyOn(ctxStub, 'fill');
+        lassoDraw['config'].isInSelection = true;
+        lassoDraw['config'].startCoords = new Vec2(0, 0);
+        lassoDraw['config'].endCoords = new Vec2(0, 0);
+        lassoDraw['fillBackground'](ctxStub);
+        expect(fillSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not fill the background if the selection is marked to be pasted', () => {
+        const fillSpy = spyOn<any>(lassoDraw, 'fillBackground');
+        lassoDraw['config'].isInSelection = true;
+        lassoDraw['config'].markedForPaste = true;
+        lassoDraw['config'].markedForDelete = true;
+        lassoDraw.execute(ctxStub);
+        expect(fillSpy).not.toHaveBeenCalled();
+    });
+
     it('should not fill basckground if did not change', () => {
         spyOn(lassoDraw['config'], 'didChange').and.returnValue(false);
         spyOn(LineDrawer, 'drawFilledLinePath').and.callThrough();
