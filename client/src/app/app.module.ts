@@ -45,6 +45,7 @@ import { EllipseSelectionConfigComponent } from './components/tool-config/ellips
 import { EraserConfigComponent } from './components/tool-config/eraser-config/eraser-config.component';
 import { EyeDropperConfigComponent } from './components/tool-config/eye-dropper-config/eye-dropper-config.component';
 import { GridConfigComponent } from './components/tool-config/grid-config/grid-config.component';
+import { LassoSelectionConfigComponent } from './components/tool-config/lasso-selection-config/lasso-selection-config.component';
 import { LineConfigComponent } from './components/tool-config/line-config/line-config.component';
 import { PencilConfigComponent } from './components/tool-config/pencil-config/pencil-config.component';
 import { PolygoneConfigComponent } from './components/tool-config/polygone-config/polygone-config.component';
@@ -90,6 +91,7 @@ import { SidebarDirective } from './directives/sidebar.directive';
         LassoSelectionComponent,
         GridConfigComponent,
         MagnetismComponent,
+        LassoSelectionConfigComponent,
     ],
     imports: [
         AppRoutingModule,
