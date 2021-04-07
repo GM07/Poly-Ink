@@ -6,6 +6,22 @@ import { AbstractDraw } from './abstract-draw';
 
 export class LassoDraw extends AbstractDraw {
     private config: LassoConfig;
+
+    static drawClippedSelection(ctx: CanvasRenderingContext2D, configLasso: LassoConfig): void {
+        ctx.beginPath();
+        ctx.save();
+        LineDrawer.drawClippedLinePath(ctx, configLasso.points);
+        ctx.drawImage(
+            configLasso.SELECTION_DATA,
+            configLasso.endCoords.x,
+            configLasso.endCoords.y,
+            Math.abs(configLasso.width),
+            Math.abs(configLasso.height),
+        );
+        ctx.restore();
+        ctx.closePath();
+    }
+
     constructor(colorService: ColorService, config: LassoConfig) {
         super(colorService);
         this.config = config.clone();
@@ -35,20 +51,5 @@ export class LassoDraw extends AbstractDraw {
         if (!this.config.didChange()) return;
         context.fillStyle = 'white';
         LineDrawer.drawFilledLinePath(context, this.config.originalPoints);
-    }
-
-    static drawClippedSelection(ctx: CanvasRenderingContext2D, configLasso: LassoConfig): void {
-        ctx.beginPath();
-        ctx.save();
-        LineDrawer.drawClippedLinePath(ctx, configLasso.points);
-        ctx.drawImage(
-            configLasso.SELECTION_DATA,
-            configLasso.endCoords.x,
-            configLasso.endCoords.y,
-            Math.abs(configLasso.width),
-            Math.abs(configLasso.height),
-        );
-        ctx.restore();
-        ctx.closePath();
     }
 }

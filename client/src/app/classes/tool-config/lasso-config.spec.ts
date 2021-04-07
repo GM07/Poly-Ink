@@ -1,4 +1,4 @@
-import { Vec2 } from '../vec2';
+import { Vec2 } from '@app/classes/vec2';
 import { LassoConfig } from './lasso-config';
 
 describe('LassoConfig', () => {

@@ -39,8 +39,10 @@ describe('EllipseSelectionService', () => {
         const drawSelection = spyOn<any>(service, 'drawSelection');
         const saveWidth = (service.config.width = 5);
         const saveHeight = (service.config.height = 25);
+        service.mouseUpCoord = new Vec2(5, 25);
         service.mouseDownCoord = new Vec2(0, 0);
-        service['drawPreviewSelectionRequired']();
+        service.config.shift.isDown = false;
+        service['drawPreviewSelection']();
         expect(saveWidth).toEqual(service.config.width);
         expect(saveHeight).toEqual(service.config.height);
         expect(drawSelection).toHaveBeenCalled();
@@ -50,9 +52,10 @@ describe('EllipseSelectionService', () => {
         const drawSelection = spyOn<any>(service, 'drawSelection');
         const saveWidth = (service.config.width = 5);
         const saveHeight = (service.config.height = 25);
-        service.config.shift.isDown = true;
+        service.mouseUpCoord = new Vec2(5, 25);
         service.mouseDownCoord = new Vec2(0, 0);
-        service['drawPreviewSelectionRequired']();
+        service.config.shift.isDown = true;
+        service['drawPreviewSelection']();
         expect(saveWidth).toEqual(service.config.width);
         expect(saveHeight).not.toEqual(service.config.height);
         expect(drawSelection).toHaveBeenCalled();

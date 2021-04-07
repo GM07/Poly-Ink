@@ -181,14 +181,12 @@ describe('RectangleSelectionService', () => {
         expect(drawImageSpy).toHaveBeenCalled();
     });
 
-    it('draw preview should update width and height and call child method', () => {
+    it('draw preview should update width and height', () => {
         service.mouseUpCoord = new Vec2(25, 25);
         service.mouseDownCoord = new Vec2(0, 0);
-        const drawPreviewSelectionRequired = spyOn<any>(service, 'drawPreviewSelectionRequired');
         service['drawPreviewSelection']();
         expect(service.config.width).toEqual(25);
         expect(service.config.height).toEqual(25);
-        expect(drawPreviewSelectionRequired).toHaveBeenCalled();
     });
 
     it('isInCanvas should return true if is in canvas', () => {
@@ -229,12 +227,14 @@ describe('RectangleSelectionService', () => {
         expect(drawClippedSelectionSpy).toHaveBeenCalled();
     });
 
-    it('drawSelection should call drawPreview and not change size if shift hasnt changed', () => {
+    it('drawSelection should call drawPreview and not change size if shift has not changed', () => {
         const drawSelection = spyOn<any>(service, 'drawSelection');
         const saveWidth = (service.config.width = 5);
         const saveHeight = (service.config.height = 25);
         service.mouseDownCoord = new Vec2(0, 0);
-        service['drawPreviewSelectionRequired']();
+        service.mouseUpCoord = new Vec2(5, 25);
+        service.config.shift.isDown = false;
+        service['drawPreviewSelection']();
         expect(saveWidth).toEqual(service.config.width);
         expect(saveHeight).toEqual(service.config.height);
         expect(drawSelection).toHaveBeenCalled();
@@ -244,9 +244,10 @@ describe('RectangleSelectionService', () => {
         const drawSelection = spyOn<any>(service, 'drawSelection');
         const saveWidth = (service.config.width = 5);
         const saveHeight = (service.config.height = 25);
-        service.config.shift.isDown = true;
+        service.mouseUpCoord = new Vec2(5, 25);
         service.mouseDownCoord = new Vec2(0, 0);
-        service['drawPreviewSelectionRequired']();
+        service.config.shift.isDown = true;
+        service['drawPreviewSelection']();
         expect(saveWidth).toEqual(service.config.width);
         expect(saveHeight).not.toEqual(service.config.height);
         expect(drawSelection).toHaveBeenCalled();
