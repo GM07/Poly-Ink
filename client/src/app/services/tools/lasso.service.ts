@@ -191,13 +191,6 @@ export class LassoService extends AbstractSelectionService {
         this.drawingService.drawPreview(command);
     }
 
-    protected drawPreviewSelectionRequired(): void {
-        if (this.configLasso.points.length === 0) return;
-
-        const size: Vec2 = this.end.substract(this.start);
-        this.drawSelection(this.drawingService.previewCtx, this.start, size);
-    }
-
     protected endSelection(): void {
         if (this.configLasso.previewSelectionCtx === null) return;
 
@@ -216,11 +209,6 @@ export class LassoService extends AbstractSelectionService {
 
         ctx.fillStyle = Colors.WHITE.rgbString;
         LineDrawer.drawFilledLinePath(ctx, this.configLasso.originalPoints);
-    }
-
-    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void {
-        if (this.configLasso.points.length < 2) return;
-        LineDrawer.drawDashedLinePath(ctx, this.configLasso.points, this.start.scalar(0 - 1));
     }
 
     protected updateSelectionRequired(): void {

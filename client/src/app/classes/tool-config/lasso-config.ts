@@ -14,10 +14,6 @@ export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
         this.points = [];
         this.originalPoints = [];
         this.isInSelection = false;
-        this.startCoords = new Vec2(0, 0);
-        this.endCoords = new Vec2(0, 0);
-        this.width = 0;
-        this.height = 0;
         this.intersecting = false;
     }
 
@@ -32,6 +28,7 @@ export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
         config.startCoords = this.startCoords.clone();
         config.endCoords = this.endCoords.clone();
         config.shift = this.shift.clone();
+        config.scaleFactor = this.scaleFactor.clone();
         config.originalHeight = this.originalHeight;
         config.height = this.height;
         config.originalWidth = this.originalWidth;
@@ -41,7 +38,6 @@ export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
         config.intersecting = this.intersecting;
         config.markedForDelete = this.markedForDelete;
         config.markedForPaste = this.markedForPaste;
-        config.scaleFactor = this.scaleFactor;
 
         DrawingService.saveCanvas(config.SELECTION_DATA, this.SELECTION_DATA);
 

@@ -38,13 +38,13 @@ export class SelectionConfig {
         config.startCoords = this.startCoords.clone();
         config.endCoords = this.endCoords.clone();
         config.shift = this.shift.clone();
+        config.scaleFactor = this.scaleFactor.clone();
         config.originalHeight = this.originalHeight;
         config.height = this.height;
         config.originalWidth = this.originalWidth;
         config.width = this.width;
         config.markedForDelete = this.markedForDelete;
         config.markedForPaste = this.markedForPaste;
-        config.scaleFactor = this.scaleFactor;
 
         DrawingService.saveCanvas(config.SELECTION_DATA, this.SELECTION_DATA);
 

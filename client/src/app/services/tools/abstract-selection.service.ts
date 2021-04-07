@@ -46,11 +46,9 @@ export abstract class AbstractSelectionService extends Tool {
 
     protected abstract fillBackground(ctx: CanvasRenderingContext2D): void;
 
-    protected abstract drawPreviewSelectionRequired(): void;
-
     protected abstract updateSelectionRequired(): void;
 
-    protected abstract drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void;
+    protected drawPreviewSelectionRequired(): void {}
 
     onMouseDown(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
