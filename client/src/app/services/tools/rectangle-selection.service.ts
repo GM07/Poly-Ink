@@ -38,7 +38,9 @@ export class RectangleSelectionService extends AbstractSelectionService {
         ctx.closePath();
     }
 
-    protected drawPreviewSelectionRequired(): void {
+    protected drawPreviewSelection(): void {
+        super.drawPreviewSelection();
+
         const ctx = this.drawingService.previewCtx;
         if (this.config.shift.isDown) {
             this.config.height = Math.sign(this.config.height) * Math.min(Math.abs(this.config.width), Math.abs(this.config.height));

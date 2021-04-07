@@ -48,8 +48,6 @@ export abstract class AbstractSelectionService extends Tool {
 
     protected abstract updateSelectionRequired(): void;
 
-    protected drawPreviewSelectionRequired(): void {}
-
     onMouseDown(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
         if (this.leftMouseDown) {
@@ -243,8 +241,6 @@ export abstract class AbstractSelectionService extends Tool {
 
         this.config.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
         this.config.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
-
-        this.drawPreviewSelectionRequired();
     }
 
     private updateDrawingSelection(): void {

@@ -17,7 +17,9 @@ export class EllipseSelectionService extends AbstractSelectionService {
         this.toolID = EllipseSelectionToolConstants.TOOL_ID;
     }
 
-    protected drawPreviewSelectionRequired(): void {
+    protected drawPreviewSelection(): void {
+        super.drawPreviewSelection();
+
         const ctx = this.drawingService.previewCtx;
         let radiusX: number = this.config.width / 2;
         let radiusY: number = this.config.height / 2;
