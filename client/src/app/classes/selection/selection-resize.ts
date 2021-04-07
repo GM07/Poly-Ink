@@ -2,7 +2,6 @@ import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
-import { SelectionData } from './selection-data';
 
 export class SelectionResize {
     private readonly FLIP_IMAGE_FACTOR: number = -1;
@@ -14,9 +13,9 @@ export class SelectionResize {
     private memoryCanvas: HTMLCanvasElement | undefined;
     private lockVertical: boolean;
     private lockHorizontal: boolean;
+    resizeSelected: boolean;
 
     readonly UPDATE_SELECTION_REQUEST: Subject<Vec2> = new Subject<Vec2>();
-    resizeSelected: boolean;
 
     constructor(config: SelectionConfig) {
         this.config = config;
@@ -41,10 +40,9 @@ export class SelectionResize {
         if (this.shouldFlipVertically(mousePos)) {
             this.flipVertical();
         }
-
         this.config.width = newSize.x;
         this.config.height = newSize.y;
-        const canvas = this.config.SELECTION_DATA[SelectionData.PreviewData];
+        const canvas = this.config.SELECTION_DATA;
         canvas.width = Math.abs(newSize.x);
         canvas.height = Math.abs(newSize.y);
         this.config.previewSelectionCtx.drawImage(this.memoryCanvas, 0, 0, Math.abs(newSize.x), Math.abs(newSize.y));
@@ -144,23 +142,17 @@ export class SelectionResize {
     private flipHorizontal(): void {
         if (this.config.previewSelectionCtx === null || this.memoryCanvas === undefined) return;
 
+        this.config.scaleFactor.x *= this.FLIP_IMAGE_FACTOR;
         this.flipDrawing(this.memoryCanvas, new Vec2(-this.memoryCanvas.width, 0), new Vec2(this.FLIP_IMAGE_FACTOR, 1));
-        this.flipDrawing(
-            this.config.SELECTION_DATA[SelectionData.FinalData],
-            new Vec2(-this.config.SELECTION_DATA[SelectionData.FinalData].width, 0),
-            new Vec2(this.FLIP_IMAGE_FACTOR, 1),
-        );
+        this.flipDrawing(this.config.SELECTION_DATA, new Vec2(-this.config.SELECTION_DATA.width, 0), new Vec2(this.FLIP_IMAGE_FACTOR, 1));
     }
 
     private flipVertical(): void {
         if (this.config.previewSelectionCtx === null || this.memoryCanvas === undefined) return;
 
+        this.config.scaleFactor.y *= this.FLIP_IMAGE_FACTOR;
         this.flipDrawing(this.memoryCanvas, new Vec2(0, -this.memoryCanvas.height), new Vec2(1, this.FLIP_IMAGE_FACTOR));
-        this.flipDrawing(
-            this.config.SELECTION_DATA[SelectionData.FinalData],
-            new Vec2(0, -this.config.SELECTION_DATA[SelectionData.FinalData].height),
-            new Vec2(1, this.FLIP_IMAGE_FACTOR),
-        );
+        this.flipDrawing(this.config.SELECTION_DATA, new Vec2(0, -this.config.SELECTION_DATA.height), new Vec2(1, this.FLIP_IMAGE_FACTOR));
     }
 
     private flipDrawing(canvas: HTMLCanvasElement, offset: Vec2, scaleFactor: Vec2): void {
@@ -211,7 +203,7 @@ export class SelectionResize {
         this.lockVertical = false;
         if (this.memoryCanvas === undefined) {
             this.memoryCanvas = document.createElement('canvas');
-            DrawingService.saveCanvas(this.memoryCanvas, this.config.SELECTION_DATA[SelectionData.PreviewData]);
+            DrawingService.saveCanvas(this.memoryCanvas, this.config.SELECTION_DATA);
         }
     }
 

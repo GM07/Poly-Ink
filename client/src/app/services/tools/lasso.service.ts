@@ -3,7 +3,6 @@ import { LassoDraw } from '@app/classes/commands/lasso-draw';
 import { LineDrawer } from '@app/classes/line-drawer';
 import { Geometry } from '@app/classes/math/geometry';
 import { Line } from '@app/classes/math/line';
-import { SelectionData } from '@app/classes/selection/selection-data';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { LassoConfig } from '@app/classes/tool-config/lasso-config';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
@@ -53,6 +52,11 @@ export class LassoService extends AbstractSelectionService {
         this.mouseDownCoord = this.start;
         this.mouseUpCoord = this.end;
         const size: Vec2 = this.end.substract(this.start);
+
+        this.configLasso.points.forEach((point) => {
+            this.configLasso.originalPoints.push(point.clone());
+        });
+
         this.configLasso.width = size.x;
         this.configLasso.height = size.y;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
@@ -211,44 +215,34 @@ export class LassoService extends AbstractSelectionService {
         if (!this.configLasso.didChange()) return;
 
         ctx.fillStyle = Colors.WHITE.rgbString;
-        LineDrawer.drawFilledLinePath(ctx, this.configLasso.points);
+        LineDrawer.drawFilledLinePath(ctx, this.configLasso.originalPoints);
     }
 
-    protected drawFinalSelection(): void {
-        const previewCTX = this.drawingService.previewCtx;
-        this.drawingService.clearCanvas(previewCTX);
-
-        this.fillBackground(previewCTX);
-
-        for (const data of this.configLasso.SELECTION_DATA) {
-            const memoryCanvas = document.createElement('canvas');
-            DrawingService.saveCanvas(memoryCanvas, data);
-
-            const ctx = data.getContext('2d') as CanvasRenderingContext2D;
-            ctx.clearRect(0, 0, Math.abs(this.config.width), Math.abs(this.config.height));
-            ctx.beginPath();
-            ctx.save();
-
-            const dp = this.configLasso.startCoords.scalar(0 - 1);
-            LineDrawer.drawClippedLinePath(ctx, this.configLasso.points, dp);
-
-            ctx.drawImage(memoryCanvas, 0, 0);
-            ctx.restore();
-            ctx.closePath();
-        }
-
-        const previewSelectionCTX = this.config.previewSelectionCtx as CanvasRenderingContext2D;
-        this.drawSelection(
-            previewSelectionCTX,
-            this.configLasso.endCoords,
-            new Vec2(Math.abs(this.configLasso.width), Math.abs(this.configLasso.height)),
-        );
-
-        previewCTX.drawImage(this.config.SELECTION_DATA[SelectionData.PreviewData], this.config.endCoords.x, this.config.endCoords.y);
-    }
-
-    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, _: Vec2): void {
+    protected drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void {
         if (this.configLasso.points.length < 2) return;
         LineDrawer.drawDashedLinePath(ctx, this.configLasso.points, this.start.scalar(0 - 1));
+    }
+
+    protected updateSelectionRequired(): void {
+        const selectionTranslation = this.configLasso.endCoords.substract(this.configLasso.startCoords);
+        for (let i = 0; i < this.configLasso.points.length; ++i) {
+            const resizeFactor = new Vec2(
+                Math.abs(this.configLasso.width / this.configLasso.originalWidth),
+                Math.abs(this.configLasso.height / this.configLasso.originalHeight),
+            );
+
+            const relativePosition = this.configLasso.originalPoints[i].substract(this.configLasso.startCoords);
+            relativePosition.x *= resizeFactor.x * this.configLasso.scaleFactor.x;
+            relativePosition.y *= resizeFactor.y * this.configLasso.scaleFactor.y;
+
+            relativePosition.x += this.configLasso.scaleFactor.x < 0 ? this.configLasso.width : 0;
+            relativePosition.y += this.configLasso.scaleFactor.y < 0 ? this.configLasso.height : 0;
+
+            this.configLasso.points[i] = this.configLasso.startCoords.add(relativePosition).add(selectionTranslation);
+        }
+
+        const ctx = this.drawingService.previewCtx;
+        LassoDraw.drawClippedSelection(ctx, this.configLasso);
+        LineDrawer.drawDashedLinePath(ctx, this.configLasso.points);
     }
 }

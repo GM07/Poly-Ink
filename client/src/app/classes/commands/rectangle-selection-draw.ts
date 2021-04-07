@@ -1,5 +1,4 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
-import { SelectionData } from '@app/classes/selection/selection-data';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { ColorService } from 'src/color-picker/services/color.service';
 
@@ -17,13 +16,7 @@ export class RectangleSelectionDraw extends AbstractDraw {
         }
 
         if (!this.config.markedForDelete) {
-            context.drawImage(
-                this.config.SELECTION_DATA[SelectionData.FinalData],
-                Math.floor(this.config.endCoords.x),
-                Math.floor(this.config.endCoords.y),
-                Math.abs(this.config.width),
-                Math.abs(this.config.height),
-            );
+            RectangleSelectionDraw.drawClippedSelection(context, this.config);
         }
     }
 
@@ -39,5 +32,9 @@ export class RectangleSelectionDraw extends AbstractDraw {
             Math.abs(this.config.originalHeight),
         );
         context.closePath();
+    }
+
+    static drawClippedSelection(ctx: CanvasRenderingContext2D, config: SelectionConfig): void {
+        ctx.drawImage(config.SELECTION_DATA, config.endCoords.x, config.endCoords.y, Math.abs(config.width), Math.abs(config.height));
     }
 }
