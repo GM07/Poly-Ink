@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
+import { LassoDraw } from '@app/classes/commands/lasso-draw';
 import { LineDrawer } from '@app/classes/line-drawer';
 import { Line } from '@app/classes/math/line';
 import { LassoConfig } from '@app/classes/tool-config/lasso-config';
@@ -60,6 +61,7 @@ describe('Lasso service', () => {
     });
 
     it('should start selection on closed path', () => {
+        service['configLasso'].points = pointsTest;
         spyOn<any>(service, 'startSelection');
         service['onClosedPath']();
         expect(service['startSelection']).toHaveBeenCalled();
@@ -243,19 +245,6 @@ describe('Lasso service', () => {
         expect(drawServiceSpy.drawPreview).toHaveBeenCalled();
     });
 
-    it('should not draw selection if point array is empty', () => {
-        const spy = spyOn<any>(service, 'drawSelection');
-        service['drawPreviewSelectionRequired']();
-        expect(spy).not.toHaveBeenCalled();
-    });
-
-    it('should draw selection if point array is not empty', () => {
-        service.configLasso.points = pointsTest;
-        const spy = spyOn<any>(service, 'drawSelection');
-        service['drawPreviewSelectionRequired']();
-        expect(spy).toHaveBeenCalled();
-    });
-
     it('should init service when ending selection', () => {
         const spy = spyOn(service, 'initAttribs').and.callThrough();
         service.configLasso.previewSelectionCtx = service['drawingService'].baseCtx;
@@ -265,32 +254,38 @@ describe('Lasso service', () => {
 
     it('should draw white background when selection is completed', () => {
         const drawSpy = spyOn(LineDrawer, 'drawFilledLinePath');
-        const changeSpy = spyOn(service.configLasso, 'didChange').and.returnValue(true);
+        const changeSpy = spyOn(service.configLasso, 'didChange').and.returnValue(false);
+        service['fillBackground']({} as CanvasRenderingContext2D);
+        expect(drawSpy).not.toHaveBeenCalled();
+        changeSpy.and.returnValue(true);
         service['fillBackground']({} as CanvasRenderingContext2D);
         expect(drawSpy).toHaveBeenCalled();
-        expect(changeSpy).toHaveBeenCalled();
     });
 
-    it('shoudl update selection with clipped line path', () => {
-        const clipSpy = spyOn(LineDrawer, 'drawClippedLinePath');
-        const drawSpy = spyOn<any>(service, 'drawSelection');
-        service['drawFinalSelection']();
+    it('should update selection with clipped line path', () => {
+        const clipSpy = spyOn(LassoDraw, 'drawClippedSelection');
+        const dashedLineSpy = spyOn(LineDrawer, 'drawDashedLinePath');
+        service['updateSelectionRequired']();
+        expect(dashedLineSpy).toHaveBeenCalled();
         expect(clipSpy).toHaveBeenCalled();
-        expect(drawSpy).toHaveBeenCalled();
     });
 
-    it('should not draw selection if point array length is less than two', () => {
-        const dashSpy = spyOn(LineDrawer, 'drawDashedLinePath');
-        service['drawSelection']({} as CanvasRenderingContext2D, mousePos, mousePos);
-        expect(dashSpy).not.toHaveBeenCalled();
-    });
+    it('should correctly offset every point when updating the selection', () => {
+        service['configLasso'].startCoords = new Vec2(0, 0);
+        service['configLasso'].endCoords = new Vec2(1, 1);
+        service['configLasso'].points = [new Vec2(0, 0), new Vec2(0, 0), new Vec2(0, 0)];
+        service['configLasso'].originalPoints = [new Vec2(0, 0), new Vec2(0, 0), new Vec2(0, 0)];
+        service['configLasso'].scaleFactor = new Vec2(1, 1);
+        service['configLasso'].width = 1;
+        service['configLasso'].height = 1;
+        service['configLasso'].originalWidth = 1;
+        service['configLasso'].originalHeight = 1;
+        service['updateSelectionRequired']();
+        for (const point of service['configLasso'].points) expect(point).toEqual(new Vec2(1, 1));
 
-    it('should draw selection', () => {
-        service.configLasso.points = pointsTest;
-        service.configLasso.points.push(mousePos);
-        const dashSpy = spyOn(LineDrawer, 'drawDashedLinePath');
-        service['drawSelection']({} as CanvasRenderingContext2D, mousePos, mousePos);
-        expect(dashSpy).toHaveBeenCalled();
+        service['configLasso'].scaleFactor = new Vec2(-1, -1);
+        service['updateSelectionRequired']();
+        for (const point of service['configLasso'].points) expect(point).toEqual(new Vec2(2, 2));
     });
 
     it('should stop drawing', () => {

@@ -53,6 +53,7 @@ export class LassoService extends AbstractSelectionService {
         this.mouseUpCoord = this.end;
         const size: Vec2 = this.end.substract(this.start);
 
+        this.configLasso.originalPoints = [];
         this.configLasso.points.forEach((point) => {
             this.configLasso.originalPoints.push(point.clone());
         });

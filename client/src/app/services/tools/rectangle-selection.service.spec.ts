@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
-import { SelectionData } from '@app/classes/selection/selection-data';
+import { RectangleSelectionDraw } from '@app/classes/commands/rectangle-selection-draw';
 import { Vec2 } from '@app/classes/vec2';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
@@ -151,18 +151,11 @@ describe('RectangleSelectionService', () => {
         service.config.width = 100;
         service.config.height = 100;
         service.mouseDownCoord = new Vec2(25, 25);
-        service['config'].previewSelectionCtx = canvasSelection.getContext('2d');
-        canvasSelection.width = 250;
-        canvasSelection.height = 250;
-        drawServiceSpy.previewCanvas = document.createElement('canvas');
-        drawServiceSpy.previewCtx = drawServiceSpy.previewCanvas.getContext('2d') as CanvasRenderingContext2D;
-        service.config.SELECTION_DATA[SelectionData.PreviewData] = canvasSelection;
-        const drawFinalselection = spyOn<any>(service, 'drawFinalSelection');
-        spyOn(drawServiceSpy.previewCtx, 'drawImage');
-        spyOn<any>(service['config'].previewSelectionCtx, 'drawImage');
+        const updateSelectionRequiredSpy = spyOn<any>(service, 'updateSelectionRequired');
+        const drawImageSpy = spyOn<any>(service['config'].SELECTION_DATA.getContext('2d'), 'drawImage');
         service['startSelection']();
-        expect(drawServiceSpy.previewCtx.drawImage).toHaveBeenCalled();
-        expect(drawFinalselection).toHaveBeenCalled();
+        expect(drawImageSpy).toHaveBeenCalled();
+        expect(updateSelectionRequiredSpy).toHaveBeenCalled();
     });
 
     it('update drawing should clear canvas and draw new preview', () => {
@@ -227,15 +220,13 @@ describe('RectangleSelectionService', () => {
         expect(previewCtxStub.fillRect).toHaveBeenCalled();
     });
 
-    it('the final drawn selection should draw the image, update it and update the background', () => {
+    it('the updated drawn selection should draw the image and update it', () => {
         service.config.endCoords = new Vec2(0, 0);
-        spyOn(previewCtxStub, 'drawImage');
-        const fillBackground = spyOn<any>(service, 'fillBackground');
+        const drawClippedSelectionSpy = spyOn(RectangleSelectionDraw, 'drawClippedSelection');
         const drawSelection = spyOn<any>(service, 'drawSelection');
-        service['drawFinalSelection']();
-        expect(previewCtxStub.drawImage).toHaveBeenCalled();
-        expect(fillBackground).toHaveBeenCalled();
+        service['updateSelectionRequired']();
         expect(drawSelection).toHaveBeenCalled();
+        expect(drawClippedSelectionSpy).toHaveBeenCalled();
     });
 
     it('drawSelection should call drawPreview and not change size if shift hasnt changed', () => {
