@@ -232,11 +232,12 @@ export class LassoService extends AbstractSelectionService {
             );
 
             const relativePosition = this.configLasso.originalPoints[i].substract(this.configLasso.startCoords);
+
             relativePosition.x *= resizeFactor.x * this.configLasso.scaleFactor.x;
             relativePosition.y *= resizeFactor.y * this.configLasso.scaleFactor.y;
 
-            relativePosition.x += this.configLasso.scaleFactor.x < 0 ? this.configLasso.width : 0;
-            relativePosition.y += this.configLasso.scaleFactor.y < 0 ? this.configLasso.height : 0;
+            if (this.configLasso.scaleFactor.x < 0) relativePosition.x += Math.abs(this.configLasso.width);
+            if (this.configLasso.scaleFactor.y < 0) relativePosition.y += Math.abs(this.configLasso.height);
 
             this.configLasso.points[i] = this.configLasso.startCoords.add(relativePosition).add(selectionTranslation);
         }

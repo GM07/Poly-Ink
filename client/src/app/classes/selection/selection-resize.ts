@@ -107,6 +107,7 @@ export class SelectionResize {
     private initAttribs(): void {
         this.oppositeSide = new Vec2(0, 0);
         this.resizeOrigin = new Vec2(0, 0);
+        this.config.scaleFactor = new Vec2(1, 1);
         this.resizeSelected = false;
         this.memoryCanvas = undefined;
         this.lockVertical = false;
