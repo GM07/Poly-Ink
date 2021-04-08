@@ -1,11 +1,5 @@
 import { Vec2 } from '@app/classes/vec2';
 
-export enum TextAlignment {
-    Left = 'left',
-    Center = 'center',
-    Right = 'right',
-}
-
 export class TextConfig {
     startCoords: Vec2;
     textData: string[];
@@ -14,6 +8,8 @@ export class TextConfig {
     italic: boolean;
     bold: boolean;
     alignmentSetting: string;
+    index: number;
+    hasInput: boolean;
     //color: Color;
 
     constructor() {
@@ -24,6 +20,8 @@ export class TextConfig {
         this.bold = false;
         this.italic = false;
         this.alignmentSetting = '';
+        this.index = 0;
+        this.hasInput = false;
     }
 
     clone(): TextConfig {
@@ -36,6 +34,8 @@ export class TextConfig {
         config.italic = this.italic;
         //config.color = this.color;
         config.alignmentSetting = this.alignmentSetting;
+        config.index = this.index;
+        config.hasInput = this.hasInput;
         
         return config;
     }

@@ -12,8 +12,6 @@ import { DrawingService } from '../drawing/drawing.service';
 })
 export class TextService extends Tool {
   config: TextConfig;
-  hasInput: boolean;
-  index: number;
 
   constructor(public drawingService: DrawingService, public colorService: ColorService) {
     super(drawingService, colorService);
@@ -22,12 +20,10 @@ export class TextService extends Tool {
     this.toolID = TextToolConstants.TOOL_ID;
 
     this.config = new TextConfig();
-    this.hasInput = false;
-    this.index = 0;
   }
 
   onKeyDown(event: KeyboardEvent): void {
-    if(this.hasInput) {
+    if(this.config.hasInput) {
       this.insert(event);
       this.drawPreview();
     }
@@ -36,13 +32,12 @@ export class TextService extends Tool {
   insert(event: KeyboardEvent): void {
     if(event.key === 'ArrowLeft' || event.key === 'ArrowRight') this.handleArrowKeys(event);
     else { 
-      let left = this.config.textData.slice(0, this.index);
-      let right = this.config.textData.slice(this.index, this.config.textData.length);
+      let left = this.config.textData.slice(0, this.config.index);
+      let right = this.config.textData.slice(this.config.index, this.config.textData.length);
 
       if(event.key === 'Shift') this.handleShift(left, right);
       this.config.textData = left.concat(event.key, right);
-      this.drawPreview();
-      this.index++;
+      this.config.index++;
     }
   }
 
@@ -55,16 +50,17 @@ export class TextService extends Tool {
   }
 
   confirmText(): void {
+    this.config.hasInput = false;
     this.draw();
     this.config.textData = [];
-    this.hasInput = false;
   }
 
   handleArrowKeys(event: KeyboardEvent) {
-    this.index = event.key === 'ArrowLeft' ? --this.index : ++this.index ;
+    this.config.index = event.key === 'ArrowLeft' ? --this.config.index : ++this.config.index ;
   }
 
   drawPreview(): void {
+    this.drawingService.clearCanvas(this.drawingService.previewCtx);
     const command = new TextDraw(this.colorService, this.config);
     this.drawingService.drawPreview(command);
   }

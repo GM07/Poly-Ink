@@ -4,10 +4,15 @@ import { AbstractDraw } from './abstract-draw';
 
 export class TextDraw extends AbstractDraw {
     private config: TextConfig;
+    private cursorX: number;
+    private cursorY: number;
 
     constructor(colorService: ColorService, textConfig: TextConfig) {
         super(colorService);
         this.config = textConfig.clone();
+
+        this.cursorX = 0;
+        this.cursorY = 0;
     }
 
     execute(context: CanvasRenderingContext2D): void {
@@ -50,9 +55,28 @@ export class TextDraw extends AbstractDraw {
             ctx.fillText(lines[n], this.config.startCoords.x, y);
             y += this.getfactorLineHeight() * this.config.fontSize;
         }
+        if(this.config.hasInput) this.drawCursor(ctx, linesAsString);
     }
 
-    private getfactorLineHeight() {
+    public drawCursor(ctx: CanvasRenderingContext2D, text: string): void {
+        let left = text.slice(0, this.config.index);
+        let metrics = ctx.measureText(left);
+        let width = metrics.width;
+        this.cursorX= this.config.startCoords.x + width;
+        this.cursorY = this.config.startCoords.y;
+        let height = this.getfactorLineHeight() * this.config.fontSize;
+
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 1;
+
+        ctx.beginPath();
+        ctx.moveTo(this.cursorX, this.cursorY);
+        ctx.lineTo(this.cursorX, this.cursorY + height);
+        ctx.stroke();
+        ctx.closePath();
+    }
+
+    private getfactorLineHeight(): number {
         switch(this.config.textFont) {
             case 'Arial':
                 return 8/7;

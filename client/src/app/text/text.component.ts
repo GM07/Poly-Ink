@@ -26,7 +26,7 @@ export class TextComponent {
   onMouseDown(event: MouseEvent): void {
     this.leftMouseDown = event.button === MouseButton.Left;
     if (this.textService.isInCanvas(event) && this.leftMouseDown && !this.colorService.isMenuOpen) {
-      this.textService.hasInput ? this.confirmText() : this.addText(event);
+      this.textService.config.hasInput ? this.confirmText() : this.addText(event);
     }
   }
 
@@ -37,9 +37,10 @@ export class TextComponent {
 
   addText(event: MouseEvent) {
     this.shortcutHandlerService.blockShortcuts = true;
-    this.textService.hasInput = true;
+    this.textService.config.hasInput = true;
     this.textService.config.startCoords.x = event.offsetX;
     this.textService.config.startCoords.y = event.offsetY;
+    this.textService.drawPreview();
   }
 }
 
