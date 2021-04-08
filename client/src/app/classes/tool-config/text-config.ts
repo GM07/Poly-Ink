@@ -8,19 +8,21 @@ export class TextConfig {
     italic: boolean;
     bold: boolean;
     alignmentSetting: string;
-    index: number;
+    index: Vec2;
     hasInput: boolean;
+    lineIndex: number;
+    charIndex: number;
     //color: Color;
 
     constructor() {
         this.startCoords = new Vec2(0, 0);
         this.textFont = 'Arial';
         this.fontSize = 14;
-        this.textData = [];
+        this.textData = [''];
         this.bold = false;
         this.italic = false;
         this.alignmentSetting = '';
-        this.index = 0;
+        this.index = new Vec2(0, 0);
         this.hasInput = false;
     }
 
@@ -36,6 +38,8 @@ export class TextConfig {
         config.alignmentSetting = this.alignmentSetting;
         config.index = this.index;
         config.hasInput = this.hasInput;
+        config.lineIndex = this.lineIndex;
+        config.charIndex = this.charIndex;
         
         return config;
     }

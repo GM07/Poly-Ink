@@ -6,6 +6,7 @@ export class TextDraw extends AbstractDraw {
     private config: TextConfig;
     private cursorX: number;
     private cursorY: number;
+    currentLineIndex: number;
 
     constructor(colorService: ColorService, textConfig: TextConfig) {
         super(colorService);
@@ -13,6 +14,7 @@ export class TextDraw extends AbstractDraw {
 
         this.cursorX = 0;
         this.cursorY = 0;
+        this.currentLineIndex = 0;
     }
 
     execute(context: CanvasRenderingContext2D): void {
@@ -49,17 +51,27 @@ export class TextDraw extends AbstractDraw {
 
     private drawText(ctx: CanvasRenderingContext2D): void {
         let y = this.config.startCoords.y;
-        let linesAsString = this.config.textData.join('');
-        let lines = linesAsString.split('Enter');
-        for (let n = 0; n < lines.length; n++) {
-            ctx.fillText(lines[n], this.config.startCoords.x, y);
-            if(this.config.hasInput) this.drawCursor(ctx, lines[n], y);
+        this.config.textData.forEach((line, index) => {
+            ctx.fillText(line, this.config.startCoords.x, y);
+            if(this.config.hasInput && index === this.config.index.y) {
+                this.drawCursor(ctx, line, y);
+            }
             y += this.getfactorLineHeight() * this.config.fontSize;
-        }
+        });
     }
 
+    /*public findIndex(): void {
+        for(let i = 0; i < this.config.lineIndexes.length; i++) {
+            if(this.config.index >= this.config.lineIndexes[i]) {
+                this.currentLineIndex = this.config.index - this.config.lineIndexes[i];
+                return;
+            }
+        }
+        this.currentLineIndex = this.config.index;
+    }*/
+
     public drawCursor(ctx: CanvasRenderingContext2D, text: string, y: number): void {
-        let left = text.slice(0, this.config.index);
+        let left = text.slice(0, this.config.index.x);
         let metrics = ctx.measureText(left);
         let width = metrics.width;
         this.cursorX= this.config.startCoords.x + width;
