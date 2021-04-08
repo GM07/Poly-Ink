@@ -53,17 +53,17 @@ export class TextDraw extends AbstractDraw {
         let lines = linesAsString.split('Enter');
         for (let n = 0; n < lines.length; n++) {
             ctx.fillText(lines[n], this.config.startCoords.x, y);
+            if(this.config.hasInput) this.drawCursor(ctx, lines[n], y);
             y += this.getfactorLineHeight() * this.config.fontSize;
         }
-        if(this.config.hasInput) this.drawCursor(ctx, linesAsString);
     }
 
-    public drawCursor(ctx: CanvasRenderingContext2D, text: string): void {
+    public drawCursor(ctx: CanvasRenderingContext2D, text: string, y: number): void {
         let left = text.slice(0, this.config.index);
         let metrics = ctx.measureText(left);
         let width = metrics.width;
         this.cursorX= this.config.startCoords.x + width;
-        this.cursorY = this.config.startCoords.y;
+        this.cursorY = y;
         let height = this.getfactorLineHeight() * this.config.fontSize;
 
         ctx.strokeStyle = 'black';
