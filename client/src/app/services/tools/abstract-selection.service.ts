@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Geometry } from '@app/classes/math/geometry';
-import { SelectionData } from '@app/classes/selection/selection-data';
 import { SelectionResize } from '@app/classes/selection/selection-resize';
 import { SelectionTranslation } from '@app/classes/selection/selection-translation';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
@@ -47,11 +46,7 @@ export abstract class AbstractSelectionService extends Tool {
 
     protected abstract fillBackground(ctx: CanvasRenderingContext2D): void;
 
-    protected abstract drawPreviewSelectionRequired(): void;
-
-    protected abstract drawFinalSelection(): void;
-
-    protected abstract drawSelection(ctx: CanvasRenderingContext2D, position: Vec2, size: Vec2): void;
+    protected abstract updateSelectionRequired(): void;
 
     onMouseDown(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
@@ -201,36 +196,28 @@ export abstract class AbstractSelectionService extends Tool {
         }
         this.config.originalWidth = this.config.width;
         this.config.originalHeight = this.config.height;
-        for (const data of this.config.SELECTION_DATA) {
-            data.width = Math.abs(this.config.width);
-            data.height = Math.abs(this.config.height);
-        }
+        this.config.SELECTION_DATA.width = Math.abs(this.config.width);
+        this.config.SELECTION_DATA.height = Math.abs(this.config.height);
 
-        this.config.previewSelectionCtx = this.config.SELECTION_DATA[SelectionData.PreviewData].getContext('2d') as CanvasRenderingContext2D;
+        this.config.previewSelectionCtx = this.config.SELECTION_DATA.getContext('2d') as CanvasRenderingContext2D;
         const x = Math.min(this.mouseDownCoord.x, this.mouseDownCoord.x + this.config.width);
         const y = Math.min(this.mouseDownCoord.y, this.mouseDownCoord.y + this.config.height);
         this.config.endCoords = new Vec2(x, y);
         this.config.startCoords = new Vec2(x, y);
 
-        for (const data of this.config.SELECTION_DATA) {
-            const ctx = data.getContext('2d') as CanvasRenderingContext2D;
-            ctx.drawImage(
-                this.drawingService.canvas,
-                x,
-                y,
-                Math.abs(this.config.width),
-                Math.abs(this.config.height),
-                0,
-                0,
-                Math.abs(this.config.width),
-                Math.abs(this.config.height),
-            );
-        }
+        this.config.previewSelectionCtx.drawImage(
+            this.drawingService.canvas,
+            x,
+            y,
+            Math.abs(this.config.width),
+            Math.abs(this.config.height),
+            0,
+            0,
+            Math.abs(this.config.width),
+            Math.abs(this.config.height),
+        );
 
-        this.drawFinalSelection();
-        this.drawingService.previewCtx.drawImage(this.config.SELECTION_DATA[SelectionData.PreviewData], x, y);
-
-        this.UPDATE_POINTS.next(true);
+        this.updateSelection(new Vec2(0, 0));
     }
 
     updateSelection(translation: Vec2): void {
@@ -244,8 +231,8 @@ export abstract class AbstractSelectionService extends Tool {
         if (!this.config.markedForPaste) {
             this.fillBackground(ctx);
         }
-        ctx.drawImage(this.config.SELECTION_DATA[SelectionData.PreviewData], this.config.endCoords.x, this.config.endCoords.y);
 
+        this.updateSelectionRequired();
         this.UPDATE_POINTS.next(true);
     }
 
@@ -254,8 +241,6 @@ export abstract class AbstractSelectionService extends Tool {
 
         this.config.width = this.mouseUpCoord.x - this.mouseDownCoord.x;
         this.config.height = this.mouseUpCoord.y - this.mouseDownCoord.y;
-
-        this.drawPreviewSelectionRequired();
     }
 
     private updateDrawingSelection(): void {

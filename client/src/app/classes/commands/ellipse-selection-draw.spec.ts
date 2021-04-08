@@ -4,7 +4,6 @@
 
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
-import { SelectionData } from '@app/classes/selection/selection-data';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
 import { Colors } from 'src/color-picker/constants/colors';
@@ -38,9 +37,9 @@ describe('EllipseSelectionDraw', () => {
         ctxStub.fillStyle = Colors.BLACK.rgbString;
         ctxStub.fillRect(0, 0, 10, 10);
 
-        ellipseSelectionDraw['config'].SELECTION_DATA[SelectionData.FinalData].width = 10;
-        ellipseSelectionDraw['config'].SELECTION_DATA[SelectionData.FinalData].height = 10;
-        const ctx = ellipseSelectionDraw['config'].SELECTION_DATA[SelectionData.FinalData].getContext('2d') as CanvasRenderingContext2D;
+        ellipseSelectionDraw['config'].SELECTION_DATA.width = 10;
+        ellipseSelectionDraw['config'].SELECTION_DATA.height = 10;
+        const ctx = ellipseSelectionDraw['config'].SELECTION_DATA.getContext('2d') as CanvasRenderingContext2D;
         ctx.fillStyle = Colors.BLACK.rgbString;
         ctx.fillRect(0, 0, 10, 10);
     });
