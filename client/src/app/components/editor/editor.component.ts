@@ -4,13 +4,14 @@ import {
     NewDrawingConstants,
     RedoConstants,
     SaveFileToolConstants,
-    UndoConstants,
+    UndoConstants
 } from '@app/classes/tool_ui_settings/tools.constants';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 import { ExportDrawingComponent } from '@app/components/export-drawing/export-drawing.component';
 import { SaveDrawingComponent } from '@app/components/save-drawing/save-drawing.component';
 import { MagnetismService } from '@app/services/drawing/magnetism.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
+import { TextService } from '@app/services/tools/text.service';
 import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 
 @Component({
@@ -46,12 +47,14 @@ export class EditorComponent {
         public shortcutHandler: ShortcutHandlerService,
         private undoRedoService: UndoRedoService,
         private magnetismService: MagnetismService,
+        private textService: TextService,
     ) {}
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
         this.shortcutHandler.onKeyDown(event);
         this.magnetismService.onKeyDown(event);
+        this.textService.onKeyDown(event);
     }
 
     @HostListener('document:mousemove', ['$event'])

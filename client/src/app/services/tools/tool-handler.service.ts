@@ -15,6 +15,7 @@ import { StampService } from '@app/services/tools/stamp.service';
 import { Subject } from 'rxjs';
 import { BucketService } from './bucket.service';
 import { EyeDropperService } from './eye-dropper.service';
+import { TextService } from './text.service';
 
 @Injectable({
     providedIn: 'root',
@@ -39,6 +40,7 @@ export class ToolHandlerService {
         stampService: StampService,
         bucketService: BucketService,
         lassoService: LassoService,
+        textService: TextService,
     ) {
         this.TOOLS.set(ToolsConstants.PencilToolConstants.TOOL_ID, pencilService);
         this.TOOLS.set(ToolsConstants.LineToolConstants.TOOL_ID, lineService);
@@ -53,7 +55,7 @@ export class ToolHandlerService {
         this.TOOLS.set(ToolsConstants.RectangleSelectionToolConstants.TOOL_ID, rectangleSelectionService);
         this.TOOLS.set(ToolsConstants.RectangleToolConstants.TOOL_ID, rectangleService);
         this.TOOLS.set(ToolsConstants.StampToolConstants.TOOL_ID, stampService);
-        // this.TOOLS.set(ToolsConstants.TextToolConstants.TOOL_ID, pencilService);
+        this.TOOLS.set(ToolsConstants.TextToolConstants.TOOL_ID, textService);
         this.currentTool = this.TOOLS.values().next().value;
         this.currentToolSubject.next(this.currentTool);
     }
@@ -114,7 +116,7 @@ export class ToolHandlerService {
 
     private findToolshortcutKey(event: KeyboardEvent): Tool | undefined {
         if (this.currentTool.shortcutKey.equals(event)) return undefined;
-
+        
         for (const tool of this.TOOLS.values()) {
             if (tool.shortcutKey.equals(event)) {
                 return tool;
