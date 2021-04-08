@@ -27,18 +27,23 @@ export class TextService extends Tool {
   }
 
   onKeyDown(event: KeyboardEvent): void {
-    this.insert(event);
-    this.drawPreview();
+    if(this.hasInput) {
+      this.insert(event);
+      this.drawPreview();
+    }
   }
 
   insert(event: KeyboardEvent): void {
-    let left = this.config.textData.slice(0, this.index);
-    let right = this.config.textData.slice(this.index, this.config.textData.length);
+    if(event.key === 'ArrowLeft' || event.key === 'ArrowRight') this.handleArrowKeys(event);
+    else { 
+      let left = this.config.textData.slice(0, this.index);
+      let right = this.config.textData.slice(this.index, this.config.textData.length);
 
-    if(event.key === 'Shift') this.handleShift(left, right);
-    this.config.textData = left.concat(event.key, right);
-    this.drawPreview();
-    this.index++;
+      if(event.key === 'Shift') this.handleShift(left, right);
+      this.config.textData = left.concat(event.key, right);
+      this.drawPreview();
+      this.index++;
+    }
   }
 
   handleShift(leftData: string[], rightData: string[]): void {
@@ -53,7 +58,10 @@ export class TextService extends Tool {
     this.draw();
     this.config.textData = [];
     this.hasInput = false;
-    //TODO
+  }
+
+  handleArrowKeys(event: KeyboardEvent) {
+    this.index = event.key === 'ArrowLeft' ? --this.index : ++this.index ;
   }
 
   drawPreview(): void {
