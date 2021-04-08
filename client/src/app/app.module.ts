@@ -53,6 +53,7 @@ import { RectangleConfigComponent } from './components/tool-config/rectangle-con
 import { RectangleSelectionConfigComponent } from './components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
 import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
 import { SidebarDirective } from './directives/sidebar.directive';
+import { TextComponent } from './text/text.component';
 
 @NgModule({
     declarations: [
@@ -92,6 +93,7 @@ import { SidebarDirective } from './directives/sidebar.directive';
         GridConfigComponent,
         MagnetismComponent,
         LassoSelectionConfigComponent,
+        TextComponent,
     ],
     imports: [
         AppRoutingModule,
