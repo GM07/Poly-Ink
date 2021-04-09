@@ -61,10 +61,10 @@ export class CarrouselComponent implements OnInit {
         this.subscribeActivatedRoute(activatedRoute);
     }
 
-    private static readonly SHORTCUT: ShortcutKey = new ShortcutKey('g', true);
     private static readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
     private static readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
     private static readonly NOT_FOUND_ERROR: number = 404;
+    static readonly SHORTCUT: ShortcutKey = new ShortcutKey('g', true);
     @ViewChild('overflowLeftPreview', { static: false }) overflowLeftPreview: ElementRef<HTMLImageElement>;
     @ViewChild('leftPreview', { static: false }) leftPreview: ElementRef<HTMLImageElement>;
     @ViewChild('middlePreview', { static: false }) middlePreview: ElementRef<HTMLImageElement>;
