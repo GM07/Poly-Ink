@@ -4,7 +4,6 @@ import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { TextConfig } from '@app/classes/tool-config/text-config';
 import { TextToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
-import { Vec2 } from '@app/classes/vec2';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { DrawingService } from '../drawing/drawing.service';
 
@@ -67,9 +66,10 @@ export class TextService extends Tool {
 
   confirmText(): void {
     this.config.hasInput = false;
-    this.config.index = new Vec2(0, 0);
     this.draw();
-    this.config.textData = [];
+    this.config.index.x = 0;
+    this.config.index.y = 0;
+    this.config.textData = [''];
   }
   
   private handleShortCuts(shortcutKey: ShortcutKey) {
@@ -167,7 +167,7 @@ export class TextService extends Tool {
   }
 
   drawPreview(): void {
-    this.drawingService.clearCanvas(this.drawingService.previewCtx);
+    //this.drawingService.clearCanvas(this.drawingService.previewCtx);
     const command = new TextDraw(this.colorService, this.config);
     this.drawingService.drawPreview(command);
   }
