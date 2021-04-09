@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { TextComponent } from './text.component';
+
 
 describe('TextComponent', () => {
   let component: TextComponent;
@@ -23,3 +23,4 @@ describe('TextComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+

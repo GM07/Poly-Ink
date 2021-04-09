@@ -70,9 +70,6 @@ export class TextDraw extends AbstractDraw {
                 break;
             case 'center':
                 this.drawCursorCenter(ctx);
-                break;
-            default:
-                break;
         }
     }
 
@@ -135,6 +132,6 @@ export class TextDraw extends AbstractDraw {
         ctx.moveTo(this.cursorX, this.cursorY);
         ctx.lineTo(this.cursorX, this.cursorY + height);
         ctx.stroke();
-        ctx.closePath();
+        //ctx.closePath();
     }
 }
