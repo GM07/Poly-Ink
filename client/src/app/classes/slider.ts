@@ -1,5 +1,5 @@
+// Code based on the radiaslider package
 // https://www.npmjs.com/package/@maslick/radiaslider/v/1.9.8
-// Code basée sur le package radiaslider
 
 import { Vec2 } from '@app/classes/vec2';
 import { ToolMath } from '@app/constants/math';

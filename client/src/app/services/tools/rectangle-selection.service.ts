@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { RectangleSelectionDraw } from '@app/classes/commands/rectangle-selection-draw';
-import { SelectionData } from '@app/classes/selection/selection-data';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { RectangleSelectionToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -39,7 +38,9 @@ export class RectangleSelectionService extends AbstractSelectionService {
         ctx.closePath();
     }
 
-    protected drawPreviewSelectionRequired(): void {
+    protected drawPreviewSelection(): void {
+        super.drawPreviewSelection();
+
         const ctx = this.drawingService.previewCtx;
         if (this.config.shift.isDown) {
             this.config.height = Math.sign(this.config.height) * Math.min(Math.abs(this.config.width), Math.abs(this.config.height));
@@ -65,17 +66,11 @@ export class RectangleSelectionService extends AbstractSelectionService {
         ctx.setLineDash([]);
     }
 
-    protected drawFinalSelection(): void {
-        const previewCTX = this.drawingService.previewCtx;
-        this.drawingService.clearCanvas(previewCTX);
-
-        this.fillBackground(previewCTX);
-
+    protected updateSelectionRequired(): void {
+        const ctx = this.drawingService.previewCtx;
         const size = new Vec2(this.config.width, this.config.height).apply(Math.abs);
-        const previewSelectionCTX = this.config.previewSelectionCtx as CanvasRenderingContext2D;
-        this.drawSelection(previewSelectionCTX, new Vec2(0, 0), size);
-
-        previewCTX.drawImage(this.config.SELECTION_DATA[SelectionData.PreviewData], this.config.endCoords.x, this.config.endCoords.y);
+        RectangleSelectionDraw.drawClippedSelection(ctx, this.config);
+        this.drawSelection(ctx, this.config.endCoords, size);
     }
 
     draw(): void {
