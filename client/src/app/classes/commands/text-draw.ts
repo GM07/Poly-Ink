@@ -53,11 +53,11 @@ export class TextDraw extends AbstractDraw {
         let y = this.config.startCoords.y;
         this.config.textData.forEach((line, index) => {
             ctx.fillText(line, this.config.startCoords.x, y);
-            if(this.config.hasInput && index === this.config.index.y) {
-                this.drawCursor(ctx, line, y);
-            }
             y += this.getfactorLineHeight() * this.config.fontSize;
         });
+        if(this.config.hasInput) {
+            this.drawCursor(ctx);
+        }
     }
 
     /*public findIndex(): void {
@@ -70,8 +70,9 @@ export class TextDraw extends AbstractDraw {
         this.currentLineIndex = this.config.index;
     }*/
 
-    public drawCursor(ctx: CanvasRenderingContext2D, text: string, y: number): void {
-        let left = text.slice(0, this.config.index.x);
+    public drawCursor(ctx: CanvasRenderingContext2D): void {
+        let y = this.config.startCoords.y + this.getfactorLineHeight() * this.config.fontSize * this.config.index.y;
+        let left = this.config.textData[this.config.index.y].slice(0, this.config.index.x);
         let metrics = ctx.measureText(left);
         let width = metrics.width;
         this.cursorX= this.config.startCoords.x + width;
