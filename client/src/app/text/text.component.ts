@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -12,7 +12,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
     templateUrl: './text.component.html',
     styleUrls: ['./text.component.scss'],
 })
-export class TextComponent implements OnInit {
+export class TextComponent {
   private leftMouseDown: boolean;
   private readonly ESCAPE: ShortcutKey = new ShortcutKey('escape');
   public subscriptionIconClick: Subscription;
@@ -21,12 +21,6 @@ export class TextComponent implements OnInit {
 
   constructor(public textService: TextService, public shortcutHandlerService: ShortcutHandlerService, public drawingService: DrawingService, public colorService: ColorService) {
     this.ESCAPE.isDown = false;
-  }
-
-  ngOnInit() {
-    this.subscriptionIconClick = this.textService.handleIconClicked.subscribe(() => {
-      this.confirmText();
-    });
   }
 
   onMouseDown(event: MouseEvent): void {

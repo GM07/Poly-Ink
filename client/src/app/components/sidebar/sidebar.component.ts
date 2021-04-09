@@ -9,6 +9,8 @@ import { ToolSettings } from '@app/classes/tool_ui_settings/tool-settings';
 import { HIGHLIGHTED_COLOR } from '@app/classes/tool_ui_settings/tools.constants';
 import { Undo } from '@app/classes/tool_ui_settings/undo-settings';
 import { ClipboardService } from '@app/services/clipboard/clipboard.service';
+import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
+import { TextService } from '@app/services/tools/text.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 
@@ -34,6 +36,8 @@ export class SidebarComponent implements OnInit {
         public clipboardService: ClipboardService,
         public toolHandlerService: ToolHandlerService,
         private undoRedoService: UndoRedoService,
+        private textService: TextService,
+        private shortcutHandlerService: ShortcutHandlerService,
         private router: Router,
         private zone: NgZone,
         private cd: ChangeDetectorRef,
@@ -68,6 +72,10 @@ export class SidebarComponent implements OnInit {
     }
 
     toolIconClicked(toolSettings: ToolSettings): void {
+        if (this.toolHandlerService.getCurrentTool() instanceof TextService) {
+            this.textService.confirmText();
+            this.shortcutHandlerService.blockShortcuts = false;
+        }
         this.toolHandlerService.setTool(toolSettings.toolId);
     }
 
