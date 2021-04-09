@@ -299,16 +299,9 @@ describe('Lasso service', () => {
             new Vec2(CanvasConst.MIN_WIDTH, 0),
             new Vec2(CanvasConst.MIN_WIDTH, CanvasConst.MIN_HEIGHT),
             new Vec2(0, CanvasConst.MIN_HEIGHT),
+            new Vec2(0, 0),
         ]);
 
         expect(closedSpy).toHaveBeenCalled();
-    });
-
-    it('should stop drawing', () => {
-        const initSpy = spyOn(service, 'initAttribs');
-        const stopSpy = spyOn<any>(AbstractSelectionService.prototype, 'stopDrawing');
-        service.stopDrawing();
-        expect(initSpy).toHaveBeenCalled();
-        expect(stopSpy).toHaveBeenCalled();
     });
 });
