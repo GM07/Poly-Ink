@@ -13,11 +13,13 @@ import { DrawingService } from '../drawing/drawing.service';
 })
 export class TextService extends Tool {
   config: TextConfig;
+  delete: ShortcutKey = new ShortcutKey('delete');
+  backspace: ShortcutKey = new ShortcutKey('backspace');
   arrowLeft: ShortcutKey = new ShortcutKey('arrowleft');
   arrowRight: ShortcutKey = new ShortcutKey('arrowright');
   arrowUp: ShortcutKey = new ShortcutKey('arrowup');
   arrowDown: ShortcutKey = new ShortcutKey('arrowdown');
-  shortcutList: ShortcutKey[] = [this.arrowLeft, this.arrowRight, this.arrowUp, this.arrowDown];
+  shortcutList: ShortcutKey[] = [this.delete, this.backspace, this.arrowLeft, this.arrowRight, this.arrowUp, this.arrowDown];
 
   constructor(public drawingService: DrawingService, public colorService: ColorService) {
     super(drawingService, colorService);
@@ -32,7 +34,7 @@ export class TextService extends Tool {
     const shortcut = ShortcutKey.get(this.shortcutList, event, true);
     if (shortcut !== undefined) {
       event.preventDefault();
-      this.handleArrowKeys(shortcut);
+      this.handleShortCuts(shortcut);
     } else if(this.config.hasInput) {
       this.insert(event);
     }
@@ -62,19 +64,21 @@ export class TextService extends Tool {
     //TODO
   }
 
-  delete(index: number): void {
-    if(index !== 0) this.config.textData.splice(index - 1 , 1);
-  }
-
   confirmText(): void {
     this.config.hasInput = false;
     this.config.index = new Vec2(0, 0);
     this.draw();
     this.config.textData = [];
   }
-
-  handleArrowKeys(shortcutKey: ShortcutKey) {
+  
+  private handleShortCuts(shortcutKey: ShortcutKey) {
     switch (shortcutKey) {
+      case this.delete:
+        this.handleDelete();
+        break;
+      case this.backspace:
+        this.handleBackspace();
+        break;
       case this.arrowLeft:
         this.handleArrowLeft();
         break;
@@ -89,7 +93,28 @@ export class TextService extends Tool {
       default:
         break;
     }
-   
+  }
+      
+  handleDelete(): void {
+    let x = this.config.index.x;
+    let y = this.config.index.y;
+    let text = this.config.textData;
+    if(x === text[y].length) return;
+    if(x < text[y].length) {
+      text[y] = text[y].substring(0, x) + text[y].substring(x + 1);
+    }
+  }
+  
+  handleBackspace(): void {
+    let x = this.config.index.x;
+    let y = this.config.index.y;
+    let text = this.config.textData;
+    if(y === 0 && x === 0) return;
+    if(x === 0) this.config.index.x = text[--this.config.index.y].length;
+    if(x > 0) {
+      text[y] = text[y].substring(0, x - 1) + text[y].substring(x);
+      this.config.index.x--;
+    }
   }
 
   private handleArrowLeft(): void {
@@ -128,8 +153,6 @@ export class TextService extends Tool {
     this.config.index.x = Math.min(x, text[y].length);
   }
 
-
-  
   drawPreview(): void {
     this.drawingService.clearCanvas(this.drawingService.previewCtx);
     const command = new TextDraw(this.colorService, this.config);
