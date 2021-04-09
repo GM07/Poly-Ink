@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
@@ -52,6 +53,7 @@ import { PolygoneConfigComponent } from './components/tool-config/polygone-confi
 import { RectangleConfigComponent } from './components/tool-config/rectangle-config/rectangle-config.component';
 import { RectangleSelectionConfigComponent } from './components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
 import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
+import { TextConfigComponent } from './components/tool-config/text-config/text-config.component';
 import { SidebarDirective } from './directives/sidebar.directive';
 import { TextComponent } from './text/text.component';
 
@@ -94,6 +96,7 @@ import { TextComponent } from './text/text.component';
         MagnetismComponent,
         LassoSelectionConfigComponent,
         TextComponent,
+        TextConfigComponent,
     ],
     imports: [
         AppRoutingModule,
@@ -120,6 +123,7 @@ import { TextComponent } from './text/text.component';
         MatChipsModule,
         MatFormFieldModule,
         MatProgressSpinnerModule,
+        MatSelectModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

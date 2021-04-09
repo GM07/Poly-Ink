@@ -14,6 +14,7 @@ import {
     RectangleSelectionToolConstants,
     RectangleToolConstants,
     StampToolConstants,
+    TextToolConstants
 } from '@app/classes/tool_ui_settings/tools.constants';
 import { AerosolConfigComponent } from '@app/components/tool-config/aerosol-config/aerosol-config.component';
 import { BucketConfigComponent } from '@app/components/tool-config/bucket-config/bucket-config.component';
@@ -28,6 +29,7 @@ import { PolygoneConfigComponent } from '@app/components/tool-config/polygone-co
 import { RectangleConfigComponent } from '@app/components/tool-config/rectangle-config/rectangle-config.component';
 import { RectangleSelectionConfigComponent } from '@app/components/tool-config/rectangle-selection-config/rectangle-selection-config.component';
 import { StampConfigComponent } from '@app/components/tool-config/stamp-config/stamp-config.component';
+import { TextConfigComponent } from '@app/components/tool-config/text-config/text-config.component';
 import { ToolConfig } from '@app/components/tool-config/tool-config';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
@@ -54,5 +56,6 @@ export class SettingsHandlerComponent {
         this.TAB_HANDLER.setTab(RectangleSelectionToolConstants.TOOL_ID, RectangleSelectionConfigComponent);
         this.TAB_HANDLER.setTab(EllipseSelectionToolConstants.TOOL_ID, EllipseSelectionConfigComponent);
         this.TAB_HANDLER.setTab(LassoToolConstants.TOOL_ID, LassoSelectionConfigComponent);
+        this.TAB_HANDLER.setTab(TextToolConstants.TOOL_ID, TextConfigComponent);
     }
 }
