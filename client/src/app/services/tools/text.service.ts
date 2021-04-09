@@ -15,11 +15,12 @@ export class TextService extends Tool {
   config: TextConfig;
   delete: ShortcutKey = new ShortcutKey('delete');
   backspace: ShortcutKey = new ShortcutKey('backspace');
+  escape: ShortcutKey = new ShortcutKey('escape');
   arrowLeft: ShortcutKey = new ShortcutKey('arrowleft');
   arrowRight: ShortcutKey = new ShortcutKey('arrowright');
   arrowUp: ShortcutKey = new ShortcutKey('arrowup');
   arrowDown: ShortcutKey = new ShortcutKey('arrowdown');
-  shortcutList: ShortcutKey[] = [this.delete, this.backspace, this.arrowLeft, this.arrowRight, this.arrowUp, this.arrowDown];
+  shortcutList: ShortcutKey[] = [this.delete, this.backspace, this.escape, this.arrowLeft, this.arrowRight, this.arrowUp, this.arrowDown];
 
   constructor(public drawingService: DrawingService, public colorService: ColorService) {
     super(drawingService, colorService);
@@ -79,6 +80,9 @@ export class TextService extends Tool {
       case this.backspace:
         this.handleBackspace();
         break;
+      case this.escape:
+        this.handleEscape();
+        break;
       case this.arrowLeft:
         this.handleArrowLeft();
         break;
@@ -95,7 +99,7 @@ export class TextService extends Tool {
     }
   }
       
-  handleDelete(): void {
+  private handleDelete(): void {
     let x = this.config.index.x;
     let y = this.config.index.y;
     let text = this.config.textData;
@@ -105,7 +109,7 @@ export class TextService extends Tool {
     }
   }
   
-  handleBackspace(): void {
+  private handleBackspace(): void {
     let x = this.config.index.x;
     let y = this.config.index.y;
     let text = this.config.textData;
@@ -115,6 +119,15 @@ export class TextService extends Tool {
       text[y] = text[y].substring(0, x - 1) + text[y].substring(x);
       this.config.index.x--;
     }
+  }
+
+  private handleEscape(): void {
+    this.config.textData = [''];
+    this.config.hasInput = false;
+    this.config.index.x = 0;
+    this.config.index.y = 0;
+    this.drawingService.clearCanvas(this.drawingService.previewCtx);
+    this.drawingService.unblockUndoRedo();
   }
 
   private handleArrowLeft(): void {
