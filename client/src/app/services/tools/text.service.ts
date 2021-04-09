@@ -4,6 +4,7 @@ import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { TextConfig } from '@app/classes/tool-config/text-config';
 import { TextToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
+import { Subject } from 'rxjs';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { DrawingService } from '../drawing/drawing.service';
 
@@ -21,6 +22,8 @@ export class TextService extends Tool {
   arrowDown: ShortcutKey = new ShortcutKey('arrowdown');
   shortcutList: ShortcutKey[] = [this.delete, this.backspace, this.escape, this.arrowLeft, this.arrowRight, this.arrowUp, this.arrowDown];
 
+  handleIconClicked: Subject<boolean>;
+
   constructor(public drawingService: DrawingService, public colorService: ColorService) {
     super(drawingService, colorService);
 
@@ -28,6 +31,7 @@ export class TextService extends Tool {
     this.toolID = TextToolConstants.TOOL_ID;
 
     this.config = new TextConfig();
+    this.handleIconClicked = new Subject<boolean>();
   }
   
   onKeyDown(event: KeyboardEvent): void {
