@@ -4,6 +4,7 @@ import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { ColorSliderComponent } from './color-slider.component';
 
+// tslint:disable:no-string-literal
 describe('ColorSliderComponent', () => {
     let component: ColorSliderComponent;
     let fixture: ComponentFixture<ColorSliderComponent>;

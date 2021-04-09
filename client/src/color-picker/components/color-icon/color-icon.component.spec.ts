@@ -17,6 +17,7 @@ class StubMatMenuComponent {}
 class StubMatIconComponent {}
 // tslint:enable:max-classes-per-file
 
+// tslint:disable:no-string-literal
 describe('ColorIconComponent', () => {
     let component: ColorIconComponent;
     let fixture: ComponentFixture<ColorIconComponent>;

@@ -4,9 +4,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSliderModule } from '@angular/material/slider';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MagnetismSelection } from '@app/services/drawing/magnetism.service';
-
 import { MagnetismComponent } from './magnetism.component';
 
+// tslint:disable:no-string-literal
 describe('MagnetismComponent', () => {
     let component: MagnetismComponent;
     let fixture: ComponentFixture<MagnetismComponent>;
