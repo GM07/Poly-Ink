@@ -32,7 +32,6 @@ describe('EraserService', () => {
         drawSpy = spyOn<any>(service, 'draw').and.stub();
         drawPreviewSpy = spyOn<any>(service, 'drawPreview').and.stub();
 
-        // Configuration of the service spy
         // tslint:disable:no-string-literal
         service['drawingService'].baseCtx = baseCtxStub;
         service['drawingService'].previewCtx = previewCtxStub;
