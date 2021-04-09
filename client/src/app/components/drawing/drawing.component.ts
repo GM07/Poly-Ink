@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, ElementRef, HostListener, Type, ViewChild } from '@angular/core';
 import { Vec2 } from '@app/classes/vec2';
+import { TextComponent } from '@app/components/text/text.component';
 import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { GridService } from '@app/services/drawing/grid.service';
 import { NewDrawingService } from '@app/services/popups/new-drawing';
 import { TextService } from '@app/services/tools/text.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
-import { TextComponent } from '@app/text/text.component';
 
 @Component({
     selector: 'app-drawing',

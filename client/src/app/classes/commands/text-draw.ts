@@ -53,31 +53,37 @@ export class TextDraw extends AbstractDraw {
         let y = this.config.startCoords.y;
         this.config.textData.forEach((line, index) => {
             ctx.fillText(line, this.config.startCoords.x, y);
-            y += this.getfactorLineHeight() * this.config.fontSize;
+            y += this.config.fontSize;
         });
         if(this.config.hasInput) {
             this.drawCursor(ctx);
         }
     }
 
-    /*public findIndex(): void {
-        for(let i = 0; i < this.config.lineIndexes.length; i++) {
-            if(this.config.index >= this.config.lineIndexes[i]) {
-                this.currentLineIndex = this.config.index - this.config.lineIndexes[i];
-                return;
-            }
+    private drawCursor(ctx: CanvasRenderingContext2D): void {
+        switch (this.config.alignmentSetting) {
+            case 'left':
+                this.drawCursorLeft(ctx);
+                break;
+            case 'right':
+                this.drawCursorRight(ctx);
+                break;
+            case 'center':
+                this.drawCursorCenter(ctx);
+                break;
+            default:
+                break;
         }
-        this.currentLineIndex = this.config.index;
-    }*/
+    }
 
-    public drawCursor(ctx: CanvasRenderingContext2D): void {
-        let y = this.config.startCoords.y + this.getfactorLineHeight() * this.config.fontSize * this.config.index.y;
+    private drawCursorLeft(ctx: CanvasRenderingContext2D): void {
+        let y = this.config.startCoords.y + this.config.fontSize * this.config.index.y;
         let left = this.config.textData[this.config.index.y].slice(0, this.config.index.x);
         let metrics = ctx.measureText(left);
         let width = metrics.width;
         this.cursorX= this.config.startCoords.x + width;
         this.cursorY = y;
-        let height = this.getfactorLineHeight() * this.config.fontSize;
+        let height = this.config.fontSize;
 
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 1;
@@ -89,19 +95,46 @@ export class TextDraw extends AbstractDraw {
         ctx.closePath();
     }
 
-    private getfactorLineHeight(): number {
-        switch(this.config.textFont) {
-            case 'Arial':
-                return 8/7;
-            case 'Times New Roman':
-                return 257/224;
-            case 'Fantasy':
-                return 175/112;
-            case 'Monospace':
-                return 8/7;
-            case 'Cursive':
-                return 11/7;
-        }
-        return 0;
+    private drawCursorRight(ctx: CanvasRenderingContext2D): void {
+        let y = this.config.startCoords.y + this.config.fontSize * this.config.index.y;
+        let right = this.config.textData[this.config.index.y].slice(this.config.index.x);
+        let metrics = ctx.measureText(right);
+        let width = metrics.width;
+        this.cursorX= this.config.startCoords.x - width;
+        this.cursorY = y;
+        let height = this.config.fontSize;
+
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 1;
+
+        ctx.beginPath();
+        ctx.moveTo(this.cursorX, this.cursorY);
+        ctx.lineTo(this.cursorX, this.cursorY + height);
+        ctx.stroke();
+        ctx.closePath();
+    }
+
+    private drawCursorCenter(ctx: CanvasRenderingContext2D): void {
+        let y = this.config.startCoords.y + this.config.fontSize * this.config.index.y;
+        let newStartCoords = this.config.startCoords.clone();
+        let text = this.config.textData[this.config.index.y]
+        let metricsText = ctx.measureText(text);
+        newStartCoords.x -= metricsText.width/2;
+
+        let left = this.config.textData[this.config.index.y].slice(0, this.config.index.x);
+        let metricsLeft = ctx.measureText(left);
+        this.cursorX= newStartCoords.x + metricsLeft.width;
+        this.cursorY = y;
+        
+        let height = this.config.fontSize;
+
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 1;
+
+        ctx.beginPath();
+        ctx.moveTo(this.cursorX, this.cursorY);
+        ctx.lineTo(this.cursorX, this.cursorY + height);
+        ctx.stroke();
+        ctx.closePath();
     }
 }

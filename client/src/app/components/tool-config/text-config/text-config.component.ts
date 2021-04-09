@@ -33,8 +33,18 @@ export class TextConfigComponent extends ToolConfig {
     this.textService.config.bold = !this.textService.config.bold;
   }
 
-  setAlignment(alignment: string) {
-    //TODO
-    //this.textService.changeTextAlign(alignment);
+  changeFont(newFont: string): void {
+    this.shortcutHandlerService.blockShortcuts = true;
+    this.textService.config.textFont = newFont;
+  }
+  
+  changeFontSize(newSize: number): void {
+    this.shortcutHandlerService.blockShortcuts = true;
+    this.textService.config.fontSize = newSize;
+  }
+
+  setAlignment(newAlignment: string) {
+    this.shortcutHandlerService.blockShortcuts = true;
+    this.textService.config.alignmentSetting = newAlignment;
   }
 }

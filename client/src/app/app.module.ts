@@ -38,6 +38,7 @@ import { LassoSelectionComponent } from './components/selection/lasso-selection/
 import { RectangleSelectionComponent } from './components/selection/rectangle-selection/rectangle-selection.component';
 import { SelectionHandlerComponent } from './components/selection/selection-handler/selection-handler.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { TextComponent } from './components/text/text.component';
 import { AbstractSelectionConfigComponent } from './components/tool-config/abstract-selection-config/abstract-selection-config.component';
 import { AerosolConfigComponent } from './components/tool-config/aerosol-config/aerosol-config.component';
 import { BucketConfigComponent } from './components/tool-config/bucket-config/bucket-config.component';
@@ -55,7 +56,6 @@ import { RectangleSelectionConfigComponent } from './components/tool-config/rect
 import { SettingsHandlerComponent } from './components/tool-config/settings-handler/settings-handler.component';
 import { TextConfigComponent } from './components/tool-config/text-config/text-config.component';
 import { SidebarDirective } from './directives/sidebar.directive';
-import { TextComponent } from './text/text.component';
 
 @NgModule({
     declarations: [
