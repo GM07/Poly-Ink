@@ -1,4 +1,4 @@
-// Code bases on the radiaslider package
+// Code based on the radiaslider package
 // https://www.npmjs.com/package/@maslick/radiaslider/v/1.9.8
 
 import { Vec2 } from '@app/classes/vec2';
