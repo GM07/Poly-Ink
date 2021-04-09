@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { TextService } from '@app/services/tools/text.service';
 
 @Component({
@@ -13,7 +14,7 @@ export class TextConfigComponent extends ToolConfig {
   readonly MIN: number = ToolSettingsConst.TEXT_MIN_FONT_SIZE;
   readonly MAX: number = ToolSettingsConst.TEXT_MAX_FONT_SIZE;
 
-  constructor(public textService: TextService) { 
+  constructor(public textService: TextService, public shortcutHandlerService: ShortcutHandlerService) { 
     super();
     this.fonts = ['Arial', 'Times New Roman', 'Cursive', 'Fantasy', 'Monospace'];
   }
@@ -23,23 +24,13 @@ export class TextConfigComponent extends ToolConfig {
   }
 
   toggleItalic(): void {
-    //TODO
-    //this.textService.toggleItalic();
+    this.shortcutHandlerService.blockShortcuts = true;
+    this.textService.config.italic = !this.textService.config.italic;
   }
   
   toggleBold(): void {
-    //TODO
-    //this.textService.toggleBold();
-  }
-
-  changeFont(newFont: string): void {
-    //TODO
-    //this.textService.changeFont(newFont);
-  }
-
-  changeFontSize(newFontSize: number): void {
-    //TODO
-    //this.textService.changeFontSize(newFontSize);
+    this.shortcutHandlerService.blockShortcuts = true;
+    this.textService.config.bold = !this.textService.config.bold;
   }
 
   setAlignment(alignment: string) {

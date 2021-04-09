@@ -1,7 +1,7 @@
 <div class="tab">
     <h5 class="textFormat">Taille police</h5>
       <div class="textFormatForSlider">
-          <mat-slider #sizeSlider min="{{ MIN }}" max="{{ MAX }}" (change)="changeFontSize($event.value)" [(ngModel)]="textService.config.fontSize" thumbLabel [displayWith]="colorSliderLabel">
+          <mat-slider #sizeSlider min="{{ MIN }}" max="{{ MAX }}" [(ngModel)]="textService.config.fontSize" thumbLabel [displayWith]="colorSliderLabel">
           </mat-slider>
           {{ textService.config.fontSize }}px
       </div>
@@ -36,7 +36,7 @@
       <br>
       <mat-form-field class="textFormat" appearance="fill">
           <mat-label>Police</mat-label>
-          <mat-select [(value)]="this.textService.config.textFont" (selectionChange)="changeFont($event.value)">
+          <mat-select [(value)]="this.textService.config.textFont">
             <mat-option *ngFor="let font of fonts" [value]="font">
               {{font}}
             </mat-option>
