@@ -101,31 +101,31 @@ describe('ColorSliderComponent', () => {
     });
 
     it('should select good height for yellow hue', () => {
-        const height = component.canvas.nativeElement.height * component.YELLOW_START;
+        const height = component['canvas'].nativeElement.height * component.YELLOW_START;
         component.setPositionToHue(Colors.YELLOW);
         expect(component.selectedHeight).toEqual(height);
     });
 
     it('should select good height for green hue', () => {
-        const height = component.canvas.nativeElement.height * component.GREEN_START;
+        const height = component['canvas'].nativeElement.height * component.GREEN_START;
         component.setPositionToHue(Colors.GREEN);
         expect(component.selectedHeight).toEqual(height);
     });
 
     it('should select good height for cyan hue', () => {
-        const height = component.canvas.nativeElement.height * component.CYAN_START;
+        const height = component['canvas'].nativeElement.height * component.CYAN_START;
         component.setPositionToHue(Colors.CYAN);
         expect(component.selectedHeight).toEqual(height);
     });
 
     it('should select good height for blue hue', () => {
-        const height = component.canvas.nativeElement.height * component.BLUE_START;
+        const height = component['canvas'].nativeElement.height * component.BLUE_START;
         component.setPositionToHue(Colors.BLUE);
         expect(component.selectedHeight).toEqual(height);
     });
 
     it('should select good height for purple hue', () => {
-        const height = component.canvas.nativeElement.height * component.PURPLE_START;
+        const height = component['canvas'].nativeElement.height * component.PURPLE_START;
         component.setPositionToHue(Colors.PURPLE);
         expect(component.selectedHeight).toEqual(height);
     });
@@ -153,10 +153,10 @@ describe('ColorSliderComponent', () => {
     it('should not getContext if there', () => {
         // Get context to make sure we have one
         component.getContext();
-        spyOn(component.canvas.nativeElement, 'getContext').and.stub();
+        spyOn(component['canvas'].nativeElement, 'getContext').and.stub();
 
         // Get context should not do anything since we already have it
         component.getContext();
-        expect(component.canvas.nativeElement.getContext).not.toHaveBeenCalled();
+        expect(component['canvas'].nativeElement.getContext).not.toHaveBeenCalled();
     });
 });

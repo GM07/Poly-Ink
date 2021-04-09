@@ -65,11 +65,11 @@ export class CarrouselComponent implements OnInit {
     private static readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
     private static readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
     private static readonly NOT_FOUND_ERROR: number = 404;
-    @ViewChild('overflowLeftPreview', { static: false }) overflowLeftPreview: ElementRef<HTMLImageElement>;
-    @ViewChild('leftPreview', { static: false }) leftPreview: ElementRef<HTMLImageElement>;
-    @ViewChild('middlePreview', { static: false }) middlePreview: ElementRef<HTMLImageElement>;
-    @ViewChild('rightPreview', { static: false }) rightPreview: ElementRef<HTMLImageElement>;
-    @ViewChild('overflowRightPreview', { static: false }) overflowRightPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('overflowLeftPreview', { static: false }) private overflowLeftPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('leftPreview', { static: false }) private leftPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('middlePreview', { static: false }) private middlePreview: ElementRef<HTMLImageElement>;
+    @ViewChild('rightPreview', { static: false }) private rightPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('overflowRightPreview', { static: false }) private overflowRightPreview: ElementRef<HTMLImageElement>;
     readonly CARROUSEL_URL: string = 'carrousel';
     readonly CANVAS_PREVIEW_SIZE: number = 200;
 

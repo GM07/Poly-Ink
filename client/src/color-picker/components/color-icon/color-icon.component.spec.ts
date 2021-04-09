@@ -43,7 +43,7 @@ describe('ColorIconComponent', () => {
         });
         fixture = TestBed.createComponent(ColorIconComponent);
         component = fixture.componentInstance;
-        component.colorMenuTrigger = newMatMenuTrigger;
+        component['colorMenuTrigger'] = newMatMenuTrigger;
     });
 
     it('can load instance', () => {
@@ -58,13 +58,13 @@ describe('ColorIconComponent', () => {
 
     it('should open color picker menu', () => {
         component.openColorPicker();
-        expect(component.colorMenuTrigger.openMenu).toHaveBeenCalled();
+        expect(component['colorMenuTrigger'].openMenu).toHaveBeenCalled();
         expect(component.colorService.shouldChangeColor).toBeTrue();
     });
 
     it('should close color picker menu on close event', () => {
         component.closeMenu();
-        expect(component.colorMenuTrigger.closeMenu).toHaveBeenCalled();
+        expect(component['colorMenuTrigger'].closeMenu).toHaveBeenCalled();
     });
 
     it('should make appropriate calls when changing primary color', () => {

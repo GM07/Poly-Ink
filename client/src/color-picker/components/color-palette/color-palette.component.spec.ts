@@ -55,25 +55,25 @@ describe('ColorPaletteComponent', () => {
     });
 
     it('should set position to color with RED hue', () => {
-        const width: number = component.canvas.nativeElement.width;
+        const width: number = component['canvas'].nativeElement.width;
         component.setPositionToColor(Colors.RED);
         expect(component.selectedPosition).toEqual({ x: width, y: 0 });
     });
 
     it('should set position to color with GREEN hue', () => {
-        const width: number = component.canvas.nativeElement.width;
+        const width: number = component['canvas'].nativeElement.width;
         component.setPositionToColor(Colors.GREEN);
         expect(component.selectedPosition).toEqual({ x: width, y: 0 });
     });
 
     it('should set position to color with BLUE hue', () => {
-        const width: number = component.canvas.nativeElement.width;
+        const width: number = component['canvas'].nativeElement.width;
         component.setPositionToColor(Colors.BLUE);
         expect(component.selectedPosition).toEqual({ x: width, y: 0 });
     });
 
     it('should set position to color with YELLOW hue', () => {
-        const width: number = component.canvas.nativeElement.width;
+        const width: number = component['canvas'].nativeElement.width;
         component.setPositionToColor(Colors.YELLOW);
         expect(component.selectedPosition).toEqual({ x: width, y: 0 });
     });
@@ -84,8 +84,8 @@ describe('ColorPaletteComponent', () => {
     });
 
     it('should select appropriate position for black color', () => {
-        const width: number = component.canvas.nativeElement.width;
-        const height: number = component.canvas.nativeElement.height;
+        const width: number = component['canvas'].nativeElement.width;
+        const height: number = component['canvas'].nativeElement.height;
         component.setPositionToColor(Colors.BLACK);
         expect(component.selectedPosition).toEqual({ x: width, y: height });
     });
@@ -150,8 +150,8 @@ describe('ColorPaletteComponent', () => {
     it('should keep selection within bounds', () => {
         const startX = 0;
         const startY = 0;
-        const width: number = component.canvas.nativeElement.width;
-        const height: number = component.canvas.nativeElement.height;
+        const width: number = component['canvas'].nativeElement.width;
+        const height: number = component['canvas'].nativeElement.height;
         const x = 50;
         const y = 50;
 
@@ -166,8 +166,8 @@ describe('ColorPaletteComponent', () => {
     });
 
     it('should get proper color from canvas', () => {
-        const width: number = component.canvas.nativeElement.width;
-        const height: number = component.canvas.nativeElement.height;
+        const width: number = component['canvas'].nativeElement.width;
+        const height: number = component['canvas'].nativeElement.height;
 
         let color: Color = component.getColorAtPosition(width, height);
 
@@ -180,11 +180,11 @@ describe('ColorPaletteComponent', () => {
     it('should not getContext if there', () => {
         // Get context to make sure we have one
         component.getContext();
-        spyOn(component.canvas.nativeElement, 'getContext').and.stub();
+        spyOn(component['canvas'].nativeElement, 'getContext').and.stub();
 
         // Get context should not do anything since we already have it
         component.getContext();
-        expect(component.canvas.nativeElement.getContext).not.toHaveBeenCalled();
+        expect(component['canvas'].nativeElement.getContext).not.toHaveBeenCalled();
     });
 
     it('should not draw selection on draw', () => {

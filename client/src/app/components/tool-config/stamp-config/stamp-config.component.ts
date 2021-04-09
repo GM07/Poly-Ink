@@ -25,7 +25,7 @@ export class StampConfigComponent implements OnInit, OnDestroy, AfterViewInit {
 
     stampMode: typeof Stamp = Stamp;
     slider: Slider;
-    @ViewChild('angleValue', { static: false }) angleValue: ElementRef<HTMLElement>;
+    @ViewChild('angleValue', { static: false }) private angleValue: ElementRef<HTMLElement>;
 
     ngOnInit(): void {
         StampConfigComponent.this = this;

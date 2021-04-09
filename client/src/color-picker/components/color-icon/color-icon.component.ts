@@ -17,7 +17,7 @@ export class ColorIconComponent {
     @Input()
     height: number;
 
-    @ViewChild(MatMenuTrigger) colorMenuTrigger: MatMenuTrigger;
+    @ViewChild(MatMenuTrigger) private colorMenuTrigger: MatMenuTrigger;
 
     constructor(public colorService: ColorService) {}
 
