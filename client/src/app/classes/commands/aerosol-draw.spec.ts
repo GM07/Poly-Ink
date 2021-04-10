@@ -17,7 +17,6 @@ describe('AerosolDraw', () => {
     let colorService: ColorService;
     let canvasTestHelper: CanvasTestHelper;
     let ctxStub: CanvasRenderingContext2D;
-    // tslint:disable:no-string-literal
     const ALPHA = 3;
 
     beforeEach(() => {

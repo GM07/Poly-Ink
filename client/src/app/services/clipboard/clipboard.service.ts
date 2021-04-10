@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { SelectionData } from '@app/classes/selection/selection-data';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
@@ -63,9 +62,7 @@ export class ClipboardService {
         this.savedConfigs = this.lastSelectionTool.config.clone();
         this.savedConfigs.endCoords = new Vec2(0, 0);
         this.savedConfigs.markedForPaste = true;
-        this.savedConfigs.previewSelectionCtx = this.savedConfigs.SELECTION_DATA[SelectionData.PreviewData].getContext(
-            '2d',
-        ) as CanvasRenderingContext2D;
+        this.savedConfigs.previewSelectionCtx = this.savedConfigs.SELECTION_DATA.getContext('2d') as CanvasRenderingContext2D;
         this.isInitialised = true;
     }
 
@@ -84,9 +81,7 @@ export class ClipboardService {
 
         this.toolHandler.setTool(this.lastSelectionTool.toolID);
         this.lastSelectionTool.initAttribs(this.savedConfigs.clone());
-        this.lastSelectionTool.config.previewSelectionCtx = this.lastSelectionTool.config.SELECTION_DATA[SelectionData.PreviewData].getContext(
-            '2d',
-        ) as CanvasRenderingContext2D;
+        this.lastSelectionTool.config.previewSelectionCtx = this.lastSelectionTool.config.SELECTION_DATA.getContext('2d') as CanvasRenderingContext2D;
 
         if (this.isInitialised) {
             this.lastSelectionTool.updateSelection(new Vec2(0, 0));

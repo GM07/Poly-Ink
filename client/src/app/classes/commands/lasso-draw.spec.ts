@@ -32,6 +32,7 @@ describe('LassoDraw', () => {
         lassoDraw['config'].width = 10;
         lassoDraw['config'].originalWidth = 10;
         lassoDraw['config'].points = [new Vec2(2, 2), new Vec2(2, 10), new Vec2(10, 10), new Vec2(10, 2)];
+        lassoDraw['config'].originalPoints = [new Vec2(2, 2), new Vec2(2, 10), new Vec2(10, 10), new Vec2(10, 2)];
 
         ctxStub.canvas.width = 100;
         ctxStub.canvas.height = 100;
@@ -39,7 +40,7 @@ describe('LassoDraw', () => {
         ctxStub.fillRect(0, 0, 10, 10);
     });
 
-    it('should fillbacground with white', () => {
+    it('should fillbackground with white', () => {
         lassoDraw['fillBackground'](ctxStub);
         let imageData = ctxStub.getImageData(0, 0, 1, 1);
         expect(imageData.data[0]).toEqual(0);

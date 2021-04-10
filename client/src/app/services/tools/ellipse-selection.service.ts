@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { EllipseSelectionDraw } from '@app/classes/commands/ellipse-selection-draw';
-import { SelectionData } from '@app/classes/selection/selection-data';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { EllipseSelectionToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
@@ -18,7 +17,9 @@ export class EllipseSelectionService extends AbstractSelectionService {
         this.toolID = EllipseSelectionToolConstants.TOOL_ID;
     }
 
-    protected drawPreviewSelectionRequired(): void {
+    protected drawPreviewSelection(): void {
+        super.drawPreviewSelection();
+
         const ctx = this.drawingService.previewCtx;
         let radiusX: number = this.config.width / 2;
         let radiusY: number = this.config.height / 2;
@@ -74,35 +75,6 @@ export class EllipseSelectionService extends AbstractSelectionService {
         ctx.closePath();
     }
 
-    protected drawFinalSelection(): void {
-        const previewCTX = this.drawingService.previewCtx;
-        this.drawingService.clearCanvas(previewCTX);
-
-        this.fillBackground(previewCTX);
-
-        const radius = new Vec2(this.config.width / 2, this.config.height / 2).apply(Math.abs);
-        const center = radius.clone();
-        for (const data of this.config.SELECTION_DATA) {
-            const memoryCanvas = document.createElement('canvas');
-            DrawingService.saveCanvas(memoryCanvas, data);
-
-            const ctx = data.getContext('2d') as CanvasRenderingContext2D;
-            ctx.clearRect(0, 0, Math.abs(this.config.width), Math.abs(this.config.height));
-            ctx.beginPath();
-            ctx.save();
-            ctx.ellipse(center.x, center.y, radius.x, radius.y, 0, 0, 2 * Math.PI);
-            ctx.clip();
-            ctx.drawImage(memoryCanvas, 0, 0);
-            ctx.restore();
-            ctx.closePath();
-        }
-
-        const previewSelectionCTX = this.config.previewSelectionCtx as CanvasRenderingContext2D;
-        this.drawSelection(previewSelectionCTX, center, radius);
-
-        previewCTX.drawImage(this.config.SELECTION_DATA[SelectionData.PreviewData], this.config.endCoords.x, this.config.endCoords.y);
-    }
-
     protected endSelection(): void {
         if (this.config.previewSelectionCtx === null) return;
 
@@ -113,6 +85,16 @@ export class EllipseSelectionService extends AbstractSelectionService {
         this.config.endCoords = new Vec2(0, 0);
         this.config.markedForDelete = false;
         this.config.markedForPaste = false;
+    }
+
+    protected updateSelectionRequired(): void {
+        const ctx = this.drawingService.previewCtx;
+        const radius = new Vec2(this.config.width / 2, this.config.height / 2).apply(Math.abs);
+        const center = radius.add(this.config.endCoords);
+
+        EllipseSelectionDraw.drawClippedSelection(ctx, this.config);
+
+        this.drawSelection(ctx, center, radius);
     }
 
     draw(): void {

@@ -5,23 +5,15 @@ import { SelectionConfig } from './selection-config';
 
 export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
     points: Vec2[];
-    startCoords: Vec2;
-    endCoords: Vec2;
-    height: number;
-    width: number;
-    shiftDown: boolean;
+    originalPoints: Vec2[];
     isInSelection: boolean;
     intersecting: boolean;
 
     constructor() {
         super();
         this.points = [];
+        this.originalPoints = [];
         this.isInSelection = false;
-        this.startCoords = new Vec2(0, 0);
-        this.endCoords = new Vec2(0, 0);
-        this.width = 0;
-        this.height = 0;
-        this.shiftDown = false;
         this.intersecting = false;
     }
 
@@ -30,9 +22,13 @@ export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
         this.points.forEach((point) => {
             config.points.push(point.clone());
         });
+        this.originalPoints.forEach((point) => {
+            config.originalPoints.push(point.clone());
+        });
         config.startCoords = this.startCoords.clone();
         config.endCoords = this.endCoords.clone();
         config.shift = this.shift.clone();
+        config.scaleFactor = this.scaleFactor.clone();
         config.originalHeight = this.originalHeight;
         config.height = this.height;
         config.originalWidth = this.originalWidth;
@@ -43,9 +39,7 @@ export class LassoConfig extends SelectionConfig implements AbstractLineConfig {
         config.markedForDelete = this.markedForDelete;
         config.markedForPaste = this.markedForPaste;
 
-        for (let i = 0; i < this.SELECTION_DATA.length; ++i) {
-            DrawingService.saveCanvas(config.SELECTION_DATA[i], this.SELECTION_DATA[i]);
-        }
+        DrawingService.saveCanvas(config.SELECTION_DATA, this.SELECTION_DATA);
 
         return config;
     }

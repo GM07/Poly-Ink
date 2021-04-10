@@ -1,5 +1,4 @@
 import { LineDrawer } from '@app/classes/line-drawer';
-import { SelectionData } from '@app/classes/selection/selection-data';
 import { LassoConfig } from '@app/classes/tool-config/lasso-config';
 import { Vec2 } from '@app/classes/vec2';
 import { ColorService } from 'src/color-picker/services/color.service';
@@ -7,6 +6,22 @@ import { AbstractDraw } from './abstract-draw';
 
 export class LassoDraw extends AbstractDraw {
     private config: LassoConfig;
+
+    static drawClippedSelection(ctx: CanvasRenderingContext2D, configLasso: LassoConfig): void {
+        ctx.beginPath();
+        ctx.save();
+        LineDrawer.drawClippedLinePath(ctx, configLasso.points);
+        ctx.drawImage(
+            configLasso.SELECTION_DATA,
+            configLasso.endCoords.x,
+            configLasso.endCoords.y,
+            Math.abs(configLasso.width),
+            Math.abs(configLasso.height),
+        );
+        ctx.restore();
+        ctx.closePath();
+    }
+
     constructor(colorService: ColorService, config: LassoConfig) {
         super(colorService);
         this.config = config.clone();
@@ -28,19 +43,13 @@ export class LassoDraw extends AbstractDraw {
         }
 
         if (!this.config.markedForDelete) {
-            context.drawImage(
-                this.config.SELECTION_DATA[SelectionData.FinalData],
-                Math.floor(this.config.endCoords.x),
-                Math.floor(this.config.endCoords.y),
-                Math.abs(this.config.width),
-                Math.abs(this.config.height),
-            );
+            LassoDraw.drawClippedSelection(context, this.config);
         }
     }
 
     private fillBackground(context: CanvasRenderingContext2D): void {
         if (!this.config.didChange()) return;
         context.fillStyle = 'white';
-        LineDrawer.drawFilledLinePath(context, this.config.points);
+        LineDrawer.drawFilledLinePath(context, this.config.originalPoints);
     }
 }

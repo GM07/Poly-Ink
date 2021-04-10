@@ -40,7 +40,6 @@ describe('PencilService', () => {
         drawSpy = spyOn<any>(service, 'draw').and.stub();
         drawPreviewSpy = spyOn<any>(service, 'drawPreview').and.stub();
 
-        // Configuration du spy du service
         // tslint:disable:no-string-literal
         service['drawingService'].baseCtx = baseCtxStub; // Jasmine doesnt copy properties with underlying data
         service['drawingService'].previewCtx = previewCtxStub;
