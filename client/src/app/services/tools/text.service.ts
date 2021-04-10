@@ -57,6 +57,7 @@ export class TextService extends Tool {
     }
 
     onKeyDown(event: KeyboardEvent): void {
+        if (event.key === ' ') event.preventDefault();
         const shortcut = ShortcutKey.get(this.shortcutList, event, true);
         if (shortcut !== undefined) {
             event.preventDefault();

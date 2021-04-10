@@ -28,6 +28,15 @@ describe('TextService', () => {
         expect(service.drawPreview).toHaveBeenCalled();
     });
 
+    it('should prevent default when space bar key is down', () => {
+        const event = jasmine.createSpyObj('event', ['preventDefault'], { key: ' ' });
+        spyOn(service, 'drawPreview');
+
+        service.onKeyDown(event);
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(service.drawPreview).toHaveBeenCalled();
+    });
+
     it('should insert when the key down is not a shortcut and only if hasInput is true', () => {
         const event = jasmine.createSpyObj('event', [], { key: 'a' });
         spyOn(service, 'insert');
