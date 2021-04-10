@@ -3,10 +3,10 @@ import { ColorService } from 'src/color-picker/services/color.service';
 import { AbstractDraw } from './abstract-draw';
 
 export class TextDraw extends AbstractDraw {
-    public config: TextConfig;
-    public cursorX: number;
-    public cursorY: number;
-    public currentLineIndex: number;
+    config: TextConfig;
+    cursorX: number;
+    cursorY: number;
+    currentLineIndex: number;
 
     constructor(colorService: ColorService, textConfig: TextConfig) {
         super(colorService);

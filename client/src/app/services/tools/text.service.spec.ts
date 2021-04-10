@@ -2,6 +2,9 @@ import { TestBed } from '@angular/core/testing';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { TextService } from './text.service';
 
+// tslint:disable:no-string-literal
+// To access private methods in expect
+
 describe('TextService', () => {
     let service: TextService;
     let drawingService: DrawingService;
@@ -69,8 +72,8 @@ describe('TextService', () => {
 
     it('should handle delete', () => {
         const indexX = 3;
-        //tslint:disable:no-any 
-        //To spy on private method
+        // tslint:disable:no-any
+        // To spy on private method
         spyOn<any>(service, 'handleDelete').and.callThrough();
         service.config.index.x = 0;
         service.config.index.y = 0;
@@ -87,8 +90,8 @@ describe('TextService', () => {
 
     it('should handle backSpace', () => {
         const indexX = 3;
-        //tslint:disable:no-any 
-        //To spy on private method
+        // tslint:disable:no-any
+        // To spy on private method
         spyOn<any>(service, 'handleBackspace').and.callThrough();
         service['handleShortCuts'](service.backspace);
         expect(service['handleBackspace']).toHaveBeenCalled();
@@ -107,8 +110,8 @@ describe('TextService', () => {
     });
 
     it('should handle escape', () => {
-        //tslint:disable:no-any 
-        //To spy on private method
+        // tslint:disable:no-any
+        // To spy on private method
         spyOn<any>(service, 'handleEscape').and.callThrough(); // .and.callThrough
         spyOn(drawingService, 'clearCanvas');
         spyOn(drawingService, 'unblockUndoRedo');
@@ -117,8 +120,8 @@ describe('TextService', () => {
     });
 
     it('should handle ArrowLeft', () => {
-        //tslint:disable:no-any 
-        //To spy on private method
+        // tslint:disable:no-any
+        // To spy on private method
         spyOn<any>(service, 'handleArrowLeft').and.callThrough();
         service['handleShortCuts'](service.arrowLeft);
         expect(service['handleArrowLeft']).toHaveBeenCalled();
@@ -135,8 +138,8 @@ describe('TextService', () => {
     });
 
     it('should handle ArrowRight', () => {
-        //tslint:disable:no-any 
-        //To spy on private method
+        // tslint:disable:no-any
+        // To spy on private method
         spyOn<any>(service, 'handleArrowRight').and.callThrough();
         service['handleShortCuts'](service.arrowRight);
         expect(service['handleArrowRight']).toHaveBeenCalled();
@@ -155,8 +158,8 @@ describe('TextService', () => {
     });
 
     it('should handle ArrowUp', () => {
-        //tslint:disable:no-any 
-        //To spy on private method
+        // tslint:disable:no-any
+        // To spy on private method
         spyOn<any>(service, 'handleArrowUp').and.callThrough();
         service['handleShortCuts'](service.arrowUp);
         expect(service['handleArrowUp']).toHaveBeenCalled();
@@ -168,8 +171,8 @@ describe('TextService', () => {
     });
 
     it('should handle ArrowDown', () => {
-        //tslint:disable:no-any 
-        //To spy on private method
+        // tslint:disable:no-any
+        // To spy on private method
         spyOn<any>(service, 'handleArrowDown').and.callThrough();
         service['handleShortCuts'](service.arrowDown);
         expect(service['handleArrowDown']).toHaveBeenCalled();

@@ -1,12 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Tool } from '@app/classes/tool';
+import { TextComponent } from '@app/components/text/text.component';
 import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { GridService } from '@app/services/drawing/grid.service';
 import { MagnetismService } from '@app/services/drawing/magnetism.service';
 import { PencilService } from '@app/services/tools/pencil.service';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { TextComponent } from '../text/text.component';
 import { DrawingComponent } from './drawing.component';
 
 // tslint:disable:no-string-literal

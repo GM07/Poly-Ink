@@ -1,9 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { TextConfig } from '@app/classes/tool-config/text-config';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
-import { CanvasTestHelper } from '../canvas-test-helper';
 import { TextDraw } from './text-draw';
+
+// tslint:disable:no-string-literal
+// To access private methods in expect
 
 describe('TextDraw', () => {
     let textDraw: TextDraw;
@@ -19,6 +22,8 @@ describe('TextDraw', () => {
     });
 
     it('should call applyAttributes on execute', () => {
+        // tslint:disable:no-any
+        // To access private method
         spyOn<any>(textDraw, 'applyAttributes').and.callThrough();
         textDraw.execute(ctxStub);
         textDraw.config.italic = true;
@@ -33,12 +38,16 @@ describe('TextDraw', () => {
     });
 
     it('should call drawText in applyAttributes', () => {
+        // tslint:disable:no-any
+        // To access private method
         spyOn<any>(textDraw, 'drawText').and.callThrough();
         textDraw['applyAttributes'](ctxStub);
         expect(textDraw['drawText']).toHaveBeenCalled();
     });
 
     it('should call drawCursor in drawText when hasInput is true', () => {
+        // tslint:disable:no-any
+        // To access private method
         spyOn<any>(textDraw, 'drawCursor');
         textDraw.config.hasInput = true;
 
@@ -47,6 +56,8 @@ describe('TextDraw', () => {
     });
 
     it('should call by default drawCursorLeft', () => {
+        // tslint:disable:no-any
+        // To access private method
         spyOn<any>(textDraw, 'drawCursorLeft').and.callThrough();
 
         textDraw['drawCursor'](ctxStub);
@@ -54,6 +65,8 @@ describe('TextDraw', () => {
     });
 
     it('should call by drawCursorRight when textAlign is right', () => {
+        // tslint:disable:no-any
+        // To access private method
         spyOn<any>(textDraw, 'drawCursorRight').and.callThrough();
         textDraw.config.alignmentSetting = 'right';
 
@@ -62,6 +75,8 @@ describe('TextDraw', () => {
     });
 
     it('should call by drawCursorCenter when textAlign is center', () => {
+        // tslint:disable:no-any
+        // To access private method
         spyOn<any>(textDraw, 'drawCursorCenter').and.callThrough();
         textDraw.config.alignmentSetting = 'center';
 
