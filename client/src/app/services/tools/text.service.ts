@@ -54,17 +54,13 @@ export class TextService extends Tool {
       let left = this.config.textData[this.config.index.y].slice(0, this.config.index.x);
       let right = this.config.textData[this.config.index.y].slice(this.config.index.x, this.config.textData[this.config.index.y].length);
       
-      if(event.key === 'Shift') this.handleShift(left, right);
+      //if(event.key === 'Shift') this.handleShift(left, right);
       this.config.textData[this.config.index.y] = left.concat(event.key, right);
       this.config.index.x += 1;
     }
   }
 
-  handleShift(leftData: string, rightData: string): void {
-    //TODO
-  }
-
-  confirmText(): void {
+  public confirmText(): void {
     this.config.hasInput = false;
     this.draw();
     this.config.index.x = 0;
@@ -167,7 +163,6 @@ export class TextService extends Tool {
   }
 
   drawPreview(): void {
-    //this.drawingService.clearCanvas(this.drawingService.previewCtx);
     const command = new TextDraw(this.colorService, this.config);
     this.drawingService.drawPreview(command);
   }
