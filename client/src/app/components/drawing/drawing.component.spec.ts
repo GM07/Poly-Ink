@@ -6,6 +6,7 @@ import { GridService } from '@app/services/drawing/grid.service';
 import { MagnetismService } from '@app/services/drawing/magnetism.service';
 import { PencilService } from '@app/services/tools/pencil.service';
 import { ColorService } from 'src/color-picker/services/color.service';
+import { TextComponent } from '../text/text.component';
 import { DrawingComponent } from './drawing.component';
 
 // tslint:disable:no-string-literal
@@ -113,5 +114,11 @@ describe('DrawingComponent', () => {
         component.onKeyUp(event);
         expect(keyboardSpy).toHaveBeenCalled();
         expect(keyboardSpy).toHaveBeenCalledWith(event);
+    });
+
+    it('should only show text component when text is the current tool', () => {
+        component.toolHandlerService.setTool('TEXT');
+        let textComponent = component.text;
+        expect(textComponent).toBe(TextComponent);
     });
 });
