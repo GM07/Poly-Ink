@@ -1,4 +1,5 @@
 import { Vec2 } from '@app/classes/vec2';
+import { ToolSettingsConst } from '@app/constants/tool-settings';
 
 export class TextConfig {
     startCoords: Vec2;
@@ -14,7 +15,7 @@ export class TextConfig {
     constructor() {
         this.startCoords = new Vec2(0, 0);
         this.textFont = 'Arial';
-        this.fontSize = 14;
+        this.fontSize = ToolSettingsConst.DEFAULT_SIZE;
         this.textData = [''];
         this.bold = false;
         this.italic = false;
@@ -34,7 +35,7 @@ export class TextConfig {
         config.alignmentSetting = this.alignmentSetting;
         config.index = this.index;
         config.hasInput = this.hasInput;
-        
+
         return config;
     }
 }

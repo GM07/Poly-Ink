@@ -54,7 +54,12 @@ describe('SidebarComponent', () => {
                 MatIconTestingModule,
                 MatSidenavModule,
             ],
-            providers: [{ provide: PencilService, useValue: pencilSpy }, { provide: LineService, useValue: lineSpy }, ToolHandlerService, TextService],
+            providers: [
+                { provide: PencilService, useValue: pencilSpy },
+                { provide: LineService, useValue: lineSpy },
+                ToolHandlerService,
+                TextService,
+            ],
         }).compileComponents();
     }));
 
@@ -90,13 +95,12 @@ describe('SidebarComponent', () => {
     });
 
     it('should confirm text when another tool is selected from sidebar', () => {
-        let spy = spyOn(textService, 'confirmText');
+        const spy = spyOn(textService, 'confirmText');
 
         component.toolHandlerService.setTool('TEXT');
         component.toolIconClicked(new LineSettings());
         expect(spy).toHaveBeenCalled();
     });
-
 
     it('should go back to menu', () => {
         const resetSpy = spyOn(component['undoRedoService'], 'reset');

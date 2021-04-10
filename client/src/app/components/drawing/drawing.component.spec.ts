@@ -118,7 +118,7 @@ describe('DrawingComponent', () => {
 
     it('should only show text component when text is the current tool', () => {
         component.toolHandlerService.setTool('TEXT');
-        let textComponent = component.text;
+        const textComponent = component.text;
         expect(textComponent).toBe(TextComponent);
     });
 });

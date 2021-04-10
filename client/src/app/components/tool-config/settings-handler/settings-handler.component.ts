@@ -14,7 +14,7 @@ import {
     RectangleSelectionToolConstants,
     RectangleToolConstants,
     StampToolConstants,
-    TextToolConstants
+    TextToolConstants,
 } from '@app/classes/tool_ui_settings/tools.constants';
 import { AerosolConfigComponent } from '@app/components/tool-config/aerosol-config/aerosol-config.component';
 import { BucketConfigComponent } from '@app/components/tool-config/bucket-config/bucket-config.component';

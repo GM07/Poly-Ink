@@ -5,46 +5,46 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
 import { TextService } from '@app/services/tools/text.service';
 
 @Component({
-  selector: 'app-text-config',
-  templateUrl: './text-config.component.html',
-  styleUrls: ['./text-config.component.scss']
+    selector: 'app-text-config',
+    templateUrl: './text-config.component.html',
+    styleUrls: ['./text-config.component.scss'],
 })
 export class TextConfigComponent extends ToolConfig {
-  fonts: string[];
-  readonly MIN: number = ToolSettingsConst.TEXT_MIN_FONT_SIZE;
-  readonly MAX: number = ToolSettingsConst.TEXT_MAX_FONT_SIZE;
+    fonts: string[];
+    readonly MIN: number = ToolSettingsConst.TEXT_MIN_FONT_SIZE;
+    readonly MAX: number = ToolSettingsConst.TEXT_MAX_FONT_SIZE;
 
-  constructor(public textService: TextService, public shortcutHandlerService: ShortcutHandlerService) { 
-    super();
-    this.fonts = ['Arial', 'Times New Roman', 'Cursive', 'Fantasy', 'Monospace'];
-  }
+    constructor(public textService: TextService, public shortcutHandlerService: ShortcutHandlerService) {
+        super();
+        this.fonts = ['Arial', 'Times New Roman', 'Cursive', 'Fantasy', 'Monospace'];
+    }
 
-  colorSliderLabel(value: number): string {
-    return value + 'px';
-  }
+    colorSliderLabel(value: number): string {
+        return value + 'px';
+    }
 
-  toggleItalic(): void {
-    this.shortcutHandlerService.blockShortcuts = true;
-    this.textService.config.italic = !this.textService.config.italic;
-  }
-  
-  toggleBold(): void {
-    this.shortcutHandlerService.blockShortcuts = true;
-    this.textService.config.bold = !this.textService.config.bold;
-  }
+    toggleItalic(): void {
+        this.shortcutHandlerService.blockShortcuts = true;
+        this.textService.config.italic = !this.textService.config.italic;
+    }
 
-  changeFont(newFont: string): void {
-    this.shortcutHandlerService.blockShortcuts = true;
-    this.textService.config.textFont = newFont;
-  }
-  
-  changeFontSize(newSize: number): void {
-    this.shortcutHandlerService.blockShortcuts = true;
-    this.textService.config.fontSize = newSize;
-  }
+    toggleBold(): void {
+        this.shortcutHandlerService.blockShortcuts = true;
+        this.textService.config.bold = !this.textService.config.bold;
+    }
 
-  setAlignment(newAlignment: string) {
-    this.shortcutHandlerService.blockShortcuts = true;
-    this.textService.config.alignmentSetting = newAlignment;
-  }
+    changeFont(newFont: string): void {
+        this.shortcutHandlerService.blockShortcuts = true;
+        this.textService.config.textFont = newFont;
+    }
+
+    changeFontSize(newSize: number): void {
+        this.shortcutHandlerService.blockShortcuts = true;
+        this.textService.config.fontSize = newSize;
+    }
+
+    setAlignment(newAlignment: string): void {
+        this.shortcutHandlerService.blockShortcuts = true;
+        this.textService.config.alignmentSetting = newAlignment;
+    }
 }

@@ -89,9 +89,8 @@ export class DrawingComponent implements AfterViewInit {
 
     get text(): Type<TextComponent> | undefined {
         if (this.toolHandlerService.getCurrentTool() instanceof TextService) {
-            return TextComponent;  
+            return TextComponent;
         }
         return undefined;
     }
-
 }

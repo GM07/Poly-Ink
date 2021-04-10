@@ -63,7 +63,8 @@ export abstract class ToolSettingsConst {
     static readonly GRID_MAX_OPACITY: number = 1.0;
     static readonly GRID_STEP: number = 5;
 
-    //Text
+    // Text
     static readonly TEXT_MIN_FONT_SIZE: number = 5;
     static readonly TEXT_MAX_FONT_SIZE: number = 100;
+    static readonly DEFAULT_SIZE: number = 14;
 }
