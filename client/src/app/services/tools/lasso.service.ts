@@ -121,6 +121,11 @@ export class LassoService extends AbstractSelectionService {
         this.onClosedPath();
     }
 
+    stopDrawing(): void {
+        super.stopDrawing();
+        this.initAttribs(new LassoConfig());
+    }
+
     private onClosedPath(): void {
         this.endSelection();
         this.selectionResize.stopDrawing();

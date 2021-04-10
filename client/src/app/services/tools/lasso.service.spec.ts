@@ -304,4 +304,12 @@ describe('Lasso service', () => {
 
         expect(closedSpy).toHaveBeenCalled();
     });
+
+    it('should stop drawing', () => {
+        const initSpy = spyOn(service, 'initAttribs');
+        const stopSpy = spyOn<any>(AbstractSelectionService.prototype, 'stopDrawing');
+        service.stopDrawing();
+        expect(initSpy).toHaveBeenCalled();
+        expect(stopSpy).toHaveBeenCalled();
+    });
 });
