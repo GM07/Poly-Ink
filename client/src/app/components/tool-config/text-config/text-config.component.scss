@@ -1,3 +1,29 @@
+.mat-button-toggle {
+    //margin-left: 8px;
+    //margin-right:8px;
+    width: 200px;
+    height: 30px;
+    line-height: 30px;
+    background-color:  #ffffff;
+    color: #000000;
+    font-size: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.mat-button-toggle-checked {
+    background-color: #686370;
+    color: #ffffff;
+    font-size: 15px;
+}
+
+.mat-button-toggle-group {
+    border: none;
+    border-radius: 4px;
+    padding: 0px !important;
+    width: 170px;
+}
+
 .tab {
     width: 190px;
 }
@@ -17,8 +43,23 @@
     width: 150px !important;
 }
 
-.buttonGroup {
-    width: 75px;
+.boldButton {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 8px;
+    height: 60px;
+    width: 40px;
+    font-weight: bold;
+}
+
+.italicButton {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 8px;
+    height: 60px;
+    width: 40px;
+    font-style: italic; 
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 .textFormatButton {

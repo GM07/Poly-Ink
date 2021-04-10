@@ -75,11 +75,7 @@ export class TextDraw extends AbstractDraw {
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 1;
 
-        ctx.beginPath();
-        ctx.moveTo(this.cursor.x, this.cursor.y);
-        ctx.lineTo(this.cursor.x, this.cursor.y + height);
-        ctx.stroke();
-        ctx.closePath();
+        this.drawLineCursor(ctx, height);
     }
 
     private drawCursorRight(ctx: CanvasRenderingContext2D): void {
@@ -94,11 +90,7 @@ export class TextDraw extends AbstractDraw {
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 1;
 
-        ctx.beginPath();
-        ctx.moveTo(this.cursor.x, this.cursor.y);
-        ctx.lineTo(this.cursor.x, this.cursor.y + height);
-        ctx.stroke();
-        ctx.closePath();
+        this.drawLineCursor(ctx, height);
     }
 
     private drawCursorCenter(ctx: CanvasRenderingContext2D): void {
@@ -118,6 +110,10 @@ export class TextDraw extends AbstractDraw {
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 1;
 
+        this.drawLineCursor(ctx, height);
+    }
+
+    private drawLineCursor(ctx: CanvasRenderingContext2D, height: number): void {
         ctx.beginPath();
         ctx.moveTo(this.cursor.x, this.cursor.y);
         ctx.lineTo(this.cursor.x, this.cursor.y + height);

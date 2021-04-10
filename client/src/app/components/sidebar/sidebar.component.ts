@@ -72,7 +72,7 @@ export class SidebarComponent implements OnInit {
     }
 
     toolIconClicked(toolSettings: ToolSettings): void {
-        if (this.toolHandlerService.getCurrentTool() instanceof TextService) {
+        if (this.toolHandlerService.getCurrentTool() instanceof TextService && this.textService.config.hasInput) {
             this.textService.confirmText();
             this.shortcutHandlerService.blockShortcuts = false;
         }

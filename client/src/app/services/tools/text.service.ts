@@ -14,18 +14,11 @@ export class TextService extends Tool {
     private static readonly delete: ShortcutKey = new ShortcutKey('delete');
     private static readonly backspace: ShortcutKey = new ShortcutKey('backspace');
     private static readonly escape: ShortcutKey = new ShortcutKey('escape');
-    private static readonly arrowLeft: ShortcutKey = new ShortcutKey('arrowLeft');
-    private static readonly arrowRight: ShortcutKey = new ShortcutKey('arrowRight');
-    private static readonly arrowUp: ShortcutKey = new ShortcutKey('arrowUp');
-    private static readonly arrowDown: ShortcutKey = new ShortcutKey('arrowDown');
-
-    private static readonly shift: ShortcutKey = new ShortcutKey('shift');
-    private static readonly alt: ShortcutKey = new ShortcutKey('alt');
-    private static readonly tab: ShortcutKey = new ShortcutKey('tab');
-    private static readonly capslock: ShortcutKey = new ShortcutKey('capslock');
-    private static readonly control: ShortcutKey = new ShortcutKey('control');
-    private static readonly meta: ShortcutKey = new ShortcutKey('meta');
-
+    private static readonly arrowLeft: ShortcutKey = new ShortcutKey('arrowleft');
+    private static readonly arrowRight: ShortcutKey = new ShortcutKey('arrowright');
+    private static readonly arrowUp: ShortcutKey = new ShortcutKey('arrowup');
+    private static readonly arrowDown: ShortcutKey = new ShortcutKey('arrowdown');
+    
     config: TextConfig;
 
     shortcutList: ShortcutKey[];
@@ -42,8 +35,6 @@ export class TextService extends Tool {
         // To allow instance initialization longer than 150 characters
         // tslint:disable-next-line
         this.shortcutList = [TextService.delete, TextService.backspace, TextService.escape, TextService.arrowLeft, TextService.arrowRight, TextService.arrowUp, TextService.arrowDown];
-
-        this.ignoreShortcutList = [TextService.shift, TextService.alt, TextService.tab, TextService.capslock, TextService.control, TextService.meta];
     }
 
     onKeyDown(event: KeyboardEvent): void {
@@ -59,17 +50,16 @@ export class TextService extends Tool {
     }
 
     insert(event: KeyboardEvent): void {
-        const shortcut = ShortcutKey.get(this.ignoreShortcutList, event, true);
-        if (shortcut !== undefined) return;
-        if (event.key === 'Enter') {
-            const right = this.config.textData[this.config.index.y].substring(
-                Math.min(this.config.index.x, this.config.textData[this.config.index.y].length),
-            );
-            this.config.textData[this.config.index.y] = this.config.textData[this.config.index.y].substring(0, this.config.index.x);
-            this.config.index.x = 0;
-            this.config.index.y++;
-            this.config.textData.push(right);
-        } else {
+      if (event.key === 'Enter') {
+        const right = this.config.textData[this.config.index.y].substring(
+          Math.min(this.config.index.x, this.config.textData[this.config.index.y].length),
+          );
+          this.config.textData[this.config.index.y] = this.config.textData[this.config.index.y].substring(0, this.config.index.x);
+          this.config.index.x = 0;
+          this.config.index.y++;
+          this.config.textData.push(right);
+        } else if(event.key.length > 1) return;
+        else {
             const left = this.config.textData[this.config.index.y].slice(0, this.config.index.x);
             const right = this.config.textData[this.config.index.y].slice(this.config.index.x, this.config.textData[this.config.index.y].length);
 
@@ -117,6 +107,7 @@ export class TextService extends Tool {
         const x = this.config.index.x;
         const y = this.config.index.y;
         const text = this.config.textData;
+        if(x === 0 && y > 0 && text[y].length === 0) this.config.index.x = this.config.textData[--this.config.index.y].length; 
         if (x === text[y].length) return;
         if (x < text[y].length) {
             text[y] = text[y].substring(0, x) + text[y].substring(x + 1);

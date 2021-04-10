@@ -121,7 +121,7 @@ describe('TextService', () => {
     it('should handle escape', () => {
         // To spy on private method with any
         // tslint:disable-next-line
-        spyOn<any>(service, 'handleEscape').and.callThrough(); // .and.callThrough
+        spyOn<any>(service, 'handleEscape').and.callThrough();
         spyOn(drawingService, 'clearCanvas');
         spyOn(drawingService, 'unblockUndoRedo');
         service['handleShortCuts'](TextService['escape']);

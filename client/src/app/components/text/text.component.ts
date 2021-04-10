@@ -18,9 +18,23 @@ export class TextComponent {
         public shortcutHandlerService: ShortcutHandlerService,
         public drawingService: DrawingService,
         public colorService: ColorService,
-    ) {}
+    ) {
+      this.initSubscriptions();
+    }
+
+    protected initSubscriptions(): void {
+      this.drawingService.changes.subscribe(() => {
+        if(this.textService.config.hasInput) {
+          this.textService.drawPreview();
+          this.shortcutHandlerService.blockShortcuts = true;
+        } else {
+          this.textService.draw();
+        }
+      });
+    }
 
     onMouseDown(event: MouseEvent): void {
+        if(this.shortcutHandlerService.blockShortcuts && !this.textService.config.hasInput) return;
         this.leftMouseDown = event.button === MouseButton.Left;
         if (this.textService.isInCanvas(event) && this.leftMouseDown && !this.colorService.isMenuOpen) {
             this.textService.config.hasInput ? this.confirmText() : this.addText(event);

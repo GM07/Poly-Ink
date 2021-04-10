@@ -10,13 +10,14 @@ import { TextService } from '@app/services/tools/text.service';
     styleUrls: ['./text-config.component.scss'],
 })
 export class TextConfigComponent extends ToolConfig {
-    fonts: string[];
-    readonly MIN: number = ToolSettingsConst.TEXT_MIN_FONT_SIZE;
-    readonly MAX: number = ToolSettingsConst.TEXT_MAX_FONT_SIZE;
+    readonly fonts: string[] = ['Arial', 'Times New Roman', 'Cursive', 'Fantasy', 'Monospace'];
+    readonly MIN: number;
+    readonly MAX: number;
 
     constructor(public textService: TextService, public shortcutHandlerService: ShortcutHandlerService) {
         super();
-        this.fonts = ['Arial', 'Times New Roman', 'Cursive', 'Fantasy', 'Monospace'];
+        this.MIN = ToolSettingsConst.TEXT_MIN_FONT_SIZE;
+        this.MAX = ToolSettingsConst.TEXT_MAX_FONT_SIZE
     }
 
     colorSliderLabel(value: number): string {

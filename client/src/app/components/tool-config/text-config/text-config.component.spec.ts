@@ -7,6 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TextAlignment } from '@app/classes/tool-config/text-config';
 import { TextService } from '@app/services/tools/text.service';
 import { TextConfigComponent } from './text-config.component';
 
@@ -83,7 +84,7 @@ describe('TextConfigComponent', () => {
 
     it('should change text alignment be left by default', () => {
         expect(textService.config.alignmentSetting).toBe('left');
-        component.setAlignment('right');
+        component.setAlignment(TextAlignment.right);
         expect(textService.config.alignmentSetting).toBe('right');
     });
 });

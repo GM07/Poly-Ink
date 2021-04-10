@@ -27,7 +27,7 @@ describe('TextDraw', () => {
         spyOn<any>(textDraw, 'applyAttributes').and.callThrough();
         textDraw.execute(ctxStub);
         textDraw.config.italic = true;
-        textDraw.config.alignmentSetting = 'center';
+        textDraw.config.alignmentSetting = 'left';
         textDraw.execute(ctxStub);
         textDraw.config.bold = true;
         textDraw.config.alignmentSetting = 'right';

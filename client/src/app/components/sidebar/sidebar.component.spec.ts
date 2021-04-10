@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LineSettings } from '@app/classes/tool_ui_settings/line-settings';
 import { NewDrawing } from '@app/classes/tool_ui_settings/new-drawing-settings';
-import { LineToolConstants, NewDrawingConstants, PencilToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
+import { LineToolConstants, NewDrawingConstants, PencilToolConstants, TextToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { CanvasResizeComponent } from '@app/components/canvas-resize/canvas-resize.component';
 import { EditorComponent } from '@app/components/editor/editor.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
@@ -97,7 +97,7 @@ describe('SidebarComponent', () => {
     it('should confirm text when another tool is selected from sidebar', () => {
         const spy = spyOn(textService, 'confirmText');
 
-        component.toolHandlerService.setTool('TEXT');
+        component.toolHandlerService.setTool(TextToolConstants.TOOL_ID);
         component.toolIconClicked(new LineSettings());
         expect(spy).toHaveBeenCalled();
     });
