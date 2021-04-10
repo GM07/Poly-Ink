@@ -8,6 +8,8 @@ import * as fs from 'fs';
 import { inject, injectable } from 'inversify';
 import { Collection, FindAndModifyWriteOpResultObject } from 'mongodb';
 
+// We need that function to convert the given id
+// to an objectId (used in the delete function)
 /* tslint:disable:no-var-requires */
 /* tslint:disable:no-require-imports */
 const objectId = require('mongodb').ObjectID;
