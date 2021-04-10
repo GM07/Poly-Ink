@@ -8,15 +8,15 @@ export class BucketDraw extends AbstractDraw {
     private originalPixel: Uint8ClampedArray;
     private pixels: ImageData;
 
-    // Max euclidian distance for 3 colors Math.sqrt(255^2 * 3)
-    // tslint:disable-next-line:no-magic-numbers
-    private readonly maxColorDifference: number = Math.sqrt(Math.pow(255, 2) * 3);
-
     private readonly R: number = 0;
     private readonly G: number = 1;
     private readonly B: number = 2;
     private readonly colorComponentMax: number = 255;
     private readonly dataPerPixel: number = 4;
+
+    // Max euclidian distance for 3 colors Math.sqrt(255^2 * 3)
+    // tslint:disable-next-line:no-magic-numbers
+    private readonly maxColorDifference: number = Math.sqrt(Math.pow(this.colorComponentMax, 2) * 3);
 
     constructor(colorService: ColorService, config: BucketConfig) {
         super(colorService);
@@ -90,6 +90,8 @@ export class BucketDraw extends AbstractDraw {
 
         const colorDifference = Math.sqrt(deltaB2 + deltaG2 + deltaR2);
 
+        // Tolerance is a number between 0 and 100, we need to divide by 100 to get
+        // the percentage
         // tslint:disable-next-line:no-magic-numbers
         const toleratedColorDifference = this.maxColorDifference * (this.config.tolerance / 100);
 
