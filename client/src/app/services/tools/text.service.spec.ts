@@ -38,6 +38,13 @@ describe('TextService', () => {
     expect(service.drawPreview).toHaveBeenCalled();
   });
 
+  it('should handle ignored shortcuts', () => {
+    const event = jasmine.createSpyObj('event', [], { key: 'Meta' });
+    service.insert(event);
+    expect(service.config.index.x).toEqual(0);
+    expect(service.config.index.y).toEqual(0);
+  });
+
   it('should handle enter key', () => {
     const event = jasmine.createSpyObj('event', [], { key: 'Enter' });
     service.insert(event);

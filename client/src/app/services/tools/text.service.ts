@@ -12,14 +12,22 @@ import { DrawingService } from '../drawing/drawing.service';
 })
 export class TextService extends Tool {
   config: TextConfig;
-  delete: ShortcutKey = new ShortcutKey('delete');
-  backspace: ShortcutKey = new ShortcutKey('backspace');
-  escape: ShortcutKey = new ShortcutKey('escape');
-  arrowLeft: ShortcutKey = new ShortcutKey('arrowleft');
-  arrowRight: ShortcutKey = new ShortcutKey('arrowright');
-  arrowUp: ShortcutKey = new ShortcutKey('arrowup');
-  arrowDown: ShortcutKey = new ShortcutKey('arrowdown');
-  shortcutList: ShortcutKey[] = [this.delete, this.backspace, this.escape, this.arrowLeft, this.arrowRight, this.arrowUp, this.arrowDown];
+  delete: ShortcutKey;
+  backspace: ShortcutKey;
+  escape: ShortcutKey;
+  arrowLeft: ShortcutKey;
+  arrowRight: ShortcutKey;
+  arrowUp: ShortcutKey;
+  arrowDown: ShortcutKey;
+  shortcutList: ShortcutKey[];
+  
+  shift: ShortcutKey;
+  alt: ShortcutKey;
+  tab: ShortcutKey;
+  capslock: ShortcutKey;
+  control: ShortcutKey;
+  meta: ShortcutKey;
+  ignoreShortcutList: ShortcutKey[];
 
   constructor(public drawingService: DrawingService, public colorService: ColorService) {
     super(drawingService, colorService);
@@ -28,6 +36,23 @@ export class TextService extends Tool {
     this.toolID = TextToolConstants.TOOL_ID;
 
     this.config = new TextConfig();
+
+    this.delete = new ShortcutKey('delete');
+    this.backspace = new ShortcutKey('backspace');
+    this.escape = new ShortcutKey('escape');
+    this.arrowLeft = new ShortcutKey('arrowleft');
+    this.arrowRight = new ShortcutKey('arrowright');
+    this.arrowUp = new ShortcutKey('arrowup');
+    this.arrowDown = new ShortcutKey('arrowdown');
+    this.shortcutList = [this.delete, this.backspace, this.escape, this.arrowLeft, this.arrowRight, this.arrowUp, this.arrowDown];
+
+    this.shift = new ShortcutKey('shift');
+    this.alt = new ShortcutKey('alt');
+    this.tab = new ShortcutKey('tab');
+    this.capslock = new ShortcutKey('capslock');
+    this.control = new ShortcutKey('control');
+    this.meta = new ShortcutKey('meta');
+    this.ignoreShortcutList = [this.shift, this.alt, this.tab, this.capslock, this.control, this.meta];
   }
   
   onKeyDown(event: KeyboardEvent): void {
@@ -42,11 +67,10 @@ export class TextService extends Tool {
   }
   
   insert(event: KeyboardEvent): void {
-    if(event.key === 'Shift') return;
+    const shortcut = ShortcutKey.get(this.ignoreShortcutList, event, true);
+    if (shortcut !== undefined) return;
     if(event.key === 'Enter') {
-      const text = this.config.textData[this.config.index.y];
-      const mathMin = Math.min(this.config.index.x, this.config.textData[this.config.index.y].length);
-      let right = text.substring(mathMin);
+      let right = this.config.textData[this.config.index.y].substring(Math.min(this.config.index.x, this.config.textData[this.config.index.y].length));
       this.config.textData[this.config.index.y] = this.config.textData[this.config.index.y].substring(0, this.config.index.x);
       this.config.index.x = 0;
       this.config.index.y++;
