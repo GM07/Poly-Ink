@@ -4,6 +4,7 @@ import { GridService } from '@app/services/drawing/grid.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 import { Subject } from 'rxjs';
+import { TextService } from '../tools/text.service';
 
 @Injectable({
     providedIn: 'root',
@@ -37,6 +38,8 @@ export class ShortcutHandlerService {
     }
 
     onKeyDown(event: KeyboardEvent): void {
+        if( this.toolHandlerService.getCurrentTool() instanceof TextService )
+            this.toolHandlerService.getCurrentTool().onKeyDown(event);
         if (!this.blockShortcutsIn) {
             this.undoRedoService.onKeyDown(event);
             this.toolHandlerService.onKeyDown(event);

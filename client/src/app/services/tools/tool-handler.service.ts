@@ -115,7 +115,7 @@ export class ToolHandlerService {
     }
 
     private findToolshortcutKey(event: KeyboardEvent): Tool | undefined {
-        if (this.currentTool.shortcutKey.equals(event)) return undefined;        
+        if (this.currentTool.shortcutKey.equals(event)) return undefined;
         for (const tool of this.TOOLS.values()) {
             if (tool.shortcutKey.equals(event)) {
                 return tool;
