@@ -42,6 +42,7 @@ export class TextService extends Tool {
   }
   
   insert(event: KeyboardEvent): void {
+    if(event.key === 'Shift') return;
     if(event.key === 'Enter') {
       const text = this.config.textData[this.config.index.y];
       const mathMin = Math.min(this.config.index.x, this.config.textData[this.config.index.y].length);
@@ -54,7 +55,6 @@ export class TextService extends Tool {
       let left = this.config.textData[this.config.index.y].slice(0, this.config.index.x);
       let right = this.config.textData[this.config.index.y].slice(this.config.index.x, this.config.textData[this.config.index.y].length);
       
-      //if(event.key === 'Shift') this.handleShift(left, right);
       this.config.textData[this.config.index.y] = left.concat(event.key, right);
       this.config.index.x += 1;
     }
