@@ -18,6 +18,7 @@ import { HomePageComponent } from '@app/components/home-page/home-page.component
 import { SidebarComponent } from '@app/components/sidebar/sidebar.component';
 import { LineService } from '@app/services/tools/line.service';
 import { PencilService } from '@app/services/tools/pencil.service';
+import { TextService } from '@app/services/tools/text.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
 @Component({ selector: 'app-settings-handler', template: '' })
@@ -30,6 +31,7 @@ describe('SidebarComponent', () => {
     let pencilServiceSpy: jasmine.SpyObj<PencilService>;
     let lineServiceSpy: jasmine.SpyObj<LineService>;
     let toolHandlerService: ToolHandlerService;
+    let textService: TextService;
     let router: Router;
     let zone: NgZone;
 
@@ -52,12 +54,13 @@ describe('SidebarComponent', () => {
                 MatIconTestingModule,
                 MatSidenavModule,
             ],
-            providers: [{ provide: PencilService, useValue: pencilSpy }, { provide: LineService, useValue: lineSpy }, ToolHandlerService],
+            providers: [{ provide: PencilService, useValue: pencilSpy }, { provide: LineService, useValue: lineSpy }, ToolHandlerService, TextService],
         }).compileComponents();
     }));
 
     beforeEach(() => {
         toolHandlerService = TestBed.inject(ToolHandlerService);
+        textService = TestBed.inject(TextService);
 
         pencilServiceSpy = TestBed.inject(PencilService) as jasmine.SpyObj<PencilService>;
         lineServiceSpy = TestBed.inject(LineService) as jasmine.SpyObj<LineService>;
@@ -85,6 +88,15 @@ describe('SidebarComponent', () => {
         component.toolIconClicked(new LineSettings());
         expect(toolHandlerService.getCurrentTool().toolID).toEqual(LineToolConstants.TOOL_ID);
     });
+
+    it('should confirm text when another tool is selected from sidebar', () => {
+        let spy = spyOn(textService, 'confirmText');
+
+        component.toolHandlerService.setTool('TEXT');
+        component.toolIconClicked(new LineSettings());
+        expect(spy).toHaveBeenCalled();
+    });
+
 
     it('should go back to menu', () => {
         const resetSpy = spyOn(component['undoRedoService'], 'reset');

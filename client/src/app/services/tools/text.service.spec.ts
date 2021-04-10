@@ -3,7 +3,7 @@ import { DrawingService } from '../drawing/drawing.service';
 import { TextService } from './text.service';
 
 
-fdescribe('TextService', () => {
+describe('TextService', () => {
   let service: TextService;
   let drawingService: DrawingService;
 
