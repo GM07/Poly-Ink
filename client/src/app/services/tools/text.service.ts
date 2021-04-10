@@ -11,23 +11,24 @@ import { ColorService } from 'src/color-picker/services/color.service';
     providedIn: 'root',
 })
 export class TextService extends Tool {
+    private static readonly delete: ShortcutKey = new ShortcutKey('delete');
+    private static readonly backspace: ShortcutKey = new ShortcutKey('backspace');
+    private static readonly escape: ShortcutKey = new ShortcutKey('escape');
+    private static readonly arrowLeft: ShortcutKey = new ShortcutKey('arrowLeft');
+    private static readonly arrowRight: ShortcutKey = new ShortcutKey('arrowRight');
+    private static readonly arrowUp: ShortcutKey = new ShortcutKey('arrowUp');
+    private static readonly arrowDown: ShortcutKey = new ShortcutKey('arrowDown');
+
+    private static readonly shift: ShortcutKey = new ShortcutKey('shift');
+    private static readonly alt: ShortcutKey = new ShortcutKey('alt');
+    private static readonly tab: ShortcutKey = new ShortcutKey('tab');
+    private static readonly capslock: ShortcutKey = new ShortcutKey('capslock');
+    private static readonly control: ShortcutKey = new ShortcutKey('control');
+    private static readonly meta: ShortcutKey = new ShortcutKey('meta');
+
     config: TextConfig;
 
-    delete: ShortcutKey;
-    backspace: ShortcutKey;
-    escape: ShortcutKey;
-    arrowLeft: ShortcutKey;
-    arrowRight: ShortcutKey;
-    arrowUp: ShortcutKey;
-    arrowDown: ShortcutKey;
     shortcutList: ShortcutKey[];
-
-    shift: ShortcutKey;
-    alt: ShortcutKey;
-    tab: ShortcutKey;
-    capslock: ShortcutKey;
-    control: ShortcutKey;
-    meta: ShortcutKey;
     ignoreShortcutList: ShortcutKey[];
 
     constructor(public drawingService: DrawingService, public colorService: ColorService) {
@@ -38,22 +39,11 @@ export class TextService extends Tool {
 
         this.config = new TextConfig();
 
-        this.delete = new ShortcutKey('delete');
-        this.backspace = new ShortcutKey('backspace');
-        this.escape = new ShortcutKey('escape');
-        this.arrowLeft = new ShortcutKey('arrowleft');
-        this.arrowRight = new ShortcutKey('arrowright');
-        this.arrowUp = new ShortcutKey('arrowup');
-        this.arrowDown = new ShortcutKey('arrowdown');
-        this.shortcutList = [this.delete, this.backspace, this.escape, this.arrowLeft, this.arrowRight, this.arrowUp, this.arrowDown];
+        // To allow instance initialization longer than 150 characters
+        // tslint:disable-next-line
+        this.shortcutList = [TextService.delete, TextService.backspace, TextService.escape, TextService.arrowLeft, TextService.arrowRight, TextService.arrowUp, TextService.arrowDown];
 
-        this.shift = new ShortcutKey('shift');
-        this.alt = new ShortcutKey('alt');
-        this.tab = new ShortcutKey('tab');
-        this.capslock = new ShortcutKey('capslock');
-        this.control = new ShortcutKey('control');
-        this.meta = new ShortcutKey('meta');
-        this.ignoreShortcutList = [this.shift, this.alt, this.tab, this.capslock, this.control, this.meta];
+        this.ignoreShortcutList = [TextService.shift, TextService.alt, TextService.tab, TextService.capslock, TextService.control, TextService.meta];
     }
 
     onKeyDown(event: KeyboardEvent): void {
@@ -98,25 +88,25 @@ export class TextService extends Tool {
 
     private handleShortCuts(shortcutKey: ShortcutKey): void {
         switch (shortcutKey) {
-            case this.delete:
+            case TextService.delete:
                 this.handleDelete();
                 break;
-            case this.backspace:
+            case TextService.backspace:
                 this.handleBackspace();
                 break;
-            case this.escape:
+            case TextService.escape:
                 this.handleEscape();
                 break;
-            case this.arrowLeft:
+            case TextService.arrowLeft:
                 this.handleArrowLeft();
                 break;
-            case this.arrowRight:
+            case TextService.arrowRight:
                 this.handleArrowRight();
                 break;
-            case this.arrowUp:
+            case TextService.arrowUp:
                 this.handleArrowUp();
                 break;
-            case this.arrowDown:
+            case TextService.arrowDown:
                 this.handleArrowDown();
             default:
                 break;

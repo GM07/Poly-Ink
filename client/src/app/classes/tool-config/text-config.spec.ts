@@ -1,6 +1,6 @@
 import { TextConfig } from './text-config';
 
-describe('StampConfig', () => {
+describe('TextConfig', () => {
     let config: TextConfig;
     beforeEach(() => {
         config = new TextConfig();
@@ -10,8 +10,13 @@ describe('StampConfig', () => {
         expect(new TextConfig()).toBeTruthy();
     });
 
-    it('should clone properly', () => {
+    it('should clone startCoords properly', () => {
         const newConfig = config.clone();
         expect(newConfig.startCoords).not.toBe(config.startCoords);
+    });
+
+    it('should clone index properly', () => {
+        const newIndex = config.index.clone();
+        expect(newIndex).not.toBe(config.index);
     });
 });

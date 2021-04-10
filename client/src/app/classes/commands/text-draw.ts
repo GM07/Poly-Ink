@@ -1,19 +1,18 @@
 import { TextConfig } from '@app/classes/tool-config/text-config';
+import { Vec2 } from '@app/classes/vec2';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { AbstractDraw } from './abstract-draw';
 
 export class TextDraw extends AbstractDraw {
     config: TextConfig;
-    cursorX: number;
-    cursorY: number;
+    cursor: Vec2;
     currentLineIndex: number;
 
     constructor(colorService: ColorService, textConfig: TextConfig) {
         super(colorService);
         this.config = textConfig.clone();
 
-        this.cursorX = 0;
-        this.cursorY = 0;
+        this.cursor = new Vec2(0, 0);
         this.currentLineIndex = 0;
     }
 
@@ -33,16 +32,7 @@ export class TextDraw extends AbstractDraw {
             ctx.font = this.config.fontSize + 'px ' + this.config.textFont;
         }
 
-        switch (this.config.alignmentSetting) {
-            case 'left':
-                ctx.textAlign = 'left';
-                break;
-            case 'center':
-                ctx.textAlign = 'center';
-                break;
-            case 'right':
-                ctx.textAlign = 'right';
-        }
+        ctx.textAlign = this.config.alignmentSetting as CanvasTextAlign;
 
         ctx.fillStyle = this.primaryRgba;
         ctx.strokeStyle = this.primaryRgba;
@@ -78,16 +68,16 @@ export class TextDraw extends AbstractDraw {
         const left = this.config.textData[this.config.index.y].slice(0, this.config.index.x);
         const metrics = ctx.measureText(left);
         const width = metrics.width;
-        this.cursorX = this.config.startCoords.x + width;
-        this.cursorY = y;
+        this.cursor.x = this.config.startCoords.x + width;
+        this.cursor.y = y;
         const height = this.config.fontSize;
 
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 1;
 
         ctx.beginPath();
-        ctx.moveTo(this.cursorX, this.cursorY);
-        ctx.lineTo(this.cursorX, this.cursorY + height);
+        ctx.moveTo(this.cursor.x, this.cursor.y);
+        ctx.lineTo(this.cursor.x, this.cursor.y + height);
         ctx.stroke();
         ctx.closePath();
     }
@@ -97,16 +87,16 @@ export class TextDraw extends AbstractDraw {
         const right = this.config.textData[this.config.index.y].slice(this.config.index.x);
         const metrics = ctx.measureText(right);
         const width = metrics.width;
-        this.cursorX = this.config.startCoords.x - width;
-        this.cursorY = y;
+        this.cursor.x = this.config.startCoords.x - width;
+        this.cursor.y = y;
         const height = this.config.fontSize;
 
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 1;
 
         ctx.beginPath();
-        ctx.moveTo(this.cursorX, this.cursorY);
-        ctx.lineTo(this.cursorX, this.cursorY + height);
+        ctx.moveTo(this.cursor.x, this.cursor.y);
+        ctx.lineTo(this.cursor.x, this.cursor.y + height);
         ctx.stroke();
         ctx.closePath();
     }
@@ -120,8 +110,8 @@ export class TextDraw extends AbstractDraw {
 
         const left = this.config.textData[this.config.index.y].slice(0, this.config.index.x);
         const metricsLeft = ctx.measureText(left);
-        this.cursorX = newStartCoords.x + metricsLeft.width;
-        this.cursorY = y;
+        this.cursor.x = newStartCoords.x + metricsLeft.width;
+        this.cursor.y = y;
 
         const height = this.config.fontSize;
 
@@ -129,9 +119,8 @@ export class TextDraw extends AbstractDraw {
         ctx.lineWidth = 1;
 
         ctx.beginPath();
-        ctx.moveTo(this.cursorX, this.cursorY);
-        ctx.lineTo(this.cursorX, this.cursorY + height);
+        ctx.moveTo(this.cursor.x, this.cursor.y);
+        ctx.lineTo(this.cursor.x, this.cursor.y + height);
         ctx.stroke();
-        // ctx.closePath();
     }
 }

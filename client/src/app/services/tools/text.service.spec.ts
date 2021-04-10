@@ -81,114 +81,114 @@ describe('TextService', () => {
 
     it('should handle delete', () => {
         const indexX = 3;
-        // tslint:disable:no-any
-        // To spy on private method
+        // To spy on private method with any
+        // tslint:disable-next-line
         spyOn<any>(service, 'handleDelete').and.callThrough();
         service.config.index.x = 0;
         service.config.index.y = 0;
         service.config.textData[0] = 'allo!';
 
-        service['handleShortCuts'](service.delete);
+        service['handleShortCuts'](TextService['delete']);
         expect(service['handleDelete']).toHaveBeenCalled();
 
         service.config.index.x = indexX;
         service.config.textData[0] = 'a';
-        service['handleShortCuts'](service.delete);
+        service['handleShortCuts'](TextService['delete']);
         expect(service['handleDelete']).toHaveBeenCalled();
     });
 
     it('should handle backSpace', () => {
         const indexX = 3;
-        // tslint:disable:no-any
-        // To spy on private method
+        // To spy on private method with any
+        // tslint:disable-next-line
         spyOn<any>(service, 'handleBackspace').and.callThrough();
-        service['handleShortCuts'](service.backspace);
+        service['handleShortCuts'](TextService['backspace']);
         expect(service['handleBackspace']).toHaveBeenCalled();
 
         service.config.index.y = 1;
         service.config.index.x = 0;
         service.config.textData[0] = 'a';
-        service['handleShortCuts'](service.backspace);
+        service['handleShortCuts'](TextService['backspace']);
         expect(service['handleBackspace']).toHaveBeenCalled();
 
         service.config.index.x = indexX;
         service.config.index.y = 0;
         service.config.textData[0] = 'aaaaa';
-        service['handleShortCuts'](service.backspace);
+        service['handleShortCuts'](TextService['backspace']);
         expect(service['handleBackspace']).toHaveBeenCalled();
     });
 
     it('should handle escape', () => {
-        // tslint:disable:no-any
-        // To spy on private method
+        // To spy on private method with any
+        // tslint:disable-next-line
         spyOn<any>(service, 'handleEscape').and.callThrough(); // .and.callThrough
         spyOn(drawingService, 'clearCanvas');
         spyOn(drawingService, 'unblockUndoRedo');
-        service['handleShortCuts'](service.escape);
+        service['handleShortCuts'](TextService['escape']);
         expect(service['handleEscape']).toHaveBeenCalled();
     });
 
     it('should handle ArrowLeft', () => {
-        // tslint:disable:no-any
-        // To spy on private method
+        // To spy on private method with any
+        // tslint:disable-next-line
         spyOn<any>(service, 'handleArrowLeft').and.callThrough();
-        service['handleShortCuts'](service.arrowLeft);
+        service['handleShortCuts'](TextService['arrowLeft']);
         expect(service['handleArrowLeft']).toHaveBeenCalled();
 
         service.config.index.x = 1;
-        service['handleShortCuts'](service.arrowLeft);
+        service['handleShortCuts'](TextService['arrowLeft']);
         expect(service['handleArrowLeft']).toHaveBeenCalled();
 
         service.config.index.y = 1;
         service.config.index.x = 0;
         service.config.textData[0] = 'a';
-        service['handleShortCuts'](service.arrowLeft);
+        service['handleShortCuts'](TextService['arrowLeft']);
         expect(service['handleArrowLeft']).toHaveBeenCalled();
     });
 
     it('should handle ArrowRight', () => {
-        // tslint:disable:no-any
-        // To spy on private method
+        // To spy on private method with any
+        // tslint:disable-next-line
         spyOn<any>(service, 'handleArrowRight').and.callThrough();
-        service['handleShortCuts'](service.arrowRight);
+        service['handleShortCuts'](TextService['arrowRight']);
         expect(service['handleArrowRight']).toHaveBeenCalled();
 
         service.config.index.y = 0;
         service.config.textData = ['aa', 'a'];
         service.config.index.x = 0;
-        service['handleShortCuts'](service.arrowRight);
+        service['handleShortCuts'](TextService['arrowRight']);
         expect(service['handleArrowRight']).toHaveBeenCalled();
 
         service.config.index.y = 0;
         service.config.textData = ['aa', 'a'];
         service.config.index.x = 2;
-        service['handleShortCuts'](service.arrowRight);
+        service['handleShortCuts'](TextService['arrowRight']);
         expect(service['handleArrowRight']).toHaveBeenCalled();
     });
 
     it('should handle ArrowUp', () => {
-        // tslint:disable:no-any
-        // To spy on private method
+        // To spy on private method with any
+        // tslint:disable-next-line
         spyOn<any>(service, 'handleArrowUp').and.callThrough();
-        service['handleShortCuts'](service.arrowUp);
+        service['handleShortCuts'](TextService['arrowUp']);
         expect(service['handleArrowUp']).toHaveBeenCalled();
 
         service.config.index.y = 1;
         service.config.textData[1] = 'a';
-        service['handleShortCuts'](service.arrowUp);
+        service['handleShortCuts'](TextService['arrowUp']);
         expect(service['handleArrowUp']).toHaveBeenCalled();
     });
 
     it('should handle ArrowDown', () => {
-        // tslint:disable:no-any
-        // To spy on private method
+        // To spy on private method with any
+        // tslint:disable-next-line
         spyOn<any>(service, 'handleArrowDown').and.callThrough();
-        service['handleShortCuts'](service.arrowDown);
+        service['handleShortCuts'](TextService['arrowDown']);
         expect(service['handleArrowDown']).toHaveBeenCalled();
 
         service.config.index.y = 0;
         service.config.textData = ['a', 'a'];
-        service['handleShortCuts'](service.arrowDown);
+        service['handleShortCuts'](TextService['arrowDown']);
         expect(service['handleArrowDown']).toHaveBeenCalled();
     });
 

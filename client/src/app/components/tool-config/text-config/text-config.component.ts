@@ -24,27 +24,22 @@ export class TextConfigComponent extends ToolConfig {
     }
 
     toggleItalic(): void {
-        this.shortcutHandlerService.blockShortcuts = true;
         this.textService.config.italic = !this.textService.config.italic;
     }
 
     toggleBold(): void {
-        this.shortcutHandlerService.blockShortcuts = true;
         this.textService.config.bold = !this.textService.config.bold;
     }
 
     changeFont(newFont: string): void {
-        this.shortcutHandlerService.blockShortcuts = true;
         this.textService.config.textFont = newFont;
     }
 
     changeFontSize(newSize: number): void {
-        this.shortcutHandlerService.blockShortcuts = true;
         this.textService.config.fontSize = newSize;
     }
 
     setAlignment(newAlignment: string): void {
-        this.shortcutHandlerService.blockShortcuts = true;
         this.textService.config.alignmentSetting = newAlignment;
     }
 }
