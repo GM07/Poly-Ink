@@ -40,8 +40,6 @@ export class PolygonDraw extends AbstractDraw {
     }
 
     private drawPolygoneSides(ctx: CanvasRenderingContext2D, center: Vec2, radiusAbs: number): void {
-        // Need the number 2 to get half of PI and to get if number is odd or even
-        // tslint:disable-next-line:no-magic-numbers
         const startingAngle = -Math.PI / 2 + (this.config.numEdges % 2 !== 0 ? 0 : Math.PI / this.config.numEdges);
         ctx.lineWidth = this.config.shapeMode === ShapeMode.Filled ? 0 : this.config.lineWidth;
 

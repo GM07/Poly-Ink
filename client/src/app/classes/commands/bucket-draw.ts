@@ -1,6 +1,8 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { BucketConfig } from '@app/classes/tool-config/bucket-config';
+import { ToolMath } from '@app/constants/math';
 import { ColorService } from 'src/color-picker/services/color.service';
+
 export class BucketDraw extends AbstractDraw {
     private config: BucketConfig;
     private queue: number[];
@@ -89,11 +91,7 @@ export class BucketDraw extends AbstractDraw {
         const deltaB2 = Math.pow(pixel[this.B] - this.originalPixel[this.B], 2);
 
         const colorDifference = Math.sqrt(deltaB2 + deltaG2 + deltaR2);
-
-        // Tolerance is a number between 0 and 100, we need to divide by 100 to get
-        // the percentage
-        // tslint:disable-next-line:no-magic-numbers
-        const toleratedColorDifference = this.maxColorDifference * (this.config.tolerance / 100);
+        const toleratedColorDifference = this.maxColorDifference * (this.config.tolerance / ToolMath.PERCENTAGE);
 
         return colorDifference <= toleratedColorDifference;
     }
