@@ -192,8 +192,9 @@ describe('SelectionTranslation', () => {
         selectionTranslation['config'].previewSelectionCtx = null;
         const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
         spyOn<any>(selectionTranslation, 'getTranslation').and.returnValue(new Vec2(0, 0));
-        selectionTranslation['config'].width = parseInt(document.body.style.width) - 1;
-        selectionTranslation['config'].height = parseInt(document.body.style.height) - 1;
+        const radix = 10;
+        selectionTranslation['config'].width = parseInt(document.body.style.width, radix) - 1;
+        selectionTranslation['config'].height = parseInt(document.body.style.height, radix) - 1;
         selectionTranslation.onMouseMove({ pageX: 1, pageY: 1 } as MouseEvent, new Vec2(1, 1));
         expect(updateSelection).not.toHaveBeenCalled();
         selectionTranslation['config'].previewSelectionCtx = canvasSelection.getContext('2d');
