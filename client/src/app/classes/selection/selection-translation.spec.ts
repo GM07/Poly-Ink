@@ -191,7 +191,9 @@ describe('SelectionTranslation', () => {
     it('should update the selection on mouse move if the selection is not null', () => {
         selectionTranslation['config'].previewSelectionCtx = null;
         const updateSelection = spyOn<any>(selectionTranslation, 'sendUpdateSelectionRequest');
-        spyOn<any>(selectionTranslation, 'getTranslation');
+        spyOn<any>(selectionTranslation, 'getTranslation').and.returnValue(new Vec2(0, 0));
+        selectionTranslation['config'].width = parseInt(document.body.style.width) - 1;
+        selectionTranslation['config'].height = parseInt(document.body.style.height) - 1;
         selectionTranslation.onMouseMove({ pageX: 1, pageY: 1 } as MouseEvent, new Vec2(1, 1));
         expect(updateSelection).not.toHaveBeenCalled();
         selectionTranslation['config'].previewSelectionCtx = canvasSelection.getContext('2d');
