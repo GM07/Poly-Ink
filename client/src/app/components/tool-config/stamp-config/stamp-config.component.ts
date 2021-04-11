@@ -37,7 +37,7 @@ export class StampConfigComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngAfterViewInit(): void {
         const saveAngle = this.stampService.angleValue;
-        this.slider = new Slider({ canvasId: 'angleCanvas', continuousMode: true, position: new Vec2(this.sliderSize, this.sliderSize) });
+        this.slider = new Slider({ canvasId: 'angleCanvas', continuousMode: false, position: new Vec2(this.sliderSize, this.sliderSize) });
         this.slider.addSlider({
             id: 1,
             radius: this.sliderRadius,
