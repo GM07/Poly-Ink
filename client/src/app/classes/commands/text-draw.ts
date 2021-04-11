@@ -22,15 +22,10 @@ export class TextDraw extends AbstractDraw {
 
     private applyAttributes(ctx: CanvasRenderingContext2D): void {
         ctx.textBaseline = 'top';
-        if (this.config.bold && this.config.italic) {
-            ctx.font = 'bold italic ' + this.config.fontSize + 'px ' + this.config.textFont;
-        } else if (this.config.italic) {
-            ctx.font = 'italic ' + this.config.fontSize + 'px ' + this.config.textFont;
-        } else if (this.config.bold) {
-            ctx.font = 'bold ' + this.config.fontSize + 'px ' + this.config.textFont;
-        } else {
-            ctx.font = this.config.fontSize + 'px ' + this.config.textFont;
-        }
+        
+        const bold: string = this.config.bold ? 'bold ' : '';
+        const italic: string = this.config.italic ? 'italic ' : '';
+        ctx.font = bold + italic + this.config.fontSize +  'px ' +  this.config.textFont;
 
         ctx.textAlign = this.config.alignmentSetting as CanvasTextAlign;
 
@@ -64,12 +59,9 @@ export class TextDraw extends AbstractDraw {
     }
 
     private drawCursorLeft(ctx: CanvasRenderingContext2D): void {
-        const y = this.config.startCoords.y + this.config.fontSize * this.config.index.y;
         const left = this.config.textData[this.config.index.y].slice(0, this.config.index.x);
-        const metrics = ctx.measureText(left);
-        const width = metrics.width;
-        this.cursor.x = this.config.startCoords.x + width;
-        this.cursor.y = y;
+        this.cursor.x = this.config.startCoords.x + ctx.measureText(left).width;;
+        this.cursor.y = this.config.startCoords.y + this.config.fontSize * this.config.index.y;
         const height = this.config.fontSize;
 
         ctx.strokeStyle = 'black';
@@ -79,12 +71,9 @@ export class TextDraw extends AbstractDraw {
     }
 
     private drawCursorRight(ctx: CanvasRenderingContext2D): void {
-        const y = this.config.startCoords.y + this.config.fontSize * this.config.index.y;
         const right = this.config.textData[this.config.index.y].slice(this.config.index.x);
-        const metrics = ctx.measureText(right);
-        const width = metrics.width;
-        this.cursor.x = this.config.startCoords.x - width;
-        this.cursor.y = y;
+        this.cursor.x = this.config.startCoords.x - ctx.measureText(right).width;
+        this.cursor.y = this.config.startCoords.y + this.config.fontSize * this.config.index.y;
         const height = this.config.fontSize;
 
         ctx.strokeStyle = 'black';
@@ -94,16 +83,14 @@ export class TextDraw extends AbstractDraw {
     }
 
     private drawCursorCenter(ctx: CanvasRenderingContext2D): void {
-        const y = this.config.startCoords.y + this.config.fontSize * this.config.index.y;
         const newStartCoords = this.config.startCoords.clone();
         const text = this.config.textData[this.config.index.y];
         const metricsText = ctx.measureText(text);
         newStartCoords.x -= metricsText.width / 2;
 
         const left = this.config.textData[this.config.index.y].slice(0, this.config.index.x);
-        const metricsLeft = ctx.measureText(left);
-        this.cursor.x = newStartCoords.x + metricsLeft.width;
-        this.cursor.y = y;
+        this.cursor.x = newStartCoords.x + ctx.measureText(left).width;
+        this.cursor.y = this.config.startCoords.y + this.config.fontSize * this.config.index.y;
 
         const height = this.config.fontSize;
 

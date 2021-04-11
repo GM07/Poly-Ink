@@ -12,11 +12,7 @@ describe('TextConfig', () => {
 
     it('should clone startCoords properly', () => {
         const newConfig = config.clone();
-        expect(newConfig.startCoords).not.toBe(config.startCoords);
-    });
-
-    it('should clone index properly', () => {
-        const newIndex = config.index.clone();
-        expect(newIndex).not.toBe(config.index);
+        expect(newConfig.startCoords).not.toEqual(config.startCoords);
+        expect(newConfig.index).not.toEqual(config.index);
     });
 });

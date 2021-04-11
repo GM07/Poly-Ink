@@ -47,7 +47,6 @@ export class TextService extends Tool {
             this.insert(event);
         }
         this.drawPreview();
-
     }
 
     insert(event: KeyboardEvent): void {
@@ -181,5 +180,9 @@ export class TextService extends Tool {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         const command = new TextDraw(this.colorService, this.config);
         this.drawingService.draw(command);
+    }
+
+    stopDrawing(): void {
+        this.confirmText();
     }
 }

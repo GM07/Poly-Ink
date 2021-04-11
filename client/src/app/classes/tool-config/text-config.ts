@@ -26,14 +26,14 @@ export class TextConfig {
 
     clone(): TextConfig {
         const config = new TextConfig();
-        config.startCoords = new Vec2(this.startCoords.x, this.startCoords.y);
+        config.startCoords = this.startCoords.clone();
         config.textFont = this.textFont;
         config.textData = this.textData;
         config.fontSize = this.fontSize;
         config.bold = this.bold;
         config.italic = this.italic;
         config.alignmentSetting = this.alignmentSetting;
-        config.index = this.index;
+        config.index = this.index.clone();
         config.hasInput = this.hasInput;
 
         return config;
