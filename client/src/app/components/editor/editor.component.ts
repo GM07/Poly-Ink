@@ -19,9 +19,9 @@ import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
     styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent {
-    @ViewChild('newCanvasMenu') newDrawingMenu: NewDrawingComponent;
-    @ViewChild('exportDrawing') exportDrawing: ExportDrawingComponent;
-    @ViewChild('saveDrawing') saveDrawing: SaveDrawingComponent;
+    @ViewChild('newCanvasMenu') private newDrawingMenu: NewDrawingComponent;
+    @ViewChild('exportDrawing') private exportDrawing: ExportDrawingComponent;
+    @ViewChild('saveDrawing') private saveDrawing: SaveDrawingComponent;
 
     async receiveSidebarButtonEvent(toolID: string): Promise<void> {
         switch (toolID) {

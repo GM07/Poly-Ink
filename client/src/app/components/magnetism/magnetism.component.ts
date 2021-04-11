@@ -7,17 +7,17 @@ import { MagnetismSelection, MagnetismService } from '@app/services/drawing/magn
     styleUrls: ['./magnetism.component.scss'],
 })
 export class MagnetismComponent {
-    magnetismSelection: typeof MagnetismSelection;
+    @ViewChild('topLeft', { static: false }) private topLeft: ElementRef<HTMLDivElement>;
+    @ViewChild('top', { static: false }) private top: ElementRef<HTMLDivElement>;
+    @ViewChild('topRight', { static: false }) private topRight: ElementRef<HTMLDivElement>;
+    @ViewChild('left', { static: false }) private left: ElementRef<HTMLDivElement>;
+    @ViewChild('center', { static: false }) private center: ElementRef<HTMLDivElement>;
+    @ViewChild('right', { static: false }) private right: ElementRef<HTMLDivElement>;
+    @ViewChild('bottomLeft', { static: false }) private bottomLeft: ElementRef<HTMLDivElement>;
+    @ViewChild('bottom', { static: false }) private bottom: ElementRef<HTMLDivElement>;
+    @ViewChild('bottomRight', { static: false }) private bottomRight: ElementRef<HTMLDivElement>;
 
-    @ViewChild('topLeft', { static: false }) topLeft: ElementRef<HTMLDivElement>;
-    @ViewChild('top', { static: false }) top: ElementRef<HTMLDivElement>;
-    @ViewChild('topRight', { static: false }) topRight: ElementRef<HTMLDivElement>;
-    @ViewChild('left', { static: false }) left: ElementRef<HTMLDivElement>;
-    @ViewChild('center', { static: false }) center: ElementRef<HTMLDivElement>;
-    @ViewChild('right', { static: false }) right: ElementRef<HTMLDivElement>;
-    @ViewChild('bottomLeft', { static: false }) bottomLeft: ElementRef<HTMLDivElement>;
-    @ViewChild('bottom', { static: false }) bottom: ElementRef<HTMLDivElement>;
-    @ViewChild('bottomRight', { static: false }) bottomRight: ElementRef<HTMLDivElement>;
+    magnetismSelection: typeof MagnetismSelection;
 
     constructor(public magnetismService: MagnetismService) {
         this.magnetismSelection = MagnetismSelection;

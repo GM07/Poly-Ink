@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { ResizeDraw } from '@app/classes/commands/resize-draw';
 import { ResizeConfig } from '@app/classes/tool-config/resize-config';
-import { CanvasConst } from '@app/constants/canvas.ts';
+import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 

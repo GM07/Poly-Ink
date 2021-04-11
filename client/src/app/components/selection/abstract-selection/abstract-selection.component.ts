@@ -13,17 +13,17 @@ import { Subscription } from 'rxjs';
     styleUrls: ['./abstract-selection.component.scss'],
 })
 export class AbstractSelectionComponent implements OnDestroy, OnInit {
-    @ViewChild('controlPointContainer', { static: false }) controlPointContainer: ElementRef<HTMLElement>;
-    @ViewChild('topLeft', { static: false }) topLeft: ElementRef<HTMLElement>;
-    @ViewChild('topMiddle', { static: false }) topMiddle: ElementRef<HTMLElement>;
-    @ViewChild('topRight', { static: false }) topRight: ElementRef<HTMLElement>;
-    @ViewChild('middleLeft', { static: false }) middleLeft: ElementRef<HTMLElement>;
-    @ViewChild('middleRight', { static: false }) middleRight: ElementRef<HTMLElement>;
-    @ViewChild('bottomLeft', { static: false }) bottomLeft: ElementRef<HTMLElement>;
-    @ViewChild('bottomMiddle', { static: false }) bottomMiddle: ElementRef<HTMLElement>;
-    @ViewChild('bottomRight', { static: false }) bottomRight: ElementRef<HTMLElement>;
-    @ViewChild('border', { static: false }) border: ElementRef<HTMLElement>;
-    @ViewChild('selectionBackground', { static: false }) selectionBackground: ElementRef<HTMLElement>;
+    @ViewChild('controlPointContainer', { static: false }) private controlPointContainer: ElementRef<HTMLElement>;
+    @ViewChild('topLeft', { static: false }) private topLeft: ElementRef<HTMLElement>;
+    @ViewChild('topMiddle', { static: false }) private topMiddle: ElementRef<HTMLElement>;
+    @ViewChild('topRight', { static: false }) private topRight: ElementRef<HTMLElement>;
+    @ViewChild('middleLeft', { static: false }) private middleLeft: ElementRef<HTMLElement>;
+    @ViewChild('middleRight', { static: false }) private middleRight: ElementRef<HTMLElement>;
+    @ViewChild('bottomLeft', { static: false }) private bottomLeft: ElementRef<HTMLElement>;
+    @ViewChild('bottomMiddle', { static: false }) private bottomMiddle: ElementRef<HTMLElement>;
+    @ViewChild('bottomRight', { static: false }) private bottomRight: ElementRef<HTMLElement>;
+    @ViewChild('border', { static: false }) private border: ElementRef<HTMLElement>;
+    @ViewChild('selectionBackground', { static: false }) private selectionBackground: ElementRef<HTMLElement>;
 
     private readonly CONTROL_INNER: number = 8;
     private readonly BORDER: number = 2;
