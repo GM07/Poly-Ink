@@ -58,18 +58,21 @@ describe('TextConfigComponent', () => {
 
     it('should toggle italic attribute', () => {
         textService.config.italic = false;
+        spyOn(textService, 'drawPreview');
         component.toggleItalic();
         expect(textService.config.italic).toBe(true);
     });
 
     it('should toggle bold attribute', () => {
         textService.config.bold = false;
+        spyOn(textService, 'drawPreview');
         component.toggleBold();
         expect(textService.config.bold).toBe(true);
     });
 
     it('should change font attribute and be Arial by default', () => {
         expect(textService.config.textFont).toBe('Arial');
+        spyOn(textService, 'drawPreview');
         component.changeFont('Times New Roman');
         expect(textService.config.textFont).toBe('Times New Roman');
     });
@@ -77,12 +80,14 @@ describe('TextConfigComponent', () => {
     it('should change font size and be 14 by default', () => {
         const newFontSize = 33;
         expect(textService.config.fontSize).toBe(DEFAULT_VALUE);
+        spyOn(textService, 'drawPreview');
         component.changeFontSize(newFontSize);
         expect(textService.config.fontSize).toBe(newFontSize);
     });
 
     it('should change text alignment be left by default', () => {
         expect(textService.config.alignmentSetting).toBe('left');
+        spyOn(textService, 'drawPreview');
         component.setAlignment('right');
         expect(textService.config.alignmentSetting).toBe('right');
     });

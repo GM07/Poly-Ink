@@ -98,8 +98,8 @@ export class TextService extends Tool {
                 break;
             case TextService.arrowDown:
                 this.handleArrowDown();
-            default:
-                break;
+            //default:
+              //  break;
         }
     }
 

@@ -40,12 +40,12 @@ export class TextComponent {
         }
     }
 
-    confirmText(): void {
+    private confirmText(): void {
         this.textService.confirmText();
         this.shortcutHandlerService.blockShortcuts = false;
     }
 
-    addText(event: MouseEvent): void {
+    private addText(event: MouseEvent): void {
         this.shortcutHandlerService.blockShortcuts = true;
         this.textService.config.hasInput = true;
         this.textService.config.startCoords.x = event.offsetX;

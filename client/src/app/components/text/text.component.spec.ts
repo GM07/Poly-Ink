@@ -5,6 +5,9 @@ import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
 import { TextComponent } from './text.component';
 
+// To access private methods with any
+// tslint:disable:no-any
+
 describe('TextComponent', () => {
     let component: TextComponent;
     let fixture: ComponentFixture<TextComponent>;
@@ -37,49 +40,46 @@ describe('TextComponent', () => {
     it('should call addText when mouseDown and there is no input', () => {
         let mouseEvent = { button: MouseButton.Right, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         spyOn(textService, 'isInCanvas').and.returnValue(true);
-        spyOn(component, 'addText');
+        spyOn<any>(component, 'addText');
         textService.config.hasInput = false;
         colorService.isMenuOpen = false;
         component.onMouseDown(mouseEvent);
-        expect(component.addText).toHaveBeenCalledTimes(0);
-
+        expect(component['addText']).toHaveBeenCalledTimes(0);
         mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         component.onMouseDown(mouseEvent);
-        expect(component.addText).toHaveBeenCalledTimes(1);
+        expect(component['addText']).toHaveBeenCalledTimes(1);
     });
 
     it('should call confirmText when mouseDown and there is input', () => {
         const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         spyOn(textService, 'isInCanvas').and.returnValue(true);
-        spyOn(component, 'confirmText');
+        spyOn<any>(component, 'confirmText');
         colorService.isMenuOpen = false;
         textService.config.hasInput = true;
         component.onMouseDown(mouseEvent);
-        expect(component.confirmText).toHaveBeenCalled();
+        expect(component['confirmText']).toHaveBeenCalled();
     });
 
     it('should do nothing on mouse down', () => {
         const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         component.shortcutHandlerService.blockShortcuts = true;
         textService.config.hasInput = false;
-        spyOn(component, 'addText');
-        spyOn(component, 'confirmText');
+        spyOn<any>(component, 'confirmText');
 
         component.onMouseDown(mouseEvent);
-        expect(component.addText).toHaveBeenCalledTimes(0);
-        expect(component.confirmText).toHaveBeenCalledTimes(0);
+        expect(component['confirmText']).toHaveBeenCalledTimes(0);
     });
 
     it('should call confirmText from textService', () => {
         spyOn(textService, 'confirmText');
-        component.confirmText();
+        component['confirmText']();
         expect(textService.confirmText).toHaveBeenCalled();
     });
 
     it('should add text and modify config attributes accordingly', () => {
         const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         spyOn(textService, 'drawPreview');
-        component.addText(mouseEvent);
+        component['addText'](mouseEvent);
         expect(textService.config.hasInput).toBe(true);
         expect(textService.config.startCoords.x).toBe(mouseEvent.offsetX);
         expect(textService.config.startCoords.y).toBe(mouseEvent.offsetY);
