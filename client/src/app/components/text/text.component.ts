@@ -27,9 +27,9 @@ export class TextComponent {
         if(this.textService.config.hasInput) {
           this.textService.drawPreview();
           this.shortcutHandlerService.blockShortcuts = true;
-        } else {
-          this.textService.draw();
+          this.drawingService.blockUndoRedo();
         }
+
       });
     }
 

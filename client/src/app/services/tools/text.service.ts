@@ -18,7 +18,7 @@ export class TextService extends Tool {
     private static readonly arrowRight: ShortcutKey = new ShortcutKey('arrowright');
     private static readonly arrowUp: ShortcutKey = new ShortcutKey('arrowup');
     private static readonly arrowDown: ShortcutKey = new ShortcutKey('arrowdown');
-    
+
     config: TextConfig;
 
     shortcutList: ShortcutKey[];
@@ -45,8 +45,9 @@ export class TextService extends Tool {
             this.handleShortCuts(shortcut);
         } else if (this.config.hasInput) {
             this.insert(event);
+            this.drawPreview();
         }
-        this.drawPreview();
+
     }
 
     insert(event: KeyboardEvent): void {
@@ -107,7 +108,7 @@ export class TextService extends Tool {
         const x = this.config.index.x;
         const y = this.config.index.y;
         const text = this.config.textData;
-        if(x === 0 && y > 0 && text[y].length === 0) this.config.index.x = this.config.textData[--this.config.index.y].length; 
+        if(x === 0 && y > 0 && text[y].length === 0) this.config.index.x = this.config.textData[--this.config.index.y].length;
         if (x === text[y].length) return;
         if (x < text[y].length) {
             text[y] = text[y].substring(0, x) + text[y].substring(x + 1);
@@ -174,6 +175,12 @@ export class TextService extends Tool {
     drawPreview(): void {
         const command = new TextDraw(this.colorService, this.config);
         this.drawingService.drawPreview(command);
+    }
+
+    //Todo RENAME
+    passDrawPreview(): void {
+      const command = new TextDraw(this.colorService, this.config);
+      this.drawingService.passDrawPreview(command);
     }
 
     draw(): void {

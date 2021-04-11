@@ -89,14 +89,14 @@ export class SidebarComponent implements OnInit {
         this.blockUndoIcon = this.undoRedoService.blockUndoRedo || this.undoRedoService.currentAction < 0;
         this.blockRedoIcon = this.undoRedoService.blockUndoRedo || this.undoRedoService.currentAction >= this.undoRedoService.commands.length - 1;
 
-        this.undoRedoService.BLOCK_UNDO_ICON.subscribe((block) => {
+        this.undoRedoService.BLOCK_UNDO_ICON.subscribe((block: boolean) => {
             if (this.blockUndoIcon !== block) {
                 this.blockUndoIcon = block;
                 this.cd.detectChanges();
             }
         });
 
-        this.undoRedoService.BLOCK_REDO_ICON.subscribe((block) => {
+        this.undoRedoService.BLOCK_REDO_ICON.subscribe((block: boolean) => {
             if (this.blockRedoIcon !== block) {
                 this.blockRedoIcon = block;
                 this.cd.detectChanges();
