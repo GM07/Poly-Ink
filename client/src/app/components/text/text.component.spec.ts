@@ -58,6 +58,18 @@ describe('TextComponent', () => {
         expect(component.confirmText).toHaveBeenCalled();
     });
 
+    it('should do nothing on mouse down', () => {
+        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        component.shortcutHandlerService.blockShortcuts = true;
+        textService.config.hasInput = false;
+        spyOn(component, 'addText');
+        spyOn(component, 'confirmText');
+
+        component.onMouseDown(mouseEvent);
+        expect(component.addText).toHaveBeenCalledTimes(0);
+        expect(component.confirmText).toHaveBeenCalledTimes(0);
+    });
+
     it('should call confirmText from textService', () => {
         spyOn(textService, 'confirmText');
         component.confirmText();
@@ -72,5 +84,24 @@ describe('TextComponent', () => {
         expect(textService.config.startCoords.x).toBe(mouseEvent.offsetX);
         expect(textService.config.startCoords.y).toBe(mouseEvent.offsetY);
         expect(textService.drawPreview).toHaveBeenCalled();
+    });
+
+    it('should initialise subscriptions', () => {
+        
+        const drawingServiceSubscribe = spyOn(component['drawingService'].changes, 'subscribe').and.callThrough();
+        spyOn(textService, 'drawPreview');
+        component['initSubscriptions']();
+        expect(drawingServiceSubscribe).toHaveBeenCalled();
+    });
+
+    it('should call the appropriate subscribed methods', () => {
+        const drawPreviewSpy = spyOn(textService, 'drawPreview');
+        textService.config.hasInput = false;
+        component['drawingService'].changes.next();
+        expect(drawPreviewSpy).toHaveBeenCalledTimes(0);
+        
+        textService.config.hasInput = true;
+        component['drawingService'].changes.next();
+        expect(drawPreviewSpy).toHaveBeenCalledTimes(1);
     });
 });

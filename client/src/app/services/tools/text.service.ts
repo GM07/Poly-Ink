@@ -177,12 +177,6 @@ export class TextService extends Tool {
         this.drawingService.drawPreview(command);
     }
 
-    //Todo RENAME
-    passDrawPreview(): void {
-      const command = new TextDraw(this.colorService, this.config);
-      this.drawingService.passDrawPreview(command);
-    }
-
     draw(): void {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         const command = new TextDraw(this.colorService, this.config);

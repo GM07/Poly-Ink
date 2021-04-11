@@ -1,7 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
+import { TextToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { TextService } from '@app/services/tools/text.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 import { ColorService } from 'src/color-picker/services/color.service';
@@ -17,6 +19,7 @@ class ToolStub extends Tool {
 
 describe('ShortcutHandlerService', () => {
     let toolHandlerService: ToolHandlerService;
+    let textService: TextService;
     let service: ShortcutHandlerService;
     let keyboardEvent: KeyboardEvent;
     let mouseEvent: MouseEvent;
@@ -24,6 +27,7 @@ describe('ShortcutHandlerService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({});
         toolHandlerService = TestBed.inject(ToolHandlerService);
+        textService = TestBed.inject(TextService);
         service = TestBed.inject(ShortcutHandlerService);
         const undoRedo = TestBed.inject(UndoRedoService);
         spyOn(undoRedo, 'onKeyDown');
@@ -38,6 +42,10 @@ describe('ShortcutHandlerService', () => {
     });
 
     it('should transfer the keyDown event to the tool Handler if the shortcuts are not blocked', () => {
+        spyOn(textService, 'onKeyDown');
+        toolHandlerService.setTool(TextToolConstants.TOOL_ID);
+        service.onKeyDown(keyboardEvent);
+        
         service.blockShortcuts = false;
         spyOn(toolHandlerService, 'onKeyDown').and.callThrough();
         service.onKeyDown(keyboardEvent);

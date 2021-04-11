@@ -98,6 +98,7 @@ describe('SidebarComponent', () => {
         const spy = spyOn(textService, 'confirmText');
 
         component.toolHandlerService.setTool(TextToolConstants.TOOL_ID);
+        textService.config.hasInput = true;
         component.toolIconClicked(new LineSettings());
         expect(spy).toHaveBeenCalled();
     });

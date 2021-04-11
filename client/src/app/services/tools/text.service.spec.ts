@@ -85,9 +85,14 @@ describe('TextService', () => {
         // tslint:disable-next-line
         spyOn<any>(service, 'handleDelete').and.callThrough();
         service.config.index.x = 0;
+        service.config.index.y = 1;
+        service.config.textData[1] = '';
+        service['handleShortCuts'](TextService['delete']);
+        expect(service.config.index.y).toEqual(0);
+        
         service.config.index.y = 0;
         service.config.textData[0] = 'allo!';
-
+        
         service['handleShortCuts'](TextService['delete']);
         expect(service['handleDelete']).toHaveBeenCalled();
 

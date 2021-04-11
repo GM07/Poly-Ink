@@ -29,7 +29,6 @@ export class TextComponent {
           this.shortcutHandlerService.blockShortcuts = true;
           this.drawingService.blockUndoRedo();
         }
-
       });
     }
 
