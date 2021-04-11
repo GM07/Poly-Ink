@@ -142,11 +142,11 @@ describe('AbstractSelectionComponent', () => {
     it('place control point should update the left and top style of an html element', () => {
         component.displayControlPoints = true;
         fixture.detectChanges();
-        const topSave: string = component.topLeft.nativeElement.style.top;
-        const leftSave: string = component.topLeft.nativeElement.style.top;
-        component['placeControlPoint'](component.topLeft, 5, 5);
-        expect(component.topLeft.nativeElement.style.top).not.toEqual(topSave);
-        expect(component.topLeft.nativeElement.style.top).not.toEqual(leftSave);
+        const topSave: string = component['topLeft'].nativeElement.style.top;
+        const leftSave: string = component['topLeft'].nativeElement.style.top;
+        component['placeControlPoint'](component['topLeft'], 5, 5);
+        expect(component['topLeft'].nativeElement.style.top).not.toEqual(topSave);
+        expect(component['topLeft'].nativeElement.style.top).not.toEqual(leftSave);
     });
 
     it('make control unselectable should set the pointer event to none', () => {

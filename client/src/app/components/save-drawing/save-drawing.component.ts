@@ -41,6 +41,12 @@ export class SaveDrawingComponent {
     saveForm: FormGroup;
     saveTags: Tag[];
 
+    @ViewChild('savePreview', { static: false }) set content(element: ElementRef) {
+        if (element) {
+            this.savePreview = element;
+        }
+    }
+
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private drawingService: DrawingService,
@@ -49,12 +55,6 @@ export class SaveDrawingComponent {
         private serverCommunicationService: ServerCommunicationService,
     ) {
         this.initValues();
-    }
-
-    @ViewChild('savePreview', { static: false }) set content(element: ElementRef) {
-        if (element) {
-            this.savePreview = element;
-        }
     }
 
     get nameFormControl(): AbstractControl {
