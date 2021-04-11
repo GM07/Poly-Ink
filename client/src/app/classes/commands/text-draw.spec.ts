@@ -23,7 +23,7 @@ describe('TextDraw', () => {
 
     it('should call applyAttributes on execute', () => {
         // To spy on private method with any
-        // tslint:disable-next-:no-any
+        // tslint:disable-next-line:no-any
         spyOn<any>(textDraw, 'applyAttributes').and.callThrough();
         textDraw.execute(ctxStub);
         textDraw.config.italic = true;
@@ -39,7 +39,7 @@ describe('TextDraw', () => {
 
     it('should call drawText in applyAttributes', () => {
         // To spy on private method with any
-        // tslint:disable-next-:no-any
+        // tslint:disable-next-line:no-any
         spyOn<any>(textDraw, 'drawText').and.callThrough();
         textDraw['applyAttributes'](ctxStub);
         expect(textDraw['drawText']).toHaveBeenCalled();
@@ -47,7 +47,7 @@ describe('TextDraw', () => {
 
     it('should call drawCursor in drawText when hasInput is true', () => {
         // To spy on private method with any
-        // tslint:disable-next-:no-any
+        // tslint:disable-next-line:no-any
         spyOn<any>(textDraw, 'drawCursor');
         textDraw.config.hasInput = true;
 
@@ -57,7 +57,7 @@ describe('TextDraw', () => {
 
     it('should call by default drawCursorLeft', () => {
         // To spy on private method with any
-        // tslint:disable-next-:no-any
+        // tslint:disable-next-line:no-any
         spyOn<any>(textDraw, 'drawCursorLeft').and.callThrough();
 
         textDraw['drawCursor'](ctxStub);

@@ -45,7 +45,7 @@ describe('ShortcutHandlerService', () => {
         spyOn(textService, 'onKeyDown');
         toolHandlerService.setTool(TextToolConstants.TOOL_ID);
         service.onKeyDown(keyboardEvent);
-        
+
         service.blockShortcuts = false;
         spyOn(toolHandlerService, 'onKeyDown').and.callThrough();
         service.onKeyDown(keyboardEvent);

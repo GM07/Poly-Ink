@@ -1,10 +1,10 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
 import {
-  ExportFileToolConstants,
-  NewDrawingConstants,
-  RedoConstants,
-  SaveFileToolConstants,
-  UndoConstants
+    ExportFileToolConstants,
+    NewDrawingConstants,
+    RedoConstants,
+    SaveFileToolConstants,
+    UndoConstants,
 } from '@app/classes/tool_ui_settings/tools.constants';
 import { NewDrawingComponent } from '@app/components/canvas-reset/canvas-reset.component';
 import { ExportDrawingComponent } from '@app/components/export-drawing/export-drawing.component';

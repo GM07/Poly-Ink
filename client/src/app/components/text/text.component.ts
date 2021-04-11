@@ -19,24 +19,24 @@ export class TextComponent {
         public drawingService: DrawingService,
         public colorService: ColorService,
     ) {
-      this.initSubscriptions();
+        this.initSubscriptions();
     }
 
     protected initSubscriptions(): void {
-      this.drawingService.changes.subscribe(() => {
-        if(this.textService.config.hasInput) {
-          this.textService.drawPreview();
-          this.shortcutHandlerService.blockShortcuts = true;
-          this.drawingService.blockUndoRedo();
-        }
-      });
-      this.textService.escapeClicked.subscribe(() => {
-        this.shortcutHandlerService.blockShortcuts = false;
-      });
+        this.drawingService.changes.subscribe(() => {
+            if (this.textService.config.hasInput) {
+                this.textService.drawPreview();
+                this.shortcutHandlerService.blockShortcuts = true;
+                this.drawingService.blockUndoRedo();
+            }
+        });
+        this.textService.escapeClicked.subscribe(() => {
+            this.shortcutHandlerService.blockShortcuts = false;
+        });
     }
 
     onMouseDown(event: MouseEvent): void {
-        if(this.shortcutHandlerService.blockShortcuts && !this.textService.config.hasInput) return;
+        if (this.shortcutHandlerService.blockShortcuts && !this.textService.config.hasInput) return;
         this.leftMouseDown = event.button === MouseButton.Left;
         if (this.textService.isInCanvas(event) && this.leftMouseDown && !this.colorService.isMenuOpen) {
             this.textService.config.hasInput ? this.confirmText() : this.addText(event);

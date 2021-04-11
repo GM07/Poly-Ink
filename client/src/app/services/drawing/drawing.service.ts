@@ -76,12 +76,10 @@ export class DrawingService {
 
     blockUndoRedo(): void {
         this.undoRedoService.blockUndoRedo = true;
-
     }
 
     unblockUndoRedo(): void {
         this.undoRedoService.blockUndoRedo = false;
-
     }
 
     initBackground(): void {

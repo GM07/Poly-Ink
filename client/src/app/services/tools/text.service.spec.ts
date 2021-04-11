@@ -89,10 +89,10 @@ describe('TextService', () => {
         service.config.textData[1] = '';
         service['handleShortCuts'](TextService['delete']);
         expect(service.config.index.y).toEqual(0);
-        
+
         service.config.index.y = 0;
         service.config.textData[0] = 'allo!';
-        
+
         service['handleShortCuts'](TextService['delete']);
         expect(service['handleDelete']).toHaveBeenCalled();
 
@@ -208,5 +208,11 @@ describe('TextService', () => {
         spyOn(drawingService, 'draw');
         service.draw();
         expect(drawingService.draw).toHaveBeenCalled();
+    });
+
+    it('should confirm text when stop drawing is called', () => {
+        spyOn(service, 'confirmText');
+        service.stopDrawing();
+        expect(service.confirmText).toHaveBeenCalled();
     });
 });

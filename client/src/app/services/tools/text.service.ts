@@ -53,15 +53,15 @@ export class TextService extends Tool {
     }
 
     insert(event: KeyboardEvent): void {
-      if (event.key === 'Enter') {
-        const right = this.config.textData[this.config.index.y].substring(
-          Math.min(this.config.index.x, this.config.textData[this.config.index.y].length),
-          );
-          this.config.textData[this.config.index.y] = this.config.textData[this.config.index.y].substring(0, this.config.index.x);
-          this.config.index.x = 0;
-          this.config.index.y++;
-          this.config.textData.push(right);
-        } else if(event.key.length > 1) return;
+        if (event.key === 'Enter') {
+            const right = this.config.textData[this.config.index.y].substring(
+                Math.min(this.config.index.x, this.config.textData[this.config.index.y].length),
+            );
+            this.config.textData[this.config.index.y] = this.config.textData[this.config.index.y].substring(0, this.config.index.x);
+            this.config.index.x = 0;
+            this.config.index.y++;
+            this.config.textData.push(right);
+        } else if (event.key.length > 1) return;
         else {
             const left = this.config.textData[this.config.index.y].slice(0, this.config.index.x);
             const right = this.config.textData[this.config.index.y].slice(this.config.index.x, this.config.textData[this.config.index.y].length);
@@ -108,7 +108,7 @@ export class TextService extends Tool {
         const x = this.config.index.x;
         const y = this.config.index.y;
         const text = this.config.textData;
-        if(x === 0 && y > 0 && text[y].length === 0) this.config.index.x = this.config.textData[--this.config.index.y].length;
+        if (x === 0 && y > 0 && text[y].length === 0) this.config.index.x = this.config.textData[--this.config.index.y].length;
         if (x === text[y].length) return;
         if (x < text[y].length) {
             text[y] = text[y].substring(0, x) + text[y].substring(x + 1);

@@ -47,10 +47,10 @@ describe('TextComponent', () => {
         textService.config.hasInput = false;
         colorService.isMenuOpen = false;
         component.onMouseDown(mouseEvent);
-        expect(component['addText']).toHaveBeenCalledTimes(0);
+        expect(component.addText).toHaveBeenCalledTimes(0);
         mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         component.onMouseDown(mouseEvent);
-        expect(component['addText']).toHaveBeenCalledTimes(1);
+        expect(component.addText).toHaveBeenCalledTimes(1);
     });
 
     it('should call confirmText when mouseDown and there is input', () => {
@@ -60,7 +60,7 @@ describe('TextComponent', () => {
         colorService.isMenuOpen = false;
         textService.config.hasInput = true;
         component.onMouseDown(mouseEvent);
-        expect(component['confirmText']).toHaveBeenCalled();
+        expect(component.confirmText).toHaveBeenCalled();
     });
 
     it('should do nothing on mouse down', () => {
@@ -70,19 +70,19 @@ describe('TextComponent', () => {
         spyOn<any>(component, 'confirmText');
 
         component.onMouseDown(mouseEvent);
-        expect(component['confirmText']).toHaveBeenCalledTimes(0);
+        expect(component.confirmText).toHaveBeenCalledTimes(0);
     });
 
     it('should call confirmText from textService', () => {
         spyOn(textService, 'confirmText');
-        component['confirmText']();
+        component.confirmText();
         expect(textService.confirmText).toHaveBeenCalled();
     });
 
     it('should add text and modify config attributes accordingly', () => {
         const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         spyOn(textService, 'drawPreview');
-        component['addText'](mouseEvent);
+        component.addText(mouseEvent);
         expect(textService.config.hasInput).toBe(true);
         expect(textService.config.startCoords.x).toBe(mouseEvent.offsetX);
         expect(textService.config.startCoords.y).toBe(mouseEvent.offsetY);
@@ -90,23 +90,23 @@ describe('TextComponent', () => {
     });
 
     it('should initialise subscriptions', () => {
-        const drawingServiceSubscribe = spyOn(component['drawingService'].changes, 'subscribe').and.callThrough();
+        const drawingServiceSubscribe = spyOn(component.drawingService.changes, 'subscribe').and.callThrough();
         spyOn(textService, 'drawPreview');
-        component['initSubscriptions']();
+        component.initSubscriptions();
         expect(drawingServiceSubscribe).toHaveBeenCalled();
     });
 
     it('should call the appropriate subscribed methods', () => {
         const drawPreviewSpy = spyOn(textService, 'drawPreview');
         textService.config.hasInput = false;
-        component['drawingService'].changes.next();
+        component.drawingService.changes.next();
         expect(drawPreviewSpy).toHaveBeenCalledTimes(0);
-        
+
         textService.config.hasInput = true;
-        component['drawingService'].changes.next();
+        component.drawingService.changes.next();
         expect(drawPreviewSpy).toHaveBeenCalledTimes(1);
 
-        component['textService'].escapeClicked.next();
+        component.textService.escapeClicked.next();
         expect(shortcutHandlerService.blockShortcuts).toBe(false);
     });
 });

@@ -1,30 +1,28 @@
 <div class="tab">
     <h5 class="textFormat">Taille police</h5>
       <div class="textFormatForSlider">
-          <mat-slider #sizeSlider min="{{ MIN }}" max="{{ MAX }}" (change)="changeFontSize($event.value)" [(ngModel)]="currentFontSize" thumbLabel [displayWith]="colorSliderLabel" (keydown)="$event.stopPropagation()">
+          <mat-slider #sizeSlider id='slider' min="{{ MIN }}" max="{{ MAX }}" (change)="changeFontSize($event.value)" [(ngModel)]="currentFontSize" thumbLabel [displayWith]="colorSliderLabel" > 
           </mat-slider>
           {{ textService.config.fontSize }}px
       </div>
-
       <div class="textFormatButton">
           <mat-button-toggle-group [multiple] = 'true'>
             <div class="boldButton">  
             <mat-button-toggle 
-                  [checked]="textService.config.bold === !isBold"
+                  [checked]="textService.config.bold === true"
                   class="boldButton"
                   (click)="toggleBold()"
-                  (keydown)="$event.stopPropagation()">B</mat-button-toggle>
+                  >B</mat-button-toggle>
             </div>
             <div class="italicButton">
               <mat-button-toggle
-                  [checked]="textService.config.italic === !isItalic"
+                  [checked]="textService.config.italic === true"
                   class="italicButton"
                   (click)="toggleItalic()"
-                  (keydown)="$event.stopPropagation()">I</mat-button-toggle>
+                  >I</mat-button-toggle>
             </div>
           </mat-button-toggle-group>
       </div>
-    
       <h5 class="textFormat">Alignement</h5>
       <div class="textFormatButton">
           <mat-button-toggle-group [vertical]="true" value="Left">
@@ -52,14 +50,41 @@
             </div>
           </mat-button-toggle-group>
       </div>
-      <br>
-      <mat-form-field id="formField" class="textFormat" appearance="fill" >
-          <mat-label>Police</mat-label>
-          <mat-select id="fontChange" [(value)]="currentFont" (selectionChange)="changeFont($event.value)" (keydown)="$event.stopPropagation()">
-            <mat-option *ngFor="let font of fonts" [value]="font">
-              {{font}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>  
+      <h5 class="textFormat">Police</h5>
+      <div class="textFormatButton">
+          <mat-button-toggle-group [vertical]="true" value="Arial">
+            <div class="textFormatButton">  
+                <mat-button-toggle 
+                    class="buttons"
+                    (click)="changeFont('Arial')"
+                    value="Arial"
+                    >Arial</mat-button-toggle>
+            </div>
+            <div class="textFormatButton"> 
+                <mat-button-toggle
+                    class="buttons"
+                    (click)="changeFont('Times New Roman')"
+                    value="Times New Roman">Times New Roman</mat-button-toggle>
+            </div>
+            <div class="textFormatButton"> 
+              <mat-button-toggle
+                  class="buttons"
+                  (click)="changeFont('Times New Roman')"
+                  value="Cursive">Cursive</mat-button-toggle>
+            </div>
+            <div class="textFormatButton"> 
+              <mat-button-toggle
+                  class="buttons"
+                  (click)="changeFont('Monospace')"
+                  value="Monospace">Monospace</mat-button-toggle>
+            </div>
+            <div class="textFormatButton"> 
+              <mat-button-toggle
+                  class="buttons"
+                  (click)="changeFont('Fantasy')"
+                  value="Fantasy">Fantasy</mat-button-toggle>
+            </div>
+          </mat-button-toggle-group>
+      </div>
 </div>
 

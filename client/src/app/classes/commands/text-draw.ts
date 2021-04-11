@@ -22,10 +22,10 @@ export class TextDraw extends AbstractDraw {
 
     private applyAttributes(ctx: CanvasRenderingContext2D): void {
         ctx.textBaseline = 'top';
-        
+
         const bold: string = this.config.bold ? 'bold ' : '';
         const italic: string = this.config.italic ? 'italic ' : '';
-        ctx.font = bold + italic + this.config.fontSize +  'px ' +  this.config.textFont;
+        ctx.font = bold + italic + this.config.fontSize + 'px ' + this.config.textFont;
 
         ctx.textAlign = this.config.alignmentSetting as CanvasTextAlign;
 
@@ -60,7 +60,7 @@ export class TextDraw extends AbstractDraw {
 
     private drawCursorLeft(ctx: CanvasRenderingContext2D): void {
         const left = this.config.textData[this.config.index.y].slice(0, this.config.index.x);
-        this.cursor.x = this.config.startCoords.x + ctx.measureText(left).width;;
+        this.cursor.x = this.config.startCoords.x + ctx.measureText(left).width;
         this.cursor.y = this.config.startCoords.y + this.config.fontSize * this.config.index.y;
         const height = this.config.fontSize;
 
