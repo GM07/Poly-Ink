@@ -63,7 +63,7 @@ export class StampConfigComponent implements OnInit, OnDestroy, AfterViewInit {
             event.preventDefault();
             let newValue =
                 StampConfigComponent.this.stampService.angleValue +
-                Math.sign(event.deltaY) * (StampConfigComponent.this.stampService.alt.isDown ? 1 : StampConfigComponent.this.ROTATION);
+                Math.sign(event.deltaY) * (StampConfigComponent.this.stampService.ALT_KEY.isDown ? 1 : StampConfigComponent.this.ROTATION);
             if (newValue > ToolMath.DEGREE_CONVERSION_FACTOR * 2) newValue -= ToolMath.DEGREE_CONVERSION_FACTOR * 2;
             if (newValue < 0) newValue += ToolMath.DEGREE_CONVERSION_FACTOR * 2;
             StampConfigComponent.this.stampService.angleValue = newValue;
