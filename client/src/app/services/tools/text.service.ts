@@ -5,6 +5,7 @@ import { Tool } from '@app/classes/tool';
 import { TextConfig } from '@app/classes/tool-config/text-config';
 import { TextToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { Subject } from 'rxjs';
 import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
@@ -18,6 +19,8 @@ export class TextService extends Tool {
     private static readonly arrowRight: ShortcutKey = new ShortcutKey('arrowright');
     private static readonly arrowUp: ShortcutKey = new ShortcutKey('arrowup');
     private static readonly arrowDown: ShortcutKey = new ShortcutKey('arrowdown');
+
+    readonly escapeClicked: Subject<boolean> = new Subject<boolean>();
 
     config: TextConfig;
 
@@ -98,8 +101,6 @@ export class TextService extends Tool {
                 break;
             case TextService.arrowDown:
                 this.handleArrowDown();
-            //default:
-              //  break;
         }
     }
 
@@ -133,6 +134,7 @@ export class TextService extends Tool {
         this.config.index.y = 0;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.drawingService.unblockUndoRedo();
+        this.escapeClicked.next(true);
     }
 
     private handleArrowLeft(): void {

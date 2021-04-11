@@ -1,7 +1,7 @@
 <div class="tab">
     <h5 class="textFormat">Taille police</h5>
       <div class="textFormatForSlider">
-          <mat-slider #sizeSlider min="{{ MIN }}" max="{{ MAX }}" (change)="changeFontSize($event.value)" [(ngModel)]="textService.config.fontSize" thumbLabel [displayWith]="colorSliderLabel" (keydown)="$event.stopPropagation()">
+          <mat-slider #sizeSlider min="{{ MIN }}" max="{{ MAX }}" (change)="changeFontSize($event.value)" [(ngModel)]="currentFontSize" thumbLabel [displayWith]="colorSliderLabel" (keydown)="$event.stopPropagation()">
           </mat-slider>
           {{ textService.config.fontSize }}px
       </div>
@@ -10,12 +10,14 @@
           <mat-button-toggle-group [multiple] = 'true'>
             <div class="boldButton">  
             <mat-button-toggle 
+                  [checked]="textService.config.bold === !isBold"
                   class="boldButton"
                   (click)="toggleBold()"
                   (keydown)="$event.stopPropagation()">B</mat-button-toggle>
             </div>
             <div class="italicButton">
               <mat-button-toggle
+                  [checked]="textService.config.italic === !isItalic"
                   class="italicButton"
                   (click)="toggleItalic()"
                   (keydown)="$event.stopPropagation()">I</mat-button-toggle>
@@ -28,18 +30,22 @@
           <mat-button-toggle-group [vertical]="true" value="Left">
             <div class="textFormatButton">  
                 <mat-button-toggle 
+                    [checked]="textService.config.alignmentSetting === 'left'"
                     class="buttons"
                     (click)="setAlignment('left')"
-                    value="Left">À gauche</mat-button-toggle>
+                    value="Left"
+                    >À gauche</mat-button-toggle>
             </div>
             <div class="textFormatButton"> 
                 <mat-button-toggle
+                    [checked]="textService.config.alignmentSetting === 'center'"
                     class="buttons"
                     (click)="setAlignment('center')"
                     value="Center">Au centre</mat-button-toggle>
             </div>
             <div class="textFormatButton"> 
               <mat-button-toggle
+                  [checked]="textService.config.alignmentSetting === 'right'"
                   class="buttons"
                   (click)="setAlignment('right')"
                   value="Right">À droite</mat-button-toggle>
@@ -49,7 +55,7 @@
       <br>
       <mat-form-field id="formField" class="textFormat" appearance="fill" >
           <mat-label>Police</mat-label>
-          <mat-select id="fontChange" [(value)]="this.textService.config.textFont" (selectionChange)="changeFont($event.value)" (keydown)="$event.stopPropagation()">
+          <mat-select id="fontChange" [(value)]="currentFont" (selectionChange)="changeFont($event.value)" (keydown)="$event.stopPropagation()">
             <mat-option *ngFor="let font of fonts" [value]="font">
               {{font}}
             </mat-option>

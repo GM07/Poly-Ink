@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MouseButton } from '@app/constants/control';
+import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { TextService } from '@app/services/tools/text.service';
 import { Colors } from 'src/color-picker/constants/colors';
 import { ColorService } from 'src/color-picker/services/color.service';
@@ -13,6 +14,7 @@ describe('TextComponent', () => {
     let fixture: ComponentFixture<TextComponent>;
     let textService: TextService;
     let colorService: ColorService;
+    let shortcutHandlerService: ShortcutHandlerService;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -22,6 +24,7 @@ describe('TextComponent', () => {
 
     beforeEach(() => {
         textService = TestBed.inject(TextService);
+        shortcutHandlerService = TestBed.inject(ShortcutHandlerService);
         colorService = colorService = {
             primaryColor: Colors.BLACK,
             secondaryColor: Colors.BLUE,
@@ -87,7 +90,6 @@ describe('TextComponent', () => {
     });
 
     it('should initialise subscriptions', () => {
-        
         const drawingServiceSubscribe = spyOn(component['drawingService'].changes, 'subscribe').and.callThrough();
         spyOn(textService, 'drawPreview');
         component['initSubscriptions']();
@@ -103,5 +105,8 @@ describe('TextComponent', () => {
         textService.config.hasInput = true;
         component['drawingService'].changes.next();
         expect(drawPreviewSpy).toHaveBeenCalledTimes(1);
+
+        component['textService'].escapeClicked.next();
+        expect(shortcutHandlerService.blockShortcuts).toBe(false);
     });
 });

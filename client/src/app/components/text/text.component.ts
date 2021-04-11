@@ -30,6 +30,9 @@ export class TextComponent {
           this.drawingService.blockUndoRedo();
         }
       });
+      this.textService.escapeClicked.subscribe(() => {
+        this.shortcutHandlerService.blockShortcuts = false;
+      });
     }
 
     onMouseDown(event: MouseEvent): void {
