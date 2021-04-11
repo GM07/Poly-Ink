@@ -40,7 +40,7 @@ import { DrawingData } from '@common/communication/drawing-data';
     ],
 })
 export class CarrouselComponent implements OnInit {
-    private static readonly SHORTCUT: ShortcutKey = new ShortcutKey('g', true);
+    static readonly SHORTCUT: ShortcutKey = new ShortcutKey('g', true);
     private static readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
     private static readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
     private static readonly NOT_FOUND_ERROR: number = 404;
