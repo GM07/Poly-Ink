@@ -142,6 +142,11 @@ mat-chip {
     height: auto;
 }
 
+.centeredWhiteText {
+    color: white;
+    text-align: center;
+}
+
 .white {
     color: white;
 }
@@ -183,4 +188,9 @@ mat-chip {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+
+.loadingAnimationBlockText {
+    color: white;
+    flex: 0 0 200px;
 }

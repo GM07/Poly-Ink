@@ -16,12 +16,49 @@
     z-index: 5;
 }
 
+.nw-cursor {
+    cursor: nw-resize;
+}
+
+.n-cursor {
+    cursor: n-resize;
+}
+
+.ne-cursor {
+    cursor: ne-resize;
+}
+
+.w-cursor {
+    cursor: w-resize;
+}
+
+.e-cursor {
+    cursor: e-resize;
+}
+
+.sw-cursor {
+    cursor: sw-resize;
+}
+
+.s-cursor {
+    cursor: s-resize;
+}
+
+.se-cursor {
+    cursor: se-resize;
+}
+
 .resize-border {
     background-color: rgba(0, 0, 0, 0);
     position: absolute;
     border: 1px solid blue;
     z-index: 5;
     cursor: all-scroll;
+}
+
+.selection-background-container {
+    position: relative;
+    z-index: 0;
 }
 
 .selection-background {
