@@ -65,6 +65,7 @@ export class LineDrawer {
             LineDrawer.drawStrokedLinePath(ctx, points, transform);
         }
         ctx.closePath();
+        ctx.setLineDash([]);
         ctx.lineDashOffset = 0;
     }
 
