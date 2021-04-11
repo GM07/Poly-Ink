@@ -45,8 +45,8 @@ export class TextService extends Tool {
             this.handleShortCuts(shortcut);
         } else if (this.config.hasInput) {
             this.insert(event);
-            this.drawPreview();
         }
+        this.drawPreview();
 
     }
 
