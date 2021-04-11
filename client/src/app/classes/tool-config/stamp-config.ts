@@ -4,10 +4,16 @@ export enum Stamp {
     Alexis = 0,
     Felix = 1,
     Florence = 2,
+    Gaya = 3,
 }
 
 export class StampConfig {
-    static readonly stampList: string[] = ['assets/stamps/alexis.png', 'assets/stamps/felix.png', 'assets/stamps/Florence.png'];
+    static readonly stampList: string[] = [
+        'assets/stamps/alexis.png',
+        'assets/stamps/felix.png',
+        'assets/stamps/Florence.png',
+        'assets/stamps/Gaya.png',
+    ];
     scale: number;
     angle: number; // Angle in radians
     position: Vec2;
