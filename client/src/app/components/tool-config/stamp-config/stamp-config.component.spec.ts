@@ -100,7 +100,7 @@ describe('StampConfigComponent', () => {
     });
 
     it('should load the toggles inside the group', async () => {
-        const nToggles = 3;
+        const nToggles = 4;
         const group = await loader.getHarness(MatButtonToggleGroupHarness);
         const toggles = await group.getToggles();
         expect(toggles.length).toBe(nToggles);
@@ -117,7 +117,7 @@ describe('StampConfigComponent', () => {
 
     it('should update angle by 1 degree if alt is pressed', () => {
         stampService.angleValue = 0;
-        stampService.alt.isDown = true;
+        stampService.ALT_KEY.isDown = true;
         spyOn(stampService, 'isActive').and.returnValue(true);
         spyOn(stampService, 'drawPreview');
         const wheelEvent = { deltaY: 1, preventDefault: () => {} } as WheelEvent;

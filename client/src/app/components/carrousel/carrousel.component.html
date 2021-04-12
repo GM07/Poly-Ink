@@ -6,8 +6,7 @@
     <div id="main">
         <div id="content">
             <h1
-                class="white"
-                style="text-align: center"
+                class="centeredWhiteText"
                 [innerHTML]="
                     'Le canvas actuel n\'est pas vide. Voulez-vous abandonner vos changements et charger ' +
                     drawingsList[currentIndex].data.name +
@@ -30,7 +29,7 @@
             <div *ngIf="!isOnline; then isOfflineBlock"></div>
             <div *ngIf="!hasDrawings; then noDrawingsBlock"></div>
             <div *ngIf="!serverConnexionError && isOnline && hasDrawings">
-                <h1 class="white" style="text-align: center">Dessins sauvegardés sur le serveur</h1>
+                <h1 class="centeredWhiteText">Dessins sauvegardés sur le serveur</h1>
                 <div *ngIf="isLoadingCarrousel; then loadingBlock; else displayBlock"></div>
                 <ng-template #displayBlock>
                     <div *ngIf="drawingsList.length !== 0">
@@ -138,22 +137,18 @@
 </div>
 
 <ng-template #noFilteredDrawingsBlock>
-    <div style="flex: 1">
-        <h2 class="white" style="text-align: center">Aucun dessin ne possède cette étiquette</h2>
-    </div>
+    <h2 class="centeredWhiteText">Aucun dessin ne possède cette étiquette</h2>
 </ng-template>
 
 <ng-template #showLoadingErrorBlock>
-    <div style="text-align: center">
-        <h3
-            class="white"
-            [innerHTML]="'Le dessin ' + drawingsList[currentIndex].data.name + ' ne peut pas être chargé. Veuillez en choisir un autre'"
-        ></h3>
-    </div>
+    <h3
+        class="centeredWhiteText"
+        [innerHTML]="'Le dessin ' + drawingsList[currentIndex].data.name + ' ne peut pas être chargé. Veuillez en choisir un autre'"
+    ></h3>
 </ng-template>
 
 <ng-template #loadingBlock>
-    <h1 class="white" style="text-align: center">Chargement en cours...</h1>
+    <h1 class="centeredWhiteText">Chargement en cours...</h1>
     <div class="loader">
         <mat-spinner></mat-spinner>
     </div>
@@ -161,7 +156,7 @@
 
 <ng-template #loadingAnimationBlock>
     <div class="loadingAnimation">
-        <div class="white" style="flex: 0 0 200px">Chargement en cours...</div>
+        <div class="loadingAnimationBlockText">Chargement en cours...</div>
         <mat-spinner [diameter]="44"></mat-spinner>
     </div>
 </ng-template>
@@ -179,21 +174,21 @@
 </ng-template>
 
 <ng-template #serverConnexionErrorBlock>
-    <h1 class="white" style="text-align: center">Erreur de connexion au serveur, impossible de charger les dessins.</h1>
+    <h1 class="centeredWhiteText">Erreur de connexion au serveur, impossible de charger les dessins.</h1>
     <div class="options">
         <button class="button red white" mat-raised-button (click)="closeCarrousel()">Annuler</button>
     </div>
 </ng-template>
 
 <ng-template #isOfflineBlock>
-    <h1 class="white" style="text-align: center">Vous semblez ne pas être connecté à Internet, il est impossible de récupérer les dessins</h1>
+    <h1 class="centeredWhiteText">Vous semblez ne pas être connecté à Internet, il est impossible de récupérer les dessins</h1>
     <div class="options">
         <button class="button red white" mat-raised-button (click)="closeCarrousel()">Annuler</button>
     </div>
 </ng-template>
 
 <ng-template #noDrawingsBlock>
-    <h1 class="white" style="text-align: center">Vous n'avez aucun dessin :'(</h1>
+    <h1 class="centeredWhiteText">Vous n'avez aucun dessin :'(</h1>
     <div class="options">
         <button class="button red white" mat-raised-button (click)="closeCarrousel()">Annuler</button>
     </div>

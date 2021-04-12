@@ -14,15 +14,13 @@ import { ColorService } from 'src/color-picker/services/color.service';
     providedIn: 'root',
 })
 export class StampService extends Tool {
-    alt: AltKey;
+    readonly ALT_KEY: AltKey = new AltKey();
     config: StampConfig;
 
     constructor(protected drawingService: DrawingService, protected colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(StampToolConstants.SHORTCUT_KEY);
         this.toolID = StampToolConstants.TOOL_ID;
-        this.alt = new AltKey();
-        this.alt.isDown = false;
 
         this.config = new StampConfig();
     }
@@ -62,11 +60,17 @@ export class StampService extends Tool {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (!this.alt.isDown) this.alt.isDown = this.alt.equals(event);
+        if (this.ALT_KEY.equals(event)) {
+            event.preventDefault();
+            this.ALT_KEY.isDown = true;
+        }
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if (this.alt.isDown) this.alt.isDown = !this.alt.equals(event);
+        if (this.ALT_KEY.equals(event)) {
+            event.preventDefault();
+            this.ALT_KEY.isDown = false;
+        }
     }
 
     draw(): void {

@@ -14,10 +14,10 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
     styleUrls: ['./drawing.component.scss'],
 })
 export class DrawingComponent implements AfterViewInit {
-    @ViewChild('baseCanvas', { static: false }) baseCanvas: ElementRef<HTMLCanvasElement>;
+    @ViewChild('baseCanvas', { static: false }) private baseCanvas: ElementRef<HTMLCanvasElement>;
     // Using the preview canvas to draw without affecting the final drawing
-    @ViewChild('previewCanvas', { static: false }) previewCanvas: ElementRef<HTMLCanvasElement>;
-    @ViewChild('grid', { static: false }) grid: ElementRef<HTMLCanvasElement>;
+    @ViewChild('previewCanvas', { static: false }) private previewCanvas: ElementRef<HTMLCanvasElement>;
+    @ViewChild('grid', { static: false }) private grid: ElementRef<HTMLCanvasElement>;
 
     private baseCtx: CanvasRenderingContext2D;
     private previewCtx: CanvasRenderingContext2D;

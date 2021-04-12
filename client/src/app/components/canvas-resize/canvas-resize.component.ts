@@ -1,7 +1,7 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, HostListener } from '@angular/core';
 import { ResizeDraw } from '@app/classes/commands/resize-draw';
 import { ResizeConfig } from '@app/classes/tool-config/resize-config';
-import { CanvasConst } from '@app/constants/canvas.ts';
+import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
@@ -27,7 +27,6 @@ export class CanvasResizeComponent implements AfterViewInit {
 
     previewResizeView: boolean;
     previewResizeStyle: { [key: string]: string };
-    @ViewChild('previewResize', { static: false }) previewResize: ElementRef<HTMLDivElement>;
 
     constructor(private drawingService: DrawingService, private cd: ChangeDetectorRef, private shortcutHandler: ShortcutHandlerService) {
         this.previewResizeView = false;

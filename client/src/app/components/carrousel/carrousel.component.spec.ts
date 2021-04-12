@@ -73,7 +73,7 @@ describe('CarrouselComponent', () => {
         const image = new Image();
         image.src = canvasDataURL;
         imageRef = new ElementRef<HTMLImageElement>(image);
-        component.middlePreview = imageRef;
+        component['middlePreview'] = imageRef;
         serverCommunicationService = TestBed.inject(ServerCommunicationService);
 
         getDrawingFromServerSpy = spyOn<any>(component, 'getImageAtIndex').and.callFake((index: number) => {

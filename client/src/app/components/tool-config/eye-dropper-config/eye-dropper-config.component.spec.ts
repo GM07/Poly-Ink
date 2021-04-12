@@ -31,7 +31,7 @@ describe('EyeDropperConfigComponent', () => {
     it('should draw on the canvas when the previsualisation sends an update notification', () => {
         component.hexColor = 'FFFFFF';
         fixture.detectChanges();
-        const getContextSpy = spyOn<any>(component.previewEyeDropper.nativeElement, 'getContext').and.callThrough();
+        const getContextSpy = spyOn<any>(component['previewEyeDropper'].nativeElement, 'getContext').and.callThrough();
         component['eyeDropperService'].updatePrevisualisation.next('ABABAB');
         expect(getContextSpy).toHaveBeenCalled();
     });
@@ -39,7 +39,7 @@ describe('EyeDropperConfigComponent', () => {
     it('should do nothing if outside of the canvas', () => {
         component.hexColor = 'FFFFFF';
         fixture.detectChanges();
-        const getContextSpy = spyOn<any>(component.previewEyeDropper.nativeElement, 'getContext').and.callThrough();
+        const getContextSpy = spyOn<any>(component['previewEyeDropper'].nativeElement, 'getContext').and.callThrough();
         component['eyeDropperService'].updatePrevisualisation.next('');
         expect(getContextSpy).not.toHaveBeenCalled();
     });

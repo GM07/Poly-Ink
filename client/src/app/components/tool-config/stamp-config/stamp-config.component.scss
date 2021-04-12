@@ -60,11 +60,19 @@
 }
 
 #angleCanvas{
-  margin-left: 45px;
+  margin-left: 25px;
 }
 
 #angleValue{
   font-size: 25px;
-  margin-top: 0px;
-  text-align: center;
+  margin-left: 10px;
+  text-align: left;
+  font-weight: 600;
+  margin-top: 35px;
+  position: absolute;
+
+}
+
+.rotation-slider{
+  position: relative;
 }

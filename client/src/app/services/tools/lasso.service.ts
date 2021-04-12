@@ -117,7 +117,7 @@ export class LassoService extends AbstractSelectionService {
         this.start = new Vec2(0, 0);
         this.end = new Vec2(width, height);
 
-        this.configLasso.points = [this.start.clone(), new Vec2(width, 0), this.end.clone(), new Vec2(0, height)];
+        this.configLasso.points = [this.start.clone(), new Vec2(width, 0), this.end.clone(), new Vec2(0, height), this.start.clone()];
         this.onClosedPath();
     }
 
@@ -208,6 +208,7 @@ export class LassoService extends AbstractSelectionService {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.draw();
 
+        this.UPDATE_POINTS.next(false);
         this.initAttribs(new LassoConfig());
         this.config.previewSelectionCtx = null;
         this.config.endCoords = new Vec2(0, 0);

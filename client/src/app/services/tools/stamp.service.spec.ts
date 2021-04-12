@@ -7,11 +7,13 @@ import { StampService } from './stamp.service';
 // tslint:disable:no-string-literal
 
 describe('StampService', () => {
+    let altKeyEvent: KeyboardEvent;
     let service: StampService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
         service = TestBed.inject(StampService);
+        altKeyEvent = new KeyboardEvent('keydown', { key: 'alt' });
     });
 
     it('should be created', () => {
@@ -101,26 +103,26 @@ describe('StampService', () => {
     });
 
     it('onKeyDown should set alt key if correct key', () => {
-        service.onKeyDown({ key: 'Alt', altKey: true } as KeyboardEvent);
-        expect(service.alt.isDown).toEqual(true);
+        service.onKeyDown(altKeyEvent);
+        expect(service.ALT_KEY.isDown).toEqual(true);
     });
 
     it('onKeyDown should not set alt key if incorrect key', () => {
-        service.alt.isDown = true;
+        service.ALT_KEY.isDown = true;
         service.onKeyDown({ key: 'Shift', altKey: false } as KeyboardEvent);
-        expect(service.alt.isDown).toEqual(true);
+        expect(service.ALT_KEY.isDown).toEqual(true);
     });
 
     it('onKeyUp should update alt key if correct key', () => {
-        service.onKeyDown({ key: 'Alt', altKey: true } as KeyboardEvent);
-        service.onKeyUp({ key: 'Alt', altKey: false } as KeyboardEvent);
-        expect(service.alt.isDown).toEqual(false);
+        service.onKeyDown(altKeyEvent);
+        service.onKeyUp(altKeyEvent);
+        expect(service.ALT_KEY.isDown).toEqual(false);
     });
 
     it('onKeyUp should not update alt key if incorrect key', () => {
-        service.alt.isDown = false;
+        service.ALT_KEY.isDown = false;
         service.onKeyUp({ key: 'Shift', altKey: true } as KeyboardEvent);
-        expect(service.alt.isDown).toEqual(false);
+        expect(service.ALT_KEY.isDown).toEqual(false);
     });
 
     it('draw should call draw from drawingService', () => {

@@ -40,6 +40,41 @@ import { DrawingData } from '@common/communication/drawing-data';
     ],
 })
 export class CarrouselComponent implements OnInit {
+    static readonly SHORTCUT: ShortcutKey = new ShortcutKey('g', true);
+    private static readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
+    private static readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
+    private static readonly NOT_FOUND_ERROR: number = 404;
+    @ViewChild('overflowLeftPreview', { static: false }) private overflowLeftPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('leftPreview', { static: false }) private leftPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('middlePreview', { static: false }) private middlePreview: ElementRef<HTMLImageElement>;
+    @ViewChild('rightPreview', { static: false }) private rightPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('overflowRightPreview', { static: false }) private overflowRightPreview: ElementRef<HTMLImageElement>;
+    readonly CARROUSEL_URL: string = 'carrousel';
+    readonly CANVAS_PREVIEW_SIZE: number = 200;
+
+    readonly overflowLeftElement: Drawing = new Drawing(new DrawingData(''));
+    readonly leftElement: Drawing = new Drawing(new DrawingData(''));
+    readonly middleElement: Drawing = new Drawing(new DrawingData(''));
+    readonly rightElement: Drawing = new Drawing(new DrawingData(''));
+    readonly overflowRightElement: Drawing = new Drawing(new DrawingData(''));
+
+    private loadedImage: HTMLImageElement;
+    currentURL: string;
+    deletionErrorMessage: string;
+    showCarrousel: boolean;
+    showLoadingError: boolean;
+    showLoadingWarning: boolean;
+    serverConnexionError: boolean;
+    isLoadingCarrousel: boolean;
+    isOnline: boolean;
+    hasDrawings: boolean;
+    tagsFocused: boolean;
+    translationState: string | null;
+    drawingsList: Drawing[];
+    currentIndex: number;
+
+    animationIsDone: boolean;
+
     constructor(
         private shortcutHandler: ShortcutHandlerService,
         private drawingService: DrawingService,
@@ -60,41 +95,6 @@ export class CarrouselComponent implements OnInit {
         this.hasDrawings = true;
         this.subscribeActivatedRoute(activatedRoute);
     }
-
-    private static readonly SHORTCUT: ShortcutKey = new ShortcutKey('g', true);
-    private static readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
-    private static readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
-    private static readonly NOT_FOUND_ERROR: number = 404;
-    @ViewChild('overflowLeftPreview', { static: false }) overflowLeftPreview: ElementRef<HTMLImageElement>;
-    @ViewChild('leftPreview', { static: false }) leftPreview: ElementRef<HTMLImageElement>;
-    @ViewChild('middlePreview', { static: false }) middlePreview: ElementRef<HTMLImageElement>;
-    @ViewChild('rightPreview', { static: false }) rightPreview: ElementRef<HTMLImageElement>;
-    @ViewChild('overflowRightPreview', { static: false }) overflowRightPreview: ElementRef<HTMLImageElement>;
-    readonly CARROUSEL_URL: string = 'carrousel';
-    readonly CANVAS_PREVIEW_SIZE: number = 200;
-
-    readonly overflowLeftElement: Drawing = new Drawing(new DrawingData(''));
-    readonly leftElement: Drawing = new Drawing(new DrawingData(''));
-    readonly middleElement: Drawing = new Drawing(new DrawingData(''));
-    readonly rightElement: Drawing = new Drawing(new DrawingData(''));
-    readonly overflowRightElement: Drawing = new Drawing(new DrawingData(''));
-
-    currentURL: string;
-    deletionErrorMessage: string;
-    showCarrousel: boolean;
-    showLoadingError: boolean;
-    showLoadingWarning: boolean;
-    serverConnexionError: boolean;
-    isLoadingCarrousel: boolean;
-    isOnline: boolean;
-    hasDrawings: boolean;
-    tagsFocused: boolean;
-    translationState: string | null;
-    drawingsList: Drawing[];
-    currentIndex: number;
-    private loadedImage: HTMLImageElement;
-
-    animationIsDone: boolean;
 
     ngOnInit(): void {
         this.serverCommunicationService.testConnection().subscribe((isOnline) => (this.isOnline = isOnline));
