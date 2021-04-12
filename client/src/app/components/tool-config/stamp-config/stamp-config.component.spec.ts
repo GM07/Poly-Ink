@@ -34,6 +34,7 @@ describe('StampConfigComponent', () => {
         loader = TestbedHarnessEnvironment.loader(fixture);
         stampService = TestBed.inject(StampService);
         fixture.detectChanges();
+        spyOn(stampService, 'isInCanvas').and.returnValue(true);
     });
 
     it('should create', () => {
