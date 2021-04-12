@@ -167,7 +167,9 @@ export const TOP_TOOLS_CONSTANTS = [
 export const HIGHLIGHTED_COLOR = 'rgba(148, 152, 153, 0.342)';
 export const BOTTOM_TOOLS_CONSTANTS = [SaveFileToolConstants, ExportFileToolConstants];
 
-// Source: www.flaticon.com
+// Sources:
+// All : www.flaticon.com
+// imgur: https://commons.wikimedia.org/wiki/File:Imgur_logo.svg
 export const ICONS_PATHS = [
     ['bucket', 'assets/icons/bucket.svg'],
     ['ellipse-selection', 'assets/icons/ellipse-selection.svg'],
@@ -188,4 +190,5 @@ export const ICONS_PATHS = [
     ['new', 'assets/icons/new.svg'],
     ['redo', 'assets/icons/redo.svg'],
     ['undo', 'assets/icons/undo.svg'],
+    ['imgur', 'assets/icons/imgur.svg']
 ];
