@@ -46,6 +46,14 @@
               >Gaya</mat-button-toggle
           >
       </div>
+      <div class="textFormatButton">
+        <mat-button-toggle
+            [checked]="stampService.config.stamp === stampMode.Mamadu"
+            class="buttons"
+            (click)="toggleStamp(stampMode.Mamadu)"
+            >Mamadu</mat-button-toggle
+        >
+    </div>
     </mat-button-toggle-group>
     <mat-divider></mat-divider>
 </div>

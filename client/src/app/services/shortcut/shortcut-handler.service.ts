@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ClipboardService } from '@app/services/clipboard/clipboard.service';
 import { GridService } from '@app/services/drawing/grid.service';
+import { TextService } from '@app/services/tools/text.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 import { Subject } from 'rxjs';
@@ -37,6 +38,7 @@ export class ShortcutHandlerService {
     }
 
     onKeyDown(event: KeyboardEvent): void {
+        if (this.toolHandlerService.getCurrentTool() instanceof TextService) this.toolHandlerService.getCurrentTool().onKeyDown(event);
         if (!this.blockShortcutsIn) {
             this.undoRedoService.onKeyDown(event);
             this.toolHandlerService.onKeyDown(event);
