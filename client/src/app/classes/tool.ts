@@ -45,6 +45,8 @@ export abstract class Tool {
 
     onKeyUp(event: KeyboardEvent): void {}
 
+    onMouseClick(event: MouseEvent): void {}
+
     stopDrawing(): void {}
 
     getPositionFromMouse(event: MouseEvent): Vec2 {
