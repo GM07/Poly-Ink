@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Vec2 } from '@app/classes/vec2';
+import { ToolMath } from '@app/constants/math';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { GridService } from './grid.service';
 
@@ -19,15 +20,15 @@ describe('GridService', () => {
 
     it('get and set opacity should get and set the opacity', () => {
         spyOn(service, 'updateGrid');
-        service.opacityValue = ToolSettingsConst.GRID_MAX_OPACITY;
-        expect(service.opacityValue).toEqual(ToolSettingsConst.GRID_MAX_OPACITY);
+        service.opacityValue = ToolSettingsConst.GRID_MAX_OPACITY * ToolMath.PERCENTAGE;
+        expect(service.opacityValue).toEqual(ToolSettingsConst.GRID_MAX_OPACITY * ToolMath.PERCENTAGE);
     });
 
     it('get and set size should get and set the size', () => {
         spyOn(service, 'updateGrid');
         service.sizeValue = ToolSettingsConst.GRID_MIN_SIZE;
-        //tslint:disable-next-line:no-magic-numbers
-        expect(service.sizeValue).toEqual(40);
+
+        expect(service.sizeValue).toEqual(ToolSettingsConst.GRID_MIN_SIZE);
     });
 
     it('updateGrid should draw lines', () => {
