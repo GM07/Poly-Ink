@@ -42,12 +42,12 @@ export class GridService {
     }
 
     set opacityValue(size: number) {
-        this.opacity = Math.max(ToolSettingsConst.GRID_MIN_OPACITY, Math.min(1 - size / ToolMath.PERCENTAGE, ToolSettingsConst.GRID_MAX_OPACITY));
+        this.opacity = Math.max(ToolSettingsConst.GRID_MIN_OPACITY, Math.min(size / ToolMath.PERCENTAGE, ToolSettingsConst.GRID_MAX_OPACITY));
         this.updateGrid();
     }
 
     get opacityValue(): number {
-        return Math.round((1 - this.opacity) * ToolMath.PERCENTAGE);
+        return Math.round(this.opacity * ToolMath.PERCENTAGE);
     }
 
     onKeyDown(event: KeyboardEvent): void {
