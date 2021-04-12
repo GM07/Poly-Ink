@@ -149,10 +149,6 @@ export class SaveDrawingComponent {
         });
     }
 
-    private generateBase64Image(): void {
-        this.canvasImage = this.baseCanvas.toDataURL('image/' + this.saveFormat);
-    }
-
     getPreviewHeight(): number {
         if (this.aspectRatio < 1) return SaveDrawingComponent.EXPORT_PREVIEW_MAX_SIZE;
 
@@ -200,5 +196,9 @@ export class SaveDrawingComponent {
             event.preventDefault();
             await this.show();
         }
+    }
+
+    private generateBase64Image(): void {
+        this.canvasImage = this.baseCanvas.toDataURL('image/' + this.saveFormat);
     }
 }
