@@ -200,6 +200,4 @@ export class SaveDrawingComponent {
     private generateBase64Image(): void {
         this.canvasImage = this.baseCanvas.toDataURL('image/' + this.saveFormat);
     }
-
-
 }
