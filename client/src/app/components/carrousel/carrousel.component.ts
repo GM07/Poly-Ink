@@ -165,14 +165,6 @@ export class CarrouselComponent implements OnInit {
             },
         );
     }
-
-    private deleteAndUpdate(): void {
-        this.drawingsList.splice(this.currentIndex, 1);
-        if (this.currentIndex === this.drawingsList.length && this.drawingsList.length !== 0) --this.currentIndex;
-        if (this.drawingsList.length === 0) this.hasDrawings = false;
-        this.updateDrawingContent();
-    }
-
     loadDrawing(indexOffset: number): void {
         if (!this.animationIsDone || this.drawingsList.length === 0) return;
         const index = (this.currentIndex + indexOffset + 2 * this.drawingsList.length) % this.drawingsList.length;
@@ -221,15 +213,6 @@ export class CarrouselComponent implements OnInit {
         }
     }
 
-    private subscribeActivatedRoute(activatedRoute: ActivatedRoute): void {
-        activatedRoute.url.subscribe((url: UrlSegment[]) => {
-            this.currentURL = url[0].path;
-            if (this.currentURL === this.CARROUSEL_URL) {
-                this.showCarrousel = true;
-            }
-        });
-    }
-
     updateDrawingContent(): void {
         const overFlowLeft = -2;
         const left = -1;
@@ -238,6 +221,17 @@ export class CarrouselComponent implements OnInit {
         this.updateSingleDrawingContent(this.middlePreview, 0, this.middleElement);
         this.updateSingleDrawingContent(this.rightPreview, 1, this.rightElement);
         this.updateSingleDrawingContent(this.overflowRightPreview, 2, this.overflowRightElement);
+    }
+
+    serverConnexionIn(serverError: boolean): void {
+        this.serverConnexionError = serverError;
+    }
+
+    loadFilteredCarrousel(filteredDrawings: Drawing[]): void {
+        this.currentIndex = 0;
+        this.drawingsList = filteredDrawings;
+        this.cd.detectChanges();
+        this.updateDrawingContent();
     }
 
     private updateSingleDrawingContent(imageRef: ElementRef<HTMLImageElement>, indexOffset: number, drawingContent: Drawing): void {
@@ -254,6 +248,15 @@ export class CarrouselComponent implements OnInit {
             drawingContent.data.tags = this.drawingsList[index].data.tags;
         }
         if (imageRef) imageRef.nativeElement.src = drawingData === undefined ? 'data:,' : 'data:image/png;base64,' + drawingData;
+    }
+
+    private subscribeActivatedRoute(activatedRoute: ActivatedRoute): void {
+        activatedRoute.url.subscribe((url: UrlSegment[]) => {
+            this.currentURL = url[0].path;
+            if (this.currentURL === this.CARROUSEL_URL) {
+                this.showCarrousel = true;
+            }
+        });
     }
 
     private createLoadedCanvas = () => {
@@ -273,20 +276,16 @@ export class CarrouselComponent implements OnInit {
         // tslint:disable-next-line:semicolon
     };
 
+    private deleteAndUpdate(): void {
+        this.drawingsList.splice(this.currentIndex, 1);
+        if (this.currentIndex === this.drawingsList.length && this.drawingsList.length !== 0) --this.currentIndex;
+        if (this.drawingsList.length === 0) this.hasDrawings = false;
+        this.updateDrawingContent();
+    }
+
     private getImageAtIndex(index: number): string | undefined {
         if (this.drawingsList.length === 0) return undefined;
         return this.drawingsList[index].image;
-    }
-
-    serverConnexionIn(serverError: boolean): void {
-        this.serverConnexionError = serverError;
-    }
-
-    loadFilteredCarrousel(filteredDrawings: Drawing[]): void {
-        this.currentIndex = 0;
-        this.drawingsList = filteredDrawings;
-        this.cd.detectChanges();
-        this.updateDrawingContent();
     }
 
     private loadCarrousel(): void {

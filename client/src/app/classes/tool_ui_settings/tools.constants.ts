@@ -190,5 +190,5 @@ export const ICONS_PATHS = [
     ['new', 'assets/icons/new.svg'],
     ['redo', 'assets/icons/redo.svg'],
     ['undo', 'assets/icons/undo.svg'],
-    ['imgur', 'assets/icons/imgur.svg']
+    ['imgur', 'assets/icons/imgur.svg'],
 ];

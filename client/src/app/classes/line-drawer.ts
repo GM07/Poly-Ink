@@ -9,6 +9,14 @@ import { Subject } from 'rxjs';
 import { AbstractLineConfig } from './tool-config/abstract-line-config';
 
 export class LineDrawer {
+    constructor(config: AbstractLineConfig, drawingService: DrawingService) {
+        this.config = config;
+        this.drawingService = drawingService;
+        this.drawPreview = new Subject<void>();
+        this.removeLine = new Subject<void>();
+        this.leftMouseDown = false;
+        this.init(config);
+    }
     pointToAdd: Vec2;
     mousePosition: Vec2;
     shift: ShiftKey = new ShiftKey();
@@ -22,24 +30,9 @@ export class LineDrawer {
     private config: AbstractLineConfig;
     private drawingService: DrawingService;
 
-    private static drawLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)): void {
-        ctx.beginPath();
-        const firstPoint: Vec2 = points[0].add(transform);
-        ctx.moveTo(firstPoint.x, firstPoint.y);
-        for (let index = 1; index < points.length; index++) {
-            const point = points[index].add(transform);
-            ctx.lineTo(point.x, point.y);
-        }
-    }
-
     static drawFilledLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)): void {
         LineDrawer.drawLinePath(ctx, points, transform);
         ctx.fill();
-    }
-
-    private static drawStrokedLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)): void {
-        LineDrawer.drawLinePath(ctx, points, transform);
-        ctx.stroke();
     }
 
     static drawClippedLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)): void {
@@ -69,13 +62,18 @@ export class LineDrawer {
         ctx.lineDashOffset = 0;
     }
 
-    constructor(config: AbstractLineConfig, drawingService: DrawingService) {
-        this.config = config;
-        this.drawingService = drawingService;
-        this.drawPreview = new Subject<void>();
-        this.removeLine = new Subject<void>();
-        this.leftMouseDown = false;
-        this.init(config);
+    private static drawLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)): void {
+        ctx.beginPath();
+        const firstPoint: Vec2 = points[0].add(transform);
+        ctx.moveTo(firstPoint.x, firstPoint.y);
+        for (let index = 1; index < points.length; index++) {
+            const point = points[index].add(transform);
+            ctx.lineTo(point.x, point.y);
+        }
+    }
+    private static drawStrokedLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)): void {
+        LineDrawer.drawLinePath(ctx, points, transform);
+        ctx.stroke();
     }
 
     init(config: AbstractLineConfig): void {
@@ -159,7 +157,6 @@ export class LineDrawer {
                 break;
         }
     }
-
     private renderLinePreview(): void {
         this.config.points.push(this.pointToAdd);
 
