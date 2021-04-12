@@ -50,7 +50,7 @@ export class UndoRedoService {
 
         this.commands.push(command);
         this.currentAction += 1;
-        this.sendIconSignals(false);
+        this.sendIconSignals(this.blockUndoRedo);
     }
 
     undo(): void {
@@ -66,7 +66,7 @@ export class UndoRedoService {
             this.commands[i].execute(this.context);
         }
 
-        this.sendIconSignals(false);
+        this.sendIconSignals(this.blockUndoRedo);
         this.autoSave();
     }
 
