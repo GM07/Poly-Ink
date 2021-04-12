@@ -20,12 +20,9 @@ export class TextService extends Tool {
     private static readonly arrowRight: ShortcutKey = new ShortcutKey('arrowright');
     private static readonly arrowUp: ShortcutKey = new ShortcutKey('arrowup');
     private static readonly arrowDown: ShortcutKey = new ShortcutKey('arrowdown');
-
-    //readonly escapeClicked: Subject<boolean> = new Subject<boolean>();
     readonly BLOCK_SHORTCUTS: Subject<boolean> = new Subject<boolean>();
 
     config: TextConfig;
-
     shortcutList: ShortcutKey[];
     ignoreShortcutList: ShortcutKey[];
 

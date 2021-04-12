@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { TextService } from './text.service';
 
@@ -47,6 +48,48 @@ describe('TextService', () => {
         service.onKeyDown(event);
         expect(service.insert).toHaveBeenCalledTimes(1);
         expect(service.drawPreview).toHaveBeenCalled();
+    });
+
+    it('should call addText when mouseDown and there is no input', () => {
+        let mouseEvent = { button: MouseButton.Right, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        spyOn<any>(service, 'addText');
+        service.config.hasInput = false;
+        service.onMouseDown(mouseEvent);
+        expect(service['addText']).toHaveBeenCalledTimes(0);
+        mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        service.onMouseDown(mouseEvent);
+        expect(service['addText']).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call confirmText when mouseDown and there is input', () => {
+        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        spyOn<any>(service, 'confirmText');
+        service.config.hasInput = true;
+        service.onMouseDown(mouseEvent);
+        expect(service['confirmText']).toHaveBeenCalled();
+    });
+
+    it('should add text and modify config attributes accordingly', () => {
+        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        spyOn(service, 'drawPreview');
+        service['addText'](mouseEvent);
+        expect(service.config.hasInput).toBe(true);
+        expect(service.config.startCoords.x).toBe(mouseEvent.offsetX);
+        expect(service.config.startCoords.y).toBe(mouseEvent.offsetY);
+        expect(service.drawPreview).toHaveBeenCalled();
+    });
+
+    it('should initialise subscriptions', () => {
+        const drawingServiceSubscribe = spyOn(service.drawingService.changes, 'subscribe').and.callThrough();
+        const drawSpy = spyOn(service, 'drawPreview');
+        service['initSubscriptions']();
+        expect(drawingServiceSubscribe).toHaveBeenCalled();
+        service['config'].hasInput = false;
+        service.drawingService.changes.next();
+        expect(drawSpy).not.toHaveBeenCalled();
+        service['config'].hasInput = true;
+        service.drawingService.changes.next();
+        expect(drawSpy).toHaveBeenCalled();
     });
 
     it('should handle ignored shortcuts', () => {

@@ -42,7 +42,6 @@ export class ShortcutHandlerService {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        // if (this.toolHandlerService.getCurrentTool() instanceof TextService) this.toolHandlerService.getCurrentTool().onKeyDown(event);
         if (!this.blockShortcutsIn) {
             this.undoRedoService.onKeyDown(event);
             this.toolHandlerService.onKeyDown(event);
