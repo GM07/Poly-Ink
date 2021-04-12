@@ -137,18 +137,6 @@ export class SaveDrawingComponent {
         }
     }
 
-    async generatePreviewData(): Promise<void> {
-        const exportPreviewCtx = this.savePreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-        this.imageData = this.baseContext.getImageData(0, 0, this.baseCanvas.width, this.baseCanvas.height);
-
-        this.aspectRatio = this.baseCanvas.width / this.baseCanvas.height;
-
-        await createImageBitmap(this.imageData).then((image) => {
-            this.baseContext.drawImage(image, 0, 0);
-            exportPreviewCtx.drawImage(image, 0, 0, image.width, image.height, 0, 0, this.getPreviewWidth(), this.getPreviewHeight());
-        });
-    }
-
     getPreviewHeight(): number {
         if (this.aspectRatio < 1) return SaveDrawingComponent.EXPORT_PREVIEW_MAX_SIZE;
 
@@ -196,6 +184,17 @@ export class SaveDrawingComponent {
             event.preventDefault();
             await this.show();
         }
+    }
+    private async generatePreviewData(): Promise<void> {
+        const exportPreviewCtx = this.savePreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+        this.imageData = this.baseContext.getImageData(0, 0, this.baseCanvas.width, this.baseCanvas.height);
+
+        this.aspectRatio = this.baseCanvas.width / this.baseCanvas.height;
+
+        await createImageBitmap(this.imageData).then((image) => {
+            this.baseContext.drawImage(image, 0, 0);
+            exportPreviewCtx.drawImage(image, 0, 0, image.width, image.height, 0, 0, this.getPreviewWidth(), this.getPreviewHeight());
+        });
     }
 
     private generateBase64Image(): void {
