@@ -5,7 +5,6 @@ import { TextService } from './text.service';
 
 // tslint:disable:no-string-literal
 // tslint:disable:no-any
-// To access private methods in expect
 
 describe('TextService', () => {
     let service: TextService;
