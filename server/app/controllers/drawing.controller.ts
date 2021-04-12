@@ -33,7 +33,7 @@ export class DrawingController {
             next();
         });
 
-        this.router.post('/', async (req: Request, res: Response, next: NextFunction) => {
+        this.router.post('/', async (req: Request, res: Response) => {
             const drawing: Drawing = req.body;
 
             if (!this.validateBody(drawing)) {
@@ -60,7 +60,7 @@ export class DrawingController {
             }
         });
 
-        this.router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+        this.router.get('/', async (req: Request, res: Response) => {
             const tags: string = req.query.tags;
             let drawingsData: DrawingData[];
             if (tags) {
@@ -84,7 +84,7 @@ export class DrawingController {
             res.status(HttpStatus.SUCCESS).json(drawings);
         });
 
-        this.router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
+        this.router.delete('/', async (req: Request, res: Response) => {
             const ids: string = req.query.ids;
             let status = HttpStatus.SUCCESS;
             let response = ResponseMessage.SuccessfullyDeleted;
