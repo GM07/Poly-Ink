@@ -13,8 +13,8 @@ export class GridConfigComponent {
     readonly MIN_SIZE: number = ToolSettingsConst.GRID_MIN_SIZE;
     readonly MAX_SIZE: number = ToolSettingsConst.GRID_MAX_SIZE;
 
-    readonly MIN_TRANSPARENCY: number = (ToolSettingsConst.GRID_MIN_OPACITY) * ToolMath.PERCENTAGE;
-    readonly MAX_TRANSPARENCY: number = (ToolSettingsConst.GRID_MAX_OPACITY) * ToolMath.PERCENTAGE;
+    readonly MIN_TRANSPARENCY: number = ToolSettingsConst.GRID_MIN_OPACITY * ToolMath.PERCENTAGE;
+    readonly MAX_TRANSPARENCY: number = ToolSettingsConst.GRID_MAX_OPACITY * ToolMath.PERCENTAGE;
 
     constructor(public gridService: GridService) {}
 

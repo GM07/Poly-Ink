@@ -26,7 +26,8 @@ describe('GridService', () => {
     it('get and set size should get and set the size', () => {
         spyOn(service, 'updateGrid');
         service.sizeValue = ToolSettingsConst.GRID_MIN_SIZE;
-        expect(service.sizeValue).toEqual(ToolSettingsConst.GRID_MIN_SIZE);
+        //tslint:disable-next-line:no-magic-numbers
+        expect(service.sizeValue).toEqual(40);
     });
 
     it('updateGrid should draw lines', () => {
