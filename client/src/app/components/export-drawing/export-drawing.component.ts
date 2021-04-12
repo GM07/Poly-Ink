@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Filter } from '@app/classes/filters/filter';
 import { FunkyFilter } from '@app/classes/filters/funky-filter';
@@ -31,8 +31,10 @@ export class ExportDrawingComponent {
     aspectRatio: number;
     exportForm: FormGroup;
     imgurURL: string;
+    imgurLoading: boolean;
     hasImgurServerError: boolean;
     private exportPreview: ElementRef<HTMLCanvasElement>;
+    @Input() diameter: number;
     @ViewChild('exportPreview', { static: false }) set content(element: ElementRef) {
         if (element) {
             this.exportPreview = element;
@@ -67,6 +69,7 @@ export class ExportDrawingComponent {
         this.exportFormat = 'png';
         this.currentFilter = 'default';
         this.hasImgurServerError = false;
+        this.imgurLoading = false;
         this.aspectRatio = 1;
         this.filename = this.defaultFileNames[Math.floor(Math.random() * this.defaultFileNames.length)];
         this.resetImgurData();
@@ -100,35 +103,20 @@ export class ExportDrawingComponent {
             if (submitterId === 'local-export') {
                 this.exportDrawingService.exportImage(this.canvasImage, this.exportFormat, this.filename);
             } else {
+                this.imgurLoading = true;
                 this.exportImgurService
                     .exportImage(this.canvasImage, this.exportFormat, this.filename)
                     .toPromise()
                     .then((res: ImgurResponse) => {
                         this.imgurURL = res.data.link;
+                        this.imgurLoading = false;
                     })
                     .catch((error: Error) => {
                         this.hasImgurServerError = true;
+                        this.imgurLoading = false;
                     });
             }
         }
-    }
-
-    private async applyFilter(): Promise<void> {
-        const exportPreviewCtx = this.exportPreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-        this.imageData = this.baseContext.getImageData(0, 0, this.baseCanvas.width, this.baseCanvas.height);
-
-        this.aspectRatio = this.baseCanvas.width / this.baseCanvas.height;
-
-        const filter = this.filterMap.get(this.currentFilter);
-        if (filter !== undefined) {
-            filter.apply(this.imageData);
-        }
-
-        await createImageBitmap(this.imageData).then((image) => {
-            this.baseContext.drawImage(image, 0, 0);
-            exportPreviewCtx.drawImage(image, 0, 0, image.width, image.height, 0, 0, this.getPreviewWidth(), this.getPreviewHeight());
-        });
-        this.canvasImage = this.baseCanvas.toDataURL('image/' + this.exportFormat);
     }
 
     async changeExportFormat(newFormat: string): Promise<void> {
@@ -176,5 +164,22 @@ export class ExportDrawingComponent {
             event.preventDefault();
             await this.show();
         }
+    }
+    private async applyFilter(): Promise<void> {
+        const exportPreviewCtx = this.exportPreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+        this.imageData = this.baseContext.getImageData(0, 0, this.baseCanvas.width, this.baseCanvas.height);
+
+        this.aspectRatio = this.baseCanvas.width / this.baseCanvas.height;
+
+        const filter = this.filterMap.get(this.currentFilter);
+        if (filter !== undefined) {
+            filter.apply(this.imageData);
+        }
+
+        await createImageBitmap(this.imageData).then((image) => {
+            this.baseContext.drawImage(image, 0, 0);
+            exportPreviewCtx.drawImage(image, 0, 0, image.width, image.height, 0, 0, this.getPreviewWidth(), this.getPreviewHeight());
+        });
+        this.canvasImage = this.baseCanvas.toDataURL('image/' + this.exportFormat);
     }
 }

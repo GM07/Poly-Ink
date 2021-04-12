@@ -117,10 +117,6 @@ export class DrawingService {
         localStorage.removeItem('editor_reloading');
     }
 
-    private isReloading(): boolean {
-        return localStorage.getItem('editor_reloading') !== null;
-    }
-
     async createLoadedCanvasFromStorage(): Promise<void> {
         const canvas = document.createElement('canvas');
         const canvasCTX = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -134,16 +130,6 @@ export class DrawingService {
             canvasCTX.drawImage(savedImage, 0, 0);
             this.loadedCanvas = canvas;
         }
-    }
-
-    private async loadImagePromise(image: HTMLImageElement): Promise<Event> {
-        return new Promise((resolve, _) => {
-            image.onload = resolve;
-        });
-    }
-
-    private save(canvas: CanvasRenderingContext2D): void {
-        localStorage.setItem('drawing', canvas.canvas.toDataURL());
     }
 
     draw(command: AbstractDraw): void {
@@ -162,5 +148,19 @@ export class DrawingService {
     passDrawPreview(command: AbstractDraw): void {
         this.clearCanvas(this.previewCtx);
         command.execute(this.previewCtx);
+    }
+
+    private isReloading(): boolean {
+        return localStorage.getItem('editor_reloading') !== null;
+    }
+
+    private async loadImagePromise(image: HTMLImageElement): Promise<Event> {
+        return new Promise((resolve, _) => {
+            image.onload = resolve;
+        });
+    }
+
+    private save(canvas: CanvasRenderingContext2D): void {
+        localStorage.setItem('drawing', canvas.canvas.toDataURL());
     }
 }

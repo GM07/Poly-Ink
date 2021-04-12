@@ -81,10 +81,6 @@ export class UndoRedoService {
         this.autoSave();
     }
 
-    private autoSave(): void {
-        localStorage.setItem('drawing', this.context.canvas.toDataURL());
-    }
-
     onKeyDown(event: KeyboardEvent): void {
         if (this.shortcutRedo.equals(event)) this.redo();
         else if (this.shortcutUndo.equals(event)) this.undo();
@@ -103,6 +99,10 @@ export class UndoRedoService {
     set blockUndoRedo(block: boolean) {
         this.blockUndoRedoIn = block;
         this.sendIconSignals(block);
+    }
+
+    private autoSave(): void {
+        localStorage.setItem('drawing', this.context.canvas.toDataURL());
     }
 
     private sendIconSignals(block: boolean): void {

@@ -92,11 +92,6 @@ export class CanvasResizeComponent implements AfterViewInit {
         this.drawingService.draw(command);
     }
 
-    private resetCanvas(): void {
-        this.setStyleControl();
-        this.setStylePreview();
-    }
-
     getCanvasLeft(): number {
         return this.canvasLeft;
     }
@@ -119,6 +114,11 @@ export class CanvasResizeComponent implements AfterViewInit {
 
         this.canvasTop = canvasOffset.top + window.pageYOffset - documentOffset.clientTop;
         this.canvasLeft = canvasOffset.left + window.pageXOffset - documentOffset.clientLeft;
+    }
+
+    private resetCanvas(): void {
+        this.setStyleControl();
+        this.setStylePreview();
     }
 
     private setStyleControl(): void {
