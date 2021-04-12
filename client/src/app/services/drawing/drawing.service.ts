@@ -147,7 +147,7 @@ export class DrawingService {
     }
 
     draw(command: AbstractDraw): void {
-        this.undoRedoService.blockUndoRedo = false;
+        this.unblockUndoRedo();
         command.execute(this.baseCtx);
         this.save(this.baseCtx);
         this.undoRedoService.saveCommand(command);
