@@ -101,7 +101,7 @@ describe('StampConfigComponent', () => {
     });
 
     it('should load the toggles inside the group', async () => {
-        const nToggles = 4;
+        const nToggles = 5;
         const group = await loader.getHarness(MatButtonToggleGroupHarness);
         const toggles = await group.getToggles();
         expect(toggles.length).toBe(nToggles);

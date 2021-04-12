@@ -5,6 +5,7 @@ export enum Stamp {
     Felix = 1,
     Florence = 2,
     Gaya = 3,
+    Mamadu = 4,
 }
 
 export class StampConfig {
@@ -13,6 +14,7 @@ export class StampConfig {
         'assets/stamps/felix.png',
         'assets/stamps/Florence.png',
         'assets/stamps/Gaya.png',
+        'assets/stamps/Mamadou.png',
     ];
     scale: number;
     angle: number; // Angle in radians
