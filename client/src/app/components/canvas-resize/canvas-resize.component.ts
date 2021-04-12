@@ -73,13 +73,13 @@ export class CanvasResizeComponent implements AfterViewInit {
     onMouseUp(event: MouseEvent): void {
         const xModifier = this.moveRight ? this.getWidth(event.pageX) : this.drawingService.canvas.width;
         const yModifier = this.moveBottom ? this.getHeight(event.pageY) : this.drawingService.canvas.height;
+        if (this.isDown) this.shortcutHandler.blockShortcuts = false;
         if (this.moveBottom || this.moveRight) this.resizeCanvas(xModifier, yModifier);
 
         this.setStyleControl();
         this.moveRight = this.moveBottom = false;
 
         this.previewResizeView = false;
-        if (this.isDown) this.shortcutHandler.blockShortcuts = false;
         this.isDown = false;
     }
 
