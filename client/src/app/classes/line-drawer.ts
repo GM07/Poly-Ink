@@ -9,14 +9,8 @@ import { Subject } from 'rxjs';
 import { AbstractLineConfig } from './tool-config/abstract-line-config';
 
 export class LineDrawer {
-    constructor(config: AbstractLineConfig, drawingService: DrawingService) {
-        this.config = config;
-        this.drawingService = drawingService;
-        this.drawPreview = new Subject<void>();
-        this.removeLine = new Subject<void>();
-        this.leftMouseDown = false;
-        this.init(config);
-    }
+    private config: AbstractLineConfig;
+    private drawingService: DrawingService;
     pointToAdd: Vec2;
     mousePosition: Vec2;
     shift: ShiftKey = new ShiftKey();
@@ -27,8 +21,14 @@ export class LineDrawer {
     removeLine: Subject<void>;
     leftMouseDown: boolean;
 
-    private config: AbstractLineConfig;
-    private drawingService: DrawingService;
+    constructor(config: AbstractLineConfig, drawingService: DrawingService) {
+        this.config = config;
+        this.drawingService = drawingService;
+        this.drawPreview = new Subject<void>();
+        this.removeLine = new Subject<void>();
+        this.leftMouseDown = false;
+        this.init(config);
+    }
 
     static drawFilledLinePath(ctx: CanvasRenderingContext2D, points: Vec2[], transform: Vec2 = new Vec2(0, 0)): void {
         LineDrawer.drawLinePath(ctx, points, transform);
