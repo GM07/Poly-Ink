@@ -215,4 +215,56 @@ describe('TextService', () => {
         service.stopDrawing();
         expect(service.confirmText).toHaveBeenCalled();
     });
+
+    it('should handle delete', () => {
+        service.config.index.x = 0;
+        service.config.index.y = 0;
+        service.config.textData[0] = 'aa';
+        service['handleDelete']();
+        expect(service.config.textData[0]).toBe('a');
+    });
+
+    it('should handle backspace', () => {
+        service.config.index.x = 1;
+        service.config.index.y = 0;
+        service.config.textData[0] = 'aa';
+        service['handleBackspace']();
+        expect(service.config.textData[0]).toBe('a');
+    });
+
+    it('should handle escape', () => {
+        spyOn(drawingService, 'clearCanvas');
+        spyOn(drawingService, 'unblockUndoRedo');
+        service.config.textData[0] = 'aa';
+        service['handleEscape']();
+        expect(service.config.textData).toEqual(['']);
+    });
+
+    it('should handle arrow left', () => {
+        service.config.index.x = 1;
+        service['handleArrowLeft']();
+        expect(service.config.index.x).toBe(0);
+    });
+
+    it('should handle arrow right', () => {
+        service.config.index.x = 0;
+        service.config.index.y = 0;
+        service.config.textData = ['a', 'b'];
+        service['handleArrowRight']();
+        expect(service.config.index.x).toBe(1);
+    });
+
+    it('should handle arrow up', () => {
+        service.config.index.y = 1;
+        service.config.textData[1] = 'a';
+        service['handleArrowUp']();
+        expect(service.config.index.y).toBe(0);
+    });
+
+    it('should handle arrow down', () => {
+        service.config.index.y = 0;
+        service.config.textData = ['a', 'b'];
+        service['handleArrowDown']();
+        expect(service.config.index.y).toBe(1);
+    });
 });
