@@ -4,6 +4,7 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 import { TextService } from './text.service';
 
 // tslint:disable:no-string-literal
+// tslint:disable:no-any
 // To access private methods in expect
 
 describe('TextService', () => {
@@ -20,10 +21,11 @@ describe('TextService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('should handleShortCuts when shortcutkey down', () => {
+    it('should handleShortcuts when shortcutkey down', () => {
         const event = jasmine.createSpyObj('event', ['preventDefault'], { key: 'Delete' });
         spyOn(service, 'drawPreview');
 
+        service['config'].hasInput = true;
         service.onKeyDown(event);
         expect(event.preventDefault).toHaveBeenCalled();
         expect(service.drawPreview).toHaveBeenCalled();
@@ -33,6 +35,7 @@ describe('TextService', () => {
         const event = jasmine.createSpyObj('event', ['preventDefault'], { key: ' ' });
         spyOn(service, 'drawPreview');
 
+        service['config'].hasInput = true;
         service.onKeyDown(event);
         expect(event.preventDefault).toHaveBeenCalled();
         expect(service.drawPreview).toHaveBeenCalled();
@@ -42,6 +45,7 @@ describe('TextService', () => {
         const event = jasmine.createSpyObj('event', [], { key: 'a' });
         spyOn(service, 'insert');
         spyOn(service, 'drawPreview');
+        service.config.hasInput = false;
         service.onKeyDown(event);
 
         service.config.hasInput = true;
@@ -114,7 +118,11 @@ describe('TextService', () => {
     });
 
     it('should modify config attributes after drawing text on baseCanvas', () => {
-        spyOn(service, 'draw');
+        const drawSpy = spyOn(service, 'draw');
+        service.config.hasInput = false;
+        service.confirmText();
+        expect(drawSpy).not.toHaveBeenCalled();
+        service.config.hasInput = true;
         service.confirmText();
         expect(service.config.hasInput).toBeFalse();
         expect(service.config.index.x).toBe(0);
@@ -124,8 +132,6 @@ describe('TextService', () => {
 
     it('should handle delete', () => {
         const indexX = 3;
-        // To spy on private method with any
-        // tslint:disable-next-line
         spyOn<any>(service, 'handleDelete').and.callThrough();
         service.config.index.x = 0;
         service.config.index.y = 1;
@@ -147,8 +153,6 @@ describe('TextService', () => {
 
     it('should handle backSpace', () => {
         const indexX = 3;
-        // To spy on private method with any
-        // tslint:disable-next-line
         spyOn<any>(service, 'handleBackspace').and.callThrough();
         service['handleShortCuts'](TextService['backspace']);
         expect(service['handleBackspace']).toHaveBeenCalled();
@@ -167,8 +171,6 @@ describe('TextService', () => {
     });
 
     it('should handle escape', () => {
-        // To spy on private method with any
-        // tslint:disable-next-line
         spyOn<any>(service, 'handleEscape').and.callThrough();
         spyOn(drawingService, 'clearCanvas');
         spyOn(drawingService, 'unblockUndoRedo');
@@ -177,8 +179,6 @@ describe('TextService', () => {
     });
 
     it('should handle ArrowLeft', () => {
-        // To spy on private method with any
-        // tslint:disable-next-line
         spyOn<any>(service, 'handleArrowLeft').and.callThrough();
         service['handleShortCuts'](TextService['arrowLeft']);
         expect(service['handleArrowLeft']).toHaveBeenCalled();
@@ -195,8 +195,6 @@ describe('TextService', () => {
     });
 
     it('should handle ArrowRight', () => {
-        // To spy on private method with any
-        // tslint:disable-next-line
         spyOn<any>(service, 'handleArrowRight').and.callThrough();
         service['handleShortCuts'](TextService['arrowRight']);
         expect(service['handleArrowRight']).toHaveBeenCalled();
@@ -215,8 +213,6 @@ describe('TextService', () => {
     });
 
     it('should handle ArrowUp', () => {
-        // To spy on private method with any
-        // tslint:disable-next-line
         spyOn<any>(service, 'handleArrowUp').and.callThrough();
         service['handleShortCuts'](TextService['arrowUp']);
         expect(service['handleArrowUp']).toHaveBeenCalled();
@@ -228,8 +224,6 @@ describe('TextService', () => {
     });
 
     it('should handle ArrowDown', () => {
-        // To spy on private method with any
-        // tslint:disable-next-line
         spyOn<any>(service, 'handleArrowDown').and.callThrough();
         service['handleShortCuts'](TextService['arrowDown']);
         expect(service['handleArrowDown']).toHaveBeenCalled();

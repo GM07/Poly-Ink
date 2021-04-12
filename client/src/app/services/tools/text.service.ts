@@ -43,9 +43,10 @@ export class TextService extends Tool {
             TextService.arrowUp,
             TextService.arrowDown,
         ];
+        this.initSubscriptions();
     }
 
-    onMouseDown(event: MouseEvent) {
+    onMouseDown(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
         if (this.leftMouseDown) {
             this.config.hasInput ? this.confirmText() : this.addText(event);
@@ -53,12 +54,14 @@ export class TextService extends Tool {
     }
 
     onKeyDown(event: KeyboardEvent): void {
+        if (!this.config.hasInput) return;
+
         if (event.key === ' ') event.preventDefault();
         const shortcut = ShortcutKey.get(this.shortcutList, event, true);
         if (shortcut !== undefined) {
             event.preventDefault();
             this.handleShortCuts(shortcut);
-        } else if (this.config.hasInput) {
+        } else {
             this.insert(event);
         }
         this.drawPreview();
@@ -84,8 +87,9 @@ export class TextService extends Tool {
     }
 
     confirmText(): void {
+        const lastInputStatus = this.config.hasInput;
         this.config.hasInput = false;
-        this.draw();
+        if (lastInputStatus) this.draw();
         this.config.index.x = 0;
         this.config.index.y = 0;
         this.config.textData = [''];
