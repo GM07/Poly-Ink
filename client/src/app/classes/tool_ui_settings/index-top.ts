@@ -28,7 +28,6 @@ export const TOP_TOOLS: ToolSettings[] = [
     new AerosolSettings(),
     new StampSettings(),
     new BucketSettings(),
-    new LassoSettings(),
     new TextSettings(),
     new EyeDropperSettings(),
 ];
