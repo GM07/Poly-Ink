@@ -100,14 +100,6 @@ describe('DrawingComponent', () => {
         expect(mouseEventSpy).toHaveBeenCalledWith(event);
     });
 
-    it(" should call the tool's mouse click when receiving a mouse click event", () => {
-        const event = {} as MouseEvent;
-        const mouseEventSpy = spyOn(toolStub, 'onMouseClick').and.callThrough();
-        component.onMouseClick(event);
-        expect(mouseEventSpy).toHaveBeenCalled();
-        expect(mouseEventSpy).toHaveBeenCalledWith(event);
-    });
-
     it(" should call the tool's double click event", () => {
         const event = {} as MouseEvent;
         const mouseEventSpy = spyOn(toolStub, 'onDoubleClick').and.callThrough();

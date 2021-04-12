@@ -47,6 +47,12 @@ export class ShortcutHandlerService {
         }
     }
 
+    onMouseClick(event: MouseEvent): void {
+        if (!this.blockShortcutsIn) {
+            this.toolHandlerService.onMouseClick(event);
+        }
+    }
+
     onMouseMove(event: MouseEvent): void {
         this.lastMouseMoveEvent = event;
         if (!this.blockShortcutsIn) {
