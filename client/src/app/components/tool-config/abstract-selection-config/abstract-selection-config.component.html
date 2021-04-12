@@ -1,20 +1,17 @@
 <div class="tab">
     <div class="textFormatButton">
-        <button mat-flat-button (click)="selectAll()">Tout sélectionner</button>
+        <button mat-raised-button (click)="selectAll()">Tout sélectionner</button>
     </div>
 
     <div *ngIf="isSelectionActive">
-        <mat-divider></mat-divider>
         <div class="textFormatButton">
-            <button mat-flat-button (click)="copySelection()">Copier</button>
+            <button mat-raised-button (click)="copySelection()">Copier</button>
         </div>
-        <mat-divider></mat-divider>
         <div class="textFormatButton">
-            <button mat-flat-button (click)="cutSelection()">Couper</button>
+            <button mat-raised-button (click)="cutSelection()">Couper</button>
         </div>
-        <mat-divider></mat-divider>
         <div class="textFormatButton">
-            <button mat-flat-button (click)="deleteSelection()">Supprimer</button>
+            <button mat-raised-button (click)="deleteSelection()">Supprimer</button>
         </div>
     </div>
 </div>

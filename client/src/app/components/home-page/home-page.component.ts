@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, NgZone } from '@angular/core';
+import { Component, HostListener, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
+import { CarrouselComponent } from '@app/components/carrousel/carrousel.component';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 
 @Component({
@@ -23,6 +24,14 @@ export class HomePageComponent {
 
     constructor(private router: Router, private zone: NgZone, private drawingService: DrawingService) {
         this.init();
+    }
+
+    @HostListener('document:keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent): void {
+        if (CarrouselComponent.SHORTCUT.equals(event)) {
+            event.preventDefault();
+            this.openCarrousel();
+        }
     }
 
     init(): void {

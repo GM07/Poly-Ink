@@ -50,7 +50,7 @@ export class UndoRedoService {
 
         this.commands.push(command);
         this.currentAction += 1;
-        this.sendIconSignals(false);
+        this.sendIconSignals(this.blockUndoRedo);
     }
 
     undo(): void {
@@ -66,7 +66,7 @@ export class UndoRedoService {
             this.commands[i].execute(this.context);
         }
 
-        this.sendIconSignals(false);
+        this.sendIconSignals(this.blockUndoRedo);
         this.autoSave();
     }
 
@@ -79,10 +79,6 @@ export class UndoRedoService {
         this.commands[this.currentAction].execute(this.context);
         this.sendIconSignals(false);
         this.autoSave();
-    }
-
-    private autoSave(): void {
-        localStorage.setItem('drawing', this.context.canvas.toDataURL());
     }
 
     onKeyDown(event: KeyboardEvent): void {
@@ -103,6 +99,10 @@ export class UndoRedoService {
     set blockUndoRedo(block: boolean) {
         this.blockUndoRedoIn = block;
         this.sendIconSignals(block);
+    }
+
+    private autoSave(): void {
+        localStorage.setItem('drawing', this.context.canvas.toDataURL());
     }
 
     private sendIconSignals(block: boolean): void {

@@ -3,3 +3,6 @@
     <canvas [ngStyle]="{'visibility':  this.gridService.gridVisibility ? 'visible' : 'hidden'}" id="grid" #grid [attr.width]="width" [attr.height]="height" (contextmenu)="$event.preventDefault();"></canvas>
     <canvas id="canvas" #baseCanvas [attr.width]="width" [attr.height]="height"></canvas>
 </div>
+<div id="text" #textBox>
+    <ng-container id="text" *ngComponentOutlet="text"></ng-container>
+</div>

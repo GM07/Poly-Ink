@@ -89,6 +89,10 @@ export class EyeDropperService extends Tool {
         this.updatePrevisualisation.next(color);
     }
 
+    stopDrawing(): void {
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
+    }
+
     private drawSelectedPixelRect(ctx: CanvasRenderingContext2D): void {
         const centerX = ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH * Math.floor(ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH / 2);
         const centerY = ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH * Math.floor(ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH / 2);

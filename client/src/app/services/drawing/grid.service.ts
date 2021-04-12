@@ -72,7 +72,7 @@ export class GridService {
 
         for (let i = 0; i < this.canvas.width; i += this.size) this.drawDotted(new Vec2(i, 0), new Vec2(i, this.canvas.height));
 
-        for (let i = 0; i < this.canvas.width; i += this.size) this.drawDotted(new Vec2(0, i), new Vec2(this.canvas.width, i));
+        for (let i = 0; i < this.canvas.height; i += this.size) this.drawDotted(new Vec2(0, i), new Vec2(this.canvas.width, i));
 
         this.ctx.setLineDash([]);
     }
