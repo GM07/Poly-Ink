@@ -34,7 +34,7 @@ export class TextComponent {
             this.shortcutHandlerService.blockShortcuts = false;
         });
         this.colorService.changedPrimary.subscribe(() => {
-          this.textService.drawPreview();
+            this.textService.drawPreview();
         });
     }
 

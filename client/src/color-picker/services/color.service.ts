@@ -31,7 +31,6 @@ export class ColorService {
     primaryColorAlpha: number = 1;
     secondaryColorAlpha: number = 1;
 
-
     constructor() {
         this.primary = Colors.BLACK;
         this.secondary = Colors.WHITE;
