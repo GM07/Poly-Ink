@@ -28,6 +28,7 @@ export class TextDraw extends AbstractDraw {
         ctx.font = bold + italic + this.config.fontSize + 'px ' + this.config.textFont;
 
         ctx.textAlign = this.config.alignmentSetting as CanvasTextAlign;
+        this.handleAlign(ctx);
 
         ctx.fillStyle = this.primaryRgba;
         ctx.strokeStyle = this.primaryRgba;
@@ -105,5 +106,32 @@ export class TextDraw extends AbstractDraw {
         ctx.moveTo(this.cursor.x, this.cursor.y);
         ctx.lineTo(this.cursor.x, this.cursor.y + height);
         ctx.stroke();
+    }
+
+    private handleAlign(ctx: CanvasRenderingContext2D): void {
+        switch (this.config.alignmentSetting) {
+            case 'right':
+                this.alignRight(ctx);
+                break;
+            case 'center':
+                this.alignCenter(ctx);
+                break;
+        }
+    }
+
+    private alignRight(ctx: CanvasRenderingContext2D): void {
+        let maxLineWidth: number = ctx.measureText('').width;
+        this.config.textData.forEach(line => {
+            maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width)
+        });
+        this.config.startCoords.x = this.config.startCoords.x + maxLineWidth;
+    }
+
+    private alignCenter(ctx: CanvasRenderingContext2D): void {
+        let maxLineWidth: number = ctx.measureText('').width;
+        this.config.textData.forEach(line => {
+            maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width)
+        });
+        this.config.startCoords.x = this.config.startCoords.x + maxLineWidth/2;
     }
 }
