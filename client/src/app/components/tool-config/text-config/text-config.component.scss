@@ -15,11 +15,36 @@
     font-size: 15px;
 }
 
+.mat-icon-button {
+    width: 40px;
+    height: 40px;
+    line-height: 30px;
+    background-color: white;
+    color: black;
+    font-size: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
 .mat-button-toggle-group {
     border: none;
     border-radius: 4px;
     padding: 0px !important;
     width: 170px;
+}
+
+.mat-icon-button {
+    width: 50px;
+    height: 50px;
+    border: 0px;
+}
+
+.mat-icon-button:checked {
+    width: 50px;
+    height: 50px;
+    border: 0px;
+    color:white;
+    background-color: #686370;
 }
 
 .tab {
@@ -39,6 +64,10 @@
 
 .buttons {
     width: 150px !important;
+}
+
+.iconButtons {
+    width: 50px !important;
 }
 
 .buttonTimes {
@@ -85,4 +114,12 @@
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 8px;
+}
+
+.textFormatButtonIcon {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    border-radius: 0%;
 }
