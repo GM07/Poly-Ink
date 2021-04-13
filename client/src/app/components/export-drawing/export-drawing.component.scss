@@ -45,11 +45,6 @@
     border: none;
 }
 
-#imgur-link-button {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
 .error {
     color: lightcoral;
 }
@@ -69,6 +64,16 @@
     margin-bottom: 32px;
     border-radius: 12px;
     text-align: center;
+}
+
+#exportButtonGroup {
+    margin-top: 20px;
+}
+
+#imgur-link-button {
+    margin-top: 20px;
+    color: blue;
+    font-style: italic;
 }
 
 .options {

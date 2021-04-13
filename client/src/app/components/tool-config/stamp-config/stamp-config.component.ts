@@ -59,7 +59,7 @@ export class StampConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     wheelEvent(event: WheelEvent): void {
-        if (StampConfigComponent.this.stampService.isActive()) {
+        if (StampConfigComponent.this.stampService.isActive() && StampConfigComponent.this.stampService.isInCanvas(event)) {
             event.preventDefault();
             let newValue =
                 StampConfigComponent.this.stampService.angleValue +
