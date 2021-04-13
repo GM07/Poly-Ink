@@ -86,4 +86,21 @@ describe('ShortcutHandlerService', () => {
         service.blockShortcuts = true;
         expect(onMouseUpSpy).toHaveBeenCalled();
     });
+
+    it('should init subscriptions', () => {
+        const subscribeSpy = spyOn(textService.BLOCK_SHORTCUTS, 'subscribe').and.callThrough();
+        service['initSubscriptions']();
+        expect(subscribeSpy).toHaveBeenCalled();
+
+        textService.BLOCK_SHORTCUTS.next(true);
+        expect(service['blockShortcuts']).toBeTruthy();
+    });
+
+    it('should call the current tool onKeyDown if whiteListed', () => {
+        const onKeyDownSpy = spyOn(service['toolHandlerService'].getCurrentTool(), 'onKeyDown');
+        service['blockShortcutsIn'] = true;
+        service['isWhiteListed'] = true;
+        service.onKeyDown(keyboardEvent);
+        expect(onKeyDownSpy).toHaveBeenCalled();
+    });
 });
