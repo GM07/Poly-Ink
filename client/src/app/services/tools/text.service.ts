@@ -53,15 +53,8 @@ export class TextService extends Tool {
     }
 
     insert(event: KeyboardEvent): void {
-        if (event.key === 'Enter') {
-            const right = this.config.textData[this.config.index.y].substring(
-                Math.min(this.config.index.x, this.config.textData[this.config.index.y].length),
-            );
-            this.config.textData[this.config.index.y] = this.config.textData[this.config.index.y].substring(0, this.config.index.x);
-            this.config.index.x = 0;
-            this.config.index.y++;
-            this.config.textData.push(right);
-        } else if (event.key.length > 1) return;
+        if (event.key === 'Enter') this.handleEnter();
+        else if (event.key.length > 1) return;
         else {
             const left = this.config.textData[this.config.index.y].slice(0, this.config.index.x);
             const right = this.config.textData[this.config.index.y].slice(this.config.index.x, this.config.textData[this.config.index.y].length);
@@ -77,6 +70,16 @@ export class TextService extends Tool {
         this.config.index.x = 0;
         this.config.index.y = 0;
         this.config.textData = [''];
+    }
+
+    private handleEnter(): void {
+        const right = this.config.textData[this.config.index.y].substring(
+            Math.min(this.config.index.x, this.config.textData[this.config.index.y].length),
+        );
+        this.config.textData[this.config.index.y] = this.config.textData[this.config.index.y].substring(0, this.config.index.x);
+        this.config.index.x = 0;
+        this.config.index.y++;
+        this.config.textData.splice(this.config.index.y, 0, right);
     }
 
     private handleShortCuts(shortcutKey: ShortcutKey): void {
