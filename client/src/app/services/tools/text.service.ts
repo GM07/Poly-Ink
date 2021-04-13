@@ -104,6 +104,9 @@ export class TextService extends Tool {
                 this.drawingService.blockUndoRedo();
             }
         });
+        this.colorService.changedPrimary.subscribe(() => {
+            this.drawPreview();
+        });
     }
 
     private handleShortCuts(shortcutKey: ShortcutKey): void {
