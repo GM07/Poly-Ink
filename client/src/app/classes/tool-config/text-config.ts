@@ -11,6 +11,7 @@ export class TextConfig {
     alignmentSetting: string;
     index: Vec2;
     hasInput: boolean;
+    newAlignment: boolean;
 
     constructor() {
         this.startCoords = new Vec2(0, 0);

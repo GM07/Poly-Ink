@@ -120,18 +120,24 @@ export class TextDraw extends AbstractDraw {
     }
 
     private alignRight(ctx: CanvasRenderingContext2D): void {
-        let maxLineWidth: number = ctx.measureText('').width;
-        this.config.textData.forEach(line => {
-            maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width)
-        });
-        this.config.startCoords.x = this.config.startCoords.x + maxLineWidth;
+        if(this.config.newAlignment) {
+            this.config.newAlignment = false;
+            let maxLineWidth: number = ctx.measureText('').width;
+            this.config.textData.forEach(line => {
+                maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width)
+            });
+            this.config.startCoords.x = this.config.startCoords.x + maxLineWidth;
+        }
     }
-
+    
     private alignCenter(ctx: CanvasRenderingContext2D): void {
-        let maxLineWidth: number = ctx.measureText('').width;
-        this.config.textData.forEach(line => {
-            maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width)
-        });
-        this.config.startCoords.x = this.config.startCoords.x + maxLineWidth/2;
+        if(this.config.newAlignment) {
+            this.config.newAlignment = false;
+            let maxLineWidth: number = ctx.measureText('').width;
+            this.config.textData.forEach(line => {
+                maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width)
+            });
+            this.config.startCoords.x = this.config.startCoords.x + maxLineWidth/2;
+        }
     }
 }

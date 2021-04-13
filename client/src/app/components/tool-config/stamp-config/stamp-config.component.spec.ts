@@ -34,6 +34,7 @@ describe('StampConfigComponent', () => {
         loader = TestbedHarnessEnvironment.loader(fixture);
         stampService = TestBed.inject(StampService);
         fixture.detectChanges();
+        spyOn(stampService, 'isInCanvas').and.returnValue(true);
     });
 
     it('should create', () => {
@@ -100,7 +101,7 @@ describe('StampConfigComponent', () => {
     });
 
     it('should load the toggles inside the group', async () => {
-        const nToggles = 4;
+        const nToggles = 5;
         const group = await loader.getHarness(MatButtonToggleGroupHarness);
         const toggles = await group.getToggles();
         expect(toggles.length).toBe(nToggles);
