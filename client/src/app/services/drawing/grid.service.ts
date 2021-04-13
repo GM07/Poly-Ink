@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { SpecialKeys } from '@app/classes/shortcut/special-keys';
 import { Vec2 } from '@app/classes/vec2';
 import { ToolMath } from '@app/constants/math';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
@@ -22,7 +23,7 @@ export class GridService {
     constructor() {
         this.size = ToolSettingsConst.GRID_MIN_SIZE;
         this.toggleGridShortcut = new ShortcutKey('g');
-        this.upsizeGridShortcut = [new ShortcutKey('+'), new ShortcutKey('='), new ShortcutKey('+', false, true)];
+        this.upsizeGridShortcut = [new ShortcutKey('+'), new ShortcutKey('='), new ShortcutKey('+', { shiftKey: true } as SpecialKeys)];
         this.downSizeGridShortcut = new ShortcutKey('-');
         this.opacity = ToolSettingsConst.GRID_DEFAULT_OPACITY;
         this.gridVisibility = false;

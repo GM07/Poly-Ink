@@ -3,6 +3,7 @@ import { Geometry } from '@app/classes/math/geometry';
 import { SelectionResize } from '@app/classes/selection/selection-resize';
 import { SelectionTranslation } from '@app/classes/selection/selection-translation';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { SpecialKeys } from '@app/classes/shortcut/special-keys';
 import { Tool } from '@app/classes/tool';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
@@ -18,7 +19,7 @@ export abstract class AbstractSelectionService extends Tool {
     static readonly LINE_DASH: number = 8;
     static readonly BORDER_WIDTH: number = 2;
 
-    private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', true);
+    private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', { ctrlKey: true } as SpecialKeys);
     private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
     protected readonly LINE_DASH: number = 8;
     protected readonly BORDER_WIDTH: number = 2;
