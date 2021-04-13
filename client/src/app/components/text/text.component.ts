@@ -33,6 +33,9 @@ export class TextComponent {
         this.textService.escapeClicked.subscribe(() => {
             this.shortcutHandlerService.blockShortcuts = false;
         });
+        this.colorService.changedPrimary.subscribe(() => {
+          this.textService.drawPreview();
+        });
     }
 
     onMouseDown(event: MouseEvent): void {

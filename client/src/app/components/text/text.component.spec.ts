@@ -109,5 +109,8 @@ describe('TextComponent', () => {
 
         component.textService.escapeClicked.next();
         expect(shortcutHandlerService.blockShortcuts).toBe(false);
+
+        component.colorService.changedPrimary.next();
+        expect(textService.drawPreview).toHaveBeenCalled();
     });
 });
