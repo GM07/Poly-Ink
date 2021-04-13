@@ -23,11 +23,7 @@ export class GridService {
     constructor() {
         this.size = ToolSettingsConst.GRID_MIN_SIZE;
         this.toggleGridShortcut = new ShortcutKey('g');
-        this.upsizeGridShortcut = [
-            new ShortcutKey('+'),
-            new ShortcutKey('='),
-            new ShortcutKey('+', { ctrlKey: false, shiftKey: true } as SpecialKeys),
-        ];
+        this.upsizeGridShortcut = [new ShortcutKey('+'), new ShortcutKey('='), new ShortcutKey('+', { shiftKey: true } as SpecialKeys)];
         this.downSizeGridShortcut = new ShortcutKey('-');
         this.opacity = ToolSettingsConst.GRID_DEFAULT_OPACITY;
         this.gridVisibility = false;
