@@ -10,8 +10,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
     styleUrls: ['./color-slider.component.scss'],
 })
 export class ColorSliderComponent implements AfterViewInit, OnDestroy {
-    @ViewChild('canvas')
-    canvas: ElementRef<HTMLCanvasElement>;
+    @ViewChild('canvas') private canvas: ElementRef<HTMLCanvasElement>;
 
     readonly RED_START: number = 0;
     readonly YELLOW_START: number = 0.17;

@@ -20,8 +20,16 @@ import { Observable, of } from 'rxjs';
 import { SaveDrawingComponent } from './save-drawing.component';
 
 /* tslint:disable:no-magic-numbers */
+// To use random test values
+
 /* tslint:disable:no-string-literal */
-/* tslint:disable:no-empty */
+// To access private methods
+
+/* tslint:disable:no-any*/
+// To spy on private methods
+
+/* tslint:disable:no-empty*/
+// To stub events with empty callbacks
 describe('SaveDrawingComponent', () => {
     let component: SaveDrawingComponent;
     let fixture: ComponentFixture<SaveDrawingComponent>;
@@ -249,7 +257,7 @@ describe('SaveDrawingComponent', () => {
     });
 
     it('should open save popup on shortcut', async () => {
-        const showSpy = spyOn(component, 'show').and.callFake(async () => {});
+        const showSpy = spyOn(component, 'show').and.returnValue(Promise.resolve());
 
         const event = { key: 's', ctrlKey: true, shiftKey: false, altKey: false, preventDefault: () => {} } as KeyboardEvent;
         await component.onKeyDown(event);
@@ -258,7 +266,7 @@ describe('SaveDrawingComponent', () => {
     });
 
     it('should not open save popup on a different key', async () => {
-        const showSpy = spyOn(component, 'show').and.callFake(async () => {});
+        const showSpy = spyOn(component, 'show').and.returnValue(Promise.resolve());
 
         const event = { key: 'a', ctrlKey: true, shiftKey: false, altKey: false, preventDefault: () => {} } as KeyboardEvent;
         await component.onKeyDown(event);
@@ -292,5 +300,17 @@ describe('SaveDrawingComponent', () => {
         component.aspectRatio = 2;
         const returnValue = component.getPreviewWidth();
         expect(returnValue).toBe(SaveDrawingComponent['EXPORT_PREVIEW_MAX_SIZE']);
+    });
+
+    it('should block shortcuts, show popup and generate preview image when save drawing component is shown', () => {
+        spyOn(component, 'backupBaseCanvas');
+        const generateBase64ImageSpy = spyOn<any>(component, 'generateBase64Image');
+        const generatePreviewDataSpy = spyOn<any>(component, 'generatePreviewData');
+        component.show().then(() => {
+            expect(generateBase64ImageSpy).toHaveBeenCalled();
+            expect(generatePreviewDataSpy).toHaveBeenCalled();
+        });
+        expect(shortcutService.blockShortcuts).toBeTruthy();
+        expect(saveDrawingService.shortcut).toBeTruthy();
     });
 });

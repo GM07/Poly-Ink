@@ -12,9 +12,11 @@ import { StampService } from '@app/services/tools/stamp.service';
     styleUrls: ['./stamp-config.component.scss'],
 })
 export class StampConfigComponent implements OnInit, OnDestroy, AfterViewInit {
-    constructor(public stampService: StampService) {}
     // The static _this is used to preserve the context in the event
     static this: StampConfigComponent;
+
+    @ViewChild('angleValue', { static: false }) private angleValue: ElementRef<HTMLElement>;
+
     readonly MAX_SCALE: number = ToolSettingsConst.STAMP_MAX_VALUE;
     readonly MIN_SCALE: number = ToolSettingsConst.STAMP_MIN_VALUE;
     readonly MIN_ROTATION: number = ToolSettingsConst.STAMP_MIN_ANGLE;
@@ -25,7 +27,8 @@ export class StampConfigComponent implements OnInit, OnDestroy, AfterViewInit {
 
     stampMode: typeof Stamp = Stamp;
     slider: Slider;
-    @ViewChild('angleValue', { static: false }) angleValue: ElementRef<HTMLElement>;
+
+    constructor(public stampService: StampService) {}
 
     ngOnInit(): void {
         StampConfigComponent.this = this;
@@ -34,7 +37,7 @@ export class StampConfigComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngAfterViewInit(): void {
         const saveAngle = this.stampService.angleValue;
-        this.slider = new Slider({ canvasId: 'angleCanvas', continuousMode: true, position: new Vec2(this.sliderSize, this.sliderSize) });
+        this.slider = new Slider({ canvasId: 'angleCanvas', continuousMode: false, position: new Vec2(this.sliderSize, this.sliderSize) });
         this.slider.addSlider({
             id: 1,
             radius: this.sliderRadius,
@@ -56,11 +59,11 @@ export class StampConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     wheelEvent(event: WheelEvent): void {
-        if (StampConfigComponent.this.stampService.isActive()) {
+        if (StampConfigComponent.this.stampService.isActive() && StampConfigComponent.this.stampService.isInCanvas(event)) {
             event.preventDefault();
             let newValue =
                 StampConfigComponent.this.stampService.angleValue +
-                Math.sign(event.deltaY) * (StampConfigComponent.this.stampService.alt.isDown ? 1 : StampConfigComponent.this.ROTATION);
+                Math.sign(event.deltaY) * (StampConfigComponent.this.stampService.ALT_KEY.isDown ? 1 : StampConfigComponent.this.ROTATION);
             if (newValue > ToolMath.DEGREE_CONVERSION_FACTOR * 2) newValue -= ToolMath.DEGREE_CONVERSION_FACTOR * 2;
             if (newValue < 0) newValue += ToolMath.DEGREE_CONVERSION_FACTOR * 2;
             StampConfigComponent.this.stampService.angleValue = newValue;

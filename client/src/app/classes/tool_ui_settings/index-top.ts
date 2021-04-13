@@ -12,21 +12,22 @@ import { PolygoneSettings } from './polygone-settings';
 import { RectangleSelectionSettings } from './rectangle-selection-settings';
 import { RectangleSettings } from './rectangle-settings';
 import { StampSettings } from './stamp-settings';
+import { TextSettings } from './text-settings';
 import { ToolSettings } from './tool-settings';
-// import { TextSettings } from './text-settings';
 
 export const TOP_TOOLS: ToolSettings[] = [
     new PencilSettings(),
     new LineSettings(),
     new RectangleSettings(),
     new EllipseSettings(),
-    new EraserSettings(),
     new PolygoneSettings(),
+    new EraserSettings(),
     new RectangleSelectionSettings(),
     new EllipseSelectionSettings(),
+    new LassoSettings(),
     new AerosolSettings(),
-    new EyeDropperSettings(),
     new StampSettings(),
     new BucketSettings(),
-    new LassoSettings(),
+    new TextSettings(),
+    new EyeDropperSettings(),
 ];

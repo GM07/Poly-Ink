@@ -105,4 +105,14 @@ describe('HomePageComponent', () => {
         component.init();
         expect(component.showContinueDrawing).toBeTruthy();
     });
+
+    it('should open the carrousel with the right shortcut', () => {
+        const openCarrouselSpy = spyOn(component, 'openCarrousel');
+        let keyboardEvent = new KeyboardEvent('keydown', { key: 'a', ctrlKey: false });
+        component.onKeyDown(keyboardEvent);
+        expect(openCarrouselSpy).not.toHaveBeenCalled();
+        keyboardEvent = new KeyboardEvent('keydown', { key: 'g', ctrlKey: true });
+        component.onKeyDown(keyboardEvent);
+        expect(openCarrouselSpy).toHaveBeenCalled();
+    });
 });

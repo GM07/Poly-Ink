@@ -80,25 +80,25 @@ describe('EditorComponent', () => {
         expect(component).toBeTruthy();
     });
     it('should create a new drawing when calling reset drawing', () => {
-        component.newDrawingMenu = newDrawingComponent;
+        component['newDrawingMenu'] = newDrawingComponent;
         component.receiveSidebarButtonEvent(NewDrawingConstants.TOOL_ID);
         expect(newDrawingComponent.createNewDrawing).toHaveBeenCalled();
     });
 
     it('should create a new drawing when calling reset drawing', () => {
-        component.exportDrawing = exportDrawingComponent;
+        component['exportDrawing'] = exportDrawingComponent;
         component.receiveSidebarButtonEvent(ExportFileToolConstants.TOOL_ID);
         expect(exportDrawingComponent.show).toHaveBeenCalled();
     });
 
     it('should create a new drawing when calling reset drawing', () => {
-        component.saveDrawing = saveDrawingComponent;
+        component['saveDrawing'] = saveDrawingComponent;
         component.receiveSidebarButtonEvent(SaveFileToolConstants.TOOL_ID);
         expect(saveDrawingComponent.show).toHaveBeenCalled();
     });
 
     it('should not create a new drawing when calling with invalid argument', () => {
-        component.newDrawingMenu = newDrawingComponent;
+        component['newDrawingMenu'] = newDrawingComponent;
         component.receiveSidebarButtonEvent('InvalidArgument');
         expect(newDrawingComponent.createNewDrawing).not.toHaveBeenCalled();
     });

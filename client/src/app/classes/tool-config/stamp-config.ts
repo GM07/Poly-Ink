@@ -3,11 +3,19 @@ import { Vec2 } from '@app/classes/vec2';
 export enum Stamp {
     Alexis = 0,
     Felix = 1,
-    Gaya = 2,
+    Florence = 2,
+    Gaya = 3,
+    Mamadu = 4,
 }
 
 export class StampConfig {
-    static readonly stampList: string[] = ['assets/stamps/alexis.png', 'assets/stamps/felix.png', 'assets/stamps/alexis.png'];
+    static readonly stampList: string[] = [
+        'assets/stamps/alexis.png',
+        'assets/stamps/felix.png',
+        'assets/stamps/Florence.png',
+        'assets/stamps/Gaya.png',
+        'assets/stamps/Mamadou.png',
+    ];
     scale: number;
     angle: number; // Angle in radians
     position: Vec2;
