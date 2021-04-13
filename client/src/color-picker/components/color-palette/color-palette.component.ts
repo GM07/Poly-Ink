@@ -9,8 +9,7 @@ import { ColorService } from 'src/color-picker/services/color.service';
     styleUrls: ['./color-palette.component.scss'],
 })
 export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
-    @ViewChild('canvas')
-    canvas: ElementRef<HTMLCanvasElement>;
+    @ViewChild('canvas') private canvas: ElementRef<HTMLCanvasElement>;
 
     context: CanvasRenderingContext2D;
     leftMouseDown: boolean = false;

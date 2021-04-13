@@ -40,6 +40,41 @@ import { DrawingData } from '@common/communication/drawing-data';
     ],
 })
 export class CarrouselComponent implements OnInit {
+    static readonly SHORTCUT: ShortcutKey = new ShortcutKey('g', true);
+    private static readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
+    private static readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
+    private static readonly NOT_FOUND_ERROR: number = 404;
+    @ViewChild('overflowLeftPreview', { static: false }) private overflowLeftPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('leftPreview', { static: false }) private leftPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('middlePreview', { static: false }) private middlePreview: ElementRef<HTMLImageElement>;
+    @ViewChild('rightPreview', { static: false }) private rightPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('overflowRightPreview', { static: false }) private overflowRightPreview: ElementRef<HTMLImageElement>;
+    readonly CARROUSEL_URL: string = 'carrousel';
+    readonly CANVAS_PREVIEW_SIZE: number = 200;
+
+    readonly overflowLeftElement: Drawing = new Drawing(new DrawingData(''));
+    readonly leftElement: Drawing = new Drawing(new DrawingData(''));
+    readonly middleElement: Drawing = new Drawing(new DrawingData(''));
+    readonly rightElement: Drawing = new Drawing(new DrawingData(''));
+    readonly overflowRightElement: Drawing = new Drawing(new DrawingData(''));
+
+    private loadedImage: HTMLImageElement;
+    currentURL: string;
+    deletionErrorMessage: string;
+    showCarrousel: boolean;
+    showLoadingError: boolean;
+    showLoadingWarning: boolean;
+    serverConnexionError: boolean;
+    isLoadingCarrousel: boolean;
+    isOnline: boolean;
+    hasDrawings: boolean;
+    tagsFocused: boolean;
+    translationState: string | null;
+    drawingsList: Drawing[];
+    currentIndex: number;
+
+    animationIsDone: boolean;
+
     constructor(
         private shortcutHandler: ShortcutHandlerService,
         private drawingService: DrawingService,
@@ -60,41 +95,6 @@ export class CarrouselComponent implements OnInit {
         this.hasDrawings = true;
         this.subscribeActivatedRoute(activatedRoute);
     }
-
-    private static readonly SHORTCUT: ShortcutKey = new ShortcutKey('g', true);
-    private static readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
-    private static readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
-    private static readonly NOT_FOUND_ERROR: number = 404;
-    @ViewChild('overflowLeftPreview', { static: false }) overflowLeftPreview: ElementRef<HTMLImageElement>;
-    @ViewChild('leftPreview', { static: false }) leftPreview: ElementRef<HTMLImageElement>;
-    @ViewChild('middlePreview', { static: false }) middlePreview: ElementRef<HTMLImageElement>;
-    @ViewChild('rightPreview', { static: false }) rightPreview: ElementRef<HTMLImageElement>;
-    @ViewChild('overflowRightPreview', { static: false }) overflowRightPreview: ElementRef<HTMLImageElement>;
-    readonly CARROUSEL_URL: string = 'carrousel';
-    readonly CANVAS_PREVIEW_SIZE: number = 200;
-
-    readonly overflowLeftElement: Drawing = new Drawing(new DrawingData(''));
-    readonly leftElement: Drawing = new Drawing(new DrawingData(''));
-    readonly middleElement: Drawing = new Drawing(new DrawingData(''));
-    readonly rightElement: Drawing = new Drawing(new DrawingData(''));
-    readonly overflowRightElement: Drawing = new Drawing(new DrawingData(''));
-
-    currentURL: string;
-    deletionErrorMessage: string;
-    showCarrousel: boolean;
-    showLoadingError: boolean;
-    showLoadingWarning: boolean;
-    serverConnexionError: boolean;
-    isLoadingCarrousel: boolean;
-    isOnline: boolean;
-    hasDrawings: boolean;
-    tagsFocused: boolean;
-    translationState: string | null;
-    drawingsList: Drawing[];
-    currentIndex: number;
-    private loadedImage: HTMLImageElement;
-
-    animationIsDone: boolean;
 
     ngOnInit(): void {
         this.serverCommunicationService.testConnection().subscribe((isOnline) => (this.isOnline = isOnline));
@@ -165,14 +165,6 @@ export class CarrouselComponent implements OnInit {
             },
         );
     }
-
-    private deleteAndUpdate(): void {
-        this.drawingsList.splice(this.currentIndex, 1);
-        if (this.currentIndex === this.drawingsList.length && this.drawingsList.length !== 0) --this.currentIndex;
-        if (this.drawingsList.length === 0) this.hasDrawings = false;
-        this.updateDrawingContent();
-    }
-
     loadDrawing(indexOffset: number): void {
         if (!this.animationIsDone || this.drawingsList.length === 0) return;
         const index = (this.currentIndex + indexOffset + 2 * this.drawingsList.length) % this.drawingsList.length;
@@ -221,15 +213,6 @@ export class CarrouselComponent implements OnInit {
         }
     }
 
-    private subscribeActivatedRoute(activatedRoute: ActivatedRoute): void {
-        activatedRoute.url.subscribe((url: UrlSegment[]) => {
-            this.currentURL = url[0].path;
-            if (this.currentURL === this.CARROUSEL_URL) {
-                this.showCarrousel = true;
-            }
-        });
-    }
-
     updateDrawingContent(): void {
         const overFlowLeft = -2;
         const left = -1;
@@ -238,6 +221,17 @@ export class CarrouselComponent implements OnInit {
         this.updateSingleDrawingContent(this.middlePreview, 0, this.middleElement);
         this.updateSingleDrawingContent(this.rightPreview, 1, this.rightElement);
         this.updateSingleDrawingContent(this.overflowRightPreview, 2, this.overflowRightElement);
+    }
+
+    serverConnexionIn(serverError: boolean): void {
+        this.serverConnexionError = serverError;
+    }
+
+    loadFilteredCarrousel(filteredDrawings: Drawing[]): void {
+        this.currentIndex = 0;
+        this.drawingsList = filteredDrawings;
+        this.cd.detectChanges();
+        this.updateDrawingContent();
     }
 
     private updateSingleDrawingContent(imageRef: ElementRef<HTMLImageElement>, indexOffset: number, drawingContent: Drawing): void {
@@ -254,6 +248,15 @@ export class CarrouselComponent implements OnInit {
             drawingContent.data.tags = this.drawingsList[index].data.tags;
         }
         if (imageRef) imageRef.nativeElement.src = drawingData === undefined ? 'data:,' : 'data:image/png;base64,' + drawingData;
+    }
+
+    private subscribeActivatedRoute(activatedRoute: ActivatedRoute): void {
+        activatedRoute.url.subscribe((url: UrlSegment[]) => {
+            this.currentURL = url[0].path;
+            if (this.currentURL === this.CARROUSEL_URL) {
+                this.showCarrousel = true;
+            }
+        });
     }
 
     private createLoadedCanvas = () => {
@@ -273,20 +276,16 @@ export class CarrouselComponent implements OnInit {
         // tslint:disable-next-line:semicolon
     };
 
+    private deleteAndUpdate(): void {
+        this.drawingsList.splice(this.currentIndex, 1);
+        if (this.currentIndex === this.drawingsList.length && this.drawingsList.length !== 0) --this.currentIndex;
+        if (this.drawingsList.length === 0) this.hasDrawings = false;
+        this.updateDrawingContent();
+    }
+
     private getImageAtIndex(index: number): string | undefined {
         if (this.drawingsList.length === 0) return undefined;
         return this.drawingsList[index].image;
-    }
-
-    serverConnexionIn(serverError: boolean): void {
-        this.serverConnexionError = serverError;
-    }
-
-    loadFilteredCarrousel(filteredDrawings: Drawing[]): void {
-        this.currentIndex = 0;
-        this.drawingsList = filteredDrawings;
-        this.cd.detectChanges();
-        this.updateDrawingContent();
     }
 
     private loadCarrousel(): void {

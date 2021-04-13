@@ -165,4 +165,9 @@ describe('EyeDropperService', () => {
         service['drawingService'].baseCtx.fillRect(0, 0, 10, 10);
         expect(service['getColor'](new Vec2(5, 5))).toEqual(new Color(255, 255, 255));
     });
+
+    it('stop drawing should clear preview', () => {
+        service.stopDrawing();
+        expect(service['drawingService'].clearCanvas).toHaveBeenCalled();
+    });
 });

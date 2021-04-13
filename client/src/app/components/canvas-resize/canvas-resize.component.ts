@@ -1,7 +1,7 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, HostListener } from '@angular/core';
 import { ResizeDraw } from '@app/classes/commands/resize-draw';
 import { ResizeConfig } from '@app/classes/tool-config/resize-config';
-import { CanvasConst } from '@app/constants/canvas.ts';
+import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
@@ -27,7 +27,6 @@ export class CanvasResizeComponent implements AfterViewInit {
 
     previewResizeView: boolean;
     previewResizeStyle: { [key: string]: string };
-    @ViewChild('previewResize', { static: false }) previewResize: ElementRef<HTMLDivElement>;
 
     constructor(private drawingService: DrawingService, private cd: ChangeDetectorRef, private shortcutHandler: ShortcutHandlerService) {
         this.previewResizeView = false;
@@ -73,13 +72,13 @@ export class CanvasResizeComponent implements AfterViewInit {
     onMouseUp(event: MouseEvent): void {
         const xModifier = this.moveRight ? this.getWidth(event.pageX) : this.drawingService.canvas.width;
         const yModifier = this.moveBottom ? this.getHeight(event.pageY) : this.drawingService.canvas.height;
+        if (this.isDown) this.shortcutHandler.blockShortcuts = false;
         if (this.moveBottom || this.moveRight) this.resizeCanvas(xModifier, yModifier);
 
         this.setStyleControl();
         this.moveRight = this.moveBottom = false;
 
         this.previewResizeView = false;
-        if (this.isDown) this.shortcutHandler.blockShortcuts = false;
         this.isDown = false;
     }
 
@@ -91,11 +90,6 @@ export class CanvasResizeComponent implements AfterViewInit {
 
         const command = new ResizeDraw(config, this.drawingService);
         this.drawingService.draw(command);
-    }
-
-    private resetCanvas(): void {
-        this.setStyleControl();
-        this.setStylePreview();
     }
 
     getCanvasLeft(): number {
@@ -120,6 +114,11 @@ export class CanvasResizeComponent implements AfterViewInit {
 
         this.canvasTop = canvasOffset.top + window.pageYOffset - documentOffset.clientTop;
         this.canvasLeft = canvasOffset.left + window.pageXOffset - documentOffset.clientLeft;
+    }
+
+    private resetCanvas(): void {
+        this.setStyleControl();
+        this.setStylePreview();
     }
 
     private setStyleControl(): void {

@@ -42,12 +42,12 @@ export class GridService {
     }
 
     set opacityValue(size: number) {
-        this.opacity = Math.max(ToolSettingsConst.GRID_MIN_OPACITY, Math.min(1 - size / ToolMath.PERCENTAGE, ToolSettingsConst.GRID_MAX_OPACITY));
+        this.opacity = Math.max(ToolSettingsConst.GRID_MIN_OPACITY, Math.min(size / ToolMath.PERCENTAGE, ToolSettingsConst.GRID_MAX_OPACITY));
         this.updateGrid();
     }
 
     get opacityValue(): number {
-        return Math.round((1 - this.opacity) * ToolMath.PERCENTAGE);
+        return Math.round(this.opacity * ToolMath.PERCENTAGE);
     }
 
     onKeyDown(event: KeyboardEvent): void {
@@ -72,7 +72,7 @@ export class GridService {
 
         for (let i = 0; i < this.canvas.width; i += this.size) this.drawDotted(new Vec2(i, 0), new Vec2(i, this.canvas.height));
 
-        for (let i = 0; i < this.canvas.width; i += this.size) this.drawDotted(new Vec2(0, i), new Vec2(this.canvas.width, i));
+        for (let i = 0; i < this.canvas.height; i += this.size) this.drawDotted(new Vec2(0, i), new Vec2(this.canvas.width, i));
 
         this.ctx.setLineDash([]);
     }

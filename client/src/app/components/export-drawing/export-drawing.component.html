@@ -28,12 +28,28 @@
             </div>
             <canvas #exportPreview id="exportPreview" [attr.width]="this.getPreviewWidth()" [attr.height]="this.getPreviewHeight()"></canvas>
             <br />
-            <a *ngIf="imgurURL.length !== 0" id="imgur-link-button" mat-raised-button [href]="imgurURL" target="_blank">{{ imgurURL }}</a>
+            <a
+                id="imgur-link-button"
+                *ngIf="imgurURL.length !== 0"
+                id="imgur-link-button"
+                id="imgur-link-button"
+                mat-raised-button
+                [href]="imgurURL"
+                target="_blank"
+            >
+                {{ imgurURL }}
+                <mat-icon>link</mat-icon>
+            </a>
             <h3 *ngIf="hasImgurServerError" class="error">Aucune connexion au serveur de Imgur!</h3>
-            <div class="options">
-                <button id="imgur-export" class="button green white" type="submit" mat-raised-button form="exportForm">Sur Imgur</button>
-                <button id="local-export" class="button green white" type="submit" mat-raised-button form="exportForm">Localement</button>
-                <button class="button red white" mat-raised-button (click)="hidePopup()">Annuler</button>
+            <div id="exportButtonGroup" class="options">
+                <button *ngIf="!imgurLoading" id="imgur-export" class="button green white" type="submit" mat-raised-button form="exportForm">
+                    Sur Imgur
+                </button>
+                <button *ngIf="!imgurLoading" id="local-export" class="button green white" type="submit" mat-raised-button form="exportForm">
+                    Localement
+                </button>
+                <button *ngIf="!imgurLoading" class="button red white" mat-raised-button (click)="hidePopup()">Annuler</button>
+                <mat-spinner [diameter]="50" *ngIf="imgurLoading"></mat-spinner>
             </div>
         </div>
     </div>
