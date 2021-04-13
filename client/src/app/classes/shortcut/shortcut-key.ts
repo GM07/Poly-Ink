@@ -4,9 +4,9 @@ export class ShortcutKey {
     isDown: boolean;
     specialKeys: SpecialKeys;
 
-    constructor(public key: string, specialKeys: SpecialKeys = {}) {
+    constructor(public key: string, specialKeysIn: SpecialKeys = {}) {
         this.specialKeys = { ctrlKey: false, shiftKey: false, altKey: false } as SpecialKeys;
-        this.specialKeys = { ...this.specialKeys, ...specialKeys } as SpecialKeys;
+        this.specialKeys = { ...this.specialKeys, ...specialKeysIn } as SpecialKeys;
         this.isDown = false;
     }
 
