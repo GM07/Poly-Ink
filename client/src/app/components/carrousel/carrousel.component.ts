@@ -270,6 +270,7 @@ export class CarrouselComponent implements OnInit {
         } else {
             this.drawingService.loadDrawing();
         }
+        // We disable the semicolon to allow anonymous function objects
         // tslint:disable-next-line:semicolon
     };
 
