@@ -119,24 +119,6 @@ export class ExportDrawingComponent {
         }
     }
 
-    private async applyFilter(): Promise<void> {
-        const exportPreviewCtx = this.exportPreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-        this.imageData = this.baseContext.getImageData(0, 0, this.baseCanvas.width, this.baseCanvas.height);
-
-        this.aspectRatio = this.baseCanvas.width / this.baseCanvas.height;
-
-        const filter = this.filterMap.get(this.currentFilter);
-        if (filter !== undefined) {
-            filter.apply(this.imageData);
-        }
-
-        await createImageBitmap(this.imageData).then((image) => {
-            this.baseContext.drawImage(image, 0, 0);
-            exportPreviewCtx.drawImage(image, 0, 0, image.width, image.height, 0, 0, this.getPreviewWidth(), this.getPreviewHeight());
-        });
-        this.canvasImage = this.baseCanvas.toDataURL('image/' + this.exportFormat);
-    }
-
     async changeExportFormat(newFormat: string): Promise<void> {
         this.exportFormat = newFormat;
         this.resetImgurData();
@@ -182,5 +164,22 @@ export class ExportDrawingComponent {
             event.preventDefault();
             await this.show();
         }
+    }
+    private async applyFilter(): Promise<void> {
+        const exportPreviewCtx = this.exportPreview.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+        this.imageData = this.baseContext.getImageData(0, 0, this.baseCanvas.width, this.baseCanvas.height);
+
+        this.aspectRatio = this.baseCanvas.width / this.baseCanvas.height;
+
+        const filter = this.filterMap.get(this.currentFilter);
+        if (filter !== undefined) {
+            filter.apply(this.imageData);
+        }
+
+        await createImageBitmap(this.imageData).then((image) => {
+            this.baseContext.drawImage(image, 0, 0);
+            exportPreviewCtx.drawImage(image, 0, 0, image.width, image.height, 0, 0, this.getPreviewWidth(), this.getPreviewHeight());
+        });
+        this.canvasImage = this.baseCanvas.toDataURL('image/' + this.exportFormat);
     }
 }

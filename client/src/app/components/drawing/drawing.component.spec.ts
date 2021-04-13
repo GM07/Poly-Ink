@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Tool } from '@app/classes/tool';
-import { TextComponent } from '@app/components/text/text.component';
 import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { GridService } from '@app/services/drawing/grid.service';
@@ -114,11 +113,5 @@ describe('DrawingComponent', () => {
         component.onKeyUp(event);
         expect(keyboardSpy).toHaveBeenCalled();
         expect(keyboardSpy).toHaveBeenCalledWith(event);
-    });
-
-    it('should only show text component when text is the current tool', () => {
-        component.toolHandlerService.setTool('TEXT');
-        const textComponent = component.text;
-        expect(textComponent).toBe(TextComponent);
     });
 });
