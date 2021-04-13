@@ -4,6 +4,7 @@ import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { TextConfig } from '@app/classes/tool-config/text-config';
 import { TextToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
+import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
 import { ColorService } from 'src/color-picker/services/color.service';
@@ -19,11 +20,9 @@ export class TextService extends Tool {
     private static readonly arrowRight: ShortcutKey = new ShortcutKey('arrowright');
     private static readonly arrowUp: ShortcutKey = new ShortcutKey('arrowup');
     private static readonly arrowDown: ShortcutKey = new ShortcutKey('arrowdown');
-
-    readonly escapeClicked: Subject<boolean> = new Subject<boolean>();
+    readonly BLOCK_SHORTCUTS: Subject<boolean> = new Subject<boolean>();
 
     config: TextConfig;
-
     shortcutList: ShortcutKey[];
     ignoreShortcutList: ShortcutKey[];
 
@@ -35,18 +34,34 @@ export class TextService extends Tool {
 
         this.config = new TextConfig();
 
-        // To allow instance initialization longer than 150 characters
-        // tslint:disable-next-line
-        this.shortcutList = [TextService.delete, TextService.backspace, TextService.escape, TextService.arrowLeft, TextService.arrowRight, TextService.arrowUp, TextService.arrowDown];
+        this.shortcutList = [
+            TextService.delete,
+            TextService.backspace,
+            TextService.escape,
+            TextService.arrowLeft,
+            TextService.arrowRight,
+            TextService.arrowUp,
+            TextService.arrowDown,
+        ];
+        this.initSubscriptions();
+    }
+
+    onMouseDown(event: MouseEvent): void {
+        this.leftMouseDown = event.button === MouseButton.Left;
+        if (this.leftMouseDown) {
+            this.config.hasInput ? this.confirmText() : this.addText(event);
+        }
     }
 
     onKeyDown(event: KeyboardEvent): void {
+        if (!this.config.hasInput) return;
+
         if (event.key === ' ') event.preventDefault();
         const shortcut = ShortcutKey.get(this.shortcutList, event, true);
         if (shortcut !== undefined) {
             event.preventDefault();
             this.handleShortCuts(shortcut);
-        } else if (this.config.hasInput) {
+        } else {
             this.insert(event);
         }
         this.drawPreview();
@@ -65,11 +80,23 @@ export class TextService extends Tool {
     }
 
     confirmText(): void {
+        const lastInputStatus = this.config.hasInput;
         this.config.hasInput = false;
-        this.draw();
+        if (lastInputStatus) this.draw();
         this.config.index.x = 0;
         this.config.index.y = 0;
         this.config.textData = [''];
+        this.BLOCK_SHORTCUTS.next(false);
+    }
+
+    protected initSubscriptions(): void {
+        this.drawingService.changes.subscribe(() => {
+            if (this.config.hasInput) {
+                this.drawPreview();
+                this.BLOCK_SHORTCUTS.next(true);
+                this.drawingService.blockUndoRedo();
+            }
+        });
     }
 
     private handleEnter(): void {
@@ -137,7 +164,7 @@ export class TextService extends Tool {
         this.config.index.y = 0;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.drawingService.unblockUndoRedo();
-        this.escapeClicked.next(true);
+        this.BLOCK_SHORTCUTS.next(false);
     }
 
     private handleArrowLeft(): void {
@@ -174,6 +201,14 @@ export class TextService extends Tool {
         if (y === text.length - 1) return;
         this.config.index.y++;
         this.config.index.x = Math.min(x, text[y].length);
+    }
+
+    private addText(event: MouseEvent): void {
+        this.BLOCK_SHORTCUTS.next(true);
+        this.config.hasInput = true;
+        this.config.startCoords.x = event.offsetX;
+        this.config.startCoords.y = event.offsetY;
+        this.drawPreview();
     }
 
     drawPreview(): void {

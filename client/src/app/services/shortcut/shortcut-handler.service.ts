@@ -12,6 +12,7 @@ import { Subject } from 'rxjs';
 })
 export class ShortcutHandlerService {
     private blockShortcutsIn: boolean;
+    private isWhiteListed: boolean;
     private lastMouseMoveEvent: MouseEvent;
     blockShortcutsEvent: Subject<boolean>;
 
@@ -19,11 +20,14 @@ export class ShortcutHandlerService {
         private toolHandlerService: ToolHandlerService,
         private undoRedoService: UndoRedoService,
         private clipboardService: ClipboardService,
+        private textService: TextService,
         private magnetismService: MagnetismService,
         private gridService: GridService,
     ) {
+        this.isWhiteListed = false;
         this.blockShortcutsIn = false;
         this.blockShortcutsEvent = new Subject<boolean>();
+        this.initSubscriptions();
     }
 
     get blockShortcuts(): boolean {
@@ -40,21 +44,29 @@ export class ShortcutHandlerService {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (this.toolHandlerService.getCurrentTool() instanceof TextService) this.toolHandlerService.getCurrentTool().onKeyDown(event);
         if (!this.blockShortcutsIn) {
             this.undoRedoService.onKeyDown(event);
             this.toolHandlerService.onKeyDown(event);
             this.clipboardService.onKeyDown(event);
             this.gridService.onKeyDown(event);
             this.magnetismService.onKeyDown(event);
+        } else if (this.isWhiteListed) {
+            this.toolHandlerService.getCurrentTool().onKeyDown(event);
         }
     }
 
     onMouseMove(event: MouseEvent): void {
         this.lastMouseMoveEvent = event;
-        if (!this.blockShortcutsIn) {
+        if (!this.blockShortcutsIn && !this.isWhiteListed) {
             this.toolHandlerService.onMouseMove(event);
             this.lastMouseMoveEvent = event;
         }
+    }
+
+    private initSubscriptions(): void {
+        this.textService.BLOCK_SHORTCUTS.subscribe((block: boolean) => {
+            this.blockShortcuts = block;
+            this.isWhiteListed = block;
+        });
     }
 }
