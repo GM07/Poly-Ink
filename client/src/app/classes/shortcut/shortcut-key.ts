@@ -1,7 +1,12 @@
+import { SpecialKeys } from '@app/classes/shortcut/special-keys';
+
 export class ShortcutKey {
     isDown: boolean;
+    specialKeys: SpecialKeys;
 
-    constructor(public key: string, public ctrlKey: boolean = false, public shiftKey: boolean = false, public altKey: boolean = false) {
+    constructor(public key: string, specialKeys: SpecialKeys = {}) {
+        this.specialKeys = { ctrlKey: false, shiftKey: false, altKey: false } as SpecialKeys;
+        this.specialKeys = { ...this.specialKeys, ...specialKeys } as SpecialKeys;
         this.isDown = false;
     }
 
@@ -33,19 +38,19 @@ export class ShortcutKey {
         let equals = true;
 
         if (ignoreOtherKeys) {
-            equals = equals && (this.ctrlKey === event.ctrlKey || !this.ctrlKey);
-            equals = equals && (this.shiftKey === event.shiftKey || !this.shiftKey);
-            equals = equals && (this.altKey === event.altKey || !this.altKey);
+            equals = equals && (this.specialKeys.ctrlKey === event.ctrlKey || !this.specialKeys.ctrlKey);
+            equals = equals && (this.specialKeys.shiftKey === event.shiftKey || !this.specialKeys.shiftKey);
+            equals = equals && (this.specialKeys.altKey === event.altKey || !this.specialKeys.altKey);
         } else {
-            equals = equals && this.ctrlKey === event.ctrlKey;
-            equals = equals && this.shiftKey === event.shiftKey;
-            equals = equals && this.altKey === event.altKey;
+            equals = equals && this.specialKeys.ctrlKey === event.ctrlKey;
+            equals = equals && this.specialKeys.shiftKey === event.shiftKey;
+            equals = equals && this.specialKeys.altKey === event.altKey;
         }
         return equals && this.key === event.key.toLocaleLowerCase();
     }
 
     clone(): ShortcutKey {
-        const shortcut = new ShortcutKey(this.key, this.ctrlKey, this.shiftKey, this.altKey);
+        const shortcut = new ShortcutKey(this.key, { ...this.specialKeys } as SpecialKeys);
         shortcut.isDown = this.isDown;
         return shortcut;
     }
