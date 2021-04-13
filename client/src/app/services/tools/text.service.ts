@@ -135,13 +135,17 @@ export class TextService extends Tool {
     }
 
     private handleDelete(): void {
-        const x = this.config.index.x;
-        const y = this.config.index.y;
+        let x = this.config.index.x;
+        let y = this.config.index.y;
         const text = this.config.textData;
-        if (x === 0 && y > 0 && text[y].length === 0) this.config.index.x = this.config.textData[--this.config.index.y].length;
-        if (x === text[y].length) return;
-        if (x < text[y].length) {
-            text[y] = text[y].substring(0, x) + text[y].substring(x + 1);
+        if (x === 0 && y > 0 && text[y].length === 0) {
+            this.config.textData.splice(this.config.index.y, 1);
+            this.config.index.x = this.config.textData[--this.config.index.y].length;
+            return;
+        }
+        if (x === text[this.config.index.y].length) return;
+        if (x < text[this.config.index.y].length) {
+            text[this.config.index.y] = text[this.config.index.y].substring(0, x) + text[this.config.index.y].substring(x + 1);
         }
     }
 
