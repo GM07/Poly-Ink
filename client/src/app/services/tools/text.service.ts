@@ -150,7 +150,10 @@ export class TextService extends Tool {
         const y = this.config.index.y;
         const text = this.config.textData;
         if (y === 0 && x === 0) return;
-        if (x === 0) this.config.index.x = text[--this.config.index.y].length;
+        if (x === 0) {
+            this.config.textData.splice(this.config.index.y, 1);
+            this.config.index.x = text[--this.config.index.y].length;
+        }
         if (x > 0) {
             text[y] = text[y].substring(0, x - 1) + text[y].substring(x);
             this.config.index.x--;
