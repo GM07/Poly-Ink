@@ -164,7 +164,7 @@ export const TOP_TOOLS_CONSTANTS = [
     EllipseSelectionToolConstants,
     LassoToolConstants,
 ];
-export const HIGHLIGHTED_COLOR = 'rgba(148, 152, 153, 0.342)';
+export const HIGHLIGHTED_COLOR = 'rgb(103,99,112)';
 export const BOTTOM_TOOLS_CONSTANTS = [SaveFileToolConstants, ExportFileToolConstants];
 
 // Sources : www.flaticon.com
