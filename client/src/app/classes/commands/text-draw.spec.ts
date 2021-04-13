@@ -6,7 +6,6 @@ import { ColorService } from 'src/color-picker/services/color.service';
 import { TextDraw } from './text-draw';
 
 // tslint:disable:no-string-literal
-// To access private methods in expect
 
 describe('TextDraw', () => {
     let textDraw: TextDraw;
@@ -22,7 +21,6 @@ describe('TextDraw', () => {
     });
 
     it('should call applyAttributes on execute', () => {
-        // To spy on private method with any
         // tslint:disable-next-line:no-any
         spyOn<any>(textDraw, 'applyAttributes').and.callThrough();
         textDraw.execute(ctxStub);
@@ -38,7 +36,6 @@ describe('TextDraw', () => {
     });
 
     it('should call drawText in applyAttributes', () => {
-        // To spy on private method with any
         // tslint:disable-next-line:no-any
         spyOn<any>(textDraw, 'drawText').and.callThrough();
         textDraw['applyAttributes'](ctxStub);
@@ -46,7 +43,6 @@ describe('TextDraw', () => {
     });
 
     it('should call drawCursor in drawText when hasInput is true', () => {
-        // To spy on private method with any
         // tslint:disable-next-line:no-any
         spyOn<any>(textDraw, 'drawCursor');
         textDraw.config.hasInput = true;
@@ -56,7 +52,6 @@ describe('TextDraw', () => {
     });
 
     it('should call by default drawCursorLeft', () => {
-        // To spy on private method with any
         // tslint:disable-next-line:no-any
         spyOn<any>(textDraw, 'drawCursorLeft').and.callThrough();
 
@@ -65,7 +60,6 @@ describe('TextDraw', () => {
     });
 
     it('should call by drawCursorRight when textAlign is right', () => {
-        // To spy on private method with any
         // tslint:disable-next-line:no-any
         spyOn<any>(textDraw, 'drawCursorRight').and.callThrough();
         textDraw.config.alignmentSetting = 'right';
@@ -75,12 +69,57 @@ describe('TextDraw', () => {
     });
 
     it('should call by drawCursorCenter when textAlign is center', () => {
-        // To spy on private method with any
         // tslint:disable-next-line:no-any
         spyOn<any>(textDraw, 'drawCursorCenter').and.callThrough();
         textDraw.config.alignmentSetting = 'center';
 
         textDraw['drawCursor'](ctxStub);
         expect(textDraw['drawCursorCenter']).toHaveBeenCalled();
+    });
+
+    it('should call alignLeft when textAlign is set to left', () => {
+        // tslint:disable-next-line:no-any
+        spyOn<any>(textDraw, 'alignLeft').and.callThrough();
+        textDraw.config.alignmentSetting = 'left';
+        textDraw.config.newAlignment = true;
+
+        textDraw['handleAlign'](ctxStub);
+        expect(textDraw['alignLeft']).toHaveBeenCalled();
+
+        textDraw.config.lastAlignment = 'center';
+        textDraw['handleAlign'](ctxStub);
+        expect(textDraw['alignLeft']).toHaveBeenCalled();
+    });
+
+    it('should call alignRight when textAlign is set to right', () => {
+        // tslint:disable-next-line:no-any
+        spyOn<any>(textDraw, 'alignRight').and.callThrough();
+        textDraw.config.alignmentSetting = 'right';
+        textDraw.config.newAlignment = true;
+
+        textDraw['handleAlign'](ctxStub);
+        expect(textDraw['alignRight']).toHaveBeenCalled();
+
+        textDraw.config.lastAlignment = 'center';
+        textDraw['handleAlign'](ctxStub);
+        expect(textDraw['alignRight']).toHaveBeenCalled();
+    });
+
+    it('should call alignCenter when textAlign is set to center', () => {
+        // tslint:disable-next-line:no-any
+        spyOn<any>(textDraw, 'alignCenter').and.callThrough();
+        textDraw.config.alignmentSetting = 'center';
+        textDraw.config.newAlignment = true;
+        textDraw.config.lastAlignment = 'left';
+
+        textDraw['handleAlign'](ctxStub);
+        expect(textDraw['alignCenter']).toHaveBeenCalled();
+
+        textDraw.config.newAlignment = true;
+        textDraw.config.lastAlignment = 'right';
+        textDraw['handleAlign'](ctxStub);
+        expect(textDraw['alignCenter']).toHaveBeenCalled();
+        textDraw['handleAlign'](ctxStub);
+        expect(textDraw['alignCenter']).toHaveBeenCalled();
     });
 });

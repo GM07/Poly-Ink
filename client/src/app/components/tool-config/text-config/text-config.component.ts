@@ -56,7 +56,7 @@ export class TextConfigComponent extends ToolConfig {
     }
 
     setAlignment(newAlignment: string): void {
-        if(this.textService.config.alignmentSetting !== newAlignment) {
+        if (this.textService.config.alignmentSetting !== newAlignment) {
             this.textService.config.newAlignment = true;
             this.textService.config.lastAlignment = this.textService.config.alignmentSetting;
             this.textService.config.alignmentSetting = newAlignment;

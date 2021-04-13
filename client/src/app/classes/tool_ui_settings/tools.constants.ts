@@ -190,5 +190,5 @@ export const ICONS_PATHS = [
     ['undo', 'assets/icons/undo.svg'],
     ['textAlignLeft', 'assets/icons/textAlignLeft.svg'],
     ['textAlignCenter', 'assets/icons/textAlignCenter.svg'],
-    ['textAlignRight', 'assets/icons/textAlignRight.svg']
+    ['textAlignRight', 'assets/icons/textAlignRight.svg'],
 ];

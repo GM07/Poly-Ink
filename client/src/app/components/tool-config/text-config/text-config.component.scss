@@ -16,8 +16,8 @@
 }
 
 .mat-icon-button {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     line-height: 30px;
     background-color: white;
     color: black;
@@ -31,20 +31,6 @@
     border-radius: 4px;
     padding: 0px !important;
     width: 170px;
-}
-
-.mat-icon-button {
-    width: 50px;
-    height: 50px;
-    border: 0px;
-}
-
-.mat-icon-button:checked {
-    width: 50px;
-    height: 50px;
-    border: 0px;
-    color:white;
-    background-color: #686370;
 }
 
 .tab {

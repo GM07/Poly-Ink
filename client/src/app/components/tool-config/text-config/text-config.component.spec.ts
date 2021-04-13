@@ -85,9 +85,11 @@ describe('TextConfigComponent', () => {
         expect(textService.config.fontSize).toBe(newFontSize);
     });
 
-    it('should change text alignment be left by default', () => {
+    it('should change text alignment and be left by default', () => {
         expect(textService.config.alignmentSetting).toBe('left');
         spyOn(textService, 'drawPreview');
+        component.setAlignment('right');
+        expect(textService.config.alignmentSetting).toBe('right');
         component.setAlignment('right');
         expect(textService.config.alignmentSetting).toBe('right');
     });

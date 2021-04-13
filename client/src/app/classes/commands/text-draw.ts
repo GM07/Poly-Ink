@@ -124,38 +124,38 @@ export class TextDraw extends AbstractDraw {
     }
 
     private alignLeft(ctx: CanvasRenderingContext2D): void {
-        if(this.config.newAlignment) {
+        if (this.config.newAlignment) {
             let maxLineWidth: number = ctx.measureText('').width;
-            this.config.textData.forEach(line => {
-                maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width)
+            this.config.textData.forEach((line) => {
+                maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width);
             });
-            if(this.config.lastAlignment === 'center') maxLineWidth = maxLineWidth/2;
+            if (this.config.lastAlignment === 'center') maxLineWidth = maxLineWidth / 2;
             this.config.startCoords.x = this.config.startCoords.x - maxLineWidth;
             this.textConfig.startCoords.x = this.config.startCoords.x;
         }
     }
 
     private alignRight(ctx: CanvasRenderingContext2D): void {
-        if(this.config.newAlignment) {
+        if (this.config.newAlignment) {
             let maxLineWidth: number = ctx.measureText('').width;
-            this.config.textData.forEach(line => {
-                maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width)
+            this.config.textData.forEach((line) => {
+                maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width);
             });
-            if(this.config.lastAlignment === 'center') maxLineWidth = maxLineWidth/2;
+            if (this.config.lastAlignment === 'center') maxLineWidth = maxLineWidth / 2;
             this.config.startCoords.x = this.config.startCoords.x + maxLineWidth;
             this.textConfig.startCoords.x = this.config.startCoords.x;
         }
     }
-    
+
     private alignCenter(ctx: CanvasRenderingContext2D): void {
-        if(this.config.newAlignment) {
+        if (this.config.newAlignment) {
             this.config.newAlignment = false;
             let maxLineWidth: number = ctx.measureText('').width;
-            this.config.textData.forEach(line => {
-                maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width)
+            this.config.textData.forEach((line) => {
+                maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width);
             });
-            if(this.config.lastAlignment === 'right') maxLineWidth = -maxLineWidth;
-            this.config.startCoords.x = this.config.startCoords.x + maxLineWidth/2;
+            if (this.config.lastAlignment === 'right') maxLineWidth = -maxLineWidth;
+            this.config.startCoords.x = this.config.startCoords.x + maxLineWidth / 2;
             this.textConfig.startCoords.x = this.config.startCoords.x;
         }
     }
