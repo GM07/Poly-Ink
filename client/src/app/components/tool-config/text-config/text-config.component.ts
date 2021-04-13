@@ -56,9 +56,13 @@ export class TextConfigComponent extends ToolConfig {
     }
 
     setAlignment(newAlignment: string): void {
-        this.textService.config.newAlignment = true;
-        this.textService.config.alignmentSetting = newAlignment;
-        this.textService.drawPreview();
+        if(this.textService.config.alignmentSetting !== newAlignment) {
+            this.textService.config.newAlignment = true;
+            this.textService.config.lastAlignment = this.textService.config.alignmentSetting;
+            this.textService.config.alignmentSetting = newAlignment;
+            this.textService.drawPreview();
+            this.textService.config.newAlignment = false;
+        }
         this.unfocusElement();
     }
 
