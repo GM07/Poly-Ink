@@ -66,13 +66,30 @@ describe('HomePageComponent', () => {
     it('should be visible after fade in', () => {
         component.fadeIn();
         component.endOfFadeAnimation();
-        expect(component.showComponent).toBe(true);
+        expect(component.showComponent).toBeTrue();
     });
 
     it('should be invisible after fade out', () => {
         component.fadeOut();
         component.endOfFadeAnimation();
-        expect(component.showComponent).toBe(false);
+        expect(component.showComponent).toBeFalse();
+    });
+
+    it('should close the new drawing warning', () => {
+        component.showNewDrawingWarning = true;
+        component.closeNewDrawingWarning();
+        expect(component.showNewDrawingWarning).toBeFalse();
+    });
+
+    it('should create a new drawing if there are no saved drawings', () => {
+        // tslint:disable-next-line:no-string-literal
+        const getSavedDrawingSpy = spyOn(component['drawingService'], 'getSavedDrawing').and.returnValue('');
+        const createNewDrawingSpy = spyOn(component, 'createNewDrawing');
+        component.createNewDrawingOption();
+        expect(createNewDrawingSpy).not.toHaveBeenCalled();
+        getSavedDrawingSpy.and.returnValue(null);
+        component.createNewDrawingOption();
+        expect(createNewDrawingSpy).toHaveBeenCalled();
     });
 
     it('should create new drawing', () => {
