@@ -96,6 +96,12 @@ describe('ShortcutHandlerService', () => {
         expect(service['blockShortcuts']).toBeTruthy();
     });
 
+    it('should indicate if the user is locked to the current tool', () => {
+        spyOn(toolHandlerService, 'getCurrentTool').and.returnValue(textService);
+        textService.config.hasInput = true;
+        expect(service['isLockedToTool']()).toBeTruthy();
+    });
+
     it('should call the current tool onKeyDown if whiteListed', () => {
         const onKeyDownSpy = spyOn(service['toolHandlerService'].getCurrentTool(), 'onKeyDown');
         service['blockShortcutsIn'] = true;

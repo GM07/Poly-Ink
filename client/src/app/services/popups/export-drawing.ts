@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Popup } from '@app/classes/popup';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { SpecialKeys } from '@app/classes/shortcut/special-keys';
 
 @Injectable({
     providedIn: 'root',
@@ -10,7 +11,7 @@ export class ExportDrawingService implements Popup {
     showPopup: boolean;
 
     constructor() {
-        this.shortcut = new ShortcutKey('e', true);
+        this.shortcut = new ShortcutKey('e', { ctrlKey: true } as SpecialKeys);
         this.showPopup = false;
     }
 

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { ResizeDraw } from '@app/classes/commands/resize-draw';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { SpecialKeys } from '@app/classes/shortcut/special-keys';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -25,8 +26,8 @@ export class UndoRedoService {
     currentAction: number;
 
     constructor() {
-        this.shortcutRedo = new ShortcutKey('z', true, true, false);
-        this.shortcutUndo = new ShortcutKey('z', true);
+        this.shortcutRedo = new ShortcutKey('z', { ctrlKey: true, shiftKey: true } as SpecialKeys);
+        this.shortcutUndo = new ShortcutKey('z', { ctrlKey: true } as SpecialKeys);
         this.reset();
     }
 
