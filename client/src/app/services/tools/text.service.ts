@@ -143,7 +143,12 @@ export class TextService extends Tool {
             this.config.index.x = this.config.textData[--this.config.index.y].length;
             return;
         }
-        if (x === text[this.config.index.y].length) return;
+        if (x === text[this.config.index.y].length) {
+            if (this.config.index.y === text.length - 1) return;
+            text[y] += text[y + 1];
+            this.config.textData.splice(this.config.index.y + 1, 1);
+            return;
+        }
         if (x < text[this.config.index.y].length) {
             text[this.config.index.y] = text[this.config.index.y].substring(0, x) + text[this.config.index.y].substring(x + 1);
         }
