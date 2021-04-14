@@ -15,7 +15,7 @@ describe('TextConfigComponent', () => {
     let fixture: ComponentFixture<TextConfigComponent>;
     let loader: HarnessLoader;
     let textService: TextService;
-    const DEFAULT_VALUE = 14;
+    const DEFAULT_VALUE = 20;
     const MAX_FONT_SIZE = 100;
 
     beforeEach(async(() => {
