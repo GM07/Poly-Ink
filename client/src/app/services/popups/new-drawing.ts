@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Popup } from '@app/classes/popup';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { SpecialKeys } from '@app/classes/shortcut/special-keys';
 import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
@@ -19,7 +20,7 @@ export class NewDrawingService implements Popup {
     }
 
     constructor(private drawingService: DrawingService, private toolHandler: ToolHandlerService) {
-        this.shortcut = new ShortcutKey('o', true);
+        this.shortcut = new ShortcutKey('o', { ctrlKey: true } as SpecialKeys);
         this.showPopup = false;
     }
 

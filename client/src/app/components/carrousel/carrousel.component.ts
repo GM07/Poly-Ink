@@ -2,6 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { SpecialKeys } from '@app/classes/shortcut/special-keys';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { NewDrawingService } from '@app/services/popups/new-drawing';
 import { ServerCommunicationService } from '@app/services/server-communication/server-communication.service';
@@ -40,7 +41,7 @@ import { DrawingData } from '@common/communication/drawing-data';
     ],
 })
 export class CarrouselComponent implements OnInit {
-    static readonly SHORTCUT: ShortcutKey = new ShortcutKey('g', true);
+    static readonly SHORTCUT: ShortcutKey = new ShortcutKey('g', { ctrlKey: true } as SpecialKeys);
     private static readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
     private static readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
     private static readonly NOT_FOUND_ERROR: number = 404;

@@ -167,7 +167,7 @@ export const TOP_TOOLS_CONSTANTS = [
 export const HIGHLIGHTED_COLOR = 'rgb(103,99,112)';
 export const BOTTOM_TOOLS_CONSTANTS = [SaveFileToolConstants, ExportFileToolConstants];
 
-// Sources : www.flaticon.com
+// Source: www.flaticon.com
 export const ICONS_PATHS = [
     ['bucket', 'assets/icons/bucket.svg'],
     ['ellipse-selection', 'assets/icons/ellipse-selection.svg'],

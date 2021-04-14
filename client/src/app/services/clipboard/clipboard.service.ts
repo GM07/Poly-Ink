@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { SpecialKeys } from '@app/classes/shortcut/special-keys';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
@@ -10,9 +11,9 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class ClipboardService {
-    private readonly COPY: ShortcutKey = new ShortcutKey('c', true);
-    private readonly PASTE: ShortcutKey = new ShortcutKey('v', true);
-    private readonly CUT: ShortcutKey = new ShortcutKey('x', true);
+    private readonly COPY: ShortcutKey = new ShortcutKey('c', { ctrlKey: true } as SpecialKeys);
+    private readonly PASTE: ShortcutKey = new ShortcutKey('v', { ctrlKey: true } as SpecialKeys);
+    private readonly CUT: ShortcutKey = new ShortcutKey('x', { ctrlKey: true } as SpecialKeys);
     private readonly DELETE: ShortcutKey = new ShortcutKey('delete');
 
     savedConfigs: SelectionConfig | undefined;
