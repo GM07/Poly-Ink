@@ -39,7 +39,8 @@ export class ShortcutHandlerService {
             this.toolHandlerService.onMouseUp(this.lastMouseMoveEvent);
         }
 
-        this.blockShortcutsIn = block;
+        this.isWhiteListed = !block && this.isLockedToTool();
+        this.blockShortcutsIn = block || this.isLockedToTool();
         this.blockShortcutsEvent.next(block);
     }
 
@@ -61,6 +62,10 @@ export class ShortcutHandlerService {
             this.toolHandlerService.onMouseMove(event);
             this.lastMouseMoveEvent = event;
         }
+    }
+
+    private isLockedToTool(): boolean {
+        return this.toolHandlerService.getCurrentTool() instanceof TextService && this.textService.config.hasInput;
     }
 
     private initSubscriptions(): void {

@@ -15,15 +15,10 @@
     font-size: 15px;
 }
 
-.mat-icon-button {
-    width: 50px;
+.alignmentButton {
+    width: 50px !important;
     height: 50px;
-    line-height: 30px;
-    background-color: white;
-    color: black;
-    font-size: 15px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    margin-left: 5px;
 }
 
 .mat-button-toggle-group {
@@ -100,12 +95,4 @@
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 8px;
-}
-
-.textFormatButtonIcon {
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 8px;
-    padding-top: 8px;
-    border-radius: 0%;
 }
