@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSelectionComponent } from '@app/components/selection/abstract-selection/abstract-selection.component';
 import { ClipboardService } from '@app/services/clipboard/clipboard.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { SelectionEventsService } from '@app/services/selection/selection-events.service';
+import { SidebarEventService } from '@app/services/selection/sidebar-events.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { RectangleSelectionService } from '@app/services/tools/rectangle-selection.service';
 
@@ -16,7 +16,7 @@ export class RectangleSelectionComponent extends AbstractSelectionComponent {
         selectionService: RectangleSelectionService,
         drawingService: DrawingService,
         cd: ChangeDetectorRef,
-        selectionEvents: SelectionEventsService,
+        selectionEvents: SidebarEventService,
         shortcutHandlerService: ShortcutHandlerService,
         clipboardService: ClipboardService,
     ) {
