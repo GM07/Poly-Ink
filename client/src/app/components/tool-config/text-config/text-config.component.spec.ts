@@ -3,6 +3,8 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatIconModule } from '@angular/material/icon';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
@@ -21,7 +23,15 @@ describe('TextConfigComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [TextConfigComponent],
-            imports: [MatSliderModule, NoopAnimationsModule, MatButtonToggleModule, MatSelectModule, FormsModule],
+            imports: [
+                MatSliderModule,
+                NoopAnimationsModule,
+                MatButtonToggleModule,
+                MatSelectModule,
+                FormsModule,
+                MatIconModule,
+                MatIconTestingModule,
+            ],
         }).compileComponents();
 
         textService = TestBed.inject(TextService);
