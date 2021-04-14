@@ -24,11 +24,6 @@ export abstract class Tool {
         return true;
     }
 
-    private getBorder(): number {
-        const borderValue: string = window.getComputedStyle(this.drawingService.canvas).getPropertyValue('border-left-width');
-        return Number(borderValue.substring(0, borderValue.length - 2));
-    }
-
     onMouseDown(event: MouseEvent): void {}
 
     onDoubleClick(event: MouseEvent): void {}
@@ -45,11 +40,18 @@ export abstract class Tool {
 
     onKeyUp(event: KeyboardEvent): void {}
 
+    onMouseClick(event: MouseEvent): void {}
+
     stopDrawing(): void {}
 
     getPositionFromMouse(event: MouseEvent): Vec2 {
         const clientRect = this.drawingService.canvas.getBoundingClientRect();
         const border: number = this.getBorder();
         return new Vec2(event.clientX - clientRect.x, event.clientY - clientRect.y).substractValue(border);
+    }
+
+    private getBorder(): number {
+        const borderValue: string = window.getComputedStyle(this.drawingService.canvas).getPropertyValue('border-left-width');
+        return Number(borderValue.substring(0, borderValue.length - 2));
     }
 }

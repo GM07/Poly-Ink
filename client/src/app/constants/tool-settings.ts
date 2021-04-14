@@ -40,7 +40,7 @@ export abstract class ToolSettingsConst {
     static readonly LINE_DEFAULT_WIDTH: number = 6;
 
     // Stamp
-    static readonly STAMP_MIN_VALUE: number = 0.1;
+    static readonly STAMP_MIN_VALUE: number = 0.2;
     static readonly STAMP_MAX_VALUE: number = 5;
     static readonly STAMP_MIN_ANGLE: number = 0;
     static readonly STAMP_MAX_ANGLE: number = 2 * Math.PI;
@@ -57,7 +57,7 @@ export abstract class ToolSettingsConst {
 
     // Grid
     static readonly GRID_MIN_SIZE: number = 25;
-    static readonly GRID_MAX_SIZE: number = 75;
+    static readonly GRID_MAX_SIZE: number = 125;
     static readonly GRID_DEFAULT_OPACITY: number = 0.5;
     static readonly GRID_MIN_OPACITY: number = 0.4;
     static readonly GRID_MAX_OPACITY: number = 1.0;
@@ -66,5 +66,5 @@ export abstract class ToolSettingsConst {
     // Text
     static readonly TEXT_MIN_FONT_SIZE: number = 5;
     static readonly TEXT_MAX_FONT_SIZE: number = 100;
-    static readonly DEFAULT_SIZE: number = 14;
+    static readonly DEFAULT_SIZE: number = 20;
 }

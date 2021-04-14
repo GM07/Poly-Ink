@@ -13,6 +13,7 @@ import { ResponseMessage } from '../classes/response-message';
 import { DrawingService } from '../services/drawing.service';
 import { TYPES } from '../types';
 
+// The response's type expected when using supertest() is any
 // tslint:disable:no-any
 
 describe('DrawingController', () => {

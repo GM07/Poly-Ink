@@ -1,17 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { SelectionEventsService } from '@app/services/selection/selection-events.service';
+import { SidebarEventService } from '@app/services/selection/sidebar-events.service';
 import { SidebarDirective } from './sidebar.directive';
 
 describe('SidebarDirective', () => {
-    let selectionEventsService: SelectionEventsService;
+    let selectionEventsService: SidebarEventService;
     let directive: SidebarDirective;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [SelectionEventsService],
+            providers: [SidebarEventService],
         });
 
-        selectionEventsService = TestBed.inject(SelectionEventsService);
+        selectionEventsService = TestBed.inject(SidebarEventService);
         directive = new SidebarDirective(selectionEventsService);
     });
 

@@ -13,16 +13,12 @@ export class TextConfigComponent extends ToolConfig {
     readonly fonts: string[] = ['Arial', 'Times New Roman', 'Cursive', 'Fantasy', 'Monospace'];
     readonly MIN: number = ToolSettingsConst.TEXT_MIN_FONT_SIZE;
     readonly MAX: number = ToolSettingsConst.TEXT_MAX_FONT_SIZE;
-    // isBold: boolean;
-    // isItalic: boolean;
     currentFont: string;
     currentFontSize: number;
     currentAlignment: string;
 
     constructor(public textService: TextService, public shortcutHandlerService: ShortcutHandlerService) {
         super();
-        // this.isBold = false;
-        // this.isItalic = false;
         this.currentFont = textService.config.textFont;
         this.currentFontSize = textService.config.fontSize;
     }

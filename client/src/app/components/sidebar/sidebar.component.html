@@ -22,7 +22,7 @@
                 [@.disabled]="true"
                 [style.background]="tool.toolId === selectedTool.toolID ? HIGHLIGHTED_COLOR : 'white'"
             >
-                <mat-icon svgIcon="{{ tool.iconName }}"></mat-icon>
+                <mat-icon [ngStyle]="{ color: tool.toolId === selectedTool.toolID ? 'white' : 'black' }" svgIcon="{{ tool.iconName }}"></mat-icon>
             </button>
         </mat-action-list>
 
