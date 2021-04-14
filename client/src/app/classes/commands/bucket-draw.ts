@@ -1,6 +1,8 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { BucketConfig } from '@app/classes/tool-config/bucket-config';
+import { ToolMath } from '@app/constants/math';
 import { ColorService } from 'src/color-picker/services/color.service';
+
 export class BucketDraw extends AbstractDraw {
     private config: BucketConfig;
     private queue: number[];
@@ -8,15 +10,15 @@ export class BucketDraw extends AbstractDraw {
     private originalPixel: Uint8ClampedArray;
     private pixels: ImageData;
 
-    // Max euclidian distance for 3 colors Math.sqrt(255^2 * 3)
-    // tslint:disable-next-line:no-magic-numbers
-    private readonly maxColorDifference: number = Math.sqrt(Math.pow(255, 2) * 3);
-
     private readonly R: number = 0;
     private readonly G: number = 1;
     private readonly B: number = 2;
     private readonly colorComponentMax: number = 255;
     private readonly dataPerPixel: number = 4;
+
+    // Max euclidian distance for 3 colors Math.sqrt(255^2 * 3)
+    // tslint:disable-next-line:no-magic-numbers
+    private readonly maxColorDifference: number = Math.sqrt(Math.pow(this.colorComponentMax, 2) * 3);
 
     constructor(colorService: ColorService, config: BucketConfig) {
         super(colorService);
@@ -89,9 +91,7 @@ export class BucketDraw extends AbstractDraw {
         const deltaB2 = Math.pow(pixel[this.B] - this.originalPixel[this.B], 2);
 
         const colorDifference = Math.sqrt(deltaB2 + deltaG2 + deltaR2);
-
-        // tslint:disable-next-line:no-magic-numbers
-        const toleratedColorDifference = this.maxColorDifference * (this.config.tolerance / 100);
+        const toleratedColorDifference = this.maxColorDifference * (this.config.tolerance / ToolMath.PERCENTAGE);
 
         return colorDifference <= toleratedColorDifference;
     }
