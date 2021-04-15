@@ -39,7 +39,7 @@ describe('EditorComponent', () => {
     let saveDrawingComponent: jasmine.SpyObj<SaveDrawingComponent>;
 
     beforeEach(async(() => {
-        shortcutServiceSpy = jasmine.createSpyObj('ShortcutHandlerService', ['onKeyDown', 'onMouseMove']);
+        shortcutServiceSpy = jasmine.createSpyObj('ShortcutHandlerService', ['onKeyDown', 'onMouseMove', 'onMouseClick']);
 
         TestBed.configureTestingModule({
             declarations: [
@@ -111,6 +111,11 @@ describe('EditorComponent', () => {
     it('Transfer mouse move events to the shortcut handler', () => {
         component.onMouseMove({} as MouseEvent);
         expect(shortcutServiceSpy.onMouseMove).toHaveBeenCalled();
+    });
+
+    it('Transfer mouse move events to the shortcut handler', () => {
+        component.onMouseClick({} as MouseEvent);
+        expect(shortcutServiceSpy.onMouseClick).toHaveBeenCalled();
     });
 
     it('should register the beginning of editor reloading in local storage', () => {

@@ -5,14 +5,20 @@
     background-color: white;
     color: black;
     font-size: 15px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .mat-button-toggle-checked {
     background-color: #686370;
     color: white;
     font-size: 15px;
+}
+
+.alignmentButton {
+    width: 50px !important;
+    height: 50px;
+    margin-left: 5px;
 }
 
 .mat-button-toggle-group {
@@ -42,6 +48,10 @@
     width: 150px !important;
 }
 
+.iconButtons {
+    width: 50px !important;
+}
+
 .buttonTimes {
     width: 150px !important;
     font-family: 'Times New Roman', Times, serif;
@@ -59,7 +69,7 @@
 
 .buttonVerdana {
     width: 150px !important;
-    font-family:'Verdana';
+    font-family: 'Verdana';
 }
 
 .boldButton {
@@ -89,6 +99,6 @@
     height: 25px;
 }
 
-.police{
-  margin-top: 100px;
+.police {
+    margin-top: 10px;
 }
