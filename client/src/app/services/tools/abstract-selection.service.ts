@@ -16,13 +16,10 @@ import { ColorService } from 'src/color-picker/services/color.service';
     providedIn: 'root',
 })
 export abstract class AbstractSelectionService extends Tool {
-    static readonly LINE_DASH: number = 8;
-    static readonly BORDER_WIDTH: number = 2;
-
     private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', { ctrlKey: true } as SpecialKeys);
     private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
-    protected readonly LINE_DASH: number = 8;
-    protected readonly BORDER_WIDTH: number = 2;
+    protected static readonly LINE_DASH: number = 8;
+    protected static readonly BORDER_WIDTH: number = 2;
     protected selectionTranslation: SelectionTranslation;
 
     readonly UPDATE_POINTS: Subject<boolean> = new Subject<boolean>();
