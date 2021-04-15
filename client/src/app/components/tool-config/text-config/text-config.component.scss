@@ -5,8 +5,8 @@
     background-color: white;
     color: black;
     font-size: 15px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .mat-button-toggle-checked {
@@ -36,6 +36,7 @@
     padding-left: 15px;
     padding-right: 15px;
     width: 160px;
+    margin-bottom: 5px;
 }
 
 .textFormatForSlider {
@@ -68,7 +69,7 @@
 
 .buttonVerdana {
     width: 150px !important;
-    font-family:'Verdana';
+    font-family: 'Verdana';
 }
 
 .boldButton {
@@ -87,7 +88,7 @@
     padding-bottom: 8px;
     height: 30px;
     width: 40px;
-    font-style: italic; 
+    font-style: italic;
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
@@ -95,4 +96,9 @@
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 8px;
+    height: 25px;
+}
+
+.police {
+    margin-top: 10px;
 }

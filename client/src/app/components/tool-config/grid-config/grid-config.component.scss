@@ -1,5 +1,6 @@
 .tab {
     width: 190px;
+    height: 150px;
 }
 
 .textFormat {
@@ -10,6 +11,10 @@
 .textFormatForSlider {
     padding-left: 8px;
     font-size: small;
+}
+
+.mat-slider-horizontal{
+  margin-top: -20px;
 }
 
 ::ng-deep .mat-form-field {

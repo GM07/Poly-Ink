@@ -88,17 +88,17 @@ describe('StampService', () => {
         expect(service.drawPreview).toHaveBeenCalled();
     });
 
-    it('onMouseDown should draw on left click', () => {
+    it('onMouseClick should draw on left click', () => {
         spyOn(service, 'getPositionFromMouse').and.returnValue(new Vec2(0, 0));
         spyOn(service, 'draw');
-        service.onMouseDown({ button: 0 } as MouseEvent);
+        service.onMouseClick({ button: 0 } as MouseEvent);
         expect(service.draw).toHaveBeenCalled();
     });
 
-    it('onMouseDown should not draw on other click', () => {
+    it('onMouseClick should not draw on other click', () => {
         spyOn(service, 'getPositionFromMouse').and.returnValue(new Vec2(0, 0));
         spyOn(service, 'draw');
-        service.onMouseDown({ button: 2 } as MouseEvent);
+        service.onMouseClick({ button: 2 } as MouseEvent);
         expect(service.draw).not.toHaveBeenCalled();
     });
 
