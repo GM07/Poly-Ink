@@ -1,13 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { SidebarEventService } from './sidebar-events.service';
 
-import { SelectionEventsService } from './selection-events.service';
-
-describe('SelectionEventsService', () => {
-    let service: SelectionEventsService;
+describe('SidebarEventService', () => {
+    let service: SidebarEventService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
-        service = TestBed.inject(SelectionEventsService);
+        service = TestBed.inject(SidebarEventService);
     });
 
     it('should be created', () => {

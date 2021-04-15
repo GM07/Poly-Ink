@@ -1,11 +1,11 @@
 import { Directive, HostListener } from '@angular/core';
-import { SelectionEventsService } from '@app/services/selection/selection-events.service';
+import { SidebarEventService } from '@app/services/selection/sidebar-events.service';
 
 @Directive({
     selector: '[appSidebar]',
 })
 export class SidebarDirective {
-    constructor(private selectionEvents: SelectionEventsService) {}
+    constructor(private selectionEvents: SidebarEventService) {}
 
     @HostListener('mouseenter')
     onMouseEnter(): void {

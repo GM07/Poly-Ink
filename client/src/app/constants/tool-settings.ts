@@ -66,5 +66,5 @@ export abstract class ToolSettingsConst {
     // Text
     static readonly TEXT_MIN_FONT_SIZE: number = 5;
     static readonly TEXT_MAX_FONT_SIZE: number = 100;
-    static readonly DEFAULT_SIZE: number = 14;
+    static readonly DEFAULT_SIZE: number = 20;
 }

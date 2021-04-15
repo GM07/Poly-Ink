@@ -53,6 +53,11 @@ export class EditorComponent {
         this.shortcutHandler.onMouseMove(event);
     }
 
+    @HostListener('document:click', ['$event'])
+    onMouseClick(event: MouseEvent): void {
+        this.shortcutHandler.onMouseClick(event);
+    }
+
     @HostListener('window:beforeunload', ['$event'])
     onPageReload(event: BeforeUnloadEvent): void {
         localStorage.setItem('editor_reloading', 'true');
