@@ -63,7 +63,7 @@ export class DrawingTagsComponent implements OnInit {
     addFilter(event: MatChipInputEvent): void {
         const value = event.value;
         const regex = new RegExp('^[a-zA-Z-0-9]+$');
-        if (regex.test(value) && value.trim() && this.filterTags.length < DrawingConstants.maxTags) {
+        if (regex.test(value) && value.trim() && this.filterTags.length < DrawingConstants.MAX_TAGS) {
             this.filterTags.push({ name: value });
             this.getFilteredDrawings();
         }
