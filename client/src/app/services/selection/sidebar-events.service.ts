@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 @Injectable({
     providedIn: 'root',
 })
-export class SelectionEventsService {
+export class SidebarEventService {
     onMouseLeaveEvent: Subject<void>;
     onMouseEnterEvent: Subject<void>;
 

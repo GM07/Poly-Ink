@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { GridService } from '@app/services/drawing/grid.service';
 import { MagnetismService } from '@app/services/drawing/magnetism.service';
-import { SelectionEventsService } from '@app/services/selection/selection-events.service';
+import { SidebarEventService } from '@app/services/selection/sidebar-events.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
 import { AbstractSelectionComponent } from './abstract-selection.component';
 
@@ -14,7 +14,7 @@ describe('AbstractSelectionComponent', () => {
     let fixture: ComponentFixture<AbstractSelectionComponent>;
     let drawService: DrawingService;
     let abstractSelectionService: AbstractSelectionService;
-    let selectionEventsService: SelectionEventsService;
+    let selectionEventsService: SidebarEventService;
 
     const mouseEvent = {
         offsetX: 25,
@@ -27,13 +27,13 @@ describe('AbstractSelectionComponent', () => {
         drawService = new DrawingService(undoRedoServiceSpy, new MagnetismService(new GridService()));
         TestBed.configureTestingModule({
             declarations: [AbstractSelectionComponent],
-            providers: [AbstractSelectionService, { provide: DrawingService, useValue: drawService }, SelectionEventsService],
+            providers: [AbstractSelectionService, { provide: DrawingService, useValue: drawService }, SidebarEventService],
         }).compileComponents();
     }));
 
     beforeEach(() => {
         abstractSelectionService = TestBed.inject(AbstractSelectionService);
-        selectionEventsService = TestBed.inject(SelectionEventsService);
+        selectionEventsService = TestBed.inject(SidebarEventService);
         drawService.canvas = document.createElement('canvas');
         drawService.previewCanvas = document.createElement('canvas');
         drawService.baseCtx = drawService.canvas.getContext('2d') as CanvasRenderingContext2D;

@@ -73,6 +73,20 @@ describe('ShortcutHandlerService', () => {
         expect(toolHandlerService.onMouseMove).not.toHaveBeenCalled();
     });
 
+    it('should transfer the MouseClick event to the tool Handler if the shortcuts are not blocked', () => {
+        service.blockShortcuts = false;
+        spyOn(toolHandlerService, 'onMouseClick').and.callThrough();
+        service.onMouseClick(mouseEvent);
+        expect(toolHandlerService.onMouseClick).toHaveBeenCalled();
+    });
+
+    it('should not transfer the MouseClick event to the tool Handler if the shortcuts are blocked', () => {
+        service.blockShortcuts = true;
+        spyOn(toolHandlerService, 'onMouseClick').and.callThrough();
+        service.onMouseClick(mouseEvent);
+        expect(toolHandlerService.onMouseClick).not.toHaveBeenCalled();
+    });
+
     it('should return the blocked shortcut status', () => {
         service['blockShortcutsIn'] = true;
         expect(service.blockShortcuts).toBeTruthy();
@@ -85,5 +99,28 @@ describe('ShortcutHandlerService', () => {
         expect(onMouseUpSpy).not.toHaveBeenCalled();
         service.blockShortcuts = true;
         expect(onMouseUpSpy).toHaveBeenCalled();
+    });
+
+    it('should init subscriptions', () => {
+        const subscribeSpy = spyOn(textService.BLOCK_SHORTCUTS, 'subscribe').and.callThrough();
+        service['initSubscriptions']();
+        expect(subscribeSpy).toHaveBeenCalled();
+
+        textService.BLOCK_SHORTCUTS.next(true);
+        expect(service['blockShortcuts']).toBeTruthy();
+    });
+
+    it('should indicate if the user is locked to the current tool', () => {
+        spyOn(toolHandlerService, 'getCurrentTool').and.returnValue(textService);
+        textService.config.hasInput = true;
+        expect(service['isLockedToTool']()).toBeTruthy();
+    });
+
+    it('should call the current tool onKeyDown if whiteListed', () => {
+        const onKeyDownSpy = spyOn(service['toolHandlerService'].getCurrentTool(), 'onKeyDown');
+        service['blockShortcutsIn'] = true;
+        service['isWhiteListed'] = true;
+        service.onKeyDown(keyboardEvent);
+        expect(onKeyDownSpy).toHaveBeenCalled();
     });
 });

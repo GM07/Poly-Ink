@@ -1,10 +1,23 @@
-<div id="background_page"></div>
+<div id="background-page"></div>
 
-<div *ngIf="showComponent" [@fade]="state" (@fade.done)="endOfFadeAnimation()" id="background">
-    <div id="main">
-        <div id="content">
-            <h1 class="white" id="title">Poly Ink.</h1>
-            <button class="button" mat-raised-button color="primary" (click)="createNewDrawing()">Nouveau dessin</button>
+<div *ngIf="showNewDrawingWarning" class="warning-background">
+    <div class="main">
+        <div class="content warning-content-background">
+            <h1 class="white title">Attention</h1>
+            <h3 class="white" id="text">Êtes-vous sûr? Les changements actuels seront perdus</h3>
+            <div class="options">
+                <button class="button green white" mat-raised-button (click)="createNewDrawing()">Confirmer</button>
+                <button class="button red white" mat-raised-button (click)="closeNewDrawingWarning()">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showComponent" [@fade]="state" (@fade.done)="endOfFadeAnimation()" class="background">
+    <div class="main">
+        <div class="content">
+            <h1 class="white title">Poly Ink.</h1>
+            <button class="button" mat-raised-button color="primary" (click)="createNewDrawingOption()">Nouveau dessin</button>
             <button class="button" mat-raised-button color="primary" (click)="openCarrousel()">Carrousel</button>
             <button *ngIf="showContinueDrawing" class="button" mat-raised-button color="primary" (click)="continueDrawing()">
                 Continuer un dessin
@@ -20,7 +33,7 @@
                     Félix-Antoine Constantin <br />
                     Florence Cloutier <br />
                     Gaya Mehenni <br />
-                    Mamadou Barri <br />
+                    Mamadu Barri <br />
                     Paul-André Bisson <br />
                 </p>
             </mat-expansion-panel>

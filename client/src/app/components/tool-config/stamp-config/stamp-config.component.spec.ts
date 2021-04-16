@@ -2,9 +2,10 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatButtonToggleGroupHarness } from '@angular/material/button-toggle/testing';
+import { MatOptionModule } from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSelectHarness } from '@angular/material/select/testing';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -24,7 +25,7 @@ describe('StampConfigComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [StampConfigComponent],
-            imports: [MatDividerModule, MatSliderModule, FormsModule, NoopAnimationsModule, MatButtonToggleModule],
+            imports: [MatDividerModule, MatSliderModule, FormsModule, NoopAnimationsModule, MatSelectModule, MatOptionModule],
         }).compileComponents();
     }));
 
@@ -34,6 +35,7 @@ describe('StampConfigComponent', () => {
         loader = TestbedHarnessEnvironment.loader(fixture);
         stampService = TestBed.inject(StampService);
         fixture.detectChanges();
+        spyOn(stampService, 'isInCanvas').and.returnValue(true);
     });
 
     it('should create', () => {
@@ -95,15 +97,16 @@ describe('StampConfigComponent', () => {
     });
 
     it('should load all button toggle group harnesses', async () => {
-        const buttons = await loader.getAllHarnesses(MatButtonToggleGroupHarness);
+        const buttons = await loader.getAllHarnesses(MatSelectHarness);
         expect(buttons.length).toBe(1);
     });
 
     it('should load the toggles inside the group', async () => {
-        const nToggles = 5;
-        const group = await loader.getHarness(MatButtonToggleGroupHarness);
-        const toggles = await group.getToggles();
-        expect(toggles.length).toBe(nToggles);
+        const nOptions = 5;
+        const group = await loader.getHarness(MatSelectHarness);
+        await group.open();
+        const options = await group.getOptions();
+        expect(options.length).toBe(nOptions);
     });
 
     it('should update angle by 15 degree if alt is not pressed', () => {

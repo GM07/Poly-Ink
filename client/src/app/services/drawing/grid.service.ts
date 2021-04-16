@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { SpecialKeys } from '@app/classes/shortcut/special-keys';
 import { Vec2 } from '@app/classes/vec2';
 import { Colors } from '@app/constants/colors';
 import { ToolMath } from '@app/constants/math';
@@ -22,7 +23,7 @@ export class GridService {
     constructor() {
         this.size = ToolSettingsConst.GRID_MIN_SIZE;
         this.toggleGridShortcut = new ShortcutKey('g');
-        this.upsizeGridShortcut = [new ShortcutKey('+'), new ShortcutKey('='), new ShortcutKey('+', false, true)];
+        this.upsizeGridShortcut = [new ShortcutKey('+'), new ShortcutKey('='), new ShortcutKey('+', { shiftKey: true } as SpecialKeys)];
         this.downSizeGridShortcut = new ShortcutKey('-');
         this.opacity = ToolSettingsConst.GRID_DEFAULT_OPACITY;
         this.gridVisibility = false;
@@ -42,12 +43,12 @@ export class GridService {
     }
 
     set opacityValue(size: number) {
-        this.opacity = Math.max(ToolSettingsConst.GRID_MIN_OPACITY, Math.min(1 - size / ToolMath.PERCENTAGE, ToolSettingsConst.GRID_MAX_OPACITY));
+        this.opacity = Math.max(ToolSettingsConst.GRID_MIN_OPACITY, Math.min(size / ToolMath.PERCENTAGE, ToolSettingsConst.GRID_MAX_OPACITY));
         this.updateGrid();
     }
 
     get opacityValue(): number {
-        return Math.round((1 - this.opacity) * ToolMath.PERCENTAGE);
+        return Math.round(this.opacity * ToolMath.PERCENTAGE);
     }
 
     onKeyDown(event: KeyboardEvent): void {

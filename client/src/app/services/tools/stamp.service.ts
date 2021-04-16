@@ -10,19 +10,26 @@ import { ToolMath } from '@app/constants/math';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { SidebarEventService } from '@app/services/selection/sidebar-events.service';
 @Injectable({
     providedIn: 'root',
 })
 export class StampService extends Tool {
     readonly ALT_KEY: AltKey = new AltKey();
     config: StampConfig;
+    private isInSidebar: boolean;
 
-    constructor(protected drawingService: DrawingService, protected colorService: ColorService) {
+    constructor(protected drawingService: DrawingService, protected colorService: ColorService, private selectionEvents: SidebarEventService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(StampToolConstants.SHORTCUT_KEY);
         this.toolID = StampToolConstants.TOOL_ID;
 
         this.config = new StampConfig();
+
+        this.isInSidebar = false;
+
+        this.selectionEvents.onMouseEnterEvent.subscribe(() => (this.isInSidebar = true));
+        this.selectionEvents.onMouseLeaveEvent.subscribe(() => (this.isInSidebar = false));
     }
 
     set scaleValue(scale: number) {
@@ -52,8 +59,8 @@ export class StampService extends Tool {
         this.drawPreview();
     }
 
-    onMouseDown(event: MouseEvent): void {
-        if (event.button === MouseButton.Left) {
+    onMouseClick(event: MouseEvent): void {
+        if (event.button === MouseButton.Left && !this.isInSidebar) {
             this.config.position = this.getPositionFromMouse(event);
             this.draw();
         }

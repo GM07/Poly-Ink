@@ -20,13 +20,7 @@ export abstract class Tool {
         const right = clientRect.x + clientRect.width;
         const top = clientRect.y;
         const bottom = clientRect.y + clientRect.height;
-        if (event.x < left + border || event.x >= right - border || event.y <= top + border / 2 || event.y >= bottom - border) return false;
-        return true;
-    }
-
-    private getBorder(): number {
-        const borderValue: string = window.getComputedStyle(this.drawingService.canvas).getPropertyValue('border-left-width');
-        return Number(borderValue.substring(0, borderValue.length - 2));
+        return !(event.x < left + border || event.x >= right - border || event.y <= top + border / 2 || event.y >= bottom - border);
     }
 
     onMouseDown(event: MouseEvent): void {}
@@ -45,11 +39,18 @@ export abstract class Tool {
 
     onKeyUp(event: KeyboardEvent): void {}
 
+    onMouseClick(event: MouseEvent): void {}
+
     stopDrawing(): void {}
 
     getPositionFromMouse(event: MouseEvent): Vec2 {
         const clientRect = this.drawingService.canvas.getBoundingClientRect();
         const border: number = this.getBorder();
         return new Vec2(event.clientX - clientRect.x, event.clientY - clientRect.y).substractValue(border);
+    }
+
+    private getBorder(): number {
+        const borderValue: string = window.getComputedStyle(this.drawingService.canvas).getPropertyValue('border-left-width');
+        return Number(borderValue.substring(0, borderValue.length - 2));
     }
 }

@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
+import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { TextService } from './text.service';
 
 // tslint:disable:no-string-literal
-// To access private methods in expect
+// tslint:disable:no-any
 
 describe('TextService', () => {
     let service: TextService;
@@ -19,10 +20,11 @@ describe('TextService', () => {
         expect(service).toBeTruthy();
     });
 
-    it('should handleShortCuts when shortcutkey down', () => {
+    it('should handleShortcuts when shortcutkey down', () => {
         const event = jasmine.createSpyObj('event', ['preventDefault'], { key: 'Delete' });
         spyOn(service, 'drawPreview');
 
+        service['config'].hasInput = true;
         service.onKeyDown(event);
         expect(event.preventDefault).toHaveBeenCalled();
         expect(service.drawPreview).toHaveBeenCalled();
@@ -32,6 +34,7 @@ describe('TextService', () => {
         const event = jasmine.createSpyObj('event', ['preventDefault'], { key: ' ' });
         spyOn(service, 'drawPreview');
 
+        service['config'].hasInput = true;
         service.onKeyDown(event);
         expect(event.preventDefault).toHaveBeenCalled();
         expect(service.drawPreview).toHaveBeenCalled();
@@ -41,12 +44,55 @@ describe('TextService', () => {
         const event = jasmine.createSpyObj('event', [], { key: 'a' });
         spyOn(service, 'insert');
         spyOn(service, 'drawPreview');
+        service.config.hasInput = false;
         service.onKeyDown(event);
 
         service.config.hasInput = true;
         service.onKeyDown(event);
         expect(service.insert).toHaveBeenCalledTimes(1);
         expect(service.drawPreview).toHaveBeenCalled();
+    });
+
+    it('should call addText when mouseDown and there is no input', () => {
+        let mouseEvent = { button: MouseButton.Right, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        spyOn<any>(service, 'addText');
+        service.config.hasInput = false;
+        service.onMouseDown(mouseEvent);
+        expect(service['addText']).toHaveBeenCalledTimes(0);
+        mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        service.onMouseDown(mouseEvent);
+        expect(service['addText']).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call confirmText when mouseDown and there is input', () => {
+        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        spyOn<any>(service, 'confirmText');
+        service.config.hasInput = true;
+        service.onMouseDown(mouseEvent);
+        expect(service['confirmText']).toHaveBeenCalled();
+    });
+
+    it('should add text and modify config attributes accordingly', () => {
+        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        spyOn(service, 'drawPreview');
+        service['addText'](mouseEvent);
+        expect(service.config.hasInput).toBe(true);
+        expect(service.config.startCoords.x).toBe(mouseEvent.offsetX);
+        expect(service.config.startCoords.y).toBe(mouseEvent.offsetY);
+        expect(service.drawPreview).toHaveBeenCalled();
+    });
+
+    it('should initialise subscriptions', () => {
+        const drawingServiceSubscribe = spyOn(service.drawingService.changes, 'subscribe').and.callThrough();
+        const drawSpy = spyOn(service, 'drawPreview');
+        service['initSubscriptions']();
+        expect(drawingServiceSubscribe).toHaveBeenCalled();
+        service['config'].hasInput = false;
+        service.drawingService.changes.next();
+        expect(drawSpy).not.toHaveBeenCalled();
+        service['config'].hasInput = true;
+        service.drawingService.changes.next();
+        expect(drawSpy).toHaveBeenCalled();
     });
 
     it('should handle ignored shortcuts', () => {
@@ -71,7 +117,11 @@ describe('TextService', () => {
     });
 
     it('should modify config attributes after drawing text on baseCanvas', () => {
-        spyOn(service, 'draw');
+        const drawSpy = spyOn(service, 'draw');
+        service.config.hasInput = false;
+        service.confirmText();
+        expect(drawSpy).not.toHaveBeenCalled();
+        service.config.hasInput = true;
         service.confirmText();
         expect(service.config.hasInput).toBeFalse();
         expect(service.config.index.x).toBe(0);
@@ -81,20 +131,28 @@ describe('TextService', () => {
 
     it('should handle delete', () => {
         const indexX = 3;
-        // To spy on private method with any
-        // tslint:disable-next-line
         spyOn<any>(service, 'handleDelete').and.callThrough();
         service.config.index.x = 0;
         service.config.index.y = 1;
         service.config.textData[1] = '';
         service['handleShortCuts'](TextService['delete']);
-        expect(service.config.index.y).toEqual(0);
+
+        service.config.textData = ['a', '', 'a'];
+        service['handleShortCuts'](TextService['delete']);
+        expect(service.config.textData).toEqual(['a', 'a']);
 
         service.config.index.y = 0;
         service.config.textData[0] = 'allo!';
 
         service['handleShortCuts'](TextService['delete']);
         expect(service['handleDelete']).toHaveBeenCalled();
+
+        service.config.index.x = 1;
+        service.config.textData[0] = 'a';
+        service.config.textData[1] = 'a';
+        service['handleShortCuts'](TextService['delete']);
+        expect(service['handleDelete']).toHaveBeenCalled();
+        expect(service.config.textData[0]).toEqual('aa');
 
         service.config.index.x = indexX;
         service.config.textData[0] = 'a';
@@ -104,8 +162,6 @@ describe('TextService', () => {
 
     it('should handle backSpace', () => {
         const indexX = 3;
-        // To spy on private method with any
-        // tslint:disable-next-line
         spyOn<any>(service, 'handleBackspace').and.callThrough();
         service['handleShortCuts'](TextService['backspace']);
         expect(service['handleBackspace']).toHaveBeenCalled();
@@ -124,8 +180,6 @@ describe('TextService', () => {
     });
 
     it('should handle escape', () => {
-        // To spy on private method with any
-        // tslint:disable-next-line
         spyOn<any>(service, 'handleEscape').and.callThrough();
         spyOn(drawingService, 'clearCanvas');
         spyOn(drawingService, 'unblockUndoRedo');
@@ -134,8 +188,6 @@ describe('TextService', () => {
     });
 
     it('should handle ArrowLeft', () => {
-        // To spy on private method with any
-        // tslint:disable-next-line
         spyOn<any>(service, 'handleArrowLeft').and.callThrough();
         service['handleShortCuts'](TextService['arrowLeft']);
         expect(service['handleArrowLeft']).toHaveBeenCalled();
@@ -152,8 +204,6 @@ describe('TextService', () => {
     });
 
     it('should handle ArrowRight', () => {
-        // To spy on private method with any
-        // tslint:disable-next-line
         spyOn<any>(service, 'handleArrowRight').and.callThrough();
         service['handleShortCuts'](TextService['arrowRight']);
         expect(service['handleArrowRight']).toHaveBeenCalled();
@@ -172,8 +222,6 @@ describe('TextService', () => {
     });
 
     it('should handle ArrowUp', () => {
-        // To spy on private method with any
-        // tslint:disable-next-line
         spyOn<any>(service, 'handleArrowUp').and.callThrough();
         service['handleShortCuts'](TextService['arrowUp']);
         expect(service['handleArrowUp']).toHaveBeenCalled();
@@ -185,8 +233,6 @@ describe('TextService', () => {
     });
 
     it('should handle ArrowDown', () => {
-        // To spy on private method with any
-        // tslint:disable-next-line
         spyOn<any>(service, 'handleArrowDown').and.callThrough();
         service['handleShortCuts'](TextService['arrowDown']);
         expect(service['handleArrowDown']).toHaveBeenCalled();

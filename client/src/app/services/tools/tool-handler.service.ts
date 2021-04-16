@@ -114,6 +114,10 @@ export class ToolHandlerService {
         this.currentTool.onMouseEnter(event);
     }
 
+    onMouseClick(event: MouseEvent): void {
+        this.currentTool.onMouseClick(event);
+    }
+
     private findToolshortcutKey(event: KeyboardEvent): Tool | undefined {
         if (this.currentTool.shortcutKey.equals(event)) return undefined;
         for (const tool of this.TOOLS.values()) {
