@@ -1,6 +1,6 @@
 import { StampConfig } from '@app/classes/tool-config/stamp-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 import { AbstractDraw } from './abstract-draw';
 
 export class StampDraw extends AbstractDraw {

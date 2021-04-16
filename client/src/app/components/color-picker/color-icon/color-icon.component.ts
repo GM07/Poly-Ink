@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 
 @Component({
     selector: 'app-color-icon',

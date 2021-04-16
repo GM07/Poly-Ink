@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { EllipseService } from '@app/services/tools/ellipse.service';
 import { Subject } from 'rxjs';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 // tslint:disable:no-any
 describe('EllipseService', () => {

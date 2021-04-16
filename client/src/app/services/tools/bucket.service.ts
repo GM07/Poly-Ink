@@ -5,8 +5,8 @@ import { Tool } from '@app/classes/tool';
 import { BucketConfig } from '@app/classes/tool-config/bucket-config';
 import { BucketToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { MouseButton } from '@app/constants/control';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',

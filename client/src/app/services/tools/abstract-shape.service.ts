@@ -4,8 +4,8 @@ import { Tool } from '@app/classes/tool';
 import { ShapeConfig } from '@app/classes/tool-config/shape-config';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',

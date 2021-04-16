@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { Color } from 'src/color-picker/classes/color';
-import { Colors } from 'src/color-picker/constants/colors';
+import { Color } from '@app/classes/color';
+import { Colors } from '@app/constants/colors';
 import { ColorService } from './color.service';
 
 describe('ColorService', () => {

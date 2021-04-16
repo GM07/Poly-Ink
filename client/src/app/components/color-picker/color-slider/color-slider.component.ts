@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
+import { Color } from '@app/classes/color';
+import { Colors } from '@app/constants/colors';
+import { ColorService } from '@app/services/color/color.service';
 import { Subscription } from 'rxjs';
-import { Color } from 'src/color-picker/classes/color';
-import { Colors } from 'src/color-picker/constants/colors';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 @Component({
     selector: 'app-color-slider',

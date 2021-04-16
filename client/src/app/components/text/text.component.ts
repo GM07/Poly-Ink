@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { MouseButton } from '@app/constants/control';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { TextService } from '@app/services/tools/text.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 @Component({
     selector: 'app-text',

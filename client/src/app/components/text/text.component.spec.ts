@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Colors } from '@app/constants/colors';
 import { MouseButton } from '@app/constants/control';
+import { ColorService } from '@app/services/color/color.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { TextService } from '@app/services/tools/text.service';
-import { Colors } from 'src/color-picker/constants/colors';
-import { ColorService } from 'src/color-picker/services/color.service';
 import { TextComponent } from './text.component';
 
 // To access private methods with any and with string literals

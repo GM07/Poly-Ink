@@ -1,5 +1,5 @@
-import { Colors } from 'src/color-picker/constants/colors';
-import { HexColors } from 'src/color-picker/constants/hex-colors';
+import { Colors } from '@app/constants/colors';
+import { HexColors } from '@app/constants/hex-colors';
 import { Color } from './color';
 
 describe('Color', () => {

@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { TextConfig } from '@app/classes/tool-config/text-config';
-import { Colors } from 'src/color-picker/constants/colors';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { Colors } from '@app/constants/colors';
+import { ColorService } from '@app/services/color/color.service';
 import { TextDraw } from './text-draw';
 
 // tslint:disable:no-string-literal

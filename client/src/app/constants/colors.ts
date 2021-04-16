@@ -1,5 +1,5 @@
 /* tslint:disable:no-magic-numbers */
-import { Color } from 'src/color-picker/classes/color';
+import { Color } from '@app/classes/color';
 
 export abstract class Colors {
     static readonly WHITE: Color = new Color(255, 255, 255);

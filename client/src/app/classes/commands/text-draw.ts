@@ -1,6 +1,6 @@
 import { TextConfig } from '@app/classes/tool-config/text-config';
 import { Vec2 } from '@app/classes/vec2';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 import { AbstractDraw } from './abstract-draw';
 
 export class TextDraw extends AbstractDraw {

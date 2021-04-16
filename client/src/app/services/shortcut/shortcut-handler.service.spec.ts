@@ -2,11 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { TextToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { TextService } from '@app/services/tools/text.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 import { ShortcutHandlerService } from './shortcut-handler.service';
 
 // tslint:disable:no-string-literal

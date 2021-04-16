@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 import { ColorPreviewComponent } from './color-preview.component';
 
 describe('ColorPreviewComponent', () => {

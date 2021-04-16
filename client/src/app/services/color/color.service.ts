@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { Color } from '@app/classes/color';
+import { Colors } from '@app/constants/colors';
 import { Subject } from 'rxjs';
-import { Color } from 'src/color-picker/classes/color';
-import { Colors } from 'src/color-picker/constants/colors';
 
 @Injectable({
     providedIn: 'root',

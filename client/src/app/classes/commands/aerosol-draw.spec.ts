@@ -3,9 +3,9 @@ import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { Prng } from '@app/classes/math/prng';
 import { AerosolConfig } from '@app/classes/tool-config/aerosol-config';
 import { Vec2 } from '@app/classes/vec2';
+import { Colors } from '@app/constants/colors';
+import { ColorService } from '@app/services/color/color.service';
 import * as seedrandom from 'seedrandom';
-import { Colors } from 'src/color-picker/constants/colors';
-import { ColorService } from 'src/color-picker/services/color.service';
 import { AerosolDraw } from './aerosol-draw';
 
 // tslint:disable:no-string-literal

@@ -8,8 +8,8 @@ import { StampToolConstants } from '@app/classes/tool_ui_settings/tools.constant
 import { MouseButton } from '@app/constants/control';
 import { ToolMath } from '@app/constants/math';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 @Injectable({
     providedIn: 'root',
 })

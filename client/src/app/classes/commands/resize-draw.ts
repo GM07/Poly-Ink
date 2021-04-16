@@ -1,7 +1,7 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { ResizeConfig } from '@app/classes/tool-config/resize-config';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 export class ResizeDraw extends AbstractDraw {
     private config: ResizeConfig;
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 
 @Component({
     selector: 'app-color-preview',

@@ -1,6 +1,6 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { BucketConfig } from '@app/classes/tool-config/bucket-config';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 export class BucketDraw extends AbstractDraw {
     private config: BucketConfig;
     private queue: number[];
