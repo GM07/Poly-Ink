@@ -45,34 +45,34 @@ describe('BucketDraw', () => {
     };
 
     it('should do appropriate calls on execute with contiguous pixels', () => {
-        spyOn(ctxStub, 'getImageData').and.stub();
         spyOn(ctxStub, 'putImageData').and.stub();
         spyOn<any>(bucketDraw, 'saveOriginalPixel').and.stub();
         spyOn<any>(bucketDraw, 'floodFill').and.stub();
         spyOn<any>(bucketDraw, 'pixelFill').and.stub();
+        spyOn<any>(bucketDraw, 'getPixels').and.callThrough();
 
         bucketDraw['config'].contiguous = true;
         bucketDraw.execute(ctxStub);
 
-        expect(ctxStub.getImageData).toHaveBeenCalled();
         expect(ctxStub.putImageData).toHaveBeenCalled();
+        expect(bucketDraw['getPixels']).toHaveBeenCalled();
         expect(bucketDraw['saveOriginalPixel']).toHaveBeenCalled();
         expect(bucketDraw['floodFill']).toHaveBeenCalled();
         expect(bucketDraw['pixelFill']).not.toHaveBeenCalled();
     });
 
     it('should do appropriate calls on execute with non contiguous pixels', () => {
-        spyOn(ctxStub, 'getImageData').and.stub();
         spyOn(ctxStub, 'putImageData').and.stub();
         spyOn<any>(bucketDraw, 'saveOriginalPixel').and.stub();
         spyOn<any>(bucketDraw, 'floodFill').and.stub();
         spyOn<any>(bucketDraw, 'pixelFill').and.stub();
+        spyOn<any>(bucketDraw, 'getPixels').and.callThrough();
 
         bucketDraw['config'].contiguous = false;
         bucketDraw.execute(ctxStub);
 
-        expect(ctxStub.getImageData).toHaveBeenCalled();
         expect(ctxStub.putImageData).toHaveBeenCalled();
+        expect(bucketDraw['getPixels']).toHaveBeenCalled();
         expect(bucketDraw['saveOriginalPixel']).toHaveBeenCalled();
         expect(bucketDraw['floodFill']).not.toHaveBeenCalled();
         expect(bucketDraw['pixelFill']).toHaveBeenCalled();
