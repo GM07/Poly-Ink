@@ -24,8 +24,17 @@ export class EyeDropperConfigComponent extends ToolConfig implements AfterViewIn
             this.hexColor = color;
             if (this.hexColor.length > 0 && this.previewEyeDropper !== undefined) {
                 const ctx = this.previewEyeDropper.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+                this.drawCircleAroundPreview(ctx, this.previewEyeDropper.nativeElement.width / 2);
+                ctx.stroke();
                 ctx.drawImage(this.eyeDropperService.previsualisationCanvas, 0, 0);
             }
         });
+    }
+
+    private drawCircleAroundPreview(ctx: CanvasRenderingContext2D, size: number): void {
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'black';
+        ctx.ellipse(size, size, size - 1, size - 1, 0, 0, 2 * Math.PI);
+        ctx.stroke();
     }
 }

@@ -73,8 +73,6 @@ export class EyeDropperService extends Tool {
 
             this.drawSelectedPixelRect(this.previsualisationCtx);
 
-            this.drawCircleAroundPreview(this.previsualisationCtx, this.previsualisationCanvas.width / 2);
-
             this.drawCircleAroundMouse(
                 this.drawingService.previewCtx,
                 new Vec2(event.offsetX, event.offsetY),
@@ -107,12 +105,6 @@ export class EyeDropperService extends Tool {
         ctx.strokeRect(centerX, centerY, ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH, ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH);
         ctx.lineDashOffset = 0;
         ctx.setLineDash([]);
-    }
-
-    private drawCircleAroundPreview(ctx: CanvasRenderingContext2D, size: number): void {
-        ctx.strokeStyle = 'black';
-        ctx.ellipse(size, size, size, size, 0, 0, 2 * Math.PI);
-        ctx.stroke();
     }
 
     private drawCircleAroundMouse(ctx: CanvasRenderingContext2D, coords: Vec2, radius: number): void {

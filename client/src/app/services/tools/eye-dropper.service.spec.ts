@@ -117,7 +117,6 @@ describe('EyeDropperService', () => {
         spyOn(service.previsualisationCtx, 'drawImage');
         spyOn<any>(service, 'drawSelectedPixelRect');
         spyOn<any>(service, 'getPrevisualisation');
-        spyOn<any>(service, 'drawCircleAroundPreview');
         spyOn<any>(service, 'drawCircleAroundMouse');
         spyOn<any>(service, 'getColor').and.returnValue(new Color(0, 0, 0));
         spyOn(service, 'isInCanvas').and.returnValue(true);
@@ -145,12 +144,6 @@ describe('EyeDropperService', () => {
         const eyeDropper: EyeDropperService = service;
         service.stopDrawing();
         expect(service).toEqual(eyeDropper);
-    });
-
-    it('draw circle around preview should draw a circle around the preview', () => {
-        spyOn(baseCtxStub, 'ellipse');
-        service['drawCircleAroundPreview'](baseCtxStub, 10);
-        expect(baseCtxStub.ellipse).toHaveBeenCalled();
     });
 
     it('draw circle around mouse should draw a circle around the mouse', () => {
