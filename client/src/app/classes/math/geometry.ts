@@ -40,10 +40,10 @@ export class Geometry {
         if (lines.length === 0) return false;
 
         const lastFormedLine = lines[lines.length - 1];
-        let dp = lastFormedLine.start.substract(lastFormedLine.end);
-        const length = Math.sqrt(dp.x * dp.x + dp.y * dp.y);
-        dp = dp.scalar(ToolMath.ZERO_THRESHOLD * (1 / length));
-        lastFormedLine.end = lastFormedLine.end.add(dp);
+        let lineDirection = lastFormedLine.start.substract(lastFormedLine.end);
+        const length = Math.sqrt(lineDirection.x * lineDirection.x + lineDirection.y * lineDirection.y);
+        lineDirection = lineDirection.scalar(ToolMath.ZERO_THRESHOLD * (1 / length));
+        lastFormedLine.end = lastFormedLine.end.add(lineDirection);
 
         for (const line of lines) {
             if (line.intersects(nextLine)) {
