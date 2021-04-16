@@ -11,12 +11,9 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
     providedIn: 'root',
 })
 export abstract class AbstractShape extends Tool {
-    protected readonly SHIFT: ShiftKey;
     toolID: string;
     config: ShapeConfig;
-
-    protected abstract draw(): void;
-    protected abstract drawPreview(): void;
+    protected readonly SHIFT: ShiftKey;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
@@ -97,4 +94,7 @@ export abstract class AbstractShape extends Tool {
             }
         }
     }
+
+    protected abstract draw(): void;
+    protected abstract drawPreview(): void;
 }

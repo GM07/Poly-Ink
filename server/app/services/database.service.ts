@@ -3,10 +3,9 @@ import { Db, MongoClient, MongoClientOptions } from 'mongodb';
 
 @injectable()
 export class DatabaseService {
+    protected static readonly DATABASE_NAME: string = 'carrousel';
     private static readonly DATABASE_URL: string =
         'mongodb+srv://admin:ugbOOh4owMDAoNOQ@polyink.moize.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-
-    protected static readonly DATABASE_NAME: string = 'carrousel';
 
     db: Db;
     protected client: MongoClient;

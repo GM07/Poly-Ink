@@ -11,10 +11,10 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class ShortcutHandlerService {
+    blockShortcutsEvent: Subject<boolean>;
     private blockShortcutsIn: boolean;
     private isWhiteListed: boolean;
     private lastMouseMoveEvent: MouseEvent;
-    blockShortcutsEvent: Subject<boolean>;
 
     constructor(
         private toolHandlerService: ToolHandlerService,

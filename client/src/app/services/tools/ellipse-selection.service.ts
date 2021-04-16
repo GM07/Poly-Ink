@@ -17,6 +17,11 @@ export class EllipseSelectionService extends AbstractSelectionService {
         this.toolID = EllipseSelectionToolConstants.TOOL_ID;
     }
 
+    draw(): void {
+        const command = new EllipseSelectionDraw(this.colorService, this.config);
+        this.drawingService.draw(command);
+    }
+
     protected drawPreviewSelection(): void {
         super.drawPreviewSelection();
 
@@ -95,10 +100,5 @@ export class EllipseSelectionService extends AbstractSelectionService {
         EllipseSelectionDraw.drawClippedSelection(ctx, this.config);
 
         this.drawSelection(ctx, center, radius);
-    }
-
-    draw(): void {
-        const command = new EllipseSelectionDraw(this.colorService, this.config);
-        this.drawingService.draw(command);
     }
 }

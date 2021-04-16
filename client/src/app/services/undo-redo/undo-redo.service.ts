@@ -9,8 +9,6 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class UndoRedoService {
-    private readonly initialActionPosition: number = -1;
-    private blockUndoRedoIn: boolean;
     readonly BLOCK_UNDO_ICON: Subject<boolean> = new Subject<boolean>();
     readonly BLOCK_REDO_ICON: Subject<boolean> = new Subject<boolean>();
 
@@ -24,11 +22,22 @@ export class UndoRedoService {
 
     commands: AbstractDraw[];
     currentAction: number;
+    private readonly initialActionPosition: number = -1;
+    private blockUndoRedoIn: boolean;
 
     constructor() {
         this.shortcutRedo = new ShortcutKey('z', { ctrlKey: true, shiftKey: true } as SpecialKeys);
         this.shortcutUndo = new ShortcutKey('z', { ctrlKey: true } as SpecialKeys);
         this.reset();
+    }
+
+    get blockUndoRedo(): boolean {
+        return this.blockUndoRedoIn;
+    }
+
+    set blockUndoRedo(block: boolean) {
+        this.blockUndoRedoIn = block;
+        this.sendIconSignals(block);
     }
 
     init(context: CanvasRenderingContext2D, preview: CanvasRenderingContext2D, originalResize: ResizeDraw): void {
@@ -91,15 +100,6 @@ export class UndoRedoService {
         this.blockUndoRedo = true;
         this.commands = [];
         this.currentAction = this.initialActionPosition;
-    }
-
-    get blockUndoRedo(): boolean {
-        return this.blockUndoRedoIn;
-    }
-
-    set blockUndoRedo(block: boolean) {
-        this.blockUndoRedoIn = block;
-        this.sendIconSignals(block);
     }
 
     private autoSave(): void {

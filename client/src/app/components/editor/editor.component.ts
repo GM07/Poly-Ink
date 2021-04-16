@@ -22,6 +22,8 @@ export class EditorComponent {
     @ViewChild('exportDrawing') private exportDrawing: ExportDrawingComponent;
     @ViewChild('saveDrawing') private saveDrawing: SaveDrawingComponent;
 
+    constructor(public shortcutHandler: ShortcutHandlerService, private undoRedoService: UndoRedoService) {}
+
     async receiveSidebarButtonEvent(toolID: string): Promise<void> {
         switch (toolID) {
             case RedoConstants.TOOL_ID:
@@ -40,8 +42,6 @@ export class EditorComponent {
                 await this.saveDrawing.show();
         }
     }
-
-    constructor(public shortcutHandler: ShortcutHandlerService, private undoRedoService: UndoRedoService) {}
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {

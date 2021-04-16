@@ -11,14 +11,6 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
     styleUrls: ['./canvas-resize.component.scss'],
 })
 export class CanvasResizeComponent implements AfterViewInit {
-    private isDown: boolean;
-
-    private moveBottom: boolean;
-    private moveRight: boolean;
-
-    private canvasTop: number;
-    private canvasLeft: number;
-
     controlBottomStyle: { [key: string]: string };
     controlCornerStyle: { [key: string]: string };
     controlRightStyle: { [key: string]: string };
@@ -27,6 +19,13 @@ export class CanvasResizeComponent implements AfterViewInit {
 
     previewResizeView: boolean;
     previewResizeStyle: { [key: string]: string };
+    private isDown: boolean;
+
+    private moveBottom: boolean;
+    private moveRight: boolean;
+
+    private canvasTop: number;
+    private canvasLeft: number;
 
     constructor(private drawingService: DrawingService, private cd: ChangeDetectorRef, private shortcutHandler: ShortcutHandlerService) {
         this.previewResizeView = false;

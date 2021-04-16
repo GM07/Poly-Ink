@@ -26,6 +26,10 @@ export class DrawingService {
         this.tryConnection();
     }
 
+    get collection(): Collection<DrawingData> {
+        return this.databaseService.db.collection(DrawingService.COLLECTION);
+    }
+
     async tryConnection(): Promise<void> {
         try {
             await this.databaseService.start();
@@ -33,10 +37,6 @@ export class DrawingService {
         } catch {
             this.databaseValid = false;
         }
-    }
-
-    get collection(): Collection<DrawingData> {
-        return this.databaseService.db.collection(DrawingService.COLLECTION);
     }
 
     validateName(name: string): boolean {

@@ -9,14 +9,13 @@ import { Subscription } from 'rxjs';
     styleUrls: ['./color-palette.component.scss'],
 })
 export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
-    @ViewChild('canvas') private canvas: ElementRef<HTMLCanvasElement>;
-
     context: CanvasRenderingContext2D;
     leftMouseDown: boolean = false;
     selectedPosition: { x: number; y: number } = { x: 0, y: 0 };
 
     selectedColorChangeHexSubscription: Subscription;
     selectedHueChangeSliderSubscription: Subscription;
+    @ViewChild('canvas') private canvas: ElementRef<HTMLCanvasElement>;
 
     constructor(public colorService: ColorService) {
         this.selectedColorChangeHexSubscription = this.colorService.selectedColorChangeFromHex.subscribe((value) => {

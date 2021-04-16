@@ -9,11 +9,6 @@ import { Subject } from 'rxjs';
 export class ColorService {
     private static readonly MAX_NUMBER_PREVIOUS_COLORS: number = 10;
 
-    private primary: Color;
-    private secondary: Color;
-
-    private previous: Color[] = [];
-
     changePrimary: boolean;
     shouldChangeColor: boolean;
     isMenuOpen: boolean;
@@ -30,6 +25,11 @@ export class ColorService {
 
     primaryColorAlpha: number = 1;
     secondaryColorAlpha: number = 1;
+
+    private primary: Color;
+    private secondary: Color;
+
+    private previous: Color[] = [];
 
     constructor() {
         this.primary = Colors.BLACK;

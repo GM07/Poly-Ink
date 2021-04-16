@@ -43,31 +43,6 @@ export class LineService extends Tool {
         }
     }
 
-    private handleSimpleClick(event: MouseEvent): void {
-        this.lineDrawer.leftMouseDown = event.button === MouseButton.Left;
-        if (this.lineDrawer.leftMouseDown) {
-            this.lineDrawer.addNewPoint(event);
-        }
-    }
-
-    private handleDoubleClick(event: MouseEvent): void {
-        const mousePos = this.getPositionFromMouse(event);
-        this.lineDrawer.pointToAdd = this.lineDrawer.shift.isDown ? this.lineDrawer.getAlignedPoint(mousePos) : mousePos;
-
-        const closedLoop: boolean =
-            Geometry.getDistanceBetween(this.lineDrawer.pointToAdd, this.config.points[0]) <= ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;
-
-        if (closedLoop) {
-            this.config.points[this.config.points.length - 1] = this.config.points[0];
-        }
-        this.config.closedLoop = closedLoop;
-
-        this.draw();
-
-        this.drawingService.clearCanvas(this.drawingService.previewCtx);
-        this.initService();
-    }
-
     onMouseUp(event: MouseEvent): void {
         if (event.button === MouseButton.Left) {
             this.lineDrawer.leftMouseDown = false;
@@ -114,5 +89,30 @@ export class LineService extends Tool {
     drawPreview(): void {
         const command = new LineDraw(this.colorService, this.config);
         this.drawingService.drawPreview(command);
+    }
+
+    private handleSimpleClick(event: MouseEvent): void {
+        this.lineDrawer.leftMouseDown = event.button === MouseButton.Left;
+        if (this.lineDrawer.leftMouseDown) {
+            this.lineDrawer.addNewPoint(event);
+        }
+    }
+
+    private handleDoubleClick(event: MouseEvent): void {
+        const mousePos = this.getPositionFromMouse(event);
+        this.lineDrawer.pointToAdd = this.lineDrawer.shift.isDown ? this.lineDrawer.getAlignedPoint(mousePos) : mousePos;
+
+        const closedLoop: boolean =
+            Geometry.getDistanceBetween(this.lineDrawer.pointToAdd, this.config.points[0]) <= ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;
+
+        if (closedLoop) {
+            this.config.points[this.config.points.length - 1] = this.config.points[0];
+        }
+        this.config.closedLoop = closedLoop;
+
+        this.draw();
+
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.initService();
     }
 }

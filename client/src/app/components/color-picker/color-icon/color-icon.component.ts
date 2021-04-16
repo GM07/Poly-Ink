@@ -8,8 +8,6 @@ import { ColorService } from '@app/services/color/color.service';
     styleUrls: ['./color-icon.component.scss'],
 })
 export class ColorIconComponent {
-    @ViewChild(MatMenuTrigger) private colorMenuTrigger: MatMenuTrigger;
-
     readonly changePrimary: boolean = true;
     readonly changeSecondary: boolean = false;
 
@@ -18,6 +16,7 @@ export class ColorIconComponent {
 
     @Input()
     height: number;
+    @ViewChild(MatMenuTrigger) private colorMenuTrigger: MatMenuTrigger;
 
     constructor(public colorService: ColorService) {}
 
