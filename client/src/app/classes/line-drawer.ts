@@ -17,6 +17,7 @@ export class LineDrawer {
     shortcutList: ShortcutKey[] = [this.escape, this.backspace, this.shift];
     drawPreview: Subject<void>;
     removeLine: Subject<void>;
+    removeLines: Subject<void>;
     leftMouseDown: boolean;
     private config: AbstractLineConfig;
     private drawingService: DrawingService;
@@ -26,6 +27,7 @@ export class LineDrawer {
         this.drawingService = drawingService;
         this.drawPreview = new Subject<void>();
         this.removeLine = new Subject<void>();
+        this.removeLines = new Subject<void>();
         this.leftMouseDown = false;
         this.init(config);
     }
@@ -99,7 +101,7 @@ export class LineDrawer {
             point = this.getAlignedPoint(point);
         }
 
-        this.pointToAdd = point.clone();
+        this.pointToAdd = point;
         this.renderLinePreview();
     }
 
@@ -135,6 +137,7 @@ export class LineDrawer {
     clearPoints(): void {
         if (this.escape.isDown) {
             this.config.points = [];
+            this.removeLines.next();
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
             this.drawingService.unblockUndoRedo();
         }
