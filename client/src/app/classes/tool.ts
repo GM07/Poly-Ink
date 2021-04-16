@@ -39,7 +39,7 @@ export abstract class Tool {
 
     onKeyUp(event: KeyboardEvent): void {}
 
-    onMouseClick(event: MouseEvent): void {}
+    onDocumentMouseDown(event: MouseEvent): void {}
 
     stopDrawing(): void {}
 
