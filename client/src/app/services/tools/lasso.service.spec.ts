@@ -219,6 +219,27 @@ describe('Lasso service', () => {
         expect(spy).toHaveBeenCalled();
     });
 
+    it('should let parent handle keys ctrl+a is pressed', () => {
+        const spy = spyOn(AbstractSelectionService.prototype, 'onKeyDown');
+        service.onKeyDown({ key: 'a', ctrlKey: true, shiftKey: false, altKey: false } as KeyboardEvent);
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should not select all twice', () => {
+        service.configLasso.points = [mousePos, mousePos, mousePos, mousePos, mousePos];
+        const spy = spyOn<any>(service, 'onClosedPath');
+        service.selectAll();
+        service.selectAll();
+        expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not send event to parent if ctrl+a is pressed and selection is not null', () => {
+        service.configLasso.previewSelectionCtx = service['drawingService'].baseCtx;
+        const spy = spyOn(AbstractSelectionService.prototype, 'onKeyDown');
+        service.onKeyDown({ key: 'a', ctrlKey: true, shiftKey: false, altKey: false } as KeyboardEvent);
+        expect(spy).not.toHaveBeenCalled();
+    });
+
     it('should handle keys itself when key is up', () => {
         const spy = spyOn(service.lineDrawer, 'handleKeys').and.callThrough();
         service.onKeyUp({ key: 'backspace', ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent);

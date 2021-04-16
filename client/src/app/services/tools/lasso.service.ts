@@ -4,6 +4,7 @@ import { LineDrawer } from '@app/classes/line-drawer';
 import { Geometry } from '@app/classes/math/geometry';
 import { Line } from '@app/classes/math/line';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { SpecialKeys } from '@app/classes/shortcut/special-keys';
 import { LassoConfig } from '@app/classes/tool-config/lasso-config';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { LassoToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
@@ -24,12 +25,14 @@ export class LassoService extends AbstractSelectionService {
     private start: Vec2;
     private end: Vec2;
     private lines: Line[];
+    private selectAllShortcut: ShortcutKey;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(LassoToolConstants.SHORTCUT_KEY);
         this.toolID = LassoToolConstants.TOOL_ID;
         this.initAttribs(new LassoConfig());
+        this.selectAllShortcut = new ShortcutKey('a', { ctrlKey: true } as SpecialKeys);
     }
 
     initAttribs(config: SelectionConfig): void {
@@ -90,25 +93,27 @@ export class LassoService extends AbstractSelectionService {
 
     onKeyDown(event: KeyboardEvent): void {
         if (this.configLasso.previewSelectionCtx === null) {
+            if (this.selectAllShortcut.equals(event)) {
+                super.onKeyDown(event);
+                return;
+            }
+
             const shortcut = ShortcutKey.get(this.lineDrawer.shortcutList, event, true);
             if (shortcut !== undefined && shortcut.isDown !== true) {
                 shortcut.isDown = true;
                 this.lineDrawer.handleKeys(shortcut);
-                return;
             }
-        } else {
+        } else if (!this.selectAllShortcut.equals(event)) {
             super.onKeyDown(event);
         }
     }
 
     onKeyUp(event: KeyboardEvent): void {
         if (this.configLasso.previewSelectionCtx === null) {
-            this.lineDrawer.shift.isDown = event.shiftKey;
             const shortcut = ShortcutKey.get(this.lineDrawer.shortcutList, event, true);
             if (shortcut !== undefined) {
                 shortcut.isDown = false;
                 this.lineDrawer.handleKeys(shortcut);
-                return;
             }
         } else {
             super.onKeyUp(event);
@@ -118,12 +123,22 @@ export class LassoService extends AbstractSelectionService {
     selectAll(): void {
         const width = this.drawingService.canvas.width;
         const height = this.drawingService.canvas.height;
-
         this.start = new Vec2(0, 0);
         this.end = new Vec2(width, height);
 
-        this.configLasso.points = [this.start.clone(), new Vec2(width, 0), this.end.clone(), new Vec2(0, height), this.start.clone()];
-        this.onClosedPath();
+        const canvasBounds: Vec2[] = [this.start.clone(), new Vec2(width, 0), this.end.clone(), new Vec2(0, height), this.start.clone()];
+
+        let samePoints = canvasBounds.length === this.configLasso.points.length;
+        for (let i = 0; i < canvasBounds.length && samePoints; i++) {
+            if (!this.configLasso.points[i].equals(canvasBounds[i])) {
+                samePoints = false;
+            }
+        }
+
+        if (!samePoints) {
+            this.configLasso.points = canvasBounds;
+            this.onClosedPath();
+        }
     }
 
     stopDrawing(): void {
@@ -148,6 +163,8 @@ export class LassoService extends AbstractSelectionService {
         this.configLasso.height = size.y;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.configLasso.isInSelection = true;
+        console.log(this.configLasso.points.copyWithin(0, 0, this.configLasso.points.length));
+
         this.startSelection();
     }
 
