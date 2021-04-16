@@ -26,6 +26,7 @@ export class ColorService {
     selectedHue: Color;
     hueChangeFromHex: Subject<Color>;
     hueChangeFromSlider: Subject<Color>;
+    changedPrimary: Subject<boolean>;
 
     primaryColorAlpha: number = 1;
     secondaryColorAlpha: number = 1;
@@ -42,6 +43,7 @@ export class ColorService {
         this.selectedHue = Colors.BLACK;
         this.hueChangeFromHex = new Subject<Color>();
         this.hueChangeFromSlider = new Subject<Color>();
+        this.changedPrimary = new Subject<boolean>();
 
         this.previous.unshift(this.secondary);
         this.previous.unshift(this.primary);
@@ -57,6 +59,7 @@ export class ColorService {
     set primaryColor(color: Color) {
         this.primary = color.clone();
         this.addToPreviousColors(this.primary);
+        this.changedPrimary.next();
     }
 
     get primaryColor(): Color {

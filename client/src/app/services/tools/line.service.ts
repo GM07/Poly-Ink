@@ -51,11 +51,8 @@ export class LineService extends Tool {
     }
 
     private handleDoubleClick(event: MouseEvent): void {
-        if (!this.lineDrawer.shift.isDown) {
-            this.lineDrawer.pointToAdd = this.getPositionFromMouse(event);
-        } else {
-            this.lineDrawer.pointToAdd = this.lineDrawer.getAlignedPoint(this.getPositionFromMouse(event));
-        }
+        const mousePos = this.getPositionFromMouse(event);
+        this.lineDrawer.pointToAdd = this.lineDrawer.shift.isDown ? this.lineDrawer.getAlignedPoint(mousePos) : mousePos;
 
         const closedLoop: boolean =
             Geometry.getDistanceBetween(this.lineDrawer.pointToAdd, this.config.points[0]) <= ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;

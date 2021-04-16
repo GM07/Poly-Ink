@@ -93,6 +93,8 @@ describe('TextService', () => {
         service['config'].hasInput = true;
         service.drawingService.changes.next();
         expect(drawSpy).toHaveBeenCalled();
+        service.colorService.changedPrimary.next();
+        expect(drawSpy).toHaveBeenCalled();
     });
 
     it('should handle ignored shortcuts', () => {

@@ -168,11 +168,7 @@ export class LineDrawer {
     private alignNextPoint(): void {
         if (this.leftMouseDown) return;
 
-        if (this.shift.isDown) {
-            this.pointToAdd = this.getAlignedPoint(this.mousePosition);
-        } else {
-            this.pointToAdd = this.mousePosition.clone();
-        }
+        this.pointToAdd = this.shift.isDown ? this.getAlignedPoint(this.mousePosition) : this.mousePosition.clone();
         this.renderLinePreview();
     }
 

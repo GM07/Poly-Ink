@@ -99,6 +99,9 @@ export class TextService extends Tool {
                 this.drawingService.blockUndoRedo();
             }
         });
+        this.colorService.changedPrimary.subscribe(() => {
+            this.drawPreview();
+        });
     }
 
     private handleEnter(): void {
