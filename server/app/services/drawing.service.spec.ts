@@ -42,6 +42,8 @@ describe('Drawing service', () => {
         await drawingService.createNewDrawingData(drawing);
         await drawingService.createNewDrawingData(drawing2);
 
+        // Used to changed the value of a read-only property in DrawingService
+        // to not add files to the drawing folder while testing
         Object.defineProperty(DrawingService, 'ROOT_DIRECTORY', { value: 'drawings_test' });
     });
 

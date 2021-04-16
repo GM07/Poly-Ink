@@ -1,92 +1,70 @@
 <div class="tab">
     <h5 class="textFormat">Taille police</h5>
-      <div class="textFormatForSlider">
-          <mat-slider #sizeSlider id='slider' min="{{ MIN }}" max="{{ MAX }}" (change)="changeFontSize($event.value)" [(ngModel)]="currentFontSize" thumbLabel [displayWith]="colorSliderLabel" >
-          </mat-slider>
-          {{ textService.config.fontSize }}px
-      </div>
-      <div class="textFormatButton">
-          <mat-button-toggle-group [multiple] = 'true'>
+    <div class="textFormatForSlider">
+        <mat-slider
+            #sizeSlider
+            id="slider"
+            min="{{ MIN }}"
+            max="{{ MAX }}"
+            (change)="changeFontSize($event.value)"
+            [(ngModel)]="currentFontSize"
+            thumbLabel
+            [displayWith]="colorSliderLabel"
+        >
+        </mat-slider>
+        {{ textService.config.fontSize }}px
+    </div>
+    <div class="textFormatButton">
+        <mat-button-toggle-group [multiple]="true">
             <div class="boldButton">
-            <mat-button-toggle
-                  [checked]="textService.config.bold === true"
-                  class="boldButton"
-                  (click)="toggleBold()"
-                  >B</mat-button-toggle>
+                <mat-button-toggle [checked]="textService.config.bold === true" class="boldButton" (click)="toggleBold()">B</mat-button-toggle>
             </div>
             <div class="italicButton">
-              <mat-button-toggle
-                  [checked]="textService.config.italic === true"
-                  class="italicButton"
-                  (click)="toggleItalic()"
-                  >I</mat-button-toggle>
+                <mat-button-toggle [checked]="textService.config.italic === true" class="italicButton" (click)="toggleItalic()">I</mat-button-toggle>
             </div>
-          </mat-button-toggle-group>
-      </div>
-      <h5 class="textFormat">Alignement</h5>
-      <div class="textFormatButton">
-          <mat-button-toggle-group [vertical]="true" value="Left">
-            <div class="textFormatButton">
-                <mat-button-toggle
-                    [checked]="textService.config.alignmentSetting === 'left'"
-                    class="buttons"
-                    (click)="setAlignment('left')"
-                    value="Left"
-                    >À gauche</mat-button-toggle>
-            </div>
-            <div class="textFormatButton">
-                <mat-button-toggle
-                    [checked]="textService.config.alignmentSetting === 'center'"
-                    class="buttons"
-                    (click)="setAlignment('center')"
-                    value="Center">Au centre</mat-button-toggle>
-            </div>
-            <div class="textFormatButton">
-              <mat-button-toggle
-                  [checked]="textService.config.alignmentSetting === 'right'"
-                  class="buttons"
-                  (click)="setAlignment('right')"
-                  value="Right">À droite</mat-button-toggle>
-            </div>
-          </mat-button-toggle-group>
-      </div>
-      <div class="police">
-      <h5 class="textFormat">Police</h5>
-      <div class="textFormatButton">
-          <mat-button-toggle-group [vertical]="true" value="Arial">
-            <div class="textFormatButton">
-                <mat-button-toggle
-                    class="buttons"
-                    (click)="changeFont('Arial')"
-                    value="Arial"
-                    >Arial</mat-button-toggle>
-            </div>
-            <div class="textFormatButton">
-                <mat-button-toggle
-                    class="buttonTimes"
-                    (click)="changeFont('Times New Roman')"
-                    value="Times New Roman">Times New Roman</mat-button-toggle>
-            </div>
-            <div class="textFormatButton">
-              <mat-button-toggle
-                  class="buttonImpact"
-                  (click)="changeFont('Impact')"
-                  value="Impact">Impact</mat-button-toggle>
-            </div>
-            <div class="textFormatButton">
-              <mat-button-toggle
-                  class="buttonMonospace"
-                  (click)="changeFont('Monospace')"
-                  value="Monospace">Monospace</mat-button-toggle>
-            </div>
-            <div class="textFormatButton">
-              <mat-button-toggle
-                  class="buttonVerdana"
-                  (click)="changeFont('Verdana')"
-                  value="Verdana">Verdana</mat-button-toggle>
-            </div>
-          </mat-button-toggle-group>
-      </div>
-      </div>
-</div>
+        </mat-button-toggle-group>
+    </div>
 
+    <h5 class="textFormat">Alignement</h5>
+    <div class="textFormatButton">
+        <mat-button-toggle-group>
+            <div class="alignmentButton">
+                <mat-button-toggle (click)="setAlignment('left')" mat-icon-button [@.disabled]="true">
+                    <mat-icon svgIcon="textAlignLeft"></mat-icon>
+                </mat-button-toggle>
+            </div>
+            <div class="alignmentButton">
+                <mat-button-toggle (click)="setAlignment('center')" mat-icon-button [@.disabled]="true">
+                    <mat-icon svgIcon="textAlignCenter"></mat-icon>
+                </mat-button-toggle>
+            </div>
+            <div class="alignmentButton">
+                <mat-button-toggle (click)="setAlignment('right')" mat-icon-button [@.disabled]="true">
+                    <mat-icon svgIcon="textAlignRight"></mat-icon>
+                </mat-button-toggle>
+            </div>
+        </mat-button-toggle-group>
+    </div>
+    <h5 class="textFormat">Police</h5>
+    <div class="textFormatButton">
+        <mat-button-toggle-group [vertical]="true" value="Arial">
+            <div class="textFormatButton">
+                <mat-button-toggle class="buttons" (click)="changeFont('Arial')" value="Arial">Arial</mat-button-toggle>
+            </div>
+            <div class="textFormatButton">
+                <mat-button-toggle class="buttonTimes" (click)="changeFont('Times New Roman')" value="Times New Roman"
+                    >Times New Roman</mat-button-toggle
+                >
+            </div>
+            <div class="textFormatButton">
+                <mat-button-toggle class="buttonImpact" (click)="changeFont('Impact')" value="Impact">Impact</mat-button-toggle>
+            </div>
+            <div class="textFormatButton">
+                <mat-button-toggle class="buttonMonospace" (click)="changeFont('Monospace')" value="Monospace">Monospace</mat-button-toggle>
+            </div>
+            <div class="textFormatButton">
+                <mat-button-toggle class="buttonVerdana" (click)="changeFont('Verdana')" value="Verdana">Verdana</mat-button-toggle>
+            </div>
+        </mat-button-toggle-group>
+    </div>
+</div>

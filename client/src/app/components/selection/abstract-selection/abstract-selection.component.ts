@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild 
 import { MouseButton } from '@app/constants/control';
 import { ClipboardService } from '@app/services/clipboard/clipboard.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { SelectionEventsService } from '@app/services/selection/selection-events.service';
+import { SidebarEventService } from '@app/services/selection/sidebar-events.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
 import { Subscription } from 'rxjs';
@@ -39,7 +39,7 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
         public selectionService: AbstractSelectionService,
         protected drawingService: DrawingService,
         private cd: ChangeDetectorRef,
-        private selectionEvents: SelectionEventsService,
+        private selectionEvents: SidebarEventService,
         private shortcutHandlerService: ShortcutHandlerService,
         private clipboardService: ClipboardService,
     ) {}

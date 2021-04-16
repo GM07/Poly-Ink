@@ -1,6 +1,6 @@
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 import { Vec2 } from './vec2';
 
 // Justified since there are functions that will be managed by child classes
@@ -20,8 +20,7 @@ export abstract class Tool {
         const right = clientRect.x + clientRect.width;
         const top = clientRect.y;
         const bottom = clientRect.y + clientRect.height;
-        if (event.x < left + border || event.x >= right - border || event.y <= top + border / 2 || event.y >= bottom - border) return false;
-        return true;
+        return !(event.x < left + border || event.x >= right - border || event.y <= top + border / 2 || event.y >= bottom - border);
     }
 
     onMouseDown(event: MouseEvent): void {}
@@ -39,6 +38,8 @@ export abstract class Tool {
     onKeyDown(event: KeyboardEvent): void {}
 
     onKeyUp(event: KeyboardEvent): void {}
+
+    onMouseClick(event: MouseEvent): void {}
 
     stopDrawing(): void {}
 

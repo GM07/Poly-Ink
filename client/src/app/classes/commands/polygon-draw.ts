@@ -1,7 +1,7 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { ShapeConfig, ShapeMode } from '@app/classes/tool-config/shape-config';
 import { Vec2 } from '@app/classes/vec2';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 
 export class PolygonDraw extends AbstractDraw {
     private config: ShapeConfig;
@@ -40,7 +40,6 @@ export class PolygonDraw extends AbstractDraw {
     }
 
     private drawPolygoneSides(ctx: CanvasRenderingContext2D, center: Vec2, radiusAbs: number): void {
-        // tslint:disable-next-line:no-magic-numbers
         const startingAngle = -Math.PI / 2 + (this.config.numEdges % 2 !== 0 ? 0 : Math.PI / this.config.numEdges);
         ctx.lineWidth = this.config.shapeMode === ShapeMode.Filled ? 0 : this.config.lineWidth;
 

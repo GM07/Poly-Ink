@@ -11,6 +11,8 @@ export class TextConfig {
     alignmentSetting: string;
     index: Vec2;
     hasInput: boolean;
+    newAlignment: boolean;
+    lastAlignment: string;
 
     constructor() {
         this.startCoords = new Vec2(0, 0);
@@ -22,6 +24,8 @@ export class TextConfig {
         this.alignmentSetting = 'left';
         this.index = new Vec2(0, 0);
         this.hasInput = false;
+        this.newAlignment = false;
+        this.lastAlignment = 'left';
     }
 
     clone(): TextConfig {
@@ -35,6 +39,8 @@ export class TextConfig {
         config.alignmentSetting = this.alignmentSetting;
         config.index = this.index.clone();
         config.hasInput = this.hasInput;
+        config.newAlignment = this.newAlignment;
+        config.lastAlignment = this.lastAlignment;
 
         return config;
     }

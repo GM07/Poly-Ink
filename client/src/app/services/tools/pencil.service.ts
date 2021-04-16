@@ -7,8 +7,8 @@ import { PencilToolConstants } from '@app/classes/tool_ui_settings/tools.constan
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 export enum LeftMouse {
     Released = 0,

@@ -1,5 +1,5 @@
-import { Color } from 'src/color-picker/classes/color';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { Color } from '@app/classes/color';
+import { ColorService } from '@app/services/color/color.service';
 
 export abstract class AbstractDraw {
     protected primary: Color;

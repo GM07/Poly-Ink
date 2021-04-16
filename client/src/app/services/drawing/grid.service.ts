@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { SpecialKeys } from '@app/classes/shortcut/special-keys';
 import { Vec2 } from '@app/classes/vec2';
+import { Colors } from '@app/constants/colors';
 import { ToolMath } from '@app/constants/math';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { Colors } from 'src/color-picker/constants/colors';
 
 @Injectable({
     providedIn: 'root',
