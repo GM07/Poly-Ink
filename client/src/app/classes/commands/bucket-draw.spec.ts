@@ -208,4 +208,9 @@ describe('BucketDraw', () => {
 
         expect(originalPixel).not.toEqual(pixels);
     });
+
+    it('should return pixels properly', () => {
+        const pixelData = bucketDraw['getPixels'](ctxStub);
+        expect(pixelData.data.length).not.toEqual(0);
+    });
 });
