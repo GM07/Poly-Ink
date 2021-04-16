@@ -73,18 +73,18 @@ describe('ShortcutHandlerService', () => {
         expect(toolHandlerService.onMouseMove).not.toHaveBeenCalled();
     });
 
-    it('should transfer the MouseClick event to the tool Handler if the shortcuts are not blocked', () => {
+    it('should transfer the onDocumentMouseDown event to the tool Handler if the shortcuts are not blocked', () => {
         service.blockShortcuts = false;
-        spyOn(toolHandlerService, 'onMouseClick').and.callThrough();
-        service.onMouseClick(mouseEvent);
-        expect(toolHandlerService.onMouseClick).toHaveBeenCalled();
+        spyOn(toolHandlerService, 'onDocumentMouseDown').and.callThrough();
+        service.onDocumentMouseDown(mouseEvent);
+        expect(toolHandlerService.onDocumentMouseDown).toHaveBeenCalled();
     });
 
-    it('should not transfer the MouseClick event to the tool Handler if the shortcuts are blocked', () => {
+    it('should not transfer the onDocumentMouseDown event to the tool Handler if the shortcuts are blocked', () => {
         service.blockShortcuts = true;
-        spyOn(toolHandlerService, 'onMouseClick').and.callThrough();
-        service.onMouseClick(mouseEvent);
-        expect(toolHandlerService.onMouseClick).not.toHaveBeenCalled();
+        spyOn(toolHandlerService, 'onDocumentMouseDown').and.callThrough();
+        service.onDocumentMouseDown(mouseEvent);
+        expect(toolHandlerService.onDocumentMouseDown).not.toHaveBeenCalled();
     });
 
     it('should return the blocked shortcut status', () => {

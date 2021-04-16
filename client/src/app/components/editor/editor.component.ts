@@ -53,9 +53,9 @@ export class EditorComponent {
         this.shortcutHandler.onMouseMove(event);
     }
 
-    @HostListener('document:click', ['$event'])
-    onMouseClick(event: MouseEvent): void {
-        this.shortcutHandler.onMouseClick(event);
+    @HostListener('document:mousedown', ['$event'])
+    onDocumentMouseDown(event: MouseEvent): void {
+        this.shortcutHandler.onDocumentMouseDown(event);
     }
 
     @HostListener('window:beforeunload', ['$event'])

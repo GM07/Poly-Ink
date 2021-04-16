@@ -84,9 +84,9 @@ describe('Tool', () => {
         expect(tool.onKeyUp).toBeTruthy();
     });
 
-    it('onMouseClick should be defined', () => {
-        tool.onMouseClick({} as MouseEvent);
-        expect(tool.onMouseClick).toBeTruthy();
+    it('onDocumentMouseDown should be defined', () => {
+        tool.onDocumentMouseDown({} as MouseEvent);
+        expect(tool.onDocumentMouseDown).toBeTruthy();
     });
 
     it('stopDrawing should be defined', () => {

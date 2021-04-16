@@ -56,9 +56,9 @@ export class ShortcutHandlerService {
         }
     }
 
-    onMouseClick(event: MouseEvent): void {
+    onDocumentMouseDown(event: MouseEvent): void {
         if (!this.blockShortcutsIn) {
-            this.toolHandlerService.onMouseClick(event);
+            this.toolHandlerService.onDocumentMouseDown(event);
         }
     }
 
