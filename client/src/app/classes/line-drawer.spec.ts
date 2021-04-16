@@ -112,16 +112,18 @@ describe('Line Drawer', () => {
     });
 
     it('should clear points when escape key is pressed', () => {
+        const spy = spyOn<any>(lineDrawer.removeLines, 'next');
         config.points = [mousePos, mousePos];
         lineDrawer['escape'].isDown = true;
-        lineDrawer['clearPoints']();
+        lineDrawer.clearPoints();
         expect(spyDrawing.unblockUndoRedo).toHaveBeenCalled();
         expect(config.points.length).toBe(0);
+        expect(spy).toHaveBeenCalled();
     });
 
     it('should not clear the canvas on other key', () => {
         lineDrawer['escape'].isDown = false;
-        lineDrawer['clearPoints']();
+        lineDrawer.clearPoints();
         expect(spyDrawing.clearCanvas).not.toHaveBeenCalled();
     });
 

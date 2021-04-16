@@ -42,6 +42,9 @@ export class LassoService extends AbstractSelectionService {
         this.lineDrawer.removeLine.subscribe(() => {
             this.lines.pop();
         });
+        this.lineDrawer.removeLines.subscribe(() => {
+            this.lines = [];
+        });
         super.initAttribs(config);
     }
 
@@ -93,8 +96,9 @@ export class LassoService extends AbstractSelectionService {
                 this.lineDrawer.handleKeys(shortcut);
                 return;
             }
+        } else {
+            super.onKeyDown(event);
         }
-        super.onKeyDown(event);
     }
 
     onKeyUp(event: KeyboardEvent): void {
@@ -106,8 +110,9 @@ export class LassoService extends AbstractSelectionService {
                 this.lineDrawer.handleKeys(shortcut);
                 return;
             }
+        } else {
+            super.onKeyUp(event);
         }
-        super.onKeyUp(event);
     }
 
     selectAll(): void {

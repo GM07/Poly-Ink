@@ -37,8 +37,16 @@ export class Geometry {
     }
 
     static lastLineIntersecting(lines: Line[], nextLine: Line): boolean {
-        for (let i = 0; i < lines.length - 1; i++) {
-            if (lines[i].intersects(nextLine)) {
+        if (lines.length === 0) return false;
+
+        const lastFormedLine = lines[lines.length - 1];
+        let dp = lastFormedLine.start.substract(lastFormedLine.end);
+        const length = Math.sqrt(dp.x * dp.x + dp.y * dp.y);
+        dp = dp.scalar(ToolMath.ZERO_THRESHOLD * (1 / length));
+        lastFormedLine.end = lastFormedLine.end.add(dp);
+
+        for (const line of lines) {
+            if (line.intersects(nextLine)) {
                 return true;
             }
         }
