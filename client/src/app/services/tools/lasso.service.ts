@@ -103,7 +103,7 @@ export class LassoService extends AbstractSelectionService {
                 shortcut.isDown = true;
                 this.lineDrawer.handleKeys(shortcut);
             }
-        } else if (!this.selectAllShortcut.equals(event)) {
+        } else {
             super.onKeyDown(event);
         }
     }
