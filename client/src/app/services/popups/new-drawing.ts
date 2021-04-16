@@ -13,15 +13,15 @@ export class NewDrawingService implements Popup {
     shortcut: ShortcutKey;
     showPopup: boolean;
 
+    constructor(private drawingService: DrawingService, private toolHandler: ToolHandlerService) {
+        this.shortcut = new ShortcutKey('o', { ctrlKey: true } as SpecialKeys);
+        this.showPopup = false;
+    }
+
     static isNotEmpty(baseCtx: CanvasRenderingContext2D, width: number, height: number): boolean {
         const whiteColor = 4294967295; // White color constant
         const pixelBuffer = new Uint32Array(baseCtx.getImageData(0, 0, width, height).data.buffer);
         return pixelBuffer.some((color) => color !== whiteColor) && pixelBuffer.some((color) => color !== 0);
-    }
-
-    constructor(private drawingService: DrawingService, private toolHandler: ToolHandlerService) {
-        this.shortcut = new ShortcutKey('o', { ctrlKey: true } as SpecialKeys);
-        this.showPopup = false;
     }
 
     newCanvas(confirm: boolean = false): void {

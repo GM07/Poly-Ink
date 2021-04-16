@@ -17,6 +17,11 @@ export class RectangleSelectionService extends AbstractSelectionService {
         this.toolID = RectangleSelectionToolConstants.TOOL_ID;
     }
 
+    draw(): void {
+        const command = new RectangleSelectionDraw(this.colorService, this.config);
+        this.drawingService.draw(command);
+    }
+
     protected endSelection(): void {
         if (this.config.previewSelectionCtx === null) return;
 
@@ -71,10 +76,5 @@ export class RectangleSelectionService extends AbstractSelectionService {
         const size = new Vec2(this.config.width, this.config.height).apply(Math.abs);
         RectangleSelectionDraw.drawClippedSelection(ctx, this.config);
         this.drawSelection(ctx, this.config.endCoords, size);
-    }
-
-    draw(): void {
-        const command = new RectangleSelectionDraw(this.colorService, this.config);
-        this.drawingService.draw(command);
     }
 }

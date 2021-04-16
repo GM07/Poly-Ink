@@ -6,11 +6,11 @@ import { Vec2 } from './vec2';
 // Justified since there are functions that will be managed by child classes
 // tslint:disable:no-empty
 export abstract class Tool {
-    constructor(protected drawingService: DrawingService, protected colorService: ColorService) {}
     mouseDownCoord: Vec2;
     leftMouseDown: boolean = false;
     shortcutKey: ShortcutKey;
     toolID: string;
+    constructor(protected drawingService: DrawingService, protected colorService: ColorService) {}
 
     isInCanvas(event: MouseEvent): boolean {
         const clientRect = this.drawingService.canvas.getBoundingClientRect();

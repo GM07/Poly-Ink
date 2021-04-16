@@ -31,6 +31,14 @@ export class DrawingComponent implements AfterViewInit {
         this.canvasSize = new Vec2(CanvasConst.DEFAULT_WIDTH, CanvasConst.DEFAULT_HEIGHT);
     }
 
+    get width(): number {
+        return this.canvasSize.x;
+    }
+
+    get height(): number {
+        return this.canvasSize.y;
+    }
+
     ngAfterViewInit(): void {
         this.baseCtx = this.baseCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
         this.previewCtx = this.previewCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
@@ -75,13 +83,5 @@ export class DrawingComponent implements AfterViewInit {
     @HostListener('mouseenter', ['$event'])
     onMouseEnter(event: MouseEvent): void {
         this.toolHandlerService.onMouseEnter(event);
-    }
-
-    get width(): number {
-        return this.canvasSize.x;
-    }
-
-    get height(): number {
-        return this.canvasSize.y;
     }
 }

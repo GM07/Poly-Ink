@@ -33,11 +33,6 @@ export class AerosolService extends Tool {
         this.config = new AerosolConfig();
     }
 
-    stopDrawing(): void {
-        this.onMouseUp();
-        this.drawingService.clearCanvas(this.drawingService.previewCtx);
-    }
-
     get areaDiameter(): number {
         return this.config.areaDiameter;
     }
@@ -64,6 +59,11 @@ export class AerosolService extends Tool {
             Math.max(emissionsPerSecond, ToolSettingsConst.MIN_EMISSIONS_PER_SECOND),
             ToolSettingsConst.MAX_EMISSIONS_PER_SECOND,
         );
+    }
+
+    stopDrawing(): void {
+        this.onMouseUp();
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
     onMouseDown(event: MouseEvent): void {

@@ -34,8 +34,6 @@ export class TextService extends Tool {
 
         this.config = new TextConfig();
 
-        // To allow instance initialization longer than 150 characters
-        // tslint:disable-next-line
         this.shortcutList = [
             TextService.DELETE,
             TextService.BACKSPACE,
@@ -89,6 +87,21 @@ export class TextService extends Tool {
         this.config.index.y = 0;
         this.config.textData = [''];
         this.BLOCK_SHORTCUTS.next(false);
+    }
+
+    drawPreview(): void {
+        const command = new TextDraw(this.colorService, this.config);
+        this.drawingService.drawPreview(command);
+    }
+
+    draw(): void {
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        const command = new TextDraw(this.colorService, this.config);
+        this.drawingService.draw(command);
+    }
+
+    stopDrawing(): void {
+        this.confirmText();
     }
 
     protected initSubscriptions(): void {
@@ -222,20 +235,5 @@ export class TextService extends Tool {
         this.config.startCoords.x = event.offsetX;
         this.config.startCoords.y = event.offsetY;
         this.drawPreview();
-    }
-
-    drawPreview(): void {
-        const command = new TextDraw(this.colorService, this.config);
-        this.drawingService.drawPreview(command);
-    }
-
-    draw(): void {
-        this.drawingService.clearCanvas(this.drawingService.previewCtx);
-        const command = new TextDraw(this.colorService, this.config);
-        this.drawingService.draw(command);
-    }
-
-    stopDrawing(): void {
-        this.confirmText();
     }
 }

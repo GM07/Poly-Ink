@@ -9,8 +9,6 @@ import { Subject } from 'rxjs';
 import { AbstractLineConfig } from './tool-config/abstract-line-config';
 
 export class LineDrawer {
-    private config: AbstractLineConfig;
-    private drawingService: DrawingService;
     pointToAdd: Vec2;
     mousePosition: Vec2;
     shift: ShiftKey = new ShiftKey();
@@ -20,6 +18,8 @@ export class LineDrawer {
     drawPreview: Subject<void>;
     removeLine: Subject<void>;
     leftMouseDown: boolean;
+    private config: AbstractLineConfig;
+    private drawingService: DrawingService;
 
     constructor(config: AbstractLineConfig, drawingService: DrawingService) {
         this.config = config;

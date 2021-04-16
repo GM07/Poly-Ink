@@ -10,8 +10,6 @@ import { Subscription } from 'rxjs';
     styleUrls: ['./color-slider.component.scss'],
 })
 export class ColorSliderComponent implements AfterViewInit, OnDestroy {
-    @ViewChild('canvas') private canvas: ElementRef<HTMLCanvasElement>;
-
     readonly RED_START: number = 0;
     readonly YELLOW_START: number = 0.17;
     readonly GREEN_START: number = 0.34;
@@ -26,6 +24,7 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
     selectedHeight: number = 0;
 
     hueChangeFromHexSubscription: Subscription;
+    @ViewChild('canvas') private canvas: ElementRef<HTMLCanvasElement>;
 
     constructor(private colorService: ColorService) {
         this.hueChangeFromHexSubscription = this.colorService.hueChangeFromHex.subscribe((color) => {

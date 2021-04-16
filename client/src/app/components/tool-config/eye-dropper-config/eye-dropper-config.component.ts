@@ -9,10 +9,10 @@ import { EyeDropperService } from '@app/services/tools/eye-dropper.service';
     styleUrls: ['./eye-dropper-config.component.scss'],
 })
 export class EyeDropperConfigComponent extends ToolConfig implements AfterViewInit {
-    @ViewChild('previewPipette', { static: false }) private previewEyeDropper: ElementRef<HTMLCanvasElement>;
     hexColor: string;
 
     readonly CANVAS_SIZE: number = ToolSettingsConst.EYE_DROPPER_PREVIEW_WIDTH ** 2;
+    @ViewChild('previewPipette', { static: false }) private previewEyeDropper: ElementRef<HTMLCanvasElement>;
 
     constructor(private eyeDropperService: EyeDropperService) {
         super();

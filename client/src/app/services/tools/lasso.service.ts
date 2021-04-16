@@ -126,6 +126,51 @@ export class LassoService extends AbstractSelectionService {
         this.initAttribs(new LassoConfig());
     }
 
+    protected endSelection(): void {
+        if (this.configLasso.previewSelectionCtx === null) return;
+
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.draw();
+
+        this.UPDATE_POINTS.next(false);
+        this.initAttribs(new LassoConfig());
+        this.config.previewSelectionCtx = null;
+        this.config.endCoords = new Vec2(0, 0);
+        this.config.markedForDelete = false;
+        this.config.markedForPaste = false;
+    }
+
+    protected fillBackground(ctx: CanvasRenderingContext2D): void {
+        if (!this.configLasso.didChange()) return;
+
+        ctx.fillStyle = Colors.WHITE.rgbString;
+        LineDrawer.drawFilledLinePath(ctx, this.configLasso.originalPoints);
+    }
+
+    protected updateSelectionRequired(): void {
+        const selectionTranslation = this.configLasso.endCoords.substract(this.configLasso.startCoords);
+        for (let i = 0; i < this.configLasso.points.length; ++i) {
+            const resizeFactor = new Vec2(
+                Math.abs(this.configLasso.width / this.configLasso.originalWidth),
+                Math.abs(this.configLasso.height / this.configLasso.originalHeight),
+            );
+
+            const relativePosition = this.configLasso.originalPoints[i].substract(this.configLasso.startCoords);
+
+            relativePosition.x *= resizeFactor.x * this.configLasso.scaleFactor.x;
+            relativePosition.y *= resizeFactor.y * this.configLasso.scaleFactor.y;
+
+            if (this.configLasso.scaleFactor.x < 0) relativePosition.x += Math.abs(this.configLasso.width);
+            if (this.configLasso.scaleFactor.y < 0) relativePosition.y += Math.abs(this.configLasso.height);
+
+            this.configLasso.points[i] = this.configLasso.startCoords.add(relativePosition).add(selectionTranslation);
+        }
+
+        const ctx = this.drawingService.previewCtx;
+        LassoDraw.drawClippedSelection(ctx, this.configLasso);
+        LineDrawer.drawDashedLinePath(ctx, this.configLasso.points);
+    }
+
     private onClosedPath(): void {
         this.endSelection();
         this.selectionResize.stopDrawing();
@@ -200,50 +245,5 @@ export class LassoService extends AbstractSelectionService {
     private drawPreview(): void {
         const command = new LassoDraw(this.colorService, this.configLasso);
         this.drawingService.drawPreview(command);
-    }
-
-    protected endSelection(): void {
-        if (this.configLasso.previewSelectionCtx === null) return;
-
-        this.drawingService.clearCanvas(this.drawingService.previewCtx);
-        this.draw();
-
-        this.UPDATE_POINTS.next(false);
-        this.initAttribs(new LassoConfig());
-        this.config.previewSelectionCtx = null;
-        this.config.endCoords = new Vec2(0, 0);
-        this.config.markedForDelete = false;
-        this.config.markedForPaste = false;
-    }
-
-    protected fillBackground(ctx: CanvasRenderingContext2D): void {
-        if (!this.configLasso.didChange()) return;
-
-        ctx.fillStyle = Colors.WHITE.rgbString;
-        LineDrawer.drawFilledLinePath(ctx, this.configLasso.originalPoints);
-    }
-
-    protected updateSelectionRequired(): void {
-        const selectionTranslation = this.configLasso.endCoords.substract(this.configLasso.startCoords);
-        for (let i = 0; i < this.configLasso.points.length; ++i) {
-            const resizeFactor = new Vec2(
-                Math.abs(this.configLasso.width / this.configLasso.originalWidth),
-                Math.abs(this.configLasso.height / this.configLasso.originalHeight),
-            );
-
-            const relativePosition = this.configLasso.originalPoints[i].substract(this.configLasso.startCoords);
-
-            relativePosition.x *= resizeFactor.x * this.configLasso.scaleFactor.x;
-            relativePosition.y *= resizeFactor.y * this.configLasso.scaleFactor.y;
-
-            if (this.configLasso.scaleFactor.x < 0) relativePosition.x += Math.abs(this.configLasso.width);
-            if (this.configLasso.scaleFactor.y < 0) relativePosition.y += Math.abs(this.configLasso.height);
-
-            this.configLasso.points[i] = this.configLasso.startCoords.add(relativePosition).add(selectionTranslation);
-        }
-
-        const ctx = this.drawingService.previewCtx;
-        LassoDraw.drawClippedSelection(ctx, this.configLasso);
-        LineDrawer.drawDashedLinePath(ctx, this.configLasso.points);
     }
 }
