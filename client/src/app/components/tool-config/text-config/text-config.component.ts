@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ToolConfig } from '@app/classes/tool-config';
+import { HIGHLIGHTED_COLOR } from '@app/classes/tool_ui_settings/tools.constants';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { TextService } from '@app/services/tools/text.service';
@@ -13,6 +14,7 @@ export class TextConfigComponent extends ToolConfig {
     readonly fonts: string[] = ['Arial', 'Times New Roman', 'Cursive', 'Fantasy', 'Monospace'];
     readonly MIN: number = ToolSettingsConst.TEXT_MIN_FONT_SIZE;
     readonly MAX: number = ToolSettingsConst.TEXT_MAX_FONT_SIZE;
+    readonly HIGHLIGHTED_COLOR: string = HIGHLIGHTED_COLOR;
     currentFont: string;
     currentFontSize: number;
     currentAlignment: string;
@@ -54,8 +56,13 @@ export class TextConfigComponent extends ToolConfig {
     }
 
     setAlignment(newAlignment: string): void {
-        this.textService.config.alignmentSetting = newAlignment;
-        this.textService.drawPreview();
+        if (this.textService.config.alignmentSetting !== newAlignment) {
+            this.textService.config.newAlignment = true;
+            this.textService.config.lastAlignment = this.textService.config.alignmentSetting;
+            this.textService.config.alignmentSetting = newAlignment;
+            this.textService.drawPreview();
+            this.textService.config.newAlignment = false;
+        }
         this.unfocusElement();
     }
 

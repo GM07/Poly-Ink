@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { EllipseDraw } from '@app/classes/commands/ellipse-draw';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { EllipseToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 import { AbstractShape } from './abstract-shape.service';
 
 @Injectable({

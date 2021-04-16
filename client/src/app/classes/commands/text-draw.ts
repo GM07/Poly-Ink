@@ -1,16 +1,18 @@
 import { TextConfig } from '@app/classes/tool-config/text-config';
 import { Vec2 } from '@app/classes/vec2';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 import { AbstractDraw } from './abstract-draw';
 
 export class TextDraw extends AbstractDraw {
     config: TextConfig;
     cursor: Vec2;
     currentLineIndex: number;
+    textConfig: TextConfig;
 
     constructor(colorService: ColorService, textConfig: TextConfig) {
         super(colorService);
         this.config = textConfig.clone();
+        this.textConfig = textConfig;
 
         this.cursor = new Vec2(0, 0);
         this.currentLineIndex = 0;
@@ -28,6 +30,7 @@ export class TextDraw extends AbstractDraw {
         ctx.font = bold + italic + this.config.fontSize + 'px ' + this.config.textFont;
 
         ctx.textAlign = this.config.alignmentSetting as CanvasTextAlign;
+        this.handleAlign(ctx);
 
         ctx.fillStyle = this.primaryRgba;
         ctx.strokeStyle = this.primaryRgba;
@@ -105,5 +108,55 @@ export class TextDraw extends AbstractDraw {
         ctx.moveTo(this.cursor.x, this.cursor.y);
         ctx.lineTo(this.cursor.x, this.cursor.y + height);
         ctx.stroke();
+    }
+
+    private handleAlign(ctx: CanvasRenderingContext2D): void {
+        switch (this.config.alignmentSetting) {
+            case 'left':
+                this.alignLeft(ctx);
+                break;
+            case 'right':
+                this.alignRight(ctx);
+                break;
+            case 'center':
+                this.alignCenter(ctx);
+        }
+    }
+
+    private alignLeft(ctx: CanvasRenderingContext2D): void {
+        if (this.config.newAlignment) {
+            let maxLineWidth: number = ctx.measureText('').width;
+            this.config.textData.forEach((line) => {
+                maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width);
+            });
+            if (this.config.lastAlignment === 'center') maxLineWidth = maxLineWidth / 2;
+            this.config.startCoords.x = this.config.startCoords.x - maxLineWidth;
+            this.textConfig.startCoords.x = this.config.startCoords.x;
+        }
+    }
+
+    private alignRight(ctx: CanvasRenderingContext2D): void {
+        if (this.config.newAlignment) {
+            let maxLineWidth: number = ctx.measureText('').width;
+            this.config.textData.forEach((line) => {
+                maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width);
+            });
+            if (this.config.lastAlignment === 'center') maxLineWidth = maxLineWidth / 2;
+            this.config.startCoords.x = this.config.startCoords.x + maxLineWidth;
+            this.textConfig.startCoords.x = this.config.startCoords.x;
+        }
+    }
+
+    private alignCenter(ctx: CanvasRenderingContext2D): void {
+        if (this.config.newAlignment) {
+            this.config.newAlignment = false;
+            let maxLineWidth: number = ctx.measureText('').width;
+            this.config.textData.forEach((line) => {
+                maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width);
+            });
+            if (this.config.lastAlignment === 'right') maxLineWidth = -maxLineWidth;
+            this.config.startCoords.x = this.config.startCoords.x + maxLineWidth / 2;
+            this.textConfig.startCoords.x = this.config.startCoords.x;
+        }
     }
 }

@@ -21,6 +21,7 @@ export class HomePageComponent {
     state: OpacityState;
     showComponent: boolean;
     showContinueDrawing: boolean;
+    showNewDrawingWarning: boolean;
 
     constructor(private router: Router, private zone: NgZone, private drawingService: DrawingService) {
         this.init();
@@ -38,10 +39,20 @@ export class HomePageComponent {
         this.state = 'visible';
         this.showContinueDrawing = this.drawingService.getSavedDrawing() !== null;
         this.showComponent = true;
+        this.showNewDrawingWarning = false;
     }
 
-    // Function called when the create new drawing button is pressed
+    createNewDrawingOption(): void {
+        this.showNewDrawingWarning = this.drawingService.getSavedDrawing() !== null;
+        if (!this.showNewDrawingWarning) this.createNewDrawing();
+    }
+
+    closeNewDrawingWarning(): void {
+        this.showNewDrawingWarning = false;
+    }
+
     createNewDrawing(): void {
+        this.closeNewDrawingWarning();
         this.fadeOut();
         this.drawingService.setIsDoneReloading();
         this.drawingService.removeSavedDrawing();

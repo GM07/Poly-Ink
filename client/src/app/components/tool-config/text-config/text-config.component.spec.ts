@@ -3,6 +3,8 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatIconModule } from '@angular/material/icon';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
@@ -21,7 +23,15 @@ describe('TextConfigComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [TextConfigComponent],
-            imports: [MatSliderModule, NoopAnimationsModule, MatButtonToggleModule, MatSelectModule, FormsModule],
+            imports: [
+                MatSliderModule,
+                NoopAnimationsModule,
+                MatButtonToggleModule,
+                MatSelectModule,
+                FormsModule,
+                MatIconModule,
+                MatIconTestingModule,
+            ],
         }).compileComponents();
 
         textService = TestBed.inject(TextService);
@@ -85,9 +95,11 @@ describe('TextConfigComponent', () => {
         expect(textService.config.fontSize).toBe(newFontSize);
     });
 
-    it('should change text alignment be left by default', () => {
+    it('should change text alignment and be left by default', () => {
         expect(textService.config.alignmentSetting).toBe('left');
         spyOn(textService, 'drawPreview');
+        component.setAlignment('right');
+        expect(textService.config.alignmentSetting).toBe('right');
         component.setAlignment('right');
         expect(textService.config.alignmentSetting).toBe('right');
     });

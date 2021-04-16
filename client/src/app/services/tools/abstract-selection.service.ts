@@ -8,21 +8,18 @@ import { Tool } from '@app/classes/tool';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export abstract class AbstractSelectionService extends Tool {
-    static readonly LINE_DASH: number = 8;
-    static readonly BORDER_WIDTH: number = 2;
-
+    protected static readonly LINE_DASH: number = 8;
+    protected static readonly BORDER_WIDTH: number = 2;
     private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', { ctrlKey: true } as SpecialKeys);
     private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
-    protected readonly LINE_DASH: number = 8;
-    protected readonly BORDER_WIDTH: number = 2;
     protected selectionTranslation: SelectionTranslation;
 
     readonly UPDATE_POINTS: Subject<boolean> = new Subject<boolean>();

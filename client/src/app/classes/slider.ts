@@ -1,9 +1,9 @@
 // Code based on the radiaslider package
 // https://www.npmjs.com/package/@maslick/radiaslider/v/1.9.8
 
+import { Color } from '@app/classes/color';
 import { Vec2 } from '@app/classes/vec2';
 import { ToolMath } from '@app/constants/math';
-import { Color } from 'src/color-picker/classes/color';
 import { SliderBand, SliderBandOptions } from './slider-band';
 
 export interface Options {

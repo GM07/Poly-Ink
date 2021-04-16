@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
+import { Color } from '@app/classes/color';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { EyeDropperToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
-import { Color } from 'src/color-picker/classes/color';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',

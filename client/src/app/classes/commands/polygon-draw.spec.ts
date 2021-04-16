@@ -3,9 +3,9 @@ import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { PolygonDraw } from '@app/classes/commands/polygon-draw';
 import { ShapeConfig, ShapeMode } from '@app/classes/tool-config/shape-config';
 import { Vec2 } from '@app/classes/vec2';
+import { Colors } from '@app/constants/colors';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { Colors } from 'src/color-picker/constants/colors';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 
 // tslint:disable:no-string-literal
 // tslint:disable:no-any

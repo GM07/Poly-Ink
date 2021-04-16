@@ -2,8 +2,8 @@ import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { Prng } from '@app/classes/math/prng';
 import { AerosolConfig } from '@app/classes/tool-config/aerosol-config';
 import { Vec2 } from '@app/classes/vec2';
+import { ColorService } from '@app/services/color/color.service';
 import * as seedrandom from 'seedrandom';
-import { ColorService } from 'src/color-picker/services/color.service';
 export class AerosolDraw extends AbstractDraw {
     private config: AerosolConfig;
 

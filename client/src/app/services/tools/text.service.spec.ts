@@ -136,13 +136,23 @@ describe('TextService', () => {
         service.config.index.y = 1;
         service.config.textData[1] = '';
         service['handleShortCuts'](TextService['delete']);
-        expect(service.config.index.y).toEqual(0);
+
+        service.config.textData = ['a', '', 'a'];
+        service['handleShortCuts'](TextService['delete']);
+        expect(service.config.textData).toEqual(['a', 'a']);
 
         service.config.index.y = 0;
         service.config.textData[0] = 'allo!';
 
         service['handleShortCuts'](TextService['delete']);
         expect(service['handleDelete']).toHaveBeenCalled();
+
+        service.config.index.x = 1;
+        service.config.textData[0] = 'a';
+        service.config.textData[1] = 'a';
+        service['handleShortCuts'](TextService['delete']);
+        expect(service['handleDelete']).toHaveBeenCalled();
+        expect(service.config.textData[0]).toEqual('aa');
 
         service.config.index.x = indexX;
         service.config.textData[0] = 'a';

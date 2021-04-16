@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
+import { Color } from '@app/classes/color';
 import { Vec2 } from '@app/classes/vec2';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { Color } from 'src/color-picker/classes/color';
-import { ColorService } from 'src/color-picker/services/color.service';
 import { EyeDropperService } from './eye-dropper.service';
 
 /* tslint:disable:no-magic-numbers */

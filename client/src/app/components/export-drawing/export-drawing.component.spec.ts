@@ -7,13 +7,13 @@ import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ImgurResponse } from '@app/classes/imgur-res';
 import { ImgurDataResponse } from '@app/classes/imgur-res-data';
+import { Colors } from '@app/constants/colors';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ExportDrawingService } from '@app/services/popups/export-drawing';
 import { ExportImgurService } from '@app/services/popups/export-imgur.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { of } from 'rxjs';
-import { Colors } from 'src/color-picker/constants/colors';
 import { ExportDrawingComponent } from './export-drawing.component';
 
 /* tslint:disable:no-magic-numbers */

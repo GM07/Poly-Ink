@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { RectangleDraw } from '@app/classes/commands/rectangle-draw';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { RectangleToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 import { AbstractShape } from './abstract-shape.service';
 @Injectable({
     providedIn: 'root',

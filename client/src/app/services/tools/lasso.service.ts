@@ -9,12 +9,12 @@ import { LassoConfig } from '@app/classes/tool-config/lasso-config';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { LassoToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
+import { Colors } from '@app/constants/colors';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
-import { Colors } from 'src/color-picker/constants/colors';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',

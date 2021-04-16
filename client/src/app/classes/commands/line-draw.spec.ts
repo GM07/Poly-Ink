@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
-import { LineConfig } from '@app/classes/tool-config/line-config.ts';
+import { LineConfig } from '@app/classes/tool-config/line-config';
 import { Vec2 } from '@app/classes/vec2';
+import { Colors } from '@app/constants/colors';
+import { HexColors } from '@app/constants/hex-colors';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { Colors } from 'src/color-picker/constants/colors';
-import { HexColors } from 'src/color-picker/constants/hex-colors';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 import { LineDraw } from './line-draw';
 
 // tslint:disable:no-string-literal
