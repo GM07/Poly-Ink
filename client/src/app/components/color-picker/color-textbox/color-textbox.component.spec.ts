@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { Color } from 'src/color-picker/classes/color';
-import { Colors } from 'src/color-picker/constants/colors';
-import { HexColors } from 'src/color-picker/constants/hex-colors';
+import { Color } from '@app/classes/color';
+import { Colors } from '@app/constants/colors';
+import { HexColors } from '@app/constants/hex-colors';
 import { ColorTextboxComponent } from './color-textbox.component';
 
 describe('ColorTextboxComponent', () => {

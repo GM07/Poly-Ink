@@ -1,6 +1,6 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 
 export class RectangleSelectionDraw extends AbstractDraw {
     private config: SelectionConfig;

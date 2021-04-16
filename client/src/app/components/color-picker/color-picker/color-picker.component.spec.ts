@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Color } from 'src/color-picker/classes/color';
-import { Colors } from 'src/color-picker/constants/colors';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { Color } from '@app/classes/color';
+import { Colors } from '@app/constants/colors';
+import { ColorService } from '@app/services/color/color.service';
 import { ColorPickerComponent } from './color-picker.component';
 // tslint:disable:max-classes-per-file
 @Component({ selector: 'app-color-palette', template: '' })

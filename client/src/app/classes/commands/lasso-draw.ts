@@ -1,7 +1,7 @@
 import { LineDrawer } from '@app/classes/line-drawer';
 import { LassoConfig } from '@app/classes/tool-config/lasso-config';
 import { Vec2 } from '@app/classes/vec2';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 import { AbstractDraw } from './abstract-draw';
 
 export class LassoDraw extends AbstractDraw {

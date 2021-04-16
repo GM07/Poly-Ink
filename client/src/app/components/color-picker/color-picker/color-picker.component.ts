@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { Color } from 'src/color-picker/classes/color';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { Color } from '@app/classes/color';
+import { ColorService } from '@app/services/color/color.service';
 
 @Component({
     selector: 'app-color-picker',

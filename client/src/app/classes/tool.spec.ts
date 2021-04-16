@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { Colors } from '@app/constants/colors';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { Colors } from 'src/color-picker/constants/colors';
-import { ColorService } from 'src/color-picker/services/color.service';
 import { CanvasTestHelper } from './canvas-test-helper';
 import { Tool } from './tool';
 import { Vec2 } from './vec2';

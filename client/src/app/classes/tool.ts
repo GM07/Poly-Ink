@@ -1,6 +1,6 @@
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 import { Vec2 } from './vec2';
 
 // Justified since there are functions that will be managed by child classes

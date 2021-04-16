@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
+import { Color } from '@app/classes/color';
+import { Colors } from '@app/constants/colors';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { Color } from 'src/color-picker/classes/color';
-import { Colors } from 'src/color-picker/constants/colors';
-import { ColorService } from 'src/color-picker/services/color.service';
 import { PolygoneService } from './polygone.service';
 // tslint:disable:no-any
 describe('PolygoneService', () => {

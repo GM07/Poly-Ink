@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Color } from 'src/color-picker/classes/color';
-import { HexColors } from 'src/color-picker/constants/hex-colors';
+import { Color } from '@app/classes/color';
+import { HexColors } from '@app/constants/hex-colors';
 
 @Component({
     selector: 'app-color-textbox',

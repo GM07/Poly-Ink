@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { PencilDraw } from '@app/classes/commands/pencil-draw';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from './drawing.service';
 
 // tslint:disable:no-string-literal

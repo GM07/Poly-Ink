@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
+import { Colors } from '@app/constants/colors';
 import { MouseButton } from '@app/constants/control';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { Colors } from 'src/color-picker/constants/colors';
-import { ColorService } from 'src/color-picker/services/color.service';
 import { BucketService } from './bucket.service';
 
 describe('BucketService', () => {

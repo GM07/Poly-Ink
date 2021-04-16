@@ -8,8 +8,8 @@ import { LineConfig } from '@app/classes/tool-config/line-config';
 import { LineToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',

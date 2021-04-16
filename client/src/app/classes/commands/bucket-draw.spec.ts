@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { BucketConfig } from '@app/classes/tool-config/bucket-config';
 import { Vec2 } from '@app/classes/vec2';
-import { Colors } from 'src/color-picker/constants/colors';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { Colors } from '@app/constants/colors';
+import { ColorService } from '@app/services/color/color.service';
 import { BucketDraw } from './bucket-draw';
 
 // tslint:disable:no-string-literal

@@ -5,9 +5,9 @@ import { Tool } from '@app/classes/tool';
 import { TextConfig } from '@app/classes/tool-config/text-config';
 import { TextToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { MouseButton } from '@app/constants/control';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',
@@ -34,6 +34,8 @@ export class TextService extends Tool {
 
         this.config = new TextConfig();
 
+        // To allow instance initialization longer than 150 characters
+        // tslint:disable-next-line
         this.shortcutList = [
             TextService.delete,
             TextService.backspace,
