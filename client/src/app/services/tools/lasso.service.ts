@@ -92,12 +92,12 @@ export class LassoService extends AbstractSelectionService {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (this.configLasso.previewSelectionCtx === null) {
-            if (this.selectAllShortcut.equals(event)) {
-                super.onKeyDown(event);
-                return;
-            }
+        if (this.selectAllShortcut.equals(event)) {
+            super.onKeyDown(event);
+            return;
+        }
 
+        if (this.configLasso.previewSelectionCtx === null) {
             const shortcut = ShortcutKey.get(this.lineDrawer.shortcutList, event, true);
             if (shortcut !== undefined && shortcut.isDown !== true) {
                 shortcut.isDown = true;
@@ -121,6 +121,7 @@ export class LassoService extends AbstractSelectionService {
     }
 
     selectAll(): void {
+        this.endSelection();
         const width = this.drawingService.canvas.width;
         const height = this.drawingService.canvas.height;
         this.start = new Vec2(0, 0);
@@ -128,17 +129,8 @@ export class LassoService extends AbstractSelectionService {
 
         const canvasBounds: Vec2[] = [this.start.clone(), new Vec2(width, 0), this.end.clone(), new Vec2(0, height), this.start.clone()];
 
-        let samePoints = canvasBounds.length === this.configLasso.points.length;
-        for (let i = 0; i < canvasBounds.length && samePoints; i++) {
-            if (!this.configLasso.points[i].equals(canvasBounds[i])) {
-                samePoints = false;
-            }
-        }
-
-        if (!samePoints) {
-            this.configLasso.points = canvasBounds;
-            this.onClosedPath();
-        }
+        this.configLasso.points = canvasBounds;
+        this.onClosedPath();
     }
 
     stopDrawing(): void {
@@ -163,7 +155,6 @@ export class LassoService extends AbstractSelectionService {
         this.configLasso.height = size.y;
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
         this.configLasso.isInSelection = true;
-
         this.startSelection();
     }
 
@@ -230,7 +221,6 @@ export class LassoService extends AbstractSelectionService {
         this.draw();
 
         this.UPDATE_POINTS.next(false);
-        this.initAttribs(new LassoConfig());
         this.config.previewSelectionCtx = null;
         this.config.endCoords = new Vec2(0, 0);
         this.config.markedForDelete = false;
