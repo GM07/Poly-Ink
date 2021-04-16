@@ -3,9 +3,9 @@ import { PolygonDraw } from '@app/classes/commands/polygon-draw';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { PolygoneToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractShape } from '@app/services/tools/abstract-shape.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',

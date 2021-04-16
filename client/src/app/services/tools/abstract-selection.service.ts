@@ -8,31 +8,36 @@ import { Tool } from '@app/classes/tool';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export abstract class AbstractSelectionService extends Tool {
-    static readonly LINE_DASH: number = 8;
-    static readonly BORDER_WIDTH: number = 2;
-
-    private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', { ctrlKey: true } as SpecialKeys);
-    private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
-    protected readonly LINE_DASH: number = 8;
-    protected readonly BORDER_WIDTH: number = 2;
-    protected selectionTranslation: SelectionTranslation;
+    protected static readonly LINE_DASH: number = 8;
+    protected static readonly BORDER_WIDTH: number = 2;
 
     readonly UPDATE_POINTS: Subject<boolean> = new Subject<boolean>();
     selectionResize: SelectionResize;
     mouseUpCoord: Vec2;
     config: SelectionConfig;
+    protected selectionTranslation: SelectionTranslation;
+    private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', { ctrlKey: true } as SpecialKeys);
+    private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.initAttribs(new SelectionConfig());
+    }
+
+    get resizeSelected(): boolean {
+        return this.selectionResize.resizeSelected;
+    }
+
+    set resizeSelected(selected: boolean) {
+        this.selectionResize.resizeSelected = selected;
     }
 
     initAttribs(config: SelectionConfig): void {
@@ -42,12 +47,6 @@ export abstract class AbstractSelectionService extends Tool {
         this.config.endCoords = new Vec2(0, 0);
         this.initSubscriptions();
     }
-
-    protected abstract endSelection(): void;
-
-    protected abstract fillBackground(ctx: CanvasRenderingContext2D): void;
-
-    protected abstract updateSelectionRequired(): void;
 
     onMouseDown(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
@@ -156,13 +155,27 @@ export abstract class AbstractSelectionService extends Tool {
         if (this.leftMouseDown) this.selectionTranslation.startMouseTranslation(this.getPositionFromMouse(event));
     }
 
-    get resizeSelected(): boolean {
-        return this.selectionResize.resizeSelected;
+    updateSelection(translation: Vec2): void {
+        if (this.config.previewSelectionCtx === null) return;
+
+        this.drawingService.blockUndoRedo();
+        this.config.endCoords = this.config.endCoords.add(translation);
+        const ctx = this.drawingService.previewCtx;
+        this.drawingService.clearCanvas(ctx);
+
+        if (!this.config.markedForPaste) {
+            this.fillBackground(ctx);
+        }
+
+        this.updateSelectionRequired();
+        this.UPDATE_POINTS.next(true);
     }
 
-    set resizeSelected(selected: boolean) {
-        this.selectionResize.resizeSelected = selected;
-    }
+    protected abstract endSelection(): void;
+
+    protected abstract fillBackground(ctx: CanvasRenderingContext2D): void;
+
+    protected abstract updateSelectionRequired(): void;
 
     protected setMouseUpCoord(event: MouseEvent): void {
         if (this.leftMouseDown && this.config.previewSelectionCtx === null && !this.isInCanvas(event)) {
@@ -219,22 +232,6 @@ export abstract class AbstractSelectionService extends Tool {
         );
 
         this.updateSelection(new Vec2(0, 0));
-    }
-
-    updateSelection(translation: Vec2): void {
-        if (this.config.previewSelectionCtx === null) return;
-
-        this.drawingService.blockUndoRedo();
-        this.config.endCoords = this.config.endCoords.add(translation);
-        const ctx = this.drawingService.previewCtx;
-        this.drawingService.clearCanvas(ctx);
-
-        if (!this.config.markedForPaste) {
-            this.fillBackground(ctx);
-        }
-
-        this.updateSelectionRequired();
-        this.UPDATE_POINTS.next(true);
     }
 
     protected drawPreviewSelection(): void {

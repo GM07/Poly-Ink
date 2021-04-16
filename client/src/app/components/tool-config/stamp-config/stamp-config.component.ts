@@ -15,8 +15,6 @@ export class StampConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     // The static _this is used to preserve the context in the event
     static this: StampConfigComponent;
 
-    @ViewChild('angleValue', { static: false }) private angleValue: ElementRef<HTMLElement>;
-
     readonly MAX_SCALE: number = ToolSettingsConst.STAMP_MAX_VALUE;
     readonly MIN_SCALE: number = ToolSettingsConst.STAMP_MIN_VALUE;
     readonly MIN_ROTATION: number = ToolSettingsConst.STAMP_MIN_ANGLE;
@@ -27,6 +25,8 @@ export class StampConfigComponent implements OnInit, OnDestroy, AfterViewInit {
 
     stampMode: typeof Stamp = Stamp;
     slider: Slider;
+
+    @ViewChild('angleValue', { static: false }) private angleValue: ElementRef<HTMLElement>;
 
     constructor(public stampService: StampService) {}
 

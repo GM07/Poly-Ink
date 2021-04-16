@@ -4,19 +4,16 @@ import { Tool } from '@app/classes/tool';
 import { ShapeConfig } from '@app/classes/tool-config/shape-config';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export abstract class AbstractShape extends Tool {
-    protected readonly SHIFT: ShiftKey;
     toolID: string;
     config: ShapeConfig;
-
-    protected abstract draw(): void;
-    protected abstract drawPreview(): void;
+    protected readonly SHIFT: ShiftKey;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
@@ -97,4 +94,7 @@ export abstract class AbstractShape extends Tool {
             }
         }
     }
+
+    protected abstract draw(): void;
+    protected abstract drawPreview(): void;
 }

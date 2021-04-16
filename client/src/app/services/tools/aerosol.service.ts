@@ -7,8 +7,8 @@ import { AerosolToolConstants } from '@app/classes/tool_ui_settings/tools.consta
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 export enum LeftMouse {
     Released = 0,
     Pressed = 1,
@@ -31,11 +31,6 @@ export class AerosolService extends Tool {
         this.emissionsPerSecondIn = ToolSettingsConst.DEFAULT_AEROSOL_EMISSIONS_PER_SECOND;
         this.toolID = AerosolToolConstants.TOOL_ID;
         this.config = new AerosolConfig();
-    }
-
-    stopDrawing(): void {
-        this.onMouseUp();
-        this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
     get areaDiameter(): number {
@@ -64,6 +59,11 @@ export class AerosolService extends Tool {
             Math.max(emissionsPerSecond, ToolSettingsConst.MIN_EMISSIONS_PER_SECOND),
             ToolSettingsConst.MAX_EMISSIONS_PER_SECOND,
         );
+    }
+
+    stopDrawing(): void {
+        this.onMouseUp();
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
     onMouseDown(event: MouseEvent): void {

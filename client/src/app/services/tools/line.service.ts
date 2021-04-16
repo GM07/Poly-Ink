@@ -8,8 +8,8 @@ import { LineConfig } from '@app/classes/tool-config/line-config';
 import { LineToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',
@@ -41,34 +41,6 @@ export class LineService extends Tool {
         } else if (event.detail === 2) {
             this.handleDoubleClick(event);
         }
-    }
-
-    private handleSimpleClick(event: MouseEvent): void {
-        this.lineDrawer.leftMouseDown = event.button === MouseButton.Left;
-        if (this.lineDrawer.leftMouseDown) {
-            this.lineDrawer.addNewPoint(event);
-        }
-    }
-
-    private handleDoubleClick(event: MouseEvent): void {
-        if (!this.lineDrawer.shift.isDown) {
-            this.lineDrawer.pointToAdd = this.getPositionFromMouse(event);
-        } else {
-            this.lineDrawer.pointToAdd = this.lineDrawer.getAlignedPoint(this.getPositionFromMouse(event));
-        }
-
-        const closedLoop: boolean =
-            Geometry.getDistanceBetween(this.lineDrawer.pointToAdd, this.config.points[0]) <= ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;
-
-        if (closedLoop) {
-            this.config.points[this.config.points.length - 1] = this.config.points[0];
-        }
-        this.config.closedLoop = closedLoop;
-
-        this.draw();
-
-        this.drawingService.clearCanvas(this.drawingService.previewCtx);
-        this.initService();
     }
 
     onMouseUp(event: MouseEvent): void {
@@ -117,5 +89,30 @@ export class LineService extends Tool {
     drawPreview(): void {
         const command = new LineDraw(this.colorService, this.config);
         this.drawingService.drawPreview(command);
+    }
+
+    private handleSimpleClick(event: MouseEvent): void {
+        this.lineDrawer.leftMouseDown = event.button === MouseButton.Left;
+        if (this.lineDrawer.leftMouseDown) {
+            this.lineDrawer.addNewPoint(event);
+        }
+    }
+
+    private handleDoubleClick(event: MouseEvent): void {
+        const mousePos = this.getPositionFromMouse(event);
+        this.lineDrawer.pointToAdd = this.lineDrawer.shift.isDown ? this.lineDrawer.getAlignedPoint(mousePos) : mousePos;
+
+        const closedLoop: boolean =
+            Geometry.getDistanceBetween(this.lineDrawer.pointToAdd, this.config.points[0]) <= ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;
+
+        if (closedLoop) {
+            this.config.points[this.config.points.length - 1] = this.config.points[0];
+        }
+        this.config.closedLoop = closedLoop;
+
+        this.draw();
+
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        this.initService();
     }
 }

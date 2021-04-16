@@ -49,8 +49,8 @@ describe('ToolHandlerService', () => {
         expect(pencilService.onMouseLeave).toHaveBeenCalled();
         service.onMouseEnter(mouseEvent);
         expect(pencilService.onMouseEnter).toHaveBeenCalled();
-        service.onMouseClick(mouseEvent);
-        expect(pencilService.onMouseClick).toHaveBeenCalled();
+        service.onDocumentMouseDown(mouseEvent);
+        expect(pencilService.onDocumentMouseDown).toHaveBeenCalled();
     });
 
     it('should change tool on keyPress', () => {

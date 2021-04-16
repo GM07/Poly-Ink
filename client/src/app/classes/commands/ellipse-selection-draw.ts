@@ -1,10 +1,15 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
 import { Vec2 } from '@app/classes/vec2';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 
 export class EllipseSelectionDraw extends AbstractDraw {
     private config: SelectionConfig;
+
+    constructor(colorService: ColorService, config: SelectionConfig) {
+        super(colorService);
+        this.config = config.clone();
+    }
 
     static drawClippedSelection(ctx: CanvasRenderingContext2D, config: SelectionConfig): void {
         const radius = new Vec2(config.width / 2, config.height / 2).apply(Math.abs);
@@ -17,11 +22,6 @@ export class EllipseSelectionDraw extends AbstractDraw {
         ctx.drawImage(config.SELECTION_DATA, config.endCoords.x, config.endCoords.y, Math.abs(config.width), Math.abs(config.height));
         ctx.restore();
         ctx.closePath();
-    }
-
-    constructor(colorService: ColorService, config: SelectionConfig) {
-        super(colorService);
-        this.config = config.clone();
     }
 
     execute(context: CanvasRenderingContext2D): void {

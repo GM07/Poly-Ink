@@ -4,6 +4,9 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
 
 export class SelectionResize {
+    resizeSelected: boolean;
+
+    readonly UPDATE_SELECTION_REQUEST: Subject<Vec2> = new Subject<Vec2>();
     private readonly FLIP_IMAGE_FACTOR: number = -1;
     private readonly MINIMUM_RESIZE_SIZE: number = 1;
 
@@ -13,9 +16,6 @@ export class SelectionResize {
     private memoryCanvas: HTMLCanvasElement | undefined;
     private lockVertical: boolean;
     private lockHorizontal: boolean;
-    resizeSelected: boolean;
-
-    readonly UPDATE_SELECTION_REQUEST: Subject<Vec2> = new Subject<Vec2>();
 
     constructor(config: SelectionConfig) {
         this.config = config;

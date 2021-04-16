@@ -6,11 +6,11 @@ export class TabHandler<TabComponentClass> {
 
     constructor(private toolHandler: ToolHandlerService) {}
 
-    setTab(tabId: string, tabComponent: Type<TabComponentClass>): void {
-        this.TAB_LIST.set(tabId, tabComponent);
-    }
-
     get activeTab(): Type<TabComponentClass> | undefined {
         return this.TAB_LIST.get(this.toolHandler.getCurrentTool().toolID);
+    }
+
+    setTab(tabId: string, tabComponent: Type<TabComponentClass>): void {
+        this.TAB_LIST.set(tabId, tabComponent);
     }
 }

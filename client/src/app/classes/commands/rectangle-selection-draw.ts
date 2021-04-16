@@ -1,17 +1,17 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { SelectionConfig } from '@app/classes/tool-config/selection-config';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 
 export class RectangleSelectionDraw extends AbstractDraw {
     private config: SelectionConfig;
 
-    static drawClippedSelection(ctx: CanvasRenderingContext2D, config: SelectionConfig): void {
-        ctx.drawImage(config.SELECTION_DATA, config.endCoords.x, config.endCoords.y, Math.abs(config.width), Math.abs(config.height));
-    }
-
     constructor(colorService: ColorService, config: SelectionConfig) {
         super(colorService);
         this.config = config.clone();
+    }
+
+    static drawClippedSelection(ctx: CanvasRenderingContext2D, config: SelectionConfig): void {
+        ctx.drawImage(config.SELECTION_DATA, config.endCoords.x, config.endCoords.y, Math.abs(config.width), Math.abs(config.height));
     }
 
     execute(context: CanvasRenderingContext2D): void {

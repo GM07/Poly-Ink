@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { SpecialKeys } from '@app/classes/shortcut/special-keys';
 import { Vec2 } from '@app/classes/vec2';
+import { Colors } from '@app/constants/colors';
 import { ToolMath } from '@app/constants/math';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
-import { Colors } from 'src/color-picker/constants/colors';
 
 @Injectable({
     providedIn: 'root',
@@ -29,10 +29,6 @@ export class GridService {
         this.gridVisibility = false;
     }
 
-    toggleGridVisibility(): void {
-        this.gridVisibility = !this.gridVisibility;
-    }
-
     set sizeValue(size: number) {
         this.size = Math.max(Math.min(size, ToolSettingsConst.GRID_MAX_SIZE), ToolSettingsConst.GRID_MIN_SIZE);
         this.updateGrid();
@@ -49,6 +45,10 @@ export class GridService {
 
     get opacityValue(): number {
         return Math.round(this.opacity * ToolMath.PERCENTAGE);
+    }
+
+    toggleGridVisibility(): void {
+        this.gridVisibility = !this.gridVisibility;
     }
 
     onKeyDown(event: KeyboardEvent): void {

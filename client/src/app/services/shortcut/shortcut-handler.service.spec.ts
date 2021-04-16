@@ -2,11 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
 import { TextToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { TextService } from '@app/services/tools/text.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 import { ShortcutHandlerService } from './shortcut-handler.service';
 
 // tslint:disable:no-string-literal
@@ -73,18 +73,18 @@ describe('ShortcutHandlerService', () => {
         expect(toolHandlerService.onMouseMove).not.toHaveBeenCalled();
     });
 
-    it('should transfer the MouseClick event to the tool Handler if the shortcuts are not blocked', () => {
+    it('should transfer the onDocumentMouseDown event to the tool Handler if the shortcuts are not blocked', () => {
         service.blockShortcuts = false;
-        spyOn(toolHandlerService, 'onMouseClick').and.callThrough();
-        service.onMouseClick(mouseEvent);
-        expect(toolHandlerService.onMouseClick).toHaveBeenCalled();
+        spyOn(toolHandlerService, 'onDocumentMouseDown').and.callThrough();
+        service.onDocumentMouseDown(mouseEvent);
+        expect(toolHandlerService.onDocumentMouseDown).toHaveBeenCalled();
     });
 
-    it('should not transfer the MouseClick event to the tool Handler if the shortcuts are blocked', () => {
+    it('should not transfer the onDocumentMouseDown event to the tool Handler if the shortcuts are blocked', () => {
         service.blockShortcuts = true;
-        spyOn(toolHandlerService, 'onMouseClick').and.callThrough();
-        service.onMouseClick(mouseEvent);
-        expect(toolHandlerService.onMouseClick).not.toHaveBeenCalled();
+        spyOn(toolHandlerService, 'onDocumentMouseDown').and.callThrough();
+        service.onDocumentMouseDown(mouseEvent);
+        expect(toolHandlerService.onDocumentMouseDown).not.toHaveBeenCalled();
     });
 
     it('should return the blocked shortcut status', () => {

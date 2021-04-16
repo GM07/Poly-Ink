@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
+import { Color } from '@app/classes/color';
 import { Vec2 } from '@app/classes/vec2';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { Color } from 'src/color-picker/classes/color';
-import { ColorService } from 'src/color-picker/services/color.service';
 import { EyeDropperService } from './eye-dropper.service';
 
 /* tslint:disable:no-magic-numbers */
@@ -117,7 +117,6 @@ describe('EyeDropperService', () => {
         spyOn(service.previsualisationCtx, 'drawImage');
         spyOn<any>(service, 'drawSelectedPixelRect');
         spyOn<any>(service, 'getPrevisualisation');
-        spyOn<any>(service, 'drawCircleAroundPreview');
         spyOn<any>(service, 'drawCircleAroundMouse');
         spyOn<any>(service, 'getColor').and.returnValue(new Color(0, 0, 0));
         spyOn(service, 'isInCanvas').and.returnValue(true);
@@ -145,12 +144,6 @@ describe('EyeDropperService', () => {
         const eyeDropper: EyeDropperService = service;
         service.stopDrawing();
         expect(service).toEqual(eyeDropper);
-    });
-
-    it('draw circle around preview should draw a circle around the preview', () => {
-        spyOn(baseCtxStub, 'ellipse');
-        service['drawCircleAroundPreview'](baseCtxStub, 10);
-        expect(baseCtxStub.ellipse).toHaveBeenCalled();
     });
 
     it('draw circle around mouse should draw a circle around the mouse', () => {

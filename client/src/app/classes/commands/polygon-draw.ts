@@ -1,7 +1,7 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { ShapeConfig, ShapeMode } from '@app/classes/tool-config/shape-config';
 import { Vec2 } from '@app/classes/vec2';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 
 export class PolygonDraw extends AbstractDraw {
     private config: ShapeConfig;

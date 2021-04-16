@@ -3,9 +3,9 @@ import { EllipseSelectionDraw } from '@app/classes/commands/ellipse-selection-dr
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { EllipseSelectionToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { Vec2 } from '@app/classes/vec2';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { AbstractSelectionService } from '@app/services/tools/abstract-selection.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 @Injectable({
     providedIn: 'root',
@@ -15,6 +15,11 @@ export class EllipseSelectionService extends AbstractSelectionService {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(EllipseSelectionToolConstants.SHORTCUT_KEY);
         this.toolID = EllipseSelectionToolConstants.TOOL_ID;
+    }
+
+    draw(): void {
+        const command = new EllipseSelectionDraw(this.colorService, this.config);
+        this.drawingService.draw(command);
     }
 
     protected drawPreviewSelection(): void {
@@ -95,10 +100,5 @@ export class EllipseSelectionService extends AbstractSelectionService {
         EllipseSelectionDraw.drawClippedSelection(ctx, this.config);
 
         this.drawSelection(ctx, center, radius);
-    }
-
-    draw(): void {
-        const command = new EllipseSelectionDraw(this.colorService, this.config);
-        this.drawingService.draw(command);
     }
 }

@@ -7,8 +7,8 @@ import { PencilToolConstants } from '@app/classes/tool_ui_settings/tools.constan
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 
 export enum LeftMouse {
     Released = 0,
@@ -91,6 +91,16 @@ export class PencilService extends Tool {
         this.drawingService.clearCanvas(this.drawingService.previewCtx);
     }
 
+    drawPreview(): void {
+        const command = new PencilDraw(this.colorService, this.config);
+        this.drawingService.drawPreview(command);
+    }
+
+    draw(): void {
+        const command = new PencilDraw(this.colorService, this.config);
+        this.drawingService.draw(command);
+    }
+
     protected drawBackgroundPoint(point: Vec2): void {
         const ctx = this.drawingService.previewCtx;
         this.drawingService.clearCanvas(ctx);
@@ -100,16 +110,6 @@ export class PencilService extends Tool {
 
         const command = new PencilDraw(this.colorService, backgroundPointConfig);
         command.execute(this.drawingService.previewCtx);
-    }
-
-    drawPreview(): void {
-        const command = new PencilDraw(this.colorService, this.config);
-        this.drawingService.drawPreview(command);
-    }
-
-    draw(): void {
-        const command = new PencilDraw(this.colorService, this.config);
-        this.drawingService.draw(command);
     }
 
     protected clearPath(): void {

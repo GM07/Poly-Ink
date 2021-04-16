@@ -19,12 +19,6 @@ import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.
 })
 export class ExportDrawingComponent {
     private static readonly EXPORT_PREVIEW_MAX_SIZE: number = 300;
-
-    private baseCanvas: HTMLCanvasElement;
-    private baseContext: CanvasRenderingContext2D;
-    private canvasImage: string;
-    private imageData: ImageData;
-    private defaultFileNames: string[];
     exportFormat: string;
     filename: string;
     currentFilter: string;
@@ -33,13 +27,14 @@ export class ExportDrawingComponent {
     imgurURL: string;
     imgurLoading: boolean;
     hasImgurServerError: boolean;
-    private exportPreview: ElementRef<HTMLCanvasElement>;
     @Input() diameter: number;
-    @ViewChild('exportPreview', { static: false }) set content(element: ElementRef) {
-        if (element) {
-            this.exportPreview = element;
-        }
-    }
+
+    private baseCanvas: HTMLCanvasElement;
+    private baseContext: CanvasRenderingContext2D;
+    private canvasImage: string;
+    private imageData: ImageData;
+    private defaultFileNames: string[];
+    private exportPreview: ElementRef<HTMLCanvasElement>;
 
     private filterMap: Map<string, Filter> = new Map([
         ['default', new Filter()],
@@ -59,13 +54,18 @@ export class ExportDrawingComponent {
     ) {
         this.initValues();
     }
+    @ViewChild('exportPreview', { static: false }) set content(element: ElementRef) {
+        if (element) {
+            this.exportPreview = element;
+        }
+    }
 
     get nameFormControl(): AbstractControl {
         return this.exportForm.get('nameFormControl') as AbstractControl;
     }
 
     initValues(): void {
-        this.defaultFileNames = DrawingConstants.defaultFileNames;
+        this.defaultFileNames = DrawingConstants.DEFAULT_FILE_NAMES;
         this.exportFormat = 'png';
         this.currentFilter = 'default';
         this.hasImgurServerError = false;

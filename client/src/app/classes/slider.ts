@@ -1,9 +1,9 @@
 // Code based on the radiaslider package
 // https://www.npmjs.com/package/@maslick/radiaslider/v/1.9.8
 
+import { Color } from '@app/classes/color';
 import { Vec2 } from '@app/classes/vec2';
 import { ToolMath } from '@app/constants/math';
-import { Color } from 'src/color-picker/classes/color';
 import { SliderBand, SliderBandOptions } from './slider-band';
 
 export interface Options {
@@ -19,24 +19,6 @@ export interface SliderValues {
 }
 
 export class Slider {
-    constructor(options: Options) {
-        this.sliders = [];
-
-        this.continuousMode = options.continuousMode;
-
-        this.container = document.getElementById(options.canvasId) as HTMLCanvasElement;
-        this.theBody = document.body;
-        this.context = this.container.getContext('2d') as CanvasRenderingContext2D;
-
-        this.position = options.position;
-
-        this.mousePos = new Vec2(0, 0);
-
-        this.rotationEventListener = this._rotation.bind(this);
-        this.container.addEventListener('mousedown', this._handleMouseDown.bind(this), false);
-        this.theBody.addEventListener('mouseup', this._handleMouseUp.bind(this), false);
-        this.container.addEventListener('click', this._handleClick.bind(this), false);
-    }
     private sliders: SliderBand[];
     // tslint:disable:no-magic-numbers
     private readonly scaleWidth: number = 17;
@@ -64,6 +46,24 @@ export class Slider {
     // bind function doesn't return a proper type
     // tslint:disable-next-line:no-any
     private rotationEventListener: any;
+    constructor(options: Options) {
+        this.sliders = [];
+
+        this.continuousMode = options.continuousMode;
+
+        this.container = document.getElementById(options.canvasId) as HTMLCanvasElement;
+        this.theBody = document.body;
+        this.context = this.container.getContext('2d') as CanvasRenderingContext2D;
+
+        this.position = options.position;
+
+        this.mousePos = new Vec2(0, 0);
+
+        this.rotationEventListener = this._rotation.bind(this);
+        this.container.addEventListener('mousedown', this._handleMouseDown.bind(this), false);
+        this.theBody.addEventListener('mouseup', this._handleMouseUp.bind(this), false);
+        this.container.addEventListener('click', this._handleClick.bind(this), false);
+    }
 
     private static radToDeg(ang: number): number {
         return (ang * ToolMath.DEGREE_CONVERSION_FACTOR) / Math.PI;
@@ -109,6 +109,32 @@ export class Slider {
             slider.normalizedValue = value;
         }
 
+        this.drawAll();
+    }
+
+    _handleMouseDown(event: MouseEvent): void {
+        event.preventDefault();
+        this.selectedSlider = this.getSelectedSlider(event) as SliderBand;
+        if (!this.selectedSlider) return;
+        this.theBody.addEventListener('mousemove', this.rotationEventListener, false);
+    }
+
+    _handleMouseUp(event: MouseEvent): void {
+        event.preventDefault();
+        this.theBody.removeEventListener('mousemove', this.rotationEventListener, false);
+        this.currentSlider = this.selectedSlider;
+    }
+
+    _handleClick(event: MouseEvent): void {
+        this.selectedSlider = this.getSelectedSlider(event) as SliderBand;
+        if (this.currentSlider && this.getSelectedSlider(event) && this.currentSlider.id !== (this.getSelectedSlider(event) as SliderBand).id) return;
+        if (this.selectedSlider) this._rotation(event);
+    }
+
+    _rotation(event: MouseEvent): void {
+        this.calculateUserCursor(event);
+        if (this.continuousMode) this.selectedSlider = this.getSelectedSlider(event) as SliderBand;
+        this.calculateAngles(this.mousePos);
         this.drawAll();
     }
 
@@ -219,31 +245,5 @@ export class Slider {
             }
         }
         return selectedSlider ? selectedSlider : null;
-    }
-
-    _handleMouseDown(event: MouseEvent): void {
-        event.preventDefault();
-        this.selectedSlider = this.getSelectedSlider(event) as SliderBand;
-        if (!this.selectedSlider) return;
-        this.theBody.addEventListener('mousemove', this.rotationEventListener, false);
-    }
-
-    _handleMouseUp(event: MouseEvent): void {
-        event.preventDefault();
-        this.theBody.removeEventListener('mousemove', this.rotationEventListener, false);
-        this.currentSlider = this.selectedSlider;
-    }
-
-    _handleClick(event: MouseEvent): void {
-        this.selectedSlider = this.getSelectedSlider(event) as SliderBand;
-        if (this.currentSlider && this.getSelectedSlider(event) && this.currentSlider.id !== (this.getSelectedSlider(event) as SliderBand).id) return;
-        if (this.selectedSlider) this._rotation(event);
-    }
-
-    _rotation(event: MouseEvent): void {
-        this.calculateUserCursor(event);
-        if (this.continuousMode) this.selectedSlider = this.getSelectedSlider(event) as SliderBand;
-        this.calculateAngles(this.mousePos);
-        this.drawAll();
     }
 }

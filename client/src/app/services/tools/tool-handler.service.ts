@@ -22,9 +22,9 @@ import { TextService } from './text.service';
 })
 export class ToolHandlerService {
     openColorPicker: boolean = false;
+    currentToolSubject: Subject<Tool> = new Subject<Tool>();
     private TOOLS: Map<string, Tool> = new Map();
     private currentTool: Tool;
-    currentToolSubject: Subject<Tool> = new Subject<Tool>();
 
     constructor(
         pencilService: PencilService,
@@ -114,8 +114,8 @@ export class ToolHandlerService {
         this.currentTool.onMouseEnter(event);
     }
 
-    onMouseClick(event: MouseEvent): void {
-        this.currentTool.onMouseClick(event);
+    onDocumentMouseDown(event: MouseEvent): void {
+        this.currentTool.onDocumentMouseDown(event);
     }
 
     private findToolshortcutKey(event: KeyboardEvent): Tool | undefined {

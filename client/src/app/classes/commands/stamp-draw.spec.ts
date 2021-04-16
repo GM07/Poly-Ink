@@ -1,7 +1,7 @@
 import { StampConfig } from '@app/classes/tool-config/stamp-config';
 import { Vec2 } from '@app/classes/vec2';
-import { Colors } from 'src/color-picker/constants/colors';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { Colors } from '@app/constants/colors';
+import { ColorService } from '@app/services/color/color.service';
 import { StampDraw } from './stamp-draw';
 
 // tslint:disable:no-string-literal

@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { BucketConfig } from '@app/classes/tool-config/bucket-config';
 import { Vec2 } from '@app/classes/vec2';
-import { Colors } from 'src/color-picker/constants/colors';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { Colors } from '@app/constants/colors';
+import { ColorService } from '@app/services/color/color.service';
 import { BucketDraw } from './bucket-draw';
 
 // tslint:disable:no-string-literal
@@ -45,34 +45,34 @@ describe('BucketDraw', () => {
     };
 
     it('should do appropriate calls on execute with contiguous pixels', () => {
-        spyOn(ctxStub, 'getImageData').and.stub();
         spyOn(ctxStub, 'putImageData').and.stub();
         spyOn<any>(bucketDraw, 'saveOriginalPixel').and.stub();
         spyOn<any>(bucketDraw, 'floodFill').and.stub();
         spyOn<any>(bucketDraw, 'pixelFill').and.stub();
+        spyOn<any>(bucketDraw, 'getPixels').and.callThrough();
 
         bucketDraw['config'].contiguous = true;
         bucketDraw.execute(ctxStub);
 
-        expect(ctxStub.getImageData).toHaveBeenCalled();
         expect(ctxStub.putImageData).toHaveBeenCalled();
+        expect(bucketDraw['getPixels']).toHaveBeenCalled();
         expect(bucketDraw['saveOriginalPixel']).toHaveBeenCalled();
         expect(bucketDraw['floodFill']).toHaveBeenCalled();
         expect(bucketDraw['pixelFill']).not.toHaveBeenCalled();
     });
 
     it('should do appropriate calls on execute with non contiguous pixels', () => {
-        spyOn(ctxStub, 'getImageData').and.stub();
         spyOn(ctxStub, 'putImageData').and.stub();
         spyOn<any>(bucketDraw, 'saveOriginalPixel').and.stub();
         spyOn<any>(bucketDraw, 'floodFill').and.stub();
         spyOn<any>(bucketDraw, 'pixelFill').and.stub();
+        spyOn<any>(bucketDraw, 'getPixels').and.callThrough();
 
         bucketDraw['config'].contiguous = false;
         bucketDraw.execute(ctxStub);
 
-        expect(ctxStub.getImageData).toHaveBeenCalled();
         expect(ctxStub.putImageData).toHaveBeenCalled();
+        expect(bucketDraw['getPixels']).toHaveBeenCalled();
         expect(bucketDraw['saveOriginalPixel']).toHaveBeenCalled();
         expect(bucketDraw['floodFill']).not.toHaveBeenCalled();
         expect(bucketDraw['pixelFill']).toHaveBeenCalled();
@@ -207,5 +207,10 @@ describe('BucketDraw', () => {
         pixels.set([1, 1, 1, 1], 0);
 
         expect(originalPixel).not.toEqual(pixels);
+    });
+
+    it('should return pixels properly', () => {
+        const pixelData = bucketDraw['getPixels'](ctxStub);
+        expect(pixelData.data.length).not.toEqual(0);
     });
 });

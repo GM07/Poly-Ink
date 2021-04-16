@@ -8,9 +8,9 @@ import { StampToolConstants } from '@app/classes/tool_ui_settings/tools.constant
 import { MouseButton } from '@app/constants/control';
 import { ToolMath } from '@app/constants/math';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { SidebarEventService } from '@app/services/selection/sidebar-events.service';
-import { ColorService } from 'src/color-picker/services/color.service';
 @Injectable({
     providedIn: 'root',
 })
@@ -59,7 +59,7 @@ export class StampService extends Tool {
         this.drawPreview();
     }
 
-    onMouseClick(event: MouseEvent): void {
+    onDocumentMouseDown(event: MouseEvent): void {
         if (event.button === MouseButton.Left && !this.isInSidebar) {
             this.config.position = this.getPositionFromMouse(event);
             this.draw();

@@ -14,12 +14,12 @@ export class AbstractSelectionConfigComponent extends ToolConfig {
         super();
     }
 
-    selectAll(): void {
-        this.selectionService.selectAll();
-    }
-
     get isSelectionActive(): boolean {
         return this.selectionService.config.previewSelectionCtx !== null;
+    }
+
+    selectAll(): void {
+        this.selectionService.selectAll();
     }
 
     copySelection(): void {

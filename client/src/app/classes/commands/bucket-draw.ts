@@ -1,7 +1,7 @@
 import { AbstractDraw } from '@app/classes/commands/abstract-draw';
 import { BucketConfig } from '@app/classes/tool-config/bucket-config';
 import { ToolMath } from '@app/constants/math';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 
 export class BucketDraw extends AbstractDraw {
     private config: BucketConfig;
@@ -30,7 +30,7 @@ export class BucketDraw extends AbstractDraw {
     }
 
     execute(context: CanvasRenderingContext2D): void {
-        this.pixels = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+        this.pixels = this.getPixels(context);
 
         this.saveOriginalPixel(context);
 
@@ -111,5 +111,14 @@ export class BucketDraw extends AbstractDraw {
         for (let i = 0; i < this.dataPerPixel; ++i) {
             this.originalPixel[i] = this.pixels.data[arrayPos + i];
         }
+    }
+
+    private getPixels(context: CanvasRenderingContext2D): ImageData {
+        const canvas: HTMLCanvasElement = document.createElement('canvas');
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+        canvas.height = context.canvas.height;
+        canvas.width = context.canvas.width;
+        ctx.drawImage(context.canvas, 0, 0);
+        return ctx.getImageData(0, 0, context.canvas.width, context.canvas.height);
     }
 }

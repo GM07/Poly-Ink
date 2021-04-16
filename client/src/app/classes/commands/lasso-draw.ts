@@ -1,11 +1,16 @@
 import { LineDrawer } from '@app/classes/line-drawer';
 import { LassoConfig } from '@app/classes/tool-config/lasso-config';
 import { Vec2 } from '@app/classes/vec2';
-import { ColorService } from 'src/color-picker/services/color.service';
+import { ColorService } from '@app/services/color/color.service';
 import { AbstractDraw } from './abstract-draw';
 
 export class LassoDraw extends AbstractDraw {
     private config: LassoConfig;
+
+    constructor(colorService: ColorService, config: LassoConfig) {
+        super(colorService);
+        this.config = config.clone();
+    }
 
     static drawClippedSelection(ctx: CanvasRenderingContext2D, configLasso: LassoConfig): void {
         ctx.beginPath();
@@ -20,11 +25,6 @@ export class LassoDraw extends AbstractDraw {
         );
         ctx.restore();
         ctx.closePath();
-    }
-
-    constructor(colorService: ColorService, config: LassoConfig) {
-        super(colorService);
-        this.config = config.clone();
     }
 
     execute(context: CanvasRenderingContext2D): void {
