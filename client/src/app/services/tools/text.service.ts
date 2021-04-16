@@ -68,15 +68,8 @@ export class TextService extends Tool {
     }
 
     insert(event: KeyboardEvent): void {
-        if (event.key === 'Enter') {
-            const right = this.config.textData[this.config.index.y].substring(
-                Math.min(this.config.index.x, this.config.textData[this.config.index.y].length),
-            );
-            this.config.textData[this.config.index.y] = this.config.textData[this.config.index.y].substring(0, this.config.index.x);
-            this.config.index.x = 0;
-            this.config.index.y++;
-            this.config.textData.push(right);
-        } else if (event.key.length > 1) return;
+        if (event.key === 'Enter') this.handleEnter();
+        else if (event.key.length > 1) return;
         else {
             const left = this.config.textData[this.config.index.y].slice(0, this.config.index.x);
             const right = this.config.textData[this.config.index.y].slice(this.config.index.x, this.config.textData[this.config.index.y].length);
@@ -104,6 +97,16 @@ export class TextService extends Tool {
                 this.drawingService.blockUndoRedo();
             }
         });
+    }
+
+    private handleEnter(): void {
+        const right = this.config.textData[this.config.index.y].substring(
+            Math.min(this.config.index.x, this.config.textData[this.config.index.y].length),
+        );
+        this.config.textData[this.config.index.y] = this.config.textData[this.config.index.y].substring(0, this.config.index.x);
+        this.config.index.x = 0;
+        this.config.index.y++;
+        this.config.textData.splice(this.config.index.y, 0, right);
     }
 
     private handleShortCuts(shortcutKey: ShortcutKey): void {
@@ -135,10 +138,19 @@ export class TextService extends Tool {
         const x = this.config.index.x;
         const y = this.config.index.y;
         const text = this.config.textData;
-        if (x === 0 && y > 0 && text[y].length === 0) this.config.index.x = this.config.textData[--this.config.index.y].length;
-        if (x === text[y].length) return;
-        if (x < text[y].length) {
-            text[y] = text[y].substring(0, x) + text[y].substring(x + 1);
+        if (x === 0 && y > 0 && text[y].length === 0) {
+            if (y === text.length - 1) return;
+            this.config.textData.splice(this.config.index.y, 1);
+            return;
+        }
+        if (x === text[this.config.index.y].length) {
+            if (this.config.index.y === text.length - 1) return;
+            text[y] += text[y + 1];
+            this.config.textData.splice(this.config.index.y + 1, 1);
+            return;
+        }
+        if (x < text[this.config.index.y].length) {
+            text[this.config.index.y] = text[this.config.index.y].substring(0, x) + text[this.config.index.y].substring(x + 1);
         }
     }
 
@@ -147,7 +159,11 @@ export class TextService extends Tool {
         const y = this.config.index.y;
         const text = this.config.textData;
         if (y === 0 && x === 0) return;
-        if (x === 0) this.config.index.x = text[--this.config.index.y].length;
+        if (x === 0) {
+            this.config.index.x = text[y - 1].length;
+            text[y - 1] += text[y];
+            this.config.textData.splice(this.config.index.y--, 1);
+        }
         if (x > 0) {
             text[y] = text[y].substring(0, x - 1) + text[y].substring(x);
             this.config.index.x--;
@@ -183,21 +199,16 @@ export class TextService extends Tool {
     }
 
     private handleArrowUp(): void {
-        const x = this.config.index.x;
-        const y = this.config.index.y;
-        const text = this.config.textData;
-        if (y === 0) return;
+        if (this.config.index.y === 0) return;
         this.config.index.y--;
-        this.config.index.x = Math.min(x, text[y].length);
+        this.config.index.x = Math.min(this.config.index.x, this.config.textData[this.config.index.y].length);
     }
 
     private handleArrowDown(): void {
-        const x = this.config.index.x;
-        const y = this.config.index.y;
         const text = this.config.textData;
-        if (y === text.length - 1) return;
+        if (this.config.index.y === text.length - 1) return;
         this.config.index.y++;
-        this.config.index.x = Math.min(x, text[y].length);
+        this.config.index.x = Math.min(this.config.index.x, text[this.config.index.y].length);
     }
 
     private addText(event: MouseEvent): void {
