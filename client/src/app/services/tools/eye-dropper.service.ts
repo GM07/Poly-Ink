@@ -73,8 +73,6 @@ export class EyeDropperService extends Tool {
 
             this.drawSelectedPixelRect(this.previsualisationCtx);
 
-            // this.drawCircleAroundPreview(this.previsualisationCtx, this.previsualisationCanvas.width / 2);
-
             this.drawCircleAroundMouse(
                 this.drawingService.previewCtx,
                 new Vec2(event.offsetX, event.offsetY),
