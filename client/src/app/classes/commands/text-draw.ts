@@ -67,7 +67,6 @@ export class TextDraw extends AbstractDraw {
         this.cursor.y = this.config.startCoords.y + this.config.fontSize * this.config.index.y;
         const height = this.config.fontSize;
 
-        ctx.strokeStyle = 'black';
         ctx.lineWidth = 1;
 
         this.drawLineCursor(ctx, height);
@@ -79,7 +78,6 @@ export class TextDraw extends AbstractDraw {
         this.cursor.y = this.config.startCoords.y + this.config.fontSize * this.config.index.y;
         const height = this.config.fontSize;
 
-        ctx.strokeStyle = 'black';
         ctx.lineWidth = 1;
 
         this.drawLineCursor(ctx, height);
@@ -97,7 +95,6 @@ export class TextDraw extends AbstractDraw {
 
         const height = this.config.fontSize;
 
-        ctx.strokeStyle = 'black';
         ctx.lineWidth = 1;
 
         this.drawLineCursor(ctx, height);
