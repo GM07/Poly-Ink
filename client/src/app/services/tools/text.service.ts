@@ -205,12 +205,10 @@ export class TextService extends Tool {
     }
 
     private handleArrowDown(): void {
-        const x = this.config.index.x;
-        const y = this.config.index.y;
         const text = this.config.textData;
-        if (y === text.length - 1) return;
+        if (this.config.index.y === text.length - 1) return;
         this.config.index.y++;
-        this.config.index.x = Math.min(x, text[y].length);
+        this.config.index.x = Math.min(this.config.index.x, text[this.config.index.y].length);
     }
 
     private addText(event: MouseEvent): void {
