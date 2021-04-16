@@ -77,7 +77,7 @@ export class SaveDrawingComponent {
         this.saveTags = [];
         this.saveForm = new FormGroup({
             nameFormControl: new FormControl(
-                DrawingConstants.defaultFileNames[Math.floor(Math.random() * DrawingConstants.defaultFileNames.length)],
+                DrawingConstants.DEFAULT_FILE_NAMES[Math.floor(Math.random() * DrawingConstants.DEFAULT_FILE_NAMES.length)],
                 [Validators.required, Validators.pattern('(?! )[a-zA-Z0-9\u00C0-\u017F, ]*(?<! )')],
             ),
             tagsFormControl: new FormControl([], Validators.pattern('^([ ]*[0-9A-Za-z-]+[ ]*)(,[ ]*[0-9A-Za-z-]+[ ]*)*$')),

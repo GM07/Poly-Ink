@@ -137,47 +137,47 @@ describe('TextService', () => {
         service.config.index.x = 0;
         service.config.index.y = 1;
         service.config.textData[1] = '';
-        service['handleShortCuts'](TextService['delete']);
+        service['handleShortCuts'](TextService['DELETE']);
 
         service.config.textData = ['a', '', 'a'];
-        service['handleShortCuts'](TextService['delete']);
+        service['handleShortCuts'](TextService['DELETE']);
         expect(service.config.textData).toEqual(['a', 'a']);
 
         service.config.index.y = 0;
         service.config.textData[0] = 'allo!';
 
-        service['handleShortCuts'](TextService['delete']);
+        service['handleShortCuts'](TextService['DELETE']);
         expect(service['handleDelete']).toHaveBeenCalled();
 
         service.config.index.x = 1;
         service.config.textData[0] = 'a';
         service.config.textData[1] = 'a';
-        service['handleShortCuts'](TextService['delete']);
+        service['handleShortCuts'](TextService['DELETE']);
         expect(service['handleDelete']).toHaveBeenCalled();
         expect(service.config.textData[0]).toEqual('aa');
 
         service.config.index.x = indexX;
         service.config.textData[0] = 'a';
-        service['handleShortCuts'](TextService['delete']);
+        service['handleShortCuts'](TextService['DELETE']);
         expect(service['handleDelete']).toHaveBeenCalled();
     });
 
     it('should handle backSpace', () => {
         const indexX = 3;
         spyOn<any>(service, 'handleBackspace').and.callThrough();
-        service['handleShortCuts'](TextService['backspace']);
+        service['handleShortCuts'](TextService['BACKSPACE']);
         expect(service['handleBackspace']).toHaveBeenCalled();
 
         service.config.index.y = 1;
         service.config.index.x = 0;
         service.config.textData[0] = 'a';
-        service['handleShortCuts'](TextService['backspace']);
+        service['handleShortCuts'](TextService['BACKSPACE']);
         expect(service['handleBackspace']).toHaveBeenCalled();
 
         service.config.index.x = indexX;
         service.config.index.y = 0;
         service.config.textData[0] = 'aaaaa';
-        service['handleShortCuts'](TextService['backspace']);
+        service['handleShortCuts'](TextService['BACKSPACE']);
         expect(service['handleBackspace']).toHaveBeenCalled();
     });
 
@@ -185,63 +185,63 @@ describe('TextService', () => {
         spyOn<any>(service, 'handleEscape').and.callThrough();
         spyOn(drawingService, 'clearCanvas');
         spyOn(drawingService, 'unblockUndoRedo');
-        service['handleShortCuts'](TextService['escape']);
+        service['handleShortCuts'](TextService['ESCAPE']);
         expect(service['handleEscape']).toHaveBeenCalled();
     });
 
     it('should handle ArrowLeft', () => {
         spyOn<any>(service, 'handleArrowLeft').and.callThrough();
-        service['handleShortCuts'](TextService['arrowLeft']);
+        service['handleShortCuts'](TextService['ARROW_LEFT']);
         expect(service['handleArrowLeft']).toHaveBeenCalled();
 
         service.config.index.x = 1;
-        service['handleShortCuts'](TextService['arrowLeft']);
+        service['handleShortCuts'](TextService['ARROW_LEFT']);
         expect(service['handleArrowLeft']).toHaveBeenCalled();
 
         service.config.index.y = 1;
         service.config.index.x = 0;
         service.config.textData[0] = 'a';
-        service['handleShortCuts'](TextService['arrowLeft']);
+        service['handleShortCuts'](TextService['ARROW_LEFT']);
         expect(service['handleArrowLeft']).toHaveBeenCalled();
     });
 
     it('should handle ArrowRight', () => {
         spyOn<any>(service, 'handleArrowRight').and.callThrough();
-        service['handleShortCuts'](TextService['arrowRight']);
+        service['handleShortCuts'](TextService['ARROW_RIGHT']);
         expect(service['handleArrowRight']).toHaveBeenCalled();
 
         service.config.index.y = 0;
         service.config.textData = ['aa', 'a'];
         service.config.index.x = 0;
-        service['handleShortCuts'](TextService['arrowRight']);
+        service['handleShortCuts'](TextService['ARROW_RIGHT']);
         expect(service['handleArrowRight']).toHaveBeenCalled();
 
         service.config.index.y = 0;
         service.config.textData = ['aa', 'a'];
         service.config.index.x = 2;
-        service['handleShortCuts'](TextService['arrowRight']);
+        service['handleShortCuts'](TextService['ARROW_RIGHT']);
         expect(service['handleArrowRight']).toHaveBeenCalled();
     });
 
     it('should handle ArrowUp', () => {
         spyOn<any>(service, 'handleArrowUp').and.callThrough();
-        service['handleShortCuts'](TextService['arrowUp']);
+        service['handleShortCuts'](TextService['ARROW_UP']);
         expect(service['handleArrowUp']).toHaveBeenCalled();
 
         service.config.index.y = 1;
         service.config.textData[1] = 'a';
-        service['handleShortCuts'](TextService['arrowUp']);
+        service['handleShortCuts'](TextService['ARROW_UP']);
         expect(service['handleArrowUp']).toHaveBeenCalled();
     });
 
     it('should handle ArrowDown', () => {
         spyOn<any>(service, 'handleArrowDown').and.callThrough();
-        service['handleShortCuts'](TextService['arrowDown']);
+        service['handleShortCuts'](TextService['ARROW_DOWN']);
         expect(service['handleArrowDown']).toHaveBeenCalled();
 
         service.config.index.y = 0;
         service.config.textData = ['a', 'a'];
-        service['handleShortCuts'](TextService['arrowDown']);
+        service['handleShortCuts'](TextService['ARROW_DOWN']);
         expect(service['handleArrowDown']).toHaveBeenCalled();
     });
 

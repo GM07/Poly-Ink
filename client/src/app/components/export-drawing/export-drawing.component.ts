@@ -65,7 +65,7 @@ export class ExportDrawingComponent {
     }
 
     initValues(): void {
-        this.defaultFileNames = DrawingConstants.defaultFileNames;
+        this.defaultFileNames = DrawingConstants.DEFAULT_FILE_NAMES;
         this.exportFormat = 'png';
         this.currentFilter = 'default';
         this.hasImgurServerError = false;
