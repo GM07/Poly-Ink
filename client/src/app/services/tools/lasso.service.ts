@@ -58,6 +58,9 @@ export class LassoService extends AbstractSelectionService {
         if (!this.leftMouseDown) return;
 
         if (this.configLasso.previewSelectionCtx === null) {
+            this.lineDrawer.followCursor(event);
+            this.configLasso.intersecting = this.isIntersecting(this.lineDrawer.pointToAdd);
+            this.lineDrawer.followCursor(event);
             this.createSelection(event);
         } else {
             this.endSelection();
@@ -85,6 +88,8 @@ export class LassoService extends AbstractSelectionService {
                 this.selectionTranslation.onMouseUp(this.mouseUpCoord);
             }
         }
+
+        this.lineDrawer.leftMouseDown = false;
         this.leftMouseDown = false;
     }
 
@@ -230,7 +235,6 @@ export class LassoService extends AbstractSelectionService {
                 Geometry.getDistanceBetween(this.lineDrawer.pointToAdd, this.configLasso.points[0]) <=
                 ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;
 
-            console.log(closedLoop);
             if (closedLoop && !this.isIntersecting(this.configLasso.points[0])) {
                 this.configLasso.points.push(this.configLasso.points[0]);
                 [this.start, this.end] = this.findSmallestRectangle();
