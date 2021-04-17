@@ -21,9 +21,19 @@ describe('Line', () => {
         expect(a['orientation'](a.start, a.end, b.start)).toBeLessThan(0);
     });
 
-    it('should indicate if a point is within a line range', () => {
+    it('should indicate if a point is on a line', () => {
         const p = new Vec2(0, 0);
-        expect(a['inLineRange'](a, p)).toBeFalsy();
+        expect(a['isInLine'](1, a, p)).toBeFalsy();
+    });
+
+    it('should indicate if the line touches the previous line', () => {
+        const line = new Line(new Vec2(0, 0), new Vec2(5, 5));
+        expect(line['isPreviousLine'](a)).toBeTruthy();
+    });
+
+    it('should indicate if the line touches the first line', () => {
+        const line = new Line(new Vec2(100, 100), new Vec2(0, 0));
+        expect(line['isStartLine'](a)).toBeTruthy();
     });
 
     it('should return true if lines are intersecting (lines are crossing each other)', () => {
