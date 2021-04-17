@@ -44,6 +44,7 @@ export class LassoService extends AbstractSelectionService {
         });
         this.lineDrawer.removeLine.subscribe(() => {
             this.lines.pop();
+            this.configLasso.intersecting = this.isIntersecting(this.lineDrawer.pointToAdd);
         });
         this.lineDrawer.removeLines.subscribe(() => {
             this.lines = [];
