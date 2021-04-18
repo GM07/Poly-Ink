@@ -1,42 +1,50 @@
 import { Vec2 } from '@app/classes/vec2';
 
 export class Line {
-    start: Vec2;
-    end: Vec2;
-
-    constructor(start: Vec2, end: Vec2) {
-        this.start = start;
-        this.end = end;
-    }
+    constructor(public start: Vec2, public end: Vec2) {}
 
     /**
-     * Based on https://math.stackexchange.com/questions/149622/finding-out-whether-two-line-segments-intersect-each-other
+     * Based on https://bryceboe.com/2006/10/23/line-segment-intersection-algorithm/
+     * and https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
      */
     intersects(other: Line): boolean {
-        const halfSpaceStart = this.halfSpaceFunction(other.start);
-        const halfSpaceEnd = this.halfSpaceFunction(other.end);
+        const isPreviousLine = this.isPreviousLine(other);
+        const isStartLine = this.isStartLine(other);
 
-        if (halfSpaceStart === halfSpaceEnd && halfSpaceStart === 0) {
-            return this.intersecting(other);
-        }
+        const orientation1 = this.orientation(this.start, this.end, other.start);
+        const orientation2 = this.orientation(this.start, this.end, other.end);
+        const orientation3 = this.orientation(other.start, other.end, this.start);
+        const orientation4 = this.orientation(other.start, other.end, this.end);
 
-        return halfSpaceStart * halfSpaceEnd <= 0 && other.halfSpaceFunction(this.start) * other.halfSpaceFunction(this.end) < 0;
-    }
+        if (orientation1 !== orientation2 && orientation3 !== orientation4 && !isPreviousLine && !isStartLine) return true;
 
-    private intersecting(other: Line): boolean {
         return (
-            Math.min(other.start.x, other.end.x) <= Math.max(this.start.x, this.end.x) &&
-            Math.max(other.start.x, other.end.x) >= Math.min(this.start.x, this.end.x) &&
-            Math.min(other.start.y, other.end.y) <= Math.max(this.start.y, this.end.y) &&
-            Math.max(other.start.y, other.end.y) >= Math.min(this.start.y, this.end.y)
+            (this.isInLine(orientation1, this, other.start) && !isPreviousLine) ||
+            (this.isInLine(orientation2, this, other.end) && !isStartLine) ||
+            (this.isInLine(orientation3, other, this.start) && !isStartLine) ||
+            (this.isInLine(orientation4, other, this.end) && !isPreviousLine)
         );
     }
 
-    private halfSpaceFunction(pointToCheck: Vec2): number {
-        return this.determinant(this.end.substract(this.start), pointToCheck.substract(this.start));
+    private orientation(point1: Vec2, point2: Vec2, point3: Vec2): number {
+        return Math.sign(Math.round((point3.y - point1.y) * (point2.x - point1.x) - (point2.y - point1.y) * (point3.x - point1.x)));
     }
 
-    private determinant(a: Vec2, b: Vec2): number {
-        return a.x * b.y - a.y * b.x;
+    private isInLine(orientation: number, line: Line, point: Vec2): boolean {
+        return (
+            orientation === 0 &&
+            point.x <= Math.max(line.start.x, line.end.x) &&
+            point.x >= Math.min(line.start.x, line.end.x) &&
+            point.y <= Math.max(line.start.y, line.end.y) &&
+            point.y >= Math.min(line.start.y, line.end.y)
+        );
+    }
+
+    private isPreviousLine(other: Line): boolean {
+        return this.end.x === other.start.x && this.end.y === other.start.y;
+    }
+
+    private isStartLine(other: Line): boolean {
+        return this.start.x === other.end.x && this.start.y === other.end.y;
     }
 }
