@@ -26,17 +26,17 @@ export class Line {
         );
     }
 
-    private orientation(p1: Vec2, p2: Vec2, p3: Vec2): number {
-        return Math.sign(Math.round((p3.y - p1.y) * (p2.x - p1.x) - (p2.y - p1.y) * (p3.x - p1.x)));
+    private orientation(point1: Vec2, point2: Vec2, point3: Vec2): number {
+        return Math.sign(Math.round((point3.y - point1.y) * (point2.x - point1.x) - (point2.y - point1.y) * (point3.x - point1.x)));
     }
 
-    private isInLine(orientation: number, line: Line, p: Vec2): boolean {
+    private isInLine(orientation: number, line: Line, point: Vec2): boolean {
         return (
             orientation === 0 &&
-            p.x <= Math.max(line.start.x, line.end.x) &&
-            p.x >= Math.min(line.start.x, line.end.x) &&
-            p.y <= Math.max(line.start.y, line.end.y) &&
-            p.y >= Math.min(line.start.y, line.end.y)
+            point.x <= Math.max(line.start.x, line.end.x) &&
+            point.x >= Math.min(line.start.x, line.end.x) &&
+            point.y <= Math.max(line.start.y, line.end.y) &&
+            point.y >= Math.min(line.start.y, line.end.y)
         );
     }
 
