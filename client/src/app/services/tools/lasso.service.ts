@@ -44,6 +44,7 @@ export class LassoService extends AbstractSelectionService {
         });
         this.lineDrawer.removeLine.subscribe(() => {
             this.lines.pop();
+            this.configLasso.intersecting = this.isIntersecting(this.lineDrawer.pointToAdd);
         });
         this.lineDrawer.removeLines.subscribe(() => {
             this.lines = [];
@@ -58,6 +59,9 @@ export class LassoService extends AbstractSelectionService {
         if (!this.leftMouseDown) return;
 
         if (this.configLasso.previewSelectionCtx === null) {
+            this.lineDrawer.followCursor(event);
+            this.configLasso.intersecting = this.isIntersecting(this.lineDrawer.pointToAdd);
+            this.lineDrawer.followCursor(event);
             this.createSelection(event);
         } else {
             this.endSelection();
@@ -70,11 +74,8 @@ export class LassoService extends AbstractSelectionService {
         }
 
         if (this.configLasso.previewSelectionCtx === null) {
-            const nextPoint = this.lineDrawer.pointToAdd;
-            this.configLasso.intersecting = Geometry.lastLineIntersecting(
-                this.lines,
-                new Line(this.configLasso.points[this.configLasso.points.length - 1], nextPoint),
-            );
+            this.lineDrawer.followCursor(event);
+            this.configLasso.intersecting = this.isIntersecting(this.lineDrawer.pointToAdd);
             this.lineDrawer.followCursor(event);
         } else {
             super.onMouseMove(event);
@@ -88,6 +89,8 @@ export class LassoService extends AbstractSelectionService {
                 this.selectionTranslation.onMouseUp(this.mouseUpCoord);
             }
         }
+
+        this.lineDrawer.leftMouseDown = false;
         this.leftMouseDown = false;
     }
 
@@ -183,6 +186,10 @@ export class LassoService extends AbstractSelectionService {
         LineDrawer.drawDashedLinePath(ctx, this.configLasso.points);
     }
 
+    private isIntersecting(pointToAdd: Vec2): boolean {
+        return Geometry.lastLineIntersecting(this.lines, new Line(this.configLasso.points[this.configLasso.points.length - 1], pointToAdd));
+    }
+
     private onClosedPath(): void {
         this.endSelection();
         this.selectionResize.stopDrawing();
@@ -204,7 +211,13 @@ export class LassoService extends AbstractSelectionService {
     }
 
     private addPointToSelection(event: MouseEvent): void {
+        const isAPoint =
+            this.configLasso.points.length > 0 &&
+            Geometry.isAPoint([this.configLasso.points[this.configLasso.points.length - 1], this.lineDrawer.pointToAdd]);
+        if (isAPoint) return;
+
         this.lineDrawer.addNewPoint(event);
+        this.lineDrawer.followCursor(event);
         this.addNewLine();
     }
 
@@ -223,16 +236,15 @@ export class LassoService extends AbstractSelectionService {
                 Geometry.getDistanceBetween(this.lineDrawer.pointToAdd, this.configLasso.points[0]) <=
                 ToolSettingsConst.MINIMUM_DISTANCE_TO_CLOSE_PATH;
 
-            if (closedLoop) {
+            if (closedLoop && !this.isIntersecting(this.configLasso.points[0])) {
                 this.configLasso.points.push(this.configLasso.points[0]);
                 [this.start, this.end] = this.findSmallestRectangle();
                 this.onClosedPath();
-            } else {
-                this.addPointToSelection(event);
+                return;
             }
-        } else {
-            this.addPointToSelection(event);
         }
+
+        this.addPointToSelection(event);
     }
 
     private findSmallestRectangle(): [Vec2, Vec2] {
