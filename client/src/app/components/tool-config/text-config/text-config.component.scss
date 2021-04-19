@@ -1,7 +1,6 @@
 .mat-button-toggle {
     width: 200px;
     height: 30px;
-    line-height: 30px;
     background-color: white;
     color: black;
     font-size: 15px;
@@ -26,6 +25,10 @@
     border-radius: 4px;
     padding: 0px !important;
     width: 170px;
+}
+
+::ng-deep .mat-button-toggle-label-content {
+  line-height: 24px !important;
 }
 
 .tab {
