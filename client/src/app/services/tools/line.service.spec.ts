@@ -4,6 +4,7 @@ import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { ColorService } from '@app/services/color/color.service';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { Subject } from 'rxjs';
 import { LineService } from './line.service';
 
 /* tslint:disable:no-magic-numbers */
@@ -23,7 +24,11 @@ describe('LineService', () => {
 
     beforeEach(() => {
         spyDrawing = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'drawPreview', 'draw', 'unblockUndoRedo']);
-        colorServiceSpy = jasmine.createSpyObj('ColorService', [], { primaryRgba: 'rgba(1, 1, 1, 1)', secondaryRgba: 'rgba(0, 0, 0, 1)' });
+        colorServiceSpy = jasmine.createSpyObj('ColorService', ['primaryChanged'], {
+            primaryRgba: 'rgba(1, 1, 1, 1)',
+            secondaryRgba: 'rgba(0, 0, 0, 1)',
+            changedPrimary: new Subject<boolean>(),
+        });
         TestBed.configureTestingModule({
             providers: [
                 { provide: DrawingService, useValue: spyDrawing },
@@ -233,5 +238,12 @@ describe('LineService', () => {
         expect(service.lineDrawer['BACKSPACE'].isDown).toBe(false);
         expect(service.config.closedLoop).toBe(false);
         expect(service.config.points.length).toBe(0);
+    });
+
+    it('should call drawPreview', () => {
+        spyOn(service, 'drawPreview');
+        colorServiceSpy.changedPrimary.next();
+
+        expect(service.drawPreview).toHaveBeenCalled();
     });
 });

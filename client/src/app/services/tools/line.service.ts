@@ -25,6 +25,9 @@ export class LineService extends Tool {
         this.lineDrawer.drawPreview.subscribe(() => {
             this.drawPreview();
         });
+        this.colorService.changedPrimary.subscribe(() => {
+            this.drawPreview();
+        });
 
         this.shortcutKey = new ShortcutKey(LineToolConstants.SHORTCUT_KEY);
         this.toolID = LineToolConstants.TOOL_ID;
