@@ -9,11 +9,6 @@ import { Subject } from 'rxjs';
 export class ColorService {
     private static readonly MAX_NUMBER_PREVIOUS_COLORS: number = 10;
 
-    private primary: Color;
-    private secondary: Color;
-
-    private previous: Color[] = [];
-
     changePrimary: boolean;
     shouldChangeColor: boolean;
     isMenuOpen: boolean;
@@ -26,9 +21,15 @@ export class ColorService {
     selectedHue: Color;
     hueChangeFromHex: Subject<Color>;
     hueChangeFromSlider: Subject<Color>;
+    changedPrimary: Subject<boolean>;
 
     primaryColorAlpha: number = 1;
     secondaryColorAlpha: number = 1;
+
+    private primary: Color;
+    private secondary: Color;
+
+    private previous: Color[] = [];
 
     constructor() {
         this.primary = Colors.BLACK;
@@ -42,6 +43,7 @@ export class ColorService {
         this.selectedHue = Colors.BLACK;
         this.hueChangeFromHex = new Subject<Color>();
         this.hueChangeFromSlider = new Subject<Color>();
+        this.changedPrimary = new Subject<boolean>();
 
         this.previous.unshift(this.secondary);
         this.previous.unshift(this.primary);
@@ -57,6 +59,7 @@ export class ColorService {
     set primaryColor(color: Color) {
         this.primary = color.clone();
         this.addToPreviousColors(this.primary);
+        this.changedPrimary.next();
     }
 
     get primaryColor(): Color {

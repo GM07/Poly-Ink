@@ -7,6 +7,11 @@ import { AbstractDraw } from './abstract-draw';
 export class LassoDraw extends AbstractDraw {
     private config: LassoConfig;
 
+    constructor(colorService: ColorService, config: LassoConfig) {
+        super(colorService);
+        this.config = config.clone();
+    }
+
     static drawClippedSelection(ctx: CanvasRenderingContext2D, configLasso: LassoConfig): void {
         ctx.beginPath();
         ctx.save();
@@ -20,11 +25,6 @@ export class LassoDraw extends AbstractDraw {
         );
         ctx.restore();
         ctx.closePath();
-    }
-
-    constructor(colorService: ColorService, config: LassoConfig) {
-        super(colorService);
-        this.config = config.clone();
     }
 
     execute(context: CanvasRenderingContext2D): void {

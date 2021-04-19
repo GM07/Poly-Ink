@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Color } from '@app/classes/color';
+import { Vec2 } from '@app/classes/vec2';
 import { Colors } from '@app/constants/colors';
 import { ColorService } from '@app/services/color/color.service';
 import { ColorPaletteComponent } from './color-palette.component';
@@ -58,37 +59,37 @@ describe('ColorPaletteComponent', () => {
     it('should set position to color with RED hue', () => {
         const width: number = component['canvas'].nativeElement.width;
         component.setPositionToColor(Colors.RED);
-        expect(component.selectedPosition).toEqual({ x: width, y: 0 });
+        expect(component.selectedPosition).toEqual(new Vec2(width, 0));
     });
 
     it('should set position to color with GREEN hue', () => {
         const width: number = component['canvas'].nativeElement.width;
         component.setPositionToColor(Colors.GREEN);
-        expect(component.selectedPosition).toEqual({ x: width, y: 0 });
+        expect(component.selectedPosition).toEqual(new Vec2(width, 0));
     });
 
     it('should set position to color with BLUE hue', () => {
         const width: number = component['canvas'].nativeElement.width;
         component.setPositionToColor(Colors.BLUE);
-        expect(component.selectedPosition).toEqual({ x: width, y: 0 });
+        expect(component.selectedPosition).toEqual(new Vec2(width, 0));
     });
 
     it('should set position to color with YELLOW hue', () => {
         const width: number = component['canvas'].nativeElement.width;
         component.setPositionToColor(Colors.YELLOW);
-        expect(component.selectedPosition).toEqual({ x: width, y: 0 });
+        expect(component.selectedPosition).toEqual(new Vec2(width, 0));
     });
 
     it('should select appropriate position for white color', () => {
         component.setPositionToColor(Colors.WHITE);
-        expect(component.selectedPosition).toEqual({ x: 0, y: 0 });
+        expect(component.selectedPosition).toEqual(new Vec2(0, 0));
     });
 
     it('should select appropriate position for black color', () => {
         const width: number = component['canvas'].nativeElement.width;
         const height: number = component['canvas'].nativeElement.height;
         component.setPositionToColor(Colors.BLACK);
-        expect(component.selectedPosition).toEqual({ x: width, y: height });
+        expect(component.selectedPosition).toEqual(new Vec2(width, height));
     });
 
     it('should set mouse down to false on mouse up', () => {
@@ -138,7 +139,7 @@ describe('ColorPaletteComponent', () => {
         const y = 50;
 
         spyOn(component, 'draw').and.stub();
-        spyOn(component, 'keepSelectionWithinBounds').and.returnValue({ x, y });
+        spyOn(component, 'keepSelectionWithinBounds').and.returnValue(new Vec2(x, y));
         spyOn(component, 'getColorAtPosition').and.stub();
 
         component.changeSelectedPosition(x, y);
@@ -157,13 +158,13 @@ describe('ColorPaletteComponent', () => {
         const y = 50;
 
         let position: { x: number; y: number } = component.keepSelectionWithinBounds(width + 1, height + 1);
-        expect(position).toEqual({ x: width, y: height });
+        expect(position).toEqual(new Vec2(width, height));
 
         position = component.keepSelectionWithinBounds(startX - 1, startY - 1);
-        expect(position).toEqual({ x: startX, y: startY });
+        expect(position).toEqual(new Vec2(startX, startY));
 
         position = component.keepSelectionWithinBounds(x, y);
-        expect(position).toEqual({ x, y });
+        expect(position).toEqual(new Vec2(x, y));
     });
 
     it('should get proper color from canvas', () => {

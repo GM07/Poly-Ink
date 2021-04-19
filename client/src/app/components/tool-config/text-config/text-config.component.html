@@ -45,26 +45,28 @@
             </div>
         </mat-button-toggle-group>
     </div>
-    <h5 class="textFormat">Police</h5>
-    <div class="textFormatButton">
-        <mat-button-toggle-group [vertical]="true" value="Arial">
-            <div class="textFormatButton">
-                <mat-button-toggle class="buttons" (click)="changeFont('Arial')" value="Arial">Arial</mat-button-toggle>
-            </div>
-            <div class="textFormatButton">
-                <mat-button-toggle class="buttonTimes" (click)="changeFont('Times New Roman')" value="Times New Roman"
-                    >Times New Roman</mat-button-toggle
-                >
-            </div>
-            <div class="textFormatButton">
-                <mat-button-toggle class="buttonImpact" (click)="changeFont('Impact')" value="Impact">Impact</mat-button-toggle>
-            </div>
-            <div class="textFormatButton">
-                <mat-button-toggle class="buttonMonospace" (click)="changeFont('Monospace')" value="Monospace">Monospace</mat-button-toggle>
-            </div>
-            <div class="textFormatButton">
-                <mat-button-toggle class="buttonVerdana" (click)="changeFont('Verdana')" value="Verdana">Verdana</mat-button-toggle>
-            </div>
-        </mat-button-toggle-group>
+    <div class="police">
+        <h5 class="textFormat">Police</h5>
+        <div class="textFormatButton">
+            <mat-button-toggle-group [vertical]="true" value="Arial">
+                <div class="textFormatButton">
+                    <mat-button-toggle class="buttons" (click)="changeFont('Arial')" value="Arial">Arial</mat-button-toggle>
+                </div>
+                <div class="textFormatButton">
+                    <mat-button-toggle class="buttonTimes" (click)="changeFont('Times New Roman')" value="Times New Roman"
+                        >Times New Roman</mat-button-toggle
+                    >
+                </div>
+                <div class="textFormatButton">
+                    <mat-button-toggle class="buttonMonospace" (click)="changeFont('Monospace')" value="Monospace">Monospace</mat-button-toggle>
+                </div>
+                <div class="textFormatButton">
+                    <mat-button-toggle class="buttonCreepster" (click)="changeFont('creepster')" value="Creepster">Creepster</mat-button-toggle>
+                </div>
+                <div class="textFormatButton">
+                    <mat-button-toggle class="buttonPressStart" (click)="changeFont('pressStart')" value="Press Start">Press Start</mat-button-toggle>
+                </div>
+            </mat-button-toggle-group>
+        </div>
     </div>
 </div>

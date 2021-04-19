@@ -11,17 +11,16 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class ClipboardService {
+    savedConfigs: SelectionConfig | undefined;
+
+    readonly INITIALISATION_SIGNAL: Subject<boolean> = new Subject<boolean>();
     private readonly COPY: ShortcutKey = new ShortcutKey('c', { ctrlKey: true } as SpecialKeys);
     private readonly PASTE: ShortcutKey = new ShortcutKey('v', { ctrlKey: true } as SpecialKeys);
     private readonly CUT: ShortcutKey = new ShortcutKey('x', { ctrlKey: true } as SpecialKeys);
     private readonly DELETE: ShortcutKey = new ShortcutKey('delete');
-
-    savedConfigs: SelectionConfig | undefined;
     private lastSelectionTool: AbstractSelectionService;
     private wantsToPaste: boolean;
     private isInitialised: boolean;
-
-    readonly INITIALISATION_SIGNAL: Subject<boolean> = new Subject<boolean>();
 
     constructor(private toolHandler: ToolHandlerService) {
         this.savedConfigs = undefined;

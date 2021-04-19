@@ -37,8 +37,8 @@ export class Geometry {
     }
 
     static lastLineIntersecting(lines: Line[], nextLine: Line): boolean {
-        for (let i = 0; i < lines.length - 1; i++) {
-            if (lines[i].intersects(nextLine)) {
+        for (const line of lines) {
+            if (line.intersects(nextLine)) {
                 return true;
             }
         }

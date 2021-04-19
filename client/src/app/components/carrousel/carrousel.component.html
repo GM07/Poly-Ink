@@ -129,7 +129,27 @@
                     ></app-drawing-tags>
                     <div *ngIf="serverConnexionError; then serverConnexionErrorBlock"></div>
                     <div *ngIf="showLoadingError; then showLoadingErrorBlock"></div>
-                    <div *ngIf="!animationIsDone; then loadingAnimationBlock; else optionsBlock"></div>
+                    <div class="options">
+                        <button
+                            *ngIf="drawingsList.length !== 0"
+                            class="button green white"
+                            mat-raised-button
+                            (click)="loadDrawing(0)"
+                            [disabled]="!animationIsDone"
+                        >
+                            Charger
+                        </button>
+                        <button
+                            *ngIf="drawingsList.length !== 0"
+                            class="button red white"
+                            mat-raised-button
+                            (click)="deleteDrawing()"
+                            [disabled]="!animationIsDone"
+                        >
+                            Supprimer
+                        </button>
+                        <button class="button red white" mat-raised-button (click)="closeCarrousel()">Annuler</button>
+                    </div>
                 </ng-template>
             </div>
         </div>
@@ -158,18 +178,6 @@
     <div class="loadingAnimation">
         <div class="loadingAnimationBlockText">Chargement en cours...</div>
         <mat-spinner [diameter]="44"></mat-spinner>
-    </div>
-</ng-template>
-
-<ng-template #optionsBlock>
-    <div class="options">
-        <button *ngIf="drawingsList.length !== 0" class="button green white" mat-raised-button (click)="loadDrawing(0)" [disabled]="!animationIsDone">
-            Charger
-        </button>
-        <button *ngIf="drawingsList.length !== 0" class="button red white" mat-raised-button (click)="deleteDrawing()" [disabled]="!animationIsDone">
-            Supprimer
-        </button>
-        <button class="button red white" mat-raised-button (click)="closeCarrousel()" [disabled]="!animationIsDone">Annuler</button>
     </div>
 </ng-template>
 

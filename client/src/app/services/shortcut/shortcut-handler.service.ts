@@ -11,10 +11,10 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class ShortcutHandlerService {
+    blockShortcutsEvent: Subject<boolean>;
     private blockShortcutsIn: boolean;
     private isWhiteListed: boolean;
     private lastMouseMoveEvent: MouseEvent;
-    blockShortcutsEvent: Subject<boolean>;
 
     constructor(
         private toolHandlerService: ToolHandlerService,
@@ -56,9 +56,9 @@ export class ShortcutHandlerService {
         }
     }
 
-    onMouseClick(event: MouseEvent): void {
+    onDocumentMouseDown(event: MouseEvent): void {
         if (!this.blockShortcutsIn) {
-            this.toolHandlerService.onMouseClick(event);
+            this.toolHandlerService.onDocumentMouseDown(event);
         }
     }
 

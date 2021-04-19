@@ -12,9 +12,9 @@ import { TYPES } from './types';
 
 @injectable()
 export class Application {
+    app: express.Application;
     private readonly internalError: number = 500;
     private readonly swaggerOptions: swaggerJSDoc.Options;
-    app: express.Application;
 
     constructor(@inject(TYPES.DrawingController) private drawingController: DrawingController) {
         this.app = express();
@@ -35,6 +35,12 @@ export class Application {
         this.bindRoutes();
     }
 
+    bindRoutes(): void {
+        this.app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(this.swaggerOptions)));
+        this.app.use('/drawings', this.drawingController.router);
+        this.errorHandling();
+    }
+
     private config(): void {
         // Middlewares configuration
         this.app.use(logger('dev'));
@@ -42,12 +48,6 @@ export class Application {
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(cookieParser());
         this.app.use(cors());
-    }
-
-    bindRoutes(): void {
-        this.app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(this.swaggerOptions)));
-        this.app.use('/drawings', this.drawingController.router);
-        this.errorHandling();
     }
 
     private errorHandling(): void {

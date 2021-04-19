@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { LassoDraw } from '@app/classes/commands/lasso-draw';
 import { LineDrawer } from '@app/classes/line-drawer';
+import { Geometry } from '@app/classes/math/geometry';
 import { Line } from '@app/classes/math/line';
 import { LassoConfig } from '@app/classes/tool-config/lasso-config';
 import { Vec2 } from '@app/classes/vec2';
@@ -28,7 +29,9 @@ describe('Lasso service', () => {
     const mousePos: Vec2 = new Vec2(50, 40);
 
     beforeEach(() => {
-        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'drawPreview'], { changes: new Subject<void>() });
+        drawServiceSpy = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'draw', 'drawPreview', 'unblockUndoRedo'], {
+            changes: new Subject<void>(),
+        });
         TestBed.configureTestingModule({
             providers: [{ provide: DrawingService, useValue: drawServiceSpy }],
         });
@@ -74,6 +77,9 @@ describe('Lasso service', () => {
         service.configLasso.points = pointsTest;
         service['addPointToSelection']({ clientX: 10, clientY: 10 } as MouseEvent);
         expect(service.configLasso.points.length).toEqual(3);
+        spyOn(Geometry, 'isAPoint').and.returnValue(true);
+        service['addPointToSelection']({ clientX: 10, clientY: 10 } as MouseEvent);
+        expect(service.configLasso.points.length).toEqual(3);
     });
 
     it('should add line if there are at least 2 points', () => {
@@ -85,6 +91,10 @@ describe('Lasso service', () => {
     it('should not add line if there is only one point', () => {
         service['addNewLine']();
         expect(service['lines'].length).toEqual(0);
+    });
+
+    it('should indicate if there is an intersection', () => {
+        expect(service['isIntersecting'](mousePos)).toBeFalsy();
     });
 
     it('should not create selection if intersecting', () => {
@@ -197,6 +207,13 @@ describe('Lasso service', () => {
         expect(spy).toHaveBeenCalled();
     });
 
+    it('should remove lines when escape key is pressed', () => {
+        service.configLasso.points = pointsTest;
+        service['lines'] = [new Line(new Vec2(0, 0), new Vec2(10, 10))];
+        service.onKeyDown({ key: 'escape', ctrlKey: false, shiftKey: false, altKey: false } as KeyboardEvent);
+        expect(service['lines'].length).toBe(0);
+    });
+
     it('should not do anything if key pressed is not in shortcut list', () => {
         const spy = spyOn(service.lineDrawer, 'handleKeys').and.callThrough();
         service.onKeyDown({ key: 't', ctrlKey: true, shiftKey: false, altKey: false } as KeyboardEvent);
@@ -207,6 +224,19 @@ describe('Lasso service', () => {
         service.configLasso.previewSelectionCtx = service['drawingService'].baseCtx;
         const spy = spyOn(AbstractSelectionService.prototype, 'onKeyDown');
         service.onKeyDown({} as KeyboardEvent);
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should let parent handle keys ctrl+a is pressed', () => {
+        const spy = spyOn(AbstractSelectionService.prototype, 'onKeyDown');
+        service.onKeyDown({ key: 'a', ctrlKey: true, shiftKey: false, altKey: false } as KeyboardEvent);
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('should send event to parent if ctrl+a is pressed and selection is not null', () => {
+        service.configLasso.previewSelectionCtx = service['drawingService'].baseCtx;
+        const spy = spyOn(AbstractSelectionService.prototype, 'onKeyDown');
+        service.onKeyDown({ key: 'a', ctrlKey: true, shiftKey: false, altKey: false } as KeyboardEvent);
         expect(spy).toHaveBeenCalled();
     });
 

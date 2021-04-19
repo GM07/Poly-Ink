@@ -45,11 +45,6 @@ export class CarrouselComponent implements OnInit {
     private static readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
     private static readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
     private static readonly NOT_FOUND_ERROR: number = 404;
-    @ViewChild('overflowLeftPreview', { static: false }) private overflowLeftPreview: ElementRef<HTMLImageElement>;
-    @ViewChild('leftPreview', { static: false }) private leftPreview: ElementRef<HTMLImageElement>;
-    @ViewChild('middlePreview', { static: false }) private middlePreview: ElementRef<HTMLImageElement>;
-    @ViewChild('rightPreview', { static: false }) private rightPreview: ElementRef<HTMLImageElement>;
-    @ViewChild('overflowRightPreview', { static: false }) private overflowRightPreview: ElementRef<HTMLImageElement>;
     readonly CARROUSEL_URL: string = 'carrousel';
     readonly CANVAS_PREVIEW_SIZE: number = 200;
 
@@ -58,8 +53,6 @@ export class CarrouselComponent implements OnInit {
     readonly middleElement: Drawing = new Drawing(new DrawingData(''));
     readonly rightElement: Drawing = new Drawing(new DrawingData(''));
     readonly overflowRightElement: Drawing = new Drawing(new DrawingData(''));
-
-    private loadedImage: HTMLImageElement;
     currentURL: string;
     deletionErrorMessage: string;
     showCarrousel: boolean;
@@ -75,6 +68,13 @@ export class CarrouselComponent implements OnInit {
     currentIndex: number;
 
     animationIsDone: boolean;
+    @ViewChild('overflowLeftPreview', { static: false }) private overflowLeftPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('leftPreview', { static: false }) private leftPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('middlePreview', { static: false }) private middlePreview: ElementRef<HTMLImageElement>;
+    @ViewChild('rightPreview', { static: false }) private rightPreview: ElementRef<HTMLImageElement>;
+    @ViewChild('overflowRightPreview', { static: false }) private overflowRightPreview: ElementRef<HTMLImageElement>;
+
+    private loadedImage: HTMLImageElement;
 
     constructor(
         private shortcutHandler: ShortcutHandlerService,

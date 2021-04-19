@@ -49,8 +49,8 @@ describe('ToolHandlerService', () => {
         expect(pencilService.onMouseLeave).toHaveBeenCalled();
         service.onMouseEnter(mouseEvent);
         expect(pencilService.onMouseEnter).toHaveBeenCalled();
-        service.onMouseClick(mouseEvent);
-        expect(pencilService.onMouseClick).toHaveBeenCalled();
+        service.onDocumentMouseDown(mouseEvent);
+        expect(pencilService.onDocumentMouseDown).toHaveBeenCalled();
     });
 
     it('should change tool on keyPress', () => {
@@ -96,6 +96,7 @@ describe('ToolHandlerService', () => {
 
     const modifyObjectToSpyOnAllFunctions = (object: any): void => {
         do {
+            // We need Object to change the properties to spy on all functions
             Object.getOwnPropertyNames(object).filter((p: string) => {
                 if (typeof object[p] === 'function') {
                     spyOn<any>(object, p);

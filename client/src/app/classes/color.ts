@@ -2,53 +2,15 @@ export class Color {
     static readonly MAX: number = 255;
     static readonly MIN: number = 0;
 
+    readonly r: number;
+    readonly g: number;
+    readonly b: number;
+
     constructor(r: number, g: number, b: number) {
         this.r = r;
         this.g = g;
         this.b = b;
     }
-
-    get rgbString(): string {
-        return `rgb(${this.r}, ${this.g}, ${this.b})`;
-    }
-
-    get hexString(): string {
-        return `${this.r.toString(16).padStart(2, '0')}${this.g.toString(16).padStart(2, '0')}${this.b.toString(16).padStart(2, '0')}`.toUpperCase();
-    }
-
-    get hue(): number {
-        const degreeInCircle = 360;
-        const R: number = this.r / Color.MAX;
-        const G: number = this.g / Color.MAX;
-        const B: number = this.b / Color.MAX;
-
-        const cmin = Math.min(R, G, B);
-        const cmax = Math.max(R, G, B);
-        const delta = cmax - cmin;
-
-        let hue = 0;
-
-        // Formula for hue to rgb contains magic numbers so we disable lint for this section
-        /* tslint:disable:no-magic-numbers */
-        if (delta === 0) hue = 0;
-        else if (R === cmax) {
-            hue = (((G - B) / delta) % 6) * 60;
-        } else if (G === cmax) {
-            hue = (2.0 + (B - R) / delta) * 60;
-        } else {
-            hue = (4.0 + (R - G) / delta) * 60;
-        }
-        /* tslint:enable:no-magic-numbers */
-
-        // Add 360 until positiove since hue is on circle
-        while (hue < 0) hue += degreeInCircle;
-
-        return hue;
-    }
-
-    readonly r: number;
-    readonly g: number;
-    readonly b: number;
 
     static hueToRgb(hue: number): Color {
         const s = 1;
@@ -109,6 +71,44 @@ export class Color {
         const b: number = parseInt(hex.substring(bStart, bEnd), 16);
 
         return new Color(r, g, b);
+    }
+
+    get rgbString(): string {
+        return `rgb(${this.r}, ${this.g}, ${this.b})`;
+    }
+
+    get hexString(): string {
+        return `${this.r.toString(16).padStart(2, '0')}${this.g.toString(16).padStart(2, '0')}${this.b.toString(16).padStart(2, '0')}`.toUpperCase();
+    }
+
+    get hue(): number {
+        const degreeInCircle = 360;
+        const R: number = this.r / Color.MAX;
+        const G: number = this.g / Color.MAX;
+        const B: number = this.b / Color.MAX;
+
+        const cmin = Math.min(R, G, B);
+        const cmax = Math.max(R, G, B);
+        const delta = cmax - cmin;
+
+        let hue = 0;
+
+        // Formula for hue to rgb contains magic numbers so we disable lint for this section
+        /* tslint:disable:no-magic-numbers */
+        if (delta === 0) hue = 0;
+        else if (R === cmax) {
+            hue = (((G - B) / delta) % 6) * 60;
+        } else if (G === cmax) {
+            hue = (2.0 + (B - R) / delta) * 60;
+        } else {
+            hue = (4.0 + (R - G) / delta) * 60;
+        }
+        /* tslint:enable:no-magic-numbers */
+
+        // Add 360 until positiove since hue is on circle
+        while (hue < 0) hue += degreeInCircle;
+
+        return hue;
     }
 
     toRgbaString(alpha: number): string {

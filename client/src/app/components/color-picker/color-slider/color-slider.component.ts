@@ -10,24 +10,26 @@ import { Subscription } from 'rxjs';
     styleUrls: ['./color-slider.component.scss'],
 })
 export class ColorSliderComponent implements AfterViewInit, OnDestroy {
-    @ViewChild('canvas') private canvas: ElementRef<HTMLCanvasElement>;
-
-    readonly RED_START: number = 0;
-    readonly YELLOW_START: number = 0.17;
-    readonly GREEN_START: number = 0.34;
-    readonly CYAN_START: number = 0.51;
-    readonly BLUE_START: number = 0.61;
-    readonly PURPLE_START: number = 0.85;
-    readonly RED_END: number = 1;
+    static readonly RED_START: number = 0;
+    static readonly YELLOW_START: number = 0.17;
+    static readonly GREEN_START: number = 0.34;
+    static readonly CYAN_START: number = 0.51;
+    static readonly BLUE_START: number = 0.61;
+    static readonly PURPLE_START: number = 0.85;
+    static readonly RED_END: number = 1;
 
     context: CanvasRenderingContext2D;
 
-    leftMouseDown: boolean = false;
-    selectedHeight: number = 0;
+    leftMouseDown: boolean;
+    selectedHeight: number;
 
     hueChangeFromHexSubscription: Subscription;
+    @ViewChild('canvas') private canvas: ElementRef<HTMLCanvasElement>;
 
     constructor(private colorService: ColorService) {
+        this.leftMouseDown = false;
+        this.selectedHeight = 0;
+
         this.hueChangeFromHexSubscription = this.colorService.hueChangeFromHex.subscribe((color) => {
             this.setPositionToHue(color);
             this.draw();
@@ -42,13 +44,13 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
         this.context.clearRect(0, 0, width, height);
 
         const gradient = this.context.createLinearGradient(0, 0, 0, height);
-        gradient.addColorStop(this.RED_START, Colors.RED.rgbString);
-        gradient.addColorStop(this.YELLOW_START, Colors.YELLOW.rgbString);
-        gradient.addColorStop(this.GREEN_START, Colors.GREEN.rgbString);
-        gradient.addColorStop(this.CYAN_START, Colors.CYAN.rgbString);
-        gradient.addColorStop(this.BLUE_START, Colors.BLUE.rgbString);
-        gradient.addColorStop(this.PURPLE_START, Colors.PURPLE.rgbString);
-        gradient.addColorStop(this.RED_END, Colors.RED.rgbString);
+        gradient.addColorStop(ColorSliderComponent.RED_START, Colors.RED.rgbString);
+        gradient.addColorStop(ColorSliderComponent.YELLOW_START, Colors.YELLOW.rgbString);
+        gradient.addColorStop(ColorSliderComponent.GREEN_START, Colors.GREEN.rgbString);
+        gradient.addColorStop(ColorSliderComponent.CYAN_START, Colors.CYAN.rgbString);
+        gradient.addColorStop(ColorSliderComponent.BLUE_START, Colors.BLUE.rgbString);
+        gradient.addColorStop(ColorSliderComponent.PURPLE_START, Colors.PURPLE.rgbString);
+        gradient.addColorStop(ColorSliderComponent.RED_END, Colors.RED.rgbString);
 
         // Draw rectangle size of the canvas
         this.context.beginPath();
@@ -112,17 +114,28 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
         // Since there are 6 different sector on the color wheel we need many if/else statement to determine the appropriate one
         /* tslint:disable:cyclomatic-complexity */
         if (color.r === Color.MAX && color.g < Color.MAX && color.b === Color.MIN) {
-            this.selectedHeight = (((this.YELLOW_START - this.RED_START) * color.g) / Color.MAX) * height;
+            this.selectedHeight = (((ColorSliderComponent.YELLOW_START - ColorSliderComponent.RED_START) * color.g) / Color.MAX) * height;
         } else if (color.r > Color.MIN && color.g === Color.MAX && color.b === Color.MIN) {
-            this.selectedHeight = (this.YELLOW_START + (this.GREEN_START - this.YELLOW_START) * (1 - color.r / Color.MAX)) * height;
+            this.selectedHeight =
+                (ColorSliderComponent.YELLOW_START +
+                    (ColorSliderComponent.GREEN_START - ColorSliderComponent.YELLOW_START) * (1 - color.r / Color.MAX)) *
+                height;
         } else if (color.r === Color.MIN && color.g === Color.MAX && color.b < Color.MAX) {
-            this.selectedHeight = (this.GREEN_START + ((this.CYAN_START - this.GREEN_START) * color.b) / Color.MAX) * height;
+            this.selectedHeight =
+                (ColorSliderComponent.GREEN_START + ((ColorSliderComponent.CYAN_START - ColorSliderComponent.GREEN_START) * color.b) / Color.MAX) *
+                height;
         } else if (color.r === Color.MIN && color.g > Color.MIN && color.b === Color.MAX) {
-            this.selectedHeight = (this.CYAN_START + (this.BLUE_START - this.CYAN_START) * (1 - color.g / Color.MAX)) * height;
+            this.selectedHeight =
+                (ColorSliderComponent.CYAN_START + (ColorSliderComponent.BLUE_START - ColorSliderComponent.CYAN_START) * (1 - color.g / Color.MAX)) *
+                height;
         } else if (color.r < Color.MAX && color.g === Color.MIN && color.b === Color.MAX) {
-            this.selectedHeight = (this.BLUE_START + ((this.PURPLE_START - this.BLUE_START) * color.r) / Color.MAX) * height;
+            this.selectedHeight =
+                (ColorSliderComponent.BLUE_START + ((ColorSliderComponent.PURPLE_START - ColorSliderComponent.BLUE_START) * color.r) / Color.MAX) *
+                height;
         } else if (color.r === Color.MAX && color.g === Color.MIN && color.b > Color.MIN) {
-            this.selectedHeight = (this.PURPLE_START + (this.RED_END - this.PURPLE_START) * (1 - color.b / Color.MAX)) * height;
+            this.selectedHeight =
+                (ColorSliderComponent.PURPLE_START + (ColorSliderComponent.RED_END - ColorSliderComponent.PURPLE_START) * (1 - color.b / Color.MAX)) *
+                height;
         } else {
             this.selectedHeight = 0;
         }

@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
     styleUrls: ['./abstract-selection.component.scss'],
 })
 export class AbstractSelectionComponent implements OnDestroy, OnInit {
+    displayControlPoints: boolean;
     @ViewChild('controlPointContainer', { static: false }) private controlPointContainer: ElementRef<HTMLElement>;
     @ViewChild('topLeft', { static: false }) private topLeft: ElementRef<HTMLElement>;
     @ViewChild('topMiddle', { static: false }) private topMiddle: ElementRef<HTMLElement>;
@@ -33,7 +34,6 @@ export class AbstractSelectionComponent implements OnDestroy, OnInit {
     private controlPointList: ElementRef<HTMLElement>[];
     private isInSidebar: boolean;
     private updateSubscription: Subscription;
-    displayControlPoints: boolean;
 
     constructor(
         public selectionService: AbstractSelectionService,

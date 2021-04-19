@@ -5,6 +5,7 @@ import { MagnetismService } from '@app/services/drawing/magnetism.service';
 import { Subject } from 'rxjs';
 
 export class SelectionTranslation {
+    readonly UPDATE_SELECTION_REQUEST: Subject<Vec2> = new Subject<Vec2>();
     private readonly LEFT_ARROW: ShortcutKey = new ShortcutKey('arrowleft');
     private readonly RIGHT_ARROW: ShortcutKey = new ShortcutKey('arrowright');
     private readonly DOWN_ARROW: ShortcutKey = new ShortcutKey('arrowdown');
@@ -20,8 +21,6 @@ export class SelectionTranslation {
     private bodyWidth: string;
     private bodyHeight: string;
     private isMouseTranslationStarted: boolean;
-
-    readonly UPDATE_SELECTION_REQUEST: Subject<Vec2> = new Subject<Vec2>();
 
     constructor(config: SelectionConfig, private magnetismService: MagnetismService) {
         this.bodyWidth = document.body.style.width;

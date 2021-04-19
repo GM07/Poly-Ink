@@ -43,4 +43,12 @@ describe('EyeDropperConfigComponent', () => {
         component['eyeDropperService'].updatePrevisualisation.next('');
         expect(getContextSpy).not.toHaveBeenCalled();
     });
+
+    it('draw circle around preview should draw a circle around the preview', () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+        spyOn(ctx, 'ellipse');
+        component['drawCircleAroundPreview'](ctx, 2);
+        expect(ctx.ellipse).toHaveBeenCalled();
+    });
 });

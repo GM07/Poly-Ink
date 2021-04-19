@@ -13,13 +13,13 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class TextService extends Tool {
-    private static readonly delete: ShortcutKey = new ShortcutKey('delete');
-    private static readonly backspace: ShortcutKey = new ShortcutKey('backspace');
-    private static readonly escape: ShortcutKey = new ShortcutKey('escape');
-    private static readonly arrowLeft: ShortcutKey = new ShortcutKey('arrowleft');
-    private static readonly arrowRight: ShortcutKey = new ShortcutKey('arrowright');
-    private static readonly arrowUp: ShortcutKey = new ShortcutKey('arrowup');
-    private static readonly arrowDown: ShortcutKey = new ShortcutKey('arrowdown');
+    private static readonly DELETE: ShortcutKey = new ShortcutKey('delete');
+    private static readonly BACKSPACE: ShortcutKey = new ShortcutKey('backspace');
+    private static readonly ESCAPE: ShortcutKey = new ShortcutKey('escape');
+    private static readonly ARROW_LEFT: ShortcutKey = new ShortcutKey('arrowleft');
+    private static readonly ARROW_RIGHT: ShortcutKey = new ShortcutKey('arrowright');
+    private static readonly ARROW_UP: ShortcutKey = new ShortcutKey('arrowup');
+    private static readonly ARROW_DOWN: ShortcutKey = new ShortcutKey('arrowdown');
     readonly BLOCK_SHORTCUTS: Subject<boolean> = new Subject<boolean>();
 
     config: TextConfig;
@@ -34,16 +34,14 @@ export class TextService extends Tool {
 
         this.config = new TextConfig();
 
-        // To allow instance initialization longer than 150 characters
-        // tslint:disable-next-line
         this.shortcutList = [
-            TextService.delete,
-            TextService.backspace,
-            TextService.escape,
-            TextService.arrowLeft,
-            TextService.arrowRight,
-            TextService.arrowUp,
-            TextService.arrowDown,
+            TextService.DELETE,
+            TextService.BACKSPACE,
+            TextService.ESCAPE,
+            TextService.ARROW_LEFT,
+            TextService.ARROW_RIGHT,
+            TextService.ARROW_UP,
+            TextService.ARROW_DOWN,
         ];
         this.initSubscriptions();
     }
@@ -91,6 +89,21 @@ export class TextService extends Tool {
         this.BLOCK_SHORTCUTS.next(false);
     }
 
+    drawPreview(): void {
+        const command = new TextDraw(this.colorService, this.config);
+        this.drawingService.drawPreview(command);
+    }
+
+    draw(): void {
+        this.drawingService.clearCanvas(this.drawingService.previewCtx);
+        const command = new TextDraw(this.colorService, this.config);
+        this.drawingService.draw(command);
+    }
+
+    stopDrawing(): void {
+        this.confirmText();
+    }
+
     protected initSubscriptions(): void {
         this.drawingService.changes.subscribe(() => {
             if (this.config.hasInput) {
@@ -98,6 +111,9 @@ export class TextService extends Tool {
                 this.BLOCK_SHORTCUTS.next(true);
                 this.drawingService.blockUndoRedo();
             }
+        });
+        this.colorService.changedPrimary.subscribe(() => {
+            this.drawPreview();
         });
     }
 
@@ -113,25 +129,25 @@ export class TextService extends Tool {
 
     private handleShortCuts(shortcutKey: ShortcutKey): void {
         switch (shortcutKey) {
-            case TextService.delete:
+            case TextService.DELETE:
                 this.handleDelete();
                 break;
-            case TextService.backspace:
+            case TextService.BACKSPACE:
                 this.handleBackspace();
                 break;
-            case TextService.escape:
+            case TextService.ESCAPE:
                 this.handleEscape();
                 break;
-            case TextService.arrowLeft:
+            case TextService.ARROW_LEFT:
                 this.handleArrowLeft();
                 break;
-            case TextService.arrowRight:
+            case TextService.ARROW_RIGHT:
                 this.handleArrowRight();
                 break;
-            case TextService.arrowUp:
+            case TextService.ARROW_UP:
                 this.handleArrowUp();
                 break;
-            case TextService.arrowDown:
+            case TextService.ARROW_DOWN:
                 this.handleArrowDown();
         }
     }
@@ -219,20 +235,5 @@ export class TextService extends Tool {
         this.config.startCoords.x = event.offsetX;
         this.config.startCoords.y = event.offsetY;
         this.drawPreview();
-    }
-
-    drawPreview(): void {
-        const command = new TextDraw(this.colorService, this.config);
-        this.drawingService.drawPreview(command);
-    }
-
-    draw(): void {
-        this.drawingService.clearCanvas(this.drawingService.previewCtx);
-        const command = new TextDraw(this.colorService, this.config);
-        this.drawingService.draw(command);
-    }
-
-    stopDrawing(): void {
-        this.confirmText();
     }
 }

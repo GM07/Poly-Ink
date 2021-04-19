@@ -74,4 +74,10 @@ describe('Geometry', () => {
         const nextLine: Line = new Line(new Vec2(20, 20), new Vec2(30, 30));
         expect(Geometry.lastLineIntersecting(lines, nextLine)).toEqual(false);
     });
+
+    it('should return false if no line given', () => {
+        const lines: Line[] = [];
+        const nextLine: Line = new Line(new Vec2(20, 20), new Vec2(30, 30));
+        expect(Geometry.lastLineIntersecting(lines, nextLine)).toEqual(false);
+    });
 });

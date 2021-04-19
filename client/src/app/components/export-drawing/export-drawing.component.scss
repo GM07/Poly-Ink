@@ -45,6 +45,10 @@
     border: none;
 }
 
+::ng-deep .mat-button-toggle-label-content {
+  line-height: 24px !important;
+}
+
 .error {
     color: lightcoral;
 }

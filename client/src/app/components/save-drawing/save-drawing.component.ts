@@ -22,11 +22,6 @@ export class SaveDrawingComponent {
     static readonly UNAVAILABLE_SERVER_STATUS: number = 503;
     static readonly DATA_LIMIT_REACHED: number = 413;
     readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-    private baseCanvas: HTMLCanvasElement;
-    private baseContext: CanvasRenderingContext2D;
-    private canvasImage: string;
-    private imageData: ImageData;
-    private savePreview: ElementRef<HTMLCanvasElement>;
 
     visible: boolean;
     selectable: boolean;
@@ -40,12 +35,11 @@ export class SaveDrawingComponent {
     unavailableServer: boolean;
     saveForm: FormGroup;
     saveTags: Tag[];
-
-    @ViewChild('savePreview', { static: false }) set content(element: ElementRef) {
-        if (element) {
-            this.savePreview = element;
-        }
-    }
+    private baseCanvas: HTMLCanvasElement;
+    private baseContext: CanvasRenderingContext2D;
+    private canvasImage: string;
+    private imageData: ImageData;
+    private savePreview: ElementRef<HTMLCanvasElement>;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -55,6 +49,12 @@ export class SaveDrawingComponent {
         private serverCommunicationService: ServerCommunicationService,
     ) {
         this.initValues();
+    }
+
+    @ViewChild('savePreview', { static: false }) set content(element: ElementRef) {
+        if (element) {
+            this.savePreview = element;
+        }
     }
 
     get nameFormControl(): AbstractControl {
@@ -77,7 +77,7 @@ export class SaveDrawingComponent {
         this.saveTags = [];
         this.saveForm = new FormGroup({
             nameFormControl: new FormControl(
-                DrawingConstants.defaultFileNames[Math.floor(Math.random() * DrawingConstants.defaultFileNames.length)],
+                DrawingConstants.DEFAULT_FILE_NAMES[Math.floor(Math.random() * DrawingConstants.DEFAULT_FILE_NAMES.length)],
                 [Validators.required, Validators.pattern('(?! )[a-zA-Z0-9\u00C0-\u017F, ]*(?<! )')],
             ),
             tagsFormControl: new FormControl([], Validators.pattern('^([ ]*[0-9A-Za-z-]+[ ]*)(,[ ]*[0-9A-Za-z-]+[ ]*)*$')),
