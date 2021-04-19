@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
-import { LineDrawer } from '@app/classes/line-drawer';
+import { DashLineSettings, LineDrawer } from '@app/classes/line-drawer';
 import { LassoConfig } from '@app/classes/tool-config/lasso-config';
 import { Vec2 } from '@app/classes/vec2';
 import { Colors } from '@app/constants/colors';
@@ -84,20 +84,29 @@ describe('LassoDraw', () => {
         lassoDraw['config'].intersecting = true;
         const spy = spyOn(LineDrawer, 'drawDashedLinePath');
         lassoDraw.execute(ctxStub);
-        expect(spy).toHaveBeenCalledWith(ctxStub, lassoDraw['config'].points, new Vec2(0, 0), ['red', 'white']);
+        expect(spy).toHaveBeenCalledWith(ctxStub, lassoDraw['config'].points, {
+            transform: new Vec2(0, 0),
+            styles: ['red', 'white'],
+        } as DashLineSettings);
     });
 
     it('should draw dashed line path with red white if intersecting', () => {
         lassoDraw['config'].intersecting = true;
         const spy = spyOn(LineDrawer, 'drawDashedLinePath');
         lassoDraw.execute(ctxStub);
-        expect(spy).toHaveBeenCalledWith(ctxStub, lassoDraw['config'].points, new Vec2(0, 0), ['red', 'white']);
+        expect(spy).toHaveBeenCalledWith(ctxStub, lassoDraw['config'].points, {
+            transform: new Vec2(0, 0),
+            styles: ['red', 'white'],
+        } as DashLineSettings);
     });
 
     it('should draw dashed line path with black white if intersecting', () => {
         const spy = spyOn(LineDrawer, 'drawDashedLinePath');
         lassoDraw.execute(ctxStub);
-        expect(spy).toHaveBeenCalledWith(ctxStub, lassoDraw['config'].points, new Vec2(0, 0), ['black', 'white']);
+        expect(spy).toHaveBeenCalledWith(ctxStub, lassoDraw['config'].points, {
+            transform: new Vec2(0, 0),
+            styles: ['black', 'white'],
+        } as DashLineSettings);
     });
 
     it('should draw dashed clipped path in selection', () => {

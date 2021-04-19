@@ -30,7 +30,7 @@ describe('ExportImgurService', () => {
 
     it('should send a request POST', () => {
         service.exportImage('imgur_image_name', 'png', 'image_name').subscribe();
-        const req = httpMock.expectOne(`${ExportImgurService.baseURL}/image`);
+        const req = httpMock.expectOne(`${ExportImgurService.BASE_URL}/image`);
         expect(req.request.method).toBe('POST');
         req.flush(dummyImgurResponse);
     });

@@ -16,15 +16,15 @@ export class GridService {
     size: number;
     private gridColor: string;
     private opacity: number;
-    private toggleGridShortcut: ShortcutKey;
-    private upsizeGridShortcut: ShortcutKey[];
-    private downSizeGridShortcut: ShortcutKey;
+    private readonly TOGGLE_GRID_SHORTCUT: ShortcutKey;
+    private readonly UPSIZE_GRID_SHORTCUT: ShortcutKey[];
+    private readonly DOWNSIZE_GRID_SHORTCUT: ShortcutKey;
 
     constructor() {
         this.size = ToolSettingsConst.GRID_MIN_SIZE;
-        this.toggleGridShortcut = new ShortcutKey('g');
-        this.upsizeGridShortcut = [new ShortcutKey('+'), new ShortcutKey('='), new ShortcutKey('+', { shiftKey: true } as SpecialKeys)];
-        this.downSizeGridShortcut = new ShortcutKey('-');
+        this.TOGGLE_GRID_SHORTCUT = new ShortcutKey('g');
+        this.UPSIZE_GRID_SHORTCUT = [new ShortcutKey('+'), new ShortcutKey('='), new ShortcutKey('+', { shiftKey: true } as SpecialKeys)];
+        this.DOWNSIZE_GRID_SHORTCUT = new ShortcutKey('-');
         this.opacity = ToolSettingsConst.GRID_DEFAULT_OPACITY;
         this.gridVisibility = false;
     }
@@ -52,13 +52,13 @@ export class GridService {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (this.toggleGridShortcut.equals(event)) {
+        if (this.TOGGLE_GRID_SHORTCUT.equals(event)) {
             this.toggleGridVisibility();
-        } else if (ShortcutKey.contains(this.upsizeGridShortcut, event)) {
+        } else if (ShortcutKey.contains(this.UPSIZE_GRID_SHORTCUT, event)) {
             this.sizeValue = this.sizeValue + ToolSettingsConst.GRID_STEP;
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.updateGrid();
-        } else if (this.downSizeGridShortcut.equals(event)) {
+        } else if (this.DOWNSIZE_GRID_SHORTCUT.equals(event)) {
             this.sizeValue = this.sizeValue - ToolSettingsConst.GRID_STEP;
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.updateGrid();

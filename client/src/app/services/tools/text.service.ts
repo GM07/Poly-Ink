@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { TextDraw } from '@app/classes/commands/text-draw';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
-import { TextConfig } from '@app/classes/tool-config/text-config';
+import { TextAlignment, TextConfig } from '@app/classes/tool-config/text-config';
 import { TextToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { MouseButton } from '@app/constants/control';
 import { ColorService } from '@app/services/color/color.service';
@@ -91,6 +91,7 @@ export class TextService extends Tool {
     }
 
     drawPreview(): void {
+        if (!this.config.hasInput) return;
         const command = new TextDraw(this.colorService, this.config);
         this.drawingService.drawPreview(command);
     }
@@ -128,15 +129,17 @@ export class TextService extends Tool {
         let left = this.config.startCoords.x;
         let right = this.config.startCoords.x + maxLineWidth;
         switch (this.config.alignmentSetting) {
-            case 'right':
+            case TextAlignment.Right:
                 right = this.config.startCoords.x;
                 left = this.config.startCoords.x - maxLineWidth;
                 break;
-            case 'center':
+            case TextAlignment.Center:
                 right = this.config.startCoords.x + maxLineWidth / 2;
                 left = this.config.startCoords.x - maxLineWidth / 2;
         }
-        return !(event.offsetX < left || event.offsetX >= right || event.y <= top || event.y >= bottom);
+        const x = this.getPositionFromMouse(event).x;
+        const y = this.getPositionFromMouse(event).y;
+        return !(x < left || x >= right || y <= top || y >= bottom);
     }
 
     private handleEnter(): void {
@@ -254,8 +257,7 @@ export class TextService extends Tool {
     private addText(event: MouseEvent): void {
         this.BLOCK_SHORTCUTS.next(true);
         this.config.hasInput = true;
-        this.config.startCoords.x = event.offsetX;
-        this.config.startCoords.y = event.offsetY;
+        this.config.startCoords = this.getPositionFromMouse(event);
         this.drawPreview();
     }
 }

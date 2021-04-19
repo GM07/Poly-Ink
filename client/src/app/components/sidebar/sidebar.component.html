@@ -16,13 +16,13 @@
                 (click)="toolIconClicked(tool)"
                 *ngFor="let tool of topToolsSettings"
                 class="sidebar-item icon-button"
-                matTooltip="{{ tool.infoBubble }}"
+                matTooltip="{{ tool.INFO_BUBBLE }}"
                 mat-icon-button
                 matTooltipPosition="right"
                 [@.disabled]="true"
-                [style.background]="tool.toolId === selectedTool.toolID ? HIGHLIGHTED_COLOR : 'white'"
+                [style.background]="tool.TOOL_ID === selectedTool.toolID ? HIGHLIGHTED_COLOR : 'white'"
             >
-                <mat-icon [ngStyle]="{ color: tool.toolId === selectedTool.toolID ? 'white' : 'black' }" svgIcon="{{ tool.iconName }}"></mat-icon>
+                <mat-icon [ngStyle]="{ color: tool.TOOL_ID === selectedTool.toolID ? 'white' : 'black' }" svgIcon="{{ tool.ICON_NAME }}"></mat-icon>
             </button>
         </mat-action-list>
 
@@ -30,53 +30,53 @@
             <button
                 (click)="clipboardService.pasteDrawing()"
                 class="sidebar-item icon-button"
-                matTooltip="{{ pasteToolSettings.infoBubble }}"
+                matTooltip="{{ pasteToolSettings.INFO_BUBBLE }}"
                 mat-icon-button
                 matTooltipPosition="right"
                 [@.disabled]="true"
                 [disabled]="clipboardService.savedConfigs === undefined"
                 [style.background]="'white'"
             >
-                <mat-icon>{{ pasteToolSettings.iconName }}</mat-icon>
+                <mat-icon>{{ pasteToolSettings.ICON_NAME }}</mat-icon>
             </button>
 
             <button
                 (click)="emitClickEvent(undoToolSettings)"
                 class="sidebar-item icon-button"
-                matTooltip="{{ undoToolSettings.infoBubble }}"
+                matTooltip="{{ undoToolSettings.INFO_BUBBLE }}"
                 mat-icon-button
                 matTooltipPosition="right"
                 [@.disabled]="true"
                 [disabled]="blockUndoIcon"
-                [style.background]="undoToolSettings.toolId === selectedTool.toolID ? HIGHLIGHTED_COLOR : 'white'"
+                [style.background]="undoToolSettings.TOOL_ID === selectedTool.toolID ? HIGHLIGHTED_COLOR : 'white'"
             >
-                <mat-icon svgIcon="{{ undoToolSettings.iconName }}"></mat-icon>
+                <mat-icon svgIcon="{{ undoToolSettings.ICON_NAME }}"></mat-icon>
             </button>
 
             <button
                 (click)="emitClickEvent(redoToolSettings)"
                 class="sidebar-item icon-button"
-                matTooltip="{{ redoToolSettings.infoBubble }}"
+                matTooltip="{{ redoToolSettings.INFO_BUBBLE }}"
                 mat-icon-button
                 matTooltipPosition="right"
                 [@.disabled]="true"
                 [disabled]="blockRedoIcon"
-                [style.background]="redoToolSettings.toolId === selectedTool.toolID ? HIGHLIGHTED_COLOR : 'white'"
+                [style.background]="redoToolSettings.TOOL_ID === selectedTool.toolID ? HIGHLIGHTED_COLOR : 'white'"
             >
-                <mat-icon svgIcon="{{ redoToolSettings.iconName }}"></mat-icon>
+                <mat-icon svgIcon="{{ redoToolSettings.ICON_NAME }}"></mat-icon>
             </button>
 
             <button
                 (click)="emitClickEvent(tool)"
                 *ngFor="let tool of bottomToolsSettings"
                 class="sidebar-item icon-button"
-                matTooltip="{{ tool.infoBubble }}"
+                matTooltip="{{ tool.INFO_BUBBLE }}"
                 mat-icon-button
                 matTooltipPosition="right"
                 [@.disabled]="true"
-                [style.background]="tool.toolId === selectedTool.toolID ? HIGHLIGHTED_COLOR : 'white'"
+                [style.background]="tool.TOOL_ID === selectedTool.toolID ? HIGHLIGHTED_COLOR : 'white'"
             >
-                <mat-icon svgIcon="{{ tool.iconName }}"></mat-icon>
+                <mat-icon svgIcon="{{ tool.ICON_NAME }}"></mat-icon>
             </button>
         </mat-action-list>
     </mat-drawer>

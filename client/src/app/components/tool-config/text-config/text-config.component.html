@@ -18,36 +18,33 @@
 
     <h5 class="textFormat">Alignement</h5>
     <div class="textFormatButton">
-        <mat-button-toggle-group value="left">
+        <mat-button-toggle-group>
             <div class="alignmentButton">
                 <mat-button-toggle
-                    (click)="setAlignment('left')"
+                    (click)="setAlignment(alignment.Left)"
                     mat-icon-button
                     [@.disabled]="true"
-                    value="left"
-                    [checked]="textService.config.alignmentSetting === 'left'"
+                    [checked]="textService.config.alignmentSetting === alignment.Left"
                 >
                     <mat-icon svgIcon="textAlignLeft"></mat-icon>
                 </mat-button-toggle>
             </div>
             <div class="alignmentButton">
                 <mat-button-toggle
-                    (click)="setAlignment('center')"
+                    (click)="setAlignment(alignment.Center)"
                     mat-icon-button
                     [@.disabled]="true"
-                    value="center"
-                    [checked]="textService.config.alignmentSetting === 'center'"
+                    [checked]="textService.config.alignmentSetting === alignment.Center"
                 >
                     <mat-icon svgIcon="textAlignCenter"></mat-icon>
                 </mat-button-toggle>
             </div>
             <div class="alignmentButton">
                 <mat-button-toggle
-                    (click)="setAlignment('right')"
+                    (click)="setAlignment(alignment.Right)"
                     mat-icon-button
                     [@.disabled]="true"
-                    value="right"
-                    [checked]="textService.config.alignmentSetting === 'right'"
+                    [checked]="textService.config.alignmentSetting === alignment.Right"
                 >
                     <mat-icon svgIcon="textAlignRight"></mat-icon>
                 </mat-button-toggle>

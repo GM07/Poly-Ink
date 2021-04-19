@@ -8,7 +8,7 @@
         <input
             placeholder="Étiquettes..."
             [matChipInputFor]="chipList"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputSeparatorKeyCodes]="SEPARATOR_KEYS_CODES"
             [matChipInputAddOnBlur]="addOnBlur"
             (matChipInputTokenEnd)="addFilter($event)"
             (focus)="isFocused.emit(true)"

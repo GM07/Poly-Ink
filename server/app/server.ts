@@ -5,24 +5,24 @@ import { TYPES } from './types';
 
 @injectable()
 export class Server {
-    private readonly appPort: string | number | boolean = this.normalizePort(process.env.PORT || '3000');
-    private readonly baseDix: number = 10;
+    private readonly APP_PORT: string | number | boolean = this.normalizePort(process.env.PORT || '3000');
+    private readonly BASE_DIX: number = 10;
     private server: http.Server;
 
     constructor(@inject(TYPES.Application) private application: Application) {}
 
     init(): void {
-        this.application.app.set('port', this.appPort);
+        this.application.app.set('port', this.APP_PORT);
 
         this.server = http.createServer(this.application.app);
 
-        this.server.listen(this.appPort);
+        this.server.listen(this.APP_PORT);
         this.server.on('error', (error: NodeJS.ErrnoException) => this.onError(error));
         this.server.on('listening', () => this.onListening());
     }
 
     private normalizePort(val: number | string): number | string | boolean {
-        const port: number = typeof val === 'string' ? parseInt(val, this.baseDix) : val;
+        const port: number = typeof val === 'string' ? parseInt(val, this.BASE_DIX) : val;
         if (isNaN(port)) {
             return val;
         } else if (port >= 0) {
@@ -36,7 +36,7 @@ export class Server {
         if (error.syscall !== 'listen') {
             throw error;
         }
-        const bind: string = typeof this.appPort === 'string' ? 'Pipe ' + this.appPort : 'Port ' + this.appPort;
+        const bind: string = typeof this.APP_PORT === 'string' ? 'Pipe ' + this.APP_PORT : 'Port ' + this.APP_PORT;
         switch (error.code) {
             case 'EACCES':
                 console.error(`${bind} requires elevated privileges`);

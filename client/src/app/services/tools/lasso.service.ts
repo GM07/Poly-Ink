@@ -25,14 +25,14 @@ export class LassoService extends AbstractSelectionService {
     private start: Vec2;
     private end: Vec2;
     private lines: Line[];
-    private selectAllShortcut: ShortcutKey;
+    private readonly SELECT_ALL_SHORTCUT: ShortcutKey;
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(LassoToolConstants.SHORTCUT_KEY);
         this.toolID = LassoToolConstants.TOOL_ID;
         this.initAttribs(new LassoConfig());
-        this.selectAllShortcut = new ShortcutKey('a', { ctrlKey: true } as SpecialKeys);
+        this.SELECT_ALL_SHORTCUT = new ShortcutKey('a', { ctrlKey: true } as SpecialKeys);
     }
 
     initAttribs(config: SelectionConfig): void {
@@ -95,13 +95,13 @@ export class LassoService extends AbstractSelectionService {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (this.selectAllShortcut.equals(event)) {
+        if (this.SELECT_ALL_SHORTCUT.equals(event)) {
             super.onKeyDown(event);
             return;
         }
 
         if (this.configLasso.previewSelectionCtx === null) {
-            const shortcut = ShortcutKey.get(this.lineDrawer.shortcutList, event, true);
+            const shortcut = ShortcutKey.get(this.lineDrawer.SHORTCUT_LIST, event, true);
             if (shortcut !== undefined && shortcut.isDown !== true) {
                 shortcut.isDown = true;
                 this.lineDrawer.handleKeys(shortcut);
@@ -115,7 +115,7 @@ export class LassoService extends AbstractSelectionService {
 
     onKeyUp(event: KeyboardEvent): void {
         if (this.configLasso.previewSelectionCtx === null) {
-            const shortcut = ShortcutKey.get(this.lineDrawer.shortcutList, event, true);
+            const shortcut = ShortcutKey.get(this.lineDrawer.SHORTCUT_LIST, event, true);
             if (shortcut !== undefined) {
                 shortcut.isDown = false;
                 this.lineDrawer.handleKeys(shortcut);
@@ -222,9 +222,6 @@ export class LassoService extends AbstractSelectionService {
 
         this.lineDrawer.addNewPoint(event);
         this.addNewLine();
-        this.lineDrawer.followCursor(event);
-        this.configLasso.intersecting = this.isIntersecting(this.lineDrawer.pointToAdd);
-        this.lineDrawer.renderLinePreview();
     }
 
     private addNewLine(): void {

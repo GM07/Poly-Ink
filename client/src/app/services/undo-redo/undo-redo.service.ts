@@ -14,20 +14,20 @@ export class UndoRedoService {
 
     context: CanvasRenderingContext2D;
     preview: CanvasRenderingContext2D;
-    shortcutUndo: ShortcutKey;
-    shortcutRedo: ShortcutKey;
+    readonly UNDO_SHORTCUT: ShortcutKey;
+    readonly REDO_SHORTCUT: ShortcutKey;
     originalResize: ResizeDraw;
 
     originalCanvas: HTMLCanvasElement;
 
     commands: AbstractDraw[];
     currentAction: number;
-    private readonly initialActionPosition: number = -1;
+    private readonly INITIAL_ACTION_POSITION: number = -1;
     private blockUndoRedoIn: boolean;
 
     constructor() {
-        this.shortcutRedo = new ShortcutKey('z', { ctrlKey: true, shiftKey: true } as SpecialKeys);
-        this.shortcutUndo = new ShortcutKey('z', { ctrlKey: true } as SpecialKeys);
+        this.REDO_SHORTCUT = new ShortcutKey('z', { ctrlKey: true, shiftKey: true } as SpecialKeys);
+        this.UNDO_SHORTCUT = new ShortcutKey('z', { ctrlKey: true } as SpecialKeys);
         this.reset();
     }
 
@@ -92,14 +92,14 @@ export class UndoRedoService {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (this.shortcutRedo.equals(event)) this.redo();
-        else if (this.shortcutUndo.equals(event)) this.undo();
+        if (this.REDO_SHORTCUT.equals(event)) this.redo();
+        else if (this.UNDO_SHORTCUT.equals(event)) this.undo();
     }
 
     reset(): void {
         this.blockUndoRedo = true;
         this.commands = [];
-        this.currentAction = this.initialActionPosition;
+        this.currentAction = this.INITIAL_ACTION_POSITION;
     }
 
     private autoSave(): void {
