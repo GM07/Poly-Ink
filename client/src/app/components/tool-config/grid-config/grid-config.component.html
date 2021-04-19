@@ -6,7 +6,6 @@
 <div *ngIf="gridService.gridVisibility" class="tab">
     <br />
     <h5 class="textFormat">Dimensions des carreaux</h5>
-    <br />
     <div class="textFormatForSlider">
         <mat-slider
             min="{{ MIN_SIZE }}"
@@ -14,7 +13,6 @@
             step="5"
             (input)="sizeChange($event)"
             [(ngModel)]="gridService.sizeValue"
-            thumbLabel
             [displayWith]="colorSliderLabel"
         >
         </mat-slider>
@@ -22,7 +20,6 @@
     </div>
 
     <h5 class="textFormat">Opacité</h5>
-    <br />
     <div class="textFormatForSlider">
         <mat-slider
             min="{{ MIN_TRANSPARENCY }}"
@@ -30,7 +27,6 @@
             step="5"
             (input)="opacityChange($event)"
             [(ngModel)]="gridService.opacityValue"
-            thumbLabel
             [displayWith]="colorSliderLabel"
         >
         </mat-slider>

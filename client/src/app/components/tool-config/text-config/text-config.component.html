@@ -6,9 +6,8 @@
             id="slider"
             min="{{ MIN }}"
             max="{{ MAX }}"
-            (change)="changeFontSize($event.value)"
+            (input)="changeFontSize($event.value)"
             [(ngModel)]="currentFontSize"
-            thumbLabel
             [displayWith]="colorSliderLabel"
         >
         </mat-slider>
@@ -29,17 +28,35 @@
     <div class="textFormatButton">
         <mat-button-toggle-group value="left">
             <div class="alignmentButton">
-                <mat-button-toggle (click)="setAlignment('left')" mat-icon-button [@.disabled]="true" value="left" [checked]="textService.config.alignmentSetting === 'left'">
+                <mat-button-toggle
+                    (click)="setAlignment('left')"
+                    mat-icon-button
+                    [@.disabled]="true"
+                    value="left"
+                    [checked]="textService.config.alignmentSetting === 'left'"
+                >
                     <mat-icon svgIcon="textAlignLeft"></mat-icon>
                 </mat-button-toggle>
             </div>
             <div class="alignmentButton">
-                <mat-button-toggle (click)="setAlignment('center')" mat-icon-button [@.disabled]="true" value="center" [checked]="textService.config.alignmentSetting === 'center'">
+                <mat-button-toggle
+                    (click)="setAlignment('center')"
+                    mat-icon-button
+                    [@.disabled]="true"
+                    value="center"
+                    [checked]="textService.config.alignmentSetting === 'center'"
+                >
                     <mat-icon svgIcon="textAlignCenter"></mat-icon>
                 </mat-button-toggle>
             </div>
             <div class="alignmentButton">
-                <mat-button-toggle (click)="setAlignment('right')" mat-icon-button [@.disabled]="true" value="right" [checked]="textService.config.alignmentSetting === 'right'">
+                <mat-button-toggle
+                    (click)="setAlignment('right')"
+                    mat-icon-button
+                    [@.disabled]="true"
+                    value="right"
+                    [checked]="textService.config.alignmentSetting === 'right'"
+                >
                     <mat-icon svgIcon="textAlignRight"></mat-icon>
                 </mat-button-toggle>
             </div>
@@ -50,20 +67,45 @@
         <div class="textFormatButton">
             <mat-button-toggle-group [vertical]="true" value="Arial">
                 <div class="textFormatButton">
-                    <mat-button-toggle class="buttons" (click)="changeFont('Arial')" value="Arial" [checked]="textService.config.textFont === 'Arial'">Arial</mat-button-toggle>
-                </div>
-                <div class="textFormatButton">
-                    <mat-button-toggle class="buttonTimes" (click)="changeFont('Times New Roman')" value="Times New Roman" [checked]="textService.config.textFont === 'Times New Roman'">Times New Roman</mat-button-toggle
+                    <mat-button-toggle class="buttons" (click)="changeFont('Arial')" value="Arial" [checked]="textService.config.textFont === 'Arial'"
+                        >Arial</mat-button-toggle
                     >
                 </div>
                 <div class="textFormatButton">
-                    <mat-button-toggle class="buttonMonospace" (click)="changeFont('Monospace')" value="Monospace" [checked]="textService.config.textFont === 'Monospace'">Monospace</mat-button-toggle>
+                    <mat-button-toggle
+                        class="buttonTimes"
+                        (click)="changeFont('Times New Roman')"
+                        value="Times New Roman"
+                        [checked]="textService.config.textFont === 'Times New Roman'"
+                        >Times New Roman</mat-button-toggle
+                    >
                 </div>
                 <div class="textFormatButton">
-                    <mat-button-toggle class="buttonCreepster" (click)="changeFont('creepster')" value="Creepster" [checked]="textService.config.textFont === 'creepster'">Creepster</mat-button-toggle>
+                    <mat-button-toggle
+                        class="buttonMonospace"
+                        (click)="changeFont('Monospace')"
+                        value="Monospace"
+                        [checked]="textService.config.textFont === 'Monospace'"
+                        >Monospace</mat-button-toggle
+                    >
                 </div>
                 <div class="textFormatButton">
-                    <mat-button-toggle class="buttonPressStart" (click)="changeFont('pressStart')" value="Press Start" [checked]="textService.config.textFont === 'pressStart'">Press Start</mat-button-toggle>
+                    <mat-button-toggle
+                        class="buttonCreepster"
+                        (click)="changeFont('creepster')"
+                        value="Creepster"
+                        [checked]="textService.config.textFont === 'creepster'"
+                        >Creepster</mat-button-toggle
+                    >
+                </div>
+                <div class="textFormatButton">
+                    <mat-button-toggle
+                        class="buttonPressStart"
+                        (click)="changeFont('pressStart')"
+                        value="Press Start"
+                        [checked]="textService.config.textFont === 'pressStart'"
+                        >Press Start</mat-button-toggle
+                    >
                 </div>
             </mat-button-toggle-group>
         </div>
