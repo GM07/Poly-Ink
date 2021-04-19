@@ -29,17 +29,17 @@
     <div class="textFormatButton">
         <mat-button-toggle-group value="left">
             <div class="alignmentButton">
-                <mat-button-toggle (click)="setAlignment('left')" mat-icon-button [@.disabled]="true" value="left">
+                <mat-button-toggle (click)="setAlignment('left')" mat-icon-button [@.disabled]="true" value="left" [checked]="textService.config.alignmentSetting === 'left'">
                     <mat-icon svgIcon="textAlignLeft"></mat-icon>
                 </mat-button-toggle>
             </div>
             <div class="alignmentButton">
-                <mat-button-toggle (click)="setAlignment('center')" mat-icon-button [@.disabled]="true" value="center">
+                <mat-button-toggle (click)="setAlignment('center')" mat-icon-button [@.disabled]="true" value="center" [checked]="textService.config.alignmentSetting === 'center'">
                     <mat-icon svgIcon="textAlignCenter"></mat-icon>
                 </mat-button-toggle>
             </div>
             <div class="alignmentButton">
-                <mat-button-toggle (click)="setAlignment('right')" mat-icon-button [@.disabled]="true" value="right">
+                <mat-button-toggle (click)="setAlignment('right')" mat-icon-button [@.disabled]="true" value="right" [checked]="textService.config.alignmentSetting === 'right'">
                     <mat-icon svgIcon="textAlignRight"></mat-icon>
                 </mat-button-toggle>
             </div>
