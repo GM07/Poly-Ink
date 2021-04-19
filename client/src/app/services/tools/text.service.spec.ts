@@ -14,6 +14,7 @@ describe('TextService', () => {
     let drawingService: DrawingService;
     let canvasTestHelper: CanvasTestHelper;
     let ctxStub: CanvasRenderingContext2D;
+    const leftMouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
@@ -61,23 +62,21 @@ describe('TextService', () => {
     });
 
     it('should call addText when mouseDown and there is no input', () => {
-        let mouseEvent = { button: MouseButton.Right, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        const mouseEvent = { button: MouseButton.Right, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         spyOn<any>(service, 'addText');
         spyOn<any>(service, 'isInTextBox').and.returnValue(false);
         service.config.hasInput = false;
         service.onMouseDown(mouseEvent);
         expect(service['addText']).toHaveBeenCalledTimes(0);
-        mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
-        service.onMouseDown(mouseEvent);
+        service.onMouseDown(leftMouseEvent);
         expect(service['addText']).toHaveBeenCalledTimes(1);
     });
 
     it('should call confirmText when mouseDown and there is input', () => {
-        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         spyOn<any>(service, 'confirmText');
         spyOn<any>(service, 'isInTextBox').and.returnValue(false);
         service.config.hasInput = true;
-        service.onMouseDown(mouseEvent);
+        service.onMouseDown(leftMouseEvent);
         expect(service['confirmText']).toHaveBeenCalled();
     });
 
@@ -92,10 +91,9 @@ describe('TextService', () => {
     });
 
     it('should do nothing if click in textBox', () => {
-        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         spyOn<any>(service, 'isInTextBox').and.returnValue(true);
         spyOn<any>(service, 'addText');
-        service.onMouseDown(mouseEvent);
+        service.onMouseDown(leftMouseEvent);
         expect(service['addText']).toHaveBeenCalledTimes(0);
     });
 
