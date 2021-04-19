@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TextAlignment } from '@app/classes/tool-config/text-config';
 import { TextService } from '@app/services/tools/text.service';
 import { TextConfigComponent } from './text-config.component';
 
@@ -96,11 +97,11 @@ describe('TextConfigComponent', () => {
     });
 
     it('should change text alignment and be left by default', () => {
-        expect(textService.config.alignmentSetting).toBe('left');
+        expect(textService.config.alignmentSetting).toBe(TextAlignment.Left);
         spyOn(textService, 'drawPreview');
-        component.setAlignment('right');
-        expect(textService.config.alignmentSetting).toBe('right');
-        component.setAlignment('right');
-        expect(textService.config.alignmentSetting).toBe('right');
+        component.setAlignment(TextAlignment.Right);
+        expect(textService.config.alignmentSetting).toBe(TextAlignment.Right);
+        component.setAlignment(TextAlignment.Right);
+        expect(textService.config.alignmentSetting).toBe(TextAlignment.Right);
     });
 });
