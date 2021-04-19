@@ -12,7 +12,11 @@ export class ColorTextboxComponent {
     hex: string;
 
     @Output()
-    hexColorChangeEvent: EventEmitter<Color> = new EventEmitter<Color>();
+    hexColorChangeEvent: EventEmitter<Color>;
+
+    constructor() {
+        this.hexColorChangeEvent = new EventEmitter<Color>();
+    }
 
     validateSizeHex(hex: string): string {
         if (hex.length !== HexColors.LENGTH) return HexColors.INVALID;

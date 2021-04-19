@@ -3,7 +3,6 @@
     margin-right: 8px;
     width: 200px;
     height: 30px;
-    line-height: 30px;
     background-color: #ffffff;
     color: #000000;
     font-size: 15px;
@@ -22,6 +21,10 @@
     border-radius: 4px;
     padding: 0px !important;
     margin-bottom: 10px;
+}
+
+::ng-deep .mat-button-toggle-label-content {
+  line-height: 24px !important;
 }
 
 .tab {

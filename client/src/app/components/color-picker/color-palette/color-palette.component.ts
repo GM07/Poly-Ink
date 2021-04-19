@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { Color } from '@app/classes/color';
+import { Vec2 } from '@app/classes/vec2';
 import { ColorService } from '@app/services/color/color.service';
 import { Subscription } from 'rxjs';
 
@@ -10,14 +11,17 @@ import { Subscription } from 'rxjs';
 })
 export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
     context: CanvasRenderingContext2D;
-    leftMouseDown: boolean = false;
-    selectedPosition: { x: number; y: number } = { x: 0, y: 0 };
+    leftMouseDown: boolean;
+    selectedPosition: Vec2;
 
     selectedColorChangeHexSubscription: Subscription;
     selectedHueChangeSliderSubscription: Subscription;
     @ViewChild('canvas') private canvas: ElementRef<HTMLCanvasElement>;
 
     constructor(public colorService: ColorService) {
+        this.leftMouseDown = false;
+        this.selectedPosition = new Vec2(0, 0);
+
         this.selectedColorChangeHexSubscription = this.colorService.selectedColorChangeFromHex.subscribe((value) => {
             this.setPositionToColor(value);
             this.draw();
@@ -131,17 +135,14 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
         this.colorService.selectedColor = this.getColorAtPosition(this.selectedPosition.x, this.selectedPosition.y);
     }
 
-    keepSelectionWithinBounds(x: number, y: number): { x: number; y: number } {
+    keepSelectionWithinBounds(x: number, y: number): Vec2 {
         const width = this.canvas.nativeElement.width;
         const height = this.canvas.nativeElement.height;
 
-        if (x > width) x = width;
-        else if (x < 0) x = 0;
+        x = Math.max(Math.min(x, width), 0);
+        y = Math.max(Math.min(y, height), 0);
 
-        if (y > height) y = height;
-        else if (y < 1) y = 0;
-
-        return { x, y };
+        return new Vec2(x, y);
     }
 
     getColorAtPosition(x: number, y: number): Color {
