@@ -9,9 +9,11 @@ import { ColorService } from '@app/services/color/color.service';
 })
 export class ColorPickerComponent {
     @Output()
-    closeMenuEvent: EventEmitter<void> = new EventEmitter<void>();
+    closeMenuEvent: EventEmitter<void>;
 
-    constructor(public colorService: ColorService) {}
+    constructor(public colorService: ColorService) {
+        this.closeMenuEvent = new EventEmitter<void>();
+    }
 
     hexValueChange(hex: Color): void {
         this.colorService.selectedColorFromHex = hex;

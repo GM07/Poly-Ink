@@ -1,7 +1,16 @@
+@font-face {
+    src: url(../../../../assets/fonts/PressStart2P-Regular.ttf);
+    font-family: pressStart;
+}
+
+@font-face {
+    src: url(../../../../assets/fonts/Creepster-Regular.ttf);
+    font-family: creepster;
+}
+
 .mat-button-toggle {
     width: 200px;
     height: 30px;
-    line-height: 30px;
     background-color: white;
     color: black;
     font-size: 15px;
@@ -26,6 +35,10 @@
     border-radius: 4px;
     padding: 0px !important;
     width: 170px;
+}
+
+::ng-deep .mat-button-toggle-label-content {
+    line-height: 24px !important;
 }
 
 .tab {
@@ -62,14 +75,15 @@
     font-family: monospace;
 }
 
-.buttonImpact {
+.buttonCreepster {
     width: 150px !important;
-    font-family: 'Impact';
+    font-family: 'creepster';
 }
 
-.buttonVerdana {
+.buttonPressStart {
     width: 150px !important;
-    font-family: 'Verdana';
+    font-family: 'pressStart';
+    font-size: 10px;
 }
 
 .boldButton {

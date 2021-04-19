@@ -46,27 +46,26 @@
         </mat-button-toggle-group>
     </div>
     <div class="police">
-      <h5 class="textFormat">Police</h5>
-      <div class="textFormatButton">
-          <mat-button-toggle-group [vertical]="true" value="Arial">
-              <div class="textFormatButton">
-                  <mat-button-toggle class="buttons" (click)="changeFont('Arial')" value="Arial" [checked]="textService.config.textFont === 'Arial'">Arial</mat-button-toggle>
-              </div>
-              <div class="textFormatButton">
-                  <mat-button-toggle class="buttonTimes" (click)="changeFont('Times New Roman')" value="Times New Roman"
-                  [checked]="textService.config.textFont === 'Times New Roman'">Times New Roman</mat-button-toggle
-                  >
-              </div>
-              <div class="textFormatButton">
-                  <mat-button-toggle class="buttonImpact" (click)="changeFont('Impact')" value="Impact" [checked]="textService.config.textFont === 'Impact'">Impact</mat-button-toggle>
-              </div>
-              <div class="textFormatButton">
-                  <mat-button-toggle class="buttonMonospace" (click)="changeFont('Monospace')" value="Monospace" [checked]="textService.config.textFont === 'Monospace'">Monospace</mat-button-toggle>
-              </div>
-              <div class="textFormatButton">
-                  <mat-button-toggle class="buttonVerdana" (click)="changeFont('Verdana')" value="Verdana" [checked]="textService.config.textFont === 'Verdana'">Verdana</mat-button-toggle>
-              </div>
-          </mat-button-toggle-group>
-      </div>
+        <h5 class="textFormat">Police</h5>
+        <div class="textFormatButton">
+            <mat-button-toggle-group [vertical]="true" value="Arial">
+                <div class="textFormatButton">
+                    <mat-button-toggle class="buttons" (click)="changeFont('Arial')" value="Arial" [checked]="textService.config.textFont === 'Arial'">Arial</mat-button-toggle>
+                </div>
+                <div class="textFormatButton">
+                    <mat-button-toggle class="buttonTimes" (click)="changeFont('Times New Roman')" value="Times New Roman" [checked]="textService.config.textFont === 'Times New Roman'">Times New Roman</mat-button-toggle
+                    >
+                </div>
+                <div class="textFormatButton">
+                    <mat-button-toggle class="buttonMonospace" (click)="changeFont('Monospace')" value="Monospace" [checked]="textService.config.textFont === 'Monospace'">Monospace</mat-button-toggle>
+                </div>
+                <div class="textFormatButton">
+                    <mat-button-toggle class="buttonCreepster" (click)="changeFont('creepster')" value="Creepster" [checked]="textService.config.textFont === 'creepster'">Creepster</mat-button-toggle>
+                </div>
+                <div class="textFormatButton">
+                    <mat-button-toggle class="buttonPressStart" (click)="changeFont('pressStart')" value="Press Start" [checked]="textService.config.textFont === 'pressStart'">Press Start</mat-button-toggle>
+                </div>
+            </mat-button-toggle-group>
+        </div>
     </div>
 </div>
