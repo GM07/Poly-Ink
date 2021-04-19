@@ -1,4 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
+import { TextAlignment } from '@app/classes/tool-config/text-config';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { TextService } from './text.service';
@@ -9,11 +11,16 @@ import { TextService } from './text.service';
 describe('TextService', () => {
     let service: TextService;
     let drawingService: DrawingService;
+    let canvasTestHelper: CanvasTestHelper;
+    let ctxStub: CanvasRenderingContext2D;
+    const leftMouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
         service = TestBed.inject(TextService);
         drawingService = TestBed.inject(DrawingService);
+        canvasTestHelper = TestBed.inject(CanvasTestHelper);
+        ctxStub = canvasTestHelper.canvas.getContext('2d') as CanvasRenderingContext2D;
     });
 
     it('should be created', () => {
@@ -54,32 +61,51 @@ describe('TextService', () => {
     });
 
     it('should call addText when mouseDown and there is no input', () => {
-        let mouseEvent = { button: MouseButton.Right, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        const mouseEvent = { button: MouseButton.Right, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         spyOn<any>(service, 'addText');
+        spyOn<any>(service, 'isInTextBox').and.returnValue(false);
         service.config.hasInput = false;
         service.onMouseDown(mouseEvent);
         expect(service['addText']).toHaveBeenCalledTimes(0);
-        mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
-        service.onMouseDown(mouseEvent);
+        service.onMouseDown(leftMouseEvent);
         expect(service['addText']).toHaveBeenCalledTimes(1);
     });
 
     it('should call confirmText when mouseDown and there is input', () => {
-        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         spyOn<any>(service, 'confirmText');
+        spyOn<any>(service, 'isInTextBox').and.returnValue(false);
         service.config.hasInput = true;
-        service.onMouseDown(mouseEvent);
+        service.onMouseDown(leftMouseEvent);
         expect(service['confirmText']).toHaveBeenCalled();
     });
 
     it('should add text and modify config attributes accordingly', () => {
-        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         spyOn(service, 'drawPreview');
-        service['addText'](mouseEvent);
+        service['addText'](leftMouseEvent);
         expect(service.config.hasInput).toBe(true);
-        expect(service.config.startCoords.x).toBe(mouseEvent.offsetX);
-        expect(service.config.startCoords.y).toBe(mouseEvent.offsetY);
+        expect(service.config.startCoords.x).toBe(leftMouseEvent.offsetX);
+        expect(service.config.startCoords.y).toBe(leftMouseEvent.offsetY);
         expect(service.drawPreview).toHaveBeenCalled();
+    });
+
+    it('should do nothing if click in textBox', () => {
+        spyOn<any>(service, 'isInTextBox').and.returnValue(true);
+        spyOn<any>(service, 'addText');
+        service.onMouseDown(leftMouseEvent);
+        expect(service['addText']).toHaveBeenCalledTimes(0);
+    });
+
+    it('should return if click is in textBox', () => {
+        drawingService.previewCtx = ctxStub;
+        service.config.textData = ['aa'];
+        service.config.startCoords.x = leftMouseEvent.clientX;
+        service.config.startCoords.y = leftMouseEvent.clientY;
+
+        service.config.alignmentSetting = TextAlignment.Right;
+        expect(service['isInTextBox'](leftMouseEvent)).toBe(true);
+
+        service.config.alignmentSetting = TextAlignment.Center;
+        expect(service['isInTextBox'](leftMouseEvent)).toBe(true);
     });
 
     it('should initialise subscriptions', () => {
@@ -247,6 +273,10 @@ describe('TextService', () => {
 
     it('should call drawPreview from drawingService', () => {
         spyOn(drawingService, 'drawPreview');
+        service.config.hasInput = false;
+        service.drawPreview();
+        expect(drawingService.drawPreview).not.toHaveBeenCalled();
+        service.config.hasInput = true;
         service.drawPreview();
         expect(drawingService.drawPreview).toHaveBeenCalled();
     });

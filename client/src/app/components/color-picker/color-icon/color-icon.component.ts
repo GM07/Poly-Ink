@@ -8,9 +8,6 @@ import { ColorService } from '@app/services/color/color.service';
     styleUrls: ['./color-icon.component.scss'],
 })
 export class ColorIconComponent {
-    readonly changePrimary: boolean;
-    readonly changeSecondary: boolean;
-
     @Input()
     width: number;
 
@@ -18,10 +15,7 @@ export class ColorIconComponent {
     height: number;
     @ViewChild(MatMenuTrigger) private colorMenuTrigger: MatMenuTrigger;
 
-    constructor(public colorService: ColorService) {
-        this.changePrimary = true;
-        this.changeSecondary = false;
-    }
+    constructor(public colorService: ColorService) {}
 
     swap(): void {
         this.colorService.swap();

@@ -1,4 +1,4 @@
-import { TextConfig } from '@app/classes/tool-config/text-config';
+import { TextAlignment, TextConfig } from '@app/classes/tool-config/text-config';
 import { Vec2 } from '@app/classes/vec2';
 import { ColorService } from '@app/services/color/color.service';
 import { AbstractDraw } from './abstract-draw';
@@ -50,13 +50,13 @@ export class TextDraw extends AbstractDraw {
 
     private drawCursor(ctx: CanvasRenderingContext2D): void {
         switch (this.config.alignmentSetting) {
-            case 'left':
+            case TextAlignment.Left:
                 this.drawCursorLeft(ctx);
                 break;
-            case 'right':
+            case TextAlignment.Right:
                 this.drawCursorRight(ctx);
                 break;
-            case 'center':
+            case TextAlignment.Center:
                 this.drawCursorCenter(ctx);
         }
     }
@@ -109,13 +109,13 @@ export class TextDraw extends AbstractDraw {
 
     private handleAlign(ctx: CanvasRenderingContext2D): void {
         switch (this.config.alignmentSetting) {
-            case 'left':
+            case TextAlignment.Left:
                 this.alignLeft(ctx);
                 break;
-            case 'right':
+            case TextAlignment.Right:
                 this.alignRight(ctx);
                 break;
-            case 'center':
+            case TextAlignment.Center:
                 this.alignCenter(ctx);
         }
     }
@@ -126,7 +126,7 @@ export class TextDraw extends AbstractDraw {
             this.config.textData.forEach((line) => {
                 maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width);
             });
-            if (this.config.lastAlignment === 'center') maxLineWidth = maxLineWidth / 2;
+            if (this.config.lastAlignment === TextAlignment.Center) maxLineWidth = maxLineWidth / 2;
             this.config.startCoords.x = this.config.startCoords.x - maxLineWidth;
             this.textConfig.startCoords.x = this.config.startCoords.x;
         }
@@ -138,7 +138,7 @@ export class TextDraw extends AbstractDraw {
             this.config.textData.forEach((line) => {
                 maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width);
             });
-            if (this.config.lastAlignment === 'center') maxLineWidth = maxLineWidth / 2;
+            if (this.config.lastAlignment === TextAlignment.Center) maxLineWidth = maxLineWidth / 2;
             this.config.startCoords.x = this.config.startCoords.x + maxLineWidth;
             this.textConfig.startCoords.x = this.config.startCoords.x;
         }
@@ -151,7 +151,7 @@ export class TextDraw extends AbstractDraw {
             this.config.textData.forEach((line) => {
                 maxLineWidth = Math.max(maxLineWidth, ctx.measureText(line).width);
             });
-            if (this.config.lastAlignment === 'right') maxLineWidth = -maxLineWidth;
+            if (this.config.lastAlignment === TextAlignment.Right) maxLineWidth = -maxLineWidth;
             this.config.startCoords.x = this.config.startCoords.x + maxLineWidth / 2;
             this.textConfig.startCoords.x = this.config.startCoords.x;
         }

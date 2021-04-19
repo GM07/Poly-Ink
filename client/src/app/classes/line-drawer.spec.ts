@@ -73,14 +73,14 @@ describe('Line Drawer', () => {
     });
 
     it('should remove last point if backspace is down', () => {
-        lineDrawer.backspace.isDown = true;
+        lineDrawer.BACKSPACE.isDown = true;
         config.points = [mousePos, mousePos];
         lineDrawer.removeLastPoint();
         expect(config.points.length).toEqual(1);
     });
 
     it('should not remove last point if backspace is down', () => {
-        lineDrawer.backspace.isDown = false;
+        lineDrawer.BACKSPACE.isDown = false;
         config.points = [mousePos, mousePos];
         lineDrawer.removeLastPoint();
         expect(config.points.length).toEqual(2);
@@ -114,7 +114,7 @@ describe('Line Drawer', () => {
     it('should clear points when escape key is pressed', () => {
         const spy = spyOn<any>(lineDrawer.removeLines, 'next');
         config.points = [mousePos, mousePos];
-        lineDrawer['escape'].isDown = true;
+        lineDrawer['ESCAPE'].isDown = true;
         lineDrawer.clearPoints();
         expect(spyDrawing.unblockUndoRedo).toHaveBeenCalled();
         expect(config.points.length).toBe(0);
@@ -122,28 +122,28 @@ describe('Line Drawer', () => {
     });
 
     it('should not clear the canvas on other key', () => {
-        lineDrawer['escape'].isDown = false;
+        lineDrawer['ESCAPE'].isDown = false;
         lineDrawer.clearPoints();
         expect(spyDrawing.clearCanvas).not.toHaveBeenCalled();
     });
 
     it('should not handle any key when point array is empty', () => {
         const handleBackspace = spyOn<any>(lineDrawer, 'removeLastPoint');
-        lineDrawer['handleKeys'](lineDrawer['backspace']);
+        lineDrawer['handleKeys'](lineDrawer['BACKSPACE']);
         expect(handleBackspace).not.toHaveBeenCalled();
     });
 
     it('should call correct function when Backspace key is pressed', () => {
         config.points.push(new Vec2(100, 100));
         const handleBackspace = spyOn<any>(lineDrawer, 'removeLastPoint');
-        lineDrawer['handleKeys'](lineDrawer['backspace']);
+        lineDrawer['handleKeys'](lineDrawer['BACKSPACE']);
         expect(handleBackspace).toHaveBeenCalled();
     });
 
     it('should call correct function when Escape key is pressed', () => {
         config.points.push(new Vec2(100, 100));
         const handleEscape = spyOn<any>(lineDrawer, 'clearPoints');
-        lineDrawer['handleKeys'](lineDrawer['escape']);
+        lineDrawer['handleKeys'](lineDrawer['ESCAPE']);
         expect(handleEscape).toHaveBeenCalled();
     });
 

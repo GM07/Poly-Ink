@@ -21,7 +21,7 @@ export class SaveDrawingComponent {
     static readonly BAD_REQUEST_STATUS: number = 400;
     static readonly UNAVAILABLE_SERVER_STATUS: number = 503;
     static readonly DATA_LIMIT_REACHED: number = 413;
-    readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+    readonly SEPARATOR_KEYS_CODES: number[] = [ENTER, COMMA];
 
     visible: boolean;
     selectable: boolean;
@@ -180,7 +180,7 @@ export class SaveDrawingComponent {
 
     @HostListener('document:keydown', ['$event'])
     async onKeyDown(event: KeyboardEvent): Promise<void> {
-        if (!this.shortcutHandler.blockShortcuts && this.saveDrawingService.shortcut.equals(event)) {
+        if (!this.shortcutHandler.blockShortcuts && this.saveDrawingService.SHORTCUT.equals(event)) {
             event.preventDefault();
             await this.show();
         }

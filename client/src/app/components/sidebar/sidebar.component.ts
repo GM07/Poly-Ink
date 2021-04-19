@@ -59,20 +59,20 @@ export class SidebarComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        Object.values(TOP_TOOLS).forEach((setting) => {
+        TOP_TOOLS.forEach((setting) => {
             this.topToolsSettings.push(setting);
         });
-        Object.values(BOTTOM_TOOLS).forEach((setting) => {
+        BOTTOM_TOOLS.forEach((setting) => {
             this.bottomToolsSettings.push(setting);
         });
     }
 
     toolIconClicked(toolSettings: ToolSettings): void {
-        this.toolHandlerService.setTool(toolSettings.toolId);
+        this.toolHandlerService.setTool(toolSettings.TOOL_ID);
     }
 
     emitClickEvent(toolSettings: ToolSettings): void {
-        this.settingClicked.emit(toolSettings.toolId);
+        this.settingClicked.emit(toolSettings.TOOL_ID);
     }
 
     private initUndoRedoService(): void {
