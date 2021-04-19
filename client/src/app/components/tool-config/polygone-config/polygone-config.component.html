@@ -30,13 +30,7 @@
 
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
-        <mat-slider
-            min="{{ MIN }}"
-            max="{{ MAX_WIDTH_POLYGONE }}"
-            [(ngModel)]="polygonService.contourWidth"
-            thumbLabel
-            [displayWith]="colorSliderLabel"
-        >
+        <mat-slider min="{{ MIN }}" max="{{ MAX_WIDTH_POLYGONE }}" (input)="changeContourWidth($event)" [(ngModel)]="polygonService.contourWidth">
         </mat-slider>
         {{ polygonService.contourWidth }}px
     </div>
@@ -44,7 +38,13 @@
 
     <h5 class="textFormat">Nombre de côtés</h5>
     <div class="textFormatForSlider">
-        <mat-slider id="polygone-edges-slider" min="{{ MIN_NUM_EDGES }}" max="{{ MAX_NUM_EDGES }}" [(ngModel)]="polygonService.numEdges" thumbLabel>
+        <mat-slider
+            id="polygone-edges-slider"
+            min="{{ MIN_NUM_EDGES }}"
+            max="{{ MAX_NUM_EDGES }}"
+            (input)="changeNumEdges($event)"
+            [(ngModel)]="polygonService.numEdges"
+        >
         </mat-slider>
         {{ polygonService.numEdges }}
     </div>

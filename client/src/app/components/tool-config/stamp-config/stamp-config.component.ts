@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatSliderChange } from '@angular/material/slider';
 import { Slider, SliderValues } from '@app/classes/slider';
 import { Stamp, StampConfig } from '@app/classes/tool-config/stamp-config';
 import { Vec2 } from '@app/classes/vec2';
@@ -73,12 +74,12 @@ export class StampConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    SliderLabel(value: number): string {
-        return value + 'x';
-    }
-
     toggleStamp(stamp: Stamp): void {
         this.stampService.config.stamp = stamp;
         this.stampService.config.stampImg.src = StampConfig.stampList[stamp];
+    }
+
+    changeStampScale(event: MatSliderChange): void {
+        this.stampService.config.scale = event.value as number;
     }
 }

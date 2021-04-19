@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatSliderChange } from '@angular/material/slider';
 import { ToolConfig } from '@app/classes/tool-config';
 import { ShapeMode } from '@app/classes/tool-config/shape-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
@@ -24,5 +25,9 @@ export class EllipseConfigComponent extends ToolConfig {
 
     colorSliderLabel(value: number): string {
         return value + 'px';
+    }
+
+    changeContourWidth(event: MatSliderChange): void {
+        this.ellipseService.contourWidth = event.value as number;
     }
 }

@@ -1,8 +1,7 @@
 <div class="tab">
     <h5 class="textFormat">Tolérance</h5>
     <div class="textFormatForSlider">
-        <mat-slider min="{{ MIN }}" max="{{ MAX }}" [(ngModel)]="bucketService.config.tolerance" thumbLabel [displayWith]="colorSliderLabel">
-        </mat-slider>
+        <mat-slider min="{{ MIN }}" max="{{ MAX }}" (input)="changeTolerance($event)" [(ngModel)]="bucketService.config.tolerance"> </mat-slider>
         {{ bucketService.config.tolerance }}%
     </div>
 </div>

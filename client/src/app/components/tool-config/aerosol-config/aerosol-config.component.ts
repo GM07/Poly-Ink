@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatSliderChange } from '@angular/material/slider';
 import { ToolConfig } from '@app/classes/tool-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { AerosolService } from '@app/services/tools/aerosol.service';
@@ -22,5 +23,17 @@ export class AerosolConfigComponent extends ToolConfig {
 
     sliderLabel(value: number): string {
         return value + 'px';
+    }
+
+    changeDropletDiameter(event: MatSliderChange): void {
+        this.aerosolService.dropletDiameter = event.value as number;
+    }
+
+    changeEmissionsPerSecond(event: MatSliderChange): void {
+        this.aerosolService.emissionsPerSecond = event.value as number;
+    }
+
+    changeAreaDiameter(event: MatSliderChange): void {
+        this.aerosolService.areaDiameter = event.value as number;
     }
 }

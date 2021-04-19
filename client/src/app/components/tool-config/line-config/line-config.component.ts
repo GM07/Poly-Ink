@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatSliderChange } from '@angular/material/slider';
 import { ToolConfig } from '@app/classes/tool-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { LineService } from '@app/services/tools/line.service';
@@ -21,5 +22,13 @@ export class LineConfigComponent extends ToolConfig {
 
     toggleLineType(lineType: boolean): void {
         this.lineService.config.showJunctionPoints = lineType;
+    }
+
+    changeThickness(event: MatSliderChange): void {
+        this.lineService.config.thickness = event.value as number;
+    }
+
+    changeJunctionsDiameter(event: MatSliderChange): void {
+        this.lineService.config.diameterJunctions = event.value as number;
     }
 }
