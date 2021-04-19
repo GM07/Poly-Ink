@@ -60,6 +60,11 @@ form {
 .mat-button-toggle-group {
     border: none;
 }
+
+::ng-deep .mat-button-toggle-label-content {
+  line-height: 24px !important;
+}
+
 .mat-form-field {
     margin-bottom: 5px;
 }
