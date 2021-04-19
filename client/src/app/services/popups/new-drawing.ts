@@ -10,11 +10,11 @@ import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
     providedIn: 'root',
 })
 export class NewDrawingService implements Popup {
-    shortcut: ShortcutKey;
+    SHORTCUT: ShortcutKey;
     showPopup: boolean;
 
     constructor(private drawingService: DrawingService, private toolHandler: ToolHandlerService) {
-        this.shortcut = new ShortcutKey('o', { ctrlKey: true } as SpecialKeys);
+        this.SHORTCUT = new ShortcutKey('o', { ctrlKey: true } as SpecialKeys);
         this.showPopup = false;
     }
 

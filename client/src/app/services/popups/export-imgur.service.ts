@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
     providedIn: 'root',
 })
 export class ExportImgurService {
-    static readonly baseURL: string = 'https://api.imgur.com/3';
+    static readonly BASE_URL: string = 'https://api.imgur.com/3';
 
     constructor(private http: HttpClient) {}
 
@@ -21,6 +21,6 @@ export class ExportImgurService {
                 Authorization: `Client-ID ${ImgurConstants.CIENT_ID}`,
             }),
         };
-        return this.http.post<ImgurDrawing>(`${ExportImgurService.baseURL}/image`, imgurDrawing, httpOptions);
+        return this.http.post<ImgurDrawing>(`${ExportImgurService.BASE_URL}/image`, imgurDrawing, httpOptions);
     }
 }

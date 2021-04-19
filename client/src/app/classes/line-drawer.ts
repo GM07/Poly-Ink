@@ -17,9 +17,9 @@ export class LineDrawer {
     pointToAdd: Vec2;
     mousePosition: Vec2;
     shift: ShiftKey = new ShiftKey();
-    escape: ShortcutKey = new ShortcutKey('escape');
-    backspace: ShortcutKey = new ShortcutKey('backspace');
-    shortcutList: ShortcutKey[] = [this.escape, this.backspace, this.shift];
+    readonly ESCAPE: ShortcutKey = new ShortcutKey('escape');
+    readonly BACKSPACE: ShortcutKey = new ShortcutKey('backspace');
+    readonly SHORTCUT_LIST: ShortcutKey[] = [this.ESCAPE, this.BACKSPACE, this.shift];
     drawPreview: Subject<void>;
     removeLine: Subject<void>;
     removeLines: Subject<void>;
@@ -84,8 +84,8 @@ export class LineDrawer {
 
     init(config: AbstractLineConfig): void {
         this.shift.isDown = false;
-        this.escape.isDown = false;
-        this.backspace.isDown = false;
+        this.ESCAPE.isDown = false;
+        this.BACKSPACE.isDown = false;
         this.pointToAdd = {} as Vec2;
         this.mousePosition = {} as Vec2;
         this.config.points = config.points;
@@ -129,7 +129,7 @@ export class LineDrawer {
     }
 
     removeLastPoint(): void {
-        if (this.backspace.isDown) {
+        if (this.BACKSPACE.isDown) {
             if (this.config.points.length >= 2) {
                 this.config.points.pop();
                 this.removeLine.next();
@@ -139,7 +139,7 @@ export class LineDrawer {
     }
 
     clearPoints(): void {
-        if (this.escape.isDown) {
+        if (this.ESCAPE.isDown) {
             this.config.points = [];
             this.removeLines.next();
             this.drawingService.clearCanvas(this.drawingService.previewCtx);
@@ -153,10 +153,10 @@ export class LineDrawer {
         }
 
         switch (shortcutKey) {
-            case this.escape:
+            case this.ESCAPE:
                 this.clearPoints();
                 break;
-            case this.backspace:
+            case this.BACKSPACE:
                 this.removeLastPoint();
                 break;
             case this.shift:

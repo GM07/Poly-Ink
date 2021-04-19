@@ -136,6 +136,6 @@ describe('UndoRedoService', () => {
         expect(service.blockUndoRedo).toBeTrue();
         expect(service.commands.length).toEqual(0);
         // tslint:disable-next-line:no-string-literal
-        expect(service.currentAction).toEqual(service['initialActionPosition']);
+        expect(service.currentAction).toEqual(service['INITIAL_ACTION_POSITION']);
     });
 });

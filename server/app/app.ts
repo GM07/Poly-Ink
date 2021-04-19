@@ -13,13 +13,13 @@ import { TYPES } from './types';
 @injectable()
 export class Application {
     app: express.Application;
-    private readonly internalError: number = 500;
-    private readonly swaggerOptions: swaggerJSDoc.Options;
+    private readonly INTERNAL_ERROR: number = 500;
+    private readonly SWAGGER_OPTIONS: swaggerJSDoc.Options;
 
     constructor(@inject(TYPES.DrawingController) private drawingController: DrawingController) {
         this.app = express();
 
-        this.swaggerOptions = {
+        this.SWAGGER_OPTIONS = {
             swaggerDefinition: {
                 openapi: '3.0.0',
                 info: {
@@ -36,7 +36,7 @@ export class Application {
     }
 
     bindRoutes(): void {
-        this.app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(this.swaggerOptions)));
+        this.app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(this.SWAGGER_OPTIONS)));
         this.app.use('/drawings', this.drawingController.router);
         this.errorHandling();
     }
@@ -62,7 +62,7 @@ export class Application {
         if (this.app.get('env') === 'development') {
             // tslint:disable-next-line:no-any
             this.app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-                res.status(err.status || this.internalError);
+                res.status(err.status || this.INTERNAL_ERROR);
                 res.send({
                     message: err.message,
                     error: err,
@@ -74,7 +74,7 @@ export class Application {
         // no stacktraces leaked to user (in production env only)
         // tslint:disable-next-line:no-any
         this.app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-            res.status(err.status || this.internalError);
+            res.status(err.status || this.INTERNAL_ERROR);
             res.send({
                 message: err.message,
                 error: {},

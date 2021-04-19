@@ -48,11 +48,11 @@ export class CarrouselComponent implements OnInit {
     readonly CARROUSEL_URL: string = 'carrousel';
     readonly CANVAS_PREVIEW_SIZE: number = 200;
 
-    readonly overflowLeftElement: Drawing = new Drawing(new DrawingData(''));
-    readonly leftElement: Drawing = new Drawing(new DrawingData(''));
-    readonly middleElement: Drawing = new Drawing(new DrawingData(''));
-    readonly rightElement: Drawing = new Drawing(new DrawingData(''));
-    readonly overflowRightElement: Drawing = new Drawing(new DrawingData(''));
+    readonly OVERFLOW_LEFT_ELEMENT: Drawing = new Drawing(new DrawingData(''));
+    readonly LEFT_ELEMENT: Drawing = new Drawing(new DrawingData(''));
+    readonly MIDDLE_ELEMENT: Drawing = new Drawing(new DrawingData(''));
+    readonly RIGHT_ELEMENT: Drawing = new Drawing(new DrawingData(''));
+    readonly OVERFLOW_RIGHT_ELEMENT: Drawing = new Drawing(new DrawingData(''));
     currentURL: string;
     deletionErrorMessage: string;
     showCarrousel: boolean;
@@ -217,11 +217,11 @@ export class CarrouselComponent implements OnInit {
     updateDrawingContent(): void {
         const overFlowLeft = -2;
         const left = -1;
-        this.updateSingleDrawingContent(this.overflowLeftPreview, overFlowLeft, this.overflowLeftElement);
-        this.updateSingleDrawingContent(this.leftPreview, left, this.leftElement);
-        this.updateSingleDrawingContent(this.middlePreview, 0, this.middleElement);
-        this.updateSingleDrawingContent(this.rightPreview, 1, this.rightElement);
-        this.updateSingleDrawingContent(this.overflowRightPreview, 2, this.overflowRightElement);
+        this.updateSingleDrawingContent(this.overflowLeftPreview, overFlowLeft, this.OVERFLOW_LEFT_ELEMENT);
+        this.updateSingleDrawingContent(this.leftPreview, left, this.LEFT_ELEMENT);
+        this.updateSingleDrawingContent(this.middlePreview, 0, this.MIDDLE_ELEMENT);
+        this.updateSingleDrawingContent(this.rightPreview, 1, this.RIGHT_ELEMENT);
+        this.updateSingleDrawingContent(this.overflowRightPreview, 2, this.OVERFLOW_RIGHT_ELEMENT);
     }
 
     serverConnexionIn(serverError: boolean): void {

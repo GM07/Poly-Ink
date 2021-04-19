@@ -19,19 +19,19 @@ export enum MagnetismSelection {
     providedIn: 'root',
 })
 export class MagnetismService {
-    magnetismShortcut: ShortcutKey;
+    readonly MAGNETISM_SHORTCUT: ShortcutKey;
     isEnabled: boolean;
     distance: Vec2;
     selection: MagnetismSelection;
 
     constructor(public gridService: GridService) {
-        this.magnetismShortcut = new ShortcutKey('m');
+        this.MAGNETISM_SHORTCUT = new ShortcutKey('m');
         this.isEnabled = false;
         this.selection = MagnetismSelection.TopLeft;
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (this.magnetismShortcut.equals(event)) this.isEnabled = !this.isEnabled;
+        if (this.MAGNETISM_SHORTCUT.equals(event)) this.isEnabled = !this.isEnabled;
     }
 
     setDistanceVector(mousePosition: Vec2, endCoords: Vec2, size: Vec2): void {

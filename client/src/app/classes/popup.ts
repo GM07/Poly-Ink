@@ -1,6 +1,6 @@
 import { ShortcutKey } from './shortcut/shortcut-key';
 
 export interface Popup {
-    readonly shortcut: ShortcutKey;
+    readonly SHORTCUT: ShortcutKey;
     showPopup: boolean;
 }

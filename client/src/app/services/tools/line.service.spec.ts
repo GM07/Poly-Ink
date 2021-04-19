@@ -149,12 +149,12 @@ describe('LineService', () => {
         service.config.points = [new Vec2(100, 300)];
         const keyEvent: KeyboardEvent = { key: 'Backspace' } as KeyboardEvent;
         service.onKeyDown(keyEvent);
-        expect(service.lineDrawer['backspace'].isDown).toBe(true);
+        expect(service.lineDrawer['BACKSPACE'].isDown).toBe(true);
     });
 
     it('should not trigger event when key pressed is same as last', () => {
         service.config.points = [new Vec2(100, 300)];
-        service.lineDrawer['backspace'].isDown = true;
+        service.lineDrawer['BACKSPACE'].isDown = true;
         const keyEvent: KeyboardEvent = { key: 'Backspace' } as KeyboardEvent;
         service.onKeyDown(keyEvent);
         spyOn<any>(service.lineDrawer, 'handleKeys');
@@ -164,7 +164,7 @@ describe('LineService', () => {
     it('should not do anything when a random key is pressed', () => {
         const keyEvent: KeyboardEvent = { key: 'randomKey', shiftKey: false } as KeyboardEvent;
         service.onKeyDown(keyEvent);
-        expect(service.lineDrawer['backspace'].isDown).toBe(false);
+        expect(service.lineDrawer['BACKSPACE'].isDown).toBe(false);
     });
 
     it('should set shift key to released when releasing Shift', () => {
@@ -176,9 +176,9 @@ describe('LineService', () => {
 
     it('should not do anything when a random key is released', () => {
         const keyEvent: KeyboardEvent = { key: 'randomKey', shiftKey: true } as KeyboardEvent;
-        service.lineDrawer['escape'].isDown = true;
+        service.lineDrawer['ESCAPE'].isDown = true;
         service.onKeyUp(keyEvent);
-        expect(service.lineDrawer['escape'].isDown).toBe(true);
+        expect(service.lineDrawer['ESCAPE'].isDown).toBe(true);
     });
 
     it('should not do anything when Backspace key is released', () => {
@@ -190,7 +190,7 @@ describe('LineService', () => {
 
     it('should delete point and update preview on a Backspace key event when there are 2 points', () => {
         service.config.points = pointsTest2;
-        service.lineDrawer['backspace'].isDown = true;
+        service.lineDrawer['BACKSPACE'].isDown = true;
         const handlePreviewFunc = spyOn<any>(service.lineDrawer, 'renderLinePreview');
         service.lineDrawer['removeLastPoint']();
         expect(handlePreviewFunc).toHaveBeenCalled();
@@ -198,7 +198,7 @@ describe('LineService', () => {
     });
 
     it('should not do anything on a Backspace key event when points array is empty ', () => {
-        service.lineDrawer['backspace'].isDown = true;
+        service.lineDrawer['BACKSPACE'].isDown = true;
         const handlePreviewFunc = spyOn<any>(service.lineDrawer, 'renderLinePreview');
         service.lineDrawer['removeLastPoint']();
         expect(handlePreviewFunc).not.toHaveBeenCalled();
@@ -230,7 +230,7 @@ describe('LineService', () => {
     it('init service should init attributes', () => {
         service['initService']();
         expect(service.lineDrawer['shift'].isDown).toBe(false);
-        expect(service.lineDrawer['backspace'].isDown).toBe(false);
+        expect(service.lineDrawer['BACKSPACE'].isDown).toBe(false);
         expect(service.config.closedLoop).toBe(false);
         expect(service.config.points.length).toBe(0);
     });

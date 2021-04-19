@@ -11,7 +11,7 @@ import { ShortcutHandlerService } from './shortcut-handler.service';
 
 // tslint:disable:no-string-literal
 class ToolStub extends Tool {
-    shortcutKey: ShortcutKey = new ShortcutKey('stub');
+    readonly SHORTCUT_KEY: ShortcutKey = new ShortcutKey('stub');
     stopDrawing(): void {
         /**/
     }
