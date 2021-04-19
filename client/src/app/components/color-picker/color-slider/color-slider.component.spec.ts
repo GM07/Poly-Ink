@@ -76,6 +76,30 @@ describe('ColorSliderComponent', () => {
         expect(component['changeSelectedHeight']).not.toHaveBeenCalled();
     });
 
+    it('should unselect selection on mouseDown', () => {
+        const event = { clientX: 0, clientY: 0, buttons: 1, button: MouseButton.Left } as MouseEvent;
+        // tslint:disable-next-line:no-empty
+        const selection: Selection = { removeAllRanges: () => {} } as Selection;
+        spyOn<any>(component, 'changeSelectedHeight').and.stub();
+        spyOn(window, 'getSelection').and.returnValue(selection);
+        spyOn(selection, 'removeAllRanges').and.stub();
+
+        component.onMouseDown(event);
+
+        expect(window.getSelection).toHaveBeenCalled();
+        expect(selection.removeAllRanges).toHaveBeenCalled();
+    });
+
+    it('should not unselect selection if null on mouseDown', () => {
+        const event = { clientX: 0, clientY: 0, buttons: 1, button: MouseButton.Left } as MouseEvent;
+        spyOn<any>(component, 'changeSelectedHeight').and.stub();
+        spyOn(window, 'getSelection').and.returnValue(null);
+
+        component.onMouseDown(event);
+
+        expect(window.getSelection).toHaveBeenCalled();
+    });
+
     it('should set selected height properly', () => {
         const height = 50;
         component.selectedHeight = 0;

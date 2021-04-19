@@ -107,6 +107,32 @@ describe('ColorPaletteComponent', () => {
         expect(component.leftMouseDown).toBeTrue();
     });
 
+    it('should unselect selection on mouseDown', () => {
+        const x = 50;
+        const y = 50;
+        // tslint:disable-next-line:no-empty
+        const selection: Selection = { removeAllRanges: () => {} } as Selection;
+        spyOn<any>(component, 'changeSelectedPosition').and.stub();
+        spyOn(window, 'getSelection').and.returnValue(selection);
+        spyOn(selection, 'removeAllRanges').and.stub();
+
+        component.onMouseDown({ clientX: x, clientY: y, buttons: 1, button: MouseButton.Left } as MouseEvent);
+
+        expect(window.getSelection).toHaveBeenCalled();
+        expect(selection.removeAllRanges).toHaveBeenCalled();
+    });
+
+    it('should not unselect selection if null on mouseDown', () => {
+        const x = 50;
+        const y = 50;
+        spyOn<any>(component, 'changeSelectedPosition').and.stub();
+        spyOn(window, 'getSelection').and.returnValue(null);
+
+        component.onMouseDown({ clientX: x, clientY: y, buttons: 1, button: MouseButton.Left } as MouseEvent);
+
+        expect(window.getSelection).toHaveBeenCalled();
+    });
+
     it('should change selected position on left click', () => {
         const x = 50;
         const y = 50;

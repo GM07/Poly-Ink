@@ -56,6 +56,7 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
     onMouseDown(event: MouseEvent): void {
         if (event.button === MouseButton.Left) {
             this.leftMouseDown = true;
+            window.getSelection()?.removeAllRanges();
             this.onMouseMove(event);
         }
     }
