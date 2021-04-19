@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { Color } from '@app/classes/color';
+import { Vec2 } from '@app/classes/vec2';
 import { Colors } from '@app/constants/colors';
+import { MouseButton } from '@app/constants/control';
 import { ColorService } from '@app/services/color/color.service';
 import { Subscription } from 'rxjs';
 
@@ -30,20 +32,52 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
         this.leftMouseDown = false;
         this.selectedHeight = 0;
 
-        this.hueChangeFromHexSubscription = this.colorService.hueChangeFromHex.subscribe((color) => {
+        this.hueChangeFromHexSubscription = this.colorService.hueChangeFromHex.subscribe((color: Color) => {
             this.setPositionToHue(color);
             this.draw();
         });
     }
 
+    ngOnDestroy(): void {
+        this.hueChangeFromHexSubscription.unsubscribe();
+    }
+
+    ngAfterViewInit(): void {
+        this.getContext();
+        this.draw();
+    }
+
+    onMouseDown(event: MouseEvent): void {
+        if (event.button === MouseButton.Left) {
+            this.leftMouseDown = true;
+            window.getSelection()?.removeAllRanges();
+            this.onMouseMove(event);
+        }
+    }
+
+    @HostListener('document:mousemove', ['$event'])
+    onMouseMove(event: MouseEvent): void {
+        if (this.leftMouseDown) {
+            const mouseCoord = this.getPositionFromMouse(event);
+            this.changeSelectedHeight(mouseCoord.y);
+        }
+    }
+
+    @HostListener('document:mouseup', ['$event'])
+    onMouseUp(event: MouseEvent): void {
+        if (event.button === MouseButton.Left) {
+            this.leftMouseDown = false;
+        }
+    }
+
     // Code from tutorial https://malcoded.com/posts/angular-color-picker/
-    draw(): void {
+    private draw(): void {
         // Set width/height and clear Canvas
         const width = this.canvas.nativeElement.width;
         const height = this.canvas.nativeElement.height;
         this.context.clearRect(0, 0, width, height);
 
-        const gradient = this.context.createLinearGradient(0, 0, 0, height);
+        const gradient = this.context.createLinearGradient(1, 1, 1, height - 1);
         gradient.addColorStop(ColorSliderComponent.RED_START, Colors.RED.rgbString);
         gradient.addColorStop(ColorSliderComponent.YELLOW_START, Colors.YELLOW.rgbString);
         gradient.addColorStop(ColorSliderComponent.GREEN_START, Colors.GREEN.rgbString);
@@ -64,17 +98,13 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
         this.drawSelectionBox();
     }
 
-    getContext(): void {
+    private getContext(): void {
         if (!this.context) {
             this.context = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
         }
     }
 
-    ngOnDestroy(): void {
-        this.hueChangeFromHexSubscription.unsubscribe();
-    }
-
-    drawSelectionBox(): void {
+    private drawSelectionBox(): void {
         const lineWidth = 5;
         const rectangleHeight = 10;
         const width = this.canvas.nativeElement.width;
@@ -86,29 +116,13 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
         this.context.closePath();
     }
 
-    ngAfterViewInit(): void {
-        this.getContext();
+    private changeSelectedHeight(offsetY: number): void {
+        this.selectedHeight = this.keepHeightWithinBounds(offsetY);
         this.draw();
+        this.colorService.selectedHueFromSliders = this.getColor(this.selectedHeight);
     }
 
-    onMouseDown(event: MouseEvent): void {
-        this.leftMouseDown = true;
-        this.changeSelectedHeight(event.offsetY);
-    }
-
-    onMouseMove(event: MouseEvent): void {
-        if (this.leftMouseDown) {
-            this.changeSelectedHeight(event.offsetY);
-        }
-    }
-
-    changeSelectedHeight(offsetY: number): void {
-        this.selectedHeight = offsetY;
-        this.draw();
-        this.colorService.selectedHueFromSliders = this.getColor(offsetY);
-    }
-
-    setPositionToHue(color: Color): void {
+    private setPositionToHue(color: Color): void {
         const height = this.canvas.nativeElement.height;
 
         // Since there are 6 different sector on the color wheel we need many if/else statement to determine the appropriate one
@@ -142,15 +156,25 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
         /* tslint:enable:cyclomatic-complexity */
     }
 
-    // Listener added globally since mouse up could be outside of canvas
-    @HostListener('window:mouseup', ['$event'])
-    onMouseUp(): void {
-        this.leftMouseDown = false;
-    }
-
-    getColor(y: number): Color {
+    private getColor(y: number): Color {
         const x = this.canvas.nativeElement.width / 2;
         const imageData = this.context.getImageData(x, y, 1, 1).data;
         return new Color(imageData[0], imageData[1], imageData[2]);
+    }
+
+    private keepHeightWithinBounds(y: number): number {
+        const height = this.canvas.nativeElement.height;
+        return Math.max(Math.min(y, height - 1), 0);
+    }
+
+    private getPositionFromMouse(event: MouseEvent): Vec2 {
+        const clientRect = this.canvas.nativeElement.getBoundingClientRect();
+        const border: number = this.getBorder();
+        return new Vec2(event.clientX - clientRect.x, event.clientY - clientRect.y).substractValue(border);
+    }
+
+    private getBorder(): number {
+        const borderValue: string = window.getComputedStyle(this.canvas.nativeElement).getPropertyValue('border-left-width');
+        return Number(borderValue.substring(0, borderValue.length - 2));
     }
 }
