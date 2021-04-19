@@ -277,6 +277,10 @@ describe('TextService', () => {
 
     it('should call drawPreview from drawingService', () => {
         spyOn(drawingService, 'drawPreview');
+        service.config.hasInput = false;
+        service.drawPreview();
+        expect(drawingService.drawPreview).not.toHaveBeenCalled();
+        service.config.hasInput = true;
         service.drawPreview();
         expect(drawingService.drawPreview).toHaveBeenCalled();
     });

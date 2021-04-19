@@ -91,6 +91,7 @@ export class TextService extends Tool {
     }
 
     drawPreview(): void {
+        if (!this.config.hasInput) return;
         const command = new TextDraw(this.colorService, this.config);
         this.drawingService.drawPreview(command);
     }
