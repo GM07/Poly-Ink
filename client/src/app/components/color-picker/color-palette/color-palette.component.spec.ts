@@ -6,6 +6,8 @@ import { ColorService } from '@app/services/color/color.service';
 import { ColorPaletteComponent } from './color-palette.component';
 
 // tslint:disable:no-string-literal
+// tslint:disable:no-any
+
 describe('ColorPaletteComponent', () => {
     let component: ColorPaletteComponent;
     let fixture: ComponentFixture<ColorPaletteComponent>;
@@ -35,60 +37,60 @@ describe('ColorPaletteComponent', () => {
     it('should set position and draw on selected color change from hex', () => {
         const color: Color = Colors.RED;
 
-        spyOn(component, 'setPositionToColor').and.stub();
-        spyOn(component, 'draw').and.stub();
+        spyOn<any>(component, 'setPositionToColor').and.stub();
+        spyOn<any>(component, 'draw').and.stub();
 
         colorService.selectedColorChangeFromHex.next(color);
 
-        expect(component.setPositionToColor).toHaveBeenCalledWith(color);
-        expect(component.draw).toHaveBeenCalled();
+        expect(component['setPositionToColor']).toHaveBeenCalledWith(color);
+        expect(component['draw']).toHaveBeenCalled();
     });
 
     it('should draw and update color on hue change from slider', () => {
         const hue: Color = Colors.BLUE;
 
-        spyOn(component, 'draw').and.stub();
-        spyOn(component, 'getColorAtPosition').and.stub();
+        spyOn<any>(component, 'draw').and.stub();
+        spyOn<any>(component, 'getColorAtPosition').and.stub();
 
         colorService.hueChangeFromSlider.next(hue);
 
-        expect(component.draw).toHaveBeenCalled();
-        expect(component.getColorAtPosition).toHaveBeenCalled();
+        expect(component['draw']).toHaveBeenCalled();
+        expect(component['getColorAtPosition']).toHaveBeenCalled();
     });
 
     it('should set position to color with RED hue', () => {
         const width: number = component['canvas'].nativeElement.width;
-        component.setPositionToColor(Colors.RED);
+        component['setPositionToColor'](Colors.RED);
         expect(component.selectedPosition).toEqual(new Vec2(width, 0));
     });
 
     it('should set position to color with GREEN hue', () => {
         const width: number = component['canvas'].nativeElement.width;
-        component.setPositionToColor(Colors.GREEN);
+        component['setPositionToColor'](Colors.GREEN);
         expect(component.selectedPosition).toEqual(new Vec2(width, 0));
     });
 
     it('should set position to color with BLUE hue', () => {
         const width: number = component['canvas'].nativeElement.width;
-        component.setPositionToColor(Colors.BLUE);
+        component['setPositionToColor'](Colors.BLUE);
         expect(component.selectedPosition).toEqual(new Vec2(width, 0));
     });
 
     it('should set position to color with YELLOW hue', () => {
         const width: number = component['canvas'].nativeElement.width;
-        component.setPositionToColor(Colors.YELLOW);
+        component['setPositionToColor'](Colors.YELLOW);
         expect(component.selectedPosition).toEqual(new Vec2(width, 0));
     });
 
     it('should select appropriate position for white color', () => {
-        component.setPositionToColor(Colors.WHITE);
+        component['setPositionToColor'](Colors.WHITE);
         expect(component.selectedPosition).toEqual(new Vec2(0, 0));
     });
 
     it('should select appropriate position for black color', () => {
         const width: number = component['canvas'].nativeElement.width;
         const height: number = component['canvas'].nativeElement.height;
-        component.setPositionToColor(Colors.BLACK);
+        component['setPositionToColor'](Colors.BLACK);
         expect(component.selectedPosition).toEqual(new Vec2(width, height));
     });
 
@@ -102,12 +104,12 @@ describe('ColorPaletteComponent', () => {
         const x = 50;
         const y = 50;
 
-        spyOn(component, 'changeSelectedPosition').and.stub();
+        spyOn<any>(component, 'changeSelectedPosition').and.stub();
 
-        component.onMouseDown(new MouseEvent('mouseDown', { clientX: x, clientY: y }));
+        component.onMouseDown({ clientX: x, clientY: y, buttons: 1 } as MouseEvent);
 
         expect(component.leftMouseDown).toBeTrue();
-        expect(component.changeSelectedPosition).toHaveBeenCalledWith(x, y);
+        expect(component['changeSelectedPosition']).toHaveBeenCalled();
     });
 
     it('should move selected position on mouse move if mouse is down', () => {
@@ -115,11 +117,11 @@ describe('ColorPaletteComponent', () => {
         const y = 50;
         component.leftMouseDown = true;
 
-        spyOn(component, 'changeSelectedPosition').and.stub();
+        spyOn<any>(component, 'changeSelectedPosition').and.stub();
 
-        component.onMouseMove(new MouseEvent('mousemove', { clientX: x, clientY: y }));
+        component.onMouseMove({ clientX: x, clientY: y, buttons: 1 } as MouseEvent);
 
-        expect(component.changeSelectedPosition).toHaveBeenCalledWith(x, y);
+        expect(component['changeSelectedPosition']).toHaveBeenCalled();
     });
 
     it('should not move selected position on mouse move if mouse up', () => {
@@ -127,26 +129,26 @@ describe('ColorPaletteComponent', () => {
         const y = 50;
         component.leftMouseDown = false;
 
-        spyOn(component, 'changeSelectedPosition').and.stub();
+        spyOn<any>(component, 'changeSelectedPosition').and.stub();
 
-        component.onMouseMove(new MouseEvent('mousemove', { clientX: x, clientY: y }));
+        component.onMouseMove({ clientX: x, clientY: y } as MouseEvent);
 
-        expect(component.changeSelectedPosition).not.toHaveBeenCalled();
+        expect(component['changeSelectedPosition']).not.toHaveBeenCalled();
     });
 
     it('should make appropriate calls when changing positions', () => {
         const x = 50;
         const y = 50;
 
-        spyOn(component, 'draw').and.stub();
-        spyOn(component, 'keepSelectionWithinBounds').and.returnValue(new Vec2(x, y));
-        spyOn(component, 'getColorAtPosition').and.stub();
+        spyOn<any>(component, 'draw').and.stub();
+        spyOn<any>(component, 'keepSelectionWithinBounds').and.returnValue(new Vec2(x, y));
+        spyOn<any>(component, 'getColorAtPosition').and.stub();
 
-        component.changeSelectedPosition(x, y);
+        component['changeSelectedPosition'](x, y);
 
-        expect(component.keepSelectionWithinBounds).toHaveBeenCalledWith(x, y);
-        expect(component.draw).toHaveBeenCalled();
-        expect(component.getColorAtPosition).toHaveBeenCalledWith(x, y);
+        expect(component['keepSelectionWithinBounds']).toHaveBeenCalledWith(x, y);
+        expect(component['draw']).toHaveBeenCalled();
+        expect(component['getColorAtPosition']).toHaveBeenCalledWith(x, y);
     });
 
     it('should keep selection within bounds', () => {
@@ -157,13 +159,13 @@ describe('ColorPaletteComponent', () => {
         const x = 50;
         const y = 50;
 
-        let position: { x: number; y: number } = component.keepSelectionWithinBounds(width + 1, height + 1);
-        expect(position).toEqual(new Vec2(width, height));
+        let position: { x: number; y: number } = component['keepSelectionWithinBounds'](width + 1, height + 1);
+        expect(position).toEqual(new Vec2(width - 1, height - 1));
 
-        position = component.keepSelectionWithinBounds(startX - 1, startY - 1);
+        position = component['keepSelectionWithinBounds'](startX - 1, startY - 1);
         expect(position).toEqual(new Vec2(startX, startY));
 
-        position = component.keepSelectionWithinBounds(x, y);
+        position = component['keepSelectionWithinBounds'](x, y);
         expect(position).toEqual(new Vec2(x, y));
     });
 
@@ -171,9 +173,9 @@ describe('ColorPaletteComponent', () => {
         const width: number = component['canvas'].nativeElement.width;
         const height: number = component['canvas'].nativeElement.height;
 
-        let color: Color = component.getColorAtPosition(width, height);
+        let color: Color = component['getColorAtPosition'](width, height);
 
-        color = component.getColorAtPosition(width, height);
+        color = component['getColorAtPosition'](width, height);
         expect(color.r).toEqual(Colors.BLACK.r);
         expect(color.g).toEqual(Colors.BLACK.g);
         expect(color.b).toEqual(Colors.BLACK.b);
@@ -181,17 +183,17 @@ describe('ColorPaletteComponent', () => {
 
     it('should not getContext if there', () => {
         // Get context to make sure we have one
-        component.getContext();
+        component['getContext']();
         spyOn(component['canvas'].nativeElement, 'getContext').and.stub();
 
         // Get context should not do anything since we already have it
-        component.getContext();
+        component['getContext']();
         expect(component['canvas'].nativeElement.getContext).not.toHaveBeenCalled();
     });
 
     it('should not draw selection on draw', () => {
-        spyOn(component, 'drawSelectionArea').and.stub();
-        component.draw();
-        expect(component.drawSelectionArea).toHaveBeenCalled();
+        spyOn<any>(component, 'drawSelectionArea').and.stub();
+        component['draw']();
+        expect(component['drawSelectionArea']).toHaveBeenCalled();
     });
 });

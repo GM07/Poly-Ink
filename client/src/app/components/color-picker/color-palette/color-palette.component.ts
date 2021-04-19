@@ -16,6 +16,8 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
 
     selectedColorChangeHexSubscription: Subscription;
     selectedHueChangeSliderSubscription: Subscription;
+
+    private readonly leftMouseButton: number = 1;
     @ViewChild('canvas') private canvas: ElementRef<HTMLCanvasElement>;
 
     constructor(public colorService: ColorService) {
@@ -38,22 +40,44 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
         this.draw();
     }
 
+    ngOnDestroy(): void {
+        this.selectedColorChangeHexSubscription.unsubscribe();
+    }
+
+    @HostListener('document:mouseup', ['$event'])
+    onMouseUp(): void {
+        this.leftMouseDown = false;
+    }
+
+    onMouseDown(event: MouseEvent): void {
+        this.leftMouseDown = true;
+        this.onMouseMove(event);
+    }
+
+    @HostListener('document:mousemove', ['$event'])
+    onMouseMove(event: MouseEvent): void {
+        if (this.leftMouseDown && event.buttons === this.leftMouseButton) {
+            const mouseCoord = this.getPositionFromMouse(event);
+            this.changeSelectedPosition(mouseCoord.x, mouseCoord.y);
+        }
+    }
+
     // Code from tutorial https://malcoded.com/posts/angular-color-picker/
-    draw(): void {
+    private draw(): void {
         const width = this.canvas.nativeElement.width;
         const height = this.canvas.nativeElement.height;
 
         this.context.fillStyle = this.colorService.selectedHue.rgbString;
         this.context.fillRect(0, 0, width, height);
 
-        const whiteGradient = this.context.createLinearGradient(0, 0, width, 0);
+        const whiteGradient = this.context.createLinearGradient(1, 1, width - 1, 1);
         whiteGradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
         whiteGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
         this.context.fillStyle = whiteGradient;
         this.context.fillRect(0, 0, width, height);
 
-        const blackGradient = this.context.createLinearGradient(0, 0, 0, height);
+        const blackGradient = this.context.createLinearGradient(1, 1, 1, height - 1);
         blackGradient.addColorStop(0, 'rgba(0,0,0,0)');
         blackGradient.addColorStop(1, 'rgba(0,0,0,1)');
 
@@ -63,17 +87,13 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
         this.drawSelectionArea();
     }
 
-    ngOnDestroy(): void {
-        this.selectedColorChangeHexSubscription.unsubscribe();
-    }
-
-    getContext(): void {
+    private getContext(): void {
         if (!this.context) {
             this.context = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
         }
     }
 
-    drawSelectionArea(): void {
+    private drawSelectionArea(): void {
         const arcRadius = 10;
         const lineWidth = 5;
         this.context.strokeStyle = 'white';
@@ -84,7 +104,7 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
         this.context.stroke();
     }
 
-    setPositionToColor(color: Color): void {
+    private setPositionToColor(color: Color): void {
         const width = this.canvas.nativeElement.width;
         const height = this.canvas.nativeElement.height;
 
@@ -112,41 +132,35 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
         this.selectedPosition.y = (height / Color.MAX) * stepY;
     }
 
-    @HostListener('window:mouseup', ['$event'])
-    onMouseUp(): void {
-        this.leftMouseDown = false;
-    }
-
-    onMouseDown(event: MouseEvent): void {
-        this.leftMouseDown = true;
-        this.changeSelectedPosition(event.offsetX, event.offsetY);
-    }
-
-    @HostListener('mousemove', ['$event'])
-    onMouseMove(event: MouseEvent): void {
-        if (this.leftMouseDown) {
-            this.changeSelectedPosition(event.offsetX, event.offsetY);
-        }
-    }
-
-    changeSelectedPosition(offsetX: number, offsetY: number): void {
+    private changeSelectedPosition(offsetX: number, offsetY: number): void {
         this.selectedPosition = this.keepSelectionWithinBounds(offsetX, offsetY);
         this.draw();
         this.colorService.selectedColor = this.getColorAtPosition(this.selectedPosition.x, this.selectedPosition.y);
     }
 
-    keepSelectionWithinBounds(x: number, y: number): Vec2 {
+    private keepSelectionWithinBounds(x: number, y: number): Vec2 {
         const width = this.canvas.nativeElement.width;
         const height = this.canvas.nativeElement.height;
 
-        x = Math.max(Math.min(x, width), 0);
-        y = Math.max(Math.min(y, height), 0);
+        x = Math.max(Math.min(x, width - 1), 0);
+        y = Math.max(Math.min(y, height - 1), 0);
 
         return new Vec2(x, y);
     }
 
-    getColorAtPosition(x: number, y: number): Color {
+    private getColorAtPosition(x: number, y: number): Color {
         const imageData = this.context.getImageData(x, y, 1, 1).data;
         return new Color(imageData[0], imageData[1], imageData[2]);
+    }
+
+    private getPositionFromMouse(event: MouseEvent): Vec2 {
+        const clientRect = this.canvas.nativeElement.getBoundingClientRect();
+        const border: number = this.getBorder();
+        return new Vec2(event.clientX - clientRect.x, event.clientY - clientRect.y).substractValue(border);
+    }
+
+    private getBorder(): number {
+        const borderValue: string = window.getComputedStyle(this.canvas.nativeElement).getPropertyValue('border-left-width');
+        return Number(borderValue.substring(0, borderValue.length - 2));
     }
 }

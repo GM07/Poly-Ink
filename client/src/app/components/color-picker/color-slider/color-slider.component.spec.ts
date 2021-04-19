@@ -5,6 +5,7 @@ import { ColorService } from '@app/services/color/color.service';
 import { ColorSliderComponent } from './color-slider.component';
 
 // tslint:disable:no-string-literal
+// tslint:disable:no-any
 describe('ColorSliderComponent', () => {
     let component: ColorSliderComponent;
     let fixture: ComponentFixture<ColorSliderComponent>;
@@ -37,103 +38,103 @@ describe('ColorSliderComponent', () => {
 
     it('should make appropriate calls on hue change from hex', () => {
         const hue: Color = Colors.CYAN;
-        spyOn(component, 'draw').and.stub();
-        spyOn(component, 'setPositionToHue').and.stub();
+        spyOn<any>(component, 'draw').and.stub();
+        spyOn<any>(component, 'setPositionToHue').and.stub();
 
         colorService.hueChangeFromHex.next(hue);
 
-        expect(component.draw).toHaveBeenCalled();
-        expect(component.setPositionToHue).toHaveBeenCalledWith(hue);
+        expect(component['draw']).toHaveBeenCalled();
+        expect(component['setPositionToHue']).toHaveBeenCalledWith(hue);
     });
 
     it('draw should make appropriate calls', () => {
-        spyOn(component, 'drawSelectionBox').and.stub();
-        component.draw();
-        expect(component.drawSelectionBox).toHaveBeenCalled();
+        spyOn<any>(component, 'drawSelectionBox').and.stub();
+        component['draw']();
+        expect(component['drawSelectionBox']).toHaveBeenCalled();
     });
 
     it('should select height on mouseDown', () => {
-        const event = new MouseEvent('click');
+        const event = { clientX: 0, clientY: 0, buttons: 1 } as MouseEvent;
         component.leftMouseDown = false;
 
-        spyOn(component, 'changeSelectedHeight');
+        spyOn<any>(component, 'changeSelectedHeight');
         component.onMouseDown(event);
 
         expect(component.leftMouseDown).toBeTrue();
-        expect(component.changeSelectedHeight).toHaveBeenCalled();
+        expect(component['changeSelectedHeight']).toHaveBeenCalled();
     });
 
     it('should set selected height properly', () => {
         const height = 50;
         component.selectedHeight = 0;
-        spyOn(component, 'draw').and.stub();
-        spyOn(component, 'getColor').and.stub();
+        spyOn<any>(component, 'draw').and.stub();
+        spyOn<any>(component, 'getColor').and.stub();
 
-        component.changeSelectedHeight(height);
+        component['changeSelectedHeight'](height);
 
         expect(component.selectedHeight).toEqual(height);
     });
 
     it('should draw on selected height change', () => {
-        spyOn(component, 'draw').and.stub();
-        spyOn(component, 'getColor').and.stub();
-        component.changeSelectedHeight(0);
-        expect(component.draw).toHaveBeenCalled();
+        spyOn<any>(component, 'draw').and.stub();
+        spyOn<any>(component, 'getColor').and.stub();
+        component['changeSelectedHeight'](0);
+        expect(component['draw']).toHaveBeenCalled();
     });
 
     it('mouse move should not update without mouse down', () => {
         component.leftMouseDown = false;
-        spyOn(component, 'changeSelectedHeight').and.stub();
+        spyOn<any>(component, 'changeSelectedHeight').and.stub();
         component.onMouseMove(new MouseEvent('mousemove'));
-        expect(component.changeSelectedHeight).not.toHaveBeenCalled();
+        expect(component['changeSelectedHeight']).not.toHaveBeenCalled();
     });
 
     it('mouse move should update when mouse down', () => {
         component.leftMouseDown = true;
-        spyOn(component, 'changeSelectedHeight').and.stub();
-        component.onMouseMove(new MouseEvent('mousemove'));
-        expect(component.changeSelectedHeight).toHaveBeenCalled();
+        spyOn<any>(component, 'changeSelectedHeight').and.stub();
+        component.onMouseMove({ clientX: 0, clientY: 0, buttons: 1 } as MouseEvent);
+        expect(component['changeSelectedHeight']).toHaveBeenCalled();
     });
 
     it('should select good height for red hue', () => {
         component.selectedHeight = 0;
-        component.setPositionToHue(Colors.RED);
+        component['setPositionToHue'](Colors.RED);
         expect(component.selectedHeight).toEqual(ColorSliderComponent.RED_START);
     });
 
     it('should select good height for yellow hue', () => {
         const height = component['canvas'].nativeElement.height * ColorSliderComponent.YELLOW_START;
-        component.setPositionToHue(Colors.YELLOW);
+        component['setPositionToHue'](Colors.YELLOW);
         expect(component.selectedHeight).toEqual(height);
     });
 
     it('should select good height for green hue', () => {
         const height = component['canvas'].nativeElement.height * ColorSliderComponent.GREEN_START;
-        component.setPositionToHue(Colors.GREEN);
+        component['setPositionToHue'](Colors.GREEN);
         expect(component.selectedHeight).toEqual(height);
     });
 
     it('should select good height for cyan hue', () => {
         const height = component['canvas'].nativeElement.height * ColorSliderComponent.CYAN_START;
-        component.setPositionToHue(Colors.CYAN);
+        component['setPositionToHue'](Colors.CYAN);
         expect(component.selectedHeight).toEqual(height);
     });
 
     it('should select good height for blue hue', () => {
         const height = component['canvas'].nativeElement.height * ColorSliderComponent.BLUE_START;
-        component.setPositionToHue(Colors.BLUE);
+        component['setPositionToHue'](Colors.BLUE);
         expect(component.selectedHeight).toEqual(height);
     });
 
     it('should select good height for purple hue', () => {
         const height = component['canvas'].nativeElement.height * ColorSliderComponent.PURPLE_START;
-        component.setPositionToHue(Colors.PURPLE);
+        component['setPositionToHue'](Colors.PURPLE);
         expect(component.selectedHeight).toEqual(height);
     });
 
     it('should set height as 0 for invalid hue', () => {
         component.selectedHeight = 0;
-        component.setPositionToHue(Colors.GRAY);
+        component['setPositionToHue'](Colors.GRAY);
         expect(component.selectedHeight).toEqual(0);
     });
 
@@ -145,7 +146,7 @@ describe('ColorSliderComponent', () => {
 
     it('should get proper color', () => {
         const place = -1;
-        const red: Color = component.getColor(ColorSliderComponent.RED_START);
+        const red: Color = component['getColor'](ColorSliderComponent.RED_START);
         expect(red.r).toBeCloseTo(Colors.RED.r, place);
         expect(red.g).toBeCloseTo(Colors.RED.g, place);
         expect(red.b).toBeCloseTo(Colors.RED.b, place);
@@ -153,11 +154,11 @@ describe('ColorSliderComponent', () => {
 
     it('should not getContext if there', () => {
         // Get context to make sure we have one
-        component.getContext();
+        component['getContext']();
         spyOn(component['canvas'].nativeElement, 'getContext').and.stub();
 
         // Get context should not do anything since we already have it
-        component.getContext();
+        component['getContext']();
         expect(component['canvas'].nativeElement.getContext).not.toHaveBeenCalled();
     });
 });
