@@ -137,7 +137,8 @@ export class TextService extends Tool {
                 left = this.config.startCoords.x - maxLineWidth / 2;
         }
         const x = this.getPositionFromMouse(event).x;
-        return !(x < left || x >= right || event.y <= top || event.y >= bottom);
+        const y = this.getPositionFromMouse(event).y;
+        return !(x < left || x >= right || y <= top || y >= bottom);
     }
 
     private handleEnter(): void {
