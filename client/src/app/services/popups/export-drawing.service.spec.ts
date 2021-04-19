@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ExportDrawingService } from './export-drawing';
+import { ExportDrawingService } from './export-drawing.service';
 
 describe('ExportDrawing', () => {
     let service: ExportDrawingService;

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
-import { NewDrawingService } from './new-drawing';
+import { NewDrawingService } from './new-drawing.service';
 
 describe('NewDrawing', () => {
     let service: NewDrawingService;

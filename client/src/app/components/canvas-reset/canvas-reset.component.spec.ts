@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NewDrawingService } from '@app/services/popups/new-drawing';
+import { NewDrawingService } from '@app/services/popups/new-drawing.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { NewDrawingComponent } from './canvas-reset.component';
 

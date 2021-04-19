@@ -86,8 +86,8 @@ export class LineDrawer {
         this.shift.isDown = false;
         this.ESCAPE.isDown = false;
         this.BACKSPACE.isDown = false;
-        this.pointToAdd = {} as Vec2;
-        this.mousePosition = {} as Vec2;
+        this.pointToAdd = new Vec2(-1, -1);
+        this.mousePosition = new Vec2(-1, -1);
         this.config.points = config.points;
     }
 

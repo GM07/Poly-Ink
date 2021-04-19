@@ -9,7 +9,7 @@ import { SpotlightFilter } from '@app/classes/filters/spotlight-filter';
 import { ImgurResponse } from '@app/classes/imgur-res';
 import { DrawingConstants } from '@app/constants/drawing';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { ExportDrawingService } from '@app/services/popups/export-drawing';
+import { ExportDrawingService } from '@app/services/popups/export-drawing.service';
 import { ExportImgurService } from '@app/services/popups/export-imgur.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 @Component({

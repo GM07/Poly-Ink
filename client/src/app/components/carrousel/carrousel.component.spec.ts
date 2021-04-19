@@ -10,7 +10,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { CarrouselComponent } from '@app/components/carrousel/carrousel.component';
 import { HomePageComponent } from '@app/components/home-page/home-page.component';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { NewDrawingService } from '@app/services/popups/new-drawing';
+import { NewDrawingService } from '@app/services/popups/new-drawing.service';
 import { ServerCommunicationService } from '@app/services/server-communication/server-communication.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { Drawing } from '@common/communication/drawing';
