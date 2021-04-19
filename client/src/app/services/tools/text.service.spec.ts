@@ -101,14 +101,11 @@ describe('TextService', () => {
 
     it('should return if click is in textBox', () => {
         spyOn(service, 'getPositionFromMouse').and.returnValue(new Vec2(0, 1));
-
         drawingService.previewCtx = ctxStub;
         service.config.textData = ['aa'];
         service.config.startCoords = new Vec2(1, 0);
-
         service.config.alignmentSetting = TextAlignment.Right;
         expect(service['isInTextBox']({} as MouseEvent)).toBeTruthy();
-
         service.config.alignmentSetting = TextAlignment.Center;
         expect(service['isInTextBox']({} as MouseEvent)).toBeTruthy();
     });
@@ -269,7 +266,6 @@ describe('TextService', () => {
         spyOn<any>(service, 'handleArrowDown').and.callThrough();
         service['handleShortCuts'](TextService['ARROW_DOWN']);
         expect(service['handleArrowDown']).toHaveBeenCalled();
-
         service.config.index.y = 0;
         service.config.textData = ['a', 'a'];
         service['handleShortCuts'](TextService['ARROW_DOWN']);
