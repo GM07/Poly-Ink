@@ -24,7 +24,7 @@
     <mat-divider></mat-divider>
 
     <div *ngIf="lineService.config.showJunctionPoints">
-        <h5 class="textFormat">Diamètre points de jonction</h5>
+        <h5 class="textFormat longFormat">Diamètre points de jonction</h5>
         <div class="textFormatForSlider">
             <mat-slider (input)="changeJunctionsDiameter($event)" [(ngModel)]="lineService.config.diameterJunctions" min="{{ MIN }}" max="{{ MAX }}">
             </mat-slider>
