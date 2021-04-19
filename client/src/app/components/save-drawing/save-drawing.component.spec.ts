@@ -311,6 +311,6 @@ describe('SaveDrawingComponent', () => {
             expect(generatePreviewDataSpy).toHaveBeenCalled();
         });
         expect(shortcutService.blockShortcuts).toBeTruthy();
-        expect(saveDrawingService.shortcut).toBeTruthy();
+        expect(saveDrawingService.SHORTCUT).toBeTruthy();
     });
 });

@@ -2,8 +2,8 @@ import { ToolSettings } from './tool-settings';
 import { RedoConstants } from './tools.constants';
 
 export class Redo implements ToolSettings {
-    readonly toolId: string = RedoConstants.TOOL_ID;
-    readonly toolTitle: string = RedoConstants.TOOL_TITLE;
-    readonly infoBubble: string = RedoConstants.INFO_BUBBLE;
-    readonly iconName: string = RedoConstants.ICON_NAME;
+    readonly TOOL_ID: string = RedoConstants.TOOL_ID;
+    readonly TOOL_TITLE: string = RedoConstants.TOOL_TITLE;
+    readonly INFO_BUBBLE: string = RedoConstants.INFO_BUBBLE;
+    readonly ICON_NAME: string = RedoConstants.ICON_NAME;
 }

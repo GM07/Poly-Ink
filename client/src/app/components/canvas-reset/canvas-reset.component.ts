@@ -30,7 +30,7 @@ export class NewDrawingComponent {
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent): void {
-        if (!this.shortcutHandler.blockShortcuts && this.newDrawing.shortcut.equals(event)) {
+        if (!this.shortcutHandler.blockShortcuts && this.newDrawing.SHORTCUT.equals(event)) {
             event.preventDefault();
             this.createNewDrawing(false);
         }

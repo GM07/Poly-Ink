@@ -1,6 +1,6 @@
 export interface ToolSettings {
-    toolId: string;
-    toolTitle: string;
-    infoBubble: string;
-    iconName: string;
+    TOOL_ID: string;
+    TOOL_TITLE: string;
+    INFO_BUBBLE: string;
+    ICON_NAME: string;
 }
