@@ -19,13 +19,14 @@ export interface SliderValues {
 }
 
 export class Slider {
-    // tslint:disable:no-magic-numbers
     private static SCALE_WIDTH: number = 17;
     private static FILL_WIDTH: number = 18;
     private static KNOB_WIDTH: number = 18;
     private static MATH_CONVERSION_FACTOR: number = 1.5;
-    private static BACKGROUND_COLOR: string = '#' + new Color(238, 238, 238).hexString;
-    private static KNOB_COLOR: string = '#' + new Color(236, 86, 129).hexString;
+    // Specific RGB colors needed
+    // tslint:disable:no-magic-numbers
+    private static BACKGROUND_COLOR: string = new Color(238, 238, 238).rgbString;
+    private static KNOB_COLOR: string = new Color(236, 86, 129).rgbString;
     private sliders: SliderBand[];
     // tslint:enable:no-magic-numbers
 
@@ -153,10 +154,12 @@ export class Slider {
     }
 
     private drawScale(slider: SliderBand): void {
+        // Mathematical Formula
         // tslint:disable-next-line:no-magic-numbers
         for (let i = 0; i <= 2 * Math.PI; i += Math.PI / 6) {
             this.context.beginPath();
             this.context.strokeStyle = Slider.BACKGROUND_COLOR;
+            // Mathematical Formula
             // tslint:disable-next-line:no-magic-numbers
             this.context.arc(this.position.x, this.position.y, slider.radius, i, i + Math.PI / 4, false);
             this.context.lineWidth = Slider.SCALE_WIDTH;
@@ -186,6 +189,7 @@ export class Slider {
         this.context.moveTo(this.position.x, this.position.y - slider.radius + Slider.SCALE_WIDTH / 2);
         this.context.lineTo(this.position.x, this.position.y - Slider.SCALE_WIDTH - slider.radius + Slider.SCALE_WIDTH / 2);
         this.context.lineTo(
+            // Mathematical Formula
             // tslint:disable-next-line:no-magic-numbers
             this.position.x + Slider.SCALE_WIDTH / 4,
             this.position.y - Slider.SCALE_WIDTH / 2 - slider.radius + Slider.SCALE_WIDTH / 2,
