@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChil
 import { Color } from '@app/classes/color';
 import { Vec2 } from '@app/classes/vec2';
 import { Colors } from '@app/constants/colors';
+import { MouseButton } from '@app/constants/control';
 import { ColorService } from '@app/services/color/color.service';
 import { Subscription } from 'rxjs';
 
@@ -48,8 +49,10 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.leftMouseDown = true;
-        this.onMouseMove(event);
+        if (event.button === MouseButton.Left) {
+            this.leftMouseDown = true;
+            this.onMouseMove(event);
+        }
     }
 
     @HostListener('document:mousemove', ['$event'])
@@ -61,8 +64,10 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
     }
 
     @HostListener('document:mouseup', ['$event'])
-    onMouseUp(): void {
-        this.leftMouseDown = false;
+    onMouseUp(event: MouseEvent): void {
+        if (event.button === MouseButton.Left) {
+            this.leftMouseDown = false;
+        }
     }
 
     // Code from tutorial https://malcoded.com/posts/angular-color-picker/

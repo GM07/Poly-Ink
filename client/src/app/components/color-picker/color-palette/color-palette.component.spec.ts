@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Color } from '@app/classes/color';
 import { Vec2 } from '@app/classes/vec2';
 import { Colors } from '@app/constants/colors';
+import { MouseButton } from '@app/constants/control';
 import { ColorService } from '@app/services/color/color.service';
 import { ColorPaletteComponent } from './color-palette.component';
 
@@ -94,22 +95,40 @@ describe('ColorPaletteComponent', () => {
         expect(component.selectedPosition).toEqual(new Vec2(width, height));
     });
 
-    it('should set mouse down to false on mouse up', () => {
+    it('should set mouse down to false on left mouse up', () => {
         component.leftMouseDown = true;
-        component.onMouseUp();
+        component.onMouseUp({ button: MouseButton.Left } as MouseEvent);
         expect(component.leftMouseDown).toBeFalse();
     });
 
-    it('should change selected position on mouseDown', () => {
+    it('should not set mouse down to false on right mouse up', () => {
+        component.leftMouseDown = true;
+        component.onMouseUp({ button: MouseButton.Right } as MouseEvent);
+        expect(component.leftMouseDown).toBeTrue();
+    });
+
+    it('should change selected position on left click', () => {
         const x = 50;
         const y = 50;
 
         spyOn<any>(component, 'changeSelectedPosition').and.stub();
 
-        component.onMouseDown({ clientX: x, clientY: y, buttons: 1 } as MouseEvent);
+        component.onMouseDown({ clientX: x, clientY: y, buttons: 1, button: MouseButton.Left } as MouseEvent);
 
         expect(component.leftMouseDown).toBeTrue();
         expect(component['changeSelectedPosition']).toHaveBeenCalled();
+    });
+
+    it('should not change selected position on click if not left click', () => {
+        const x = 50;
+        const y = 50;
+
+        spyOn<any>(component, 'changeSelectedPosition').and.stub();
+
+        component.onMouseDown({ clientX: x, clientY: y, buttons: 1, button: MouseButton.Right } as MouseEvent);
+
+        expect(component.leftMouseDown).toBeFalse();
+        expect(component['changeSelectedPosition']).not.toHaveBeenCalled();
     });
 
     it('should move selected position on mouse move if mouse is down', () => {

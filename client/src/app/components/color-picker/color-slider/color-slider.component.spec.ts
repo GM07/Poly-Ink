@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Color } from '@app/classes/color';
 import { Colors } from '@app/constants/colors';
+import { MouseButton } from '@app/constants/control';
 import { ColorService } from '@app/services/color/color.service';
 import { ColorSliderComponent } from './color-slider.component';
 
@@ -53,8 +54,8 @@ describe('ColorSliderComponent', () => {
         expect(component['drawSelectionBox']).toHaveBeenCalled();
     });
 
-    it('should select height on mouseDown', () => {
-        const event = { clientX: 0, clientY: 0, buttons: 1 } as MouseEvent;
+    it('should select height on left click', () => {
+        const event = { clientX: 0, clientY: 0, buttons: 1, button: MouseButton.Left } as MouseEvent;
         component.leftMouseDown = false;
 
         spyOn<any>(component, 'changeSelectedHeight');
@@ -62,6 +63,17 @@ describe('ColorSliderComponent', () => {
 
         expect(component.leftMouseDown).toBeTrue();
         expect(component['changeSelectedHeight']).toHaveBeenCalled();
+    });
+
+    it('should not select height on click that is not left', () => {
+        const event = { clientX: 0, clientY: 0, buttons: 1, button: MouseButton.Right } as MouseEvent;
+        component.leftMouseDown = false;
+
+        spyOn<any>(component, 'changeSelectedHeight');
+        component.onMouseDown(event);
+
+        expect(component.leftMouseDown).toBeFalse();
+        expect(component['changeSelectedHeight']).not.toHaveBeenCalled();
     });
 
     it('should set selected height properly', () => {
@@ -140,8 +152,14 @@ describe('ColorSliderComponent', () => {
 
     it('should set mousedown to false on mouse up', () => {
         component.leftMouseDown = true;
-        component.onMouseUp();
+        component.onMouseUp({ button: MouseButton.Left } as MouseEvent);
         expect(component.leftMouseDown).toBeFalse();
+    });
+
+    it('should set mousedown to false on mouse up', () => {
+        component.leftMouseDown = true;
+        component.onMouseUp({ button: MouseButton.Right } as MouseEvent);
+        expect(component.leftMouseDown).toBeTrue();
     });
 
     it('should get proper color', () => {

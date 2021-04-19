@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { Color } from '@app/classes/color';
 import { Vec2 } from '@app/classes/vec2';
+import { MouseButton } from '@app/constants/control';
 import { ColorService } from '@app/services/color/color.service';
 import { Subscription } from 'rxjs';
 
@@ -45,13 +46,17 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
     }
 
     @HostListener('document:mouseup', ['$event'])
-    onMouseUp(): void {
-        this.leftMouseDown = false;
+    onMouseUp(event: MouseEvent): void {
+        if (event.button === MouseButton.Left) {
+            this.leftMouseDown = false;
+        }
     }
 
     onMouseDown(event: MouseEvent): void {
-        this.leftMouseDown = true;
-        this.onMouseMove(event);
+        if (event.button === MouseButton.Left) {
+            this.leftMouseDown = true;
+            this.onMouseMove(event);
+        }
     }
 
     @HostListener('document:mousemove', ['$event'])
