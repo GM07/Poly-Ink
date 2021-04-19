@@ -58,7 +58,7 @@ export class LineService extends Tool {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        const shortcut = ShortcutKey.get(this.lineDrawer.shortcutList, event, true);
+        const shortcut = ShortcutKey.get(this.lineDrawer.SHORTCUT_LIST, event, true);
         if (shortcut !== undefined && shortcut.isDown !== true) {
             shortcut.isDown = true;
             this.lineDrawer.handleKeys(shortcut);
@@ -68,7 +68,7 @@ export class LineService extends Tool {
     onKeyUp(event: KeyboardEvent): void {
         this.lineDrawer.shift.isDown = event.shiftKey;
 
-        const shortcut = ShortcutKey.get(this.lineDrawer.shortcutList, event, true);
+        const shortcut = ShortcutKey.get(this.lineDrawer.SHORTCUT_LIST, event, true);
         if (shortcut !== undefined) {
             shortcut.isDown = false;
             this.lineDrawer.handleKeys(shortcut);

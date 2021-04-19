@@ -68,11 +68,11 @@ export class SidebarComponent implements OnInit {
     }
 
     toolIconClicked(toolSettings: ToolSettings): void {
-        this.toolHandlerService.setTool(toolSettings.toolId);
+        this.toolHandlerService.setTool(toolSettings.TOOL_ID);
     }
 
     emitClickEvent(toolSettings: ToolSettings): void {
-        this.settingClicked.emit(toolSettings.toolId);
+        this.settingClicked.emit(toolSettings.TOOL_ID);
     }
 
     private initUndoRedoService(): void {

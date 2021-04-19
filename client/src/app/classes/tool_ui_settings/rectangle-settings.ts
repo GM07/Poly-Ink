@@ -2,8 +2,8 @@ import { ToolSettings } from './tool-settings';
 import { RectangleToolConstants } from './tools.constants';
 
 export class RectangleSettings implements ToolSettings {
-    readonly toolId: string = RectangleToolConstants.TOOL_ID;
-    readonly toolTitle: string = RectangleToolConstants.TOOL_TITLE;
-    readonly infoBubble: string = RectangleToolConstants.INFO_BUBBLE;
-    readonly iconName: string = RectangleToolConstants.ICON_NAME;
+    readonly TOOL_ID: string = RectangleToolConstants.TOOL_ID;
+    readonly TOOL_TITLE: string = RectangleToolConstants.TOOL_TITLE;
+    readonly INFO_BUBBLE: string = RectangleToolConstants.INFO_BUBBLE;
+    readonly ICON_NAME: string = RectangleToolConstants.ICON_NAME;
 }

@@ -24,7 +24,7 @@ export class DrawingComponent implements AfterViewInit {
 
     constructor(
         private drawingService: DrawingService,
-        readonly toolHandlerService: ToolHandlerService,
+        readonly TOOL_HANDLER_SERVICE: ToolHandlerService,
         private newDrawingService: NewDrawingService,
         public gridService: GridService,
     ) {
@@ -57,31 +57,31 @@ export class DrawingComponent implements AfterViewInit {
 
     @HostListener('mousedown', ['$event'])
     onMouseDown(event: MouseEvent): void {
-        this.toolHandlerService.onMouseDown(event);
+        this.TOOL_HANDLER_SERVICE.onMouseDown(event);
     }
 
     @HostListener('dblclick', ['$event'])
     onDoubleClick(event: MouseEvent): void {
-        this.toolHandlerService.onDoubleClick(event);
+        this.TOOL_HANDLER_SERVICE.onDoubleClick(event);
     }
 
     @HostListener('document:mouseup', ['$event'])
     onMouseUp(event: MouseEvent): void {
-        this.toolHandlerService.onMouseUp(event);
+        this.TOOL_HANDLER_SERVICE.onMouseUp(event);
     }
 
     @HostListener('document:keyup', ['$event'])
     onKeyUp(event: KeyboardEvent): void {
-        this.toolHandlerService.onKeyUp(event);
+        this.TOOL_HANDLER_SERVICE.onKeyUp(event);
     }
 
     @HostListener('mouseleave', ['$event'])
     onMouseLeave(event: MouseEvent): void {
-        this.toolHandlerService.onMouseLeave(event);
+        this.TOOL_HANDLER_SERVICE.onMouseLeave(event);
     }
 
     @HostListener('mouseenter', ['$event'])
     onMouseEnter(event: MouseEvent): void {
-        this.toolHandlerService.onMouseEnter(event);
+        this.TOOL_HANDLER_SERVICE.onMouseEnter(event);
     }
 }
