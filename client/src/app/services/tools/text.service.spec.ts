@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { TextAlignment } from '@app/classes/tool-config/text-config';
+import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { TextService } from './text.service';
@@ -13,6 +14,7 @@ describe('TextService', () => {
     let drawingService: DrawingService;
     let canvasTestHelper: CanvasTestHelper;
     let ctxStub: CanvasRenderingContext2D;
+    const leftMouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
@@ -60,56 +62,50 @@ describe('TextService', () => {
     });
 
     it('should call addText when mouseDown and there is no input', () => {
-        let mouseEvent = { button: MouseButton.Right, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        const mouseEvent = { button: MouseButton.Right, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         spyOn<any>(service, 'addText');
         spyOn<any>(service, 'isInTextBox').and.returnValue(false);
         service.config.hasInput = false;
         service.onMouseDown(mouseEvent);
         expect(service['addText']).toHaveBeenCalledTimes(0);
-        mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
-        service.onMouseDown(mouseEvent);
+        service.onMouseDown(leftMouseEvent);
         expect(service['addText']).toHaveBeenCalledTimes(1);
     });
 
     it('should call confirmText when mouseDown and there is input', () => {
-        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         spyOn<any>(service, 'confirmText');
         spyOn<any>(service, 'isInTextBox').and.returnValue(false);
         service.config.hasInput = true;
-        service.onMouseDown(mouseEvent);
+        service.onMouseDown(leftMouseEvent);
         expect(service['confirmText']).toHaveBeenCalled();
     });
 
     it('should add text and modify config attributes accordingly', () => {
-        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        const expectedCoords = new Vec2(0, 0);
+        spyOn(service, 'getPositionFromMouse').and.returnValue(expectedCoords);
         spyOn(service, 'drawPreview');
-        service['addText'](mouseEvent);
+        service['addText']({} as MouseEvent);
         expect(service.config.hasInput).toBe(true);
-        expect(service.config.startCoords.x).toBe(mouseEvent.offsetX);
-        expect(service.config.startCoords.y).toBe(mouseEvent.offsetY);
+        expect(service.config.startCoords).toEqual(expectedCoords);
         expect(service.drawPreview).toHaveBeenCalled();
     });
 
     it('should do nothing if click in textBox', () => {
-        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
         spyOn<any>(service, 'isInTextBox').and.returnValue(true);
         spyOn<any>(service, 'addText');
-        service.onMouseDown(mouseEvent);
+        service.onMouseDown(leftMouseEvent);
         expect(service['addText']).toHaveBeenCalledTimes(0);
     });
 
     it('should return if click is in textBox', () => {
-        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        spyOn(service, 'getPositionFromMouse').and.returnValue(new Vec2(0, 1));
         drawingService.previewCtx = ctxStub;
         service.config.textData = ['aa'];
-        service.config.startCoords.x = mouseEvent.clientX;
-        service.config.startCoords.y = mouseEvent.clientY;
-
+        service.config.startCoords = new Vec2(1, 0);
         service.config.alignmentSetting = TextAlignment.Right;
-        expect(service['isInTextBox'](mouseEvent)).toBe(true);
-
+        expect(service['isInTextBox']({} as MouseEvent)).toBeTruthy();
         service.config.alignmentSetting = TextAlignment.Center;
-        expect(service['isInTextBox'](mouseEvent)).toBe(true);
+        expect(service['isInTextBox']({} as MouseEvent)).toBeTruthy();
     });
 
     it('should initialise subscriptions', () => {
@@ -268,7 +264,6 @@ describe('TextService', () => {
         spyOn<any>(service, 'handleArrowDown').and.callThrough();
         service['handleShortCuts'](TextService['ARROW_DOWN']);
         expect(service['handleArrowDown']).toHaveBeenCalled();
-
         service.config.index.y = 0;
         service.config.textData = ['a', 'a'];
         service['handleShortCuts'](TextService['ARROW_DOWN']);

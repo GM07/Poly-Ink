@@ -137,7 +137,9 @@ export class TextService extends Tool {
                 right = this.config.startCoords.x + maxLineWidth / 2;
                 left = this.config.startCoords.x - maxLineWidth / 2;
         }
-        return !(event.offsetX < left || event.offsetX >= right || event.y <= top || event.y >= bottom);
+        const x = this.getPositionFromMouse(event).x;
+        const y = this.getPositionFromMouse(event).y;
+        return !(x < left || x >= right || y <= top || y >= bottom);
     }
 
     private handleEnter(): void {
@@ -255,8 +257,7 @@ export class TextService extends Tool {
     private addText(event: MouseEvent): void {
         this.BLOCK_SHORTCUTS.next(true);
         this.config.hasInput = true;
-        this.config.startCoords.x = event.offsetX;
-        this.config.startCoords.y = event.offsetY;
+        this.config.startCoords = this.getPositionFromMouse(event);
         this.drawPreview();
     }
 }
