@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { SpecialKeys } from '@app/classes/shortcut/special-keys';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { NewDrawingService } from '@app/services/popups/new-drawing';
+import { NewDrawingService } from '@app/services/popups/new-drawing.service';
 import { ServerCommunicationService } from '@app/services/server-communication/server-communication.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 import { Drawing } from '@common/communication/drawing';

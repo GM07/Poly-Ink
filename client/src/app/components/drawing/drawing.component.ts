@@ -3,7 +3,7 @@ import { Vec2 } from '@app/classes/vec2';
 import { CanvasConst } from '@app/constants/canvas';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { GridService } from '@app/services/drawing/grid.service';
-import { NewDrawingService } from '@app/services/popups/new-drawing';
+import { NewDrawingService } from '@app/services/popups/new-drawing.service';
 import { ToolHandlerService } from '@app/services/tools/tool-handler.service';
 
 @Component({

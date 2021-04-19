@@ -3,7 +3,7 @@ import { Component, HostListener, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { CarrouselComponent } from '@app/components/carrousel/carrousel.component';
 import { DrawingService } from '@app/services/drawing/drawing.service';
-import { NewDrawingService } from '@app/services/popups/new-drawing';
+import { NewDrawingService } from '@app/services/popups/new-drawing.service';
 
 @Component({
     selector: 'app-home-page',

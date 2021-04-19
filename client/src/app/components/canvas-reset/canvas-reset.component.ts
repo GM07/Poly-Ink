@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { NewDrawingService } from '@app/services/popups/new-drawing';
+import { NewDrawingService } from '@app/services/popups/new-drawing.service';
 import { ShortcutHandlerService } from '@app/services/shortcut/shortcut-handler.service';
 
 @Component({
