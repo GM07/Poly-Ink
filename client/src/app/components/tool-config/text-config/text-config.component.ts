@@ -16,7 +16,6 @@ export class TextConfigComponent extends ToolConfig {
     readonly HIGHLIGHTED_COLOR: string = HIGHLIGHTED_COLOR;
     currentFont: string;
     currentFontSize: number;
-    currentAlignment: string;
 
     constructor(public textService: TextService, public shortcutHandlerService: ShortcutHandlerService) {
         super();

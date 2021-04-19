@@ -49,6 +49,7 @@ export class TextService extends Tool {
     onMouseDown(event: MouseEvent): void {
         this.leftMouseDown = event.button === MouseButton.Left;
         if (this.leftMouseDown) {
+            if (this.isInTextBox(event)) return;
             this.config.hasInput ? this.confirmText() : this.addText(event);
         }
     }
@@ -115,6 +116,27 @@ export class TextService extends Tool {
         this.colorService.changedPrimary.subscribe(() => {
             this.drawPreview();
         });
+    }
+
+    private isInTextBox(event: MouseEvent): boolean {
+        const top: number = this.config.startCoords.y;
+        const bottom: number = this.config.startCoords.y + this.config.textData.length * this.config.fontSize;
+        let maxLineWidth = 0;
+        this.config.textData.forEach((line) => {
+            maxLineWidth = Math.max(maxLineWidth, this.drawingService.previewCtx.measureText(line).width);
+        });
+        let left = this.config.startCoords.x;
+        let right = this.config.startCoords.x + maxLineWidth;
+        switch (this.config.alignmentSetting) {
+            case 'right':
+                right = this.config.startCoords.x;
+                left = this.config.startCoords.x - maxLineWidth;
+                break;
+            case 'center':
+                right = this.config.startCoords.x + maxLineWidth / 2;
+                left = this.config.startCoords.x - maxLineWidth / 2;
+        }
+        return !(event.offsetX < left || event.offsetX >= right || event.y <= top || event.y >= bottom);
     }
 
     private handleEnter(): void {
