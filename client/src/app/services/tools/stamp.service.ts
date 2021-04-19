@@ -60,7 +60,7 @@ export class StampService extends Tool {
     }
 
     onDocumentMouseDown(event: MouseEvent): void {
-        if (event.button === MouseButton.Left && !this.isInSidebar) {
+        if (event.button === MouseButton.Left && !this.isInSidebar && !this.colorService.isMenuOpen) {
             this.config.position = this.getPositionFromMouse(event);
             this.draw();
         }
