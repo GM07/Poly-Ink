@@ -2,8 +2,6 @@
     width: 75px;
     height: 75px;
     border: 2px dotted black;
-    margin-left: 58px;
-    margin-bottom: 20px;
 }
 
 .magnetism-selection {
@@ -55,4 +53,12 @@
 
 h5 {
     margin: 0px;
+}
+
+.centered {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
 }
