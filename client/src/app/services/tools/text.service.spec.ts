@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
+import { TextAlignment } from '@app/classes/tool-config/text-config';
 import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
@@ -105,10 +106,10 @@ describe('TextService', () => {
         service.config.textData = ['aa'];
         service.config.startCoords = new Vec2(1, 0);
 
-        service.config.alignmentSetting = 'right';
+        service.config.alignmentSetting = TextAlignment.Right;
         expect(service['isInTextBox']({} as MouseEvent)).toBeTruthy();
 
-        service.config.alignmentSetting = 'center';
+        service.config.alignmentSetting = TextAlignment.Center;
         expect(service['isInTextBox']({} as MouseEvent)).toBeTruthy();
     });
 
@@ -277,6 +278,10 @@ describe('TextService', () => {
 
     it('should call drawPreview from drawingService', () => {
         spyOn(drawingService, 'drawPreview');
+        service.config.hasInput = false;
+        service.drawPreview();
+        expect(drawingService.drawPreview).not.toHaveBeenCalled();
+        service.config.hasInput = true;
         service.drawPreview();
         expect(drawingService.drawPreview).toHaveBeenCalled();
     });

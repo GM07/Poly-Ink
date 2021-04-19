@@ -222,9 +222,6 @@ export class LassoService extends AbstractSelectionService {
 
         this.lineDrawer.addNewPoint(event);
         this.addNewLine();
-        this.lineDrawer.followCursor(event);
-        this.configLasso.intersecting = this.isIntersecting(this.lineDrawer.pointToAdd);
-        this.lineDrawer.renderLinePreview();
     }
 
     private addNewLine(): void {
