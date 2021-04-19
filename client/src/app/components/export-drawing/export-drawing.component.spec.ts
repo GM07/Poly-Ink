@@ -128,6 +128,7 @@ describe('ExportDrawingComponent', () => {
     });
 
     it('should export image while changing filename from form', () => {
+        // We need to use Object to change the value of the form (readonly)
         Object.defineProperty(component.nameFormControl, 'valid', { value: true });
         Object.defineProperty(component.nameFormControl, 'value', { value: 'test' });
 
@@ -239,6 +240,7 @@ describe('ExportDrawingComponent', () => {
     });
 
     it('should not export if name is invalid', () => {
+        // We need to use Object to change the value of the form (readonly)
         Object.defineProperty(component.nameFormControl, 'valid', { value: false });
         component.export('local-export');
 
@@ -247,6 +249,7 @@ describe('ExportDrawingComponent', () => {
     });
 
     it('should export if name is valid', () => {
+        // We need to use Object to change the value of the form (readonly)
         Object.defineProperty(component.nameFormControl, 'valid', { value: true });
         component.export('local-export');
 
@@ -279,6 +282,7 @@ describe('ExportDrawingComponent', () => {
     });
 
     it('should export image using Imgur service on imgur-export submitter id and change the link on a successful request', () => {
+        // We need to use Object to change the value of the form (readonly)
         Object.defineProperty(component.nameFormControl, 'valid', { value: true });
         spyOn(exportImgurService, 'exportImage').and.callFake((submitterId: string) => {
             return of(Promise.resolve(mockImgurResponse));
@@ -291,6 +295,7 @@ describe('ExportDrawingComponent', () => {
     });
 
     it('should export image using Imgur service on imgur-export submitter id and set server error flag on failed request', () => {
+        // We need to use Object to change the value of the form (readonly)
         Object.defineProperty(component.nameFormControl, 'valid', { value: true });
         mockImgurResponse.status = '400';
         mockImgurResponse.success = false;

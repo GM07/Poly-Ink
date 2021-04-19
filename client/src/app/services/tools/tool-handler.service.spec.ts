@@ -96,6 +96,7 @@ describe('ToolHandlerService', () => {
 
     const modifyObjectToSpyOnAllFunctions = (object: any): void => {
         do {
+            // We need Object to change the properties to spy on all functions
             Object.getOwnPropertyNames(object).filter((p: string) => {
                 if (typeof object[p] === 'function') {
                     spyOn<any>(object, p);

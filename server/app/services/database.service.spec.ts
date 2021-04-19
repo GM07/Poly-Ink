@@ -29,6 +29,7 @@ describe('Database service', () => {
     });
 
     it('should connect to database on start with default url when none is provided', async () => {
+        // Used to changed the value of a read-only property in to test database with mongo server
         Object.defineProperty(DatabaseService, 'DATABASE_URL', { value: await mongoServer.getUri() });
         await databaseService.start();
 
