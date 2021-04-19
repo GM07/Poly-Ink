@@ -19,7 +19,6 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
     static readonly BLUE_START: number = 0.61;
     static readonly PURPLE_START: number = 0.85;
     static readonly RED_END: number = 1;
-    private static readonly LEFT_MOUSE_BUTTON: number = 1;
 
     context: CanvasRenderingContext2D;
 
@@ -58,7 +57,7 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
 
     @HostListener('document:mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
-        if (this.leftMouseDown && event.buttons === ColorSliderComponent.LEFT_MOUSE_BUTTON) {
+        if (this.leftMouseDown) {
             const mouseCoord = this.getPositionFromMouse(event);
             this.changeSelectedHeight(mouseCoord.y);
         }

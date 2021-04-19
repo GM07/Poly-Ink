@@ -11,8 +11,6 @@ import { Subscription } from 'rxjs';
     styleUrls: ['./color-palette.component.scss'],
 })
 export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
-    private static readonly LEFT_MOUSE_BUTTON: number = 1;
-
     context: CanvasRenderingContext2D;
     leftMouseDown: boolean;
     selectedPosition: Vec2;
@@ -63,7 +61,7 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
 
     @HostListener('document:mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
-        if (this.leftMouseDown && event.buttons === ColorPaletteComponent.LEFT_MOUSE_BUTTON) {
+        if (this.leftMouseDown) {
             const mouseCoord = this.getPositionFromMouse(event);
             this.changeSelectedPosition(mouseCoord.x, mouseCoord.y);
         }
