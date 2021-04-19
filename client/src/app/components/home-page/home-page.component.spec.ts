@@ -81,14 +81,30 @@ describe('HomePageComponent', () => {
         expect(component.showNewDrawingWarning).toBeFalse();
     });
 
-    it('should create a new drawing if there are no saved drawings', () => {
+    it('should create a new drawing if there are no saved drawings', async () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1;
+        canvas.height = 1;
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, 1, 1);
+
         // tslint:disable-next-line:no-string-literal
-        const getSavedDrawingSpy = spyOn(component['drawingService'], 'getSavedDrawing').and.returnValue('');
+        const getSavedDrawingSpy = spyOn(component['drawingService'], 'getSavedDrawing').and.returnValue(canvas.toDataURL());
         const createNewDrawingSpy = spyOn(component, 'createNewDrawing');
-        component.createNewDrawingOption();
+
+        await component.createNewDrawingOption();
+        expect(createNewDrawingSpy).toHaveBeenCalled();
+
+        createNewDrawingSpy.calls.reset();
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, 1, 1);
+        getSavedDrawingSpy.and.returnValue(canvas.toDataURL());
+        await component.createNewDrawingOption();
         expect(createNewDrawingSpy).not.toHaveBeenCalled();
+
         getSavedDrawingSpy.and.returnValue(null);
-        component.createNewDrawingOption();
+        await component.createNewDrawingOption();
         expect(createNewDrawingSpy).toHaveBeenCalled();
     });
 
