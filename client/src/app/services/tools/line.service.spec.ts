@@ -23,7 +23,10 @@ describe('LineService', () => {
 
     beforeEach(() => {
         spyDrawing = jasmine.createSpyObj('DrawingService', ['clearCanvas', 'drawPreview', 'draw', 'unblockUndoRedo']);
-        colorServiceSpy = jasmine.createSpyObj('ColorService', ['primaryChanged'], { primaryRgba: 'rgba(1, 1, 1, 1)', secondaryRgba: 'rgba(0, 0, 0, 1)' });
+        colorServiceSpy = jasmine.createSpyObj('ColorService', ['primaryChanged'], {
+            primaryRgba: 'rgba(1, 1, 1, 1)',
+            secondaryRgba: 'rgba(0, 0, 0, 1)',
+        });
         TestBed.configureTestingModule({
             providers: [
                 { provide: DrawingService, useValue: spyDrawing },
