@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
+import { Vec2 } from '@app/classes/vec2';
 import { MouseButton } from '@app/constants/control';
 import { DrawingService } from '@app/services/drawing/drawing.service';
 import { TextService } from './text.service';
@@ -80,12 +81,12 @@ describe('TextService', () => {
     });
 
     it('should add text and modify config attributes accordingly', () => {
-        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        const expectedCoords = new Vec2(0, 0);
+        spyOn(service, 'getPositionFromMouse').and.returnValue(expectedCoords);
         spyOn(service, 'drawPreview');
-        service['addText'](mouseEvent);
+        service['addText']({} as MouseEvent);
         expect(service.config.hasInput).toBe(true);
-        expect(service.config.startCoords.x).toBe(mouseEvent.offsetX);
-        expect(service.config.startCoords.y).toBe(mouseEvent.offsetY);
+        expect(service.config.startCoords).toEqual(expectedCoords);
         expect(service.drawPreview).toHaveBeenCalled();
     });
 
@@ -98,17 +99,17 @@ describe('TextService', () => {
     });
 
     it('should return if click is in textBox', () => {
-        const mouseEvent = { button: MouseButton.Left, clientX: 300, clientY: 400, detail: 1 } as MouseEvent;
+        spyOn(service, 'getPositionFromMouse').and.returnValue(new Vec2(0, 1));
+
         drawingService.previewCtx = ctxStub;
         service.config.textData = ['aa'];
-        service.config.startCoords.x = mouseEvent.clientX;
-        service.config.startCoords.y = mouseEvent.clientY;
+        service.config.startCoords = new Vec2(1, 0);
 
         service.config.alignmentSetting = 'right';
-        expect(service['isInTextBox'](mouseEvent)).toBe(true);
+        expect(service['isInTextBox']({} as MouseEvent)).toBeTruthy();
 
         service.config.alignmentSetting = 'center';
-        expect(service['isInTextBox'](mouseEvent)).toBe(true);
+        expect(service['isInTextBox']({} as MouseEvent)).toBeTruthy();
     });
 
     it('should initialise subscriptions', () => {
