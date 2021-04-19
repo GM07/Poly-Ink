@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { CanvasTestHelper } from '@app/classes/canvas-test-helper';
 import { LassoDraw } from '@app/classes/commands/lasso-draw';
 import { LineDrawer } from '@app/classes/line-drawer';
+import { Geometry } from '@app/classes/math/geometry';
 import { Line } from '@app/classes/math/line';
 import { LassoConfig } from '@app/classes/tool-config/lasso-config';
 import { Vec2 } from '@app/classes/vec2';
@@ -76,6 +77,9 @@ describe('Lasso service', () => {
         service.configLasso.points = pointsTest;
         service['addPointToSelection']({ clientX: 10, clientY: 10 } as MouseEvent);
         expect(service.configLasso.points.length).toEqual(3);
+        spyOn(Geometry, 'isAPoint').and.returnValue(true);
+        service['addPointToSelection']({ clientX: 10, clientY: 10 } as MouseEvent);
+        expect(service.configLasso.points.length).toEqual(3);
     });
 
     it('should add line if there are at least 2 points', () => {
@@ -87,6 +91,10 @@ describe('Lasso service', () => {
     it('should not add line if there is only one point', () => {
         service['addNewLine']();
         expect(service['lines'].length).toEqual(0);
+    });
+
+    it('should indicate if there is an intersection', () => {
+        expect(service['isIntersecting'](mousePos)).toBeFalsy();
     });
 
     it('should not create selection if intersecting', () => {

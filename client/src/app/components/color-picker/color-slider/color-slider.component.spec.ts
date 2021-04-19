@@ -98,35 +98,35 @@ describe('ColorSliderComponent', () => {
     it('should select good height for red hue', () => {
         component.selectedHeight = 0;
         component.setPositionToHue(Colors.RED);
-        expect(component.selectedHeight).toEqual(component.RED_START);
+        expect(component.selectedHeight).toEqual(ColorSliderComponent.RED_START);
     });
 
     it('should select good height for yellow hue', () => {
-        const height = component['canvas'].nativeElement.height * component.YELLOW_START;
+        const height = component['canvas'].nativeElement.height * ColorSliderComponent.YELLOW_START;
         component.setPositionToHue(Colors.YELLOW);
         expect(component.selectedHeight).toEqual(height);
     });
 
     it('should select good height for green hue', () => {
-        const height = component['canvas'].nativeElement.height * component.GREEN_START;
+        const height = component['canvas'].nativeElement.height * ColorSliderComponent.GREEN_START;
         component.setPositionToHue(Colors.GREEN);
         expect(component.selectedHeight).toEqual(height);
     });
 
     it('should select good height for cyan hue', () => {
-        const height = component['canvas'].nativeElement.height * component.CYAN_START;
+        const height = component['canvas'].nativeElement.height * ColorSliderComponent.CYAN_START;
         component.setPositionToHue(Colors.CYAN);
         expect(component.selectedHeight).toEqual(height);
     });
 
     it('should select good height for blue hue', () => {
-        const height = component['canvas'].nativeElement.height * component.BLUE_START;
+        const height = component['canvas'].nativeElement.height * ColorSliderComponent.BLUE_START;
         component.setPositionToHue(Colors.BLUE);
         expect(component.selectedHeight).toEqual(height);
     });
 
     it('should select good height for purple hue', () => {
-        const height = component['canvas'].nativeElement.height * component.PURPLE_START;
+        const height = component['canvas'].nativeElement.height * ColorSliderComponent.PURPLE_START;
         component.setPositionToHue(Colors.PURPLE);
         expect(component.selectedHeight).toEqual(height);
     });
@@ -145,7 +145,7 @@ describe('ColorSliderComponent', () => {
 
     it('should get proper color', () => {
         const place = -1;
-        const red: Color = component.getColor(component.RED_START);
+        const red: Color = component.getColor(ColorSliderComponent.RED_START);
         expect(red.r).toBeCloseTo(Colors.RED.r, place);
         expect(red.g).toBeCloseTo(Colors.RED.g, place);
         expect(red.b).toBeCloseTo(Colors.RED.b, place);
