@@ -160,7 +160,8 @@ export class LineDrawer {
                 break;
         }
     }
-    private renderLinePreview(): void {
+
+    renderLinePreview(): void {
         this.config.points.push(this.pointToAdd);
 
         this.drawPreview.next();
