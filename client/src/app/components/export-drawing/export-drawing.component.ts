@@ -36,14 +36,7 @@ export class ExportDrawingComponent {
     private defaultFileNames: string[];
     private exportPreview: ElementRef<HTMLCanvasElement>;
 
-    private filterMap: Map<string, Filter> = new Map([
-        ['default', new Filter()],
-        ['negative', new NegativeFilter()],
-        ['funky', new FunkyFilter()],
-        ['spotlight', new SpotlightFilter()],
-        ['sepia', new SepiaFilter()],
-        ['monochrome', new Monochrome()],
-    ]);
+    private filterMap: Map<string, Filter>;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -52,8 +45,17 @@ export class ExportDrawingComponent {
         private exportDrawingService: ExportDrawingService,
         private exportImgurService: ExportImgurService,
     ) {
+        this.filterMap = new Map([
+            ['default', new Filter()],
+            ['negative', new NegativeFilter()],
+            ['funky', new FunkyFilter()],
+            ['spotlight', new SpotlightFilter()],
+            ['sepia', new SepiaFilter()],
+            ['monochrome', new Monochrome()],
+        ]);
         this.initValues();
     }
+
     @ViewChild('exportPreview', { static: false }) set content(element: ElementRef) {
         if (element) {
             this.exportPreview = element;

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { TextDraw } from '@app/classes/commands/text-draw';
 import { ShortcutKey } from '@app/classes/shortcut/shortcut-key';
 import { Tool } from '@app/classes/tool';
-import { TextConfig } from '@app/classes/tool-config/text-config';
+import { TextAlignment, TextConfig } from '@app/classes/tool-config/text-config';
 import { TextToolConstants } from '@app/classes/tool_ui_settings/tools.constants';
 import { MouseButton } from '@app/constants/control';
 import { ColorService } from '@app/services/color/color.service';
@@ -128,11 +128,11 @@ export class TextService extends Tool {
         let left = this.config.startCoords.x;
         let right = this.config.startCoords.x + maxLineWidth;
         switch (this.config.alignmentSetting) {
-            case 'right':
+            case TextAlignment.Right:
                 right = this.config.startCoords.x;
                 left = this.config.startCoords.x - maxLineWidth;
                 break;
-            case 'center':
+            case TextAlignment.Center:
                 right = this.config.startCoords.x + maxLineWidth / 2;
                 left = this.config.startCoords.x - maxLineWidth / 2;
         }

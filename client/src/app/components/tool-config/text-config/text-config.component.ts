@@ -13,7 +13,6 @@ import { TextService } from '@app/services/tools/text.service';
 })
 export class TextConfigComponent extends ToolConfig {
     alignment: typeof TextAlignment = TextAlignment;
-    readonly fonts: string[] = ['Arial', 'Times New Roman', 'Cursive', 'Fantasy', 'Monospace'];
     readonly MIN: number = ToolSettingsConst.TEXT_MIN_FONT_SIZE;
     readonly MAX: number = ToolSettingsConst.TEXT_MAX_FONT_SIZE;
     readonly HIGHLIGHTED_COLOR: string = HIGHLIGHTED_COLOR;
