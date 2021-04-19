@@ -256,8 +256,7 @@ export class TextService extends Tool {
     private addText(event: MouseEvent): void {
         this.BLOCK_SHORTCUTS.next(true);
         this.config.hasInput = true;
-        this.config.startCoords.x = this.getPositionFromMouse(event).x;
-        this.config.startCoords.y = this.getPositionFromMouse(event).y;
+        this.config.startCoords = this.getPositionFromMouse(event);
         this.drawPreview();
     }
 }
