@@ -17,10 +17,6 @@ export class BucketConfigComponent extends ToolConfig {
         super();
     }
 
-    colorSliderLabel(value: number): string {
-        return value + '%';
-    }
-
     changeTolerance(event: MatSliderChange): void {
         this.bucketService.config.tolerance = event.value as number;
     }

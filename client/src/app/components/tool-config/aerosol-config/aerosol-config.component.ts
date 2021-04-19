@@ -21,10 +21,6 @@ export class AerosolConfigComponent extends ToolConfig {
         super();
     }
 
-    sliderLabel(value: number): string {
-        return value + 'px';
-    }
-
     changeDropletDiameter(event: MatSliderChange): void {
         this.aerosolService.dropletDiameter = event.value as number;
     }

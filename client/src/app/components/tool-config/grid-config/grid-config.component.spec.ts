@@ -93,6 +93,7 @@ describe('GridConfigComponent', () => {
 
     it('should should change opacity on slider changer', () => {
         component.opacityChange({ value: ToolSettingsConst.GRID_MAX_OPACITY * ToolMath.PERCENTAGE } as MatSliderChange);
+        // tslint:disable-next-line:no-string-literal
         expect(component.gridService['opacity']).toBe(ToolSettingsConst.GRID_MAX_OPACITY);
     });
 });

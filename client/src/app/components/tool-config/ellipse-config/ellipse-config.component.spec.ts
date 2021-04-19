@@ -110,8 +110,8 @@ describe('EllipseConfigComponent', () => {
     });
 
     it('should change the contour in ellipse on mat slider change event', () => {
-        const matSliderChangeEvent = {value: 2} as MatSliderChange;
+        const matSliderChangeEvent = { value: 2 } as MatSliderChange;
         component.changeContourWidth(matSliderChangeEvent);
-        expect(ellipseService.contourWidth).toEqual(2); 
-    })
+        expect(ellipseService.contourWidth).toEqual(2);
+    });
 });

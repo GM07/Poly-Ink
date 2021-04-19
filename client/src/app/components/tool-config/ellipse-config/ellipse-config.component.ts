@@ -23,10 +23,6 @@ export class EllipseConfigComponent extends ToolConfig {
         this.ellipseService.config.shapeMode = traceType;
     }
 
-    colorSliderLabel(value: number): string {
-        return value + 'px';
-    }
-
     changeContourWidth(event: MatSliderChange): void {
         this.ellipseService.contourWidth = event.value as number;
     }

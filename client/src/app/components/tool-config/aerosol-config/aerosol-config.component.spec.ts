@@ -3,7 +3,7 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatSliderModule } from '@angular/material/slider';
+import { MatSliderChange, MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
@@ -93,5 +93,20 @@ describe('AerosolConfigComponent', () => {
         await slider[2].setValue(setValue);
 
         expect(await slider[2].getValue()).toBe(setValue);
+    });
+
+    it('should change droplet diameter on slider change', () => {
+        component.changeDropletDiameter({ value: ToolSettingsConst.MAX_DROPLETS_WIDTH } as MatSliderChange);
+        expect(component.aerosolService.config.dropletDiameter).toBe(ToolSettingsConst.MAX_DROPLETS_WIDTH);
+    });
+
+    it('should change emissions on slider change', () => {
+        component.changeEmissionsPerSecond({ value: ToolSettingsConst.MAX_EMISSIONS_PER_SECOND } as MatSliderChange);
+        expect(component.aerosolService.emissionsPerSecond).toBe(ToolSettingsConst.MAX_EMISSIONS_PER_SECOND);
+    });
+
+    it('should change area diameter on slider change', () => {
+        component.changeAreaDiameter({ value: ToolSettingsConst.MAX_AREA_WIDTH } as MatSliderChange);
+        expect(component.aerosolService.areaDiameter).toBe(ToolSettingsConst.MAX_AREA_WIDTH);
     });
 });
