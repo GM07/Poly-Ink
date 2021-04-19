@@ -8,6 +8,11 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
 import { Subject } from 'rxjs';
 import { AbstractLineConfig } from './tool-config/abstract-line-config';
 
+export interface DashLineSettings {
+    transform: Vec2;
+    styles: string[];
+}
+
 export class LineDrawer {
     pointToAdd: Vec2;
     mousePosition: Vec2;
@@ -45,19 +50,18 @@ export class LineDrawer {
     static drawDashedLinePath(
         ctx: CanvasRenderingContext2D,
         points: Vec2[],
-        transform: Vec2 = new Vec2(0, 0),
-        styles: string[] = ['black', 'white'],
+        settings: DashLineSettings = { transform: new Vec2(0, 0), styles: ['black', 'white'] } as DashLineSettings,
     ): void {
         ctx.lineWidth = ToolSettingsConst.BORDER_WIDTH;
         ctx.setLineDash([ToolSettingsConst.LINE_DASH, ToolSettingsConst.LINE_DASH]);
         ctx.lineJoin = 'round' as CanvasLineJoin;
         ctx.lineCap = 'round' as CanvasLineCap;
 
-        for (let index = 0; index < styles.length; index++) {
-            const style: string = styles[index];
+        for (let index = 0; index < settings.styles.length; index++) {
+            const style: string = settings.styles[index];
             ctx.lineDashOffset = index * ToolSettingsConst.LINE_DASH;
             ctx.strokeStyle = style;
-            LineDrawer.drawStrokedLinePath(ctx, points, transform);
+            LineDrawer.drawStrokedLinePath(ctx, points, settings.transform);
         }
         ctx.closePath();
         ctx.setLineDash([]);
