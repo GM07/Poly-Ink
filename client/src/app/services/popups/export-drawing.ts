@@ -7,11 +7,11 @@ import { SpecialKeys } from '@app/classes/shortcut/special-keys';
     providedIn: 'root',
 })
 export class ExportDrawingService implements Popup {
-    shortcut: ShortcutKey;
+    SHORTCUT: ShortcutKey;
     showPopup: boolean;
 
     constructor() {
-        this.shortcut = new ShortcutKey('e', { ctrlKey: true } as SpecialKeys);
+        this.SHORTCUT = new ShortcutKey('e', { ctrlKey: true } as SpecialKeys);
         this.showPopup = false;
     }
 

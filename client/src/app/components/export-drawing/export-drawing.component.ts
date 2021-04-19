@@ -162,7 +162,7 @@ export class ExportDrawingComponent {
 
     @HostListener('document:keydown', ['$event'])
     async onKeyDown(event: KeyboardEvent): Promise<void> {
-        if (!this.shortcutHandler.blockShortcuts && this.exportDrawingService.shortcut.equals(event)) {
+        if (!this.shortcutHandler.blockShortcuts && this.exportDrawingService.SHORTCUT.equals(event)) {
             event.preventDefault();
             await this.show();
         }

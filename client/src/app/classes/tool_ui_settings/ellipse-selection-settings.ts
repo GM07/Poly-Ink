@@ -2,8 +2,8 @@ import { ToolSettings } from './tool-settings';
 import { EllipseSelectionToolConstants } from './tools.constants';
 
 export class EllipseSelectionSettings implements ToolSettings {
-    readonly toolId: string = EllipseSelectionToolConstants.TOOL_ID;
-    readonly toolTitle: string = EllipseSelectionToolConstants.TOOL_TITLE;
-    readonly infoBubble: string = EllipseSelectionToolConstants.INFO_BUBBLE;
-    readonly iconName: string = EllipseSelectionToolConstants.ICON_NAME;
+    readonly TOOL_ID: string = EllipseSelectionToolConstants.TOOL_ID;
+    readonly TOOL_TITLE: string = EllipseSelectionToolConstants.TOOL_TITLE;
+    readonly INFO_BUBBLE: string = EllipseSelectionToolConstants.INFO_BUBBLE;
+    readonly ICON_NAME: string = EllipseSelectionToolConstants.ICON_NAME;
 }

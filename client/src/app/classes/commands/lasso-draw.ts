@@ -1,4 +1,4 @@
-import { LineDrawer } from '@app/classes/line-drawer';
+import { DashLineSettings, LineDrawer } from '@app/classes/line-drawer';
 import { LassoConfig } from '@app/classes/tool-config/lasso-config';
 import { Vec2 } from '@app/classes/vec2';
 import { ColorService } from '@app/services/color/color.service';
@@ -29,12 +29,10 @@ export class LassoDraw extends AbstractDraw {
 
     execute(context: CanvasRenderingContext2D): void {
         if (!this.config.isInSelection) {
-            LineDrawer.drawDashedLinePath(
-                context,
-                this.config.points,
-                new Vec2(0, 0),
-                this.config.intersecting ? ['red', 'white'] : ['black', 'white'],
-            );
+            LineDrawer.drawDashedLinePath(context, this.config.points, {
+                transform: new Vec2(0, 0),
+                styles: this.config.intersecting ? ['red', 'white'] : ['black', 'white'],
+            } as DashLineSettings);
             return;
         }
 

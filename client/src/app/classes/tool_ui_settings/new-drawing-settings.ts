@@ -2,8 +2,8 @@ import { ToolSettings } from './tool-settings';
 import { NewDrawingConstants } from './tools.constants';
 
 export class NewDrawing implements ToolSettings {
-    readonly toolId: string = NewDrawingConstants.TOOL_ID;
-    readonly toolTitle: string = NewDrawingConstants.TOOL_TITLE;
-    readonly infoBubble: string = NewDrawingConstants.INFO_BUBBLE;
-    readonly iconName: string = NewDrawingConstants.ICON_NAME;
+    readonly TOOL_ID: string = NewDrawingConstants.TOOL_ID;
+    readonly TOOL_TITLE: string = NewDrawingConstants.TOOL_TITLE;
+    readonly INFO_BUBBLE: string = NewDrawingConstants.INFO_BUBBLE;
+    readonly ICON_NAME: string = NewDrawingConstants.ICON_NAME;
 }

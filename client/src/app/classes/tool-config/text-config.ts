@@ -1,6 +1,11 @@
 import { Vec2 } from '@app/classes/vec2';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 
+export enum TextAlignment {
+    Left = 'left',
+    Center = 'center',
+    Right = 'right',
+}
 export class TextConfig {
     startCoords: Vec2;
     textData: string[];
@@ -8,11 +13,11 @@ export class TextConfig {
     textFont: string;
     italic: boolean;
     bold: boolean;
-    alignmentSetting: string;
+    alignmentSetting: TextAlignment;
     index: Vec2;
     hasInput: boolean;
     newAlignment: boolean;
-    lastAlignment: string;
+    lastAlignment: TextAlignment;
 
     constructor() {
         this.startCoords = new Vec2(0, 0);
@@ -21,11 +26,11 @@ export class TextConfig {
         this.textData = [''];
         this.bold = false;
         this.italic = false;
-        this.alignmentSetting = 'left';
+        this.alignmentSetting = TextAlignment.Left;
         this.index = new Vec2(0, 0);
         this.hasInput = false;
         this.newAlignment = false;
-        this.lastAlignment = 'left';
+        this.lastAlignment = TextAlignment.Left;
     }
 
     clone(): TextConfig {

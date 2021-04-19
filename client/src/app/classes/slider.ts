@@ -19,18 +19,18 @@ export interface SliderValues {
 }
 
 export class Slider {
-    private sliders: SliderBand[];
     // tslint:disable:no-magic-numbers
-    private readonly scaleWidth: number = 17;
-    private readonly fillWidth: number = 18;
-    private readonly knobWidth: number = 18;
-    private readonly MATH_CONVERSION_FACTOR: number = 1.5;
-    private readonly backgroundColor: string = '#' + new Color(238, 238, 238).hexString;
-    private readonly knobColor: string = '#' + new Color(236, 86, 129).hexString;
+    private static SCALE_WIDTH: number = 17;
+    private static FILL_WIDTH: number = 18;
+    private static KNOB_WIDTH: number = 18;
+    private static MATH_CONVERSION_FACTOR: number = 1.5;
+    private static BACKGROUND_COLOR: string = '#' + new Color(238, 238, 238).hexString;
+    private static KNOB_COLOR: string = '#' + new Color(236, 86, 129).hexString;
+    private sliders: SliderBand[];
     // tslint:enable:no-magic-numbers
 
-    private readonly startAngle: number = this.MATH_CONVERSION_FACTOR * Math.PI + ToolMath.ZERO_THRESHOLD;
-    private readonly endAngle: number = this.MATH_CONVERSION_FACTOR * Math.PI - ToolMath.ZERO_THRESHOLD;
+    private startAngle: number = Slider.MATH_CONVERSION_FACTOR * Math.PI + ToolMath.ZERO_THRESHOLD;
+    private endAngle: number = Slider.MATH_CONVERSION_FACTOR * Math.PI - ToolMath.ZERO_THRESHOLD;
 
     private continuousMode: boolean;
     private container: HTMLCanvasElement;
@@ -156,20 +156,20 @@ export class Slider {
         // tslint:disable-next-line:no-magic-numbers
         for (let i = 0; i <= 2 * Math.PI; i += Math.PI / 6) {
             this.context.beginPath();
-            this.context.strokeStyle = this.backgroundColor;
+            this.context.strokeStyle = Slider.BACKGROUND_COLOR;
             // tslint:disable-next-line:no-magic-numbers
             this.context.arc(this.position.x, this.position.y, slider.radius, i, i + Math.PI / 4, false);
-            this.context.lineWidth = this.scaleWidth;
+            this.context.lineWidth = Slider.SCALE_WIDTH;
             this.context.stroke();
         }
     }
 
     private drawCenterDot(): void {
         this.context.beginPath();
-        this.context.strokeStyle = this.backgroundColor;
-        this.context.arc(this.position.x, this.position.y, this.scaleWidth / 2, 0, Math.PI * 2, false);
+        this.context.strokeStyle = Slider.BACKGROUND_COLOR;
+        this.context.arc(this.position.x, this.position.y, Slider.SCALE_WIDTH / 2, 0, Math.PI * 2, false);
         this.context.lineWidth = 1;
-        this.context.fillStyle = this.backgroundColor;
+        this.context.fillStyle = Slider.BACKGROUND_COLOR;
         this.context.fill();
     }
 
@@ -177,35 +177,38 @@ export class Slider {
         this.context.beginPath();
         this.context.strokeStyle = slider.color;
         this.context.arc(this.position.x, this.position.y, slider.radius, slider.startAngle, slider.endAngle, false);
-        this.context.lineWidth = this.fillWidth;
+        this.context.lineWidth = Slider.FILL_WIDTH;
         this.context.stroke();
     }
 
     private drawArrow(slider: SliderBand): void {
         this.context.beginPath();
-        this.context.moveTo(this.position.x, this.position.y - slider.radius + this.scaleWidth / 2);
-        this.context.lineTo(this.position.x, this.position.y - this.scaleWidth - slider.radius + this.scaleWidth / 2);
-        // tslint:disable-next-line:no-magic-numbers
-        this.context.lineTo(this.position.x + this.scaleWidth / 4, this.position.y - this.scaleWidth / 2 - slider.radius + this.scaleWidth / 2);
-        this.context.fillStyle = this.backgroundColor;
+        this.context.moveTo(this.position.x, this.position.y - slider.radius + Slider.SCALE_WIDTH / 2);
+        this.context.lineTo(this.position.x, this.position.y - Slider.SCALE_WIDTH - slider.radius + Slider.SCALE_WIDTH / 2);
+        this.context.lineTo(
+            // tslint:disable-next-line:no-magic-numbers
+            this.position.x + Slider.SCALE_WIDTH / 4,
+            this.position.y - Slider.SCALE_WIDTH / 2 - slider.radius + Slider.SCALE_WIDTH / 2,
+        );
+        this.context.fillStyle = Slider.BACKGROUND_COLOR;
         this.context.fill();
     }
 
     private drawKnob(slider: SliderBand): void {
         // Knob
         this.context.beginPath();
-        this.context.strokeStyle = this.knobColor;
+        this.context.strokeStyle = Slider.KNOB_COLOR;
         this.context.arc(
             Math.cos(slider.endAngle) * slider.radius + this.position.x,
             Math.sin(slider.endAngle) * slider.radius + this.position.y,
-            this.knobWidth / 2,
+            Slider.KNOB_WIDTH / 2,
             0,
             Math.PI * 2,
             false,
         );
         this.context.lineWidth = 1;
 
-        this.context.fillStyle = this.knobColor;
+        this.context.fillStyle = Slider.KNOB_COLOR;
         this.context.fill();
     }
 
@@ -239,7 +242,7 @@ export class Slider {
         for (const key in this.sliders) {
             if (!this.sliders.hasOwnProperty(key)) continue;
             const obj = this.sliders[key];
-            if (Math.abs(hip - obj.radius) <= this.scaleWidth / 2) {
+            if (Math.abs(hip - obj.radius) <= Slider.SCALE_WIDTH / 2) {
                 selectedSlider = obj;
                 break;
             }
