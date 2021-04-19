@@ -17,7 +17,7 @@ import { SidebarEventService } from '@app/services/selection/sidebar-events.serv
 export class StampService extends Tool {
     readonly ALT_KEY: AltKey = new AltKey();
     config: StampConfig;
-    private isInSidebar: boolean;
+    isInSidebar: boolean;
 
     constructor(protected drawingService: DrawingService, protected colorService: ColorService, private selectionEvents: SidebarEventService) {
         super(drawingService, colorService);
@@ -60,7 +60,7 @@ export class StampService extends Tool {
     }
 
     onDocumentMouseDown(event: MouseEvent): void {
-        if (event.button === MouseButton.Left && !this.isInSidebar) {
+        if (event.button === MouseButton.Left && !this.isInSidebar && !this.colorService.isMenuOpen) {
             this.config.position = this.getPositionFromMouse(event);
             this.draw();
         }

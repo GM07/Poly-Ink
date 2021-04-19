@@ -3,6 +3,7 @@ import { Component, HostListener, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { CarrouselComponent } from '@app/components/carrousel/carrousel.component';
 import { DrawingService } from '@app/services/drawing/drawing.service';
+import { NewDrawingService } from '@app/services/popups/new-drawing';
 
 @Component({
     selector: 'app-home-page',
@@ -42,9 +43,26 @@ export class HomePageComponent {
         this.showNewDrawingWarning = false;
     }
 
-    createNewDrawingOption(): void {
-        this.showNewDrawingWarning = this.drawingService.getSavedDrawing() !== null;
-        if (!this.showNewDrawingWarning) this.createNewDrawing();
+    async createNewDrawingOption(): Promise<void> {
+        const canvas = document.createElement('canvas');
+        const canvasCTX = canvas.getContext('2d') as CanvasRenderingContext2D;
+        const savedImage: HTMLImageElement = new Image();
+        const savedDrawingStr: string | null = this.drawingService.getSavedDrawing();
+
+        let showWarning = savedDrawingStr !== null;
+        if (savedDrawingStr !== null) {
+            savedImage.src = savedDrawingStr;
+            await this.drawingService.loadImagePromise(savedImage);
+            canvas.width = savedImage.width;
+            canvas.height = savedImage.height;
+            canvasCTX.drawImage(savedImage, 0, 0);
+            showWarning = NewDrawingService.isNotEmpty(canvasCTX, canvas.width, canvas.height);
+        }
+
+        this.showNewDrawingWarning = showWarning;
+        if (!this.showNewDrawingWarning) {
+            this.createNewDrawing();
+        }
     }
 
     closeNewDrawingWarning(): void {

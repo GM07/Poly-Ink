@@ -150,14 +150,14 @@ export class DrawingService {
         command.execute(this.previewCtx);
     }
 
-    private isReloading(): boolean {
-        return localStorage.getItem('editor_reloading') !== null;
-    }
-
-    private async loadImagePromise(image: HTMLImageElement): Promise<Event> {
-        return new Promise((resolve, _) => {
+    async loadImagePromise(image: HTMLImageElement): Promise<Event> {
+        return new Promise((resolve) => {
             image.onload = resolve;
         });
+    }
+
+    private isReloading(): boolean {
+        return localStorage.getItem('editor_reloading') !== null;
     }
 
     private save(canvas: CanvasRenderingContext2D): void {

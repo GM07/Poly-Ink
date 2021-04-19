@@ -18,7 +18,12 @@
 
     <p class="textFormat"><b>Choix Étampe</b></p>
     <div class="select-container">
-        <mat-select [(value)]="stampService.config.stamp" [disableOptionCentering]="true" (valueChange)="toggleStamp($event)">
+        <mat-select
+            [(value)]="stampService.config.stamp"
+            [disableOptionCentering]="true"
+            (valueChange)="toggleStamp($event)"
+            (opened)="this.stampService.isInSidebar = true"
+        >
             <mat-option [value]="stampMode.Alexis">Alexis</mat-option>
             <mat-option [value]="stampMode.Felix">Felix</mat-option>
             <mat-option [value]="stampMode.Florence">Florence</mat-option>
