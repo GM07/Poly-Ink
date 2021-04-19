@@ -19,6 +19,7 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
     static readonly BLUE_START: number = 0.61;
     static readonly PURPLE_START: number = 0.85;
     static readonly RED_END: number = 1;
+    private static readonly LEFT_MOUSE_BUTTON: number = 1;
 
     context: CanvasRenderingContext2D;
 
@@ -26,14 +27,13 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
     selectedHeight: number;
 
     hueChangeFromHexSubscription: Subscription;
-    private readonly leftMouseButton: number = 1;
     @ViewChild('canvas') private canvas: ElementRef<HTMLCanvasElement>;
 
     constructor(private colorService: ColorService) {
         this.leftMouseDown = false;
         this.selectedHeight = 0;
 
-        this.hueChangeFromHexSubscription = this.colorService.hueChangeFromHex.subscribe((color) => {
+        this.hueChangeFromHexSubscription = this.colorService.hueChangeFromHex.subscribe((color: Color) => {
             this.setPositionToHue(color);
             this.draw();
         });
@@ -57,7 +57,7 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
 
     @HostListener('document:mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
-        if (this.leftMouseDown && event.buttons === this.leftMouseButton) {
+        if (this.leftMouseDown && event.buttons === ColorSliderComponent.LEFT_MOUSE_BUTTON) {
             const mouseCoord = this.getPositionFromMouse(event);
             this.changeSelectedHeight(mouseCoord.y);
         }

@@ -11,6 +11,8 @@ import { Subscription } from 'rxjs';
     styleUrls: ['./color-palette.component.scss'],
 })
 export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
+    private static readonly LEFT_MOUSE_BUTTON: number = 1;
+
     context: CanvasRenderingContext2D;
     leftMouseDown: boolean;
     selectedPosition: Vec2;
@@ -18,14 +20,13 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
     selectedColorChangeHexSubscription: Subscription;
     selectedHueChangeSliderSubscription: Subscription;
 
-    private readonly leftMouseButton: number = 1;
     @ViewChild('canvas') private canvas: ElementRef<HTMLCanvasElement>;
 
     constructor(public colorService: ColorService) {
         this.leftMouseDown = false;
         this.selectedPosition = new Vec2(0, 0);
 
-        this.selectedColorChangeHexSubscription = this.colorService.selectedColorChangeFromHex.subscribe((value) => {
+        this.selectedColorChangeHexSubscription = this.colorService.selectedColorChangeFromHex.subscribe((value: Color) => {
             this.setPositionToColor(value);
             this.draw();
         });
@@ -61,7 +62,7 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
 
     @HostListener('document:mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
-        if (this.leftMouseDown && event.buttons === this.leftMouseButton) {
+        if (this.leftMouseDown && event.buttons === ColorPaletteComponent.LEFT_MOUSE_BUTTON) {
             const mouseCoord = this.getPositionFromMouse(event);
             this.changeSelectedPosition(mouseCoord.x, mouseCoord.y);
         }
