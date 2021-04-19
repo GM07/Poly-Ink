@@ -16,10 +16,6 @@ export class PencilConfigComponent extends ToolConfig {
         super();
     }
 
-    colorSliderLabel(value: number): string {
-        return value + 'px';
-    }
-    
     widthChange(event: MatSliderChange): void {
         this.pencilService.config.lineWidth = event.value as number;
     }

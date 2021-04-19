@@ -1,14 +1,7 @@
 <div class="tab">
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
-        <mat-slider
-            min="{{ MIN }}"
-            max="{{ MAX }}"
-            (input)="widthChange($event)"
-            [(ngModel)]="pencilService.config.lineWidth"
-            [displayWith]="colorSliderLabel"
-        >
-        </mat-slider>
+        <mat-slider min="{{ MIN }}" max="{{ MAX }}" (input)="widthChange($event)" [(ngModel)]="pencilService.config.lineWidth"> </mat-slider>
         {{ pencilService.config.lineWidth }}px
     </div>
 </div>

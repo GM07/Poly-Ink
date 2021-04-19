@@ -18,10 +18,6 @@ export class GridConfigComponent {
 
     constructor(public gridService: GridService) {}
 
-    colorSliderLabel(value: number): string {
-        return value.toString();
-    }
-
     sizeChange(event: MatSliderChange): void {
         this.gridService.sizeValue = event.value as number;
     }

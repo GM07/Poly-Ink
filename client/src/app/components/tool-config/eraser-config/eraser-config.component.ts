@@ -17,10 +17,6 @@ export class EraserConfigComponent extends ToolConfig {
         super();
     }
 
-    colorSliderLabel(value: number): string {
-        return value + 'px';
-    }
-
     changeLineWidth(event: MatSliderChange): void {
         this.eraserService.config.lineWidth = event.value as number;
     }

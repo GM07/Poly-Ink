@@ -3,7 +3,7 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatSliderModule } from '@angular/material/slider';
+import { MatSliderChange, MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
@@ -53,5 +53,11 @@ describe('PencilConfigComponent', () => {
         await slider.setValue(setValue);
 
         expect(await slider.getValue()).toBe(setValue);
+    });
+
+    it('should change width on slider change', () => {
+        component.pencilService.config.lineWidth = 1;
+        component.widthChange({ value: 2 } as MatSliderChange);
+        expect(component.pencilService.config.lineWidth).toBe(2);
     });
 });

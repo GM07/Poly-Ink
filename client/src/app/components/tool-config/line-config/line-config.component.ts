@@ -16,10 +16,6 @@ export class LineConfigComponent extends ToolConfig {
         super();
     }
 
-    colorSliderLabel(value: number): string {
-        return value + 'px';
-    }
-
     toggleLineType(lineType: boolean): void {
         this.lineService.config.showJunctionPoints = lineType;
     }

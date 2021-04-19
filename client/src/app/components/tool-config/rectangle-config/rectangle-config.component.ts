@@ -22,10 +22,6 @@ export class RectangleConfigComponent extends ToolConfig {
         this.rectangleService.config.shapeMode = rectangleMode;
     }
 
-    colorSliderLabel(value: number): string {
-        return value + 'px';
-    }
-
     changeContourWidth(event: MatSliderChange): void {
         this.rectangleService.contourWidth = event.value as number;
     }

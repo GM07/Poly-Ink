@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonToggleGroupHarness } from '@angular/material/button-toggle/testing';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatSliderModule } from '@angular/material/slider';
+import { MatSliderChange, MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -109,4 +109,16 @@ describe('LineConfigComponent', () => {
             expect(component.toggleLineType).toHaveBeenCalled();
         });
     }));
+
+    it('should change thickness on slider change', () => {
+        component.lineService.config.thickness = 0;
+        component.changeThickness({ value: 2 } as MatSliderChange);
+        expect(component.lineService.config.thickness).toBe(2);
+    });
+
+    it('should change junctions diameter on slider change', () => {
+        component.lineService.config.diameterJunctions = 0;
+        component.changeJunctionsDiameter({ value: 2 } as MatSliderChange);
+        expect(component.lineService.config.diameterJunctions).toBe(2);
+    });
 });

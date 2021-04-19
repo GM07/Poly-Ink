@@ -1,15 +1,7 @@
 <div class="tab">
     <h5 class="textFormat">Taille police</h5>
     <div class="textFormatForSlider">
-        <mat-slider
-            #sizeSlider
-            id="slider"
-            min="{{ MIN }}"
-            max="{{ MAX }}"
-            (input)="changeFontSize($event.value)"
-            [(ngModel)]="currentFontSize"
-            [displayWith]="colorSliderLabel"
-        >
+        <mat-slider #sizeSlider id="slider" min="{{ MIN }}" max="{{ MAX }}" (input)="changeFontSize($event.value)" [(ngModel)]="currentFontSize">
         </mat-slider>
         {{ textService.config.fontSize }}px
     </div>
