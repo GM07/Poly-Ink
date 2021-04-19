@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonToggleGroupHarness } from '@angular/material/button-toggle/testing';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatSliderModule } from '@angular/material/slider';
+import { MatSliderChange, MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -53,11 +53,6 @@ describe('PolygoneConfigComponent', () => {
     it('should toggle the traceType', () => {
         component.toggleTraceType(ShapeMode.FilledWithContour);
         expect(polygoneService.config.shapeMode).toBe(ShapeMode.FilledWithContour);
-    });
-
-    it('should return the value and px string', () => {
-        const pixelValue = 10;
-        expect(component.colorSliderLabel(pixelValue)).toEqual('10px');
     });
 
     it('should load all slider harnesses', async () => {
@@ -153,5 +148,15 @@ describe('PolygoneConfigComponent', () => {
         buttonToggleLabelElements[2].click();
         fixture.detectChanges();
         expect(polygoneService.config.shapeMode).toEqual(ShapeMode.FilledWithContour);
+    });
+
+    it('should change number of edges on slider change', () => {
+        component.changeNumEdges({ value: ToolSettingsConst.MAX_NUM_EDGES - 1 } as MatSliderChange);
+        expect(component.polygonService.config.numEdges).toBe(ToolSettingsConst.MAX_NUM_EDGES - 1);
+    });
+
+    it('should change contour width on slider change', () => {
+        component.changeContourWidth({ value: 2 } as MatSliderChange);
+        expect(component.polygonService.config.lineWidth).toBe(2);
     });
 });

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatSliderChange } from '@angular/material/slider';
 import { ToolConfig } from '@app/classes/tool-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { EraserService } from '@app/services/tools/eraser.service';
@@ -16,7 +17,7 @@ export class EraserConfigComponent extends ToolConfig {
         super();
     }
 
-    colorSliderLabel(value: number): string {
-        return value + 'px';
+    changeLineWidth(event: MatSliderChange): void {
+        this.eraserService.config.lineWidth = event.value as number;
     }
 }

@@ -6,7 +6,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSelectHarness } from '@angular/material/select/testing';
-import { MatSliderModule } from '@angular/material/slider';
+import { MatSliderChange, MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Stamp } from '@app/classes/tool-config/stamp-config';
@@ -126,5 +126,10 @@ describe('StampConfigComponent', () => {
         const wheelEvent = { deltaY: 1, preventDefault: () => {} } as WheelEvent;
         component.wheelEvent(wheelEvent);
         expect(stampService.angleValue).toEqual(1);
+    });
+
+    it('should change config value on slider change', () => {
+        component.changeStampScale({ value: 2 } as MatSliderChange);
+        expect(component.stampService.config.scale).toBe(2);
     });
 });

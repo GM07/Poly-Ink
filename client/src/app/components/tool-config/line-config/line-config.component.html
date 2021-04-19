@@ -1,14 +1,7 @@
 <div class="tab">
     <h5 class="textFormat">Épaisseur</h5>
     <div class="textFormatForSlider">
-        <mat-slider
-            id="widthSlider"
-            min="{{ MIN }}"
-            max="{{ MAX }}"
-            [(ngModel)]="lineService.config.thickness"
-            thumbLabel
-            [displayWith]="colorSliderLabel"
-        >
+        <mat-slider id="widthSlider" min="{{ MIN }}" max="{{ MAX }}" (input)="changeThickness($event)" [(ngModel)]="lineService.config.thickness">
         </mat-slider>
         {{ lineService.config.thickness }}px
     </div>
@@ -31,15 +24,9 @@
     <mat-divider></mat-divider>
 
     <div *ngIf="lineService.config.showJunctionPoints">
-        <h5 class="textFormat">Diamètre points de jonction</h5>
+        <h5 class="textFormat longFormat">Diamètre points de jonction</h5>
         <div class="textFormatForSlider">
-            <mat-slider
-                thumbLabel
-                [(ngModel)]="lineService.config.diameterJunctions"
-                [displayWith]="colorSliderLabel"
-                min="{{ MIN }}"
-                max="{{ MAX }}"
-            >
+            <mat-slider (input)="changeJunctionsDiameter($event)" [(ngModel)]="lineService.config.diameterJunctions" min="{{ MIN }}" max="{{ MAX }}">
             </mat-slider>
             {{ lineService.config.diameterJunctions }}px
         </div>

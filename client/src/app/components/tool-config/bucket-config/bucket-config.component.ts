@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatSliderChange } from '@angular/material/slider';
 import { ToolConfig } from '@app/classes/tool-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { BucketService } from '@app/services/tools/bucket.service';
@@ -16,7 +17,7 @@ export class BucketConfigComponent extends ToolConfig {
         super();
     }
 
-    colorSliderLabel(value: number): string {
-        return value + '%';
+    changeTolerance(event: MatSliderChange): void {
+        this.bucketService.config.tolerance = event.value as number;
     }
 }

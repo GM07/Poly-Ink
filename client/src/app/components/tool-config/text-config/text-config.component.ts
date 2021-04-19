@@ -25,10 +25,6 @@ export class TextConfigComponent extends ToolConfig {
         this.currentFontSize = textService.config.fontSize;
     }
 
-    colorSliderLabel(value: number): string {
-        return value + 'px';
-    }
-
     toggleItalic(): void {
         this.textService.config.italic = !this.textService.config.italic;
         this.textService.drawPreview();

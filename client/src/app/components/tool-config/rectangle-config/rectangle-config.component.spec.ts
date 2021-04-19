@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonToggleGroupHarness } from '@angular/material/button-toggle/testing';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatSliderModule } from '@angular/material/slider';
+import { MatSliderChange, MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -106,5 +106,10 @@ describe('RectangleConfigComponent', () => {
         buttonToggleLabelElements[2].click();
         fixture.detectChanges();
         expect(rectangleService.config.shapeMode).toEqual(ShapeMode.FilledWithContour);
+    });
+
+    it('should change contour width on slider change', () => {
+        component.changeContourWidth({ value: 2 } as MatSliderChange);
+        expect(component.rectangleService.contourWidth).toBe(2);
     });
 });

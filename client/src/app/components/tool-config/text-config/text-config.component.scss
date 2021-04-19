@@ -9,107 +9,98 @@
 }
 
 .mat-button-toggle {
-    width: 200px;
-    height: 30px;
-    background-color: white;
-    color: black;
-    font-size: 15px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    background-color: #ffffff;
+    color: #000000;
+    border: none !important;
 }
 
 .mat-button-toggle-checked {
     background-color: #686370;
-    color: white;
-    font-size: 15px;
-}
-
-.alignmentButton {
-    width: 50px !important;
-    height: 50px;
-    margin-left: 5px;
+    color: #ffffff;
 }
 
 .mat-button-toggle-group {
+    border-radius: 0px;
     border: none;
-    border-radius: 4px;
-    padding: 0px !important;
-    width: 170px;
-}
-
-::ng-deep .mat-button-toggle-label-content {
-    line-height: 35px !important;
+    width: 100%;
 }
 
 .tab {
     width: 190px;
 }
 
-.textFormat {
-    padding-left: 15px;
-    padding-right: 15px;
-    width: 160px;
-    margin-bottom: 10px;
-}
-
 .textFormatForSlider {
-    padding-left: 15px;
+    padding-left: 8px;
     font-size: small;
 }
 
-.buttons {
-    width: 150px !important;
+.buttonArial {
+    font-family: Arial;
 }
 
 .buttonTimes {
-    width: 150px !important;
     font-family: 'Times New Roman', Times, serif;
 }
 
 .buttonMonospace {
-    width: 150px !important;
     font-family: monospace;
 }
 
 .buttonCreepster {
-    width: 150px !important;
     font-family: 'creepster';
 }
 
-.buttonPressStart {
-    width: 150px !important;
-    font-family: 'pressStart';
-    font-size: 10px;
-}
-
 .boldButton {
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 8px;
-    height: 30px;
-    width: 40px;
+    width: 70px;
     font-weight: bold;
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 .italicButton {
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 8px;
-    height: 30px;
-    width: 40px;
+    width: 70px;
     font-style: italic;
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-.textFormatButton {
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 8px;
-    height: 25px;
+.boldItalicButtons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.police {
-    margin-top: 10px;
-    height: 200px !important;
+.alignementGroup {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.alignementButton {
+    width: 50px;
+    padding: 5px 0px;
+}
+
+.policeGroup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.textFormat {
+    padding: 0px 15px;
+}
+
+.sliderLabelFormat {
+    margin-bottom: 0px;
+}
+
+.policeButton {
+    font-size: 15px;
+    line-height: 15px;
+    width: 150px;
+    margin: 5px 0px;
+}
+
+.buttonPressStart {
+    font-family: 'pressStart';
+    font-size: 12px;
 }

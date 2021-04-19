@@ -1,13 +1,7 @@
 .mat-button-toggle {
-    margin-left: 8px;
-    margin-right: 8px;
-    width: 200px;
-    height: 30px;
     background-color: #ffffff;
     color: #000000;
     font-size: 15px;
-    padding-top: 5px;
-    padding-bottom: 5px;
 }
 
 .mat-button-toggle-checked {
@@ -18,13 +12,10 @@
 
 .mat-button-toggle-group {
     border: none;
-    border-radius: 4px;
+    border-radius: 0px;
     padding: 0px !important;
     margin-bottom: 10px;
-}
-
-::ng-deep .mat-button-toggle-label-content {
-  line-height: 24px !important;
+    width: 100%;
 }
 
 .tab {
@@ -34,6 +25,7 @@
 .textFormat {
     padding-left: 15px;
     padding-right: 15px;
+    margin-bottom: 0px;
 }
 
 .textFormatForSlider {
@@ -46,8 +38,8 @@
 }
 
 .textFormatButton {
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 8px;
-    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px 0px;
 }

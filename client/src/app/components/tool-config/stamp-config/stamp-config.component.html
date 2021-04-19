@@ -1,14 +1,7 @@
 <div class="tab">
     <h5 class="textFormat">Mise à l'échelle</h5>
     <div class="textFormatForSlider">
-        <mat-slider
-            min="{{ MIN_SCALE }}"
-            max="{{ MAX_SCALE }}"
-            step="0.1"
-            [(ngModel)]="stampService.config.scale"
-            thumbLabel
-            [displayWith]="SliderLabel"
-        >
+        <mat-slider min="{{ MIN_SCALE }}" max="{{ MAX_SCALE }}" step="0.1" (input)="changeStampScale($event)" [(ngModel)]="stampService.config.scale">
         </mat-slider>
         {{ stampService.config.scale }}x
     </div>
@@ -23,7 +16,7 @@
 
     <mat-divider></mat-divider>
 
-    <p class="textFormat">Choix Étampe</p>
+    <p class="textFormat"><b>Choix Étampe</b></p>
     <div class="select-container">
         <mat-select
             [(value)]="stampService.config.stamp"

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatSliderChange } from '@angular/material/slider';
 import { ToolConfig } from '@app/classes/tool-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { PencilService } from '@app/services/tools/pencil.service';
@@ -15,7 +16,7 @@ export class PencilConfigComponent extends ToolConfig {
         super();
     }
 
-    colorSliderLabel(value: number): string {
-        return value + 'px';
+    widthChange(event: MatSliderChange): void {
+        this.pencilService.config.lineWidth = event.value as number;
     }
 }

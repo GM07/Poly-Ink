@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonToggleGroupHarness } from '@angular/material/button-toggle/testing';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatSliderModule } from '@angular/material/slider';
+import { MatSliderChange, MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -107,5 +107,11 @@ describe('EllipseConfigComponent', () => {
     it('traceType should be Plein & Contour when Plein & Contour button is clicked ', async () => {
         buttonToggleLabelElements[2].click(); // Element 2 is FilleWithContour button
         expect(ellipseService.config.shapeMode).toEqual(ShapeMode.FilledWithContour);
+    });
+
+    it('should change the contour in ellipse on mat slider change event', () => {
+        const matSliderChangeEvent = { value: 2 } as MatSliderChange;
+        component.changeContourWidth(matSliderChangeEvent);
+        expect(ellipseService.contourWidth).toEqual(2);
     });
 });

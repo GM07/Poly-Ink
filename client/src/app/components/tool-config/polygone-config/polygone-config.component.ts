@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatSliderChange } from '@angular/material/slider';
 import { ToolConfig } from '@app/classes/tool-config';
 import { ShapeMode } from '@app/classes/tool-config/shape-config';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
@@ -25,7 +26,11 @@ export class PolygoneConfigComponent extends ToolConfig {
         this.polygonService.config.shapeMode = polygonMode;
     }
 
-    colorSliderLabel(value: number): string {
-        return value + 'px';
+    changeNumEdges(event: MatSliderChange): void {
+        this.polygonService.numEdges = event.value as number;
+    }
+
+    changeContourWidth(event: MatSliderChange): void {
+        this.polygonService.contourWidth = event.value as number;
     }
 }

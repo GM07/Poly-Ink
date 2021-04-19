@@ -3,9 +3,10 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatSliderModule } from '@angular/material/slider';
+import { MatSliderChange, MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ToolMath } from '@app/constants/math';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { GridService } from '@app/services/drawing/grid.service';
 import { GridConfigComponent } from './grid-config.component';
@@ -83,5 +84,16 @@ describe('GridConfigComponent', () => {
         await slider[1].setValue(setValue);
 
         expect(await slider[1].getValue()).toBe(setValue);
+    });
+
+    it('should should change size on slider changer', () => {
+        component.sizeChange({ value: ToolSettingsConst.GRID_MAX_SIZE } as MatSliderChange);
+        expect(component.gridService.sizeValue).toBe(ToolSettingsConst.GRID_MAX_SIZE);
+    });
+
+    it('should should change opacity on slider changer', () => {
+        component.opacityChange({ value: ToolSettingsConst.GRID_MAX_OPACITY * ToolMath.PERCENTAGE } as MatSliderChange);
+        // tslint:disable-next-line:no-string-literal
+        expect(component.gridService['opacity']).toBe(ToolSettingsConst.GRID_MAX_OPACITY);
     });
 });

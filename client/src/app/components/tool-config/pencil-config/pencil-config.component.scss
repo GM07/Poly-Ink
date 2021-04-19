@@ -5,29 +5,10 @@
 .textFormat {
     padding-left: 15px;
     padding-right: 15px;
+    margin-bottom: 0%;
 }
 
 .textFormatForSlider {
     padding-left: 8px;
     font-size: small;
-}
-
-::ng-deep .mat-form-field {
-    width: 100px;
-}
-
-::ng-deep .mat-slider-wrapper {
-    padding-left: 0px;
-    width: 100px;
-    .mat-slider-thumb-container {
-        .mat-slider-thumb-label {
-            width: 30px;
-            height: 30px;
-            top: -41px;
-            right: -15px;
-            .mat-slider-thumb-label-text {
-                font-size: x-small;
-            }
-        }
-    }
 }

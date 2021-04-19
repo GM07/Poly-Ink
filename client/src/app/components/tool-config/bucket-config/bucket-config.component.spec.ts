@@ -3,7 +3,7 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatSliderModule } from '@angular/material/slider';
+import { MatSliderChange, MatSliderModule } from '@angular/material/slider';
 import { MatSliderHarness } from '@angular/material/slider/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
@@ -58,5 +58,11 @@ describe('BucketConfigComponent', () => {
         await slider[0].setValue(setValue);
 
         expect(await slider[0].getValue()).toBe(setValue);
+    });
+
+    it('should change tolerance on slider change', () => {
+        component.bucketService.config.tolerance = 1;
+        component.changeTolerance({ value: 2 } as MatSliderChange);
+        expect(component.bucketService.config.tolerance).toBe(2);
     });
 });
