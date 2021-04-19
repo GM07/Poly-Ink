@@ -61,7 +61,7 @@ export class LassoService extends AbstractSelectionService {
         if (this.configLasso.previewSelectionCtx === null) {
             this.lineDrawer.followCursor(event);
             this.configLasso.intersecting = this.isIntersecting(this.lineDrawer.pointToAdd);
-            this.lineDrawer.followCursor(event);
+            this.lineDrawer.renderLinePreview();
             this.createSelection(event);
         } else {
             this.endSelection();
@@ -76,7 +76,7 @@ export class LassoService extends AbstractSelectionService {
         if (this.configLasso.previewSelectionCtx === null) {
             this.lineDrawer.followCursor(event);
             this.configLasso.intersecting = this.isIntersecting(this.lineDrawer.pointToAdd);
-            this.lineDrawer.followCursor(event);
+            this.lineDrawer.renderLinePreview();
         } else {
             super.onMouseMove(event);
         }
@@ -105,6 +105,8 @@ export class LassoService extends AbstractSelectionService {
             if (shortcut !== undefined && shortcut.isDown !== true) {
                 shortcut.isDown = true;
                 this.lineDrawer.handleKeys(shortcut);
+                this.configLasso.intersecting = this.isIntersecting(this.lineDrawer.pointToAdd);
+                this.lineDrawer.renderLinePreview();
             }
         } else {
             super.onKeyDown(event);
@@ -117,6 +119,8 @@ export class LassoService extends AbstractSelectionService {
             if (shortcut !== undefined) {
                 shortcut.isDown = false;
                 this.lineDrawer.handleKeys(shortcut);
+                this.configLasso.intersecting = this.isIntersecting(this.lineDrawer.pointToAdd);
+                this.lineDrawer.renderLinePreview();
             }
         } else {
             super.onKeyUp(event);
@@ -217,8 +221,10 @@ export class LassoService extends AbstractSelectionService {
         if (isAPoint) return;
 
         this.lineDrawer.addNewPoint(event);
-        this.lineDrawer.followCursor(event);
         this.addNewLine();
+        this.lineDrawer.followCursor(event);
+        this.configLasso.intersecting = this.isIntersecting(this.lineDrawer.pointToAdd);
+        this.lineDrawer.renderLinePreview();
     }
 
     private addNewLine(): void {
