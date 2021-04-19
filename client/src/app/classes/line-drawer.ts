@@ -20,6 +20,7 @@ export class LineDrawer {
     readonly ESCAPE: ShortcutKey = new ShortcutKey('escape');
     readonly BACKSPACE: ShortcutKey = new ShortcutKey('backspace');
     readonly SHORTCUT_LIST: ShortcutKey[] = [this.ESCAPE, this.BACKSPACE, this.shift];
+    readonly INITIAL_VEC_VALUE: number = -1;
     drawPreview: Subject<void>;
     removeLine: Subject<void>;
     removeLines: Subject<void>;
@@ -86,8 +87,8 @@ export class LineDrawer {
         this.shift.isDown = false;
         this.ESCAPE.isDown = false;
         this.BACKSPACE.isDown = false;
-        this.pointToAdd = new Vec2(-1, -1);
-        this.mousePosition = new Vec2(-1, -1);
+        this.pointToAdd = new Vec2(this.INITIAL_VEC_VALUE, this.INITIAL_VEC_VALUE);
+        this.mousePosition = new Vec2(this.INITIAL_VEC_VALUE, this.INITIAL_VEC_VALUE);
         this.config.points = config.points;
     }
 
