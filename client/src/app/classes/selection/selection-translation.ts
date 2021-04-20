@@ -153,7 +153,7 @@ export class SelectionTranslation {
     private VerticalTranslationModifier(): number {
         if (this.magnetismService.isEnabled)
             return (
-                this.magnetismService.getYKeyAdjustment(this.config.endCoords.y, this.config.height) +
+                this.magnetismService.getYKeyAdjustment(this.config.endCoords.y, Math.abs(this.config.height)) +
                 (+this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown) * this.magnetismService.gridService.size
             );
         else return (+this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown) * this.TRANSLATION_PIXELS;
