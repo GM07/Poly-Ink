@@ -242,8 +242,11 @@ describe('LineService', () => {
 
     it('should call drawPreview', () => {
         spyOn(service, 'drawPreview');
+        service.config.points = [];
         colorServiceSpy.changedPrimary.next();
-
+        expect(service.drawPreview).not.toHaveBeenCalled();
+        service.config.points = pointsTest2;
+        colorServiceSpy.changedPrimary.next();
         expect(service.drawPreview).toHaveBeenCalled();
     });
 });
