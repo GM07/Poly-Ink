@@ -127,28 +127,28 @@ export class ColorSliderComponent implements AfterViewInit, OnDestroy {
 
         // Since there are 6 different sector on the color wheel we need many if/else statement to determine the appropriate one
         /* tslint:disable:cyclomatic-complexity */
-        if (color.r === Color.MAX && color.g < Color.MAX && color.b === Color.MIN) {
-            this.selectedHeight = (((ColorSliderComponent.YELLOW_START - ColorSliderComponent.RED_START) * color.g) / Color.MAX) * height;
-        } else if (color.r > Color.MIN && color.g === Color.MAX && color.b === Color.MIN) {
+        if (color.R === Color.MAX && color.G < Color.MAX && color.B === Color.MIN) {
+            this.selectedHeight = (((ColorSliderComponent.YELLOW_START - ColorSliderComponent.RED_START) * color.G) / Color.MAX) * height;
+        } else if (color.R > Color.MIN && color.G === Color.MAX && color.B === Color.MIN) {
             this.selectedHeight =
                 (ColorSliderComponent.YELLOW_START +
-                    (ColorSliderComponent.GREEN_START - ColorSliderComponent.YELLOW_START) * (1 - color.r / Color.MAX)) *
+                    (ColorSliderComponent.GREEN_START - ColorSliderComponent.YELLOW_START) * (1 - color.R / Color.MAX)) *
                 height;
-        } else if (color.r === Color.MIN && color.g === Color.MAX && color.b < Color.MAX) {
+        } else if (color.R === Color.MIN && color.G === Color.MAX && color.B < Color.MAX) {
             this.selectedHeight =
-                (ColorSliderComponent.GREEN_START + ((ColorSliderComponent.CYAN_START - ColorSliderComponent.GREEN_START) * color.b) / Color.MAX) *
+                (ColorSliderComponent.GREEN_START + ((ColorSliderComponent.CYAN_START - ColorSliderComponent.GREEN_START) * color.B) / Color.MAX) *
                 height;
-        } else if (color.r === Color.MIN && color.g > Color.MIN && color.b === Color.MAX) {
+        } else if (color.R === Color.MIN && color.G > Color.MIN && color.B === Color.MAX) {
             this.selectedHeight =
-                (ColorSliderComponent.CYAN_START + (ColorSliderComponent.BLUE_START - ColorSliderComponent.CYAN_START) * (1 - color.g / Color.MAX)) *
+                (ColorSliderComponent.CYAN_START + (ColorSliderComponent.BLUE_START - ColorSliderComponent.CYAN_START) * (1 - color.G / Color.MAX)) *
                 height;
-        } else if (color.r < Color.MAX && color.g === Color.MIN && color.b === Color.MAX) {
+        } else if (color.R < Color.MAX && color.G === Color.MIN && color.B === Color.MAX) {
             this.selectedHeight =
-                (ColorSliderComponent.BLUE_START + ((ColorSliderComponent.PURPLE_START - ColorSliderComponent.BLUE_START) * color.r) / Color.MAX) *
+                (ColorSliderComponent.BLUE_START + ((ColorSliderComponent.PURPLE_START - ColorSliderComponent.BLUE_START) * color.R) / Color.MAX) *
                 height;
-        } else if (color.r === Color.MAX && color.g === Color.MIN && color.b > Color.MIN) {
+        } else if (color.R === Color.MAX && color.G === Color.MIN && color.B > Color.MIN) {
             this.selectedHeight =
-                (ColorSliderComponent.PURPLE_START + (ColorSliderComponent.RED_END - ColorSliderComponent.PURPLE_START) * (1 - color.b / Color.MAX)) *
+                (ColorSliderComponent.PURPLE_START + (ColorSliderComponent.RED_END - ColorSliderComponent.PURPLE_START) * (1 - color.B / Color.MAX)) *
                 height;
         } else {
             this.selectedHeight = 0;

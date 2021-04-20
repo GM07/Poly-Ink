@@ -113,7 +113,7 @@ export class ExportDrawingComponent {
                         this.imgurURL = res.data.link;
                         this.imgurLoading = false;
                     })
-                    .catch((error: Error) => {
+                    .catch(() => {
                         this.hasImgurServerError = true;
                         this.imgurLoading = false;
                     });

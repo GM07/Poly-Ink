@@ -21,9 +21,9 @@ export class ColorPickerComponent {
 
     hexRGBChange(values: [string, string]): void {
         const component: number = parseInt(values[1], 16);
-        const r: number = this.colorService.selectedColor.r;
-        const g: number = this.colorService.selectedColor.g;
-        const b: number = this.colorService.selectedColor.b;
+        const r: number = this.colorService.selectedColor.R;
+        const g: number = this.colorService.selectedColor.G;
+        const b: number = this.colorService.selectedColor.B;
         let color: Color;
         switch (values[0]) {
             case 'R':

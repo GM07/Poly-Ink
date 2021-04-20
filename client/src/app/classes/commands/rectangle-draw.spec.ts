@@ -56,9 +56,9 @@ describe('RectangleDraw', () => {
 
         // tslint:disable-next-line:no-magic-numbers
         imageData = ctxStub.getImageData(5, 5, 1, 1);
-        expect(imageData.data[0]).toEqual(Colors.RED.r); // R
-        expect(imageData.data[1]).toEqual(Colors.RED.g); // G
-        expect(imageData.data[2]).toEqual(Colors.RED.b); // B
+        expect(imageData.data[0]).toEqual(Colors.RED.R); // R
+        expect(imageData.data[1]).toEqual(Colors.RED.G); // G
+        expect(imageData.data[2]).toEqual(Colors.RED.B); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
@@ -79,9 +79,9 @@ describe('RectangleDraw', () => {
 
         // Border is present
         let imageData: ImageData = ctxStub.getImageData(0, 0, 1, 1);
-        expect(imageData.data[0]).toEqual(Colors.BLUE.r); // R
-        expect(imageData.data[1]).toEqual(Colors.BLUE.g); // G
-        expect(imageData.data[2]).toEqual(Colors.BLUE.b); // B
+        expect(imageData.data[0]).toEqual(Colors.BLUE.R); // R
+        expect(imageData.data[1]).toEqual(Colors.BLUE.G); // G
+        expect(imageData.data[2]).toEqual(Colors.BLUE.B); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
 
         // Inside is untouched
@@ -96,9 +96,9 @@ describe('RectangleDraw', () => {
 
         // tslint:disable-next-line:no-magic-numbers
         const imageData: ImageData = ctxStub.getImageData(0, 0, 1, 1);
-        expect(imageData.data[0]).toEqual(Colors.RED.r); // R
-        expect(imageData.data[1]).toEqual(Colors.RED.g); // G
-        expect(imageData.data[2]).toEqual(Colors.RED.b); // B
+        expect(imageData.data[0]).toEqual(Colors.RED.R); // R
+        expect(imageData.data[1]).toEqual(Colors.RED.G); // G
+        expect(imageData.data[2]).toEqual(Colors.RED.B); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
@@ -109,17 +109,17 @@ describe('RectangleDraw', () => {
 
         // Border is present
         let imageData: ImageData = ctxStub.getImageData(0, 0, 1, 1);
-        expect(imageData.data[0]).toEqual(Colors.BLUE.r); // R
-        expect(imageData.data[1]).toEqual(Colors.BLUE.g); // G
-        expect(imageData.data[2]).toEqual(Colors.BLUE.b); // B
+        expect(imageData.data[0]).toEqual(Colors.BLUE.R); // R
+        expect(imageData.data[1]).toEqual(Colors.BLUE.G); // G
+        expect(imageData.data[2]).toEqual(Colors.BLUE.B); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
 
         // Inside is present
         // tslint:disable-next-line:no-magic-numbers
         imageData = ctxStub.getImageData(2, 2, 1, 1);
-        expect(imageData.data[0]).toEqual(Colors.RED.r); // R
-        expect(imageData.data[1]).toEqual(Colors.RED.g); // G
-        expect(imageData.data[2]).toEqual(Colors.RED.b); // B
+        expect(imageData.data[0]).toEqual(Colors.RED.R); // R
+        expect(imageData.data[1]).toEqual(Colors.RED.G); // G
+        expect(imageData.data[2]).toEqual(Colors.RED.B); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 });

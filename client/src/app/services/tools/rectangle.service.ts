@@ -9,8 +9,6 @@ import { AbstractShape } from './abstract-shape.service';
     providedIn: 'root',
 })
 export class RectangleService extends AbstractShape {
-    readonly toolID: string = RectangleToolConstants.TOOL_ID;
-
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(RectangleToolConstants.SHORTCUT_KEY);

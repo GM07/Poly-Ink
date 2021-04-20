@@ -18,6 +18,7 @@ export class ClipboardService {
     private readonly PASTE: ShortcutKey = new ShortcutKey('v', { ctrlKey: true } as SpecialKeys);
     private readonly CUT: ShortcutKey = new ShortcutKey('x', { ctrlKey: true } as SpecialKeys);
     private readonly DELETE: ShortcutKey = new ShortcutKey('delete');
+
     private lastSelectionTool: AbstractSelectionService;
     private wantsToPaste: boolean;
     private isInitialised: boolean;

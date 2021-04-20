@@ -20,7 +20,7 @@ export class SpotlightFilter extends Filter {
         }
     }
 
-    getPositionOfPixel(width: number, index: number): Vec2 {
+    private getPositionOfPixel(width: number, index: number): Vec2 {
         const pixelIndex: number = Math.floor(index / Filter.PIXEL_FORMAT_LENGTH);
 
         const xPos = pixelIndex % width;

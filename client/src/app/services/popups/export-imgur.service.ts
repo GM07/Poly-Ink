@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ImgurDrawing } from '@app/classes/imgur-drawing';
+import { ImgurResponse } from '@app/classes/imgur-res';
 import { ImgurConstants } from '@app/constants/imgur';
 import { Observable } from 'rxjs';
 @Injectable({
@@ -11,7 +12,7 @@ export class ExportImgurService {
 
     constructor(private http: HttpClient) {}
 
-    exportImage(image: string, format: string, filename: string): Observable<{}> {
+    exportImage(image: string, format: string, filename: string): Observable<ImgurResponse> {
         const imgurDrawing: ImgurDrawing = new ImgurDrawing();
         imgurDrawing.image = image.split('base64,')[1];
         imgurDrawing.type = format;
@@ -21,6 +22,6 @@ export class ExportImgurService {
                 Authorization: `Client-ID ${ImgurConstants.CIENT_ID}`,
             }),
         };
-        return this.http.post<ImgurDrawing>(`${ExportImgurService.BASE_URL}/image`, imgurDrawing, httpOptions);
+        return this.http.post<ImgurResponse>(`${ExportImgurService.BASE_URL}/image`, imgurDrawing, httpOptions);
     }
 }

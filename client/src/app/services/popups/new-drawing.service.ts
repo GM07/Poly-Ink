@@ -19,8 +19,8 @@ export class NewDrawingService implements Popup {
     }
 
     static isNotEmpty(baseCtx: CanvasRenderingContext2D, width: number, height: number): boolean {
-        const whiteColor = 4294967295; // White color constant
-        const pixelBuffer = new Uint32Array(baseCtx.getImageData(0, 0, width, height).data.buffer);
+        const whiteColor = 255; // White color constant
+        const pixelBuffer = baseCtx.getImageData(0, 0, width, height).data;
         return pixelBuffer.some((color) => color !== whiteColor) && pixelBuffer.some((color) => color !== 0);
     }
 

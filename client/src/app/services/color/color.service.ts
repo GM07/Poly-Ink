@@ -16,15 +16,15 @@ export class ColorService {
     selectedColor: Color;
     selectedColorChangeFromHex: Subject<Color>;
 
-    selectedAlpha: number = 1;
+    selectedAlpha: number;
 
     selectedHue: Color;
     hueChangeFromHex: Subject<Color>;
     hueChangeFromSlider: Subject<Color>;
     changedPrimary: Subject<boolean>;
 
-    primaryColorAlpha: number = 1;
-    secondaryColorAlpha: number = 1;
+    primaryColorAlpha: number;
+    secondaryColorAlpha: number;
 
     private primary: Color;
     private secondary: Color;
@@ -40,6 +40,8 @@ export class ColorService {
         this.selectedColor = Colors.BLACK;
         this.selectedColorChangeFromHex = new Subject<Color>();
         this.selectedAlpha = 1;
+        this.primaryColorAlpha = 1;
+        this.secondaryColorAlpha = 1;
         this.selectedHue = Colors.BLACK;
         this.hueChangeFromHex = new Subject<Color>();
         this.hueChangeFromSlider = new Subject<Color>();
@@ -92,7 +94,7 @@ export class ColorService {
     }
 
     rgba(color: Color, alpha: number): string {
-        return `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})`;
+        return `rgba(${color.R}, ${color.G}, ${color.B}, ${alpha})`;
     }
 
     addToPreviousColors(color: Color): void {

@@ -85,14 +85,14 @@ describe('BucketDraw', () => {
         bucketDraw.execute(ctxStub);
 
         const pixelLeftOfLine = ctxStub.getImageData(0, 0, 1, 1);
-        expect(pixelLeftOfLine.data[R]).toEqual(Colors.RED.r);
-        expect(pixelLeftOfLine.data[G]).toEqual(Colors.RED.g);
-        expect(pixelLeftOfLine.data[B]).toEqual(Colors.RED.b);
+        expect(pixelLeftOfLine.data[R]).toEqual(Colors.RED.R);
+        expect(pixelLeftOfLine.data[G]).toEqual(Colors.RED.G);
+        expect(pixelLeftOfLine.data[B]).toEqual(Colors.RED.B);
 
         const pixelRightOfLine = ctxStub.getImageData(ctxStub.canvas.width - 1, 0, 1, 1);
-        expect(pixelRightOfLine.data[R]).toEqual(Colors.BLACK.r);
-        expect(pixelRightOfLine.data[G]).toEqual(Colors.BLACK.g);
-        expect(pixelRightOfLine.data[B]).toEqual(Colors.BLACK.b);
+        expect(pixelRightOfLine.data[R]).toEqual(Colors.BLACK.R);
+        expect(pixelRightOfLine.data[G]).toEqual(Colors.BLACK.G);
+        expect(pixelRightOfLine.data[B]).toEqual(Colors.BLACK.B);
     });
 
     it('should flood fill appropriately right of line', () => {
@@ -103,14 +103,14 @@ describe('BucketDraw', () => {
         bucketDraw.execute(ctxStub);
 
         const pixelLeftOfLine = ctxStub.getImageData(0, 0, 1, 1);
-        expect(pixelLeftOfLine.data[R]).toEqual(Colors.BLACK.r);
-        expect(pixelLeftOfLine.data[G]).toEqual(Colors.BLACK.g);
-        expect(pixelLeftOfLine.data[B]).toEqual(Colors.BLACK.b);
+        expect(pixelLeftOfLine.data[R]).toEqual(Colors.BLACK.R);
+        expect(pixelLeftOfLine.data[G]).toEqual(Colors.BLACK.G);
+        expect(pixelLeftOfLine.data[B]).toEqual(Colors.BLACK.B);
 
         const pixelRightOfLine = ctxStub.getImageData(ctxStub.canvas.width - 1, 0, 1, 1);
-        expect(pixelRightOfLine.data[R]).toEqual(Colors.RED.r);
-        expect(pixelRightOfLine.data[G]).toEqual(Colors.RED.g);
-        expect(pixelRightOfLine.data[B]).toEqual(Colors.RED.b);
+        expect(pixelRightOfLine.data[R]).toEqual(Colors.RED.R);
+        expect(pixelRightOfLine.data[G]).toEqual(Colors.RED.G);
+        expect(pixelRightOfLine.data[B]).toEqual(Colors.RED.B);
     });
 
     it('should pixel fill approprietly', () => {
@@ -120,14 +120,14 @@ describe('BucketDraw', () => {
         bucketDraw.execute(ctxStub);
 
         const pixelLeftOfLine = ctxStub.getImageData(0, 0, 1, 1);
-        expect(pixelLeftOfLine.data[R]).toEqual(Colors.RED.r);
-        expect(pixelLeftOfLine.data[G]).toEqual(Colors.RED.g);
-        expect(pixelLeftOfLine.data[B]).toEqual(Colors.RED.b);
+        expect(pixelLeftOfLine.data[R]).toEqual(Colors.RED.R);
+        expect(pixelLeftOfLine.data[G]).toEqual(Colors.RED.G);
+        expect(pixelLeftOfLine.data[B]).toEqual(Colors.RED.B);
 
         const pixelRightOfLine = ctxStub.getImageData(0, 0, 1, 1);
-        expect(pixelRightOfLine.data[R]).toEqual(Colors.RED.r);
-        expect(pixelRightOfLine.data[G]).toEqual(Colors.RED.g);
-        expect(pixelRightOfLine.data[B]).toEqual(Colors.RED.b);
+        expect(pixelRightOfLine.data[R]).toEqual(Colors.RED.R);
+        expect(pixelRightOfLine.data[G]).toEqual(Colors.RED.G);
+        expect(pixelRightOfLine.data[B]).toEqual(Colors.RED.B);
     });
 
     it('should add adjacent only if inside canvas', () => {
@@ -180,9 +180,9 @@ describe('BucketDraw', () => {
         bucketDraw['setPixel'](0);
         const newPixels = bucketDraw['pixels'].data.subarray(0, 4);
 
-        expect(newPixels[R]).toEqual(Colors.RED.r);
-        expect(newPixels[G]).toEqual(Colors.RED.g);
-        expect(newPixels[B]).toEqual(Colors.RED.b);
+        expect(newPixels[R]).toEqual(Colors.RED.R);
+        expect(newPixels[G]).toEqual(Colors.RED.G);
+        expect(newPixels[B]).toEqual(Colors.RED.B);
     });
 
     it('should set pixel properly if alpha is not 1', () => {
@@ -192,9 +192,9 @@ describe('BucketDraw', () => {
         bucketDraw['setPixel'](0);
         const newPixels = bucketDraw['pixels'].data.subarray(0, 4);
 
-        expect(newPixels[R]).not.toEqual(Colors.RED.r);
-        expect(newPixels[G]).not.toEqual(Colors.RED.g);
-        expect(newPixels[B]).not.toEqual(Colors.RED.b);
+        expect(newPixels[R]).not.toEqual(Colors.RED.R);
+        expect(newPixels[G]).not.toEqual(Colors.RED.G);
+        expect(newPixels[B]).not.toEqual(Colors.RED.B);
     });
 
     it('should duplicate original pixel to prevent it from changing', () => {

@@ -189,9 +189,9 @@ describe('ColorSliderComponent', () => {
     it('should get proper color', () => {
         const place = -1;
         const red: Color = component['getColor'](ColorSliderComponent.RED_START);
-        expect(red.r).toBeCloseTo(Colors.RED.r, place);
-        expect(red.g).toBeCloseTo(Colors.RED.g, place);
-        expect(red.b).toBeCloseTo(Colors.RED.b, place);
+        expect(red.R).toBeCloseTo(Colors.RED.R, place);
+        expect(red.G).toBeCloseTo(Colors.RED.G, place);
+        expect(red.B).toBeCloseTo(Colors.RED.B, place);
     });
 
     it('should not getContext if there', () => {

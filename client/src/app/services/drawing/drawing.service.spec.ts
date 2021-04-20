@@ -80,7 +80,7 @@ describe('DrawingService', () => {
     it('passdrawPreview should execute command on preview', () => {
         spyOn(command, 'execute').and.stub();
         spyOn(service, 'clearCanvas').and.stub();
-        service.passDrawPreview(command);
+        service.drawStampPreview(command);
         expect(command.execute).toHaveBeenCalledWith(service.previewCtx);
     });
 

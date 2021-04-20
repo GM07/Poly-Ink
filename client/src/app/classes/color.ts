@@ -2,14 +2,14 @@ export class Color {
     static readonly MAX: number = 255;
     static readonly MIN: number = 0;
 
-    readonly r: number;
-    readonly g: number;
-    readonly b: number;
+    readonly R: number;
+    readonly G: number;
+    readonly B: number;
 
     constructor(r: number, g: number, b: number) {
-        this.r = r;
-        this.g = g;
-        this.b = b;
+        this.R = r;
+        this.G = g;
+        this.B = b;
     }
 
     static hueToRgb(hue: number): Color {
@@ -74,18 +74,18 @@ export class Color {
     }
 
     get rgbString(): string {
-        return `rgb(${this.r}, ${this.g}, ${this.b})`;
+        return `rgb(${this.R}, ${this.G}, ${this.B})`;
     }
 
     get hexString(): string {
-        return `${this.r.toString(16).padStart(2, '0')}${this.g.toString(16).padStart(2, '0')}${this.b.toString(16).padStart(2, '0')}`.toUpperCase();
+        return `${this.R.toString(16).padStart(2, '0')}${this.G.toString(16).padStart(2, '0')}${this.B.toString(16).padStart(2, '0')}`.toUpperCase();
     }
 
     get hue(): number {
         const degreeInCircle = 360;
-        const R: number = this.r / Color.MAX;
-        const G: number = this.g / Color.MAX;
-        const B: number = this.b / Color.MAX;
+        const R: number = this.R / Color.MAX;
+        const G: number = this.G / Color.MAX;
+        const B: number = this.B / Color.MAX;
 
         const cmin = Math.min(R, G, B);
         const cmax = Math.max(R, G, B);
@@ -112,13 +112,13 @@ export class Color {
     }
 
     toRgbaString(alpha: number): string {
-        return `rgba(${this.r}, ${this.g}, ${this.b}, ${alpha})`;
+        return `rgba(${this.R}, ${this.G}, ${this.B}, ${alpha})`;
     }
     equals(color: Color): boolean {
-        return this.r === color.r && this.g === color.g && this.b === color.b;
+        return this.R === color.R && this.G === color.G && this.B === color.B;
     }
 
     clone(): Color {
-        return new Color(this.r, this.g, this.b);
+        return new Color(this.R, this.G, this.B);
     }
 }

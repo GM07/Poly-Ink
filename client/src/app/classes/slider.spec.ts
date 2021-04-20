@@ -148,52 +148,52 @@ describe('Slider', () => {
     it('handleMouseDown should add a mouseMove event listener is on slider', () => {
         spyOn<any>(slider, 'getSelectedSlider').and.returnValue(slider['sliders'][1]);
         spyOn(slider['theBody'], 'addEventListener');
-        slider._handleMouseDown({ preventDefault: () => {} } as MouseEvent);
+        slider.handleMouseDown({ preventDefault: () => {} } as MouseEvent);
         expect(slider['theBody'].addEventListener).toHaveBeenCalled();
     });
 
     it('handleMouseDown should add a mouseMove event listener is on slider', () => {
         spyOn<any>(slider, 'getSelectedSlider').and.returnValue(null);
         spyOn(slider['theBody'], 'addEventListener');
-        slider._handleMouseDown({ preventDefault: () => {} } as MouseEvent);
+        slider.handleMouseDown({ preventDefault: () => {} } as MouseEvent);
         expect(slider['theBody'].addEventListener).not.toHaveBeenCalled();
     });
 
     it('handleMouseUp shoud remove mouseMove event listener', () => {
         spyOn(slider['theBody'], 'removeEventListener');
-        slider._handleMouseUp({ preventDefault: () => {} } as MouseEvent);
+        slider.handleMouseUp({ preventDefault: () => {} } as MouseEvent);
         expect(slider['theBody'].removeEventListener).toHaveBeenCalled();
     });
 
     it('handleClick should set rotate the slider', () => {
         spyOn<any>(slider, 'getSelectedSlider').and.returnValue(slider['sliders'][1]);
-        spyOn(slider, '_rotation');
+        spyOn(slider, 'rotation');
         slider['currentSlider'] = slider['sliders'][1];
-        slider._handleClick({} as MouseEvent);
-        expect(slider._rotation).toHaveBeenCalled();
+        slider.handleClick({} as MouseEvent);
+        expect(slider.rotation).toHaveBeenCalled();
     });
 
     it('handleClick should set rotate the slider', () => {
         spyOn<any>(slider, 'getSelectedSlider').and.returnValue(null);
-        spyOn(slider, '_rotation');
+        spyOn(slider, 'rotation');
         slider['currentSlider'] = slider['sliders'][1];
-        slider._handleClick({} as MouseEvent);
-        expect(slider._rotation).not.toHaveBeenCalled();
+        slider.handleClick({} as MouseEvent);
+        expect(slider.rotation).not.toHaveBeenCalled();
     });
 
     it('handleClick should set rotate the slider', () => {
         spyOn<any>(slider, 'getSelectedSlider').and.returnValue(slider['sliders'][2]);
-        spyOn(slider, '_rotation');
+        spyOn(slider, 'rotation');
         slider['currentSlider'] = slider['sliders'][1];
-        slider._handleClick({} as MouseEvent);
-        expect(slider._rotation).not.toHaveBeenCalled();
+        slider.handleClick({} as MouseEvent);
+        expect(slider.rotation).not.toHaveBeenCalled();
     });
 
     it('rotation should rotate the slider', () => {
         spyOn<any>(slider, 'calculateUserCursor');
         spyOn<any>(slider, 'calculateAngles');
         spyOn<any>(slider, 'drawAll');
-        slider._rotation({} as MouseEvent);
+        slider.rotation({} as MouseEvent);
         expect(slider['calculateUserCursor']).toHaveBeenCalled();
         expect(slider['calculateAngles']).toHaveBeenCalled();
         expect(slider['drawAll']).toHaveBeenCalled();
@@ -204,7 +204,7 @@ describe('Slider', () => {
         spyOn<any>(slider, 'calculateUserCursor');
         spyOn<any>(slider, 'calculateAngles');
         spyOn<any>(slider, 'drawAll');
-        slider._rotation({} as MouseEvent);
+        slider.rotation({} as MouseEvent);
         expect(slider['calculateUserCursor']).toHaveBeenCalled();
         expect(slider['calculateAngles']).toHaveBeenCalled();
         expect(slider['drawAll']).toHaveBeenCalled();

@@ -19,11 +19,13 @@ export abstract class AbstractSelectionService extends Tool {
     protected static readonly LINE_DASH: number = 8;
     protected static readonly BORDER_WIDTH: number = 2;
 
-    readonly UPDATE_POINTS: Subject<boolean> = new Subject<boolean>();
     selectionResize: SelectionResize;
     mouseUpCoord: Vec2;
     config: SelectionConfig;
+    readonly UPDATE_POINTS: Subject<boolean> = new Subject<boolean>();
+
     protected selectionTranslation: SelectionTranslation;
+
     private readonly SELECT_ALL: ShortcutKey = new ShortcutKey('a', { ctrlKey: true } as SpecialKeys);
     private readonly CANCEL_SELECTION: ShortcutKey = new ShortcutKey('escape');
 

@@ -55,9 +55,9 @@ describe('PolygonDraw', () => {
 
         let imageData: ImageData = ctxStub.getImageData(middle.x, 0, 1, 1);
 
-        expect(imageData.data[0]).toEqual(Colors.BLUE.r); // R
-        expect(imageData.data[1]).toEqual(Colors.BLUE.g); // G
-        expect(imageData.data[2]).toEqual(Colors.BLUE.b); // B
+        expect(imageData.data[0]).toEqual(Colors.BLUE.R); // R
+        expect(imageData.data[1]).toEqual(Colors.BLUE.G); // G
+        expect(imageData.data[2]).toEqual(Colors.BLUE.B); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
 
         imageData = ctxStub.getImageData(middle.x, middle.y, 1, 1);
@@ -72,9 +72,9 @@ describe('PolygonDraw', () => {
         const middleX: number = (polygonDraw['config'].endCoords.x - polygonDraw['config'].startCoords.x) / 2;
 
         const imageData: ImageData = ctxStub.getImageData(middleX, 0, 1, 1);
-        expect(imageData.data[0]).toEqual(Colors.RED.r); // R
-        expect(imageData.data[1]).toEqual(Colors.RED.g); // G
-        expect(imageData.data[2]).toEqual(Colors.RED.b); // B
+        expect(imageData.data[0]).toEqual(Colors.RED.R); // R
+        expect(imageData.data[1]).toEqual(Colors.RED.G); // G
+        expect(imageData.data[2]).toEqual(Colors.RED.B); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
@@ -87,18 +87,18 @@ describe('PolygonDraw', () => {
         const middle: Vec2 = polygonDraw['config'].endCoords.substract(polygonDraw['config'].startCoords).scalar(1 / 2);
 
         let imageData: ImageData = ctxStub.getImageData(middle.x, 0, 1, 1);
-        expect(imageData.data[0]).toEqual(Colors.BLUE.r); // R
-        expect(imageData.data[1]).toEqual(Colors.BLUE.g); // G
-        expect(imageData.data[2]).toEqual(Colors.BLUE.b); // B
+        expect(imageData.data[0]).toEqual(Colors.BLUE.R); // R
+        expect(imageData.data[1]).toEqual(Colors.BLUE.G); // G
+        expect(imageData.data[2]).toEqual(Colors.BLUE.B); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
 
         imageData = ctxStub.getImageData(0, middle.y, 1, 1);
         expect(imageData.data[ALPHA]).toEqual(0); // A
 
         imageData = ctxStub.getImageData(middle.x, middle.y, 1, 1);
-        expect(imageData.data[0]).toEqual(Colors.RED.r); // R
-        expect(imageData.data[1]).toEqual(Colors.RED.g); // G
-        expect(imageData.data[2]).toEqual(Colors.RED.b); // B
+        expect(imageData.data[0]).toEqual(Colors.RED.R); // R
+        expect(imageData.data[1]).toEqual(Colors.RED.G); // G
+        expect(imageData.data[2]).toEqual(Colors.RED.B); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 
@@ -115,21 +115,21 @@ describe('PolygonDraw', () => {
         const middle: Vec2 = polygonDraw['config'].endCoords.substract(polygonDraw['config'].startCoords).scalar(1 / 2);
 
         let imageData: ImageData = ctxStub.getImageData(middle.x, 2, 1, 1);
-        expect(imageData.data[0]).toEqual(Colors.BLUE.r); // R
-        expect(imageData.data[1]).toEqual(Colors.BLUE.g); // G
-        expect(imageData.data[2]).toEqual(Colors.BLUE.b); // B
+        expect(imageData.data[0]).toEqual(Colors.BLUE.R); // R
+        expect(imageData.data[1]).toEqual(Colors.BLUE.G); // G
+        expect(imageData.data[2]).toEqual(Colors.BLUE.B); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
 
         imageData = ctxStub.getImageData(2, middle.y, 1, 1);
-        expect(imageData.data[0]).toEqual(Colors.BLUE.r); // R
-        expect(imageData.data[1]).toEqual(Colors.BLUE.g); // G
-        expect(imageData.data[2]).toEqual(Colors.BLUE.b); // B
+        expect(imageData.data[0]).toEqual(Colors.BLUE.R); // R
+        expect(imageData.data[1]).toEqual(Colors.BLUE.G); // G
+        expect(imageData.data[2]).toEqual(Colors.BLUE.B); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
 
         imageData = ctxStub.getImageData(middle.x, middle.y, 1, 1);
-        expect(imageData.data[0]).toEqual(Colors.RED.r); // R
-        expect(imageData.data[1]).toEqual(Colors.RED.g); // G
-        expect(imageData.data[2]).toEqual(Colors.RED.b); // B
+        expect(imageData.data[0]).toEqual(Colors.RED.R); // R
+        expect(imageData.data[1]).toEqual(Colors.RED.G); // G
+        expect(imageData.data[2]).toEqual(Colors.RED.B); // B
         expect(imageData.data[ALPHA]).not.toEqual(0); // A
     });
 

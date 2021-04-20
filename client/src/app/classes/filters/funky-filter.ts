@@ -1,5 +1,6 @@
 import { Filter } from './filter';
 
+// Mathematical formula
 /* tslint:disable:no-magic-numbers */
 export class FunkyFilter extends Filter {
     apply(image: ImageData): void {

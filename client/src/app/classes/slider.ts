@@ -60,10 +60,10 @@ export class Slider {
 
         this.mousePos = new Vec2(0, 0);
 
-        this.rotationEventListener = this._rotation.bind(this);
-        this.container.addEventListener('mousedown', this._handleMouseDown.bind(this), false);
-        this.theBody.addEventListener('mouseup', this._handleMouseUp.bind(this), false);
-        this.container.addEventListener('click', this._handleClick.bind(this), false);
+        this.rotationEventListener = this.rotation.bind(this);
+        this.container.addEventListener('mousedown', this.handleMouseDown.bind(this), false);
+        this.theBody.addEventListener('mouseup', this.handleMouseUp.bind(this), false);
+        this.container.addEventListener('click', this.handleClick.bind(this), false);
     }
 
     private static radToDeg(ang: number): number {
@@ -90,8 +90,8 @@ export class Slider {
             step: options.step,
         };
 
-        const obj = this.sliders[options.id];
-        this.setSliderValue(obj.id, options.min);
+        const sliderBand = this.sliders[options.id];
+        this.setSliderValue(sliderBand.id, options.min);
     }
 
     setSliderValue(id: number, value: number): void {
@@ -113,26 +113,26 @@ export class Slider {
         this.drawAll();
     }
 
-    _handleMouseDown(event: MouseEvent): void {
+    handleMouseDown(event: MouseEvent): void {
         event.preventDefault();
         this.selectedSlider = this.getSelectedSlider(event) as SliderBand;
         if (!this.selectedSlider) return;
         this.theBody.addEventListener('mousemove', this.rotationEventListener, false);
     }
 
-    _handleMouseUp(event: MouseEvent): void {
+    handleMouseUp(event: MouseEvent): void {
         event.preventDefault();
         this.theBody.removeEventListener('mousemove', this.rotationEventListener, false);
         this.currentSlider = this.selectedSlider;
     }
 
-    _handleClick(event: MouseEvent): void {
+    handleClick(event: MouseEvent): void {
         this.selectedSlider = this.getSelectedSlider(event) as SliderBand;
         if (this.currentSlider && this.getSelectedSlider(event) && this.currentSlider.id !== (this.getSelectedSlider(event) as SliderBand).id) return;
-        if (this.selectedSlider) this._rotation(event);
+        if (this.selectedSlider) this.rotation(event);
     }
 
-    _rotation(event: MouseEvent): void {
+    rotation(event: MouseEvent): void {
         this.calculateUserCursor(event);
         if (this.continuousMode) this.selectedSlider = this.getSelectedSlider(event) as SliderBand;
         this.calculateAngles(this.mousePos);
@@ -143,12 +143,16 @@ export class Slider {
         this.context.clearRect(0, 0, this.container.width, this.container.height);
         for (const key in this.sliders) {
             if (!this.sliders.hasOwnProperty(key)) continue;
-            const obj = this.sliders[key];
-            this.drawScale(obj);
-            this.drawData(obj);
-            this.drawArrow(obj);
-            this.drawKnob(obj);
-            obj.onValueChangeCallback({ rad: obj.endAngle, deg: obj.angDegrees, value: obj.normalizedValue } as SliderValues);
+            const sliderBand = this.sliders[key];
+            this.drawScale(sliderBand);
+            this.drawData(sliderBand);
+            this.drawArrow(sliderBand);
+            this.drawKnob(sliderBand);
+            sliderBand.onValueChangeCallback({
+                rad: sliderBand.endAngle,
+                deg: sliderBand.angDegrees,
+                value: sliderBand.normalizedValue,
+            } as SliderValues);
         }
         this.drawCenterDot();
     }
@@ -245,9 +249,9 @@ export class Slider {
 
         for (const key in this.sliders) {
             if (!this.sliders.hasOwnProperty(key)) continue;
-            const obj = this.sliders[key];
-            if (Math.abs(hip - obj.radius) <= Slider.SCALE_WIDTH / 2) {
-                selectedSlider = obj;
+            const sliderBand = this.sliders[key];
+            if (Math.abs(hip - sliderBand.radius) <= Slider.SCALE_WIDTH / 2) {
+                selectedSlider = sliderBand;
                 break;
             }
         }

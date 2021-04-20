@@ -8,7 +8,7 @@ export class ResizeDraw extends AbstractDraw {
     constructor(config: ResizeConfig, private drawingService: DrawingService) {
         super({ primaryRgba: '', secondaryRgba: '' } as ColorService);
 
-        this.config = config;
+        this.config = config.clone();
     }
 
     execute(): void {

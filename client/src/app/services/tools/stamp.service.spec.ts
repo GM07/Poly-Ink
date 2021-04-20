@@ -132,10 +132,10 @@ describe('StampService', () => {
         expect(service['drawingService'].draw).toHaveBeenCalled();
     });
 
-    it('drawPreview should call passDrawPreview from drawingService', () => {
+    it('drawPreview should call drawStampPreview from drawingService', () => {
         spyOn(service.config, 'clone');
-        spyOn(service['drawingService'], 'passDrawPreview');
+        spyOn(service['drawingService'], 'drawStampPreview');
         service.drawPreview();
-        expect(service['drawingService'].passDrawPreview).toHaveBeenCalled();
+        expect(service['drawingService'].drawStampPreview).toHaveBeenCalled();
     });
 });

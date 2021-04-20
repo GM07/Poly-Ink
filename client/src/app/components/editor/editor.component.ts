@@ -58,8 +58,8 @@ export class EditorComponent {
         this.shortcutHandler.onDocumentMouseDown(event);
     }
 
-    @HostListener('window:beforeunload', ['$event'])
-    onPageReload(event: BeforeUnloadEvent): void {
+    @HostListener('window:beforeunload')
+    onPageReload(): void {
         localStorage.setItem('editor_reloading', 'true');
     }
 }
