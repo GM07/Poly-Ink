@@ -37,7 +37,7 @@ export class TextConfig {
         const config = new TextConfig();
         config.startCoords = this.startCoords.clone();
         config.textFont = this.textFont;
-        config.textData = this.textData;
+        config.textData = [...this.textData];
         config.fontSize = this.fontSize;
         config.bold = this.bold;
         config.italic = this.italic;

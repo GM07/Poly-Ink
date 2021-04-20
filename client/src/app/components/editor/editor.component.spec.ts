@@ -120,7 +120,7 @@ describe('EditorComponent', () => {
 
     it('should register the beginning of editor reloading in local storage', () => {
         spyOn(localStorage, 'setItem');
-        component.onPageReload({} as BeforeUnloadEvent);
+        component.onPageReload();
         expect(localStorage.setItem).toHaveBeenCalledWith('editor_reloading', 'true');
     });
 

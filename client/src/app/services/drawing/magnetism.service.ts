@@ -77,29 +77,11 @@ export class MagnetismService {
     }
 
     getGridPosition(currentPos: Vec2): Vec2 {
-        if (this.isEnabled) currentPos = this.getAjustement(this.getClosestIntersection(currentPos));
+        if (this.isEnabled) currentPos = this.getAdjustment(this.getClosestIntersection(currentPos));
         return currentPos;
     }
 
-    getClosestIntersection(position: Vec2): Vec2 {
-        const xMod = position.x % this.gridService.size;
-        const yMod = position.y % this.gridService.size;
-        const xPos = xMod > this.gridService.size / 2 ? position.x + (this.gridService.size - xMod) : position.x - xMod;
-        const yPos = yMod > this.gridService.size / 2 ? position.y + (this.gridService.size - yMod) : position.y - yMod;
-        return new Vec2(xPos, yPos);
-    }
-
-    getAjustement(currentPos: Vec2): Vec2 {
-        const newEndCoords = currentPos.add(this.distance);
-        const newCoordsMod = new Vec2(newEndCoords.x % this.gridService.size, newEndCoords.y % this.gridService.size);
-        currentPos.x +=
-            newCoordsMod.x > this.gridService.size / 2 ? newCoordsMod.x : newCoordsMod.x === 0 ? 0 : -(this.gridService.size - newCoordsMod.x);
-        currentPos.y +=
-            newCoordsMod.y > this.gridService.size / 2 ? newCoordsMod.y : newCoordsMod.y === 0 ? 0 : -(this.gridService.size - newCoordsMod.y);
-        return currentPos;
-    }
-
-    getXKeyAjustement(endCoords: number, size: number): number {
+    getXKeyAdjustment(endCoords: number, size: number): number {
         switch (this.selection) {
             case MagnetismSelection.TopLeft:
             case MagnetismSelection.Left:
@@ -114,7 +96,7 @@ export class MagnetismService {
         }
     }
 
-    getYKeyAjustement(endCoords: number, size: number): number {
+    getYKeyAdjustment(endCoords: number, size: number): number {
         switch (this.selection) {
             case MagnetismSelection.TopLeft:
             case MagnetismSelection.Top:
@@ -127,5 +109,24 @@ export class MagnetismService {
             default:
                 return this.gridService.size - ((endCoords + size) % this.gridService.size) - this.gridService.size;
         }
+    }
+
+    private getClosestIntersection(position: Vec2): Vec2 {
+        const xMod = position.x % this.gridService.size;
+        const yMod = position.y % this.gridService.size;
+        const xPos = xMod > this.gridService.size / 2 ? position.x + (this.gridService.size - xMod) : position.x - xMod;
+        const yPos = yMod > this.gridService.size / 2 ? position.y + (this.gridService.size - yMod) : position.y - yMod;
+        return new Vec2(xPos, yPos);
+    }
+
+    private getAdjustment(currentPos: Vec2): Vec2 {
+        const newEndCoords = currentPos.add(this.distance);
+        const newCoordsMod = new Vec2(newEndCoords.x % this.gridService.size, newEndCoords.y % this.gridService.size);
+        const offsetX = newCoordsMod.x === 0 ? 0 : -(this.gridService.size - newCoordsMod.x);
+        const offsetY = newCoordsMod.y === 0 ? 0 : -(this.gridService.size - newCoordsMod.y);
+        currentPos.x += newCoordsMod.x > this.gridService.size / 2 ? newCoordsMod.x : offsetX;
+        currentPos.y += newCoordsMod.y > this.gridService.size / 2 ? newCoordsMod.y : offsetY;
+
+        return currentPos;
     }
 }

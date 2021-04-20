@@ -14,6 +14,7 @@ export class GridService {
     canvas: HTMLCanvasElement;
     gridVisibility: boolean;
     size: number;
+
     private gridColor: string;
     private opacity: number;
     private readonly TOGGLE_GRID_SHORTCUT: ShortcutKey;
@@ -78,7 +79,7 @@ export class GridService {
         this.ctx.setLineDash([]);
     }
 
-    drawDotted(begin: Vec2, end: Vec2): void {
+    private drawDotted(begin: Vec2, end: Vec2): void {
         this.ctx.strokeStyle = this.gridColor;
         this.drawLine(new Vec2(begin.x, begin.y), new Vec2(end.x, end.y));
         this.ctx.lineDashOffset = 2;
@@ -87,7 +88,7 @@ export class GridService {
         this.ctx.lineDashOffset = 0;
     }
 
-    drawLine(begin: Vec2, end: Vec2): void {
+    private drawLine(begin: Vec2, end: Vec2): void {
         this.ctx.beginPath();
         this.ctx.moveTo(begin.x, begin.y);
         this.ctx.lineTo(end.x, end.y);

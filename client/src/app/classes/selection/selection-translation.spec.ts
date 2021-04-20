@@ -215,15 +215,15 @@ describe('SelectionTranslation', () => {
 
     it('horizontal translation modifier should use magnetism if enabled', () => {
         selectionTranslation['magnetismService'].isEnabled = true;
-        spyOn(selectionTranslation['magnetismService'], 'getXKeyAjustement');
+        spyOn(selectionTranslation['magnetismService'], 'getXKeyAdjustment');
         selectionTranslation['HorizontalTranslationModifier']();
-        expect(selectionTranslation['magnetismService'].getXKeyAjustement).toHaveBeenCalled();
+        expect(selectionTranslation['magnetismService'].getXKeyAdjustment).toHaveBeenCalled();
     });
 
     it('vertical translation modifier should use magnetism if enabled', () => {
         selectionTranslation['magnetismService'].isEnabled = true;
-        spyOn(selectionTranslation['magnetismService'], 'getYKeyAjustement');
+        spyOn(selectionTranslation['magnetismService'], 'getYKeyAdjustment');
         selectionTranslation['VerticalTranslationModifier']();
-        expect(selectionTranslation['magnetismService'].getYKeyAjustement).toHaveBeenCalled();
+        expect(selectionTranslation['magnetismService'].getYKeyAdjustment).toHaveBeenCalled();
     });
 });

@@ -25,7 +25,7 @@ export class DrawingService {
     static saveCanvas(memoryCanvas: HTMLCanvasElement, canvas: HTMLCanvasElement): void {
         const memoryCtx = memoryCanvas.getContext('2d') as CanvasRenderingContext2D;
         memoryCanvas.width = canvas.width;
-        memoryCanvas.height = canvas.height; // Saving canvas
+        memoryCanvas.height = canvas.height;
         memoryCtx.drawImage(canvas, 0, 0);
     }
 
@@ -145,7 +145,7 @@ export class DrawingService {
         command.execute(this.previewCtx);
     }
 
-    passDrawPreview(command: AbstractDraw): void {
+    drawStampPreview(command: AbstractDraw): void {
         this.clearCanvas(this.previewCtx);
         command.execute(this.previewCtx);
     }

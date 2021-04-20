@@ -254,10 +254,10 @@ export class LassoService extends AbstractSelectionService {
         const start: Vec2 = new Vec2(this.drawingService.canvas.width + 1, this.drawingService.canvas.height + 1);
         const end: Vec2 = new Vec2(0 - 1, 0 - 1);
         this.configLasso.points.forEach((point) => {
-            start.x = point.x < start.x ? point.x : start.x;
-            start.y = point.y < start.y ? point.y : start.y;
-            end.x = point.x > end.x ? point.x : end.x;
-            end.y = point.y > end.y ? point.y : end.y;
+            start.x = Math.min(point.x, start.x);
+            start.y = Math.min(point.y, start.y);
+            end.x = Math.max(point.x, end.x);
+            end.y = Math.max(point.y, end.y);
         });
 
         return [start, end];

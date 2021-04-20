@@ -140,7 +140,7 @@ export class SelectionTranslation {
     private HorizontalTranslationModifier(): number {
         if (this.magnetismService.isEnabled) {
             return (
-                this.magnetismService.getXKeyAjustement(this.config.endCoords.x, this.config.width) +
+                this.magnetismService.getXKeyAdjustment(this.config.endCoords.x, this.config.width) +
                 (+this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown) * this.magnetismService.gridService.size
             );
         } else return (+this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown) * this.TRANSLATION_PIXELS;
@@ -149,7 +149,7 @@ export class SelectionTranslation {
     private VerticalTranslationModifier(): number {
         if (this.magnetismService.isEnabled)
             return (
-                this.magnetismService.getYKeyAjustement(this.config.endCoords.y, this.config.height) +
+                this.magnetismService.getYKeyAdjustment(this.config.endCoords.y, this.config.height) +
                 (+this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown) * this.magnetismService.gridService.size
             );
         else return (+this.DOWN_ARROW.isDown - +this.UP_ARROW.isDown) * this.TRANSLATION_PIXELS;

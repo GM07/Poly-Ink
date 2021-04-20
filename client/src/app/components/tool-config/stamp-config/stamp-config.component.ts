@@ -21,8 +21,8 @@ export class StampConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     readonly MIN_ROTATION: number = ToolSettingsConst.STAMP_MIN_ANGLE;
     readonly MAX_ROTATION: number = (ToolSettingsConst.STAMP_MAX_ANGLE / Math.PI) * ToolMath.DEGREE_CONVERSION_FACTOR;
     readonly ROTATION: number = ToolSettingsConst.STAMP_ANGLE_STEP;
-    readonly sliderSize: number = 50;
-    readonly sliderRadius: number = 25;
+    readonly SLIDER_SIZE: number = 50;
+    readonly SLIDER_RADIUS: number = 25;
 
     stampMode: typeof Stamp = Stamp;
     slider: Slider;
@@ -38,10 +38,10 @@ export class StampConfigComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngAfterViewInit(): void {
         const saveAngle = this.stampService.angleValue;
-        this.slider = new Slider({ canvasId: 'angleCanvas', continuousMode: false, position: new Vec2(this.sliderSize, this.sliderSize) });
+        this.slider = new Slider({ canvasId: 'angleCanvas', continuousMode: false, position: new Vec2(this.SLIDER_SIZE, this.SLIDER_SIZE) });
         this.slider.addSlider({
             id: 1,
-            radius: this.sliderRadius,
+            radius: this.SLIDER_RADIUS,
             min: 0,
             max: ToolMath.DEGREE_CONVERSION_FACTOR * 2,
             step: this.ROTATION,
@@ -76,7 +76,7 @@ export class StampConfigComponent implements OnInit, OnDestroy, AfterViewInit {
 
     toggleStamp(stamp: Stamp): void {
         this.stampService.config.stamp = stamp;
-        this.stampService.config.stampImg.src = StampConfig.stampList[stamp];
+        this.stampService.config.stampImg.src = StampConfig.STAMP_LIST[stamp];
     }
 
     changeStampScale(event: MatSliderChange): void {

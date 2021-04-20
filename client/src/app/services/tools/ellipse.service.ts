@@ -10,8 +10,6 @@ import { AbstractShape } from './abstract-shape.service';
     providedIn: 'root',
 })
 export class EllipseService extends AbstractShape {
-    readonly toolID: string = EllipseToolConstants.TOOL_ID;
-
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
         this.shortcutKey = new ShortcutKey(EllipseToolConstants.SHORTCUT_KEY);

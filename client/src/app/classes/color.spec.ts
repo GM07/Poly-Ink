@@ -8,9 +8,9 @@ describe('Color', () => {
         const g = 200;
         const b = 125;
         const color: Color = new Color(r, g, b);
-        expect(color.r).toEqual(r);
-        expect(color.g).toEqual(g);
-        expect(color.b).toEqual(b);
+        expect(color.R).toEqual(r);
+        expect(color.G).toEqual(g);
+        expect(color.B).toEqual(b);
     });
 
     it('should construct proper rgba string', () => {
@@ -104,5 +104,12 @@ describe('Color', () => {
         expect(Color.hexToRgb(HexColors.BLACK)).toEqual(Colors.BLACK);
         expect(Color.hexToRgb(HexColors.WHITE)).toEqual(Colors.WHITE);
         expect(Color.hexToRgb(HexColors.GRAY)).toEqual(Colors.GRAY);
+    });
+
+    it('should get all rgb values', () => {
+        const color = new Color(0, 1, 2);
+        expect(color.R).toBe(0);
+        expect(color.G).toBe(1);
+        expect(color.B).toBe(2);
     });
 });

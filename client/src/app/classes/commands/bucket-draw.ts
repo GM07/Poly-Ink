@@ -98,9 +98,9 @@ export class BucketDraw extends AbstractDraw {
 
     private setPixel(pos: number): void {
         const previousPixel = this.pixels.data.subarray(pos, pos + this.DATA_PER_PIXEL);
-        const R = this.primary.r * this.primaryAlpha + (1 - this.primaryAlpha) * previousPixel[this.R];
-        const G = this.primary.g * this.primaryAlpha + (1 - this.primaryAlpha) * previousPixel[this.G];
-        const B = this.primary.b * this.primaryAlpha + (1 - this.primaryAlpha) * previousPixel[this.B];
+        const R = this.primary.R * this.primaryAlpha + (1 - this.primaryAlpha) * previousPixel[this.R];
+        const G = this.primary.G * this.primaryAlpha + (1 - this.primaryAlpha) * previousPixel[this.G];
+        const B = this.primary.B * this.primaryAlpha + (1 - this.primaryAlpha) * previousPixel[this.B];
 
         this.pixels.data.set([R, G, B, this.COLOR_COMPONENT_MAX], pos);
     }

@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { Vec2 } from '@app/classes/vec2';
-
 import { MagnetismSelection, MagnetismService } from './magnetism.service';
 
 // tslint:disable:no-magic-numbers
+// tslint:disable:no-string-literal
+// tslint:disable:no-any
 
 describe('MagnetismService', () => {
     let service: MagnetismService;
@@ -112,77 +113,77 @@ describe('MagnetismService', () => {
 
     it('get grid position should return position of grid', () => {
         service.isEnabled = true;
-        spyOn(service, 'getClosestIntersection');
-        spyOn(service, 'getAjustement').and.returnValue(new Vec2(10, 10));
+        spyOn<any>(service, 'getClosestIntersection');
+        spyOn<any>(service, 'getAdjustment').and.returnValue(new Vec2(10, 10));
         expect(service.getGridPosition(new Vec2(0, 0))).toEqual(new Vec2(10, 10));
     });
 
     it('get closest intersection should return the closest intersection', () => {
         service.gridService.size = 25;
-        expect(service.getClosestIntersection(new Vec2(22, 22))).toEqual(new Vec2(25, 25));
+        expect(service['getClosestIntersection'](new Vec2(22, 22))).toEqual(new Vec2(25, 25));
     });
 
     it('get closest intersection should return the closest intersection', () => {
         service.gridService.size = 25;
-        expect(service.getClosestIntersection(new Vec2(12, 12))).toEqual(new Vec2(0, 0));
+        expect(service['getClosestIntersection'](new Vec2(12, 12))).toEqual(new Vec2(0, 0));
     });
 
     it('get closest intersection should return 0 if already on it', () => {
         service.gridService.size = 25;
-        expect(service.getClosestIntersection(new Vec2(0, 0))).toEqual(new Vec2(0, 0));
+        expect(service['getClosestIntersection'](new Vec2(0, 0))).toEqual(new Vec2(0, 0));
     });
 
     it('getAjustement should return an adjusted vector', () => {
         service.distance = new Vec2(0, 0);
         service.gridService.size = 25;
-        expect(service.getAjustement(new Vec2(22, 22))).toEqual(new Vec2(44, 44));
+        expect(service['getAdjustment'](new Vec2(22, 22))).toEqual(new Vec2(44, 44));
     });
 
     it('getAjustement should return an adjusted vector', () => {
         service.distance = new Vec2(0, 0);
         service.gridService.size = 24;
-        expect(service.getAjustement(new Vec2(12, 12))).toEqual(new Vec2(0, 0));
+        expect(service['getAdjustment'](new Vec2(12, 12))).toEqual(new Vec2(0, 0));
     });
 
     it('getAjustement should do nothing if position is OK', () => {
         service.distance = new Vec2(0, 0);
         service.gridService.size = 25;
-        expect(service.getAjustement(new Vec2(25, 25))).toEqual(new Vec2(25, 25));
+        expect(service['getAdjustment'](new Vec2(25, 25))).toEqual(new Vec2(25, 25));
     });
 
     it('getXKeyAdjustement should return left corner', () => {
         service.selection = MagnetismSelection.TopLeft;
         service.gridService.size = 25;
-        expect(service.getXKeyAjustement(12, 12)).toEqual(-12);
+        expect(service.getXKeyAdjustment(12, 12)).toEqual(-12);
     });
 
     it('getXKeyAdjustement should return center', () => {
         service.selection = MagnetismSelection.Top;
         service.gridService.size = 25;
-        expect(service.getXKeyAjustement(12, 12)).toEqual(-18);
+        expect(service.getXKeyAdjustment(12, 12)).toEqual(-18);
     });
 
     it('getXKeyAdjustement should return right', () => {
         service.selection = MagnetismSelection.TopRight;
         service.gridService.size = 25;
-        expect(service.getXKeyAjustement(12, 12)).toEqual(-24);
+        expect(service.getXKeyAdjustment(12, 12)).toEqual(-24);
     });
 
     it('getYKeyAdjustement should return top corner', () => {
         service.selection = MagnetismSelection.TopLeft;
         service.gridService.size = 25;
-        expect(service.getYKeyAjustement(12, 12)).toEqual(-12);
+        expect(service.getYKeyAdjustment(12, 12)).toEqual(-12);
     });
 
     it('getYKeyAdjustement should return center', () => {
         service.selection = MagnetismSelection.Left;
         service.gridService.size = 25;
-        expect(service.getYKeyAjustement(12, 12)).toEqual(-18);
+        expect(service.getYKeyAdjustment(12, 12)).toEqual(-18);
     });
 
     it('getYKeyAdjustement should return bottom', () => {
         service.selection = MagnetismSelection.BottomLeft;
         service.gridService.size = 25;
-        expect(service.getYKeyAjustement(12, 12)).toEqual(-24);
+        expect(service.getYKeyAdjustment(12, 12)).toEqual(-24);
     });
 });

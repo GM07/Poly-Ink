@@ -23,23 +23,23 @@ export abstract class Tool {
         return !(event.x < left + border || event.x >= right - border || event.y <= top + border / 2 || event.y >= bottom - border);
     }
 
-    onMouseDown(event: MouseEvent): void {}
+    onMouseDown(_: MouseEvent): void {}
 
-    onDoubleClick(event: MouseEvent): void {}
+    onDoubleClick(_: MouseEvent): void {}
 
-    onMouseUp(event: MouseEvent): void {}
+    onMouseUp(_: MouseEvent): void {}
 
-    onMouseMove(event: MouseEvent): void {}
+    onMouseMove(_: MouseEvent): void {}
 
-    onMouseLeave(event: MouseEvent): void {}
+    onMouseLeave(_: MouseEvent): void {}
 
-    onMouseEnter(event: MouseEvent): void {}
+    onMouseEnter(_: MouseEvent): void {}
 
-    onKeyDown(event: KeyboardEvent): void {}
+    onKeyDown(_: KeyboardEvent): void {}
 
-    onKeyUp(event: KeyboardEvent): void {}
+    onKeyUp(_: KeyboardEvent): void {}
 
-    onDocumentMouseDown(event: MouseEvent): void {}
+    onDocumentMouseDown(_: MouseEvent): void {}
 
     stopDrawing(): void {}
 

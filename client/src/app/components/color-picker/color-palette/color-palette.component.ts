@@ -117,20 +117,20 @@ export class ColorPaletteComponent implements AfterViewInit, OnDestroy {
         let stepY = 0;
         const hue: Color = Color.hueToRgb(color.hue);
 
-        if (hue.r === Color.MAX) {
-            stepY = Color.MAX - color.r;
-        } else if (hue.g === Color.MAX) {
-            stepY = Color.MAX - color.g;
+        if (hue.R === Color.MAX) {
+            stepY = Color.MAX - color.R;
+        } else if (hue.G === Color.MAX) {
+            stepY = Color.MAX - color.G;
         } else {
-            stepY = Color.MAX - color.b;
+            stepY = Color.MAX - color.B;
         }
 
-        if (hue.r === Color.MIN) {
-            stepX = color.r;
-        } else if (hue.g === Color.MIN) {
-            stepX = color.g;
+        if (hue.R === Color.MIN) {
+            stepX = color.R;
+        } else if (hue.G === Color.MIN) {
+            stepX = color.G;
         } else {
-            stepX = color.b;
+            stepX = color.B;
         }
 
         this.selectedPosition.x = width - (width / Color.MAX) * stepX;

@@ -284,9 +284,7 @@ describe('ExportDrawingComponent', () => {
     it('should export image using Imgur service on imgur-export submitter id and change the link on a successful request', () => {
         // We need to use Object to change the value of the form (readonly)
         Object.defineProperty(component.nameFormControl, 'valid', { value: true });
-        spyOn(exportImgurService, 'exportImage').and.callFake((submitterId: string) => {
-            return of(Promise.resolve(mockImgurResponse));
-        });
+        spyOn<any>(exportImgurService, 'exportImage').and.returnValue(of(Promise.resolve(mockImgurResponse)));
         component.export('imgur-export');
         setTimeout(() => {
             expect(component.imgurURL).toEqual(mockImgurResponse.data.link);
@@ -299,9 +297,7 @@ describe('ExportDrawingComponent', () => {
         Object.defineProperty(component.nameFormControl, 'valid', { value: true });
         mockImgurResponse.status = '400';
         mockImgurResponse.success = false;
-        spyOn(exportImgurService, 'exportImage').and.callFake((submitterId: string) => {
-            return of(Promise.reject(mockImgurResponse));
-        });
+        spyOn<any>(exportImgurService, 'exportImage').and.returnValue(of(Promise.reject(mockImgurResponse)));
         component.export('imgur-export');
         setTimeout(() => {
             expect(component.imgurURL).toEqual('');

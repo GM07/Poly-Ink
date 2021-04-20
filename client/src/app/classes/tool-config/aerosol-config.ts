@@ -1,5 +1,6 @@
 import { Vec2 } from '@app/classes/vec2';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
+
 export class AerosolConfig {
     dropletDiameter: number;
     areaDiameter: number;

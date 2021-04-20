@@ -221,9 +221,9 @@ describe('ColorPaletteComponent', () => {
         let color: Color = component['getColorAtPosition'](width, height);
 
         color = component['getColorAtPosition'](width, height);
-        expect(color.r).toEqual(Colors.BLACK.r);
-        expect(color.g).toEqual(Colors.BLACK.g);
-        expect(color.b).toEqual(Colors.BLACK.b);
+        expect(color.R).toEqual(Colors.BLACK.R);
+        expect(color.G).toEqual(Colors.BLACK.G);
+        expect(color.B).toEqual(Colors.BLACK.B);
     });
 
     it('should not getContext if there', () => {
