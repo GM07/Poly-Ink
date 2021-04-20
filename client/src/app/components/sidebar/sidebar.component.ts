@@ -14,6 +14,8 @@ import { UndoRedoService } from '@app/services/undo-redo/undo-redo.service';
 
 @Component({ selector: 'app-sidebar', templateUrl: './sidebar.component.html', styleUrls: ['./sidebar.component.scss'] })
 export class SidebarComponent implements OnInit {
+    readonly HIGHLIGHTED_COLOR: string = HIGHLIGHTED_COLOR;
+
     topToolsSettings: ToolSettings[];
     bottomToolsSettings: ToolSettings[];
 
@@ -26,7 +28,6 @@ export class SidebarComponent implements OnInit {
     blockRedoIcon: boolean;
 
     selectedTool: Tool;
-    readonly HIGHLIGHTED_COLOR: string = HIGHLIGHTED_COLOR;
     @Output() settingClicked: EventEmitter<string>;
     @Input() disableClose: boolean;
 
@@ -59,10 +60,10 @@ export class SidebarComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        TOP_TOOLS.forEach((setting) => {
+        TOP_TOOLS.forEach((setting: ToolSettings) => {
             this.topToolsSettings.push(setting);
         });
-        BOTTOM_TOOLS.forEach((setting) => {
+        BOTTOM_TOOLS.forEach((setting: ToolSettings) => {
             this.bottomToolsSettings.push(setting);
         });
     }

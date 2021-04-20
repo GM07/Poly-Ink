@@ -29,7 +29,6 @@ export class Geometry {
 
     /**
      *  Can return -0
-     *
      *  -0 === +0 returns true
      */
     static roundTowardsZero(value: number): number {

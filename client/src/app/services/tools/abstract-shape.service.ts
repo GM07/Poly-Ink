@@ -11,13 +11,11 @@ import { DrawingService } from '@app/services/drawing/drawing.service';
     providedIn: 'root',
 })
 export abstract class AbstractShape extends Tool {
-    toolID: string;
     config: ShapeConfig;
-    protected readonly SHIFT: ShiftKey;
+    protected readonly SHIFT: ShiftKey = new ShiftKey();
 
     constructor(drawingService: DrawingService, colorService: ColorService) {
         super(drawingService, colorService);
-        this.SHIFT = new ShiftKey();
         this.config = new ShapeConfig();
     }
 

@@ -4,6 +4,9 @@ import { ToolMath } from '@app/constants/math';
 import { ToolSettingsConst } from '@app/constants/tool-settings';
 import { GridService } from './grid.service';
 
+// tslint:disable:no-string-literal
+// tslint:disable:no-any
+
 describe('GridService', () => {
     let service: GridService;
 
@@ -36,9 +39,19 @@ describe('GridService', () => {
         service.ctx = service.canvas.getContext('2d') as CanvasRenderingContext2D;
         service.canvas.width = ToolSettingsConst.GRID_MIN_SIZE;
         service.canvas.height = ToolSettingsConst.GRID_MIN_SIZE;
-        spyOn(service, 'drawLine');
+        spyOn<any>(service, 'drawLine');
         service.updateGrid();
-        expect(service.drawLine).toHaveBeenCalled();
+        expect(service['drawLine']).toHaveBeenCalled();
+    });
+
+    it('drawDotted should draw lines', () => {
+        service.canvas = document.createElement('canvas');
+        service.ctx = service.canvas.getContext('2d') as CanvasRenderingContext2D;
+        service.canvas.width = ToolSettingsConst.GRID_MIN_SIZE;
+        service.canvas.height = ToolSettingsConst.GRID_MIN_SIZE;
+        spyOn<any>(service, 'drawLine');
+        service['drawDotted'](new Vec2(0, 0), new Vec2(1, 1));
+        expect(service['drawLine']).toHaveBeenCalledTimes(2);
     });
 
     it('drawLine should draw a line between begin and end', () => {
@@ -49,7 +62,7 @@ describe('GridService', () => {
         spyOn(service.ctx, 'moveTo');
         spyOn(service.ctx, 'lineTo');
         spyOn(service.ctx, 'stroke');
-        service.drawLine(new Vec2(0, 0), new Vec2(ToolSettingsConst.GRID_STEP, ToolSettingsConst.GRID_STEP));
+        service['drawLine'](new Vec2(0, 0), new Vec2(ToolSettingsConst.GRID_STEP, ToolSettingsConst.GRID_STEP));
         expect(service.ctx.moveTo).toHaveBeenCalled();
         expect(service.ctx.lineTo).toHaveBeenCalled();
         expect(service.ctx.stroke).toHaveBeenCalled();

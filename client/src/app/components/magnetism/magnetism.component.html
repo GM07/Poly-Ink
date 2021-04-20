@@ -9,55 +9,55 @@
         <div
             class="magnetism-selection north west"
             #topLeft
-            [ngStyle]="isSelected(magnetismSelection.TopLeft)"
+            [style.background]="this.magnetismService.selection === magnetismSelection.TopLeft ? '#ec5681' : 'white'"
             (click)="setSelected(magnetismSelection.TopLeft)"
         ></div>
         <div
             class="magnetism-selection north xCenter"
             #top
-            [ngStyle]="isSelected(magnetismSelection.Top)"
+            [style.background]="this.magnetismService.selection === magnetismSelection.Top ? '#ec5681' : 'white'"
             (click)="setSelected(magnetismSelection.Top)"
         ></div>
         <div
             class="magnetism-selection north east"
             #topRight
-            [ngStyle]="isSelected(magnetismSelection.TopRight)"
+            [style.background]="this.magnetismService.selection === magnetismSelection.TopRight ? '#ec5681' : 'white'"
             (click)="setSelected(magnetismSelection.TopRight)"
         ></div>
         <div
             class="magnetism-selection west yCenter"
             #left
-            [ngStyle]="isSelected(magnetismSelection.Left)"
+            [style.background]="this.magnetismService.selection === magnetismSelection.Left ? '#ec5681' : 'white'"
             (click)="setSelected(magnetismSelection.Left)"
         ></div>
         <div
             class="magnetism-selection xCenter yCenter"
             #center
-            [ngStyle]="isSelected(magnetismSelection.Center)"
+            [style.background]="this.magnetismService.selection === magnetismSelection.Center ? '#ec5681' : 'white'"
             (click)="setSelected(magnetismSelection.Center)"
         ></div>
         <div
             class="magnetism-selection east yCenter"
             #right
-            [ngStyle]="isSelected(magnetismSelection.Right)"
+            [style.background]="this.magnetismService.selection === magnetismSelection.Right ? '#ec5681' : 'white'"
             (click)="setSelected(magnetismSelection.Right)"
         ></div>
         <div
             class="magnetism-selection south west"
             #bottomLeft
-            [ngStyle]="isSelected(magnetismSelection.BottomLeft)"
+            [style.background]="this.magnetismService.selection === magnetismSelection.BottomLeft ? '#ec5681' : 'white'"
             (click)="setSelected(magnetismSelection.BottomLeft)"
         ></div>
         <div
             class="magnetism-selection south xCenter"
             #bottom
-            [ngStyle]="isSelected(magnetismSelection.Bottom)"
+            [style.background]="this.magnetismService.selection === magnetismSelection.Bottom ? '#ec5681' : 'white'"
             (click)="setSelected(magnetismSelection.Bottom)"
         ></div>
         <div
             class="magnetism-selection south east"
             #bottomRight
-            [ngStyle]="isSelected(magnetismSelection.BottomRight)"
+            [style.background]="this.magnetismService.selection === magnetismSelection.BottomRight ? '#ec5681' : 'white'"
             (click)="setSelected(magnetismSelection.BottomRight)"
         ></div>
     </div>

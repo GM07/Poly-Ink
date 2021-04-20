@@ -38,7 +38,7 @@ describe('AbstractSelectionConfigComponent', () => {
     });
 
     it('should select all', () => {
-        buttonToggleLabelElements[0].click(); // Tout selectionner
+        buttonToggleLabelElements[0].click();
         expect(selectAllSpy).toHaveBeenCalled();
         selectAllSpy.calls.reset();
         component.selectAll();

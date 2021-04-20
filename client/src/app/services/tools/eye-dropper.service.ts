@@ -14,7 +14,6 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class EyeDropperService extends Tool {
-    toolID: string;
     previsualisationCanvas: HTMLCanvasElement;
     previsualisationCtx: CanvasRenderingContext2D;
     updatePrevisualisation: Subject<string>;

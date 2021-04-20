@@ -49,9 +49,9 @@ describe('LassoDraw', () => {
         expect(imageData.data[ALPHA]).not.toEqual(0);
 
         imageData = ctxStub.getImageData(lassoDraw['config'].width / 2, lassoDraw['config'].height / 2, 1, 1);
-        expect(imageData.data[0]).toEqual(Colors.WHITE.r);
-        expect(imageData.data[1]).toEqual(Colors.WHITE.g);
-        expect(imageData.data[2]).toEqual(Colors.WHITE.b);
+        expect(imageData.data[0]).toEqual(Colors.WHITE.R);
+        expect(imageData.data[1]).toEqual(Colors.WHITE.G);
+        expect(imageData.data[2]).toEqual(Colors.WHITE.B);
         expect(imageData.data[ALPHA]).not.toEqual(0);
     });
 

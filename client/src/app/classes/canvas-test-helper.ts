@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanvasConst } from '@app/constants/canvas.ts';
+import { CanvasConst } from '@app/constants/canvas';
 
 @Injectable({
     providedIn: 'root',

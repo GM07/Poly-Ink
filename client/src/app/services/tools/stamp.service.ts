@@ -87,6 +87,6 @@ export class StampService extends Tool {
 
     drawPreview(): void {
         const command = new StampDraw(this.colorService, this.config);
-        this.drawingService.passDrawPreview(command);
+        this.drawingService.drawStampPreview(command);
     }
 }

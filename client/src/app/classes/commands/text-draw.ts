@@ -39,7 +39,7 @@ export class TextDraw extends AbstractDraw {
 
     private drawText(ctx: CanvasRenderingContext2D): void {
         let y = this.config.startCoords.y;
-        this.config.textData.forEach((line, index) => {
+        this.config.textData.forEach((line) => {
             ctx.fillText(line, this.config.startCoords.x, y);
             y += this.config.fontSize;
         });

@@ -6,7 +6,6 @@ import { Tag } from '@common/communication/tag';
 import { fromEvent, merge, Observable, Observer, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-/* tslint:disable:no-any */
 @Injectable({
     providedIn: 'root',
 })
@@ -49,6 +48,8 @@ export class ServerCommunicationService {
     }
 
     createDrawing(drawing: Drawing): Observable<{}> {
+        // We use any to let the server create an id for the drawing
+        // tslint:disable-next-line:no-any
         const drawingData: any = { ...drawing };
         delete drawingData.data._id;
         const httpOptions = {

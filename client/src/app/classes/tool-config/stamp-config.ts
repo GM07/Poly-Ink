@@ -9,7 +9,7 @@ export enum Stamp {
 }
 
 export class StampConfig {
-    static readonly stampList: string[] = [
+    static readonly STAMP_LIST: string[] = [
         'assets/stamps/alexis.png',
         'assets/stamps/felix.png',
         'assets/stamps/Florence.png',
@@ -25,7 +25,7 @@ export class StampConfig {
     constructor() {
         this.stamp = Stamp.Alexis;
         this.stampImg = new Image();
-        this.stampImg.src = StampConfig.stampList[this.stamp];
+        this.stampImg.src = StampConfig.STAMP_LIST[this.stamp];
         this.scale = 1;
         this.angle = 0;
     }

@@ -10,9 +10,9 @@ import { RectangleService } from '@app/services/tools/rectangle.service';
     styleUrls: ['./rectangle-config.component.scss'],
 })
 export class RectangleConfigComponent extends ToolConfig {
-    rectangleModeIn: typeof ShapeMode = ShapeMode;
     readonly MIN: number = ToolSettingsConst.MIN_WIDTH;
     readonly MAX: number = ToolSettingsConst.MAX_WIDTH;
+    rectangleModeIn: typeof ShapeMode = ShapeMode;
 
     constructor(public rectangleService: RectangleService) {
         super();
