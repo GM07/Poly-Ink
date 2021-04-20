@@ -62,13 +62,17 @@ export class SelectionTranslation {
         if (this.config.previewSelectionCtx !== null && this.isMouseTranslationStarted) {
             const translation = this.getTranslation(this.magnetismService.getGridPosition(mouseUpCoord));
             this.sendUpdateSelectionRequest(translation);
-            document.body.style.width = event.pageX + this.config.width + 'px';
-            document.body.style.height = event.pageY + this.config.height + 'px';
+            document.body.style.width = event.pageX + Math.abs(this.config.width) + 'px';
+            document.body.style.height = event.pageY + Math.abs(this.config.height) + 'px';
         }
     }
 
     startMouseTranslation(mousePosition: Vec2): void {
-        this.magnetismService.setDistanceVector(mousePosition, this.config.endCoords, new Vec2(this.config.width, this.config.height));
+        this.magnetismService.setDistanceVector(
+            mousePosition,
+            this.config.endCoords,
+            new Vec2(this.config.width, this.config.height).apply(Math.abs),
+        );
         this.isMouseTranslationStarted = true;
         this.translationOrigin = mousePosition;
     }
@@ -140,7 +144,7 @@ export class SelectionTranslation {
     private HorizontalTranslationModifier(): number {
         if (this.magnetismService.isEnabled) {
             return (
-                this.magnetismService.getXKeyAdjustment(this.config.endCoords.x, this.config.width) +
+                this.magnetismService.getXKeyAdjustment(this.config.endCoords.x, Math.abs(this.config.width)) +
                 (+this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown) * this.magnetismService.gridService.size
             );
         } else return (+this.RIGHT_ARROW.isDown - +this.LEFT_ARROW.isDown) * this.TRANSLATION_PIXELS;
