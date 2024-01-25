@@ -1,4 +1,4 @@
-# LOG2990
+# PolyInk
 
 Projet de base à utiliser pour démarrer le développement de votre application.
 
